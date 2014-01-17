@@ -174,92 +174,98 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // For Stamps, we want to either promote Express1 or show the Express1 savings
                 if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
                 {
-                    List<RateResult> finalRates = new List<RateResult>();
-
-                    bool hasExpress1Savings = false;
-
-                    // Go through each Stamps rate
-                    foreach(RateResult stampsRate in stampsRates)
+                    if (ShouldRetrieveExpress1Rates)
                     {
-                        PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.Tag;
-                        stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
+                        List<RateResult> finalRates = new List<RateResult>();
 
-                        // If it's a rate they could (or have) saved on with Express1, we modify it
-                        if (ShouldRetrieveExpress1Rates &&
-                            stampsRate.Selectable && 
-                            stampsRateDetail != null && 
-                            Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
+                        bool hasExpress1Savings = false;
+
+                        // Go through each Stamps rate
+                        foreach (RateResult stampsRate in stampsRates)
                         {
-                            // See if Express1 returned a rate for this service
-                            RateResult express1Rate = null;
-                            if (express1Rates != null)
-                            {
-                                express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                    ((PostalRateSelection)e1r.Tag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == stampsRateDetail.ConfirmationType);
-                                express1Rate.ShipmentType = stampsRate.ShipmentType;
-                            }
+                            PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.Tag;
+                            stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
 
-                            // If Express1 returned a rate, check to make sure it is a lower amount
-                            if (express1Rate != null && express1Rate.Amount <= stampsRate.Amount)
+                            // If it's a rate they could (or have) saved on with Express1, we modify it
+                            if (stampsRate.Selectable &&
+                                stampsRateDetail != null &&
+                                Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
                             {
-                                finalRates.Add(express1Rate);
-                                hasExpress1Savings = true;
+                                // See if Express1 returned a rate for this service
+                                RateResult express1Rate = null;
+                                if (express1Rates != null)
+                                {
+                                    express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
+                                        ((PostalRateSelection)e1r.Tag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == stampsRateDetail.ConfirmationType);
+                                    express1Rate.ShipmentType = stampsRate.ShipmentType;
+                                }
+
+                                // If Express1 returned a rate, check to make sure it is a lower amount
+                                if (express1Rate != null && express1Rate.Amount <= stampsRate.Amount)
+                                {
+                                    finalRates.Add(express1Rate);
+                                    hasExpress1Savings = true;
+                                }
+                                else
+                                {
+                                    finalRates.Add(stampsRate);
+
+                                    // Set the express rate to null so that it doesn't add the icon later
+                                    express1Rate = null;
+                                }
+
+                                RateResult rate = finalRates[finalRates.Count - 1];
+
+                                // If user wanted Express 1 rates
+                                if (settings.StampsAutomaticExpress1)
+                                {
+                                    // If they actually got the rate, show the check
+                                    if (express1Rate != null)
+                                    {
+                                        rate.AmountFootnote = Resources.check2;
+                                    }
+                                }
+                                else
+                                {
+                                    // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
+                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                    {
+                                        rate.AmountFootnote = Resources.star_green;
+                                    }
+                                }
                             }
                             else
                             {
                                 finalRates.Add(stampsRate);
-
-                                // Set the express rate to null so that it doesn't add the icon later
-                                express1Rate = null;
                             }
+                        }
 
-                            RateResult rate = finalRates[finalRates.Count - 1];
-
-                            // If user wanted Express 1 rates
-                            if (settings.StampsAutomaticExpress1)
+                        RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
+                        if (settings.StampsAutomaticExpress1)
+                        {
+                            if (hasExpress1Savings)
                             {
-                                // If they actually got the rate, show the check
-                                if (express1Rate != null)
-                                {
-                                    rate.AmountFootnote = Resources.check2;
-                                }
+                                finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
                             }
                             else
                             {
-                                // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
-                                {
-                                    rate.AmountFootnote = Resources.star_green;
-                                }
+                                finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
                             }
                         }
                         else
                         {
-                            finalRates.Add(stampsRate);
+                            if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new EndiciaExpress1SettingsFacade(settings)));
+                            }
                         }
-                    }
 
-                    RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
-                    if (settings.StampsAutomaticExpress1)
-                    {
-                        if (hasExpress1Savings)
-                        {
-                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
-                        }
-                        else
-                        {
-                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
-                        }
+                        return finalGroup;
                     }
                     else
                     {
-                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
-                        {
-                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new EndiciaExpress1SettingsFacade(settings)));
-                        }
+                        return new RateGroup(stampsRates);
                     }
-                    
-                    return finalGroup;
                 }
                 else
                 {
