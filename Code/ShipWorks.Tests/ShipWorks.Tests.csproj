@@ -151,7 +151,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsFootnoteFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateExpress1PromotionFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateFilterFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateNonExistentShipmentTypeFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\RateGroupFilterTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />

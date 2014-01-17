@@ -17,9 +17,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         /// <returns>A collection of IRateGroupFilter objects.</returns>
         public IEnumerable<IRateGroupFilter> CreateFilters(ShipmentEntity shipment)
         {
+            // Order is important regarding the footnote filters - promo footnote filter should
+            // be after the non-existent shipment type footnote filter
             return new List<IRateGroupFilter>
             {
                 new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
+                new BestRateNonExistentShipmentTypeFootnoteFilter(),
                 new BestRateExpress1PromotionFootnoteFilter()
             };
         }
