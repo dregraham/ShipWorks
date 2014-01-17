@@ -13,6 +13,8 @@ namespace ShipWorks.Data.Administration.Versioning
         // Used for executing scripts
         private static SqlScriptLoader sqlLoader = new SqlScriptLoader("ShipWorks.Data.Administration.Scripts.Update");
 
+        private static string serializedSchemaVersionInfo;
+
         private List<UpgradePath> allVersions;
 
         /// <summary>
@@ -61,12 +63,13 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Gets the serialized versions.
         /// </summary>
-        private static string GetSerializedSchemaUpdateInformation()
+        public static string GetSerializedSchemaUpdateInformation()
         {
             Stream shipWorksVersions = Assembly.GetCallingAssembly().GetManifestResourceStream("ShipWorks.Data.Administration.Scripts.Update.ShipWorksVersions.json");
             StreamReader reader = new StreamReader(shipWorksVersions);
 
-            return reader.ReadToEnd();
+            serializedSchemaVersionInfo = reader.ReadToEnd();
+            return serializedSchemaVersionInfo;
         }
 
         /// <summary>
@@ -132,9 +135,23 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
+        /// Gets the serialized schema version information.
+        /// </summary>
+        /// <value>
+        /// The serialized schema version information.
+        /// </value>
+        public string SerializedSchemaVersionInfo
+        {
+            get
+            {
+                return serializedSchemaVersionInfo;
+            }
+        }
+
+        /// <summary>
         /// Deserailize serializedVersions
         /// </summary>
-        private List<UpgradePath> GetAllVersions(string serializedVersions)
+        public List<UpgradePath> GetAllVersions(string serializedVersions)
         {
             List<UpgradePath> versions =
                 JsonConvert.DeserializeObject<List<UpgradePath>>(serializedVersions);

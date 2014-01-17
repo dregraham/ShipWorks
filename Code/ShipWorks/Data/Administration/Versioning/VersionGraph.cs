@@ -9,7 +9,7 @@ namespace ShipWorks.Data.Administration.Versioning
     /// <summary>
     /// When all the versions are added to VersionGraph, this will return the best shortest path.
     /// </summary>
-    internal class VersionGraph
+    public class VersionGraph
     {
         private AdjacencyGraph<string, Edge<string>> graph;
         private Dictionary<Edge<string>, double> edgeCosts;
@@ -22,6 +22,21 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             graph = new AdjacencyGraph<string, Edge<string>>();
             edgeCosts = new Dictionary<Edge<string>, double>(graph.EdgeCount);
+        }
+
+        /// <summary>
+        /// Gets the adjacency graph.
+        /// </summary>
+        /// <value>
+        /// The adjacency graph.
+        /// </value>
+        [CLSCompliant(false)]
+        public AdjacencyGraph<string, Edge<string>> VersionAdjacencyGraph
+        {
+            get
+            {
+                return graph;
+            }
         }
 
         /// <summary>
