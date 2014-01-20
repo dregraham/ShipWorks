@@ -240,7 +240,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             IEnumerable<RateResult> allRates = tasks.SelectMany(x => x.Result.Rates);
 
             RateGroup compiledRateGroup = new RateGroup(allRates);
-            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
             // Add the footnotes from all returned RateGroups into the new compiled RateGroup
             foreach (IRateFootnoteFactory footnoteFactory in tasks.SelectMany(x => x.Result.FootnoteFactories))
@@ -258,7 +257,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
             compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
-            
+            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
+
             return compiledRateGroup;
         }
 
