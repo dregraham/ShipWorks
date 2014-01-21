@@ -20,10 +20,10 @@ namespace ShipWorks.Shipping.Carriers
         private TangoCounterRatesCredentialStore()
         {
             // TODO: Populate with values from Tango when Tango supports these.
-            FedExAccountNumber = "224813333";
-            FedExMeterNumber = "118590367";
-            FedExUsername = "7prplPors913iUfh";
-            FedExPassword = "+//I8JlHYCTg43+YVbmfh9RcO2YvwYhlrj99+ccITPw=";
+            FedExAccountNumber = "603103343";
+            FedExMeterNumber = "118601174";
+            FedExUsername = "51LPnQ5iP1uPARkC";
+            FedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
         }
 
         /// <summary>

@@ -44,6 +44,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             {
                 AccountNumber = counterRatesCredentialStore.FedExAccountNumber,
                 MeterNumber = counterRatesCredentialStore.FedExMeterNumber,
+                PostalCode = "63102",
+                CountryCode = "US",
+                SmartPostHubList = string.Empty,
                 FedExAccountID = -1055
             };
 

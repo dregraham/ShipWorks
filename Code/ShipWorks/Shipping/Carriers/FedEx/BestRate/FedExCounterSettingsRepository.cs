@@ -44,7 +44,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             return new FedExAccountEntity
             {
                 AccountNumber = credentialStore.FedExAccountNumber,
-                MeterNumber = credentialStore.FedExMeterNumber
+                MeterNumber = credentialStore.FedExMeterNumber,
+                PostalCode = "63102",
+                CountryCode = "US"
             };
         }
 
