@@ -45,9 +45,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             // Use a settings repository to get counter rates
             ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
+
             return base.GetBestRates(shipment, exceptionHandler);
         }
 
+        /// <summary>
+        /// Applies FedEx specific data to the specified shipment
+        /// </summary>
+        /// <param name="currentShipment">Shipment that will be modified</param>
+        /// <param name="originalShipment">Shipment that contains original data for copying</param>
+        /// <param name="account">Account that will be attached to the shipment</param>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, FedExAccountEntity account)
+        {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+            currentShipment.FedEx.SmartPostHubID = string.Empty;
+        }
         /// <summary>
         /// Wraps the shipping exception.
         /// </summary>
