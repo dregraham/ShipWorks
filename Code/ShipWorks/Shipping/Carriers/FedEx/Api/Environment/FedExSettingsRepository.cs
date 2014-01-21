@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// The ShippingSettingsEntity.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public ShippingSettingsEntity GetShippingSettings()
+        public virtual ShippingSettingsEntity GetShippingSettings()
         {
             return ShippingSettings.Fetch();
         }

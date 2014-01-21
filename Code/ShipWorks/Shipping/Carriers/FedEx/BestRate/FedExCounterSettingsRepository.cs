@@ -21,6 +21,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
+        /// Gets shipping settings with the counter version of the FedEx credentials
+        /// </summary>
+        /// <returns></returns>
+        public override ShippingSettingsEntity GetShippingSettings()
+        {
+            ShippingSettingsEntity settings = base.GetShippingSettings();
+            settings.FedExUsername = credentialStore.FedExUsername;
+            settings.FedExPassword = credentialStore.FedExPassword;
+            return settings;
+        }
+
+        /// <summary>
         /// Gets the FedEx account that should be used for counter rates.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
