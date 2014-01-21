@@ -41,6 +41,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             : this(new FedExServiceGateway(new FedExSettingsRepository()), new FedExSettingsRepository(), new FedExShipmentTokenProcessor(),  new FedExResponseFactory())
         { }
 
+        public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExServiceGateway(settingsRepository), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
+        { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
         /// constructor is primarily for testing purposes.
@@ -322,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 manipulators.AddRange(specializedManipulators);
             }
 
-            return new FedExRateRequest(manipulators, shipmentEntity);
+            return new FedExRateRequest(manipulators, shipmentEntity, settingsRepository);
         }
 
         /// <summary>
