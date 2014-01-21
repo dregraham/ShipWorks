@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
     /// <summary>
     /// A repository for FedEx counter rate accounts
     /// </summary>
-    public class FedExCounterRateAccountRepository : ICarrierAccountRepository<FedExAccountEntity>
+    public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity>
     {
         private readonly ICounterRatesCredentialStore counterRatesCredentialStore;
         private readonly Lazy<List<FedExAccountEntity>> lazyAccounts;
@@ -60,6 +62,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         public FedExAccountEntity GetAccount(long accountID)
         {
             return Accounts.First();
+        }
+
+        /// <summary>
+        /// Gets shipping settings with the counter version of the FedEx credentials
+        /// </summary>
+        /// <returns></returns>
+        public override ShippingSettingsEntity GetShippingSettings()
+        {
+            ShippingSettingsEntity settings = base.GetShippingSettings();
+            settings.FedExUsername = counterRatesCredentialStore.FedExUsername;
+            settings.FedExPassword = counterRatesCredentialStore.FedExPassword;
+            return settings;
+        }
+
+        /// <summary>
+        /// Gets the FedEx account that should be used for counter rates.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>A FedExAccountEntity object.</returns>
+        public override IEntity2 GetAccount(ShipmentEntity shipment)
+        {
+            return Accounts.First();
+        }
+
+        /// <summary>
+        /// Gets a list of the FedEx account that should be used for counter rates
+        /// </summary>
+        public override IEnumerable<IEntity2> GetAccounts()
+        {
+            return lazyAccounts.Value;
         }
     }
 }

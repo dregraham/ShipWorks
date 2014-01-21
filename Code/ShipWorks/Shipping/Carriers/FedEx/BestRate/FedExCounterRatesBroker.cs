@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// the <see cref="TangoCounterRatesCredentialStore"/> as the underlying credential store.
         /// </summary>
         public FedExCounterRatesBroker()
-            : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance), new FedExCounterSettingsRepository(TangoCounterRatesCredentialStore.Instance))
+            : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance))
         { }
 
         /// <summary>
