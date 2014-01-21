@@ -297,21 +297,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// FedEx for obtaining shipping rates.</returns>
         public CarrierRequest CreateRateRequest(ShipmentEntity shipmentEntity, IEnumerable<ICarrierRequestManipulator> specializedManipulators)
         {
+            FedExSettings settings = new FedExSettings(settingsRepository);
+
             // Create the "standard" manipulators for a FedEx rate request
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRateClientDetailManipulator(settingsRepository),
-                new FedExRateWebAuthenticationManipulator(),
+                new FedExRateWebAuthenticationManipulator(settings),
                 new FedExRateVersionManipulator(),
                 new FedExRateReturnTransitManipulator(),
                 new FedExRateShipperManipulator(),
                 new FedExRateRecipientManipulator(),
                 new FedExRateShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTotalInsuredValueManipulator(),
+                new FedExRateTotalInsuredValueManipulator(settings),
                 new FedExRateTotalWeightManipulator(),
                 new FedExRateRateTypeManipulator(settingsRepository),
                 new FedExRatePickupManipulator(),
-                new FedExRatePackageDetailsManipulator(),
+                new FedExRatePackageDetailsManipulator(settings),
                 new FedExRatePackageSpecialServicesManipulator(),
                 new FedExRatePackagingTypeManipulator()
             };
