@@ -583,6 +583,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
