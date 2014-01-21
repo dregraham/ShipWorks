@@ -65,10 +65,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Packages[0].DimsAddWeight = false;
             currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
             currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
-            currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
+            SetAccount(currentShipment, account);
 
             currentShipment.FedEx.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
             currentShipment.FedEx.Packages[0].Insurance = currentShipment.Insurance;
+        }
+
+        /// <summary>
+        /// Sets the FedEx Account.
+        /// </summary>
+        protected virtual void SetAccount(ShipmentEntity currentShipment, FedExAccountEntity account)
+        {
+            currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
         }
 
         /// <summary>
