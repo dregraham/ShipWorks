@@ -60,6 +60,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
             currentShipment.FedEx.SmartPostHubID = string.Empty;
         }
+
         /// <summary>
         /// Wraps the shipping exception.
         /// </summary>
