@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExRegistrationWebAuthenticationDetailManipulator(),
+                new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExRegistrationClientDetailManipulator(settingsRepository),
                 new FedExRegistrationVersionManipulator()
             };
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExPackageMovementWebAuthenticationDetailManipulator(),
+                new FedExPackageMovementWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExPackageMovementClientDetailManipulator(settingsRepository),
                 new FedExPackageMovementVersionManipulator()
             };
