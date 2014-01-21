@@ -63,11 +63,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 throw new ArgumentNullException("orderKeys");
             }
-
-            if (orderKeys.Count > MaxAllowedOrders)
-            {
-                throw new InvalidOperationException("Too many orders trying to load at once.");
-            }
            
             // ensure we were given EbayOrderEntities
             if (orderKeys.Count > 0)
@@ -79,6 +74,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             }
 
             #endregion
+
+            if (orderKeys.Count > MaxAllowedOrders)
+            {
+                throw new EbayException(string.Format("You can only select up to {0} orders for ShipWorks to try to combine at a time.", MaxAllowedOrders));
+            }
 
             // configure object that will be the asyncronous state throughout the operation
             Dictionary<string, object> asyncState = new Dictionary<string, object>();
