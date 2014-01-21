@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -46,7 +48,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Use a settings repository to get counter rates
             ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
 
-            return base.GetBestRates(shipment, exceptionHandler);
+            RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
+
+            foreach (BestRateResultTag bestRateResultTag in bestRates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
+            {
+                bestRateResultTag.SignUpAction= new Func<bool>(DisplaySetupWizard);
+            }
+
+            return bestRates;
+        }
+
+        /// <summary>
+        /// Displays the setup wizard.
+        /// </summary>
+        private bool DisplaySetupWizard()
+        {
+            using(Form setupWizard = ShipmentType.CreateSetupWizard())
+            {
+                return (setupWizard.ShowDialog() == DialogResult.OK);
+            }
         }
 
         /// <summary>
