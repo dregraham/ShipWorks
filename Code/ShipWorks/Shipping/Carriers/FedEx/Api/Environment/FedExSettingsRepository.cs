@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A FedExAccountEntity object.</returns>
-        public IEntity2 GetAccount(ShipmentEntity shipment)
+        public virtual IEntity2 GetAccount(ShipmentEntity shipment)
         {
             if (shipment == null || shipment.FedEx == null)
             {
