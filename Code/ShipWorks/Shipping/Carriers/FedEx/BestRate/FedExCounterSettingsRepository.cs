@@ -1,6 +1,8 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -44,6 +46,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 AccountNumber = credentialStore.FedExAccountNumber,
                 MeterNumber = credentialStore.FedExMeterNumber
             };
+        }
+
+        /// <summary>
+        /// Gets a list of the FedEx account that should be used for counter rates
+        /// </summary>
+        public override IEnumerable<IEntity2> GetAccounts()
+        {
+            return new List<IEntity2> { GetAccount(null) };
         }
     }
 }

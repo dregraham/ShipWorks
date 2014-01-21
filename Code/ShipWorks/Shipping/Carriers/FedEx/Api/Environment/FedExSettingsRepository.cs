@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// A collection of FedExAccountEntity object. (The return type may need to be changed to an IEntity2 object
         /// if this interface is used outside of FedEx in the future.)
         /// </returns>
-        public IEnumerable<IEntity2> GetAccounts()
+        public virtual IEnumerable<IEntity2> GetAccounts()
         {
             return FedExAccountManager.Accounts;
         }
