@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Editing
                     new GridCell(rate.Description),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
-                    new GridHyperlinkCell(rate.Selectable ? "Select" : "")
+                    new GridHyperlinkCell(rate.SelectionText)
                 }) { Tag = rate };
 
                 sandGrid.Rows.Add(row);

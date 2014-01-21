@@ -21,6 +21,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Delegate that will be executed when a rate is selected
         /// </summary>
-        public Action<ShipmentEntity> RateSelectionDelegate { get; set; } 
+        public Action<ShipmentEntity> RateSelectionDelegate { get; set; }
+
+        /// <summary>
+        /// Function that will be executed when an account doesn't exist for a carrier, and the 
+        /// new carrier setup wizard needs displayed.
+        /// </summary>
+        public Func<bool> SignUpAction { get; set; }
     }
 }

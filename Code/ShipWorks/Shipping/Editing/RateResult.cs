@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Editing
@@ -129,8 +130,6 @@ namespace ShipWorks.Shipping.Editing
             
         }
 
-
-
         /// <summary>
         /// Gets or sets the carrier description.
         /// </summary>
@@ -143,7 +142,25 @@ namespace ShipWorks.Shipping.Editing
             set { carrierDescription = value; }
         }
 
+        /// <summary>
+        /// Returns the test to display for the rate selection link, i.e. "Select" or "Sign up!"
+        /// </summary>
+        public string SelectionText
+        {
+            get
+            {
+                if (Tag is BestRateResultTag && ((BestRateResultTag)Tag).SignUpAction != null)
+                {
+                    return "Sign Up!";
+                }
 
+                if (Selectable)
+                {
+                    return "Select";
+                }
 
+                return string.Empty;
+            }
+        }
     }
 }
