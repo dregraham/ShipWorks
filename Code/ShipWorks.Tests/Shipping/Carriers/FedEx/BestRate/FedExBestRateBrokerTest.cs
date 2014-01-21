@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -7,7 +6,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Insurance;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.BestRate
+namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 {
     [TestClass]
     public class FedExBestRateBrokerTest
