@@ -478,7 +478,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory();
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
             FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
             FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();

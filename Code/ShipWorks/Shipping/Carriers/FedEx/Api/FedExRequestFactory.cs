@@ -37,8 +37,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
         /// </summary>
-        public FedExRequestFactory()
-            : this(new FedExServiceGateway(new FedExSettingsRepository()), new FedExSettingsRepository(), new FedExShipmentTokenProcessor(),  new FedExResponseFactory())
+        public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExServiceGateway(new FedExSettingsRepository()), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
         { }
 
         public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
