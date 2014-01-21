@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public class RateGroup
     {
-        bool outOfDate = false;
         private readonly List<IRateFootnoteFactory> footnoteFactories;
 
         /// <summary>
@@ -20,6 +19,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
         {
+            OutOfDate = false;
             this.Rates = rates.ToList();
             footnoteFactories = new List<IRateFootnoteFactory>();
         }
@@ -32,11 +32,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
         /// </summary>
-        public bool OutOfDate
-        {
-            get { return outOfDate; }
-            set { outOfDate = value; }
-        }
+        public bool OutOfDate { get; set; }
 
         /// <summary>
         /// Gets the footnote factories.

@@ -72,6 +72,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
+            SuspendRateCriteriaChangeEvent();
+
             if (shipments == null)
             {
                 throw new ArgumentNullException("shipments");
@@ -92,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
                 }
             }
+            
+            ResumeRateCriteriaChangeEvent();
         }
 
         /// <summary>
