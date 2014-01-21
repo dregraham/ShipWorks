@@ -45,7 +45,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// values for the "live" FedEx settings repository and FedEx request factory.
         /// </summary>
         public FedExShippingClerk()
-            : this(new FedExSettingsRepository(), new FedExRequestFactory(), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+            : this(new FedExSettingsRepository())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExShippingClerk"/> class.
+        /// </summary>
+        /// <param name="settingsRepository">The settings repository.</param>
+        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository)
+            : this(settingsRepository, new FedExRequestFactory(), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
         {
         }
 

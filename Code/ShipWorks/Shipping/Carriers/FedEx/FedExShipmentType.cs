@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
@@ -29,6 +30,7 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -37,6 +39,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentType : ShipmentType
     {
+        private ICarrierSettingsRepository settingsRepository;
+
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -78,6 +82,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain FedEx related settings and account information. This provides
+        /// the ability to use different FedEx settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic FedEx account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierSettingsRepository SettingsRepository
+        {
+            get
+            {
+                // Default the settings repository to the "live" FedExSettingsRepository if
+                // it hasn't been set already
+                return settingsRepository ?? (settingsRepository = new FedExSettingsRepository());
+            }
+            set
+            {
+                settingsRepository = value;
             }
         }
 
@@ -836,7 +863,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                return new FedExShippingClerk().GetRates(shipment);
+                return new FedExShippingClerk(SettingsRepository).GetRates(shipment);
             }
             catch (FedExException ex)
             {
@@ -1000,7 +1027,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>An instance of a FedExBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new FedExBestRateBroker();
+            if (FedExAccountManager.Accounts.Any())
+            {
+                return new FedExBestRateBroker();
+            }
+            else
+            {
+                // We want to be able to show counter rates to users that don't have 
+                // their own account in ShipWorks
+                return new FedExCounterRatesBroker();
+            }
         }
 
         /// <summary>
