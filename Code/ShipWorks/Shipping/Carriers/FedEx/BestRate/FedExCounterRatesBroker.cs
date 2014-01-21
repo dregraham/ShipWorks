@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     public class FedExCounterRatesBroker : FedExBestRateBroker
     {
         private readonly ICarrierSettingsRepository settingsRepository;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker"/> class using
         /// the <see cref="TangoCounterRatesCredentialStore"/> as the underlying credential store.
@@ -17,6 +17,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         public FedExCounterRatesBroker()
             : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance), new FedExCounterSettingsRepository(TangoCounterRatesCredentialStore.Instance))
         { }
+
+        /// <summary>
+        /// Gets or sets the account just created by the user.
+        /// </summary>
+        public FedExAccountEntity CreatedAccount { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker" /> class.
@@ -53,6 +58,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Since this is just getting counter rates, we want to have the severity level
             // as information for all shipping exceptions
             return new BrokerException(ex, BrokerExceptionSeverityLevel.Information, ShipmentType);
+        }
+
+        /// <summary>
+        /// Sets the FedEx Account.  If created account is null, use the account in the parameter.
+        /// </summary>
+        public override void SetAccount(ShipmentEntity currentShipment, FedExAccountEntity account)
+        {
+            base.SetAccount(currentShipment, CreatedAccount ?? account);
         }
     }
 }

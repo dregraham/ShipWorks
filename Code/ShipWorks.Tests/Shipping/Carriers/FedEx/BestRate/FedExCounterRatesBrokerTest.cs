@@ -20,18 +20,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
         private Mock<FedExShipmentType> fedExShipmentType;
         private Mock<ICarrierSettingsRepository> settingsRepository;
+        private ShipmentEntity shipmentEntity;
+        private FedExAccountEntity fedExAccountEntity;
 
         [TestInitialize]
         public void Initialize()
         {
             accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
-            
+
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
             fedExShipmentType = new Mock<FedExShipmentType>();
             fedExShipmentType.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(new RateGroup(new List<RateResult>()));
 
             testObject = new FedExCounterRatesBroker(fedExShipmentType.Object, accountRepository.Object, settingsRepository.Object);
+
+            shipmentEntity = new ShipmentEntity() { FedEx = new FedExShipmentEntity() };
+            fedExAccountEntity = new FedExAccountEntity(){ FedExAccountID = 42};
         }
 
         [TestMethod]
@@ -48,6 +53,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             testObject.GetBestRates(shipment, exceptionHandler);
 
             Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
+        }
+
+        [TestMethod]
+        public void SetAccount_SetsAccountOfShipmentToParameterAccount_WhenCreatedAccountIsNull_Test()
+        {
+            testObject.SetAccount(shipmentEntity,fedExAccountEntity);
+
+            Assert.AreEqual(42, shipmentEntity.FedEx.FedExAccountID);
+        }
+
+        [TestMethod]
+        public void SetAccount_SetsAccountOfParameter_WhenCreatedAccountIsNull_Test()
+        {
+            testObject.CreatedAccount = new FedExAccountEntity() { FedExAccountID = 2 };
+            testObject.SetAccount(shipmentEntity, fedExAccountEntity);
+
+            Assert.AreEqual(2, shipmentEntity.FedEx.FedExAccountID);
         }
     }
 }

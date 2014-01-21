@@ -74,7 +74,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <summary>
         /// Sets the FedEx Account.
         /// </summary>
-        protected virtual void SetAccount(ShipmentEntity currentShipment, FedExAccountEntity account)
         {
             currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
         }
