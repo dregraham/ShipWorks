@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            RateGroup rateGroup = GetRates(shipment, ex =>
+            RateGroup rateGroup = GetRates(shipment, true, ex =>
             {
                 // Accumulate all of the broker exceptions for later use
                 log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
@@ -218,9 +218,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private RateGroup GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private RateGroup GetRates(ShipmentEntity shipment, bool createCounterRateBrokers, Action<BrokerException> exceptionHandler)
         {
-            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment).ToList();
+            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, createCounterRateBrokers).ToList();
             
             if (!bestRateShippingBrokers.Any())
             {
@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
-                rateGroup = GetRates(shipment, PreProcessExceptionHandler);
+                rateGroup = GetRates(shipment, false, PreProcessExceptionHandler);
             }
             catch (AggregateException ex)
             {
@@ -374,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment);
+            IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
 
@@ -439,7 +439,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public InsuranceProvider GetShipmentInsuranceProvider(ShipmentEntity shipment)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment).Where(b => b.HasAccounts).ToList();
+            IEnumerable<IBestRateShippingBroker> brokersWithAccounts = brokerFactory.CreateBrokers(shipment, false).Where(b => b.HasAccounts).ToList();
 
             // Default shipmentInsuranceProvider is ShipWorks
             InsuranceProvider shipmentInsuranceProvider;

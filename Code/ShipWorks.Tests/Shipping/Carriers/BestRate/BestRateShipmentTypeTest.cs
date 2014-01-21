@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
 
             brokerFactory = new Mock<IBestRateShippingBrokerFactory>();
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             filterFactory = new Mock<IRateGroupFilterFactory>();
             filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter>());
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject.GetRates(shipment);
 
-            brokerFactory.Verify(f => f.CreateBrokers(shipment), Times.Once());
+            brokerFactory.Verify(f => f.CreateBrokers(shipment, It.IsAny<bool>()), Times.Once());
         }
 
         [TestMethod]
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup(rates));
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
 
             testObject.GetRates(shipment);
 
@@ -109,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<Action<BrokerException>>())).Returns(new RateGroup( rates));
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
@@ -280,7 +280,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { brokerException, anotherBrokerException });
 
             // We want the factory to return our fake broker for this test
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
             RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote() as BrokerExceptionsRateFootnoteControl;
@@ -302,7 +302,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             FakeExceptionHandlerBroker fakeBroker = new FakeExceptionHandlerBroker(new List<BrokerException> { informationLevelBrokerException, errorLevelBrokerException, warningLevelBrokerException });
 
             // We want the factory to return our fake broker for this test
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
@@ -361,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.HasAccounts).Returns(true);
             broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
 
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
@@ -372,7 +372,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.HasAccounts).Returns(true);
             broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
 
             Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
@@ -383,7 +383,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.HasAccounts).Returns(true);
             broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
@@ -450,7 +450,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker = new Mock<IBestRateShippingBroker>();
             broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsFalse(isRequired);
@@ -462,7 +462,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker = new Mock<IBestRateShippingBroker>();
             broker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);
@@ -477,7 +477,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(false);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsFalse(isRequired);
@@ -492,7 +492,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);
@@ -507,7 +507,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
             secondBroker.Setup(b => b.IsCustomsRequired(It.IsAny<ShipmentEntity>())).Returns(true);
 
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
             bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
             Assert.IsTrue(isRequired);
