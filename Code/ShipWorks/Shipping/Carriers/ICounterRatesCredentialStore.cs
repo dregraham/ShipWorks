@@ -26,5 +26,20 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets the FedEx password used for obtaining counter rates.
         /// </summary>
         string FedExPassword { get; }
+
+        /// <summary>
+        /// Gets the Ups user id used for obtaining counter rates
+        /// </summary>
+        string UpsUserId { get; }
+
+        /// <summary>
+        /// Gets the Ups password used for obtaining counter rates
+        /// </summary>
+        string UpsPassword { get; }
+
+        /// <summary>
+        /// Gets the Ups access key used for obtaining counter rates
+        /// </summary>
+        string UpsAccessKey { get; }
     }
 }

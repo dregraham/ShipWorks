@@ -24,6 +24,9 @@ namespace ShipWorks.Shipping.Carriers
             FedExMeterNumber = "118601174";
             FedExUsername = "51LPnQ5iP1uPARkC";
             FedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
+            UpsUserId = "6863e0f62cdd4a1b";
+            UpsPassword = "cf9e7473";
+            UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
         }
 
         /// <summary>
@@ -71,6 +74,32 @@ namespace ShipWorks.Shipping.Carriers
         {
             get; 
             private set;
+        }
+
+        /// <summary>
+        /// Gets the Ups user id used for obtaining counter rates
+        /// </summary>
+        public string UpsUserId
+        {
+            get; 
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the Ups password used for obtaining counter rates
+        /// </summary>
+        public string UpsPassword
+        {
+            get; 
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the Ups access key used for obtaining counter rates
+        /// </summary>
+        public string UpsAccessKey { 
+            get; 
+            private set; 
         }
     }
 }
