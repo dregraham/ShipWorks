@@ -33,9 +33,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             List<IBestRateShippingBroker> brokers = shipmentTypes.Where(st => !IsShipmentTypeExcluded(shippingSettings, st.ShipmentTypeCode))
-                .Where(st => createCounterRateBrokers || IsShipmentTypeActiveAndConfigured(shippingSettings, st.ShipmentTypeCode))
                 .Select(st => st.GetShippingBroker(shipment))
-                .Where(broker => broker.HasAccounts)
+                .Where(broker => broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
                 .ToList();
             
             // We need to configure each of the brokers now that we have our final

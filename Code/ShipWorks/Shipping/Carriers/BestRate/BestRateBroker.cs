@@ -57,6 +57,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Gets a value indicating whether the broker is a counter broker.
+        /// </summary>
+        /// <value>
+        ///   False by default
+        /// </value>
+        public virtual bool IsCounterRate
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Determines whether customs forms are required for the given shipment for any accounts of a broker.
         /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>

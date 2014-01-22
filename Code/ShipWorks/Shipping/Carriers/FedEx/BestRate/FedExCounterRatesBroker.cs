@@ -110,5 +110,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             base.SetAccount(currentShipment, CreatedAccount ?? account);
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the broker is a counter broker.
+        /// </summary>
+        /// <value>
+        ///   Returns false.
+        /// </value>
+        public override bool IsCounterRate
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
