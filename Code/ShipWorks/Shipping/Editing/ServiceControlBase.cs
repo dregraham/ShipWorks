@@ -70,15 +70,9 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ShipmentTypeChanged;
 
         /// <summary>
-        /// The shipment type this instance is servicing
+        /// Raised when the rates have been cleared from the rates grid.
         /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return shipmentTypeCode;
-            }
-        }
+        public event EventHandler RatesCleared;
 
         /// <summary>
         /// Constructor
@@ -97,6 +91,16 @@ namespace ShipWorks.Shipping.Editing
             this.shipmentTypeCode = shipmentTypeCode;
         }
 
+        /// <summary>
+        /// The shipment type this instance is servicing
+        /// </summary>
+        public ShipmentTypeCode ShipmentTypeCode
+        {
+            get
+            {
+                return shipmentTypeCode;
+            }
+        }
 
         /// <summary>
         /// Initialization
@@ -582,6 +586,17 @@ namespace ShipWorks.Shipping.Editing
             if (ShipmentTypeChanged != null)
             {
                 ShipmentTypeChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Raises the rates cleared event.
+        /// </summary>
+        protected void RaiseRatesCleared()
+        {
+            if (RatesCleared != null)
+            {
+                RatesCleared(this, EventArgs.Empty);
             }
         }
 

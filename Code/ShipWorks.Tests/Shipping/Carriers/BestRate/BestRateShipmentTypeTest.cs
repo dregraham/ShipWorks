@@ -393,7 +393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             shipment.BestRateEvents = 0;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents); 
         }
@@ -403,7 +403,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             shipment.BestRateEvents = (int)BestRateEventTypes.RatesCompared;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
         }
@@ -413,7 +413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             ShipmentEntity calledShipment = null;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual(shipment, calledShipment);
         }
@@ -425,7 +425,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             bool? signUpActionResult = null;
 
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => {signUpActionResult = true; return true;}, RateSelectionDelegate = entity => calledShipment = entity } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.IsTrue(signUpActionResult.Value);
         }
@@ -437,7 +437,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             bool? signUpActionResult = null;
 
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.IsFalse(signUpActionResult.HasValue);
         }
@@ -448,10 +448,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity calledShipment = null;
             
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => false, RateSelectionDelegate = entity => calledShipment = entity } };
-            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+            testObject.ApplySelectedShipmentRate(shipment, rate);
 
             // The called shipment should still be null since the sign up action returned false
             Assert.IsNull(calledShipment);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_RaisesSignUpForAccountCompleted_WhenSignUpActionReturnsTrue_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            bool signUpEventFired = false;
+
+            testObject.SignUpForProviderAccountCompleted += (sender, args) => signUpEventFired = true;
+
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => true, RateSelectionDelegate = entity => calledShipment = entity } };
+            testObject.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.IsTrue(signUpEventFired);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_DoesNotRaisSignUpForAccountCompleted_WhenSignUpActionReturnsFalse_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            bool signUpEventFired = false;
+
+            testObject.SignUpForProviderAccountCompleted += (sender, args) => signUpEventFired = true;
+
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => false, RateSelectionDelegate = entity => calledShipment = entity } };
+            testObject.ApplySelectedShipmentRate(shipment, rate);
+
+            // This should not have been changed
+            Assert.IsFalse(signUpEventFired);
         }
 
         private void InitializeFootnoteTests()

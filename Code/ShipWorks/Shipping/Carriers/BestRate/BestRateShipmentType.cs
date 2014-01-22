@@ -8,7 +8,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +15,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -28,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
+
+        public event EventHandler SignUpForProviderAccountCompleted;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -397,7 +397,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipment">Shipment that will have the rate applied</param>
         /// <param name="bestRate">Rate that should be applied to the shipment</param>
-        public static void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
+        public void ApplySelectedShipmentRate(ShipmentEntity shipment, RateResult bestRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
             BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
@@ -409,9 +409,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // Capture the result of the sign up action to determine if the rate
                 // should be selected (i.e. the setup wizard completed)
-                selectRate = bestRateResultTag.SignUpAction();
-            }
+                bool signedUpForAccount = bestRateResultTag.SignUpAction();
+                selectRate = signedUpForAccount;
 
+                if (signedUpForAccount && SignUpForProviderAccountCompleted != null)
+                {
+                    // They didn't cancel out of the wizard, so signal that the 
+                    // user signed up for an account
+                    SignUpForProviderAccountCompleted(typeof(BestRateShipmentType), EventArgs.Empty);
+                }
+            }
+            
             if (selectRate)
             {
                 // We only want to select the rate if the sign up action finished    

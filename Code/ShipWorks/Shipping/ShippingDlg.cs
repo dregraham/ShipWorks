@@ -782,6 +782,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ReloadRatesRequired += new EventHandler(OnRateReloadRequired);
                     newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
+                    newServiceControl.RatesCleared += OnRatesCleared;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -796,6 +797,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ReloadRatesRequired -= new EventHandler(OnRateReloadRequired);
                     oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+                    oldServiceControl.RatesCleared -= OnRatesCleared;
 
                     oldServiceControl.Dispose();
                 }
@@ -810,6 +812,11 @@ namespace ShipWorks.Shipping
 
             // Update the displayed rates
             LoadDisplayedRates();
+        }
+
+        private void OnRatesCleared(object sender, EventArgs e)
+        {
+            shipmentRateMap.Clear();
         }
 
         /// <summary>

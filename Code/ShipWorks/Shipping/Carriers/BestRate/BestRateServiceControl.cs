@@ -11,6 +11,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 {
     public partial class BestRateServiceControl : ServiceControlBase
     {
+        private readonly BestRateShipmentType bestRateShipment;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -18,8 +20,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             : base (shipmentTypeCode)
         {
             InitializeComponent();
-
+            
             rateControl.ReloadRatesRequired += OnReloadRatesRequired;
+            bestRateShipment = new BestRateShipmentType();
+            bestRateShipment.SignUpForProviderAccountCompleted += OnAccountSignUp;
         }
 
         /// <summary>
@@ -149,8 +153,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            BestRateShipmentType.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
-
+            bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
+            
             RaiseShipmentTypeChanged();
         }
 
@@ -182,6 +186,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnServiceLevelChanged(object sender, EventArgs e)
         {
             OnRateCriteriaChanged(sender, e);
+        }
+
+
+        /// <summary>
+        /// Called when an account has been signed up via an entry in the rates grid.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnAccountSignUp(object sender, EventArgs e)
+        {
+            rateControl.ClearRates(string.Empty);
+            RaiseRatesCleared();
         }
     }
 }

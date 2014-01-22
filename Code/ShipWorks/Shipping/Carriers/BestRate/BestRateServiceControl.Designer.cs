@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             base.Dispose(disposing);
         }
-
+        
         #region Component Designer generated code
 
         /// <summary> 
