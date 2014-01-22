@@ -21,11 +21,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         { }
 
         /// <summary>
-        /// Gets or sets the account just created by the user.
-        /// </summary>
-        public FedExAccountEntity CreatedAccount { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
@@ -36,6 +31,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             this.settingsRepository = settingsRepository;
         }
+        
+        /// <summary>
+        /// Gets or sets the account just created by the user.
+        /// </summary>
+        public FedExAccountEntity CreatedAccount { get; set; }
 
         /// <summary>
         /// Gets the best rates for for FedEx counter-based prices.
@@ -47,11 +47,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             // Use a settings repository to get counter rates
             ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
-
             RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
 
             foreach (BestRateResultTag bestRateResultTag in bestRates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
             {
+                // We want FedEx account setup wizard to show when a rate is selected so the user 
+                // can create their own FedEx account since these rates are just counter rates 
+                // using a ShipWorks account.
                 bestRateResultTag.SignUpAction= new Func<bool>(DisplaySetupWizard);
             }
 
@@ -59,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
-        /// Displays the setup wizard.
+        /// Displays the FedEx setup wizard.
         /// </summary>
         private bool DisplaySetupWizard()
         {
