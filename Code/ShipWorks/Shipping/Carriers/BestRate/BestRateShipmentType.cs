@@ -411,9 +411,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // should be selected (i.e. the setup wizard completed)
                 bool signedUpForAccount = bestRateResultTag.SignUpAction();
                 selectRate = signedUpForAccount;
-
-                ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
-
+                
                 if (signedUpForAccount && SignUpForProviderAccountCompleted != null)
                 {
                     // They didn't cancel out of the wizard, so signal that the 

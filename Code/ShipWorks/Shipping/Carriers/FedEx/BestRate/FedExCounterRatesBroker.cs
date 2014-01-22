@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -67,7 +68,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             using(Form setupWizard = ShipmentType.CreateSetupWizard())
             {
-                return (setupWizard.ShowDialog() == DialogResult.OK);
+                DialogResult result = setupWizard.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
+                }
+
+                return result == DialogResult.OK;
             }
         }
 
