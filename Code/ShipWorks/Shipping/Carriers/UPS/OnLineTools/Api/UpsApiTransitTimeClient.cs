@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using log4net;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
@@ -65,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment)
         {
             // Create the client for connecting to the UPS server
-            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.TimeInTransit, UpsApiCore.GetUpsAccount(shipment));
+            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.TimeInTransit, UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository()));
 
             UpsShipmentEntity ups = shipment.Ups;
 

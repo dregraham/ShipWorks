@@ -73,9 +73,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get the UPS account associated with the given shipment.  Throws an exception if it does not exist.
         /// </summary>
-        public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment)
+        public static UpsAccountEntity GetUpsAccount(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository)
         {
-            UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
+            UpsAccountEntity account = accountRepository.GetAccount(shipment.Ups.UpsAccountID);
             if (account == null)
             {
                 throw new UpsException("No UPS account is selected for the shipment.");

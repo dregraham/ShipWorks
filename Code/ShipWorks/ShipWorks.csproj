@@ -1750,14 +1750,14 @@
     <Compile Include="Shipping\Carriers\UPS\UpsServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\IUpsOpenAccountRequestFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceGateway.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\IUpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\IUpsOpenAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountCharacteristicsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountCharacteristicsControl.Designer.cs">
       <DependentUpon>UpsAccountCharacteristicsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsBillingContactInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

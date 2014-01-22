@@ -741,7 +741,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Get the transit times and services
                 List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment);
 
-                List<UpsServiceRate> serviceRates = UpsApiRateClient.GetRates(shipment);
+                List<UpsServiceRate> serviceRates = new UpsApiRateClient().GetRates(shipment);
 
                 if (!serviceRates.Any())
                 {
@@ -750,7 +750,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 else
                 {
                     // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment).RateType == (int)UpsRateType.Negotiated;
+                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository()).RateType == (int)UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
