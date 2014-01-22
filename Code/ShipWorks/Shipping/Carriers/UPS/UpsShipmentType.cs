@@ -45,6 +45,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
+        private ICarrierAccountRepository<UpsAccountEntity> settingsRepository;
+
         /// <summary>
         /// UPS supports getting rates
         /// </summary>
@@ -59,6 +61,29 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override bool SupportsAccountAsOrigin
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain Ups related settings and account information. This provides
+        /// the ability to use different Ups settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic Ups account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository
+        {
+            get
+            {
+                // Default the settings repository to the "live" UpsAccountRepository if
+                // it hasn't been set already
+                return settingsRepository ?? (settingsRepository = new UpsAccountRepository());
+            }
+            set
+            {
+                settingsRepository = value;
+            }
         }
 
         /// <summary>
