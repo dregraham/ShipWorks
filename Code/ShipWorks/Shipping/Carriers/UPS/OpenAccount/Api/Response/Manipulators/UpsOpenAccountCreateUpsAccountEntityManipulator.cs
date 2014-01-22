@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response.Manipulators
 
             // TODO: See if we can get the UpsAccessKey from the response.  
 
-            UpsOpenAccountRepository upsAccountRepository = new UpsOpenAccountRepository();
+            UpsAccountRepository upsAccountRepository = new UpsAccountRepository();
             upsAccountRepository.Save(upsAccountEntity);
 
             // TODO: Hoping that we don't have to send this...we'll see.

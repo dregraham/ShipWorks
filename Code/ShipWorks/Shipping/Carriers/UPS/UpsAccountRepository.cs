@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
-namespace ShipWorks.Shipping.Carriers.UPS.BestRate
+namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class UpsAccountRepository : ICarrierAccountRepository<UpsAccountEntity>
+    public class UpsAccountRepository : ICarrierAccountRepository<UpsAccountEntity>, IUpsOpenAccountRepository
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
@@ -24,6 +26,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public UpsAccountEntity GetAccount(long accountID)
         {
             return UpsAccountManager.GetAccount(accountID);
+        }
+
+        /// <summary>
+        /// Saves the given UPS account entity to the underlying data source.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(UpsAccountEntity account)
+        {
+            if (account == null)
+            {
+                throw new ArgumentNullException("account");
+            }
+
+            UpsAccountManager.SaveAccount(account);
         }
     }
 }
