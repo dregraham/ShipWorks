@@ -67,7 +67,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 Password = counterRatesCredentialStore.UpsPassword,
                 PostalCode = "63102",
                 CountryCode = "US",
-                RateType = (int)UpsRateType.Retail
+                RateType = (int)UpsRateType.Retail,
+                UpsAccountID = -1056
             };
 
             return new List<UpsAccountEntity> { fedExAccountEntity };
