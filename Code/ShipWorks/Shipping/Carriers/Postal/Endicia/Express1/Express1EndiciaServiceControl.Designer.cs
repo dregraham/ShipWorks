@@ -44,10 +44,6 @@
             // 
             this.sectionRecipient.Size = new System.Drawing.Size(375, 24);
             // 
-            // personControl
-            // 
-            this.personControl.Size = new System.Drawing.Size(330, 330);
-            // 
             // sectionReturns
             // 
             this.sectionReturns.Size = new System.Drawing.Size(375, 24);

@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.accountSectionLabel = new System.Windows.Forms.Label();
@@ -95,7 +98,9 @@
             // 
             // personControl
             // 
-            this.personControl.Size = new System.Drawing.Size(273, 364);
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.personControl.Size = new System.Drawing.Size(389, 333);
             // 
             // labelResidentialCommercial
             // 
@@ -107,7 +112,10 @@
             // 
             // residentialDetermination
             // 
+            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Location = new System.Drawing.Point(79, 358);
+            this.residentialDetermination.Size = new System.Drawing.Size(300, 21);
             // 
             // sectionReturns
             // 
@@ -175,7 +183,7 @@
             this.originControl.Location = new System.Drawing.Point(1, 60);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(383, 355);
+            this.originControl.Size = new System.Drawing.Size(391, 355);
             this.originControl.TabIndex = 9;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -199,7 +207,7 @@
             this.onTracAccount.Location = new System.Drawing.Point(80, 32);
             this.onTracAccount.Name = "onTracAccount";
             this.onTracAccount.PromptText = "(Multiple Values)";
-            this.onTracAccount.Size = new System.Drawing.Size(288, 21);
+            this.onTracAccount.Size = new System.Drawing.Size(298, 21);
             this.onTracAccount.TabIndex = 4;
             this.onTracAccount.SelectedIndexChanged += new System.EventHandler(this.OnChangeAccount);
             // 
@@ -221,6 +229,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(210, 21);
             this.referenceNumber.TabIndex = 78;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // referenceNumber2
             // 
@@ -230,6 +239,7 @@
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(210, 21);
             this.referenceNumber2.TabIndex = 80;
+            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // instructions
             // 
@@ -239,6 +249,7 @@
             this.instructions.Name = "instructions";
             this.instructions.Size = new System.Drawing.Size(210, 21);
             this.instructions.TabIndex = 82;
+            this.instructions.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // sectionReferenceInstructions
             // 
@@ -426,7 +437,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(11, 251);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(465, 50);
+            this.insuranceControl.Size = new System.Drawing.Size(479, 50);
             this.insuranceControl.TabIndex = 74;
             // 
             // dimensionsControl
@@ -500,7 +511,6 @@
             this.rateControl.Size = new System.Drawing.Size(395, 0);
             this.rateControl.TabIndex = 4;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
             // 
             // packagingType
             // 

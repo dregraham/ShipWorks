@@ -99,7 +99,7 @@
             // 
             // personControl
             // 
-            this.personControl.Size = new System.Drawing.Size(285, 330);
+            this.personControl.Size = new System.Drawing.Size(361, 330);
             // 
             // sectionReturns
             // 

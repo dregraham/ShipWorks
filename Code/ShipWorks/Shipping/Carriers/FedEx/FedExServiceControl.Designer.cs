@@ -242,11 +242,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // personControl
             // 
-            this.personControl.Size = new System.Drawing.Size(425, 330);
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.personControl.Size = new System.Drawing.Size(494, 330);
             // 
             // residentialDetermination
             // 
-            this.residentialDetermination.Size = new System.Drawing.Size(335, 21);
+            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.residentialDetermination.Size = new System.Drawing.Size(405, 21);
             // 
             // sectionReturns
             // 
@@ -471,24 +475,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // originControl
             // 
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
             this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.originControl.Location = new System.Drawing.Point(0, 52);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(428, 427);
+            this.originControl.Size = new System.Drawing.Size(499, 427);
             this.originControl.TabIndex = 1;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // panelTop
             // 
+            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.BackColor = System.Drawing.Color.Transparent;
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.label1);
             this.panelTop.Controls.Add(this.fedexAccount);
             this.panelTop.Location = new System.Drawing.Point(3, 1);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(425, 50);
+            this.panelTop.Size = new System.Drawing.Size(496, 50);
             this.panelTop.TabIndex = 0;
             // 
             // label2
@@ -520,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fedexAccount.Location = new System.Drawing.Point(79, 25);
             this.fedexAccount.Name = "fedexAccount";
             this.fedexAccount.PromptText = "(Multiple Values)";
-            this.fedexAccount.Size = new System.Drawing.Size(332, 21);
+            this.fedexAccount.Size = new System.Drawing.Size(403, 21);
             this.fedexAccount.TabIndex = 0;
             this.fedexAccount.SelectedIndexChanged += new System.EventHandler(this.OnOriginChanged);
             // 
@@ -548,13 +556,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // fromAddressType
             // 
+            this.fromAddressType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fromAddressType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fromAddressType.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.fromAddressType.FormattingEnabled = true;
             this.fromAddressType.Location = new System.Drawing.Point(82, 503);
             this.fromAddressType.Name = "fromAddressType";
             this.fromAddressType.PromptText = "(Multiple Values)";
-            this.fromAddressType.Size = new System.Drawing.Size(332, 21);
+            this.fromAddressType.Size = new System.Drawing.Size(404, 21);
             this.fromAddressType.TabIndex = 2;
             // 
             // nonStandardPackaging
@@ -590,7 +600,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(3, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(618, 213);
+            this.packageControl.Size = new System.Drawing.Size(856, 213);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);

@@ -90,7 +90,7 @@
             // 
             // personControl
             // 
-            this.personControl.Size = new System.Drawing.Size(308, 330);
+            this.personControl.Size = new System.Drawing.Size(371, 330);
             // 
             // labelResidentialCommercial
             // 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.panelTop = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -72,13 +73,25 @@
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 523);
-            this.sectionRecipient.Size = new System.Drawing.Size(389, 23);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
+            this.sectionRecipient.Size = new System.Drawing.Size(389, 24);
+            // 
+            // personControl
+            // 
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.personControl.Size = new System.Drawing.Size(378, 330);
+            // 
+            // residentialDetermination
+            // 
+            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.residentialDetermination.Size = new System.Drawing.Size(289, 21);
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 994);
-            this.sectionReturns.Size = new System.Drawing.Size(389, 23);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 506);
+            this.sectionReturns.Size = new System.Drawing.Size(389, 24);
             // 
             // sectionShipment
             // 
@@ -88,24 +101,26 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.packageControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 637);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 149);
             this.sectionShipment.Size = new System.Drawing.Size(389, 352);
             // 
             // sectionFrom
             // 
             this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionFrom.Collapsed = true;
             // 
             // sectionFrom.ContentPanel
             // 
             this.sectionFrom.ContentPanel.Controls.Add(this.panelTop);
             this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
+            this.sectionFrom.ExpandedHeight = 513;
             this.sectionFrom.ExtraText = "";
             this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
-            this.sectionFrom.Size = new System.Drawing.Size(389, 513);
+            this.sectionFrom.Size = new System.Drawing.Size(389, 24);
             this.sectionFrom.TabIndex = 4;
             // 
             // panelTop
@@ -194,6 +209,7 @@
             this.referenceCustomer.Name = "referenceCustomer";
             this.referenceCustomer.Size = new System.Drawing.Size(210, 21);
             this.referenceCustomer.TabIndex = 3;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelReference
             // 
@@ -217,7 +233,7 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.emailTrack);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNotification);
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 1050);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 564);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -278,11 +294,11 @@
             this.sectionReference.ContentPanel.Controls.Add(this.labelReference);
             this.sectionReference.ExpandedHeight = 70;
             this.sectionReference.ExtraText = "";
-            this.sectionReference.Location = new System.Drawing.Point(3, 1022);
+            this.sectionReference.Location = new System.Drawing.Point(3, 535);
             this.sectionReference.Name = "sectionReference";
             this.sectionReference.SectionName = "Reference";
             this.sectionReference.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
-            this.sectionReference.Size = new System.Drawing.Size(389, 23);
+            this.sectionReference.Size = new System.Drawing.Size(389, 24);
             this.sectionReference.TabIndex = 8;
             // 
             // rateControl
@@ -291,7 +307,7 @@
             this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateControl.Location = new System.Drawing.Point(0, 0);
             this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(385, 56);
+            this.rateControl.Size = new System.Drawing.Size(385, 55);
             this.rateControl.TabIndex = 2;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
             // 
@@ -304,7 +320,7 @@
             // 
             this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
             this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 551);
+            this.sectionRates.Location = new System.Drawing.Point(3, 63);
             this.sectionRates.Name = "sectionRates";
             this.sectionRates.SectionName = "Rates";
             this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
