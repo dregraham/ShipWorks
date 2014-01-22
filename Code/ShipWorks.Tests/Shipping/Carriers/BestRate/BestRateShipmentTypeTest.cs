@@ -409,13 +409,49 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void ApplySelectedShipmentRate_CallsActionSetOnTag_Test()
+        public void ApplySelectedShipmentRate_CallsSelectActionSetOnTag_Test()
         {
             ShipmentEntity calledShipment = null;
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
             BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.AreEqual(shipment, calledShipment);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_CallsSignUpActionOnTag_WhenSignUpActionIsNotNull_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            bool? signUpActionResult = null;
+
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => {signUpActionResult = true; return true;}, RateSelectionDelegate = entity => calledShipment = entity } };
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.IsTrue(signUpActionResult.Value);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_DoesNotCallSignUpActionOnTag_WhenSignUpActionIsNull_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            bool? signUpActionResult = null;
+
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            Assert.IsFalse(signUpActionResult.HasValue);
+        }
+
+        [TestMethod]
+        public void ApplySelectedShipmentRate_DoesNotCallSelectActionOnTag_WhenSignUpActionReturnsFalse_Test()
+        {
+            ShipmentEntity calledShipment = null;
+            
+            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => false, RateSelectionDelegate = entity => calledShipment = entity } };
+            BestRateShipmentType.ApplySelectedShipmentRate(shipment, rate);
+
+            // The called shipment should still be null since the sign up action returned false
+            Assert.IsNull(calledShipment);
         }
 
         private void InitializeFootnoteTests()

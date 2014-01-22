@@ -401,13 +401,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateSelected);
             BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
-
+            
             BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
-            bestRateResultTag.RateSelectionDelegate(shipment);
+            bool selectRate = true;
 
-            // Reset the event types after the the selected shipment has been applied to 
-            // avoid losing them during the transition to the targeted shipment type
-            shipment.BestRateEvents = (byte)originalEventTypes;
+            if (bestRateResultTag.SignUpAction != null)
+            {
+                // Capture the result of the sign up action to determine if the rate
+                // should be selected (i.e. the setup wizard completed)
+                selectRate = bestRateResultTag.SignUpAction();
+            }
+
+            if (selectRate)
+            {
+                // We only want to select the rate if the sign up action finished    
+                bestRateResultTag.RateSelectionDelegate(shipment);
+
+                // Reset the event types after the the selected shipment has been applied to 
+                // avoid losing them during the transition to the targeted shipment type
+                shipment.BestRateEvents = (byte)originalEventTypes;
+            }
         }
 
         /// <summary>
