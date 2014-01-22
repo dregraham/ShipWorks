@@ -227,31 +227,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
         }
 
-
-
-        /// <summary>
-        /// MI package types are not allowed to be used with non-MI services.  Checks to make
-        /// sure the combination is valid for all packages.
-        /// </summary>
-        /// <param name="ups"></param>
-        /// <returns></returns>
-        private bool IsServiceAndPackageTypeValid(UpsShipmentEntity ups)
-        {
-            // All packages in the shipment
-            foreach (UpsPackageEntity package in ups.Packages)
-            {
-                if (!UpsServicePackageTypeSetting.ServicePackageValidationSettings.Any(
-                    uspts =>
-                    (int) uspts.PackageType == package.PackagingType &&
-                    (int) uspts.ServiceType == ups.Service))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Process the response document returned by UPS
         /// </summary>
