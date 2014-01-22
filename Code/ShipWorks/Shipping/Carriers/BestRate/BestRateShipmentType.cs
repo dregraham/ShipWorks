@@ -416,7 +416,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // They didn't cancel out of the wizard, so signal that the 
                     // user signed up for an account
-                    SignUpForProviderAccountCompleted(typeof(BestRateShipmentType), EventArgs.Empty);
+                    SignUpForProviderAccountCompleted(this, EventArgs.Empty);
                 }
             }
             
