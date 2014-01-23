@@ -61,8 +61,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
-            this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
             this.packagingType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackaging = new System.Windows.Forms.Label();
             this.signatureRequired = new System.Windows.Forms.CheckBox();
@@ -86,9 +84,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionCod)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionCod.ContentPanel)).BeginInit();
             this.sectionCod.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
-            this.sectionRates.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionRecipient
@@ -119,7 +114,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 487);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 458);
             this.sectionReturns.Size = new System.Drawing.Size(399, 24);
             // 
             // sectionShipment
@@ -142,7 +137,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 92);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(399, 332);
             // 
             // sectionFrom
@@ -267,7 +262,7 @@
             this.sectionReferenceInstructions.ContentPanel.Controls.Add(this.labelReference);
             this.sectionReferenceInstructions.ExpandedHeight = 115;
             this.sectionReferenceInstructions.ExtraText = "";
-            this.sectionReferenceInstructions.Location = new System.Drawing.Point(3, 458);
+            this.sectionReferenceInstructions.Location = new System.Drawing.Point(3, 429);
             this.sectionReferenceInstructions.Name = "sectionReferenceInstructions";
             this.sectionReferenceInstructions.SectionName = "Reference & Instructions";
             this.sectionReferenceInstructions.SettingsKey = "{7A064A2F-0914-4A65-A993-DC3E8E70E054}";
@@ -319,7 +314,7 @@
             this.sectionCod.ContentPanel.Controls.Add(this.codAmount);
             this.sectionCod.ExpandedHeight = 117;
             this.sectionCod.ExtraText = "";
-            this.sectionCod.Location = new System.Drawing.Point(3, 429);
+            this.sectionCod.Location = new System.Drawing.Point(3, 400);
             this.sectionCod.Name = "sectionCod";
             this.sectionCod.SectionName = "C.O.D.";
             this.sectionCod.SettingsKey = "{640124b8-f610-4488-b282-7e2c36618b81}";
@@ -437,7 +432,7 @@
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(11, 251);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(479, 50);
+            this.insuranceControl.Size = new System.Drawing.Size(493, 50);
             this.insuranceControl.TabIndex = 74;
             // 
             // dimensionsControl
@@ -483,34 +478,6 @@
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionRates.Collapsed = true;
-            // 
-            // sectionRates.ContentPanel
-            // 
-            this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
-            this.sectionRates.ExpandedHeight = 93;
-            this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 63);
-            this.sectionRates.Name = "sectionRates";
-            this.sectionRates.SectionName = "Rates";
-            this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
-            this.sectionRates.Size = new System.Drawing.Size(399, 24);
-            this.sectionRates.TabIndex = 12;
-            // 
-            // rateControl
-            // 
-            this.rateControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rateControl.Location = new System.Drawing.Point(0, 0);
-            this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(395, 0);
-            this.rateControl.TabIndex = 4;
-            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
             // 
             // packagingType
             // 
@@ -571,7 +538,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
-            this.Controls.Add(this.sectionRates);
             this.Controls.Add(this.sectionCod);
             this.Controls.Add(this.sectionReferenceInstructions);
             this.Name = "OnTracServiceControl";
@@ -580,7 +546,6 @@
             this.Controls.SetChildIndex(this.sectionReferenceInstructions, 0);
             this.Controls.SetChildIndex(this.sectionCod, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
@@ -606,9 +571,6 @@
             this.sectionCod.ContentPanel.ResumeLayout(false);
             this.sectionCod.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionCod)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
-            this.sectionRates.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -640,8 +602,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label labelWeight;
         private UI.Controls.WeightControl weight;
-        protected UI.Controls.CollapsibleGroupControl sectionRates;
-        private Editing.RateControl rateControl;
         private UI.Controls.MultiValueComboBox codPaymentType;
         private System.Windows.Forms.Label labelCodPayment;
         private Templates.Tokens.TemplateTokenTextBox instructions;

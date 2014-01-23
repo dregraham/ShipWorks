@@ -28,17 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Size = new System.Drawing.Size(375, 93);
             // 
             // sectionRecipient
             // 
@@ -56,7 +51,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Express1EndiciaServiceControl";
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Editing
     public partial class ServiceControlBase : UserControl
     {
         // The type of shipment this instance is servicing 
-        ShipmentTypeCode shipmentTypeCode;
+        readonly ShipmentTypeCode shipmentTypeCode;
 
         // The values last past to the LoadShipments function
         List<ShipmentEntity> loadedShipments;
@@ -56,12 +56,6 @@ namespace ShipWorks.Shipping.Editing
         /// Raised when a shipment value that affects rate data has changed, so that the shipping window can know to invalidate rate data.
         /// </summary>
         public event EventHandler RateCriteriaChanged;
-
-        /// <summary>
-        /// Raised when something occurs that should cause rates to immediately refresh.  For example, this was created to support the Endicia Express1 promotional window, and allowing
-        /// rates to instantly refresh when Express1 discounted rates are enabled.
-        /// </summary>
-        public event EventHandler ReloadRatesRequired;
 
         /// <summary>
         /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support 
@@ -366,68 +360,6 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Load the given rates into the control.  Will be null if no rates are available.  outOfDate indicates if the shipment has changed since the 
-        /// rates were retrieved.
-        /// </summary>
-        public void LoadRates(RateGroup rateGroup)
-        {
-            CollapsibleGroupControl ratesSection = Controls.OfType<CollapsibleGroupControl>().Where(c => c.SectionName == "Rates").SingleOrDefault();
-            if (ratesSection != null)
-            {
-                RateControl rateControl = ratesSection.ContentPanel.Controls.OfType<RateControl>().SingleOrDefault();
-                if (rateControl != null)
-                {
-                    if (LoadedShipments.Count > 1)
-                    {
-                        rateControl.ClearRates("(Multiple)");
-                    }
-                    else
-                    {
-                        if (rateGroup == null)
-                        {
-                            if (LoadedShipments.Count == 1 && LoadedShipments[0].Processed)
-                            {
-                                rateControl.ClearRates("The shipment has already been processed.");
-                            }
-                            else
-                            {
-                                rateControl.ClearRates("Click 'Get Rates'.");
-                            }
-                        }
-                        else if (rateGroup.Rates.Count == 0)
-                        {
-                            rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
-                        }
-                        else
-                        {
-                            rateControl.LoadRates(rateGroup);
-                        }
-                    }
-                }
-
-                int rateLines = Math.Max(2, rateGroup != null ? rateGroup.Rates.Count : 0);
-                int height = (ratesSection.Height - ratesSection.ContentPanel.Height) + (rateLines + 1) * DetailViewSettings.SingleRowHeight + 6;
-
-                if (rateGroup != null && rateGroup.Rates.Count > 0)
-                {
-                    if (rateGroup.OutOfDate)
-                    {
-                        height += 30;
-                    }
-                }
-
-                height += rateControl.FootnoteHeight;
-
-                ratesSection.Height = height;
-
-                if (ratesSection.Collapsed)
-                {
-                    ratesSection.Collapsed = false;
-                }
-            }
-        }
-
-        /// <summary>
         /// Suspend raising the event that rate criteria has changed
         /// </summary>
         protected void SuspendRateCriteriaChangeEvent()
@@ -457,21 +389,11 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
-        /// <summary>
-        /// Event raised indicating that a full reload of the rates is required
-        /// </summary>
-        protected void OnReloadRatesRequired(object sender, EventArgs e)
-        {
-            if (ReloadRatesRequired != null)
-            {
-                ReloadRatesRequired(this, EventArgs.Empty);
-            }
-        }
 
         /// <summary>
         /// The shipments last past to LoadShipments
         /// </summary>
-        protected List<ShipmentEntity> LoadedShipments
+        public List<ShipmentEntity> LoadedShipments
         {
             get { return loadedShipments; }
         }

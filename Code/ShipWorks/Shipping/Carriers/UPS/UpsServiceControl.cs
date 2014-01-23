@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             : base (shipmentTypeCode)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
 
             originControl.Initialize(ShipmentTypeCode.UpsOnLineTools);
 

@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.UI;
+﻿using System.Drawing;
+
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -65,6 +67,10 @@ namespace ShipWorks.Shipping
         // Maps shipment ID's to the list of rates for the shipment
         Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
 
+        private List<ShipmentEntity> loadedShipmentEntities;
+
+        private RateControl rateControl;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -99,6 +105,7 @@ namespace ShipWorks.Shipping
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
             this.initialDisplayTracking = trackingPage;
+            this.rateControl = new RateControl();
         }
 
         /// <summary>
@@ -471,12 +478,12 @@ namespace ShipWorks.Shipping
 
             // Extract userState
             var userState = (Dictionary<string, object>) e.UserState;
-            List<ShipmentEntity> loaded = (List<ShipmentEntity>) userState["loaded"];
+            this.loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
             List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
             bool resortWhenDone = (bool) userState["resortWhenDone"];
 
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
-            ApplyShipmentsToGridRows(loaded);
+            ApplyShipmentsToGridRows(loadedShipmentEntities);
 
             // We also have to apply deleted information to the grid, so the grid knows which rows are marked for deletion and will need
             // removed on the next RefreshAndResort
@@ -487,7 +494,7 @@ namespace ShipWorks.Shipping
             //
             // If they had cancelled, then the selection will be bigger than what was loaded obviously - and the rest of this function
             // will take care of unselecting it.
-            if (!e.Canceled && HasSelectionChanged(loaded))
+            if (!e.Canceled && HasSelectionChanged(loadedShipmentEntities))
             {
                 LoadSelectedShipments(resortWhenDone);
                 return;
@@ -500,7 +507,7 @@ namespace ShipWorks.Shipping
             // that had been deleted too, but those will get wiped out when we do the RefreshAndRestor.
             if (e.Canceled)
             {
-                var notLoaded = shipmentControl.SelectedRows.Where(r => !loaded.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
+                var notLoaded = shipmentControl.SelectedRows.Where(r => !loadedShipmentEntities.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
 
                 if (notLoaded.Count > 0)
                 {
@@ -525,36 +532,36 @@ namespace ShipWorks.Shipping
 
             ShipmentType shipmentType = null;
 
-            bool enableEditing = !loaded.Any(s => s.Processed);
+            bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed);
             
             // To have editing enabled, its also necesary to have permissions for all of them
             if (enableEditing)
             {
-                enableEditing = loaded.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
+                enableEditing = loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
             }
 
             bool enableShippingAddress = enableEditing;
 
-            if (enableEditing && loaded.Count > 0)
+            if (enableEditing && loadedShipmentEntities.Count > 0)
             {
                 // Check with the store to see if the shipping address should be editable
-                OrderEntity order = DataProvider.GetEntity(loaded.FirstOrDefault().OrderID) as OrderEntity;
+                OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
                 StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
 
-                enableShippingAddress = loaded.All(s => storeType.IsShippingAddressEditable(s));
+                enableShippingAddress = loadedShipmentEntities.All(s => storeType.IsShippingAddressEditable(s));
             }
 
             comboShipmentType.SelectedIndexChanged -= this.OnChangeShipmentType;
 
             // See if anything is selected
-            if (loaded.Count == 0)
+            if (loadedShipmentEntities.Count == 0)
             {
                 comboShipmentType.Enabled = false;
                 comboShipmentType.SelectedIndex = -1;
             }
             else
             {
-                shipmentType = GetShipmentType(loaded);
+                shipmentType = GetShipmentType(loadedShipmentEntities);
 
                 // Update the shipment type combo
                 comboShipmentType.Enabled = enableEditing;
@@ -581,11 +588,11 @@ namespace ShipWorks.Shipping
             comboShipmentType.SelectedIndexChanged += this.OnChangeShipmentType;
 
             // Update our list of shipments that are displayed in the UI
-            uiDisplayedShipments = loaded.ToList();
+            uiDisplayedShipments = loadedShipmentEntities.ToList();
 
             // Some of the shipment data is "dynamic".  Like the origin address, if it pulled from the Store Address,
             // and the store address has since changed, we want to update to reflect that.
-            foreach (ShipmentEntity shipment in loaded)
+            foreach (ShipmentEntity shipment in loadedShipmentEntities)
             {
                 if (!shipment.Processed && IsShipmentTypeActivatedUI(shipment))
                 {
@@ -594,7 +601,7 @@ namespace ShipWorks.Shipping
             }
 
             // Load the service control with the UI displayed shipments
-            LoadServiceControl(loaded, shipmentType, enableEditing, enableShippingAddress);
+            LoadServiceControl(loadedShipmentEntities, shipmentType, enableEditing, enableShippingAddress);
 
             // Load the tracking control
             LoadTrackingDisplay();
@@ -768,6 +775,12 @@ namespace ShipWorks.Shipping
                     reduceFlash = new Panel();
                     reduceFlash.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(reduceFlash);
+
+                    // Add the rate control below the service control
+                    rateControlArea.Height = rateControl.Height;
+                    rateControlArea.Controls.Add(rateControl);
+
+                    splitContainer1.Panel2.AutoScrollMinSize = new Size(0, rateControl.Height);
                 }
 
                 // If there was a setup control, remove it
@@ -779,7 +792,6 @@ namespace ShipWorks.Shipping
                     newServiceControl.RecipientDestinationChanged += this.OnRecipientDestinationChanged;
                     newServiceControl.ShipmentServiceChanged += this.OnShipmentServiceChanged;
                     newServiceControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
-                    newServiceControl.ReloadRatesRequired += new EventHandler(OnRateReloadRequired);
                     newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
                     newServiceControl.RatesCleared += OnRatesCleared;
@@ -794,7 +806,6 @@ namespace ShipWorks.Shipping
                     oldServiceControl.RecipientDestinationChanged -= this.OnRecipientDestinationChanged;
                     oldServiceControl.ShipmentServiceChanged -= this.OnShipmentServiceChanged;
                     oldServiceControl.RateCriteriaChanged -= this.OnRateCriteriaChanged;
-                    oldServiceControl.ReloadRatesRequired -= new EventHandler(OnRateReloadRequired);
                     oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.RatesCleared -= OnRatesCleared;
@@ -814,6 +825,12 @@ namespace ShipWorks.Shipping
             LoadDisplayedRates();
         }
 
+
+        /// <summary>
+        /// Called when [rates cleared].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnRatesCleared(object sender, EventArgs e)
         {
             shipmentRateMap.Clear();
@@ -903,7 +920,41 @@ namespace ShipWorks.Shipping
                     rateGroup = GetCachedRates(uiShipment);
                 }
 
-                ServiceControl.LoadRates(rateGroup);
+                this.LoadRates(rateGroup);
+            }
+        }
+
+        /// <summary>
+        /// Loads the rates.
+        /// </summary>
+        /// <param name="rateGroup">The rate group.</param>
+        public void LoadRates(RateGroup rateGroup)
+        {
+            if (this.loadedShipmentEntities.Count > 1)
+            {
+                rateControl.ClearRates("(Multiple)");
+            }
+            else
+            {
+                if (rateGroup == null)
+                {
+                    if (this.loadedShipmentEntities.Count == 1 && this.loadedShipmentEntities[0].Processed)
+                    {
+                        rateControl.ClearRates("The shipment has already been processed.");
+                    }
+                    else
+                    {
+                        rateControl.ClearRates("Click 'Get Rates'.");
+                    }
+                }
+                else if (rateGroup.Rates.Count == 0)
+                {
+                    rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
+                }
+                else
+                {
+                    rateControl.LoadRates(rateGroup);
+                }
             }
         }
 

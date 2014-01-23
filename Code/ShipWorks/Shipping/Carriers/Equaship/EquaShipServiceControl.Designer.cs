@@ -208,7 +208,6 @@
             this.rateControl.Size = new System.Drawing.Size(492, 55);
             this.rateControl.TabIndex = 3;
             this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
             // 
             // service
             // 

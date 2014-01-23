@@ -21,11 +21,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public iParcelServiceControl() : base(ShipmentTypeCode.iParcel)
         {
             InitializeComponent();
-
-            // OnReloadRatesRequired is part of ServiceControlBase, so if we define it in the designer class we get the following error:
-            // The method 'xxx' cannot be the method for an event because a class this class derives from already defines the method
-            // So set it here instead.
-            rateControl.ReloadRatesRequired += new System.EventHandler(OnReloadRatesRequired);
         }
 
         /// <summary>

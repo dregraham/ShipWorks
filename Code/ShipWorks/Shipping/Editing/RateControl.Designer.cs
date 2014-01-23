@@ -114,7 +114,6 @@
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
-            this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
             // 
             // gridColumnProvider
@@ -246,7 +245,6 @@
             // 
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Top;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 0);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(493, 1);

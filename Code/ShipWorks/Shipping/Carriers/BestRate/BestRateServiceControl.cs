@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             InitializeComponent();
             
-            rateControl.ReloadRatesRequired += OnReloadRatesRequired;
             bestRateShipment = new BestRateShipmentType();
             bestRateShipment.SignUpForProviderAccountCompleted += OnAccountSignUp;
         }
@@ -196,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnAccountSignUp(object sender, EventArgs e)
         {
-            rateControl.ClearRates(string.Empty);
+            // TODO: rateControl.ClearRates(string.Empty);
             RaiseRatesCleared();
         }
     }

@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             : base (ShipmentTypeCode.FedEx)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
         }
 
         /// <summary>
