@@ -54,22 +54,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 
             Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
         }
-
-        [TestMethod]
-        public void SetAccount_SetsAccountOfShipmentToParameterAccount_WhenCreatedAccountIsNull_Test()
-        {
-            testObject.SetAccount(shipmentEntity,fedExAccountEntity);
-
-            Assert.AreEqual(42, shipmentEntity.FedEx.FedExAccountID);
-        }
-
-        [TestMethod]
-        public void SetAccount_SetsAccountOfParameter_WhenCreatedAccountIsNull_Test()
-        {
-            testObject.CreatedAccount = new FedExAccountEntity() { FedExAccountID = 2 };
-            testObject.SetAccount(shipmentEntity, fedExAccountEntity);
-
-            Assert.AreEqual(2, shipmentEntity.FedEx.FedExAccountID);
-        }
     }
 }

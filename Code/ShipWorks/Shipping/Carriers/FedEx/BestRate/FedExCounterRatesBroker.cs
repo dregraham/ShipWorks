@@ -32,11 +32,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             this.settingsRepository = settingsRepository;
         }
-        
-        /// <summary>
-        /// Gets or sets the account just created by the user.
-        /// </summary>
-        public FedExAccountEntity CreatedAccount { get; set; }
 
         /// <summary>
         /// Gets the best rates for for FedEx counter-based prices.
@@ -101,14 +96,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Since this is just getting counter rates, we want to have the severity level
             // as information for all shipping exceptions
             return new BrokerException(ex, BrokerExceptionSeverityLevel.Information, ShipmentType);
-        }
-
-        /// <summary>
-        /// Sets the FedEx Account.  If created account is null, use the account in the parameter.
-        /// </summary>
-        public override void SetAccount(ShipmentEntity currentShipment, FedExAccountEntity account)
-        {
-            base.SetAccount(currentShipment, CreatedAccount ?? account);
         }
 
         /// <summary>
