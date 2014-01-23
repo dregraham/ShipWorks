@@ -20,8 +20,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
         private Mock<FedExShipmentType> fedExShipmentType;
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        private ShipmentEntity shipmentEntity;
-        private FedExAccountEntity fedExAccountEntity;
 
         [TestInitialize]
         public void Initialize()
@@ -34,9 +32,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             fedExShipmentType.Setup(s => s.GetRates(It.IsAny<ShipmentEntity>())).Returns(new RateGroup(new List<RateResult>()));
 
             testObject = new FedExCounterRatesBroker(fedExShipmentType.Object, accountRepository.Object, settingsRepository.Object);
-
-            shipmentEntity = new ShipmentEntity() { FedEx = new FedExShipmentEntity() };
-            fedExAccountEntity = new FedExAccountEntity(){ FedExAccountID = 42};
         }
 
         [TestMethod]

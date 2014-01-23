@@ -183,10 +183,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             currentShipment.Ups.Packages[0].DimsAddWeight = false;
             currentShipment.Ups.Packages[0].PackagingType = (int)UpsPackagingType.Custom;
             currentShipment.Ups.Service = (int)UpsServiceType.UpsGround;
-            currentShipment.Ups.UpsAccountID = GetAccountID(account);
+            SetAccount(currentShipment, account);
 
             currentShipment.Ups.Packages[0].Insurance = currentShipment.Insurance;
             currentShipment.Ups.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
+        }
+
+        /// <summary>
+        /// Sets the UPS  account ID on the given shipment.
+        /// </summary>
+        public virtual void SetAccount(ShipmentEntity currentShipment, UpsAccountEntity account)
+        {
+            currentShipment.Ups.UpsAccountID = account.UpsAccountID;
         }
 
         /// <summary>
