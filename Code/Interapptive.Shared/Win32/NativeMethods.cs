@@ -739,6 +739,8 @@ namespace Interapptive.Shared.Win32
         public const int STD_ERROR_HANDLE = unchecked((int) 0xFFFFFFF4);
         public const int DUPLICATE_SAME_ACCESS = 2;
 
+        public const int WHEEL_DELTA = 120;
+
         /// <summary>
         /// Policy Enumeration
         /// </summary>

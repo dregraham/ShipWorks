@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
+using Interapptive.Shared.Win32;
 using Image = System.Drawing.Image;
 
 namespace ShipWorks.UI.Controls
@@ -12,6 +13,9 @@ namespace ShipWorks.UI.Controls
     public class ImageComboBox : PopupComboBox
 	{
         const int imageSize = 16;
+
+        // Used to track mouse wheel movement
+        private int totalWheelAmount = 0;
 
         #region DropDownListBox
 
@@ -342,6 +346,37 @@ namespace ShipWorks.UI.Controls
             object item = Items[SelectedIndex];
 
             DropDownListBox.DrawImageAndText(item, g, Font, foreColor, bounds);
+        }
+
+        /// <summary>
+        /// Intercept the mouse wheel
+        /// </summary>
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == NativeMethods.WM_MOUSEWHEEL)
+            {
+                // Track how much the wheel has moved for this message
+                totalWheelAmount += NativeMethods.SignedHIWORD(m.WParam);
+                int wheelClicks = totalWheelAmount / NativeMethods.WHEEL_DELTA;
+
+                // See if there has been at least one "click" of wheel movement
+                if (Math.Abs(wheelClicks) >= 1)
+                {
+                    totalWheelAmount = 0;
+
+                    // Update the selected index, if possible
+                    int index = listBox.SelectedIndex - wheelClicks;
+                    if (index >= 0 && index < Items.Count)
+                    {
+                        listBox.SelectedIndex = index;
+                    }
+                }
+            }
+            else
+            {
+                // This isn't a mouse wheel message, so pass it on
+                base.WndProc(ref m);
+            }
         }
 
         /// <summary>
