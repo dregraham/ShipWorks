@@ -46,8 +46,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
-        private ICarrierSettingsRepository settingsRepository;
+        protected UpsShipmentType()
+        {
+            // Use the "live" versions of the repository by default
+            AccountRepository = new UpsAccountRepository();
+            SettingsRepository = new UpsSettingsRepository();
+        }
 
         /// <summary>
         /// UPS supports getting rates
@@ -66,45 +70,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets or sets the settings repository that the shipment type should use
-        /// to obtain Ups related settings and account information. This provides
-        /// the ability to use different Ups settings depending on how the shipment
+        /// Gets or sets the account repository that the shipment type should use
+        /// to obtain Ups related account information. This provides
+        /// the ability to use different UPS account info depending on how the shipment
         /// type is going to be used. For example, to obtain counter rates with a
-        /// generic Ups account intended to be used with ShipWorks, all that would
+        /// generic UPS account intended to be used with ShipWorks, all that would
         /// have to be done is to assign this property with a repository that contains
         /// the appropriate account information for getting counter rates.
         /// </summary>
-        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository
-        {
-            get
-            {
-                // Default the settings repository to the "live" UpsAccountRepository if
-                // it hasn't been set already
-                return accountRepository ?? (accountRepository = new UpsAccountRepository());
-            }
-            set
-            {
-                accountRepository = value;
-            }
-        }
-
+        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        
         /// <summary>
-        /// Gets the settings repository.
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain Ups related settings information. This provides
+        /// the ability to use different UPS settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic UPS account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
         /// </summary>
-        /// <value>
-        /// The settings repository.
-        /// </value>
-        public ICarrierSettingsRepository SettingsRepository
-        {
-            get 
-            {
-                return settingsRepository ?? (settingsRepository = new UpsSettingsRepository()); 
-            }
-            set
-            {
-                settingsRepository = value;
-            }
-        }
+        public ICarrierSettingsRepository SettingsRepository { get; set; }
 
         /// <summary>
         /// UPS always uses the residential indicator
@@ -759,11 +744,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 // Get the transit times and services
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, accountRepository, settingsRepository);
+                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository);
 
-                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(accountRepository, settingsRepository);
-                
-
+                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository);
                 List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
                 if (!serviceRates.Any())

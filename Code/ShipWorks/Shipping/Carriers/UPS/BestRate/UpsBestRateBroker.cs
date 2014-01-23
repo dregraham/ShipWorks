@@ -21,8 +21,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         private bool isMailInnovationsAvailable;
         private bool canUseSurePost;
 
-        protected ICarrierSettingsRepository SettingsRepository { get; set; }
-
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
@@ -37,12 +35,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         /// <param name="shipmentType">Instance of a UPS shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get UPS accounts</param>
+        /// <param name="upsSettingsRepository">The ups settings repository.</param>
         /// <remarks>This is designed to be used by tests</remarks>
         public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository upsSettingsRepository) :
             base(shipmentType, accountRepository, "UPS")
         {
             SettingsRepository = upsSettingsRepository;
         }
+
+        /// <summary>
+        /// Gets or sets the settings repository.
+        /// </summary>
+        protected ICarrierSettingsRepository SettingsRepository { get; private set; }
 
         /// <summary>
         /// Gets a list of UPS rates
