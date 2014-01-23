@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 // We want FedEx account setup wizard to show when a rate is selected so the user 
                 // can create their own FedEx account since these rates are just counter rates 
                 // using a ShipWorks account.
-                bestRateResultTag.SignUpAction= new Func<bool>(DisplaySetupWizard);
+                bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
             }
 
             return bestRates;

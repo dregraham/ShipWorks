@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.UpsEnvironment
         /// The ShippingSettingsEntity.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public ShippingSettingsEntity GetShippingSettings()
+        public virtual ShippingSettingsEntity GetShippingSettings()
         {
             return ShippingSettings.Fetch();
         }
@@ -83,7 +83,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.UpsEnvironment
             get { return InterapptiveOnly.IsInterapptiveUser; }
         }
 
-
+        /// <summary>
+        /// Gets or sets a value indicating whether to [use list rates]. Indicates if LIST rates are in
+        /// effect, instead of the standard ACCOUNT rates
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [use list rates]; otherwise, <c>false</c>.
+        /// </value>
+        /// <exception cref="System.NotImplementedException">
+        /// </exception>
         public bool UseListRates
         {
             get

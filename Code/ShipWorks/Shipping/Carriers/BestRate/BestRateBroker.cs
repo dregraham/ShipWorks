@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// <typeparam name="TAccount">Type of account</typeparam>
     public abstract class BestRateBroker<TAccount> : IBestRateShippingBroker where TAccount : EntityBase2
     {
-        private readonly ICarrierAccountRepository<TAccount> accountRepository;
         private readonly string carrierDescription;
 
         /// <summary>
@@ -27,10 +26,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount> accountRepository, string carrierDescription)
         {
-            this.accountRepository = accountRepository;
+            this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
             ShipmentType = shipmentType;
             GetRatesAction = ShippingManager.GetRates;
+        }
+
+        /// <summary>
+        /// Gets or sets the account repository.
+        /// </summary>
+        protected ICarrierAccountRepository<TAccount> AccountRepository
+        {
+            get; 
+            private set;
         }
 
         /// <summary>
@@ -53,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </value>
         public bool HasAccounts
         {
-            get { return accountRepository.Accounts.Any(); }
+            get { return AccountRepository.Accounts.Any(); }
         }
 
         /// <summary>
@@ -76,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public virtual bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            List<TAccount> accounts = accountRepository.Accounts.ToList();
+            List<TAccount> accounts = AccountRepository.Accounts.ToList();
             foreach (TAccount account in accounts)
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
@@ -106,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            List<TAccount> accounts = accountRepository.Accounts.ToList();
+            List<TAccount> accounts = AccountRepository.Accounts.ToList();
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,

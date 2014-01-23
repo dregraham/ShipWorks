@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 
@@ -19,12 +21,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         private bool isMailInnovationsAvailable;
         private bool canUseSurePost;
 
+        protected ICarrierSettingsRepository SettingsRepository { get; set; }
+
         /// <summary>
         /// Creates a broker with the default shipment type and account repository
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
         public UpsBestRateBroker()
-            : this(new UpsOltShipmentType(), new UpsAccountRepository())
+            : this(new UpsOltShipmentType(), new UpsAccountRepository(), new UpsSettingsRepository())
         {
         }
 
@@ -34,10 +38,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="shipmentType">Instance of a UPS shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get UPS accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository) :
+        public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository upsSettingsRepository) :
             base(shipmentType, accountRepository, "UPS")
         {
-
+            SettingsRepository = upsSettingsRepository;
         }
 
         /// <summary>

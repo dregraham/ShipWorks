@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
@@ -45,7 +46,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        private ICarrierAccountRepository<UpsAccountEntity> settingsRepository;
+        private ICarrierAccountRepository<UpsAccountEntity> accountRepository;
+        private ICarrierSettingsRepository settingsRepository;
 
         /// <summary>
         /// UPS supports getting rates
@@ -78,7 +80,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 // Default the settings repository to the "live" UpsAccountRepository if
                 // it hasn't been set already
-                return settingsRepository ?? (settingsRepository = new UpsAccountRepository());
+                return accountRepository ?? (accountRepository = new UpsAccountRepository());
+            }
+            set
+            {
+                accountRepository = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the settings repository.
+        /// </summary>
+        /// <value>
+        /// The settings repository.
+        /// </value>
+        public ICarrierSettingsRepository SettingsRepository
+        {
+            get 
+            {
+                return settingsRepository ?? (settingsRepository = new UpsSettingsRepository()); 
             }
             set
             {
@@ -739,9 +759,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 // Get the transit times and services
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment);
+                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, accountRepository, settingsRepository);
 
-                List<UpsServiceRate> serviceRates = new UpsApiRateClient().GetRates(shipment);
+                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(accountRepository, settingsRepository);
+                
+
+                List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
                 if (!serviceRates.Any())
                 {
@@ -750,7 +773,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 else
                 {
                     // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository()).RateType == (int)UpsRateType.Negotiated;
+                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, AccountRepository).RateType == (int)UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
