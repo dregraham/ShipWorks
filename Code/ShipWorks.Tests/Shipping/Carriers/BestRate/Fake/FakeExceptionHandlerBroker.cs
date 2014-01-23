@@ -91,5 +91,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
         /// <param name="brokerSettings">The broker settings.</param>
         public void Configure(IBestRateBrokerSettings brokerSettings)
         { }
+
+
+        /// <summary>
+        /// Gets a value indicating whether [is counter rate].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is counter rate]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCounterRate
+        {
+            get
+            {
+                return false;
+            }
+        }
     }
 }
