@@ -1164,7 +1164,8 @@ namespace ShipWorks.Shipping
         public static bool IsShipmentTypeCounterRateAllowed(ShipmentTypeCode shipmentTypeCode)
         {
             // TODO: Add other counter rate shipment types when we implement them.
-            bool isCounterRateShipmentType = shipmentTypeCode == ShipmentTypeCode.FedEx;
+            bool isCounterRateShipmentType = shipmentTypeCode == ShipmentTypeCode.FedEx ||
+                                             shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
 
             return isCounterRateShipmentType;
         }
