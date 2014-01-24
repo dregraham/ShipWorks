@@ -48,7 +48,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             ((UpsShipmentType)ShipmentType).SettingsRepository = SettingsRepository;
             ((UpsShipmentType)ShipmentType).AccountRepository = AccountRepository;
 
-            RateGroup rates = base.GetBestRates(shipment, exceptionHandler);
+            // We're passing in our own exception handler to accumulate broker exceptions otherwise
+            // any SurePost exceptions generated will display as having a Warning severity level; later
+            // on we're going to make sure any broker exceptions have the severity level set to 
+            // information and then call the exception handler provided.
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            RateGroup rates = base.GetBestRates(shipment, brokerExceptions.Add);
 
             foreach (BestRateResultTag bestRateResultTag in rates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
             {
@@ -58,6 +63,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
             }
 
+            // Since we sent our own exception handler to the GetBestRates method, we need to 
+            // call the exception handler that was provided with any broker exceptions
+            foreach (BrokerException brokerException in brokerExceptions)
+            {
+                if (brokerException.SeverityLevel != BrokerExceptionSeverityLevel.Information)
+                {
+                    // Translate the broker exception to an informational severity level before
+                    // sending it to the exception handler
+                    exceptionHandler(new BrokerException(brokerException, BrokerExceptionSeverityLevel.Information, brokerException.ShipmentType));
+                }
+                else
+                {
+                    exceptionHandler(brokerException);
+                }
+            }
+            
             return rates;
         }
 
