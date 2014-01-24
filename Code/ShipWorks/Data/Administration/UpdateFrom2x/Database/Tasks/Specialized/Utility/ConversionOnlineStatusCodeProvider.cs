@@ -68,7 +68,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized.
                     if (storeTypeCode == (int)StoreTypeCode.osCommerce ||
                         storeTypeCode == (int)StoreTypeCode.CreLoaded ||
                         storeTypeCode == (int)StoreTypeCode.AmeriCommerce ||
-                        storeTypeCode == (int)StoreTypeCode.AuctionSound ||
+                        storeTypeCode == (int)StoreTypeCode.SellerVantage ||
                         storeTypeCode == (int)StoreTypeCode.ClickCartPro ||
                         storeTypeCode == (int)StoreTypeCode.CommerceInterface ||
                         storeTypeCode == (int)StoreTypeCode.Magento ||
