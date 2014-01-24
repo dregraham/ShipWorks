@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
@@ -127,7 +128,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // International stuff
             if (!ShipmentType.IsDomestic(shipment))
             {
-                xmlWriter.WriteElementString("Description", ups.CustomsDescription);
+                string customsDescription = ups.CustomsDescription;
+
+                // MI only allows 35 characters for customs descriptions
+                if (UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
+                {
+                    customsDescription = customsDescription.Length <= 35 ? customsDescription : customsDescription.Substring(0, 35);
+                }
+                xmlWriter.WriteElementString("Description", customsDescription);
 
                 // Documents Only
                 if (ups.CustomsDocumentsOnly)
@@ -727,7 +735,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 // Start Product
                 xmlWriter.WriteStartElement("Product");
-                xmlWriter.WriteElementString("Description", Regex.Replace(shipmentCustomsItem.Description, "[^A-Za-z0-9 _]", string.Empty));
+
+                string customsItemDescription = Regex.Replace(shipmentCustomsItem.Description, "[^A-Za-z0-9 _]", string.Empty);
+                customsItemDescription = customsItemDescription.Length < 35 ? customsItemDescription : customsItemDescription.Substring(0, 35);
+
+                xmlWriter.WriteElementString("Description", customsItemDescription);
                 xmlWriter.WriteEndElement();
 
                 otherDescription += string.Format("{0} ", shipmentCustomsItem.Description);
