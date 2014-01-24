@@ -48,18 +48,29 @@ namespace ShipWorks.Templates.Distribution
                 }
             }
 
+            // Fake it if runnning under development, otherwise they'd try to install themselves everytime
+            if (swVersion.Major == 0)
+            {
+                // Has to be set to the biggest number we check below
+                swVersion = new Version("3.7.0.5018");
+            }
+
             // No default templates are installed yet - we are safe to do the initial install
             if (installed == new Version("0.0.0.0"))
             {
                 PerformInitialInstall();
 
-                // Fake it if runnning under development, otherwise they'd try to install themselves everytime
-                if (swVersion.Major == 0)
-                {
-                    swVersion = new Version("3.0.0.0");
-                }
-
                 UpdateDatabaseTemplateVersion(swVersion);
+            }
+            else
+            {
+                // Added 'Reports\Shipper Productivity' for 3.7
+                if (installed < new Version("3.7.0.5018"))
+                {
+                    InstallTemplate(@"Reports\Shipper Productivity", TemplateManager.Tree.CreateEditableClone());
+
+                    UpdateDatabaseTemplateVersion(swVersion);
+                }
             }
         }
 

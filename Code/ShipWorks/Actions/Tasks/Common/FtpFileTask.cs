@@ -124,10 +124,15 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 ftp.PutFiles(string.Format("{0}\\*", rootTempFileName), "/", FtpBatchTransferOptions.Recursive, FtpActionOnExistingFiles.OverwriteAll);
             }
-            catch (FtpBatchTransferException ex)
+            catch (FtpException ex)
             {
                 log.Error("Error transferring File", ex);
                 throw new ActionTaskRunException(String.Format("Error uploading file. Ftp returned error: {0}", ex.Message));
+            }
+            catch (FileTransferException ex)
+            {
+                log.Error("Error transferring File", ex);
+                throw new ActionTaskRunException(String.Format("Error uploading file. Ftp returned error: {0}", ex));
             }
         }
 

@@ -355,14 +355,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     // Save the order, which will include all moved items, payments, and charges
                     adapter.SaveAndRefetch(newOrder);
 
-                    // Now we need to go through each old order, copy over the notes and shipments, and delete toe original order
+                    // Now we need to go through each old order, copy over the notes and shipments, and delete the original order
                     foreach (OrderEntity order in toCombine.Select(c => c.Order))
                     {
                         OrderUtility.CopyNotes(order.OrderID, newOrder);
 
                         OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                        DeletionService.DeleteOrder(order.OrderID);
+                        DeletionService.DeleteOrder(order.OrderID, adapter);
                     }
 
                     // commit the transaction

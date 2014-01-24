@@ -755,7 +755,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
             finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
 
             List<long> orderIDs = context.SelectedKeys.ToList();
-            finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
+
+            try
+            {
+                finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
+            }
+            catch (EbayException ex)
+            {
+                context.Complete(MenuCommandResult.Error, ex.Message);
+            }
         }
 
         /// <summary>
