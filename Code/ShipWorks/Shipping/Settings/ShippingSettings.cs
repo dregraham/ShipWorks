@@ -119,12 +119,6 @@ namespace ShipWorks.Shipping.Settings
             {
                 configured.Add((int) shipmentTypeCode);
                 settings.ConfiguredTypes = configured.ToArray();
-
-                // If this is the first one to be setup, set it as the default
-                if (configured.Count == 1)
-                {
-                    settings.DefaultType = configured[0];
-                }
             }
 
             // Save the changes, if any
@@ -141,7 +135,7 @@ namespace ShipWorks.Shipping.Settings
             settings.ActivatedTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
             settings.ConfiguredTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
             settings.ExcludedTypes = new int[0];
-            settings.DefaultType = (int) ShipmentTypeCode.None;
+            settings.DefaultType = (int) ShipmentTypeCode.BestRate;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
             settings.BlankPhoneNumber = "999-999-9999";
