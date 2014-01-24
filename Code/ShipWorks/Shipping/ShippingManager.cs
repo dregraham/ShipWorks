@@ -1165,6 +1165,7 @@ namespace ShipWorks.Shipping
         {
             // TODO: Add other counter rate shipment types when we implement them.
             bool isCounterRateShipmentType = shipmentTypeCode == ShipmentTypeCode.FedEx ||
+                                             shipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                                              shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools;
 
             return isCounterRateShipmentType;

@@ -168,7 +168,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <returns>An instance of a WebToolsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new WebToolsBestRateBroker();
+            // TODO: Put logic to return correct shipping broker here.
+            return new NullShippingBroker();
         }
     }
 }
