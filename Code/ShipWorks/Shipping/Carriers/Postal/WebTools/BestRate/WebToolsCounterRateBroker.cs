@@ -31,8 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <returns>A RateGroup containing the counter rates for a generic WebTools account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            // Use a settings repository to get counter rates
-            //((PostalWebShipmentType)ShipmentType).SettingsRepository = settingsRepository;
             RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
 
             foreach (RateResult rateResult in bestRates.Rates)
