@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -168,8 +170,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <returns>An instance of a WebToolsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            // TODO: Put logic to return correct shipping broker here.
-            return new NullShippingBroker();
+            if (StampsAccountManager.GetAccounts(false).Any() ||
+                EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Any())
+            {
+                return new NullShippingBroker();
+            }
+            else
+            {
+                return new WebToolsCounterRatesBroker();
+            }
         }
     }
 }
