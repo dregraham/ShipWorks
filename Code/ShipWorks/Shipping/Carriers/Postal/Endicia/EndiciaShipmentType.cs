@@ -29,6 +29,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public class EndiciaShipmentType : PostalShipmentType
     {
+        private ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+
         /// <summary>
         /// Endicia ShipmentType code
         /// </summary>
@@ -49,6 +51,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Should Express1 rates be checked when getting Endicia rates?
         /// </summary>
         public bool ShouldRetrieveExpress1Rates { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository that should be used for retrieving accounts
+        /// </summary>
+        public ICarrierAccountRepository<EndiciaAccountEntity> AccountRepository
+        {
+            get
+            {
+                // Default the settings repository to the "live" EndiciaAccountRepository if
+                // it hasn't been set already
+                return accountRepository ?? (accountRepository = new EndiciaAccountRepository());
+            }
+            set
+            {
+                accountRepository = value;
+            }
+        }
 
         /// <summary>
         /// Create an EndiciaShipmentType object
@@ -343,7 +362,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
+                EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository);
 
                 List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
                     endiciaApiClient.GetRatesSlow(shipment, this) :
@@ -474,7 +493,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository);
 
             if (useExpress1)
             {
