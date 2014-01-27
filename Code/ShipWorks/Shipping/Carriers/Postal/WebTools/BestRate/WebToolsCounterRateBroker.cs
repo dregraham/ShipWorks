@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 
             foreach (RateResult rateResult in bestRates.Rates)
             {
-                //rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
+                rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
 
                 // We want WebTools account setup wizard to show when a rate is selected so the user 
                 // can create their own WebTools account since these rates are just counter rates 
