@@ -14,7 +14,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
-            ShipmentTypeCode.Other
+            ShipmentTypeCode.Other,
+            ShipmentTypeCode.PostalWebTools
         };
 
         private bool isDirty;
