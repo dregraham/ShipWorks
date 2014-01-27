@@ -12,6 +12,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateShippingBrokerFactory : IBestRateShippingBrokerFactory
     {
+        private readonly IEnumerable<IShippingBrokerFilter> filters;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
+        /// </summary>
+        public BestRateShippingBrokerFactory()
+            : this(new List<IShippingBrokerFilter>())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
+        /// </summary>
+        /// <param name="filters">The filters.</param>
+        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
+        {
+            this.filters = filters;
+        }
+
         /// <summary>
         /// Creates all of the best rate shipping brokers available in the system for the shipping
         /// providers that are activated and configured.
@@ -36,7 +54,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .Select(st => st.GetShippingBroker(shipment))
                 .Where(broker => broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
                 .ToList();
-            
+
+            foreach (IShippingBrokerFilter filter in filters)
+            {
+                brokers = filter.Filter(brokers).ToList();
+            }
+
             // We need to configure each of the brokers now that we have our final
             // list that should be used
             BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers, EditionManager.ActiveRestrictions);
