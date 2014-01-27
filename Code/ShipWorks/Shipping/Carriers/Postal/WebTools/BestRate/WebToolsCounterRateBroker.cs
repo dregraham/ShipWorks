@@ -1,18 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 {
+    /// <summary>
+    /// Gets counter rates for USPS
+    /// </summary>
     public class WebToolsCounterRatesBroker : WebToolsBestRateBroker
     {
+        private readonly PostalShipmentType actualPostalShipmentType;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WebToolsCounterRatesBroker(PostalShipmentType actualPostalShipmentType)
+        {
+            this.actualPostalShipmentType = actualPostalShipmentType;
+        }
+
         /// <summary>
         /// Gets the best rates for for WebTools counter-based prices.
         /// </summary>
@@ -27,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 
             foreach (RateResult rateResult in bestRates.Rates)
             {
-                rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
+                //rateResult.Description = rateResult.Description.Replace("(w/o Postage) ", string.Empty);
 
                 // We want WebTools account setup wizard to show when a rate is selected so the user 
                 // can create their own WebTools account since these rates are just counter rates 
@@ -44,13 +54,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// </summary>
         private bool DisplaySetupWizard()
         {
-            using(Form setupWizard = ShipmentType.CreateSetupWizard())
+            using (Form setupWizard = actualPostalShipmentType.CreateSetupWizard())
             {
                 DialogResult result = setupWizard.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.PostalWebTools);
+                    ShippingSettings.MarkAsConfigured(actualPostalShipmentType.ShipmentTypeCode);
                 }
 
                 return result == DialogResult.OK;
@@ -69,6 +79,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
             {
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Converts the USPS counter rate into an actual postal type
+        /// </summary>
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, NullEntity account)
+        {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
+            currentShipment.ShipmentType = (int)actualPostalShipmentType.ShipmentTypeCode;
         }
     }
 }

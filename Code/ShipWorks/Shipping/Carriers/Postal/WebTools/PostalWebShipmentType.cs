@@ -177,8 +177,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
             else
             {
-                return new WebToolsCounterRatesBroker();
+                PostalShipmentType actualType = (IsShipmentTypeAllowed(ShipmentTypeCode.Stamps) && !IsShipmentTypeAllowed(ShipmentTypeCode.Endicia))
+                    ? (PostalShipmentType)new StampsShipmentType()
+                    : new EndiciaShipmentType();
+
+                return new WebToolsCounterRatesBroker(actualType);
             }
+        }
+
+        /// <summary>
+        /// Gets whether the specified shipment type is allowed to be used for best rates
+        /// </summary>
+        private static bool IsShipmentTypeAllowed(ShipmentTypeCode typeCode)
+        {
+            return ShippingManager.IsShipmentTypeActivated(typeCode) &&
+                ShippingManager.IsShipmentTypeEnabled(typeCode) && 
+                !ShippingSettings.Fetch().BestRateExcludedTypes.Contains((int)typeCode);
         }
     }
 }

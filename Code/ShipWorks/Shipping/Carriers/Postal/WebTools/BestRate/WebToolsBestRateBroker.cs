@@ -1,5 +1,4 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.Custom.EntityClasses;
+﻿using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -67,14 +66,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
             }
 
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
-        }
-
-        /// <summary>
-        /// There is no extra selection logic for WebTools postal
-        /// </summary>
-        protected override void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment)
-        {
-
         }
     }
 }

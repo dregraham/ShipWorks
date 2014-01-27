@@ -46,22 +46,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         /// <summary>
-        /// Convert the best rate shipment into the specified postal reseller shipment
-        /// </summary>
-        /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        /// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        protected override void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment)
-        {
-            // Save a reference to the Endicia shipment entity because if we set the shipment id while it's 
-            // attached to the Postal entity, the Endicia entity will be set to null
-            EndiciaShipmentEntity newEndiciaShipment = rateShipment.Endicia;
-            newEndiciaShipment.ShipmentID = selectedShipment.ShipmentID;
-
-            selectedShipment.Postal.Endicia = newEndiciaShipment;
-            selectedShipment.Postal.Endicia.IsNew = false;
-        }
-
-        /// <summary>
         /// Gets the insurance provider.
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
