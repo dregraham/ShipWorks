@@ -41,5 +41,25 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets the Ups access key used for obtaining counter rates
         /// </summary>
         string UpsAccessKey { get; }
+
+        /// <summary>
+        /// Gets the Express1 Endicia user name used for obtaining counter rates
+        /// </summary>
+        string Express1EndiciaUAccountNumber { get; }
+
+        /// <summary>
+        /// Gets the Express1 Endicia password used for obtaining counter rates
+        /// </summary>
+        string Express1EndiciaPassPhrase { get; }
+
+        /// <summary>
+        /// Gets the Express1 Stamps user name used for obtaining counter rates
+        /// </summary>
+        string Express1StampUsername { get; }
+
+        /// <summary>
+        /// Gets the Express1 Stamps password used for obtaining counter rates
+        /// </summary>
+        string Express1StampsPassword { get; }
     }
 }
