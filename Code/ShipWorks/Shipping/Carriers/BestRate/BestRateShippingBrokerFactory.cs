@@ -81,8 +81,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             int shipmentTypeCodeValue = (int)shipmentTypeCode;
 
-            return shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue) ||
-                   shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCodeValue);
+            // Always include web tools, so we get USPS counter rates as needed
+            return (shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue) ||
+                   shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCodeValue) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
         }
     }
 }
