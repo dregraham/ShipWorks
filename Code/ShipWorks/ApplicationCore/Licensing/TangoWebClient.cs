@@ -152,9 +152,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given processed shipment to Tango
+        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
+        /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public static void LogShipment(StoreEntity store, ShipmentEntity shipment)
+        public static void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
             {
@@ -221,6 +222,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                         .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                         .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier && choice.InsuranceValue > 0)
                         .Any();
+                }
+
+                if (isRetry)
+                {
+                    postRequest.Variables.Add("isretry", "1");
                 }
 
                 postRequest.Variables.Add("action", "logshipmentdetails");
