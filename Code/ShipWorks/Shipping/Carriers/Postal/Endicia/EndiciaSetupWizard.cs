@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaSetupWizard : WizardForm
     {
         EndiciaAccountEntity account;
+        EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
 
         // track if the account is one being migrated from 2
         bool migratingDazzleAccount = false;
@@ -606,7 +607,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 if (!account.TestAccount)
                 {
                     // This is required to activate the account
-                    account.ApiUserPassword = EndiciaApiClient.ChangeApiPassphrase(
+                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
                         account.AccountNumber,
                         (EndiciaReseller) account.EndiciaReseller,
                         SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
@@ -738,12 +739,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         string oldPassword = passwordExisting.Text + "_initial";
                         string newPassword = passwordExisting.Text;
 
-                        account.ApiUserPassword = EndiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
+                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
                     }
                 }
 
                 // See if we can connect
-                EndiciaApiClient.GetAccountStatus(account);
+                endiciaApiClient.GetAccountStatus(account);
 
                 // Freemium flow...
                 if (freemiumEdition != null)

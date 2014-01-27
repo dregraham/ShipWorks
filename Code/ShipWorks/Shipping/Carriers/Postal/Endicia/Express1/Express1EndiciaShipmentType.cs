@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
             try
             {
-                EndiciaApiClient.ProcessShipment(shipment, this);
+                (new EndiciaApiClient()).ProcessShipment(shipment, this);
             }
             catch (EndiciaException ex)
             {
