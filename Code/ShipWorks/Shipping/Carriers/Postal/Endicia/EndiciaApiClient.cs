@@ -595,7 +595,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException(accountRestriction.GetDescription());
                 }
 
-                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, EndiciaAccountManager.EndiciaAccounts.Count);
+                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
                 if (quantityRestriction.Level != EditionRestrictionLevel.None)
                 {
                     throw new ShippingException(quantityRestriction.GetDescription());
