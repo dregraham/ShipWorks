@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 try
                 {
-                    AccountInfo accountInfo = StampsApiSession.GetAccountInfo(account);
+                    AccountInfo accountInfo = new StampsApiSession().GetAccountInfo(account);
 
                     result = accountInfo.PostageBalance.AvailablePostage.ToString("c");
                 }

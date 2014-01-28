@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Stamps.HidePostage = true;
-                StampsApiSession.ProcessShipment(shipment);
+                new StampsApiSession().ProcessShipment(shipment);
             }
             catch(StampsException ex)
             {

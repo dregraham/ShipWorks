@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = StampsApiSession.CreateScanForm(stampsShipments, accountEntity);
+            XDocument xDocument = new StampsApiSession().CreateScanForm(stampsShipments, accountEntity);
 
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())
