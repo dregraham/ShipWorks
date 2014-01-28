@@ -2,18 +2,18 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRates;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 {
     [TestClass]
-    public class Express1StampsCounterAccountRepositoryTest
+    public class Express1StampsCounterRatesAccountRepositoryTest
     {
         [TestMethod]
         public void GetAccount_GetsCredentialsFromStore()
         {
             var store = new Mock<ICounterRatesCredentialStore>();
-            var testObject = new Express1StampsCounterAccountRepository(store.Object);
+            var testObject = new Express1StampsCounterRatesAccountRepository(store.Object);
 
             testObject.GetAccount(0);
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
             store.Setup(x => x.Express1StampUsername).Returns("Foo");
             store.Setup(x => x.Express1StampsPassword).Returns("Bar");
 
-            var testObject = new Express1StampsCounterAccountRepository(store.Object);
+            var testObject = new Express1StampsCounterRatesAccountRepository(store.Object);
 
             StampsAccountEntity account = testObject.GetAccount(0);
 
