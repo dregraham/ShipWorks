@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         {
             StampsAccountEntity account = new StampsAccountEntity
             {
-                Username = credentialStore.Express1StampUsername,
+                Username = credentialStore.Express1StampsUsername,
                 Password = credentialStore.Express1StampsPassword,
                 IsExpress1 = true
             };

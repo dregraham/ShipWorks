@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         {
             EndiciaAccountEntity account = new EndiciaAccountEntity
             {
-                AccountNumber = credentialStore.Express1EndiciaUAccountNumber,
+                AccountNumber = credentialStore.Express1EndiciaAccountNumber,
                 ApiUserPassword = credentialStore.Express1EndiciaPassPhrase,
                 EndiciaReseller = (int) EndiciaReseller.Express1
             };
