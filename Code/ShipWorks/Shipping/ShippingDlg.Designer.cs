@@ -367,6 +367,7 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Window;
             this.splitContainer1.Panel2.Controls.Add(this.rateControlArea);
+            this.splitContainer1.Panel2MinSize = 80;
             this.splitContainer1.Size = new System.Drawing.Size(342, 457);
             this.splitContainer1.SplitterDistance = 372;
             this.splitContainer1.SplitterWidth = 5;
