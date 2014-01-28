@@ -576,7 +576,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest)
         {
             // Timeout
-            postRequest.Timeout = TimeSpan.FromSeconds(15);
+            postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Set the uri
             postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
