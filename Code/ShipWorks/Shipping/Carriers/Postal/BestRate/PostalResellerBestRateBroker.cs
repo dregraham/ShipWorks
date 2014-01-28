@@ -94,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="account">The Account Entity for this shipment.</param>
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, T account)
         {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
             currentShipment.Postal.DimsHeight = currentShipment.BestRate.DimsHeight;
             currentShipment.Postal.DimsWidth = currentShipment.BestRate.DimsWidth;
             currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
@@ -144,13 +146,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(rate.Tag));
         }
-
-        /// <summary>
-        /// Convert the best rate shipment into the specified postal reseller shipment
-        /// </summary>
-        /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        /// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        protected abstract void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment);
 
         /// <summary>
         /// Updates the account id on the postal reseller shipment

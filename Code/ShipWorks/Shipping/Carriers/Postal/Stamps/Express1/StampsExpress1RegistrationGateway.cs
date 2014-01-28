@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             try
             {
                 // This throws a stamps exception if the account credentials are incorrect
-                StampsApiSession.GetAccountInfo(new StampsAccountEntity
+                new StampsApiSession().GetAccountInfo(new StampsAccountEntity
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,

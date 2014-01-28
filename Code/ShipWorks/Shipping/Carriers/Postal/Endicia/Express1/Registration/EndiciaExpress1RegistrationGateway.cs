@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
                     ApiUserPassword = registration.EncryptedPassword
                 };
 
-                EndiciaApiClient.GetAccountStatus(account);
+                (new EndiciaApiClient()).GetAccountStatus(account);
             }
             catch (EndiciaException ex)
             {

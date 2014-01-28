@@ -23,6 +23,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public class StampsShipmentType : PostalShipmentType
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="StampsShipmentType"/> class.
+        /// </summary>
+        public StampsShipmentType()
+        {
+            ShouldRetrieveExpress1Rates = true;
+
+            // Use the "live" versions of the repository by default
+            AccountRepository = new StampsAccountRepository();
+        }
+
+        /// <summary>
+        /// Gets or sets the repository that should be used when retrieving account information.
+        /// </summary>
+        public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
+
+        /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode
@@ -81,15 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Should Express1 rates be checked when getting Endicia rates?
         /// </summary>
-        public bool ShouldRetrieveExpress1Rates { get; set; }
-
-        /// <summary>
-        /// Create an instance of StampsShipmentType
-        /// </summary>
-        public StampsShipmentType()
-        {
-            ShouldRetrieveExpress1Rates = true;
-        }
+        public bool ShouldRetrieveExpress1Rates { get; set; }        
 
         /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
@@ -168,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                List<RateResult> stampsRates = StampsApiSession.GetRates(shipment);
+                List<RateResult> stampsRates = new StampsApiSession().GetRates(shipment);
 
                 // For Stamps, we want to either promote Express1 or show the Express1 savings
                 if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
@@ -306,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // Check Stamps.com amount
-                    List<RateResult> stampsRates = StampsApiSession.GetRates(shipment);
+                    List<RateResult> stampsRates = new StampsApiSession().GetRates(shipment);
                     RateResult stampsRate = stampsRates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                   ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                   && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
@@ -316,7 +324,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
                     shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
 
-                    List<RateResult> express1Rates = StampsApiSession.GetRates(shipment);
+                    List<RateResult> express1Rates = new StampsApiSession().GetRates(shipment);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                       ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                       && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
@@ -366,7 +374,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    StampsApiSession.ProcessShipment(shipment);
+                    new StampsApiSession().ProcessShipment(shipment);
                 }
                 catch (StampsException ex)
                 {
@@ -398,7 +406,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                StampsApiSession.VoidShipment(shipment);
+                new StampsApiSession().VoidShipment(shipment);
             }
             catch (StampsException ex)
             {

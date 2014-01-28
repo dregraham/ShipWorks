@@ -84,6 +84,14 @@ namespace ShipWorks.Shipping
 			get { return false; }
 		}
 
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+	    public virtual bool SupportsCounterRates
+	    {
+            get { return false; }
+	    }
+
 		/// <summary>
 		/// Indicates if the ShipmentType needs the ResidentialResult field determined for the given shipment.
 		/// </summary>

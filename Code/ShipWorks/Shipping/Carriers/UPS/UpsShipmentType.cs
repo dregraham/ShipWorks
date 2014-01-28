@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
@@ -45,7 +46,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
-        private ICarrierAccountRepository<UpsAccountEntity> settingsRepository;
+        protected UpsShipmentType()
+        {
+            // Use the "live" versions of the repository by default
+            AccountRepository = new UpsAccountRepository();
+            SettingsRepository = new UpsSettingsRepository();
+        }
 
         /// <summary>
         /// UPS supports getting rates
@@ -64,27 +70,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets or sets the settings repository that the shipment type should use
-        /// to obtain Ups related settings and account information. This provides
-        /// the ability to use different Ups settings depending on how the shipment
+        /// Gets or sets the account repository that the shipment type should use
+        /// to obtain Ups related account information. This provides
+        /// the ability to use different UPS account info depending on how the shipment
         /// type is going to be used. For example, to obtain counter rates with a
-        /// generic Ups account intended to be used with ShipWorks, all that would
+        /// generic UPS account intended to be used with ShipWorks, all that would
         /// have to be done is to assign this property with a repository that contains
         /// the appropriate account information for getting counter rates.
         /// </summary>
-        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository
-        {
-            get
-            {
-                // Default the settings repository to the "live" UpsAccountRepository if
-                // it hasn't been set already
-                return settingsRepository ?? (settingsRepository = new UpsAccountRepository());
-            }
-            set
-            {
-                settingsRepository = value;
-            }
-        }
+        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain Ups related settings information. This provides
+        /// the ability to use different UPS settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic UPS account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierSettingsRepository SettingsRepository { get; set; }
 
         /// <summary>
         /// UPS always uses the residential indicator
@@ -739,9 +744,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 // Get the transit times and services
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment);
+                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository);
 
-                List<UpsServiceRate> serviceRates = new UpsApiRateClient().GetRates(shipment);
+                UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository);
+                List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
                 if (!serviceRates.Any())
                 {
@@ -750,7 +756,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 else
                 {
                     // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository()).RateType == (int)UpsRateType.Negotiated;
+                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, AccountRepository).RateType == (int)UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     bool anyNegotiated = serviceRates.Any(s => s.Negotiated);

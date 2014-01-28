@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             try
             {
                 this.account = account;
-                this.accountInfo = accountInfo ?? StampsApiSession.GetAccountInfo(account);
+                this.accountInfo = accountInfo ?? new StampsApiSession().GetAccountInfo(account);
 
                 if (this.accountInfo == null)
                 {
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                StampsApiSession.PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
+                new StampsApiSession().PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
 
                 string message = string.Format("The purchase request has been submitted to {0}.\n\n" +
                                                "It may take a few minutes before the amount is reflected in your available balance.", carrierName);
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                accountInfo = StampsApiSession.GetAccountInfo(account);
+                accountInfo = new StampsApiSession().GetAccountInfo(account);
                 current.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
             }
             catch (StampsException ex)

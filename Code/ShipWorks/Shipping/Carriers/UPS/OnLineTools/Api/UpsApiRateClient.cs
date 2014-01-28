@@ -14,6 +14,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using log4net;
 using Interapptive.Shared.Business;
 
@@ -26,12 +27,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly ILog log;
-        
+        private readonly ICarrierSettingsRepository settingsRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient()
-            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)))
+            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
+        /// </summary>
+        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository)
         { }
 
         /// <summary>
@@ -39,10 +48,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="log">The log.</param>
-        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log)
+        /// <param name="settingsRepository"></param>
+        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log, ICarrierSettingsRepository settingsRepository)
         {
             this.accountRepository = accountRepository;
             this.log = log;
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
@@ -61,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             try
             {
                 // Get non-SurePost rates using the "standard" element writers
-                XmlTextWriter xmlTextWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Rate, account);
+                XmlTextWriter xmlTextWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.Rate, account, settingsRepository);
                 List<UpsServiceRate> nonSurePostRates = GetRates(shipment, account, xmlTextWriter, new UpsRateServiceElementWriter(xmlTextWriter), new UpsRatePackageWeightElementWriter(xmlTextWriter), new UpsRatePackageServiceOptionsElementWriter(xmlTextWriter));
 
                 rates.AddRange(nonSurePostRates);
@@ -123,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <returns>The rates from UPS.</returns>
         private List<UpsServiceRate> GetSurePostRate(ShipmentEntity shipment, UpsAccountEntity account, UpsServiceType serviceType)
         {
-            using (XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.SurePostRate, account))
+            using (XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.SurePostRate, account, settingsRepository))
             {
                 // Ge the rates for the given SurePost service using the SurePost specific element writers
                 return GetRates(shipment, account, xmlWriter, new UpsSurePostRateServiceElementWriter(xmlWriter, serviceType, shipment),

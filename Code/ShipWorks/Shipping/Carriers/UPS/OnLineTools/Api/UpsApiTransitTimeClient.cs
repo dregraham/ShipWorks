@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using log4net;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Api;
@@ -30,9 +31,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get transit times for the given shipment
         /// </summary>
-        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment)
+        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
         {
-            XmlTextWriter xmlWriter = PrepareTransitRequest(shipment);
+            XmlTextWriter xmlWriter = PrepareTransitRequest(shipment, accountRepository, settingsRepository);
 
             var upsTransitTimes = new List<UpsTransitTime>();
             try
@@ -61,12 +62,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Prepares the transit request.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns></returns>
-        private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment)
+        private static XmlTextWriter PrepareTransitRequest(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
         {
             // Create the client for connecting to the UPS server
-            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.TimeInTransit, UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository()));
+            XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.TimeInTransit, UpsApiCore.GetUpsAccount(shipment, accountRepository), settingsRepository);
 
             UpsShipmentEntity ups = shipment.Ups;
 
@@ -116,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 xmlWriter.WriteStartElement("InvoiceLineTotal");
 
-                UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
+                UpsAccountEntity account = accountRepository.GetAccount(shipment.Ups.UpsAccountID);
                 xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));
                 xmlWriter.WriteElementString("MonetaryValue", shipment.CustomsValue.ToString("0.00"));
                 xmlWriter.WriteEndElement();
@@ -179,5 +178,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             return transitTimes;
         }       
-    }
+    
+}
 }

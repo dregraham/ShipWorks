@@ -38,22 +38,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         /// <summary>
-        /// Convert the best rate shipment into the specified postal reseller shipment
-        /// </summary>
-        /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        /// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        protected override void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment)
-        {
-            // Save a reference to the stamps shipment entity because if we set the shipment id while it's 
-            // attached to the Postal entity, the Stamps entity will be set to null
-            StampsShipmentEntity newStampsShipment = rateShipment.Stamps;
-            newStampsShipment.ShipmentID = selectedShipment.ShipmentID;
-
-            selectedShipment.Postal.Stamps = newStampsShipment;
-            selectedShipment.Postal.Stamps.IsNew = false;
-        }
-
-        /// <summary>
         /// Gets the insurance provider.
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)

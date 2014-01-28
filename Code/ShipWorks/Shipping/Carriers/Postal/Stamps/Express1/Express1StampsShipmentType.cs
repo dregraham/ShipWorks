@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -92,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Stamps.HidePostage = true;
-                StampsApiSession.ProcessShipment(shipment);
+                new StampsApiSession().ProcessShipment(shipment);
             }
             catch(StampsException ex)
             {
@@ -107,7 +109,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new Express1StampsBestRateBroker();
+            if (StampsAccountManager.Express1Accounts.Any())
+            {
+                return new Express1StampsBestRateBroker();
+            }
+            
+            return new Express1StampsCounterRatesBroker();
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
         }
     }
 }
