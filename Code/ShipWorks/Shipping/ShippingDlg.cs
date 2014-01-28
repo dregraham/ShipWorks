@@ -69,8 +69,6 @@ namespace ShipWorks.Shipping
 
         private List<ShipmentEntity> loadedShipmentEntities;
 
-        private RateControl rateControl;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -105,7 +103,6 @@ namespace ShipWorks.Shipping
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
             this.initialDisplayTracking = trackingPage;
-            this.rateControl = new RateControl();
         }
 
         /// <summary>
@@ -775,12 +772,6 @@ namespace ShipWorks.Shipping
                     reduceFlash = new Panel();
                     reduceFlash.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(reduceFlash);
-
-                    // Add the rate control below the service control
-                    rateControlArea.Height = rateControl.Height;
-                    rateControlArea.Controls.Add(rateControl);
-
-                    splitContainer1.Panel2.AutoScrollMinSize = new Size(0, rateControl.Height);
                 }
 
                 // If there was a setup control, remove it
@@ -795,6 +786,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
                     newServiceControl.RatesCleared += OnRatesCleared;
+                    rateControl.RateSelected += newServiceControl.OnRateSelected;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -809,6 +801,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.RatesCleared -= OnRatesCleared;
+                    rateControl.RateSelected -= oldServiceControl.OnRateSelected;
 
                     oldServiceControl.Dispose();
                 }
@@ -997,6 +990,14 @@ namespace ShipWorks.Shipping
             {
                 BeginInvoke(new MethodInvoker<object, EventArgs>(OnGetRates), this, e);
             }
+        }
+
+        /// <summary>
+        /// A rate was selected on the rate grid
+        /// </summary>
+        void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            
         }
 
         /// <summary>

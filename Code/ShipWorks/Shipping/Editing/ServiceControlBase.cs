@@ -189,6 +189,13 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Event raised when Rate is selected in rate control.
+        /// </summary>
+        public virtual void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+        }
+
+        /// <summary>
         /// Save returns
         /// </summary>
         private void SaveReturnsToShipments()

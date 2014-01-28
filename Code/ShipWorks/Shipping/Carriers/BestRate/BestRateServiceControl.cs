@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Event raised when Rate is selected in rate control.
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
             
