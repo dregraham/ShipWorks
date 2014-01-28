@@ -23,6 +23,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public class StampsShipmentType : PostalShipmentType
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="StampsShipmentType"/> class.
+        /// </summary>
+        public StampsShipmentType()
+        {
+            ShouldRetrieveExpress1Rates = true;
+
+            // Use the "live" versions of the repository by default
+            AccountRepository = new StampsAccountRepository();
+        }
+
+        /// <summary>
+        /// Gets or sets the repository that should be used when retrieving account information.
+        /// </summary>
+        public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
+
+        /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode
@@ -81,15 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Should Express1 rates be checked when getting Endicia rates?
         /// </summary>
-        public bool ShouldRetrieveExpress1Rates { get; set; }
-
-        /// <summary>
-        /// Create an instance of StampsShipmentType
-        /// </summary>
-        public StampsShipmentType()
-        {
-            ShouldRetrieveExpress1Rates = true;
-        }
+        public bool ShouldRetrieveExpress1Rates { get; set; }        
 
         /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
