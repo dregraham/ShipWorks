@@ -7,6 +7,7 @@ using Common.Logging;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -281,6 +282,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         // Detatch it from the order
                         affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+
+                        // Deleted all the attributes
+                        foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
+                        {
+                            adapter.DeleteEntity(attribute);
+                        }
 
                         // And delete it
                         adapter.DeleteEntity(item);
