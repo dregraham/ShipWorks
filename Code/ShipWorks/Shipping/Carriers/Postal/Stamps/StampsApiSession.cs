@@ -58,23 +58,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         // Express1 API service connection info 
         static Express1StampsConnectionDetails express1StampsConnectionDetails = new Express1StampsConnectionDetails();
         
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsApiSession"/> class.
         /// </summary>
         public StampsApiSession()
-            : this(new StampsAccountRepository(), LogManager.GetLogger(typeof(StampsApiSession)))
+            : this(new StampsAccountRepository())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsApiSession" /> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        /// <param name="log">The log.</param>
-        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository, ILog log)
+        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
-            this.log = log;
+            this.log = LogManager.GetLogger(typeof(StampsApiSession));
         }
 
         /// <summary>

@@ -29,8 +29,8 @@ namespace ShipWorks.Shipping.Carriers
             UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
             Express1EndiciaUAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
             Express1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
-            Express1StampUsername = "3e359d76-84f0-405b-b651-ffa6af91a1cb";
-            Express1StampsPassword = "8f2ecd06-c116-4812-9086-9ed6fbcde926";
+            Express1StampUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
+            Express1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         }
 
         /// <summary>
