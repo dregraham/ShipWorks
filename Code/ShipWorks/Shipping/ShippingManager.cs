@@ -716,7 +716,7 @@ namespace ShipWorks.Shipping
         public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
             // Marke sure the type is setup - it's possible it's not in the case of upgrading from V2
-            if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) && !IsShipmentTypeCounterRateAllowed(shipmentType.ShipmentTypeCode))
+            if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) && !shipmentType.SupportsCounterRates)
             {
                 throw new ShippingException(String.Format("The '{0}' shipping provider was migrated from ShipWorks 2, and has not yet been configured for ShipWorks 3.", shipmentType.ShipmentTypeName));
             }
@@ -1156,21 +1156,6 @@ namespace ShipWorks.Shipping
             }
 
             return ShippingSettings.Fetch().ConfiguredTypes.Contains((int)shipmentTypeCode);
-        }
-
-        /// <summary>
-        /// Indicates if the shipment type of the given type code has gone through the full setup wizard \ configuration
-        /// </summary>
-        public static bool IsShipmentTypeCounterRateAllowed(ShipmentTypeCode shipmentTypeCode)
-        {
-            // TODO: Add other counter rate shipment types when we implement them.
-            bool isCounterRateShipmentType = shipmentTypeCode == ShipmentTypeCode.FedEx ||
-                                             shipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
-                                             shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools ||
-                                             shipmentTypeCode == ShipmentTypeCode.Express1Endicia ||
-                                             shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
-
-            return isCounterRateShipmentType;
         }
 
         /// <summary>

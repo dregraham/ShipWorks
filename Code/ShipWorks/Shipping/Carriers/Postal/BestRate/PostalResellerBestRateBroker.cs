@@ -147,13 +147,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(rate.Tag));
         }
 
-        ///// <summary>
-        ///// Convert the best rate shipment into the specified postal reseller shipment
-        ///// </summary>
-        ///// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        ///// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        //protected abstract void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment);
-
         /// <summary>
         /// Updates the account id on the postal reseller shipment
         /// </summary>

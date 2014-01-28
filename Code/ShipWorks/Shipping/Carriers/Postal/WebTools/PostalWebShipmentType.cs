@@ -78,6 +78,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Get the rates for the given shipment.
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)

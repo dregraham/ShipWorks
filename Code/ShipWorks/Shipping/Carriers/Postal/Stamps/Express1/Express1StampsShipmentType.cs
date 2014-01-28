@@ -116,5 +116,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             
             return new Express1StampsCounterRatesBroker();
         }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
     }
 }

@@ -167,5 +167,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 new Express1EndiciaBestRateBroker() : 
                 new Express1EndiciaCounterRatesBroker();
         }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
     }
 }
