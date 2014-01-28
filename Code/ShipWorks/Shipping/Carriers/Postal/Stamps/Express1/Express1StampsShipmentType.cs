@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 return new Express1StampsBestRateBroker();
             }
             
-            return new Express1StampsCounterRatesRateBroker();
+            return new Express1StampsCounterRatesBroker();
         }
     }
 }
