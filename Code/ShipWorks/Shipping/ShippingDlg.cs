@@ -1399,6 +1399,7 @@ namespace ShipWorks.Shipping
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
             getRates.Enabled = canGetRates;
+            splitContainer1.Panel2Collapsed = !canGetRates;
             print.Enabled = canPrint;
             voidSelected.Enabled = canVoid;
 
