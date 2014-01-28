@@ -52,6 +52,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         }
 
         /// <summary>
+        /// Wraps the shipping exception.
+        /// </summary>
+        protected override BrokerException WrapShippingException(ShippingException ex)
+        {
+            // Since this is just getting counter rates, we want to have the severity level
+            // as information for all shipping exceptions
+            return new BrokerException(ex, BrokerExceptionSeverityLevel.Information, ShipmentType);
+        }
+
+        /// <summary>
         /// Displays the Express1Endicia setup wizard.
         /// </summary>
         private bool DisplaySetupWizard()
