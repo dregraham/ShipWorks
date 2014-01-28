@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
             testObject.GetAccount(0);
 
-            store.Verify(x => x.Express1StampUsername);
+            store.Verify(x => x.Express1StampsUsername);
             store.Verify(x => x.Express1StampsPassword);
         }
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         public void GetAccount_ReturnsValidCounterAccount()
         {
             var store = new Mock<ICounterRatesCredentialStore>();
-            store.Setup(x => x.Express1StampUsername).Returns("Foo");
+            store.Setup(x => x.Express1StampsUsername).Returns("Foo");
             store.Setup(x => x.Express1StampsPassword).Returns("Bar");
 
             var testObject = new Express1StampsCounterRatesAccountRepository(store.Object);

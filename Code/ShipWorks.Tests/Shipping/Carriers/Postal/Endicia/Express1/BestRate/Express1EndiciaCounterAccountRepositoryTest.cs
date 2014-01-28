@@ -19,14 +19,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
             testObject.GetAccount(0);
 
             store.Verify(x => x.Express1EndiciaPassPhrase);
-            store.Verify(x => x.Express1EndiciaUAccountNumber);
+            store.Verify(x => x.Express1EndiciaAccountNumber);
         }
 
         [TestMethod]
         public void GetAccount_ReturnsValidCounterAccount()
         {
             var store = new Mock<ICounterRatesCredentialStore>();
-            store.Setup(x => x.Express1EndiciaUAccountNumber).Returns("Foo");
+            store.Setup(x => x.Express1EndiciaAccountNumber).Returns("Foo");
             store.Setup(x => x.Express1EndiciaPassPhrase).Returns("Bar");
 
             var testObject = new Express1EndiciaCounterAccountRepository(store.Object);
