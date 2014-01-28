@@ -64,11 +64,6 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ShipmentTypeChanged;
 
         /// <summary>
-        /// Raised when the rates have been cleared from the rates grid.
-        /// </summary>
-        public event EventHandler RatesCleared;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         private ServiceControlBase()
@@ -95,6 +90,27 @@ namespace ShipWorks.Shipping.Editing
                 return shipmentTypeCode;
             }
         }
+
+        /// <summary>
+        /// The shipments last past to LoadShipments
+        /// </summary>
+        public List<ShipmentEntity> LoadedShipments
+        {
+            get { return loadedShipments; }
+        }
+
+        /// <summary>
+        /// The enable editing value last past to LoadShipments
+        /// </summary>
+        protected bool EnableEditing
+        {
+            get { return enableEditing; }
+        }
+
+        /// <summary>
+        /// Clear the rates in the main rates grid
+        /// </summary>
+        public Action<string> ClearRatesAction { get; set; }
 
         /// <summary>
         /// Initialization
@@ -396,23 +412,6 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
-
-        /// <summary>
-        /// The shipments last past to LoadShipments
-        /// </summary>
-        public List<ShipmentEntity> LoadedShipments
-        {
-            get { return loadedShipments; }
-        }
-
-        /// <summary>
-        /// The enable editing value last past to LoadShipments
-        /// </summary>
-        protected bool EnableEditing
-        {
-            get { return enableEditing; }
-        }
-
         /// <summary>
         /// Laying out controls
         /// </summary>
@@ -517,17 +516,5 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentTypeChanged(this, EventArgs.Empty);
             }
         }
-
-        /// <summary>
-        /// Raises the rates cleared event.
-        /// </summary>
-        protected void RaiseRatesCleared()
-        {
-            if (RatesCleared != null)
-            {
-                RatesCleared(this, EventArgs.Empty);
-            }
-        }
-
     }
 }

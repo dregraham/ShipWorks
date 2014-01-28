@@ -785,7 +785,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
                     newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
-                    newServiceControl.RatesCleared += OnRatesCleared;
+                    newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
 
                     newServiceControl.Dock = DockStyle.Fill;
@@ -800,7 +800,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.RateCriteriaChanged -= this.OnRateCriteriaChanged;
                     oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-                    oldServiceControl.RatesCleared -= OnRatesCleared;
+                    oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
 
                     oldServiceControl.Dispose();
@@ -818,14 +818,12 @@ namespace ShipWorks.Shipping
             LoadDisplayedRates();
         }
 
-
         /// <summary>
-        /// Called when [rates cleared].
+        /// Clear the rates from the grid
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnRatesCleared(object sender, EventArgs e)
+        private void ClearRates(string reason)
         {
+            rateControl.ClearRates(reason);
             shipmentRateMap.Clear();
         }
 

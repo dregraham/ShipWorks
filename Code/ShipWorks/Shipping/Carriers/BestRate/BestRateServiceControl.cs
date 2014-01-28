@@ -187,7 +187,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             OnRateCriteriaChanged(sender, e);
         }
 
-
         /// <summary>
         /// Called when an account has been signed up via an entry in the rates grid.
         /// </summary>
@@ -195,8 +194,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnAccountSignUp(object sender, EventArgs e)
         {
-            // TODO: rateControl.ClearRates(string.Empty);
-            RaiseRatesCleared();
+            ClearRatesAction(string.Empty);
         }
     }
 }
