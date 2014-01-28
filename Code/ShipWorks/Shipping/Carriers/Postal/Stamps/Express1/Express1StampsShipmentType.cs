@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Editing;
@@ -108,7 +109,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new Express1StampsBestRateBroker();
+            if (StampsAccountManager.Express1Accounts.Any())
+            {
+                return new Express1StampsBestRateBroker();
+            }
+            
+            return new Express1StampsCounterRatesRateBroker();
         }
     }
 }

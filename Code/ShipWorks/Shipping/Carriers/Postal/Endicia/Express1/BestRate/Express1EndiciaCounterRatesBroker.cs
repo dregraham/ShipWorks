@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
     /// <summary>
     /// Best rate broker for Express1 Endicia rates
     /// </summary>
-    public class Express1EndiciaCounterBestRateBroker : Express1EndiciaBestRateBroker
+    public class Express1EndiciaCounterRatesBroker : Express1EndiciaBestRateBroker
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1EndiciaCounterBestRateBroker() 
+        public Express1EndiciaCounterRatesBroker() 
             : base(new Express1EndiciaShipmentType(), new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance))
         { }
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         /// </summary>
         /// <param name="shipmentType">The shipment type should be used with this broker</param>
         /// <param name="accountRepository">The account repository that should be used with this broker</param>
-        public Express1EndiciaCounterBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
+        public Express1EndiciaCounterRatesBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
             : base(shipmentType, accountRepository)
         { }
 

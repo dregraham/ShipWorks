@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             return (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any()) ?
                 new Express1EndiciaBestRateBroker() : 
-                new Express1EndiciaCounterBestRateBroker();
+                new Express1EndiciaCounterRatesBroker();
         }
     }
 }

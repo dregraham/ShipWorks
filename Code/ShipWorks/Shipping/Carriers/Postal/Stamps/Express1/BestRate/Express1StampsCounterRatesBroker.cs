@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
     /// <summary>
     /// A broker to obtain counter rates using Express1 for Stamps.com.
     /// </summary>
-    public class Express1StampsCounterBestRateBroker : Express1StampsBestRateBroker
+    public class Express1StampsCounterRatesRateBroker : Express1StampsBestRateBroker
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1StampsCounterBestRateBroker"/> class.
         /// </summary>
-        public Express1StampsCounterBestRateBroker()
+        public Express1StampsCounterRatesRateBroker()
             : base(new Express1StampsShipmentType(), new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance))
         { }
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// </summary>
         /// <param name="shipmentType">The shipment type should be used with this broker</param>
         /// <param name="accountRepository">The account repository that should be used with this broker</param>
-        public Express1StampsCounterBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository)
+        public Express1StampsCounterRatesRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository)
             : base(shipmentType, accountRepository)
         { }
 
