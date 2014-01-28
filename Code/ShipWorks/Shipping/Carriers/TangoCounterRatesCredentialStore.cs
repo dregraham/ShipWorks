@@ -27,9 +27,9 @@ namespace ShipWorks.Shipping.Carriers
             UpsUserId = "6863e0f62cdd4a1b";
             UpsPassword = "cf9e7473";
             UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
-            Express1EndiciaUAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
+            Express1EndiciaAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
             Express1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
-            Express1StampUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
+            Express1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
             Express1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         }
 
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the Express1 Endicia account number used for obtaining counter rates
         /// </summary>
-        public string Express1EndiciaUAccountNumber
+        public string Express1EndiciaAccountNumber
         { 
             get; 
             private set; 
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the Express1 Stamps user name used for obtaining counter rates
         /// </summary>
-        public string Express1StampUsername
+        public string Express1StampsUsername
         {
             get;
             private set;

@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the Express1 Endicia user name used for obtaining counter rates
         /// </summary>
-        string Express1EndiciaUAccountNumber { get; }
+        string Express1EndiciaAccountNumber { get; }
 
         /// <summary>
         /// Gets the Express1 Endicia password used for obtaining counter rates
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the Express1 Stamps user name used for obtaining counter rates
         /// </summary>
-        string Express1StampUsername { get; }
+        string Express1StampsUsername { get; }
 
         /// <summary>
         /// Gets the Express1 Stamps password used for obtaining counter rates
