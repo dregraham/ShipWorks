@@ -2,6 +2,7 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Settings;
 
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
         /// </summary>
         public BestRateShippingBrokerFactory()
-            : this(new List<IShippingBrokerFilter> { new UpsWorldShipBrokerFilter() })
+            : this(new List<IShippingBrokerFilter> { new UpsWorldShipBrokerFilter(), new Express1BrokerFilter() })
         { }
 
         /// <summary>
