@@ -2,6 +2,7 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
@@ -22,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         }
 
         [TestMethod]
-        public void GetAccount_ReturnsAccountWithCredentials()
+        public void GetAccount_ReturnsValidCounterAccount()
         {
             var store = new Mock<ICounterRatesCredentialStore>();
             store.Setup(x => x.Express1EndiciaUAccountNumber).Returns("Foo");
@@ -34,6 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
 
             Assert.AreEqual("Foo", account.AccountNumber);
             Assert.AreEqual("Bar", account.ApiUserPassword);
+            Assert.AreEqual((int)EndiciaReseller.Express1, account.EndiciaReseller);
         }
     }
 }

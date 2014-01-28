@@ -17,6 +17,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Templates.Tokens;
 using log4net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
@@ -883,17 +884,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         string errorMessage = response.ErrorMessage;
 
-                        if (response.Status == 55001)
+                        if (response.Status == 55001 && errorMessage != null)
                         {
                             // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
                             // an authentication error message in the response; do some fuzzy logic to determine what the error actually is
-                            if (response.ErrorMessage.ToUpperInvariant().Contains("CUBIC") && !response.ErrorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
+                            if (errorMessage.ToUpperInvariant().Contains("CUBIC") && !errorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
                             {
                                 // The error is in reference to cubic packaging; use our own error message, here so we can 
                                 // direct the user to contact Express1 to try to reduce ShipWorks call volume
                                 errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
                             }
-                            else if (response.ErrorMessage.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
+                            else if (errorMessage.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
                             {
                                 // Use an error message that is slightly more informative, to let the user know which of their accounts
                                 // had the problem in the event that they have multiple accounts for Endicia and/or have an Express1 account

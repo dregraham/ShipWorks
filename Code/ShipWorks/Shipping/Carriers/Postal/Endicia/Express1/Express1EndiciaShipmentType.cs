@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
@@ -161,7 +163,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <returns>An instance of an Express1EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new Express1EndiciaBestRateBroker();
+            return (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any()) ?
+                new Express1EndiciaBestRateBroker() : 
+                new Express1EndiciaCounterBestRateBroker();
         }
     }
 }
