@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Editing
 
             foreach (IRateFootnoteFactory factory in footnoteFactories)
             {
-                RateFootnoteControl footnote = factory.CreateFootnote();
+                RateFootnoteControl footnote = factory.CreateFootnote(null);
 
                 panelFootnote.Controls.Add(footnote);
                 footnote.Location = new Point(0, y);

@@ -32,8 +32,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// <summary>
         /// Create an Express1 rate discounted control
         /// </summary>
+        /// <param name="parameters"></param>
         /// <returns></returns>
-        public RateFootnoteControl CreateFootnote()
+        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new Express1RateDiscountedFootnote(originalRates, discountedRates);
         }

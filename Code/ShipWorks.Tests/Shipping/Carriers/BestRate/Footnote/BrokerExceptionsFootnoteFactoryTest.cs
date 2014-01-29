@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
 
             testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
 
-            RateFootnoteControl footnote = testObject.CreateFootnote();
+            RateFootnoteControl footnote = testObject.CreateFootnote(null);
 
             Assert.IsInstanceOfType(footnote, typeof(BrokerExceptionsRateFootnoteControl));
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 
             testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
 
-            BrokerExceptionsRateFootnoteControl footnote = testObject.CreateFootnote() as BrokerExceptionsRateFootnoteControl;
+            BrokerExceptionsRateFootnoteControl footnote = testObject.CreateFootnote(null) as BrokerExceptionsRateFootnoteControl;
 
             Assert.AreEqual(3, footnote.BrokerExceptions.Count());
         }

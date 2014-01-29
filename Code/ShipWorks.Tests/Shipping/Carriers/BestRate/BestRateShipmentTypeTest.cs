@@ -283,7 +283,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { fakeBroker });
 
             RateGroup rateGroup = testObject.GetRates(shipment);
-            RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote() as BrokerExceptionsRateFootnoteControl;
+            RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote(null) as BrokerExceptionsRateFootnoteControl;
 
             Assert.IsNotNull(footnote);
         }
@@ -307,7 +307,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             // Create the footnote control and extract the exceptions
-            RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote();
+            RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote(null);
             List<BrokerException> exceptionsInFootnoteControl = ((BrokerExceptionsRateFootnoteControl)footnote).BrokerExceptions.ToList();
             
             Assert.AreEqual(BrokerExceptionSeverityLevel.Error, exceptionsInFootnoteControl[0].SeverityLevel);
@@ -486,7 +486,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         private void InitializeFootnoteTests()
         {
             associatedWithAmountFooterFootnoteFactory = new Mock<IRateFootnoteFactory>();
-            associatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote()).Returns(new FakeRateFootnoteControl(true));
+            associatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote(null)).Returns(new FakeRateFootnoteControl(true));
 
             rateGroupWithNoFootnote = new RateGroup(new List<RateResult> { new RateResult("result1", "2"), new RateResult("result2", "2") });
 
@@ -499,7 +499,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
 
             notAssociatedWithAmountFooterFootnoteFactory = new Mock<IRateFootnoteFactory>();
-            notAssociatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote()).Returns(new FakeRateFootnoteControl(false));
+            notAssociatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote(null)).Returns(new FakeRateFootnoteControl(false));
 
             rateGroupWithFooterNotAssociatedWithAmount = new RateGroup(new List<RateResult>
             {

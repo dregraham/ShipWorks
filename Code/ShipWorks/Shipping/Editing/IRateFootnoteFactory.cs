@@ -13,7 +13,8 @@
         /// <summary>
         /// Creates a footnote control.
         /// </summary>
+        /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>
         /// <returns>A instance of a RateFoonoteControl.</returns>
-        RateFootnoteControl CreateFootnote();
+        RateFootnoteControl CreateFootnote(FootnoteParameters parameters);
     }
 }

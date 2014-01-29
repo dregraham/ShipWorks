@@ -40,8 +40,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// Creates a footnote control.
         /// </summary>
+        /// <param name="parameters"></param>
         /// <returns>A BrokerExceptionsRateFootnoteControl object.</returns>
-        public RateFootnoteControl CreateFootnote()
+        public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new BrokerExceptionsRateFootnoteControl(brokerExceptions);
         }
