@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Utility;
@@ -17,6 +16,8 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RateControl : UserControl
     {
+        private FootnoteParameters footnoteParameters;
+
         /// <summary>
         /// Raised when the user clicks "Select" to select a rate
         /// </summary>
@@ -47,9 +48,17 @@ namespace ShipWorks.Shipping.Editing
 
             sandGrid.Rows.Clear();
 
-            gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);
+            gridColumnSelect.ButtonClicked += OnSelectRate;
 
             this.ReloadRatesRequired += OnReloadRatesRequired;
+        }
+
+        /// <summary>
+        /// Initialize the rate control
+        /// </summary>
+        public void Initialize(FootnoteParameters parameters)
+        {
+            this.footnoteParameters = parameters;
         }
 
         /// <summary>
@@ -167,7 +176,7 @@ namespace ShipWorks.Shipping.Editing
 
             foreach (IRateFootnoteFactory factory in footnoteFactories)
             {
-                RateFootnoteControl footnote = factory.CreateFootnote(null);
+                RateFootnoteControl footnote = factory.CreateFootnote(footnoteParameters);
 
                 panelFootnote.Controls.Add(footnote);
                 footnote.Location = new Point(0, y);

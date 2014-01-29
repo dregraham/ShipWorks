@@ -99,6 +99,8 @@ namespace ShipWorks.Shipping
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
             this.initialDisplayTracking = trackingPage;
+
+            rateControl.Initialize(new FootnoteParameters(GetRates, GetStoreForCurrentShipment));
         }
 
         /// <summary>
@@ -1622,6 +1624,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnGetRates(object sender, EventArgs e)
         {
+            GetRates();
+        }
+
+        /// <summary>
+        /// Gets rates for the selected shipments
+        /// </summary>
+        private void GetRates()
+        {
             // Save changes to the current selection (NOT the ones we are processing) before we process it
             SaveChangesToUIDisplayedShipments();
 
@@ -1724,10 +1734,10 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }
-            }, 
-            
-            // The shipments to get rates for.
-            shipments);
+            },
+
+                // The shipments to get rates for.
+                shipments);
         }
 
         /// <summary>
@@ -2170,6 +2180,20 @@ namespace ShipWorks.Shipping
             }
 
             processingErrors.Clear();
+        }
+
+        /// <summary>
+        /// Gets the store for the current shipment, if only one is selected
+        /// </summary>
+        private StoreEntity GetStoreForCurrentShipment()
+        {
+            if (uiDisplayedShipments.Count == 1)
+            {
+                OrderEntity order = DataProvider.GetEntity(uiDisplayedShipments[0].OrderID) as OrderEntity;
+                return StoreManager.GetStore(order.StoreID);
+            }
+
+            return null;
         }
     }
 }
