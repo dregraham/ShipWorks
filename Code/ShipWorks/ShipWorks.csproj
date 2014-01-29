@@ -577,6 +577,8 @@
     <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDialog.Designer.cs">
       <DependentUpon>CounterRatesInvalidStoreAddressDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressException.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

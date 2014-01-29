@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
@@ -23,7 +24,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             List<RateResult> rates = rateGroup.Rates;
 
             // Remove the footnote factories that do not have associated rates in the rate group
-            List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories.Where(f => rates.Select(r => r.ShipmentType).Contains(f.ShipmentType.ShipmentTypeCode)).ToList();
+            // We want to keep the footnote for an invalid store address when getting counter rates though.
+            List<IRateFootnoteFactory> footnoteFactories = rateGroup.FootnoteFactories
+                                                                    .Where(f => f.GetType() == typeof(CounterRatesInvalidStoreAddressFootnoteFactory) || rates.Select(r => r.ShipmentType).Contains(f.ShipmentType.ShipmentTypeCode)).ToList();
 
             RateGroup filteredRateGroup = new RateGroup(rates);
             footnoteFactories.ForEach(filteredRateGroup.AddFootnoteFactory);
