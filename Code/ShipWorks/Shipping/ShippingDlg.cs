@@ -90,10 +90,6 @@ namespace ShipWorks.Shipping
                 throw new ArgumentNullException("shipments");
             }
 
-            // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
-            windowSaver.ManageSplitter(splitContainer);
-
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
 
@@ -110,6 +106,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            // Manage the window positioning
+            WindowStateSaver windowSaver = new WindowStateSaver(this);
+            windowSaver.ManageSplitter(splitContainer, "Splitter");
+            windowSaver.ManageSplitter(splitContainer1, "RateSplitter");
+
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
 
