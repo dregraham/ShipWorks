@@ -1,5 +1,5 @@
 ﻿using System;
-using ShipWorks.Stores;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -12,11 +12,11 @@ namespace ShipWorks.Shipping.Editing
         /// Constructor
         /// </summary>
         /// <param name="reloadRatesAction">Action that will cause rates to reload</param>
-        /// <param name="getStoreTypeAction">Function that will get the current store</param>
-        public FootnoteParameters(Action reloadRatesAction, Func<StoreType> getStoreTypeAction)
+        /// <param name="getStoreAction">Function that will get the current store</param>
+        public FootnoteParameters(Action reloadRatesAction, Func<StoreEntity> getStoreAction)
         {
             ReloadRatesAction = reloadRatesAction;
-            GetStoreTypeAction = getStoreTypeAction;
+            GetStoreAction = getStoreAction;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the current store
         /// </summary>
-        public Func<StoreType> GetStoreTypeAction
+        public Func<StoreEntity> GetStoreAction
         {
             get;
             private set;

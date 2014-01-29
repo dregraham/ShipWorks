@@ -571,6 +571,12 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDialog.Designer.cs">
+      <DependentUpon>CounterRatesInvalidStoreAddressDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6808,6 +6814,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.resx">
       <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDialog.resx">
+      <DependentUpon>CounterRatesInvalidStoreAddressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.resx">
       <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>

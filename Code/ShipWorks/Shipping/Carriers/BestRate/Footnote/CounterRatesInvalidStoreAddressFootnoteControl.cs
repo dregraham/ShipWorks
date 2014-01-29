@@ -1,25 +1,40 @@
 ﻿using System;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
+    /// <summary>
+    /// Footnote that notifies user that a store does not have an address
+    /// </summary>
     public partial class CounterRatesInvalidStoreAddressFootnoteControl : RateFootnoteControl
     {
         private readonly FootnoteParameters parameters;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public CounterRatesInvalidStoreAddressFootnoteControl(FootnoteParameters parameters)
         {
             this.parameters = parameters;
             InitializeComponent();
         }
 
+        /// <summary>
+        /// The user has clicked the "Enter store address" link
+        /// </summary>
         private void OnShowAddress(object sender, EventArgs e)
         {
-            // TODO: implement store popup
-            // StoreType storeType = parameters.GetStoreTypeAction();
-            
-            
+            StoreEntity store = parameters.GetStoreAction();
+
+            using (CounterRatesInvalidStoreAddressDialog dialog = new CounterRatesInvalidStoreAddressDialog(store))
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    parameters.ReloadRatesAction();
+                }
+            }
         }
     }
 }
