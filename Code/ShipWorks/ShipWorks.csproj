@@ -583,6 +583,7 @@
     <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.Designer.cs">
       <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IShippingBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateFilterFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateExpress1PromotionFootnoteFilter.cs" />
