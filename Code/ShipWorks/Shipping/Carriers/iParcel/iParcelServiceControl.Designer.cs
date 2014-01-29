@@ -45,8 +45,6 @@
             this.emailTrack = new System.Windows.Forms.CheckBox();
             this.labelNotification = new System.Windows.Forms.Label();
             this.sectionReference = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
-            this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.packageControl = new ShipWorks.Shipping.Carriers.iParcel.iParcelPackageControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
@@ -66,9 +64,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionReference)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReference.ContentPanel)).BeginInit();
             this.sectionReference.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
-            this.sectionRates.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionRecipient
@@ -90,7 +85,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 506);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 420);
             this.sectionReturns.Size = new System.Drawing.Size(389, 24);
             // 
             // sectionShipment
@@ -101,7 +96,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.packageControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 149);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(389, 352);
             // 
             // sectionFrom
@@ -233,7 +228,7 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.emailTrack);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNotification);
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 564);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 478);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -294,38 +289,12 @@
             this.sectionReference.ContentPanel.Controls.Add(this.labelReference);
             this.sectionReference.ExpandedHeight = 70;
             this.sectionReference.ExtraText = "";
-            this.sectionReference.Location = new System.Drawing.Point(3, 535);
+            this.sectionReference.Location = new System.Drawing.Point(3, 449);
             this.sectionReference.Name = "sectionReference";
             this.sectionReference.SectionName = "Reference";
             this.sectionReference.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
             this.sectionReference.Size = new System.Drawing.Size(389, 24);
             this.sectionReference.TabIndex = 8;
-            // 
-            // rateControl
-            // 
-            this.rateControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rateControl.Location = new System.Drawing.Point(0, 0);
-            this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(385, 55);
-            this.rateControl.TabIndex = 2;
-            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            // 
-            // sectionRates.ContentPanel
-            // 
-            this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
-            this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 63);
-            this.sectionRates.Name = "sectionRates";
-            this.sectionRates.SectionName = "Rates";
-            this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
-            this.sectionRates.Size = new System.Drawing.Size(389, 81);
-            this.sectionRates.TabIndex = 9;
             // 
             // packageControl
             // 
@@ -344,7 +313,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
-            this.Controls.Add(this.sectionRates);
             this.Controls.Add(this.sectionReference);
             this.Controls.Add(this.sectionOptions);
             this.Name = "iParcelServiceControl";
@@ -353,7 +321,6 @@
             this.Controls.SetChildIndex(this.sectionReference, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
@@ -379,9 +346,6 @@
             this.sectionReference.ContentPanel.ResumeLayout(false);
             this.sectionReference.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReference)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
-            this.sectionRates.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -402,8 +366,6 @@
         private UI.Controls.CollapsibleGroupControl sectionReference;
         private System.Windows.Forms.Label labelNotification;
         private System.Windows.Forms.CheckBox emailTrack;
-        private Editing.RateControl rateControl;
-        private UI.Controls.CollapsibleGroupControl sectionRates;
         private iParcelPackageControl packageControl;
         private System.Windows.Forms.CheckBox isDeliveryDutyPaid;
         private System.Windows.Forms.Label labelDeliveryDutyPaid;

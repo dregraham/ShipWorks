@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             : base (shipmentTypeCode)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
 
             originControl.Initialize(ShipmentTypeCode.UpsOnLineTools);
 
@@ -779,7 +778,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 

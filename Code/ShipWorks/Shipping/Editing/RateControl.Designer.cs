@@ -114,7 +114,6 @@
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
-            this.sandGrid.StretchPrimaryGrid = false;
             this.sandGrid.TabIndex = 1;
             // 
             // gridColumnProvider
@@ -176,6 +175,7 @@
             this.outOfDateBar.GroupBorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
             this.outOfDateBar.Location = new System.Drawing.Point(4, 3);
             this.outOfDateBar.Name = "outOfDateBar";
+            this.outOfDateBar.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Global;
             // 
             // outOfDateBar.Panel
             // 
@@ -184,11 +184,19 @@
             this.outOfDateBar.Panel.Controls.Add(this.image);
             this.outOfDateBar.Size = new System.Drawing.Size(485, 24);
             this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(235)))));
+            this.outOfDateBar.StateCommon.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.StateCommon.Border.Color1 = System.Drawing.Color.Silver;
             this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.outOfDateBar.StateCommon.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.StateCommon.Border.Rounding = 4;
+            this.outOfDateBar.StateDisabled.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateDisabled.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Inherit;
+            this.outOfDateBar.StateDisabled.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateNormal.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.outOfDateBar.StateNormal.Border.DrawBorders = ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Inherit;
+            this.outOfDateBar.StateNormal.Border.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.outOfDateBar.TabIndex = 6;
             // 
             // labelSecondary
@@ -244,12 +252,17 @@
             // 
             // kryptonBorderEdge
             // 
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Dock = System.Windows.Forms.DockStyle.Top;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 0);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
+            this.kryptonBorderEdge.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Global;
             this.kryptonBorderEdge.Size = new System.Drawing.Size(493, 1);
+            this.kryptonBorderEdge.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.kryptonBorderEdge.StateDisabled.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
+            this.kryptonBorderEdge.StateNormal.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Inherit;
             this.kryptonBorderEdge.TabIndex = 3;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 

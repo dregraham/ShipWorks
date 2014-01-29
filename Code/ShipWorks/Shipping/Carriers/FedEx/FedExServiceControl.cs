@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             : base (ShipmentTypeCode.FedEx)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
         }
 
         /// <summary>
@@ -830,7 +829,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 

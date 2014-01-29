@@ -42,8 +42,6 @@
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelMemo = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -59,12 +57,6 @@
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Location = new System.Drawing.Point(3, 63);
-            this.sectionRates.Size = new System.Drawing.Size(378, 93);
-            this.sectionRates.TabIndex = 2;
             // 
             // insuranceControl
             // 
@@ -287,11 +279,8 @@
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();

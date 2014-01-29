@@ -55,9 +55,12 @@
             this.shipmentControl = new ShipWorks.Shipping.Editing.ShipmentGridControl();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageService = new System.Windows.Forms.TabPage();
-            this.serviceControlArea = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelService = new System.Windows.Forms.Label();
+            this.serviceControlArea = new System.Windows.Forms.Panel();
+            this.rateControlArea = new System.Windows.Forms.Panel();
+            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
             this.customsControlArea = new System.Windows.Forms.Panel();
             this.tabPageTracking = new System.Windows.Forms.TabPage();
@@ -82,6 +85,11 @@
             this.splitContainer.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageService.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.rateControlArea.SuspendLayout();
             this.tabPageCustoms.SuspendLayout();
             this.tabPageTracking.SuspendLayout();
             this.panelTrackingData.SuspendLayout();
@@ -330,9 +338,7 @@
             // 
             // tabPageService
             // 
-            this.tabPageService.Controls.Add(this.serviceControlArea);
-            this.tabPageService.Controls.Add(this.comboShipmentType);
-            this.tabPageService.Controls.Add(this.labelService);
+            this.tabPageService.Controls.Add(this.splitContainer1);
             this.tabPageService.Location = new System.Drawing.Point(4, 22);
             this.tabPageService.Name = "tabPageService";
             this.tabPageService.Padding = new System.Windows.Forms.Padding(3);
@@ -341,15 +347,31 @@
             this.tabPageService.Text = "Service";
             this.tabPageService.UseVisualStyleBackColor = true;
             // 
-            // serviceControlArea
+            // splitContainer1
             // 
-            this.serviceControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.serviceControlArea.Location = new System.Drawing.Point(6, 36);
-            this.serviceControlArea.Name = "serviceControlArea";
-            this.serviceControlArea.Size = new System.Drawing.Size(336, 427);
-            this.serviceControlArea.TabIndex = 2;
+            this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window;
+            this.splitContainer1.Panel1.Controls.Add(this.comboShipmentType);
+            this.splitContainer1.Panel1.Controls.Add(this.labelService);
+            this.splitContainer1.Panel1.Controls.Add(this.serviceControlArea);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.AutoScroll = true;
+            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Window;
+            this.splitContainer1.Panel2.Controls.Add(this.rateControlArea);
+            this.splitContainer1.Panel2MinSize = 80;
+            this.splitContainer1.Size = new System.Drawing.Size(342, 457);
+            this.splitContainer1.SplitterDistance = 372;
+            this.splitContainer1.SplitterWidth = 5;
+            this.splitContainer1.TabIndex = 4;
             // 
             // comboShipmentType
             // 
@@ -357,7 +379,7 @@
             this.comboShipmentType.FormattingEnabled = true;
             this.comboShipmentType.Items.AddRange(new object[] {
             "FedEx"});
-            this.comboShipmentType.Location = new System.Drawing.Point(60, 9);
+            this.comboShipmentType.Location = new System.Drawing.Point(62, 12);
             this.comboShipmentType.Name = "comboShipmentType";
             this.comboShipmentType.PromptText = "(Multiple Values)";
             this.comboShipmentType.Size = new System.Drawing.Size(184, 21);
@@ -367,11 +389,45 @@
             // labelService
             // 
             this.labelService.AutoSize = true;
-            this.labelService.Location = new System.Drawing.Point(7, 12);
+            this.labelService.Location = new System.Drawing.Point(9, 15);
             this.labelService.Name = "labelService";
             this.labelService.Size = new System.Drawing.Size(51, 13);
             this.labelService.TabIndex = 0;
             this.labelService.Text = "Provider:";
+            // 
+            // serviceControlArea
+            // 
+            this.serviceControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.serviceControlArea.BackColor = System.Drawing.Color.Transparent;
+            this.serviceControlArea.Location = new System.Drawing.Point(8, 39);
+            this.serviceControlArea.Name = "serviceControlArea";
+            this.serviceControlArea.Size = new System.Drawing.Size(331, 330);
+            this.serviceControlArea.TabIndex = 2;
+            // 
+            // rateControlArea
+            // 
+            this.rateControlArea.BackColor = System.Drawing.Color.Transparent;
+            this.rateControlArea.Controls.Add(this.rateControl);
+            this.rateControlArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rateControlArea.Location = new System.Drawing.Point(0, 0);
+            this.rateControlArea.Name = "rateControlArea";
+            this.rateControlArea.Size = new System.Drawing.Size(342, 80);
+            this.rateControlArea.TabIndex = 3;
+            // 
+            // rateControl
+            // 
+            this.rateControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rateControl.Location = new System.Drawing.Point(0, 0);
+            this.rateControl.Name = "rateControl";
+            this.rateControl.Size = new System.Drawing.Size(342, 80);
+            this.rateControl.TabIndex = 0;
+            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
+            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
             // tabPageCustoms
             // 
@@ -557,7 +613,12 @@
             this.splitContainer.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
             this.tabPageService.ResumeLayout(false);
-            this.tabPageService.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.rateControlArea.ResumeLayout(false);
             this.tabPageCustoms.ResumeLayout(false);
             this.tabPageTracking.ResumeLayout(false);
             this.panelTrackingData.ResumeLayout(false);
@@ -608,5 +669,8 @@
         private UI.Controls.DropDownButton processDropDownButton;
         private System.Windows.Forms.Panel panelSettingsButtons;
         private System.Windows.Forms.Button shippingServices;
+        private System.Windows.Forms.Panel rateControlArea;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private Editing.RateControl rateControl;
     }
 }

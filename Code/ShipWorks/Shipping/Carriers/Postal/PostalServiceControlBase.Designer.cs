@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.nonRectangular = new System.Windows.Forms.CheckBox();
@@ -48,14 +46,16 @@
             this.sectionExpress = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.expressSignatureWaiver = new System.Windows.Forms.CheckBox();
             this.labelExpressSignatureWaiver = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).BeginInit();
-            this.sectionRates.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             this.sectionExpress.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,13 +66,13 @@
             // 
             // personControl
             // 
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Size = new System.Drawing.Size(395, 330);
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 481);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 383);
             this.sectionReturns.Size = new System.Drawing.Size(390, 24);
             // 
             // sectionShipment
@@ -95,41 +95,14 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.weight);
             this.sectionShipment.ContentPanel.Controls.Add(this.confirmation);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 132);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 34);
             this.sectionShipment.Size = new System.Drawing.Size(390, 315);
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            // 
-            // sectionRates.ContentPanel
-            // 
-            this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
-            this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(3, 34);
-            this.sectionRates.Name = "sectionRates";
-            this.sectionRates.SectionName = "Rates";
-            this.sectionRates.SettingsKey = "{4b96a784-c2c9-4e5e-9f58-28adec07349f}";
-            this.sectionRates.Size = new System.Drawing.Size(390, 93);
-            this.sectionRates.TabIndex = 11;
-            // 
-            // rateControl
-            // 
-            this.rateControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.rateControl.Location = new System.Drawing.Point(0, 0);
-            this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(386, 67);
-            this.rateControl.TabIndex = 1;
-            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
             // 
             // dimensionsControl
             // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dimensionsControl.Location = new System.Drawing.Point(87, 161);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
@@ -226,7 +199,7 @@
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(90, 91);
             this.weight.Name = "weight";
             this.weight.RangeMax = 300D;
@@ -276,19 +249,19 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.insuranceControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceControl.BackColor = System.Drawing.Color.Transparent;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(21, 236);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(459, 50);
+            this.insuranceControl.Size = new System.Drawing.Size(464, 50);
             this.insuranceControl.TabIndex = 50;
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionExpress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionExpress.Collapsed = true;
             // 
             // sectionExpress.ContentPanel
@@ -297,7 +270,7 @@
             this.sectionExpress.ContentPanel.Controls.Add(this.labelExpressSignatureWaiver);
             this.sectionExpress.ExpandedHeight = 62;
             this.sectionExpress.ExtraText = "";
-            this.sectionExpress.Location = new System.Drawing.Point(3, 452);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 354);
             this.sectionExpress.Name = "sectionExpress";
             this.sectionExpress.SectionName = "Priority Mail Express";
             this.sectionExpress.SettingsKey = "{1883602a-4bec-4004-9ce5-7fba05b99e17}";
@@ -329,35 +302,33 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.sectionRates);
             this.Controls.Add(this.sectionExpress);
             this.Name = "PostalServiceControlBase";
             this.Size = new System.Drawing.Size(396, 782);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
-            this.sectionRates.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             this.sectionExpress.ContentPanel.ResumeLayout(false);
             this.sectionExpress.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ShipWorks.Shipping.Editing.RateControl rateControl;
-        protected ShipWorks.UI.Controls.CollapsibleGroupControl sectionRates;
         private ShipWorks.Shipping.Editing.DimensionsControl dimensionsControl;
         private System.Windows.Forms.CheckBox nonMachinable;
         private System.Windows.Forms.CheckBox nonRectangular;

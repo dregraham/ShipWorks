@@ -422,7 +422,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// A shipping rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             PostalRateSelection rate = e.Rate.Tag as PostalRateSelection;
 

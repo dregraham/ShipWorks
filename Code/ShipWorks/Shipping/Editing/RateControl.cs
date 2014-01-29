@@ -1,4 +1,6 @@
-﻿using Divelements.SandGrid;
+﻿using System.Diagnostics;
+
+using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Utility;
 using ShipWorks.Properties;
@@ -26,6 +28,17 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ReloadRatesRequired;
 
         /// <summary>
+        /// Event raised indicating that a full reload of the rates is required
+        /// </summary>
+        protected void OnReloadRatesRequired(object sender, EventArgs e)
+        {
+            if (this.ReloadRatesRequired != null)
+            {
+                ReloadRatesRequired(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public RateControl()
@@ -35,6 +48,8 @@ namespace ShipWorks.Shipping.Editing
             sandGrid.Rows.Clear();
 
             gridColumnSelect.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnSelectRate);
+
+            this.ReloadRatesRequired += OnReloadRatesRequired;
         }
 
         /// <summary>
@@ -51,10 +66,9 @@ namespace ShipWorks.Shipping.Editing
         /// <remarks>This version will display any footnotes associated with the rate group</remarks>
         public void ClearRates(string emptyReason, RateGroup rateGroup)
         {
-            if (sandGrid.EmptyText != emptyReason)
-            {
-                sandGrid.EmptyText = emptyReason;
-            }
+            Debug.Assert(sandGrid.EmptyText != null, "sandGrid.EmptyText != null");
+                
+            sandGrid.EmptyText = emptyReason;
 
             if (sandGrid.Rows.Count > 0)
             {
@@ -68,7 +82,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Clear the previous content of the footnote control
         /// </summary>
-        private List<RateFootnoteControl> CurrentFootnotes
+        private IEnumerable<RateFootnoteControl> CurrentFootnotes
         {
             get { return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList(); }
         }

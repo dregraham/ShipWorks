@@ -30,7 +30,6 @@
         {
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -40,12 +39,6 @@
             ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Location = new System.Drawing.Point(3, 63);
-            this.sectionRates.Size = new System.Drawing.Size(415, 93);
-            this.sectionRates.TabIndex = 2;
             // 
             // insuranceControl
             // 
@@ -119,10 +112,8 @@
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
