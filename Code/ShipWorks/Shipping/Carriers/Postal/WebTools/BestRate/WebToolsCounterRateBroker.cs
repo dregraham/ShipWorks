@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -10,6 +11,7 @@ using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 {
@@ -83,14 +85,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         {
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
 
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
+                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
             {
-                // We don't have an account for counter rates, so we need to use the store address
-                PersonAdapter.Copy(currentShipment.Order.Store, currentShipment, "Origin");
+                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
+                // so we'll try to use the store address
+                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
+                StoreEntity store = StoreManager.GetStore(order.StoreID);
+
+                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
             }
 
-            // Check to see if the address is incomplete
-            CounterRatesOriginAddressValidator.Validate(currentShipment);
+            if (!CounterRatesOriginAddressValidator.IsValidate(currentShipment))
+            {
+                // The store address is incomplete, too, so the origin address is still incomplete
+                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
+            }
         }
         /// <summary>
         /// Displays the WebTools setup wizard.

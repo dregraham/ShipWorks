@@ -2189,8 +2189,13 @@ namespace ShipWorks.Shipping
         {
             if (uiDisplayedShipments.Count == 1)
             {
-                OrderEntity order = DataProvider.GetEntity(uiDisplayedShipments[0].OrderID) as OrderEntity;
-                return StoreManager.GetStore(order.StoreID);
+                ShipmentEntity shipment = uiDisplayedShipments[0];
+                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+
+                StoreEntity store = StoreManager.GetStore(order.StoreID);
+                shipment.Order.Store = store;
+
+                return store;
             }
 
             return null;

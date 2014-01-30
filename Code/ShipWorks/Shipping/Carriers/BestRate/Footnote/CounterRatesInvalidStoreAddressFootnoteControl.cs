@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         {
             StoreEntity store = parameters.GetStoreAction();
 
-            using (CounterRatesInvalidStoreAddressDialog dialog = new CounterRatesInvalidStoreAddressDialog(store))
+            using (StoreSettingsDlg dialog = new StoreSettingsDlg(store))
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

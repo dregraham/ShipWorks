@@ -9,53 +9,56 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
 
         [TestMethod]
-        [ExpectedException(typeof(CounterRatesOriginAddressException))]
-        public void Validate_ThrowsCounterRatesOriginAddressException_WhenOriginStreet1IsEmpty_Test()
+        public void Validate_ReturnsFalse_WhenOriginStreet1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStreet1 = string.Empty;
 
-            CounterRatesOriginAddressValidator.Validate(shipment);
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CounterRatesOriginAddressException))]
-        public void Validate_ThrowsCounterRatesOriginAddressException_WhenOriginCityIsEmpty_Test()
+        public void Validate_ReturnsFalse_WhenOriginCityIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCity = string.Empty;
 
-            CounterRatesOriginAddressValidator.Validate(shipment);
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CounterRatesOriginAddressException))]
-        public void Validate_ThrowsCounterRatesOriginAddressException_WhenOriginStateIsEmpty_Test()
+        public void Validate_ReturnsFalse_WhenOriginStateIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStateProvCode = string.Empty;
 
-            CounterRatesOriginAddressValidator.Validate(shipment);
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CounterRatesOriginAddressException))]
-        public void Validate_ThrowsCounterRatesOriginAddressException_WhenOriginPostalCode1IsEmpty_Test()
+        public void Validate_ReturnsFalse_WhenOriginPostalCode1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginPostalCode = string.Empty;
 
-            CounterRatesOriginAddressValidator.Validate(shipment);
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(CounterRatesOriginAddressException))]
-        public void Validate_ThrowsCounterRatesOriginAddressException_WhenOriginCountryCodeIsEmpty_Test()
+        public void Validate_ReturnsFalse_WhenOriginCountryCodeIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCountryCode = string.Empty;
 
-            CounterRatesOriginAddressValidator.Validate(shipment);
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+        }
+
+        [TestMethod]
+        public void Validate_ReturnsTrue_WhenOriginAddressIsComplete_Test()
+        {
+            ShipmentEntity shipment = CreateShipment();
+
+            Assert.IsTrue(CounterRatesOriginAddressValidator.IsValidate(shipment));
         }
 
         private ShipmentEntity CreateShipment()
