@@ -573,7 +573,9 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressException.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidator.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDlg.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressDlg.Designer.cs">
       <DependentUpon>CounterRatesInvalidStoreAddressDlg.cs</DependentUpon>
     </Compile>

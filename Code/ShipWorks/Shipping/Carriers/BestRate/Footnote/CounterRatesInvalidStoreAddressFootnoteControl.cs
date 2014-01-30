@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
+                    StoreManager.CheckForChanges();
                     parameters.ReloadRatesAction();
                 }
             }
