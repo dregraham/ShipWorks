@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
     /// <summary>
     /// Dialog that allows the store address to be modified
     /// </summary>
-    public partial class CounterRatesInvalidStoreAddressDialog : Form
+    public partial class CounterRatesInvalidStoreAddressDlg : Form
     {
         private readonly StoreEntity store;
 
@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// Constructor
         /// </summary>
         /// <param name="store">Store that will be edited</param>
-        public CounterRatesInvalidStoreAddressDialog(StoreEntity store)
+        public CounterRatesInvalidStoreAddressDlg(StoreEntity store)
         {
             this.store = store;
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// The user wants to save changes
         /// </summary>
-        private void okButton_Click(object sender, EventArgs e)
+        private void OnOkButtonClick(object sender, EventArgs e)
         {
             storeAddressControl.SaveToEntity(store);
             StoreManager.SaveStore(store);
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         /// <summary>
         /// The user wants to cancel
         /// </summary>
-        private void cancelButton_Click(object sender, EventArgs e)
+        private void OnCancelButtonClick(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
         }

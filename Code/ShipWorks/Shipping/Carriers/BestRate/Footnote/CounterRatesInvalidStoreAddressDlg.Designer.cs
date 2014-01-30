@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
-    partial class CounterRatesInvalidStoreAddressDialog
+    partial class CounterRatesInvalidStoreAddressDlg
     {
         /// <summary>
         /// Required designer variable.
@@ -53,7 +53,7 @@
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.cancelButton.Click += new System.EventHandler(this.OnCancelButtonClick);
             // 
             // okButton
             // 
@@ -62,9 +62,9 @@
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 2;
-            this.okButton.Text = "Ok";
+            this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.okButton.Click += new System.EventHandler(this.OnOkButtonClick);
             // 
             // CounterRatesInvalidStoreAddressDialog
             // 
@@ -74,7 +74,12 @@
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.storeAddressControl);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CounterRatesInvalidStoreAddressDialog";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit store address";
             this.ResumeLayout(false);
