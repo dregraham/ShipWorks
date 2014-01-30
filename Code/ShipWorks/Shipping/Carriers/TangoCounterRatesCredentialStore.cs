@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -10,27 +14,43 @@ namespace ShipWorks.Shipping.Carriers
     /// </summary>
     public class TangoCounterRatesCredentialStore : ICounterRatesCredentialStore
     {
+        private static FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
+
         // The lazy loaded singleton instance variable.
         private static readonly Lazy<TangoCounterRatesCredentialStore> lazyInstance = 
             new Lazy<TangoCounterRatesCredentialStore>(() => new TangoCounterRatesCredentialStore());
+
+        // Test credentials
+        private const string testCredentialFedExAccountNumber = "603103343";
+        private const string testCredentialFedExMeterNumber = "118601174";
+        private const string testCredentialFedExUsername = "51LPnQ5iP1uPARkC";
+        private const string testCredentialFedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
+        private const string testCredentialUpsUserId = "6863e0f62cdd4a1b";
+        private const string testCredentialUpsPassword = "cf9e7473";
+        private const string testCredentialUpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
+        private const string testCredentialExpress1EndiciaAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
+        private const string testCredentialExpress1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
+        private const string testCredentialExpress1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
+        private const string testCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
+
+        // Production credentials
+        private const string fedExAccountNumber = "";
+        private const string fedExMeterNumber = "";
+        private const string fedExUsername = "";
+        private const string fedExPassword = "";
+        private const string upsUserId = "";
+        private const string upsPassword = "";
+        private const string upsAccessKey = "";
+        private const string express1EndiciaAccountNumber = "";
+        private const string express1EndiciaPassPhrase = "";
+        private const string express1StampsUsername = "";
+        private const string express1StampsPassword = "";
 
         /// <summary>
         /// Private constructor.
         /// </summary>
         private TangoCounterRatesCredentialStore()
         {
-            // TODO: Populate with values from Tango when Tango supports these.
-            FedExAccountNumber = "603103343";
-            FedExMeterNumber = "118601174";
-            FedExUsername = "51LPnQ5iP1uPARkC";
-            FedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
-            UpsUserId = "6863e0f62cdd4a1b";
-            UpsPassword = "cf9e7473";
-            UpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
-            Express1EndiciaAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
-            Express1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
-            Express1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
-            Express1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         }
 
         /// <summary>
@@ -49,8 +69,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string FedExAccountNumber
         {
-            get; 
-            private set;
+            get
+            {
+                return fedExSettingsRepo.UseTestServer ? testCredentialFedExAccountNumber : fedExAccountNumber;
+            }
         }
 
         /// <summary>
@@ -58,8 +80,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string FedExMeterNumber
         {
-            get; 
-            private set;
+            get
+            {
+                return fedExSettingsRepo.UseTestServer ? testCredentialFedExMeterNumber : fedExMeterNumber;
+            }
         }
 
         /// <summary>
@@ -67,8 +91,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string FedExUsername
         {
-            get; 
-            private set;
+            get
+            {
+                return fedExSettingsRepo.UseTestServer ? testCredentialFedExUsername : fedExUsername;
+            }
         }
 
         /// <summary>
@@ -76,8 +102,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string FedExPassword
         {
-            get; 
-            private set;
+            get
+            {
+                return fedExSettingsRepo.UseTestServer ? testCredentialFedExPassword : fedExPassword;
+            }
         }
 
         /// <summary>
@@ -85,8 +113,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string UpsUserId
         {
-            get; 
-            private set;
+            get
+            {
+                return UpsWebClient.UseTestServer ? testCredentialUpsUserId : upsUserId;
+            }
         }
 
         /// <summary>
@@ -94,25 +124,32 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string UpsPassword
         {
-            get; 
-            private set;
+            get
+            {
+                return UpsWebClient.UseTestServer ? testCredentialUpsPassword : upsPassword;
+            }
         }
 
         /// <summary>
         /// Gets the Ups access key used for obtaining counter rates
         /// </summary>
-        public string UpsAccessKey { 
-            get; 
-            private set; 
+        public string UpsAccessKey
+        {
+            get
+            {
+                return UpsWebClient.UseTestServer ? testCredentialUpsAccessKey : upsAccessKey;
+            }
         }
 
         /// <summary>
         /// Gets the Express1 Endicia account number used for obtaining counter rates
         /// </summary>
         public string Express1EndiciaAccountNumber
-        { 
-            get; 
-            private set; 
+        {
+            get
+            {
+                return Express1EndiciaUtility.UseTestServer ? testCredentialExpress1EndiciaAccountNumber : express1EndiciaAccountNumber;
+            }
         }
 
         /// <summary>
@@ -120,16 +157,20 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string Express1EndiciaPassPhrase
         {
-            get;
-            private set;
+            get
+            {
+                return Express1EndiciaUtility.UseTestServer ? testCredentialExpress1EndiciaPassPhrase : express1EndiciaPassPhrase;
+            }
         }
         /// <summary>
         /// Gets the Express1 Stamps user name used for obtaining counter rates
         /// </summary>
         public string Express1StampsUsername
         {
-            get;
-            private set;
+            get
+            {
+                return Express1StampsConnectionDetails.UseTestServer ? testCredentialExpress1StampsUsername : express1StampsUsername;
+            }
         }
 
         /// <summary>
@@ -137,8 +178,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public string Express1StampsPassword
         {
-            get;
-            private set;
+            get
+            {
+                return Express1StampsConnectionDetails.UseTestServer ? testCredentialExpress1StampsPassword : express1StampsPassword;
+            }
         }
     }
 }
