@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
                 // We don't have an account for counter rates or "Other" is selected and is incomplete, 
                 // so we'll try to use the store address
                 OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = StoreManager.GetStore(order.StoreID);
+                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
 
                 PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
             }
