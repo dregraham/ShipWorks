@@ -121,11 +121,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the command that should be executed
         /// </summary>
-        /// <param name="inputKey">Id of object to use for merging tokens</param>
+        /// <param name="inputKeys">Id of object to use for merging tokens</param>
         /// <returns></returns>
         private string GetCommandToExecute(List<long> inputKeys)
         {
-            return TurnOffEcho(TemplateTokenProcessor.ProcessTokens(Command, inputKeys, false));
+            return TemplateTokenProcessor.ProcessTokens(Command ?? string.Empty, inputKeys, false);
         }
 
         /// <summary>
@@ -143,12 +143,19 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
+            if (string.IsNullOrWhiteSpace(Command))
+            {
+                const string errorMessage = "No command was entered.";
+                log.ErrorFormat(errorMessage);
+                throw new ActionTaskRunException(errorMessage);
+            }
+
             // Get the time that should be used for timing out the process
             DateTime timeoutDate = DateTime.Now.AddMinutes(CommandTimeoutInMinutes);
 
             if ((ActionTaskInputSource) context.Step.InputSource == ActionTaskInputSource.Nothing)
             {
-                RunCommand(TurnOffEcho(Command), timeoutDate);
+                RunCommand(Command, timeoutDate);
             }
             else
             {
@@ -186,6 +193,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <param name="timeoutDate">Date after which the command should be timed out</param>
         private void RunCommand(string executionCommand, DateTime timeoutDate)
         {
+            if (string.IsNullOrWhiteSpace(executionCommand))
+            {
+                log.Warn("After processing the template, the command was empty.");
+            }
+
+            string command = TurnOffEcho(executionCommand);
+
             string commandFileName = Path.GetRandomFileName() + ".cmd";
             string commandPath = Path.Combine(GetTempPath(), commandFileName);
             string commandLogBasePath = GetNextCommandLogPathWithoutExtension();
@@ -197,8 +211,8 @@ namespace ShipWorks.Actions.Tasks.Common
             log.InfoFormat("Output log path: {0}", outputLogPath);
 
             // Save the command text for both logging and execution
-            File.WriteAllText(commandLogPath, executionCommand);
-            File.WriteAllText(commandPath, executionCommand);
+            File.WriteAllText(commandLogPath, command);
+            File.WriteAllText(commandPath, command);
 
             try
             {
