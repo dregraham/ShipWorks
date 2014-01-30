@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using System.Xml;
 using System.Net;
@@ -23,6 +24,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using System.Reflection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -65,6 +67,24 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "getstatus");
 
             return ProcessAccountRequest(postRequest, store, license);
+        }
+
+        /// <summary>
+        /// Get the status of the specified license
+        /// </summary>
+        public static Dictionary<string, string> GetCounterRatesCredentials()
+        {
+            Dictionary<string, string> results = new Dictionary<string, string>();
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            postRequest.Variables.Add("action", "getcounterratescredentials");
+            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
+
+            // Convert to an XEelement so we can use LINQ
+            IEnumerable<XElement> rootNodes = responseXmlDocument.ToXElement().DescendantNodes().OfType<XElement>();
+            results = rootNodes.ToDictionary(n => n.Name.ToString(), n => n.Value);
+
+            return results;
         }
 
         /// <summary>
@@ -565,9 +585,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Process the given requiest against the interapptive license server
+        /// Process the given request against the interapptive license server
         /// </summary>
         private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest)
+        {
+            return ProcessRequest(postRequest, "License");
+        }
+
+        /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
+        private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
         {
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(15);
@@ -576,7 +604,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
 
             // Logging
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, "License");
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
             logEntry.LogRequest(postRequest);
 
             // Setup parameters

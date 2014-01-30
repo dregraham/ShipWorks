@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
@@ -34,23 +35,59 @@ namespace ShipWorks.Shipping.Carriers
         private const string testCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
 
         // Production credentials
-        private const string fedExAccountNumber = "";
-        private const string fedExMeterNumber = "";
-        private const string fedExUsername = "";
-        private const string fedExPassword = "";
-        private const string upsUserId = "";
-        private const string upsPassword = "";
-        private const string upsAccessKey = "";
-        private const string express1EndiciaAccountNumber = "";
-        private const string express1EndiciaPassPhrase = "";
-        private const string express1StampsUsername = "";
-        private const string express1StampsPassword = "";
+        private string fedExAccountNumber = "";
+        private string fedExMeterNumber = "";
+        private string fedExUsername = "";
+        private string fedExPassword = "";
+        private string upsUserId = "";
+        private string upsPassword = "";
+        private string upsAccessKey = "";
+        private string express1EndiciaAccountNumber = "";
+        private string express1EndiciaPassPhrase = "";
+        private string express1StampsUsername = "";
+        private string express1StampsPassword = "";
 
         /// <summary>
         /// Private constructor.
         /// </summary>
         private TangoCounterRatesCredentialStore()
         {
+        }
+
+        /// <summary>
+        /// Calls Tango to get counter rates credentials
+        /// </summary>
+        private void LoadTangoProductionCredentials()
+        {
+            Dictionary<string, string> creds;
+
+            // Try to get the counter rates credentials from Tango
+            try
+            {
+                creds = TangoWebClient.GetCounterRatesCredentials();
+            }
+            catch (TangoException)
+            {
+                throw new ShippingException("Unable to get counter rates.");
+            }
+
+            // Check the result...make sure it's not null, has more than 0 entries, and at least has the FedExAccountNumber
+            if (creds == null || creds.Count == 0 || !creds.ContainsKey("FedExAccountNumber"))
+            {
+                throw new ShippingException("Unable to get counter rates.");
+            }
+
+            fedExAccountNumber = creds["FedExAccountNumber"];
+            fedExMeterNumber = creds["FedExMeterNumber"];
+            fedExUsername = creds["FedExUsername"];
+            fedExPassword = creds["FedExPassword"];
+            upsUserId = creds["UpsUserId"];
+            upsPassword = creds["UpsPassword"];
+            upsAccessKey = creds["UpsAccessKey"];
+            express1EndiciaAccountNumber = creds["Express1EndiciaAccountNumber"];
+            express1EndiciaPassPhrase = creds["Express1EndiciaPassPhrase"];
+            express1StampsUsername = creds["Express1StampsUsername"];
+            express1StampsPassword = creds["Express1StampsPassword"];
         }
 
         /// <summary>
