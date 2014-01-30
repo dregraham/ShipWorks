@@ -23,7 +23,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             {
                 new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
                 new BestRateNonExistentShipmentTypeFootnoteFilter(),
-                new BestRateExpress1PromotionFootnoteFilter()
+                new BestRateExpress1PromotionFootnoteFilter(),
+                new CounterRatesInvalidStoreAddressFootnoteFilter()
             };
         }
     }
