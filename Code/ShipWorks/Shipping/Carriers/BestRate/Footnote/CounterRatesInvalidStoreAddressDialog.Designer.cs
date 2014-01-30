@@ -75,6 +75,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.storeAddressControl);
             this.Name = "CounterRatesInvalidStoreAddressDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit store address";
             this.ResumeLayout(false);
 

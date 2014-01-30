@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
@@ -29,6 +30,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         private void okButton_Click(object sender, EventArgs e)
         {
             storeAddressControl.SaveToEntity(store);
+            StoreManager.SaveStore(store);
+
             DialogResult = DialogResult.OK;
         }
 
