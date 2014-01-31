@@ -53,6 +53,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Use a settings repository to get counter rates
             ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
 
+            // The dummy account wouldn't have an account number if we couldn't get one from Tango
+            FedExAccountEntity account = AccountRepository.GetAccount(0);
+            if (account == null || string.IsNullOrEmpty(account.AccountNumber))
+            {
+                exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for FedEx"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                return bestRates;
+            }
+
             try
             {
                 bestRates = base.GetBestRates(shipment, exceptionHandler);

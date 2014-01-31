@@ -47,6 +47,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
 
             ((EndiciaShipmentType)ShipmentType).AccountRepository = AccountRepository;
 
+            // The dummy account wouldn't have an account number if we couldn't get one from Tango
+            EndiciaAccountEntity account = AccountRepository.GetAccount(0);
+            if (account == null || string.IsNullOrEmpty(account.AccountNumber))
+            {
+                exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for Express1"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                return bestRates;
+            }
+
             try
             {
                 bestRates = base.GetBestRates(shipment, exceptionHandler);

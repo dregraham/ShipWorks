@@ -222,21 +222,16 @@ namespace ShipWorks.Shipping.Carriers
         /// <returns>The value for the given key.</returns>
         private string GetCredentialValue(string key)
         {
-            try
+            if (!productionCredentials.Any())
             {
-                if (!productionCredentials.Any())
-                {
-                    // The credentials haven't been populated yet, so we need to get them
-                    // from Tango
-                    LoadTangoProductionCredentials();
-                }
+                // The credentials haven't been populated yet, so we need to get them
+                // from Tango
+                LoadTangoProductionCredentials();
+            }
 
-                return productionCredentials[key];
-            }
-            catch (KeyNotFoundException ex)
-            {
-                throw new MissingCounterRatesCredentialException(string.Format("The {0} credential could was not found.", key), ex);
-            }
+            // Each counter rates broker will check for empty credentials to avoid hitting
+            // web services with no credentials
+            return productionCredentials.ContainsKey(key) ? productionCredentials[key] : string.Empty;
         }
 
         /// <summary>

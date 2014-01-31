@@ -49,9 +49,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup rates = new RateGroup(new List<RateResult>());
-
             ((UpsShipmentType)ShipmentType).SettingsRepository = SettingsRepository;
             ((UpsShipmentType)ShipmentType).AccountRepository = AccountRepository;
+
+            // The dummy account wouldn't have an account number if we couldn't get one from Tango
+            UpsAccountEntity account = AccountRepository.GetAccount(0);
+            if (account == null || string.IsNullOrEmpty(account.AccountNumber))
+            {
+                exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for UPS"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                return rates;
+            }
 
             try
             {
