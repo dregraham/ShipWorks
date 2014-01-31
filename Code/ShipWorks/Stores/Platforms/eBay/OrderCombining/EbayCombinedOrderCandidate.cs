@@ -212,8 +212,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                         if (add)
                         {
-                            // add it to the this combined order
-                            components.Add(new EbayCombinedOrderComponent(foundOrder, true));
+                            // add it to the this combined order.  For ones we find that aren't in the original selection, don't check them by default for the combined order screen.
+                            components.Add(new EbayCombinedOrderComponent(foundOrder, false));
                         }
                     }
                 }
