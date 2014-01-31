@@ -38,7 +38,7 @@ EXEC sp_rename N'[dbo].[tmp_rg_xx_WorldShipGoods]', N'WorldShipGoods'
 GO
 PRINT N'Creating primary key [PK_WorldShipGoods_1] on [dbo].[WorldShipGoods]'
 GO
-ALTER TABLE [dbo].[WorldShipGoods] ADD CONSTRAINT [PK_WorldShipGoods] PRIMARY KEY CLUSTERED  ([WorldShipGoodID])
+ALTER TABLE [dbo].[WorldShipGoods] ADD CONSTRAINT [PK_WorldShipGoods] PRIMARY KEY CLUSTERED  ([WorldShipGoodsID])
 GO
 PRINT N'Adding foreign keys to [dbo].[WorldShipGoods]'
 GO
