@@ -47,14 +47,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         /// </summary>
         private List<EndiciaAccountEntity> ConvertCredentialsToEndiciaAccountEntities()
         {
-            EndiciaAccountEntity account = new EndiciaAccountEntity
-            {
-                AccountNumber = credentialStore.Express1EndiciaAccountNumber,
-                ApiUserPassword = credentialStore.Express1EndiciaPassPhrase,
-                EndiciaReseller = (int) EndiciaReseller.Express1
-            };
+            List<EndiciaAccountEntity> counterRatesAccounts = new List<EndiciaAccountEntity>();
 
-            return new List<EndiciaAccountEntity> { account };
+            try
+            {
+                EndiciaAccountEntity account = new EndiciaAccountEntity
+                {
+                    AccountNumber = credentialStore.Express1EndiciaAccountNumber,
+                    ApiUserPassword = credentialStore.Express1EndiciaPassPhrase,
+                    EndiciaReseller = (int)EndiciaReseller.Express1
+                };
+
+                counterRatesAccounts.Add(account);
+            }
+            catch (MissingCounterRatesCredentialException)
+            {
+                // Eat this exception, and carry on as if there was not an account
+            }
+
+            return counterRatesAccounts;
         }
     }
 }

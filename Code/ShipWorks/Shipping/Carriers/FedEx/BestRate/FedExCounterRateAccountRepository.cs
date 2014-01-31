@@ -42,17 +42,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         private List<FedExAccountEntity> ConvertTangoCredentialsToFedExAccountEntities()
         {
-            FedExAccountEntity fedExAccountEntity = new FedExAccountEntity
-            {
-                AccountNumber = counterRatesCredentialStore.FedExAccountNumber,
-                MeterNumber = counterRatesCredentialStore.FedExMeterNumber,
-                PostalCode = "63102",
-                CountryCode = "US",
-                SmartPostHubList = string.Empty,
-                FedExAccountID = -1055
-            };
+            List<FedExAccountEntity> accounts = new List<FedExAccountEntity>();
 
-            return new List<FedExAccountEntity>() {fedExAccountEntity};
+            try
+            {
+                FedExAccountEntity fedExAccountEntity = new FedExAccountEntity
+                {
+                    AccountNumber = counterRatesCredentialStore.FedExAccountNumber,
+                    MeterNumber = counterRatesCredentialStore.FedExMeterNumber,
+                    PostalCode = "63102",
+                    CountryCode = "US",
+                    SmartPostHubList = string.Empty,
+                    FedExAccountID = -1055
+                };
+
+                accounts.Add(fedExAccountEntity);
+            }
+            catch (MissingCounterRatesCredentialException)
+            {
+                // Eat this exception, and carry on as if there was not an account
+            }
+
+            return accounts;
         }
 
         /// <summary>

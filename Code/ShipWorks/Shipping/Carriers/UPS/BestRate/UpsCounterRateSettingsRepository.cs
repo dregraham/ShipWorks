@@ -1,3 +1,4 @@
+using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
@@ -22,7 +23,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         public override ShippingSettingsEntity GetShippingSettings()
         {
             ShippingSettingsEntity shippingSettingsEntity = base.GetShippingSettings();
-            shippingSettingsEntity.UpsAccessKey = tangoCounterRatesCredentialStore.UpsAccessKey;
+
+            try
+            {
+                shippingSettingsEntity.UpsAccessKey = tangoCounterRatesCredentialStore.UpsAccessKey;
+            }
+            catch (MissingCounterRatesCredentialException)
+            {
+                // Eat this exception - and just use whatever is returned from the base class
+            }
 
             return shippingSettingsEntity;
         }

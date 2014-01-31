@@ -61,17 +61,28 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         private List<UpsAccountEntity> ConvertTangoCredentialsToFedExAccountEntities()
         {
-            UpsAccountEntity fedExAccountEntity = new UpsAccountEntity
-            {
-                UserID = counterRatesCredentialStore.UpsUserId,
-                Password = counterRatesCredentialStore.UpsPassword,
-                PostalCode = "63102",
-                CountryCode = "US",
-                RateType = (int)UpsRateType.Retail,
-                UpsAccountID = -1056
-            };
+            List<UpsAccountEntity> accounts = new List<UpsAccountEntity>();
 
-            return new List<UpsAccountEntity> { fedExAccountEntity };
+            try
+            {
+                UpsAccountEntity fedExAccountEntity = new UpsAccountEntity
+                {
+                    UserID = counterRatesCredentialStore.UpsUserId,
+                    Password = counterRatesCredentialStore.UpsPassword,
+                    PostalCode = "63102",
+                    CountryCode = "US",
+                    RateType = (int)UpsRateType.Retail,
+                    UpsAccountID = -1056
+                };
+
+                accounts.Add(fedExAccountEntity);
+            }
+            catch (MissingCounterRatesCredentialException)
+            {
+                // Eat this exception, and carry on as if there was not an account
+            }
+
+            return accounts;
         }
     }
 }

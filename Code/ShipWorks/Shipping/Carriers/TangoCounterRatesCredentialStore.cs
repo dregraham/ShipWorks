@@ -233,9 +233,9 @@ namespace ShipWorks.Shipping.Carriers
 
                 return productionCredentials[key];
             }
-            catch (Exception ex)
+            catch (KeyNotFoundException ex)
             {
-                throw new ShippingException("Unable to get counter rates.", ex);
+                throw new MissingCounterRatesCredentialException(string.Format("The {0} credential could was not found.", key), ex);
             }
         }
 
@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers
                 {
                     // The 30 second delay from the last failed request hasn't elapsed , so just throw the
                     // shipping exception here.
-                    throw new ShippingException("Unable to get counter rates.");
+                    throw new MissingCounterRatesCredentialException("Unable to get counter rates.");
                 }
 
                 lock (lockObject)
@@ -266,30 +266,23 @@ namespace ShipWorks.Shipping.Carriers
                         catch (TangoException ex)
                         {
                             log.Error(ex);
-                            ThrowShippingException(ex);
+
+                            // Note the time of the failure, so we can throttle any subsequent 
+                            // calls to Tango before throwing the exception;
+                            lastFailure = DateTime.UtcNow;
+                            throw new MissingCounterRatesCredentialException("Unable to get counter rates.", ex);
                         }
 
                         // Check the result...make sure it's not null, has more than 0 entries, and at least has the FedExAccountNumber
                         if (!productionCredentials.Any() || !productionCredentials.ContainsKey(FedExAccountNumberKeyName))
                         {
                             // We still don't have any credentials
-                            ThrowShippingException(null);
+                            lastFailure = DateTime.UtcNow;
+                            throw new MissingCounterRatesCredentialException("Unable to get counter rates.");
                         }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Throws a shipping exception.
-        /// </summary>
-        /// <exception cref="ShippingException">Unable to get counter rates.</exception>
-        private void ThrowShippingException(Exception innerException)
-        {
-            // Note the time of the failure, so we can throttle any subsequent 
-            // calls to Tango before throwing the exception;
-            lastFailure = DateTime.UtcNow;
-            throw new ShippingException("Unable to get counter rates.", innerException);
         }
     }
 }

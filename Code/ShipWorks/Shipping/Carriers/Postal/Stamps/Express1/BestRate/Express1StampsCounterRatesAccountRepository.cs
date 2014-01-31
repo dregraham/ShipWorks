@@ -48,14 +48,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// </summary>
         private List<StampsAccountEntity> ConvertCredentialsToStampsAccountEntities()
         {
-            StampsAccountEntity account = new StampsAccountEntity
-            {
-                Username = credentialStore.Express1StampsUsername,
-                Password = credentialStore.Express1StampsPassword,
-                IsExpress1 = true
-            };
+            List<StampsAccountEntity> counterRateAccounts = new List<StampsAccountEntity>();
 
-            return new List<StampsAccountEntity> { account };
+            try
+            {
+                StampsAccountEntity account = new StampsAccountEntity
+                {
+                    Username = credentialStore.Express1StampsUsername,
+                    Password = credentialStore.Express1StampsPassword,
+                    IsExpress1 = true
+                };
+
+                counterRateAccounts.Add(account);
+            }
+            catch (MissingCounterRatesCredentialException)
+            {
+                // Eat this exception, and carry on as if there was not an account
+            }
+
+            return counterRateAccounts;
         }
     }
 }
