@@ -70,6 +70,7 @@ namespace ShipWorks.Shipping
         private List<ShipmentEntity> loadedShipmentEntities;
 
         BackgroundWorker getRatesBackgroundWorker;
+        private bool getRatesQueued = false;
 
         /// <summary>
         /// Constructor
@@ -841,6 +842,7 @@ namespace ShipWorks.Shipping
         private void CancelPendingGetRates()
         {
             getRatesBackgroundWorker.CancelAsync();
+            getRatesQueued = false;
         }
 
         /// <summary>
@@ -999,7 +1001,6 @@ namespace ShipWorks.Shipping
                 }
             }
 
-            LoadDisplayedRates();
             GetRates();
         }
 
@@ -1603,12 +1604,6 @@ namespace ShipWorks.Shipping
                             // Add this as a delayed key
                             delayedKeys.Add(shipment.ShipmentID);
 
-                            // If its a report just queue it up until the end
-                            if (template.Type == (int) TemplateType.Report)
-                            {
-
-                            }
-
                             // It must be a label template
                             if (template.Type == (int) TemplateType.Label)
                             {
@@ -1657,6 +1652,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void GetRates()
         {
+            rateControl.ClearRates("Fetching Rates...");
+
             // Save changes to the current selection (NOT the ones we are processing) before we process it
             SaveChangesToUIDisplayedShipments();
 
@@ -1671,10 +1668,14 @@ namespace ShipWorks.Shipping
                 return;
             }
 
+            if (getRatesBackgroundWorker.IsBusy)
+            {
+                getRatesQueued = true;
+                return;
+            }
+
             // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
             List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(uiDisplayedShipments);
-
-            getRatesBackgroundWorker.CancelAsync();
 
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
@@ -1711,15 +1712,21 @@ namespace ShipWorks.Shipping
                         "getting rates for the selected carrier is not supported.");
                 }
 
-                if (anyAttempted)
+
+
+                if (getRatesQueued)
                 {
-                    LoadSelectedShipments(true);
+                    GetRates();
                 }
             };
 
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
+                // sleep .25 seconds. Turn off queued rates if get rates was called a few times quickly
+                Thread.Sleep(250);
+                getRatesQueued = false;
+
                 ShipmentEntity shipment = shipments.First();
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
