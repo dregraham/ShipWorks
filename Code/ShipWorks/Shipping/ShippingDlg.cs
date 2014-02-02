@@ -69,6 +69,8 @@ namespace ShipWorks.Shipping
 
         private List<ShipmentEntity> loadedShipmentEntities;
 
+        BackgroundWorker getRatesBackgroundWorker;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -108,6 +110,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            getRatesBackgroundWorker = new BackgroundWorker()
+            {
+                WorkerReportsProgress = false,
+                WorkerSupportsCancellation = true
+            };
+
+            GetRates();
+
             // Manage the window positioning
             WindowStateSaver windowSaver = new WindowStateSaver(this);
             windowSaver.ManageSplitter(splitContainer, "Splitter");
@@ -721,6 +731,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
+            CancelPendingGetRates();
+            
             ServiceControlBase newServiceControl = null;
 
             if (shipments.Any())
@@ -819,6 +831,16 @@ namespace ShipWorks.Shipping
 
             // Update the displayed rates
             LoadDisplayedRates();
+
+            GetRates();
+        }
+
+        /// <summary>
+        /// Cancels the pending get rates.
+        /// </summary>
+        private void CancelPendingGetRates()
+        {
+            getRatesBackgroundWorker.CancelAsync();
         }
 
         /// <summary>
@@ -957,6 +979,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         void OnRateCriteriaChanged(object sender, EventArgs e)
         {
+            CancelPendingGetRates();
+
             // Since this could change if customs needs generated, we need to save right now.
             SaveChangesToUIDisplayedShipments();
 
@@ -976,6 +1000,7 @@ namespace ShipWorks.Shipping
             }
 
             LoadDisplayedRates();
+            GetRates();
         }
 
         /// <summary>
@@ -1649,14 +1674,10 @@ namespace ShipWorks.Shipping
             // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
             List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(uiDisplayedShipments);
 
-            var worker = new BackgroundWorker()
-            {
-                WorkerReportsProgress = false,
-                WorkerSupportsCancellation = false
-            };
+            getRatesBackgroundWorker.CancelAsync();
 
             // What to do when done.  Runs on the UI thread.
-            worker.RunWorkerCompleted += (_sender, _e) =>
+            getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
             {
                 if (anyAttempted)
                 {
@@ -1697,7 +1718,7 @@ namespace ShipWorks.Shipping
             };
 
             // What to do for each shipment
-            worker.DoWork += (_sender, _e) =>
+            getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
                 ShipmentEntity shipment = shipments.First();
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
@@ -1745,7 +1766,7 @@ namespace ShipWorks.Shipping
                 }
             };
 
-            worker.RunWorkerAsync();
+            getRatesBackgroundWorker.RunWorkerAsync();
         }
 
         /// <summary>
