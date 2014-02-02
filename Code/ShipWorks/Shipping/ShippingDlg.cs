@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-
+using System.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -1635,20 +1635,28 @@ namespace ShipWorks.Shipping
             // Save changes to the current selection (NOT the ones we are processing) before we process it
             SaveChangesToUIDisplayedShipments();
 
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
-                "Get Rates",
-                "ShipWorks is getting shipping rates.",
-                "Getting {0} of {1}");
 
             List<string> newErrors = new List<string>();
             bool noRates = false;
             bool anyAttempted = false;
 
+ 
+            if (uiDisplayedShipments.Count != 1)
+            {
+                return;
+            }
+
             // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
             List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(uiDisplayedShipments);
 
+            var worker = new BackgroundWorker()
+            {
+                WorkerReportsProgress = false,
+                WorkerSupportsCancellation = false
+            };
+
             // What to do when done.  Runs on the UI thread.
-            executor.ExecuteCompleted += (_sender, _e) =>
+            worker.RunWorkerCompleted += (_sender, _e) =>
             {
                 if (anyAttempted)
                 {
@@ -1689,8 +1697,9 @@ namespace ShipWorks.Shipping
             };
 
             // What to do for each shipment
-            executor.ExecuteAsync((ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
+            worker.DoWork += (_sender, _e) =>
             {
+                ShipmentEntity shipment = shipments.First();
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
                 // Don't attempt to use cached rates if just one is selected.  If multi are selected, then we'll only get them if we need to for effeciency.  But
@@ -1734,10 +1743,9 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }
-            },
+            };
 
-                // The shipments to get rates for.
-                shipments);
+            worker.RunWorkerAsync();
         }
 
         /// <summary>
