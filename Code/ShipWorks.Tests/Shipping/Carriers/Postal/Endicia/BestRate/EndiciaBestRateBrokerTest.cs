@@ -340,8 +340,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.AreEqual("Endicia Foo Bar", result2.Description);
-            Assert.AreEqual("Endicia Baz Other", result4.Description);
+            Assert.AreEqual("USPS Foo Bar", result2.Description);
+            Assert.AreEqual("USPS Baz Other", result4.Description);
             Assert.AreEqual("4", result2.Days);
             Assert.AreEqual("3", result4.Days);
         }
@@ -613,8 +613,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Endicia Ground"));
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Endicia Some Service"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Endicia Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Some Service"));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
