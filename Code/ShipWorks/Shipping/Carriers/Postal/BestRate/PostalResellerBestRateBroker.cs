@@ -26,6 +26,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
+        /// Get best rates for the specified shipment
+        /// </summary>
+        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        {
+            exceptionHandler(new BrokerException(new ShippingException("Flat rate and regional boxes were not checked for best rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+
+            return base.GetBestRates(shipment, exceptionHandler);
+        }
+
+        /// <summary>
         /// Gets a list of Postal rates
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
