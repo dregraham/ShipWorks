@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// Constructor
         /// </summary>
         public Express1EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "Express1 Endicia")
+            base(shipmentType, accountRepository, "USPS")
         {
 
         }

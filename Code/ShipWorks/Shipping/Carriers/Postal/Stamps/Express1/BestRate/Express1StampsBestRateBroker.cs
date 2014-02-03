@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// Constructor
         /// </summary>
         public Express1StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "Express1 Stamps")
+            base(shipmentType, accountRepository, "USPS")
         {
 
         }
