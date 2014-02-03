@@ -25,6 +25,7 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
+using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System;
@@ -75,7 +76,6 @@ namespace ShipWorks.Shipping
         public ShippingDlg(List<ShipmentEntity> shipments)
             : this(shipments, false)
         {
-
         }
 
         /// <summary>
@@ -89,6 +89,8 @@ namespace ShipWorks.Shipping
             {
                 throw new ArgumentNullException("shipments");
             }
+
+            ThemedBorderProvider.Apply(rateControlArea);
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
