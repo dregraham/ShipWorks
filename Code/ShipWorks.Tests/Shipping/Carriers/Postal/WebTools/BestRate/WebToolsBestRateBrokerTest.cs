@@ -80,12 +80,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
         [TestMethod]
         public void GetRates_ThrowsException_WhenAccountAddressIsSelected()
         {
-            testShipment.OriginOriginID = (int) ShipmentOriginSource.Account;
+            testShipment.OriginOriginID = (int)ShipmentOriginSource.Account;
 
-            BrokerException calledException = null;
-            testObject.GetBestRates(testShipment, (ex) => calledException = ex);
+            List<BrokerException> calledExceptions = new List<BrokerException>();
+            testObject.GetBestRates(testShipment, calledExceptions.Add);
 
-            Assert.IsNotNull(calledException);
+            Assert.IsTrue(calledExceptions.Any(x => !x.GetBaseException().Message.Contains("boxes")));
         }
 
         [TestMethod]
@@ -93,10 +93,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.WebTools.BestRate
         {
             testShipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 
-            BrokerException calledException = null;
-            testObject.GetBestRates(testShipment, (ex) => calledException = ex);
+            List<BrokerException> calledExceptions = new List<BrokerException>();
+            testObject.GetBestRates(testShipment, calledExceptions.Add);
 
-            Assert.IsNull(calledException);
+            Assert.IsFalse(calledExceptions.Any(x => !x.GetBaseException().Message.Contains("boxes")));
         }
 
         [TestMethod]

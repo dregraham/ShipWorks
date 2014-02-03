@@ -425,11 +425,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            BrokerException calledException = null;
+            List<BrokerException> calledExceptions = new List<BrokerException>();
 
-            testObject.GetBestRates(testShipment, ex => calledException = ex);
+            testObject.GetBestRates(testShipment, calledExceptions.Add);
 
-            Assert.IsNull(calledException);
+            Assert.IsFalse(calledExceptions.Any(x => x.GetBaseException().Message.Contains("DHL")));
         }
 
 
@@ -469,11 +469,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            BrokerException calledException = null;
+            List<BrokerException> calledExceptions = new List<BrokerException>();
 
-            testObject.GetBestRates(testShipment, ex => calledException = ex);
+            testObject.GetBestRates(testShipment, calledExceptions.Add);
 
-            Assert.IsNull(calledException);
+            Assert.IsFalse(calledExceptions.Any(x => x.GetBaseException().Message.Contains("consolidator")));
         }
 
         [TestMethod]
