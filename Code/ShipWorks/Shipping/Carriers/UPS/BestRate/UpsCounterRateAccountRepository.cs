@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             try
             {
-                UpsAccountEntity fedExAccountEntity = new UpsAccountEntity
+                UpsAccountEntity upsAccountEntity = new UpsAccountEntity
                 {
                     UserID = counterRatesCredentialStore.UpsUserId,
                     Password = counterRatesCredentialStore.UpsPassword,
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     UpsAccountID = -1056
                 };
 
-                accounts.Add(fedExAccountEntity);
+                accounts.Add(upsAccountEntity);
             }
             catch (MissingCounterRatesCredentialException)
             {
