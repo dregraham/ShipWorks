@@ -387,15 +387,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
         
         /// <summary>
-        /// Temporary helper method to add the old service name to the end of the new service name for ExpressMail and InternationalExpress
+        /// Helper method to get postal service description.
         /// </summary>
         public static string GetPostalServiceTypeDescription(PostalServiceType postalServiceType)
         {
-            if (postalServiceType == PostalServiceType.ExpressMail)
-            {
-                return EnumHelper.GetDescription(postalServiceType) + " (Express Mail)";
-            }
-
             return EnumHelper.GetDescription(postalServiceType);
         }
 
