@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="descriptionMessage.Text" xml:space="preserve">
-    <value>Items denoted as an error will prevent a shipment from being automatically processed after ShipWorks finds the best rate, but the shipment can still be processed manually by selecting a rate from the rates grid, though.</value>
+    <value>Errors will stop Best Rate from automatically processing your shipment. If this occurs, your shipment can still be processed manually by selecting a rate (from the Rates section). If there are no errors, only warnings, you can still process your shipment by using the process button.</value>
   </data>
 </root>
