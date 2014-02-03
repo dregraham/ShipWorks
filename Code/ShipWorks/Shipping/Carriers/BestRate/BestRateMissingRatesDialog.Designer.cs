@@ -117,7 +117,6 @@
             this.gridColumnIcon.CellHorizontalAlignment = System.Drawing.StringAlignment.Center;
             this.gridColumnIcon.Clickable = false;
             this.gridColumnIcon.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gridColumnIcon.HeaderText = "Severity";
             this.gridColumnIcon.MinimumWidth = 25;
             this.gridColumnIcon.Width = 50;
             // 
