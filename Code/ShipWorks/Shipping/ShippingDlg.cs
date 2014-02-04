@@ -1,10 +1,12 @@
 ﻿using System.Drawing;
-
+using Divelements.SandGrid.Rendering;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using RestSharp.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -103,6 +105,9 @@ namespace ShipWorks.Shipping
             this.initialDisplayTracking = trackingPage;
 
             rateControl.Initialize(new FootnoteParameters(GetRates, GetStoreForCurrentShipment));
+
+            // Default the minimum size of the tab control panel to be 2/3rds the hight of the shipping dialog.
+            ratesSplitContainer.Panel1MinSize = 2*(Size.Height/3);
         }
 
         /// <summary>
@@ -113,7 +118,7 @@ namespace ShipWorks.Shipping
             // Manage the window positioning
             WindowStateSaver windowSaver = new WindowStateSaver(this);
             windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(splitContainer1, "RateSplitter");
+            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
 
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
@@ -1402,7 +1407,7 @@ namespace ShipWorks.Shipping
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
             getRates.Enabled = canGetRates;
-            splitContainer1.Panel2Collapsed = !canGetRates;
+            ratesSplitContainer.Panel2Collapsed = !canGetRates;
             print.Enabled = canPrint;
             voidSelected.Enabled = canVoid;
 
@@ -2201,6 +2206,12 @@ namespace ShipWorks.Shipping
             }
 
             return null;
+        }
+
+        private void OnTabSelecting(object sender, TabControlCancelEventArgs e)
+        {
+            // Hide the rates panel if we aren't on the service tab.
+            ratesSplitContainer.Panel2Collapsed = tabControl.SelectedTab != tabPageService;
         }
     }
 }
