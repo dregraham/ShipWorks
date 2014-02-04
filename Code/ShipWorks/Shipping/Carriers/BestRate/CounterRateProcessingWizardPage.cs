@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,8 +15,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 {
     public partial class CounterRateProcessingWizardPage : WizardPage
     {
-        private readonly IEnumerable<ShipmentEntity> shipmentsInBatch;
         private bool usingAvailableRate;
+        private readonly RateResult absoluteBestRate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CounterRateProcessingWizardPage" /> class.
@@ -29,11 +30,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             FilteredRates = filteredRates;
             AllRates = allRates;
-
-            this.shipmentsInBatch = shipmentsInBatch;
+            
             usingAvailableRate = false;
 
-            if (this.shipmentsInBatch.Count() > 1)
+            // Make note of this otherwise we'd be running Rates.First() a number of times
+            absoluteBestRate = filteredRates.Rates.First();
+            
+            // Swap out the "tokenized" provider text with that of the provider with the best rate
+            bestRateDescription.Text = ReplaceTokensInDescription(bestRateDescription.Text, absoluteBestRate.ShipmentType, absoluteBestRate.Amount);
+            Description = ReplaceTokensInDescription(Description, absoluteBestRate.ShipmentType, absoluteBestRate.Amount);
+
+            if (shipmentsInBatch.Count() <= 1)
             {
                 // There's only one shipment, so it doesn't make sense to show the UI 
                 // for the user to ignore counter rates for the rest of the batch
@@ -42,10 +49,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             if (AllRates.Rates.All(r => r.IsCounterRate))
             {
-                // There aren't any rates for an existing account, so remove 
-                // the UI for the user choose to use an available rate
+                // There aren't any rates for an existing account, so remove the UI 
+                // for the user choose to use an available rate and change the verbiage
+                // of the title so it doesn't read as though we're comparing the counter
+                // rate to a rate for an account that is already setup
                 availableRatePanel.Visible = false;
+                Title = @"It looks like you need to add a shipping account to ShipWorks";
             }
+            else
+            {
+                // Find the difference between the available rate and the cheapest rate to 
+                // display for comparison purposes
+                RateResult bestAvailableRate = AllRates.Rates.First(r => !r.IsCounterRate);
+
+                // We need to swap out the tokenized values in the more expensive rate text
+                decimal difference = bestAvailableRate.Amount - absoluteBestRate.Amount;
+                moreExpensiveAvailableRate.Text = ReplaceTokensInDescription(moreExpensiveAvailableRate.Text, bestAvailableRate.ShipmentType, difference);
+            }
+
+            
         }
 
         /// <summary>
@@ -65,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get
             {
-                RateResult selectedRate = FilteredRates.Rates.First();
+                RateResult selectedRate = absoluteBestRate;
 
                 if (usingAvailableRate)
                 {
@@ -97,6 +119,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// A helper method that replaces the {ProviderName} and {Amount} tokens in the source
+        /// string with the corresponding values from the given rate.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="rate">The rate.</param>
+        /// <returns>The formatted string with the actual provider name and rate amount.</returns>
+        private string ReplaceTokensInDescription(string source, ShipmentTypeCode shipmentTypeCode, decimal amount)
+        {
+            // Swap out the generic provider text with that of the provider with 
+            // the values from the rate
+            string providerName = EnumHelper.GetDescription(shipmentTypeCode);
+            
+            string result = source.Replace("{ProviderName}", providerName);
+            result = result.Replace("{Amount}", string.Format("{0:C2}", amount));
+
+            return result;
+        }
+
+        /// <summary>
         /// Called when [use available rate link clicked].
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -105,7 +146,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Note that the user chose to use the available rate and close the wizard
             // hosting this page.
-            usingAvailableRate = true;            
+            usingAvailableRate = true;
+
+            // Need to explicitly set the dialog result to indicate that the user
+            // actually chose an option rather than canceling
+            Wizard.DialogResult = DialogResult.OK;            
             Wizard.Close();
         }
     }
