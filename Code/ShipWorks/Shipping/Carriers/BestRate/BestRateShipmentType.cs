@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, true, ex =>
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, ex =>
             {
                 // Accumulate all of the broker exceptions for later use
                 log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
@@ -222,9 +222,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, bool createCounterRateBrokers, Action<BrokerException> exceptionHandler)
+        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, createCounterRateBrokers).ToList();
+            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
             
             if (!bestRateShippingBrokers.Any())
             {
@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
-                rateGroups = GetRates(shipment, false, PreProcessExceptionHandler);
+                rateGroups = GetRates(shipment, PreProcessExceptionHandler);
             }
             catch (AggregateException ex)
             {
