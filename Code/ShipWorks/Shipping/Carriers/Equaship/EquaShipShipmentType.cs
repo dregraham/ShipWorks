@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.EquaShip
 {
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Creates the wizard for configuring EquaShip 
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new EquashipSetupWizard();
         }

@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping
 		/// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
 		/// null if the shipment type does not require setup
 		/// </summary>
-		public virtual Form CreateSetupWizard()
+		public virtual WizardForm CreateSetupWizard()
 		{
 			return null;
 		}

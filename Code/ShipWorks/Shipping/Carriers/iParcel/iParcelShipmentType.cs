@@ -26,6 +26,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.UI.Wizard;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -431,7 +432,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// null if the shipment type does not require setup
         /// </summary>
         /// <returns>An iParcelSetupWizard object.</returns>
-        public override System.Windows.Forms.Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new iParcelSetupWizard();
         }

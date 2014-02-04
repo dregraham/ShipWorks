@@ -38,6 +38,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -102,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the wizard used to do the one-time initial service setup
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new UpsSetupWizard(ShipmentTypeCode);
         }

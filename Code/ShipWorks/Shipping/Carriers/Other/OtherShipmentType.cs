@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the Setup Wizard used to setup the "Other" shipment type
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new OtherSetupWizard();
         }
