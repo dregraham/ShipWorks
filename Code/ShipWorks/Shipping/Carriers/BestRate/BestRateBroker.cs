@@ -217,7 +217,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShipmentType.ConfigureNewShipment(testRateShipment);
                 UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
-                return GetRates(testRateShipment);
+                // Denote whether the rate is a counter or not based on the broker
+                // that was retrieving the rates
+                RateGroup rateGroup = GetRates(testRateShipment);
+                rateGroup.Rates.ForEach(r => r.IsCounterRate = this.IsCounterRate);
+
+                return rateGroup;
             }
             catch (ShippingException ex)
             {
