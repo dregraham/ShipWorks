@@ -593,12 +593,13 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateNonExistentShipmentTypeFootnoteFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilterFactory.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\RateGroupFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateResultTag.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />

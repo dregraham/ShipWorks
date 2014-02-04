@@ -155,8 +155,9 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateExpress1PromotionFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateFilterFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateNonExistentShipmentTypeFootnoteFilterTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilterTest.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\RateGroupFilterTest.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequestTest.cs" />

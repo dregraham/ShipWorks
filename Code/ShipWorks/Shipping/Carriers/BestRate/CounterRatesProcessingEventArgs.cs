@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -14,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="allRates">A list of all available rates</param>
         /// <param name="filteredRates">A list of rates that have been filtered as they would exist in the main rates grid</param>
-        public CounterRatesProcessingEventArgs(List<RateResult> allRates, List<RateResult> filteredRates)
+        public CounterRatesProcessingEventArgs(RateGroup allRates, RateGroup filteredRates)
         {
             this.AllRates = allRates;
             this.FilteredRates = filteredRates;
@@ -23,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets all the rates that can be applied to the shipment
         /// </summary>
-        public List<RateResult> AllRates
+        public RateGroup AllRates
         {
             get; 
             private set;
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the filtered list of rates
         /// </summary>
-        public List<RateResult> FilteredRates
+        public RateGroup FilteredRates
         {
             get; 
             private set;
