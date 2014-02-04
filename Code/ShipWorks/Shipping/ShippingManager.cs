@@ -927,6 +927,13 @@ namespace ShipWorks.Shipping
                     // used to process the shipment
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment).PreProcess(shipment);
 
+                    // A null value returned from the pre-process method means the user has opted to not continue 
+                    // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
+                    if (shipmentType == null)
+                    {
+                        return;
+                    }
+
                     // Make sure the type is setup - its possible it's not in the case of upgrading from V2
                     if (!IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                     {
