@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly IRateGroupFilterFactory filterFactory;
 
         public event EventHandler SignUpForProviderAccountCompleted;
+        public event EventHandler<CounterRatesProcessingEventArgs> CounterRatesProcessing; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -357,6 +358,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 throw new ShippingException("ShipWorks could not find any rates.");
             }
 
+            // If the best rate is a counter rate, raise an event that will let the user sign up for the service
+            if (((BestRateResultTag) bestRate.Tag).SignUpAction != null)
+            {
+                CounterRatesProcessingEventArgs eventArgs = new CounterRatesProcessingEventArgs(rateGroup.Rates, rateGroup.Rates);
+                OnCounterRatesProcessing(eventArgs);
+
+                if (eventArgs.SelectedRate == null)
+                {
+                    return null;
+                }
+
+                bestRate = eventArgs.SelectedRate;
+            }
+
             ApplySelectedShipmentRate(shipment, bestRate);
 
             using (SqlAdapter adapter = new SqlAdapter())
@@ -500,6 +515,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
                 shipment.BestRateEvents |= (byte)eventType;
+            }
+        }
+
+        /// <summary>
+        /// Fires the CounterRatesProcessing event
+        /// </summary>
+        private void OnCounterRatesProcessing(CounterRatesProcessingEventArgs eventArgs)
+        {
+            if (CounterRatesProcessing != null)
+            {
+                CounterRatesProcessing(this, eventArgs);
             }
         }
     }
