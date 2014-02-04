@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="bestRateDescription.Text" xml:space="preserve">
-    <value>The best rate that ShipWorks found is {Amount} with {ProviderName}, but you don't currently have an account with {ProviderName} in ShipWorks. Clicking Next will walk you through adding an account to ShipWorks, so you can get the best rate available for this shipment and start saving money.</value>
+    <value>The best rate that ShipWorks found is {Amount} with {ProviderName}, but you need to setup an account with {ProviderName} in ShipWorks. Clicking Next will walk you through adding an account to ShipWorks, so you can get the best rate available for this shipment and start saving money.</value>
   </data>
 </root>

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.UI.Wizard;
@@ -13,6 +8,10 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
+    /// <summary>
+    /// A wizard page intended to be used in conjunction with counter rates and the setup 
+    /// wizard of a shipping provider.
+    /// </summary>
     public partial class CounterRateProcessingWizardPage : WizardPage
     {
         private bool usingAvailableRate;
@@ -73,12 +72,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets all rates.
         /// </summary>
-        public RateGroup AllRates { get; private set; }
+        public RateGroup AllRates
+        {
+            get; 
+            private set;
+        }
 
         /// <summary>
         /// Gets the filtered rates.
         /// </summary>
-        public RateGroup FilteredRates { get; private set; }
+        public RateGroup FilteredRates
+        {
+            get; 
+            private set;
+        }
 
         /// <summary>
         /// Gets the selected rate.
@@ -120,10 +127,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
         /// <summary>
         /// A helper method that replaces the {ProviderName} and {Amount} tokens in the source
-        /// string with the corresponding values from the given rate.
+        /// string with the corresponding values from the given shipment type code and amount values.
         /// </summary>
         /// <param name="source">The source.</param>
-        /// <param name="rate">The rate.</param>
+        /// <param name="shipmentTypeCode">The shipment type code.</param>
+        /// <param name="amount">The amount.</param>
         /// <returns>The formatted string with the actual provider name and rate amount.</returns>
         private string ReplaceTokensInDescription(string source, ShipmentTypeCode shipmentTypeCode, decimal amount)
         {

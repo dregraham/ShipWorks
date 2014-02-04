@@ -45,7 +45,7 @@
             this.availableRatePanel.Controls.Add(this.useAvailableRateLink);
             this.availableRatePanel.Controls.Add(this.availableRateClickLabel);
             this.availableRatePanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.availableRatePanel.Location = new System.Drawing.Point(0, 61);
+            this.availableRatePanel.Location = new System.Drawing.Point(20, 65);
             this.availableRatePanel.Name = "availableRatePanel";
             this.availableRatePanel.Size = new System.Drawing.Size(488, 43);
             this.availableRatePanel.TabIndex = 0;
@@ -92,9 +92,9 @@
             // 
             // bestRateDescription
             // 
-            this.bestRateDescription.Location = new System.Drawing.Point(3, 0);
+            this.bestRateDescription.Location = new System.Drawing.Point(23, 14);
             this.bestRateDescription.Name = "bestRateDescription";
-            this.bestRateDescription.Size = new System.Drawing.Size(484, 52);
+            this.bestRateDescription.Size = new System.Drawing.Size(484, 48);
             this.bestRateDescription.TabIndex = 1;
             this.bestRateDescription.Text = resources.GetString("bestRateDescription.Text");
             // 
@@ -104,9 +104,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.bestRateDescription);
             this.Controls.Add(this.availableRatePanel);
-            this.Description = "Sign up for {ProviderName} account";
+            this.Description = "Add an account with {ProviderName}";
             this.Name = "CounterRateProcessingWizardPage";
-            this.Size = new System.Drawing.Size(501, 349);
+            this.Size = new System.Drawing.Size(531, 349);
             this.Title = "ShipWorks found a way to save you money!";
             this.availableRatePanel.ResumeLayout(false);
             this.availableRatePanel.PerformLayout();
