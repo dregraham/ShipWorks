@@ -370,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             // If the best rate is a counter rate, raise an event that will let the user sign up for the service
-            if (((BestRateResultTag) bestRate.Tag).SignUpAction != null)
+            if (bestRate.IsCounterRate)
             {
                 // Get all rates that meet the specified service level ordered by amount
                 BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
