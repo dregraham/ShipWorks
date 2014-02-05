@@ -589,7 +589,6 @@
             this.rateControl.Name = "rateControl";
             this.rateControl.Size = new System.Drawing.Size(342, 95);
             this.rateControl.TabIndex = 0;
-            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
             // trackingControl

@@ -611,6 +611,13 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Editing\ExceptionsRateFootNoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ExceptionsRateFootNoteControl.Designer.cs">
+      <DependentUpon>ExceptionsRateFootNoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\FootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
@@ -6801,6 +6808,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
@@ -6993,6 +7001,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsMailInnovationsOptionControl.resx">
       <DependentUpon>UpsMailInnovationsOptionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ExceptionsRateFootNoteControl.resx">
+      <DependentUpon>ExceptionsRateFootNoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>

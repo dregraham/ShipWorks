@@ -78,7 +78,6 @@ namespace ShipWorks.Shipping
         public ShippingDlg(List<ShipmentEntity> shipments)
             : this(shipments, false)
         {
-
         }
 
         /// <summary>
@@ -111,14 +110,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            getRatesBackgroundWorker = new BackgroundWorker()
-            {
-                WorkerReportsProgress = false,
-                WorkerSupportsCancellation = true
-            };
-
-            GetRates();
-
             // Manage the window positioning
             WindowStateSaver windowSaver = new WindowStateSaver(this);
             windowSaver.ManageSplitter(splitContainer, "Splitter");
@@ -246,6 +237,8 @@ namespace ShipWorks.Shipping
 
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
+
+                GetRates();
             }
         }
 
@@ -301,6 +294,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void LoadSelectedShipments(bool resortWhenDone)
         {
+            LoadSelectedShipments(resortWhenDone, true);
+        }
+
+        /// <summary>
+        /// Update the shipment details section to display the data currently in the selected shipments
+        /// </summary>
+        private void LoadSelectedShipments(bool resortWhenDone, bool getRatesWhenDone)
+        {
             // If we're already in the process of loading shipments, there is no need to process this
             if (loadingSelectedShipments)
             {
@@ -331,6 +332,7 @@ namespace ShipWorks.Shipping
             userState["loaded"] = loaded;
             userState["deleted"] = deleted;
             userState["resortWhenDone"] = resortWhenDone;
+            userState["getRatesWhenDone"] = getRatesWhenDone;
 
             // We need to load a copy of the shipments, since its going to be on the background thread.  Otherwise the UI could try to draw at the exact same
             // time it was being loaded on the background, and crashes could occur.
@@ -492,6 +494,7 @@ namespace ShipWorks.Shipping
             this.loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
             List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
             bool resortWhenDone = (bool) userState["resortWhenDone"];
+            bool getRatesWhenDone = (bool)userState["getRatesWhenDone"];
 
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
             ApplyShipmentsToGridRows(loadedShipmentEntities);
@@ -641,6 +644,11 @@ namespace ShipWorks.Shipping
             {
                 shipmentControl.RefreshAndResort();
             }
+
+            if (getRatesWhenDone)
+            {
+               GetRates(); 
+            }
         }
 
         /// <summary>
@@ -668,16 +676,25 @@ namespace ShipWorks.Shipping
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
             foreach (ShipmentEntity shipment in shipments)
             {
-                ShipmentGridRow row = shipmentControl.FindRow(shipment.ShipmentID);
+                ApplyShipmentToGridRow(shipment);
+            }
+        }
 
-                // I dont _think_ this should ever be null
-                Debug.Assert(row != null, "Could not find shipment row for shipment when applying settings to grid row.");
+        /// <summary>
+        /// Apply the given shipment to the associated row in the grid.  This is used after cloned shipments were altered somehow in the background thread
+        /// and the changes need to be propagated ot the UI.
+        /// </summary>
+        private void ApplyShipmentToGridRow(ShipmentEntity shipment)
+        {
+            ShipmentGridRow row = shipmentControl.FindRow(shipment.ShipmentID);
 
-                if (row != null)
-                {
-                    // Update the row with the copy of the shipment that was updated in the background
-                    row.Shipment = shipment;
-                }
+            // I dont _think_ this should ever be null
+            Debug.Assert(row != null, "Could not find shipment row for shipment when applying settings to grid row.");
+
+            if (row != null)
+            {
+                // Update the row with the copy of the shipment that was updated in the background
+                row.Shipment = shipment;
             }
         }
 
@@ -732,8 +749,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
-            CancelPendingGetRates();
-            
             ServiceControlBase newServiceControl = null;
 
             if (shipments.Any())
@@ -830,10 +845,8 @@ namespace ShipWorks.Shipping
             // Update the custom's control
             LoadCustomsControl(shipments, shipmentType, enableEditing);
 
-            // Update the displayed rates
-            LoadDisplayedRates();
-
-            GetRates();
+            //// Update the displayed rates
+            //LoadDisplayedRates();
         }
 
         /// <summary>
@@ -863,6 +876,8 @@ namespace ShipWorks.Shipping
             ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
 
             comboShipmentType.SelectedValue = shipmentTypeCode;
+
+            GetRates();
         }
 
         /// <summary>
@@ -1001,6 +1016,7 @@ namespace ShipWorks.Shipping
                 }
             }
 
+            // LoadDisplayedRates();
             GetRates();
         }
 
@@ -1013,18 +1029,10 @@ namespace ShipWorks.Shipping
             shipmentRateMap.Clear();
 
             // Then go ahead and do a Get Rates and whatever is selected
-            if (uiDisplayedShipments.Count > 0)
+            if (uiDisplayedShipments.Count == 1)
             {
-                BeginInvoke(new MethodInvoker<object, EventArgs>(OnGetRates), this, e);
+                GetRates();
             }
-        }
-
-        /// <summary>
-        /// A rate was selected on the rate grid
-        /// </summary>
-        void OnRateSelected(object sender, RateSelectedEventArgs e)
-        {
-            
         }
 
         /// <summary>
@@ -1652,11 +1660,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void GetRates()
         {
-            rateControl.ClearRates("Fetching Rates...");
-
             // Save changes to the current selection (NOT the ones we are processing) before we process it
             SaveChangesToUIDisplayedShipments();
-
 
             List<string> newErrors = new List<string>();
             bool noRates = false;
@@ -1668,52 +1673,83 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            if (getRatesBackgroundWorker.IsBusy)
+            ShipmentEntity uiShipment = uiDisplayedShipments.First();
+            ShipmentType uiShipmentType = ShipmentTypeManager.GetType(uiShipment);
+
+            if (!uiShipmentType.SupportsGetRates || uiShipment.Processed || !IsShipmentTypeActivatedUI(uiShipment))
+            {
+                return;
+            }
+            
+            if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
             {
                 getRatesQueued = true;
                 return;
             }
 
+            if (getRatesBackgroundWorker != null)
+            {
+                getRatesBackgroundWorker.Dispose();
+            }
+
+            getRatesBackgroundWorker = new BackgroundWorker()
+            {
+                WorkerReportsProgress = false,
+                WorkerSupportsCancellation = true
+            };
+
+            rateControl.ClearRates("Fetching Rates...");
+
             // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
-            List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(uiDisplayedShipments);
+            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(uiShipment);
 
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
             {
+                string errorMessage = string.Empty;
+
+                if (newErrors.Count > 0)
+                {
+                    foreach (string error in newErrors.Take(3))
+                    {
+                        errorMessage += error + "\n\n";
+                    }
+
+                    if (newErrors.Count > 3)
+                    {
+                        errorMessage += "See the shipment list for all errors.";
+                    }
+                }
+                else if (noRates)
+                {
+                    errorMessage =
+                        "Rates could not be obtained for every shipment.\n\nThis could be because the shipment is already processed or " +
+                        "getting rates for the selected carrier is not supported.";
+                }
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    RateGroup cachedRates = GetCachedRates(clonedShipment) ?? new RateGroup(new List<RateResult>());
+                    if (!cachedRates.Rates.Any())
+                    {
+                        cachedRates.Rates.Add(new RateResult("Oops",""));
+                    }
+                    cachedRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(uiShipmentType, errorMessage));
+                    SetCachedRates(clonedShipment, cachedRates);
+                }
+
                 if (anyAttempted)
                 {
                     // This is not necessary since we reload completely anyway, but it reduces the percieved load time by getting these displayed ASAP
                     LoadDisplayedRates();
 
                     // Apply any changes made during processing to the grid
-                    ApplyShipmentsToGridRows(shipments);
+                    //ApplyShipmentToGridRow(clonedShipment);
+
+                    //LoadSelectedShipments(true, false);
                 }
 
-                if (newErrors.Count > 0)
-                {
-                    string message = "Some errors occurred while getting rates.\n\n";
-
-                    foreach (string error in newErrors.Take(3))
-                    {
-                        message += error + "\n\n";
-                    }
-
-                    if (newErrors.Count > 3)
-                    {
-                        message += "See the shipment list for all errors.";
-                    }
-
-                    MessageHelper.ShowError(this, message);
-                }
-                else if (noRates)
-                {
-                    MessageHelper.ShowInformation(this,
-                        "Rates could not be obtained for every shipment.\n\nThis could be because the shipment is already processed or " +
-                        "getting rates for the selected carrier is not supported.");
-                }
-
-
-
+                // If GetRates was called while processing the last rates.
                 if (getRatesQueued)
                 {
                     GetRates();
@@ -1727,20 +1763,8 @@ namespace ShipWorks.Shipping
                 Thread.Sleep(250);
                 getRatesQueued = false;
 
-                ShipmentEntity shipment = shipments.First();
+                var shipment = (ShipmentEntity)_e.Argument;
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
-                // Don't attempt to use cached rates if just one is selected.  If multi are selected, then we'll only get them if we need to for effeciency.  But
-                // if you are looking at a specific order, we'll get them every time you ask.  I think this is a good way to do it.  If better logic presents itself
-                // for a different way, im open.
-                if (shipments.Count > 1)
-                {
-                    RateGroup cachedRates = GetCachedRates(shipment);
-                    if (cachedRates != null && !cachedRates.OutOfDate)
-                    {
-                        return;
-                    }
-                }
 
                 if (shipment.Processed || !shipmentType.SupportsGetRates || !IsShipmentTypeActivatedUI(shipment))
                 {
@@ -1752,16 +1776,9 @@ namespace ShipWorks.Shipping
                 {
                     anyAttempted = true;
 
-                    Dictionary<ShipmentTypeCode, RateGroup> rateMap;
-                    if (!shipmentRateMap.TryGetValue(shipment.ShipmentID, out rateMap))
-                    {
-                        rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
-                        shipmentRateMap[shipment.ShipmentID] = rateMap;
-                    }
-
                     RateGroup rateResults = ShippingManager.GetRates(shipment);
 
-                    rateMap[shipmentType.ShipmentTypeCode] = rateResults;
+                    SetCachedRates(shipment, rateResults);
 
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
@@ -1773,7 +1790,26 @@ namespace ShipWorks.Shipping
                 }
             };
 
-            getRatesBackgroundWorker.RunWorkerAsync();
+            getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
+        }
+
+        /// <summary>
+        /// Set the cached rate for the shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="rateResults"></param>
+        private void SetCachedRates(ShipmentEntity shipment, RateGroup rateResults)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+            Dictionary<ShipmentTypeCode, RateGroup> rateMap;
+            if (!shipmentRateMap.TryGetValue(shipment.ShipmentID, out rateMap))
+            {
+                rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
+                shipmentRateMap[shipment.ShipmentID] = rateMap;
+            }
+
+            rateMap[shipmentType.ShipmentTypeCode] = rateResults;
         }
 
         /// <summary>
