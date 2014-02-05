@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // Create a clone so we don't have to worry about modifying the original shipment
                     ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
-                    selectedShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
+                    ChangeShipmentType(selectedShipment);
 
                     ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
@@ -264,6 +264,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     SetServiceTypeFromTag(selectedShipment, originalTag);
                 };
+        }
+
+        /// <summary>
+        /// Changes the shipment type on the specified shipment
+        /// </summary>
+        protected virtual void ChangeShipmentType(ShipmentEntity selectedShipment)
+        {
+            selectedShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
         }
 
         /// <summary>

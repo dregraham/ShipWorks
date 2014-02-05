@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 {
@@ -102,6 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                 throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
             }
         }
+
         /// <summary>
         /// Displays the WebTools setup wizard.
         /// </summary>
@@ -135,13 +135,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         }
 
         /// <summary>
-        /// Converts the USPS counter rate into an actual postal type
+        /// Changes the shipment type on the specified shipment
         /// </summary>
-        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, NullEntity account)
+        protected override void ChangeShipmentType(ShipmentEntity selectedShipment)
         {
-            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
-
-            currentShipment.ShipmentType = (int)actualPostalShipmentType.ShipmentTypeCode;
+            selectedShipment.ShipmentType = (int)actualPostalShipmentType.ShipmentTypeCode;
         }
     }
 }
