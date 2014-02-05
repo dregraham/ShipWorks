@@ -2120,7 +2120,7 @@ namespace ShipWorks.Shipping
             // If the user has opted to not see counter rate setup wizard for this batch, just return.
             if (!showCounterRateSetupWizard)
             {
-                counterRatesProcessingArgs.SelectedRate = counterRatesProcessingArgs.FilteredRates.Rates.First();
+                counterRatesProcessingArgs.SelectedRate = counterRatesProcessingArgs.FilteredRates.Rates.First(rr => !rr.IsCounterRate);
                 return DialogResult.OK;
             }
 
@@ -2131,7 +2131,7 @@ namespace ShipWorks.Shipping
                 setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
             });
 
-            if (setupWizardDialogResult == DialogResult.OK)
+            if (setupWizardDialogResult == DialogResult.OK && showCounterRateSetupWizard)
             {
                 ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
             }
