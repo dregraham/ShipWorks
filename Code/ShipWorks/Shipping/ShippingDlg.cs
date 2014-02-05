@@ -2131,9 +2131,24 @@ namespace ShipWorks.Shipping
                 setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
             });
 
-            if (setupWizardDialogResult == DialogResult.OK && showCounterRateSetupWizard)
+            if (setupWizardDialogResult != DialogResult.OK)
             {
-                ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
+                    // (after we call LoadRates on the ratecontrol below, later on the rates try to be loaded from cache)
+                    Dictionary<ShipmentTypeCode, RateGroup> rateMap;
+                    if (!shipmentRateMap.TryGetValue(counterRatesProcessingArgs.ShipmentID, out rateMap))
+                    {
+                        rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
+                        rateMap[ShipmentTypeCode.BestRate] = counterRatesProcessingArgs.FilteredRates;
+                        shipmentRateMap[counterRatesProcessingArgs.ShipmentID] = rateMap;
+                    }
+
+                    // Now we can load the rates and they will display
+                    rateControl.LoadRates(counterRatesProcessingArgs.FilteredRates);
+                });
+                
             }
 
             return setupWizardDialogResult;
@@ -2169,6 +2184,7 @@ namespace ShipWorks.Shipping
             if (setupWizardDialogResult == DialogResult.OK)
             {
                 counterRatesProcessingArgs.SelectedRate = wizardRateResultReturned;
+                ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
             }
 
             return setupWizardDialogResult;

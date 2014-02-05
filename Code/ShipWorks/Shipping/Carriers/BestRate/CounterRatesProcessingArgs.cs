@@ -14,11 +14,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="allRates">A list of all available rates</param>
         /// <param name="filteredRates">A list of rates that have been filtered as they would exist in the main rates grid</param>
         /// <param name="setupShipmentType">The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.</param>
-        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, ShipmentType setupShipmentType)
+        /// <param name="shipmentID">The shipment ID for this counter rate.</param>
+        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, ShipmentType setupShipmentType, long shipmentID)
         {
             AllRates = allRates;
             FilteredRates = filteredRates;
             SetupShipmentType = setupShipmentType;
+            ShipmentID = shipmentID;
         }
 
         /// <summary>
@@ -55,6 +57,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             get; 
             set;
+        }
+
+        public long ShipmentID
+        {
+            get; 
+            private set;
         }
     }
 }

@@ -378,7 +378,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 // Determine what the actual shipment type should be for the selected best rate (i.e. use Endicia if a postal type was selected)
                 ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(bestRate.ShipmentType);
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
 
                 if (counterRatesProcessing != null)
                 {
