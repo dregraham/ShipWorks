@@ -6,17 +6,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// <summary>
     /// Event arguments for the counter rates processing event
     /// </summary>
-    public class CounterRatesProcessingEventArgs : EventArgs
+    public class CounterRatesProcessingArgs
     {
         /// <summary>
         /// Constructur
         /// </summary>
         /// <param name="allRates">A list of all available rates</param>
         /// <param name="filteredRates">A list of rates that have been filtered as they would exist in the main rates grid</param>
-        public CounterRatesProcessingEventArgs(RateGroup allRates, RateGroup filteredRates)
+        /// <param name="setupShipmentType">The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.</param>
+        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, ShipmentType setupShipmentType)
         {
-            this.AllRates = allRates;
-            this.FilteredRates = filteredRates;
+            AllRates = allRates;
+            FilteredRates = filteredRates;
+            SetupShipmentType = setupShipmentType;
         }
 
         /// <summary>
@@ -34,6 +36,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public RateGroup FilteredRates
         {
             get; 
+            private set;
+        }
+
+        /// <summary>
+        /// The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.
+        /// </summary>
+        public ShipmentType SetupShipmentType
+        {
+            get;
             private set;
         }
 

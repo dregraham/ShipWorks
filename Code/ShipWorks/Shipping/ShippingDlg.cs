@@ -17,7 +17,9 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -28,6 +30,7 @@ using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Utility;
+using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System;
@@ -69,6 +72,10 @@ namespace ShipWorks.Shipping
 
         // Maps shipment ID's to the list of rates for the shipment
         Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
+
+        // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
+        // counter rates during the current batch.  This variable will be for tracking that flag.
+        bool showCounterRateSetupWizard = true;
 
         private List<ShipmentEntity> loadedShipmentEntities;
 
@@ -1970,6 +1977,9 @@ namespace ShipWorks.Shipping
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
                 concurrencyErrors = SaveShipmentsToDatabase(shipments, true);
+
+                // Reset to true, so that we show the counter rate setup wizard for this batch.
+                showCounterRateSetupWizard = true;
             };
 
             // Code to execute once background load is complete
@@ -2044,7 +2054,7 @@ namespace ShipWorks.Shipping
                     }
 
                     // Process it
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults);
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2099,6 +2109,68 @@ namespace ShipWorks.Shipping
 
             // Each shipment to execute the code for
             shipments);
+        }
+
+        /// <summary>
+        /// Method used when processing a best rate shipment whose best rate is a counter rate, and we need
+        /// to provide the user with a way to sign up for the counter carrier or chose to use the best available rate.
+        /// </summary>
+        private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        {
+            // If the user has opted to not see counter rate setup wizard for this batch, just return.
+            if (!showCounterRateSetupWizard)
+            {
+                counterRatesProcessingArgs.SelectedRate = counterRatesProcessingArgs.FilteredRates.Rates.First();
+                return DialogResult.OK;
+            }
+
+            DialogResult setupWizardDialogResult = DialogResult.Cancel;
+
+            this.Invoke((MethodInvoker)delegate
+            {
+                setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
+            });
+
+            if (setupWizardDialogResult == DialogResult.OK)
+            {
+                ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
+            }
+
+            return setupWizardDialogResult;
+        }
+
+        /// <summary>
+        /// Shows the counter rate carrier setup wizard, and handles the result of the wizard.
+        /// </summary>
+        private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        {
+            DialogResult setupWizardDialogResult;
+            RateResult wizardRateResultReturned;
+
+            ShipmentType shipmentType = counterRatesProcessingArgs.SetupShipmentType;
+
+            using (WizardForm wizardForm = shipmentType.CreateSetupWizard())
+            {
+                CounterRateProcessingWizardPage counterRateProcessingWizardPage =
+                    new CounterRateProcessingWizardPage(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments);
+
+                wizardForm.Pages.Insert(0, counterRateProcessingWizardPage);
+
+                setupWizardDialogResult = wizardForm.ShowDialog(this);
+
+                wizardRateResultReturned = counterRateProcessingWizardPage.SelectedRate;
+                wizardRateResultReturned.ShipmentType = shipmentType.ShipmentTypeCode;
+                ((BestRateResultTag) wizardRateResultReturned.Tag).SignUpAction = null;
+
+                showCounterRateSetupWizard = !counterRateProcessingWizardPage.IgnoreAllCounterRates;
+            }
+
+            if (setupWizardDialogResult == DialogResult.OK)
+            {
+                counterRatesProcessingArgs.SelectedRate = wizardRateResultReturned;
+            }
+
+            return setupWizardDialogResult;
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -891,7 +892,7 @@ namespace ShipWorks.Shipping
         /// Process the given shipment.  If the shipment is already processed, then no action is taken or error reported.  Licensing
         /// is validated, and processing results are logged to tango.
         /// </summary>
-        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache)
+        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
 
@@ -925,7 +926,7 @@ namespace ShipWorks.Shipping
                     // Get the ShipmentType instance - call PreProcess to give the (best rate) shipment type
                     // a chance to inspect the shipment and return the actual shipment type that will be
                     // used to process the shipment
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment).PreProcess(shipment);
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment).PreProcess(shipment, counterRatesProcessing);
 
                     // A null value returned from the pre-process method means the user has opted to not continue 
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted

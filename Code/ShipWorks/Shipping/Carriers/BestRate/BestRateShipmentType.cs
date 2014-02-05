@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
@@ -29,7 +30,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly IRateGroupFilterFactory filterFactory;
 
         public event EventHandler SignUpForProviderAccountCompleted;
-        public event EventHandler<CounterRatesProcessingEventArgs> CounterRatesProcessing; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -333,7 +333,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
         /// <returns>This will return the shipping type of the best rate found.</returns>
-        public override ShipmentType PreProcess(ShipmentEntity shipment)
+        public override ShipmentType PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
@@ -376,8 +376,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
                 RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
 
-                CounterRatesProcessingEventArgs eventArgs = new CounterRatesProcessingEventArgs(allRates, filteredRates);
-                OnCounterRatesProcessing(eventArgs);
+                // Determine what the actual shipment type should be for the selected best rate (i.e. use Endicia if a postal type was selected)
+                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(bestRate.ShipmentType);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType);
+
+                if (counterRatesProcessing != null)
+                {
+                    counterRatesProcessing(eventArgs);
+                    ShippingSettings.CheckForChangesNeeded();
+                }
 
                 if (eventArgs.SelectedRate == null)
                 {
@@ -395,6 +402,38 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return ShipmentTypeManager.GetType(shipment);
+        }
+
+        /// <summary>
+        /// For a given shipment type, determines which shipment type should be used for the setup wizard.
+        /// </summary>
+        private static ShipmentType DetermineCounterRateShipmentTypeForCounterRateSetupWizard(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShipmentType setupShipmentType;
+
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.UpsOnLineTools:
+                case ShipmentTypeCode.UpsWorldShip:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
+                    break;
+                case ShipmentTypeCode.Endicia:
+                case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.PostalWebTools:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+                    break;
+                case ShipmentTypeCode.FedEx:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+                    break;
+                default:
+                    throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");
+            }
+
+            return setupShipmentType;
         }
 
         /// <summary>
@@ -530,17 +569,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
                 shipment.BestRateEvents |= (byte)eventType;
-            }
-        }
-
-        /// <summary>
-        /// Fires the CounterRatesProcessing event
-        /// </summary>
-        private void OnCounterRatesProcessing(CounterRatesProcessingEventArgs eventArgs)
-        {
-            if (CounterRatesProcessing != null)
-            {
-                CounterRatesProcessing(this, eventArgs);
             }
         }
     }
