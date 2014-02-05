@@ -2151,18 +2151,19 @@ namespace ShipWorks.Shipping
 
             using (WizardForm wizardForm = shipmentType.CreateSetupWizard())
             {
-                CounterRateProcessingWizardPage counterRateProcessingWizardPage =
-                    new CounterRateProcessingWizardPage(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments);
+                using (CounterRateProcessingWizardPage counterRateProcessingWizardPage =
+                    new CounterRateProcessingWizardPage(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments))
+                {
+                    wizardForm.Pages.Insert(0, counterRateProcessingWizardPage);
 
-                wizardForm.Pages.Insert(0, counterRateProcessingWizardPage);
+                    setupWizardDialogResult = wizardForm.ShowDialog(this);
 
-                setupWizardDialogResult = wizardForm.ShowDialog(this);
+                    wizardRateResultReturned = counterRateProcessingWizardPage.SelectedRate;
+                    wizardRateResultReturned.ShipmentType = shipmentType.ShipmentTypeCode;
+                    ((BestRateResultTag) wizardRateResultReturned.Tag).SignUpAction = null;
 
-                wizardRateResultReturned = counterRateProcessingWizardPage.SelectedRate;
-                wizardRateResultReturned.ShipmentType = shipmentType.ShipmentTypeCode;
-                ((BestRateResultTag) wizardRateResultReturned.Tag).SignUpAction = null;
-
-                showCounterRateSetupWizard = !counterRateProcessingWizardPage.IgnoreAllCounterRates;
+                    showCounterRateSetupWizard = !counterRateProcessingWizardPage.IgnoreAllCounterRates;
+                }
             }
 
             if (setupWizardDialogResult == DialogResult.OK)
