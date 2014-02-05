@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// Constructor
         /// </summary>
         public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity> accountRepository) :
-            this(shipmentType, accountRepository, "Endicia")
+            this(shipmentType, accountRepository, "USPS")
         {
 
         }

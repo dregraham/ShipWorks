@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping
 		/// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
 		/// null if the shipment type does not require setup
 		/// </summary>
-		public virtual Form CreateSetupWizard()
+		public virtual WizardForm CreateSetupWizard()
 		{
 			return null;
 		}
@@ -569,7 +569,7 @@ namespace ShipWorks.Shipping
 		/// Most shipment types don't do any pre-processing and will return themselves.  
 		/// This will return a different shipping type for BestRate
 		/// </returns>
-		public virtual ShipmentType PreProcess(ShipmentEntity shipment)
+        public virtual ShipmentType PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
 		{
 			return this;
 		}

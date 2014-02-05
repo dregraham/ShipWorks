@@ -46,16 +46,16 @@
             this.getRates = new System.Windows.Forms.Button();
             this.panelEditButtons = new System.Windows.Forms.Panel();
             this.panelSettingsButtons = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.shippingServices = new System.Windows.Forms.Button();
             this.labelInternal = new System.Windows.Forms.Label();
             this.unprocess = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.ratesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageService = new System.Windows.Forms.TabPage();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.labelService = new System.Windows.Forms.Label();
             this.serviceControlArea = new System.Windows.Forms.Panel();
-            this.rateControlArea = new System.Windows.Forms.Panel();
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
             this.customsControlArea = new System.Windows.Forms.Panel();
             this.tabPageTracking = new System.Windows.Forms.TabPage();
@@ -69,13 +69,14 @@
             this.labelTrackingProcessed = new System.Windows.Forms.Label();
             this.panelTrackingMessage = new System.Windows.Forms.Panel();
             this.labelTrackingMessage = new System.Windows.Forms.Label();
+            this.labelRates = new System.Windows.Forms.Label();
+            this.rateControlArea = new System.Windows.Forms.Panel();
             this.processDropDownButton = new ShipWorks.UI.Controls.DropDownButton();
             this.applyProfile = new ShipWorks.UI.Controls.DropDownButton();
             this.shipmentControl = new ShipWorks.Shipping.Editing.ShipmentGridControl();
             this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
             this.trackingControl = new ShipWorks.Shipping.Tracking.ShipmentTrackingControl();
+            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -84,20 +85,17 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ratesSplitContainer)).BeginInit();
+            this.ratesSplitContainer.Panel1.SuspendLayout();
+            this.ratesSplitContainer.Panel2.SuspendLayout();
+            this.ratesSplitContainer.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPageService.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.rateControlArea.SuspendLayout();
             this.tabPageCustoms.SuspendLayout();
             this.tabPageTracking.SuspendLayout();
             this.panelTrackingData.SuspendLayout();
             this.panelTrackingMessage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).BeginInit();
-            this.sectionRates.ContentPanel.SuspendLayout();
+            this.rateControlArea.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelProcessing
@@ -125,7 +123,7 @@
             // 
             this.voidSelected.Image = global::ShipWorks.Properties.Resources.cancel16;
             this.voidSelected.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.voidSelected.Location = new System.Drawing.Point(7, 150);
+            this.voidSelected.Location = new System.Drawing.Point(7, 151);
             this.voidSelected.Name = "voidSelected";
             this.voidSelected.Size = new System.Drawing.Size(150, 23);
             this.voidSelected.TabIndex = 6;
@@ -185,7 +183,7 @@
             // 
             this.print.Image = global::ShipWorks.Properties.Resources.printer1;
             this.print.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.print.Location = new System.Drawing.Point(7, 121);
+            this.print.Location = new System.Drawing.Point(7, 122);
             this.print.Name = "print";
             this.print.Size = new System.Drawing.Size(150, 23);
             this.print.TabIndex = 5;
@@ -220,22 +218,33 @@
             this.panelEditButtons.Controls.Add(this.print);
             this.panelEditButtons.Location = new System.Drawing.Point(665, 12);
             this.panelEditButtons.Name = "panelEditButtons";
-            this.panelEditButtons.Size = new System.Drawing.Size(160, 274);
+            this.panelEditButtons.Size = new System.Drawing.Size(160, 281);
             this.panelEditButtons.TabIndex = 1;
             // 
             // panelSettingsButtons
             // 
+            this.panelSettingsButtons.Controls.Add(this.label1);
             this.panelSettingsButtons.Controls.Add(this.shippingServices);
-            this.panelSettingsButtons.Location = new System.Drawing.Point(0, 178);
+            this.panelSettingsButtons.Location = new System.Drawing.Point(0, 183);
             this.panelSettingsButtons.Name = "panelSettingsButtons";
-            this.panelSettingsButtons.Size = new System.Drawing.Size(160, 38);
+            this.panelSettingsButtons.Size = new System.Drawing.Size(160, 45);
             this.panelSettingsButtons.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(6, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Manage";
             // 
             // shippingServices
             // 
             this.shippingServices.Image = global::ShipWorks.Properties.Resources.box_preferences;
             this.shippingServices.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.shippingServices.Location = new System.Drawing.Point(7, 3);
+            this.shippingServices.Location = new System.Drawing.Point(7, 16);
             this.shippingServices.Name = "shippingServices";
             this.shippingServices.Size = new System.Drawing.Size(150, 23);
             this.shippingServices.TabIndex = 8;
@@ -247,7 +256,7 @@
             // 
             this.labelInternal.AutoSize = true;
             this.labelInternal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInternal.Location = new System.Drawing.Point(4, 224);
+            this.labelInternal.Location = new System.Drawing.Point(4, 231);
             this.labelInternal.Name = "labelInternal";
             this.labelInternal.Size = new System.Drawing.Size(53, 13);
             this.labelInternal.TabIndex = 10;
@@ -257,7 +266,7 @@
             // 
             this.unprocess.Image = global::ShipWorks.Properties.Resources.skull;
             this.unprocess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.unprocess.Location = new System.Drawing.Point(6, 241);
+            this.unprocess.Location = new System.Drawing.Point(6, 248);
             this.unprocess.Name = "unprocess";
             this.unprocess.Size = new System.Drawing.Size(151, 23);
             this.unprocess.TabIndex = 11;
@@ -281,11 +290,36 @@
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.tabControl);
+            this.splitContainer.Panel2.Controls.Add(this.ratesSplitContainer);
             this.splitContainer.Size = new System.Drawing.Size(651, 489);
             this.splitContainer.SplitterDistance = 291;
             this.splitContainer.TabIndex = 0;
             this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
+            // 
+            // ratesSplitContainer
+            // 
+            this.ratesSplitContainer.BackColor = System.Drawing.SystemColors.Control;
+            this.ratesSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ratesSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.ratesSplitContainer.Name = "ratesSplitContainer";
+            this.ratesSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // ratesSplitContainer.Panel1
+            // 
+            this.ratesSplitContainer.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.ratesSplitContainer.Panel1.Controls.Add(this.tabControl);
+            // 
+            // ratesSplitContainer.Panel2
+            // 
+            this.ratesSplitContainer.Panel2.AutoScroll = true;
+            this.ratesSplitContainer.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.ratesSplitContainer.Panel2.Controls.Add(this.labelRates);
+            this.ratesSplitContainer.Panel2.Controls.Add(this.rateControlArea);
+            this.ratesSplitContainer.Panel2MinSize = 145;
+            this.ratesSplitContainer.Size = new System.Drawing.Size(356, 489);
+            this.ratesSplitContainer.SplitterDistance = 349;
+            this.ratesSplitContainer.SplitterWidth = 5;
+            this.ratesSplitContainer.TabIndex = 4;
             // 
             // tabControl
             // 
@@ -296,46 +330,23 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(356, 489);
+            this.tabControl.Size = new System.Drawing.Size(356, 349);
             this.tabControl.TabIndex = 0;
+            this.tabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.OnTabSelecting);
             this.tabControl.Deselecting += new System.Windows.Forms.TabControlCancelEventHandler(this.OnTabDeselecting);
             // 
             // tabPageService
             // 
-            this.tabPageService.Controls.Add(this.splitContainer1);
+            this.tabPageService.Controls.Add(this.comboShipmentType);
+            this.tabPageService.Controls.Add(this.labelService);
+            this.tabPageService.Controls.Add(this.serviceControlArea);
             this.tabPageService.Location = new System.Drawing.Point(4, 22);
             this.tabPageService.Name = "tabPageService";
             this.tabPageService.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageService.Size = new System.Drawing.Size(348, 463);
+            this.tabPageService.Size = new System.Drawing.Size(348, 323);
             this.tabPageService.TabIndex = 0;
             this.tabPageService.Text = "Service";
             this.tabPageService.UseVisualStyleBackColor = true;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Window;
-            this.splitContainer1.Panel1.Controls.Add(this.comboShipmentType);
-            this.splitContainer1.Panel1.Controls.Add(this.labelService);
-            this.splitContainer1.Panel1.Controls.Add(this.serviceControlArea);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.AutoScroll = true;
-            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Window;
-            this.splitContainer1.Panel2.Controls.Add(this.rateControlArea);
-            this.splitContainer1.Panel2MinSize = 115;
-            this.splitContainer1.Size = new System.Drawing.Size(342, 457);
-            this.splitContainer1.SplitterDistance = 327;
-            this.splitContainer1.SplitterWidth = 5;
-            this.splitContainer1.TabIndex = 4;
             // 
             // labelService
             // 
@@ -354,18 +365,8 @@
             this.serviceControlArea.BackColor = System.Drawing.Color.Transparent;
             this.serviceControlArea.Location = new System.Drawing.Point(8, 39);
             this.serviceControlArea.Name = "serviceControlArea";
-            this.serviceControlArea.Size = new System.Drawing.Size(331, 287);
+            this.serviceControlArea.Size = new System.Drawing.Size(331, 280);
             this.serviceControlArea.TabIndex = 2;
-            // 
-            // rateControlArea
-            // 
-            this.rateControlArea.BackColor = System.Drawing.Color.Transparent;
-            this.rateControlArea.Controls.Add(this.sectionRates);
-            this.rateControlArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rateControlArea.Location = new System.Drawing.Point(0, 0);
-            this.rateControlArea.Name = "rateControlArea";
-            this.rateControlArea.Size = new System.Drawing.Size(342, 125);
-            this.rateControlArea.TabIndex = 3;
             // 
             // tabPageCustoms
             // 
@@ -373,19 +374,17 @@
             this.tabPageCustoms.Location = new System.Drawing.Point(4, 22);
             this.tabPageCustoms.Name = "tabPageCustoms";
             this.tabPageCustoms.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCustoms.Size = new System.Drawing.Size(348, 463);
+            this.tabPageCustoms.Size = new System.Drawing.Size(348, 323);
             this.tabPageCustoms.TabIndex = 2;
             this.tabPageCustoms.Text = "Customs";
             this.tabPageCustoms.UseVisualStyleBackColor = true;
             // 
             // customsControlArea
             // 
-            this.customsControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.customsControlArea.Location = new System.Drawing.Point(5, 6);
+            this.customsControlArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customsControlArea.Location = new System.Drawing.Point(3, 3);
             this.customsControlArea.Name = "customsControlArea";
-            this.customsControlArea.Size = new System.Drawing.Size(374, 454);
+            this.customsControlArea.Size = new System.Drawing.Size(342, 317);
             this.customsControlArea.TabIndex = 0;
             // 
             // tabPageTracking
@@ -395,16 +394,13 @@
             this.tabPageTracking.Location = new System.Drawing.Point(4, 22);
             this.tabPageTracking.Name = "tabPageTracking";
             this.tabPageTracking.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTracking.Size = new System.Drawing.Size(348, 463);
+            this.tabPageTracking.Size = new System.Drawing.Size(348, 323);
             this.tabPageTracking.TabIndex = 3;
             this.tabPageTracking.Text = "Tracking";
             this.tabPageTracking.UseVisualStyleBackColor = true;
             // 
             // panelTrackingData
             // 
-            this.panelTrackingData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTrackingData.Controls.Add(this.trackingControl);
             this.panelTrackingData.Controls.Add(this.track);
             this.panelTrackingData.Controls.Add(this.trackingNumbers);
@@ -413,16 +409,17 @@
             this.panelTrackingData.Controls.Add(this.labelTrackingCost);
             this.panelTrackingData.Controls.Add(this.trackingProcessedDate);
             this.panelTrackingData.Controls.Add(this.labelTrackingProcessed);
-            this.panelTrackingData.Location = new System.Drawing.Point(6, 6);
+            this.panelTrackingData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelTrackingData.Location = new System.Drawing.Point(3, 3);
             this.panelTrackingData.Name = "panelTrackingData";
-            this.panelTrackingData.Size = new System.Drawing.Size(373, 454);
+            this.panelTrackingData.Size = new System.Drawing.Size(342, 317);
             this.panelTrackingData.TabIndex = 1;
             this.panelTrackingData.Visible = false;
             // 
             // track
             // 
             this.track.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.track.Location = new System.Drawing.Point(283, 49);
+            this.track.Location = new System.Drawing.Point(252, 49);
             this.track.Name = "track";
             this.track.Size = new System.Drawing.Size(75, 23);
             this.track.TabIndex = 7;
@@ -438,7 +435,7 @@
             this.trackingNumbers.Multiline = true;
             this.trackingNumbers.Name = "trackingNumbers";
             this.trackingNumbers.ReadOnly = true;
-            this.trackingNumbers.Size = new System.Drawing.Size(191, 20);
+            this.trackingNumbers.Size = new System.Drawing.Size(160, 20);
             this.trackingNumbers.TabIndex = 5;
             // 
             // labelTrackingNumbers
@@ -508,6 +505,29 @@
             this.labelTrackingMessage.Text = "Multiple shipments are selected.  Select a single shipment to get tracking inform" +
     "ation.";
             // 
+            // labelRates
+            // 
+            this.labelRates.AutoSize = true;
+            this.labelRates.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRates.Location = new System.Drawing.Point(0, 1);
+            this.labelRates.Name = "labelRates";
+            this.labelRates.Size = new System.Drawing.Size(40, 13);
+            this.labelRates.TabIndex = 1;
+            this.labelRates.Text = "Rates";
+            // 
+            // rateControlArea
+            // 
+            this.rateControlArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rateControlArea.BackColor = System.Drawing.Color.Transparent;
+            this.rateControlArea.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rateControlArea.Controls.Add(this.rateControl);
+            this.rateControlArea.Location = new System.Drawing.Point(0, 17);
+            this.rateControlArea.Name = "rateControlArea";
+            this.rateControlArea.Size = new System.Drawing.Size(354, 118);
+            this.rateControlArea.TabIndex = 3;
+            // 
             // processDropDownButton
             // 
             this.processDropDownButton.AutoSize = true;
@@ -561,36 +581,6 @@
             this.comboShipmentType.TabIndex = 1;
             this.comboShipmentType.SelectedIndexChanged += new System.EventHandler(this.OnChangeShipmentType);
             // 
-            // sectionRates
-            // 
-            this.sectionRates.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            // 
-            // sectionRates.ContentPanel
-            // 
-            this.sectionRates.ContentPanel.Controls.Add(this.rateControl);
-            this.sectionRates.ExtraText = "";
-            this.sectionRates.Location = new System.Drawing.Point(0, 0);
-            this.sectionRates.Name = "sectionRates";
-            this.sectionRates.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.sectionRates.SectionName = "Rates";
-            this.sectionRates.SettingsKey = "{7e9d54e9-5768-4aea-b90f-ed7216d79f57}";
-            this.sectionRates.Size = new System.Drawing.Size(342, 125);
-            this.sectionRates.TabIndex = 1;
-            // 
-            // rateControl
-            // 
-            this.rateControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rateControl.Location = new System.Drawing.Point(0, 0);
-            this.rateControl.Name = "rateControl";
-            this.rateControl.Size = new System.Drawing.Size(342, 95);
-            this.rateControl.TabIndex = 0;
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
-            // 
             // trackingControl
             // 
             this.trackingControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -599,8 +589,22 @@
             this.trackingControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackingControl.Location = new System.Drawing.Point(33, 77);
             this.trackingControl.Name = "trackingControl";
-            this.trackingControl.Size = new System.Drawing.Size(325, 364);
+            this.trackingControl.Size = new System.Drawing.Size(294, 227);
             this.trackingControl.TabIndex = 8;
+            // 
+            // rateControl
+            // 
+            this.rateControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rateControl.Location = new System.Drawing.Point(0, 0);
+            this.rateControl.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+            this.rateControl.Name = "rateControl";
+            this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.rateControl.Size = new System.Drawing.Size(352, 117);
+            this.rateControl.TabIndex = 0;
+            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
             // ShippingDlg
             // 
@@ -612,6 +616,7 @@
             this.Controls.Add(this.close);
             this.Controls.Add(this.splitContainer);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Location = new System.Drawing.Point(1, 1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(780, 461);
@@ -628,26 +633,25 @@
             this.panelEditButtons.ResumeLayout(false);
             this.panelEditButtons.PerformLayout();
             this.panelSettingsButtons.ResumeLayout(false);
+            this.panelSettingsButtons.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.ratesSplitContainer.Panel1.ResumeLayout(false);
+            this.ratesSplitContainer.Panel2.ResumeLayout(false);
+            this.ratesSplitContainer.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ratesSplitContainer)).EndInit();
+            this.ratesSplitContainer.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
             this.tabPageService.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.rateControlArea.ResumeLayout(false);
+            this.tabPageService.PerformLayout();
             this.tabPageCustoms.ResumeLayout(false);
             this.tabPageTracking.ResumeLayout(false);
             this.panelTrackingData.ResumeLayout(false);
             this.panelTrackingData.PerformLayout();
             this.panelTrackingMessage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates.ContentPanel)).EndInit();
-            this.sectionRates.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRates)).EndInit();
+            this.rateControlArea.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -694,8 +698,9 @@
         private System.Windows.Forms.Panel panelSettingsButtons;
         private System.Windows.Forms.Button shippingServices;
         private System.Windows.Forms.Panel rateControlArea;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer ratesSplitContainer;
         private Editing.RateControl rateControl;
-        private UI.Controls.CollapsibleGroupControl sectionRates;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelRates;
     }
 }

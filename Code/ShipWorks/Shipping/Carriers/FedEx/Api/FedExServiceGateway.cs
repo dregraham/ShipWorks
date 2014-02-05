@@ -393,7 +393,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {
                         string uniqueId = string.IsNullOrEmpty(shipmentEntity.FedEx.ReferencePO) ? Guid.NewGuid().ToString() : shipmentEntity.FedEx.ReferencePO;
-                        FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
+                        try
+                        {
+                            // Now that we are doing get rates for multiple accounts in parallel, this call can try to write to the same file at the same time
+                            // and throw an error.  However, if it does, we don't care because this is only for certification purposes.
+                            FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
+                        }
+                        catch
+                        {
+                        }
                     }
                 }
 

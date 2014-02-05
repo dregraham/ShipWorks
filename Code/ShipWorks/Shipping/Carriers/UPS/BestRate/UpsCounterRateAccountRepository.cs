@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         {
             this.counterRatesCredentialStore = counterRatesCredentialStore;
 
-            lazyAccounts = new Lazy<List<UpsAccountEntity>>(ConvertTangoCredentialsToFedExAccountEntities);
+            lazyAccounts = new Lazy<List<UpsAccountEntity>>(ConvertTangoCredentialsToUpsAccountEntities);
         }
 
         /// <summary>
@@ -47,25 +47,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
-        /// Gets the FedEx account that should be used for counter rates.
+        /// Gets the Ups account that should be used for counter rates.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>A FedExAccountEntity object.</returns>
+        /// <returns>A UpsAccountEntity object.</returns>
         public IEntity2 GetAccount(ShipmentEntity shipment)
         {
             return Accounts.First();
         }
 
         /// <summary>
-        /// Converts Tango Ups credentials into a FedExAccountEntity
+        /// Converts Tango Ups credentials into a UpsAccountEntity
         /// </summary>
-        private List<UpsAccountEntity> ConvertTangoCredentialsToFedExAccountEntities()
+        private List<UpsAccountEntity> ConvertTangoCredentialsToUpsAccountEntities()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>();
 
             try
             {
-                UpsAccountEntity fedExAccountEntity = new UpsAccountEntity
+                UpsAccountEntity upsAccountEntity = new UpsAccountEntity
                 {
                     UserID = counterRatesCredentialStore.UpsUserId,
                     Password = counterRatesCredentialStore.UpsPassword,
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     UpsAccountID = -1056
                 };
 
-                accounts.Add(fedExAccountEntity);
+                accounts.Add(upsAccountEntity);
             }
             catch (MissingCounterRatesCredentialException)
             {

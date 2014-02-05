@@ -217,7 +217,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShipmentType.ConfigureNewShipment(testRateShipment);
                 UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
-                return GetRates(testRateShipment);
+                // Denote whether the rate is a counter or not based on the broker
+                // that was retrieving the rates
+                RateGroup rateGroup = GetRates(testRateShipment);
+                rateGroup.Rates.ForEach(r => r.IsCounterRate = this.IsCounterRate);
+
+                return rateGroup;
             }
             catch (ShippingException ex)
             {
@@ -250,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // Create a clone so we don't have to worry about modifying the original shipment
                     ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
-                    selectedShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
+                    ChangeShipmentType(selectedShipment);
 
                     ShippingManager.EnsureShipmentLoaded(selectedShipment);
 
@@ -259,6 +264,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                     SetServiceTypeFromTag(selectedShipment, originalTag);
                 };
+        }
+
+        /// <summary>
+        /// Changes the shipment type on the specified shipment
+        /// </summary>
+        protected virtual void ChangeShipmentType(ShipmentEntity selectedShipment)
+        {
+            selectedShipment.ShipmentType = (int) ShipmentType.ShipmentTypeCode;
         }
 
         /// <summary>

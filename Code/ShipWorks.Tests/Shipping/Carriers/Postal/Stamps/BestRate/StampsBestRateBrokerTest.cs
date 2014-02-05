@@ -329,8 +329,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.AreEqual("Stamps Foo Bar", result2.Description);
-            Assert.AreEqual("Stamps Baz Other", result4.Description);
+            Assert.AreEqual("USPS Foo Bar", result2.Description);
+            Assert.AreEqual("USPS Baz Other", result4.Description);
             Assert.AreEqual("4", result2.Days);
             Assert.AreEqual("3", result4.Days);
         }
@@ -544,7 +544,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
 
-            RateResult result1 = new RateResult("Stamps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("USPS Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
             RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup1.Rates.Add(result1);
@@ -552,8 +552,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, ex => { });
 
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Stamps Ground"));
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Stamps Some Service"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Some Service"));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 

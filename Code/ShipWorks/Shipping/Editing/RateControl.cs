@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Clear the previous content of the footnote control
         /// </summary>
-        private IEnumerable<RateFootnoteControl> CurrentFootnotes
+        private List<RateFootnoteControl> CurrentFootnotes
         {
             get { return panelFootnote.Controls.OfType<RateFootnoteControl>().ToList(); }
         }
@@ -138,16 +138,18 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void UpdateFootnotes(RateGroup rateGroup)
         {
-            RemoveFootnotes(CurrentFootnotes);
+            // Get a copy of the current footnotes, since we don't want to include the newly created footnotes from what we'll remove
+            List<RateFootnoteControl> footnotesToRemove = CurrentFootnotes;
 
-            if (rateGroup == null)
+            if (rateGroup != null)
             {
-                panelFootnote.Visible = false;
-            }
-            else
-            {
+                // We're adding new footnotes first to eliminate UI flickering
                 AddFootnotes(rateGroup.FootnoteFactories);
             }
+
+            RemoveFootnotes(footnotesToRemove);
+
+            panelFootnote.Visible = panelFootnote.Controls.OfType<RateFootnoteControl>().Any();
         }
 
         /// <summary>
@@ -157,12 +159,10 @@ namespace ShipWorks.Shipping.Editing
         {
             foreach (RateFootnoteControl previousFootnote in previousFootnotes)
             {
-                previousFootnote.RateCriteriaChanged -= new EventHandler(OnFootnoteRateCriteriaChanged);
+                previousFootnote.RateCriteriaChanged -= OnFootnoteRateCriteriaChanged;
                 panelFootnote.Controls.Remove(previousFootnote);
                 previousFootnote.Dispose();
             }
-
-            panelFootnote.Visible = false;
         }
 
         /// <summary>
@@ -171,7 +171,6 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="footnoteFactories">The footnote factories.</param>
         private void AddFootnotes(IEnumerable<IRateFootnoteFactory> footnoteFactories)
         {
-            panelFootnote.Height = 0;
             int y = 0;
 
             foreach (IRateFootnoteFactory factory in footnoteFactories)
@@ -180,12 +179,12 @@ namespace ShipWorks.Shipping.Editing
 
                 panelFootnote.Controls.Add(footnote);
                 footnote.Location = new Point(0, y);
-                panelFootnote.Visible = true;
 
-                footnote.RateCriteriaChanged += new EventHandler(OnFootnoteRateCriteriaChanged);
-                panelFootnote.Height += footnote.Height;
+                footnote.RateCriteriaChanged += OnFootnoteRateCriteriaChanged;
                 y += footnote.Height;
             }
+
+            panelFootnote.Height = y;
         }
 
         /// <summary>

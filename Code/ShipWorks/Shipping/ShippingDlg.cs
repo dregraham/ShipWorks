@@ -1,10 +1,13 @@
 ﻿using System.Drawing;
+using Divelements.SandGrid.Rendering;
 using System.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using RestSharp.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -15,7 +18,9 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -25,6 +30,8 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
+using ShipWorks.UI.Utility;
+using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System;
@@ -67,6 +74,10 @@ namespace ShipWorks.Shipping
         // Maps shipment ID's to the list of rates for the shipment
         Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
 
+        // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
+        // counter rates during the current batch.  This variable will be for tracking that flag.
+        bool showCounterRateSetupWizard = true;
+
         private List<ShipmentEntity> loadedShipmentEntities;
 
         BackgroundWorker getRatesBackgroundWorker;
@@ -92,6 +103,8 @@ namespace ShipWorks.Shipping
                 throw new ArgumentNullException("shipments");
             }
 
+            ThemedBorderProvider.Apply(rateControlArea);
+
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
 
@@ -103,6 +116,9 @@ namespace ShipWorks.Shipping
             this.initialDisplayTracking = trackingPage;
 
             rateControl.Initialize(new FootnoteParameters(GetRates, GetStoreForCurrentShipment));
+
+            // Default the minimum size of the tab control panel to be 2/3rds the hight of the shipping dialog.
+            ratesSplitContainer.Panel1MinSize = 2*(Size.Height/3);
         }
 
         /// <summary>
@@ -113,7 +129,7 @@ namespace ShipWorks.Shipping
             // Manage the window positioning
             WindowStateSaver windowSaver = new WindowStateSaver(this);
             windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(splitContainer1, "RateSplitter");
+            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
 
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
@@ -1434,7 +1450,7 @@ namespace ShipWorks.Shipping
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
             getRates.Enabled = canGetRates;
-            splitContainer1.Panel2Collapsed = !canGetRates;
+            ratesSplitContainer.Panel2Collapsed = !canGetRates;
             print.Enabled = canPrint;
             voidSelected.Enabled = canVoid;
 
@@ -2035,6 +2051,9 @@ namespace ShipWorks.Shipping
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
                 concurrencyErrors = SaveShipmentsToDatabase(shipments, true);
+
+                // Reset to true, so that we show the counter rate setup wizard for this batch.
+                showCounterRateSetupWizard = true;
             };
 
             // Code to execute once background load is complete
@@ -2109,7 +2128,7 @@ namespace ShipWorks.Shipping
                     }
 
                     // Process it
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults);
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2164,6 +2183,85 @@ namespace ShipWorks.Shipping
 
             // Each shipment to execute the code for
             shipments);
+        }
+
+        /// <summary>
+        /// Method used when processing a best rate shipment whose best rate is a counter rate, and we need
+        /// to provide the user with a way to sign up for the counter carrier or chose to use the best available rate.
+        /// </summary>
+        private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        {
+            // If the user has opted to not see counter rate setup wizard for this batch, just return.
+            if (!showCounterRateSetupWizard)
+            {
+                counterRatesProcessingArgs.SelectedRate = counterRatesProcessingArgs.FilteredRates.Rates.First(rr => !rr.IsCounterRate);
+                return DialogResult.OK;
+            }
+
+            DialogResult setupWizardDialogResult = DialogResult.Cancel;
+
+            this.Invoke((MethodInvoker)delegate
+            {
+                setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
+            });
+
+            if (setupWizardDialogResult != DialogResult.OK)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
+                    // (after we call LoadRates on the ratecontrol below, later on the rates try to be loaded from cache)
+                    Dictionary<ShipmentTypeCode, RateGroup> rateMap;
+                    if (!shipmentRateMap.TryGetValue(counterRatesProcessingArgs.ShipmentID, out rateMap))
+                    {
+                        rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
+                        rateMap[ShipmentTypeCode.BestRate] = counterRatesProcessingArgs.FilteredRates;
+                        shipmentRateMap[counterRatesProcessingArgs.ShipmentID] = rateMap;
+                    }
+
+                    // Now we can load the rates and they will display
+                    rateControl.LoadRates(counterRatesProcessingArgs.FilteredRates);
+                });
+                
+            }
+
+            return setupWizardDialogResult;
+        }
+
+        /// <summary>
+        /// Shows the counter rate carrier setup wizard, and handles the result of the wizard.
+        /// </summary>
+        private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        {
+            DialogResult setupWizardDialogResult;
+            RateResult wizardRateResultReturned;
+
+            ShipmentType shipmentType = counterRatesProcessingArgs.SetupShipmentType;
+
+            using (WizardForm wizardForm = shipmentType.CreateSetupWizard())
+            {
+                using (CounterRateProcessingWizardPage counterRateProcessingWizardPage =
+                    new CounterRateProcessingWizardPage(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments))
+                {
+                    wizardForm.Pages.Insert(0, counterRateProcessingWizardPage);
+
+                    setupWizardDialogResult = wizardForm.ShowDialog(this);
+
+                    wizardRateResultReturned = counterRateProcessingWizardPage.SelectedRate;
+                    wizardRateResultReturned.ShipmentType = shipmentType.ShipmentTypeCode;
+                    ((BestRateResultTag) wizardRateResultReturned.Tag).SignUpAction = null;
+
+                    showCounterRateSetupWizard = !counterRateProcessingWizardPage.IgnoreAllCounterRates;
+                }
+            }
+
+            if (setupWizardDialogResult == DialogResult.OK)
+            {
+                counterRatesProcessingArgs.SelectedRate = wizardRateResultReturned;
+                ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
+            }
+
+            return setupWizardDialogResult;
         }
 
         /// <summary>
@@ -2271,6 +2369,12 @@ namespace ShipWorks.Shipping
             }
 
             return null;
+        }
+
+        private void OnTabSelecting(object sender, TabControlCancelEventArgs e)
+        {
+            // Hide the rates panel if we aren't on the service tab.
+            ratesSplitContainer.Panel2Collapsed = tabControl.SelectedTab != tabPageService;
         }
     }
 }

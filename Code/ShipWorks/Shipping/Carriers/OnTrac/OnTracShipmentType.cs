@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -195,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get new OnTracSetupWizard
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new OnTracSetupWizard();
         }

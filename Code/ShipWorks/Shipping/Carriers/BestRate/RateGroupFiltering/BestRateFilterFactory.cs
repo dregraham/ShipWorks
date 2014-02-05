@@ -21,7 +21,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             // be after the non-existent shipment type footnote filter
             return new List<IRateGroupFilter>
             {
-                new RateGroupFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
+                new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
+                new BestRateServiceTypeFilter(),
                 new BestRateNonExistentShipmentTypeFootnoteFilter(),
                 new BestRateExpress1PromotionFootnoteFilter(),
                 new CounterRatesInvalidStoreAddressFootnoteFilter()

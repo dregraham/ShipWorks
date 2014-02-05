@@ -38,18 +38,7 @@
             this.gridColumnIcon = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnErrorMessage = new Divelements.SandGrid.GridColumn();
-            this.warningLabel = new System.Windows.Forms.Label();
-            this.warningIcon = new System.Windows.Forms.PictureBox();
-            this.errorLabel = new System.Windows.Forms.Label();
-            this.errorImage = new System.Windows.Forms.PictureBox();
-            this.informationLabel = new System.Windows.Forms.Label();
-            this.informationIcon = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.header = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // closeButton
@@ -115,7 +104,7 @@
             gridRow1,
             gridRow2});
             this.errorGrid.ShadeAlternateRows = true;
-            this.errorGrid.Size = new System.Drawing.Size(489, 204);
+            this.errorGrid.Size = new System.Drawing.Size(489, 236);
             this.errorGrid.StretchPrimaryGrid = false;
             this.errorGrid.TabIndex = 6;
             // 
@@ -128,7 +117,6 @@
             this.gridColumnIcon.CellHorizontalAlignment = System.Drawing.StringAlignment.Center;
             this.gridColumnIcon.Clickable = false;
             this.gridColumnIcon.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gridColumnIcon.HeaderText = "Severity";
             this.gridColumnIcon.MinimumWidth = 25;
             this.gridColumnIcon.Width = 50;
             // 
@@ -155,77 +143,6 @@
             this.gridColumnErrorMessage.HeaderText = "Error";
             this.gridColumnErrorMessage.Width = 385;
             // 
-            // warningLabel
-            // 
-            this.warningLabel.Location = new System.Drawing.Point(230, 5);
-            this.warningLabel.Name = "warningLabel";
-            this.warningLabel.Size = new System.Drawing.Size(48, 14);
-            this.warningLabel.TabIndex = 11;
-            this.warningLabel.Text = "Warning";
-            this.warningLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // warningIcon
-            // 
-            this.warningIcon.Image = global::ShipWorks.Properties.Resources.warning16;
-            this.warningIcon.Location = new System.Drawing.Point(212, 4);
-            this.warningIcon.Name = "warningIcon";
-            this.warningIcon.Size = new System.Drawing.Size(16, 16);
-            this.warningIcon.TabIndex = 10;
-            this.warningIcon.TabStop = false;
-            // 
-            // errorLabel
-            // 
-            this.errorLabel.Location = new System.Drawing.Point(37, 5);
-            this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(31, 14);
-            this.errorLabel.TabIndex = 9;
-            this.errorLabel.Text = "Error";
-            this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // errorImage
-            // 
-            this.errorImage.Image = global::ShipWorks.Properties.Resources.error16;
-            this.errorImage.Location = new System.Drawing.Point(19, 4);
-            this.errorImage.Name = "errorImage";
-            this.errorImage.Size = new System.Drawing.Size(16, 16);
-            this.errorImage.TabIndex = 8;
-            this.errorImage.TabStop = false;
-            // 
-            // informationLabel
-            // 
-            this.informationLabel.Location = new System.Drawing.Point(395, 5);
-            this.informationLabel.Name = "informationLabel";
-            this.informationLabel.Size = new System.Drawing.Size(72, 15);
-            this.informationLabel.TabIndex = 13;
-            this.informationLabel.Text = "Information";
-            this.informationLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // informationIcon
-            // 
-            this.informationIcon.ErrorImage = null;
-            this.informationIcon.Image = global::ShipWorks.Properties.Resources.information16;
-            this.informationIcon.Location = new System.Drawing.Point(378, 4);
-            this.informationIcon.Name = "informationIcon";
-            this.informationIcon.Size = new System.Drawing.Size(16, 16);
-            this.informationIcon.TabIndex = 12;
-            this.informationIcon.TabStop = false;
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.errorLabel);
-            this.panel1.Controls.Add(this.informationLabel);
-            this.panel1.Controls.Add(this.errorImage);
-            this.panel1.Controls.Add(this.informationIcon);
-            this.panel1.Controls.Add(this.warningIcon);
-            this.panel1.Controls.Add(this.warningLabel);
-            this.panel1.Location = new System.Drawing.Point(11, 279);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(489, 26);
-            this.panel1.TabIndex = 14;
-            // 
             // header
             // 
             this.header.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -245,7 +162,6 @@
             this.CancelButton = this.closeButton;
             this.ClientSize = new System.Drawing.Size(512, 353);
             this.Controls.Add(this.header);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.errorGrid);
             this.Controls.Add(this.descriptionMessage);
             this.Controls.Add(this.closeButton);
@@ -258,10 +174,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Missing Rates";
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.warningIcon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.informationIcon)).EndInit();
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -273,14 +185,7 @@
         private Divelements.SandGrid.SandGrid errorGrid;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnIcon;
         private Divelements.SandGrid.GridColumn gridColumnErrorMessage;
-        private System.Windows.Forms.Label warningLabel;
-        private System.Windows.Forms.PictureBox warningIcon;
-        private System.Windows.Forms.Label errorLabel;
-        private System.Windows.Forms.PictureBox errorImage;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
-        private System.Windows.Forms.Label informationLabel;
-        private System.Windows.Forms.PictureBox informationIcon;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label header;
 
     }

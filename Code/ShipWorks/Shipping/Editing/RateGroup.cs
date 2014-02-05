@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -56,5 +52,23 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public ShipmentTypeCode Carrier { get; set; }
 
+        /// <summary>
+        /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates
+        /// </summary>
+        public RateGroup CopyWithRates(IEnumerable<RateResult> rates)
+        {
+            RateGroup newRateGroup = new RateGroup(rates)
+            {
+                Carrier = Carrier,
+                OutOfDate = OutOfDate
+            };
+
+            foreach (IRateFootnoteFactory factory in FootnoteFactories)
+            {
+                newRateGroup.AddFootnoteFactory(factory);
+            }
+
+            return newRateGroup;
+        }
     }
 }

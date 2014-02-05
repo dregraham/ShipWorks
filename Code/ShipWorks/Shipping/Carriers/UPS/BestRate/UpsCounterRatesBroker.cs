@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango
             UpsAccountEntity account = AccountRepository.GetAccount(0);
-            if (account == null || string.IsNullOrEmpty(account.AccountNumber))
+            if (account == null || string.IsNullOrEmpty(account.UserID))
             {
                 exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for UPS"), BrokerExceptionSeverityLevel.Information, ShipmentType));
                 return rates;

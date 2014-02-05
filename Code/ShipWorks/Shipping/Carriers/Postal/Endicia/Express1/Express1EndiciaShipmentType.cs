@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -108,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Create the setup wizard for configuring an Express 1 account.
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(), 
                 new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());

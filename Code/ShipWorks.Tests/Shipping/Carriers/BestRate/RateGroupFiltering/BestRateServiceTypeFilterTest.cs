@@ -15,55 +15,55 @@ using ShipWorks.Shipping.Editing.Enums;
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
     [TestClass]
-    public class RateGroupFilterTest
+    public class BestRateServiceTypeFilterTest
     {
-        private RateGroupFilter testObject;
+        private BestRateServiceTypeFilter testObject;
 
-        [TestMethod]
-        public void Filter_RatesAreOrderedFromCheapestToMostExpensive_Test()
-        {
-            // Setup the broker to return specific rates
-            List<RateResult> rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "12", 34.30M, "SomeRateResult", ServiceLevelType.Anytime),
-                CreateRateResult("Rate xyz", "12", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime),
-                CreateRateResult("Rate 123", "probably 7", 9.87M, "SomeRateResult3", ServiceLevelType.Anytime)
-            };
+        //[TestMethod]
+        //public void Filter_RatesAreOrderedFromCheapestToMostExpensive_Test()
+        //{
+        //    // Setup the broker to return specific rates
+        //    List<RateResult> rates = new List<RateResult>
+        //    {
+        //        CreateRateResult("Rate abc", "12", 34.30M, "SomeRateResult", ServiceLevelType.Anytime),
+        //        CreateRateResult("Rate xyz", "12", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime),
+        //        CreateRateResult("Rate 123", "probably 7", 9.87M, "SomeRateResult3", ServiceLevelType.Anytime)
+        //    };
             
-            RateGroup rateGroup = new RateGroup(rates);
+        //    RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.Anytime);
-            List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
+        //    testObject = new BestRateServiceTypeFilter();
+        //    List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[1], filteredRates[0]);
-            Assert.AreEqual(rates[2], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
-        }
+        //    Assert.AreEqual(rates[1], filteredRates[0]);
+        //    Assert.AreEqual(rates[2], filteredRates[1]);
+        //    Assert.AreEqual(rates[0], filteredRates[2]);
+        //}
         
-        [TestMethod]
-        public void Filter_RatesWithSameCost_AreOrderedByServiceLevel_Test()
-        {
-            // Setup the broker to return specific rates
-            List<RateResult> rates = new List<RateResult>
-            {
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult", ServiceLevelType.ThreeDays),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult3", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult4", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult5", ServiceLevelType.TwoDays ),                
-            };
+        //[TestMethod]
+        //public void Filter_RatesWithSameCost_AreOrderedByServiceLevel_Test()
+        //{
+        //    // Setup the broker to return specific rates
+        //    List<RateResult> rates = new List<RateResult>
+        //    {
+        //        CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult", ServiceLevelType.ThreeDays),
+        //        CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult2", ServiceLevelType.Anytime ),
+        //        CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult3", ServiceLevelType.OneDay ),
+        //        CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult4", ServiceLevelType.FourToSevenDays ),
+        //        CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult5", ServiceLevelType.TwoDays ),                
+        //    };
 
-            RateGroup rateGroup = new RateGroup(rates);
+        //    RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.Anytime);
-            List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
+        //    testObject = new BestRateServiceTypeFilter();
+        //    List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[2], filteredRates[0]);
-            Assert.AreEqual(rates[4], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
-            Assert.AreEqual(rates[3], filteredRates[3]);
-            Assert.AreEqual(rates[1], filteredRates[4]);
-        }
+        //    Assert.AreEqual(rates[2], filteredRates[0]);
+        //    Assert.AreEqual(rates[4], filteredRates[1]);
+        //    Assert.AreEqual(rates[0], filteredRates[2]);
+        //    Assert.AreEqual(rates[3], filteredRates[3]);
+        //    Assert.AreEqual(rates[1], filteredRates[4]);
+        //}
 
         [TestMethod]
         public void Filter_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable_Test()
@@ -79,105 +79,103 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.Anytime);
+            testObject = new BestRateServiceTypeFilter();
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
             Assert.AreEqual(rates.Count, filteredRates.Count);
         }
 
-        [TestMethod]
-        public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
-        {
+        //[TestMethod]
+        //public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
+        //{
 
-            // Setup the broker to return specific rates
-            List<RateResult> rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
+        //    // Setup the broker to return specific rates
+        //    List<RateResult> rates = new List<RateResult>
+        //    {
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
 
-                // These are the rates that should be returned
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.TwoDays ),                
-            };
+        //        // These are the rates that should be returned
+        //        CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
+        //        CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
+        //        CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
+        //        CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
+        //        CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.TwoDays ),                
+        //    };
 
-            RateGroup rateGroup = new RateGroup(rates);
+        //    RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.Anytime);
-            List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
+        //    testObject = new BestRateServiceTypeFilter();
+        //    List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[6], filteredRates[0]);
-            Assert.AreEqual(rates[8], filteredRates[1]);
-            Assert.AreEqual(rates[4], filteredRates[2]);
-            Assert.AreEqual(rates[7], filteredRates[3]);
-            Assert.AreEqual(rates[5], filteredRates[4]);
-        }
+        //    Assert.AreEqual(rates[6], filteredRates[0]);
+        //    Assert.AreEqual(rates[8], filteredRates[1]);
+        //    Assert.AreEqual(rates[4], filteredRates[2]);
+        //    Assert.AreEqual(rates[7], filteredRates[3]);
+        //    Assert.AreEqual(rates[5], filteredRates[4]);
+        //}
 
-        [TestMethod]
-        public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
-        {
-            // Setup the broker to return specific rates
-            List<RateResult> rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
+        //[TestMethod]
+        //public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
+        //{
+        //    // Setup the broker to return specific rates
+        //    List<RateResult> rates = new List<RateResult>
+        //    {
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
 
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
-            };
+        //        CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
+        //        CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
+        //        CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
+        //        CreateRateResult("Rate 456", "Soon", 4.23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays ),
+        //        CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
+        //    };
 
-            RateGroup rateGroup = new RateGroup(rates);
+        //    RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.TwoDays);
-            List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
+        //    testObject = new BestRateServiceTypeFilter();
+        //    List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[6], filteredRates[0]);
-            Assert.AreEqual(rates[0], filteredRates[1]);
-            Assert.AreEqual(rates[1], filteredRates[2]);
-            Assert.AreEqual(rates[2], filteredRates[3]);
-            Assert.AreEqual(rates[3], filteredRates[4]);
-        }
+        //    Assert.AreEqual(rates[6], filteredRates[0]);
+        //    Assert.AreEqual(rates[0], filteredRates[1]);
+        //    Assert.AreEqual(rates[1], filteredRates[2]);
+        //    Assert.AreEqual(rates[2], filteredRates[3]);
+        //    Assert.AreEqual(rates[3], filteredRates[4]);
+        //}
 
-        [TestMethod]
-        public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
-        {
-            // Setup the broker to return specific rates
-            List<RateResult> rates = new List<RateResult>
-            {
-                CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays, DateTime.Today.AddDays(3) ),  
-                CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
-                CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
+        //[TestMethod]
+        //public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
+        //{
+        //    // Setup the broker to return specific rates
+        //    List<RateResult> rates = new List<RateResult>
+        //    {
+        //        CreateRateResult("Rate 789", "2", 6.87M, "SomeRateResult", ServiceLevelType.TwoDays, DateTime.Today.AddDays(3) ),  
+        //        CreateRateResult("Rate 789", "2", 6.88M, "SomeRateResult2", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.89M, "SomeRateResult3", ServiceLevelType.TwoDays ),  
+        //        CreateRateResult("Rate 789", "2", 6.90M, "SomeRateResult4", ServiceLevelType.TwoDays ),  
 
-                CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
-                CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
-                CreateRateResult("Rate 456", "Soon", .23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays, DateTime.Today.AddDays(3)),
-                CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
-            };
+        //        CreateRateResult("Rate abc", "3", 4.23M, "SomeRateResult5", ServiceLevelType.ThreeDays ),
+        //        CreateRateResult("Rate xyz", "It will get there when it gets there", 4.23M, "SomeRateResult6", ServiceLevelType.Anytime ),
+        //        CreateRateResult("Rate 123", "1", 4.23M, "SomeRateResult7", ServiceLevelType.OneDay ),
+        //        CreateRateResult("Rate 456", "Soon", .23M, "SomeRateResult8", ServiceLevelType.FourToSevenDays, DateTime.Today.AddDays(3)),
+        //        CreateRateResult("Rate 789", "2", 4.23M, "SomeRateResult9", ServiceLevelType.Anytime ),                  
+        //    };
 
-            RateGroup rateGroup = new RateGroup(rates);
+        //    RateGroup rateGroup = new RateGroup(rates);
 
-            testObject = new RateGroupFilter(ServiceLevelType.TwoDays);
-            List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
+        //    testObject = new BestRateServiceTypeFilter();
+        //    List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[7], filteredRates[0]);
-            Assert.AreEqual(rates[6], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
-            Assert.AreEqual(rates[1], filteredRates[3]);
-            Assert.AreEqual(rates[2], filteredRates[4]);
-        }
-
-
+        //    Assert.AreEqual(rates[7], filteredRates[0]);
+        //    Assert.AreEqual(rates[6], filteredRates[1]);
+        //    Assert.AreEqual(rates[0], filteredRates[2]);
+        //    Assert.AreEqual(rates[1], filteredRates[3]);
+        //    Assert.AreEqual(rates[2], filteredRates[4]);
+        //}
 
         [TestMethod]
         public void Filter_RatesWithDifferentCosts_ReturnsOneRatePerServiceTypePerTag_Test()
@@ -337,17 +335,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             {
                 CreateRateResult("Rate abc", "3", 4.23M, "Tag1", ServiceLevelType.ThreeDays),
                 CreateRateResult("Rate xyz", "A", 4.23M, "Tag1", ServiceLevelType.Anytime ),
-                CreateRateResult("Rate 456", "S", 4.23M, "Tag1", ServiceLevelType.FourToSevenDays ),
                 CreateRateResult("Rate 789", "2", 4.23M, "Tag1", ServiceLevelType.TwoDays ),    
                 CreateRateResult("Rate 000", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),  
                 CreateRateResult("Rate 123", "1", 4.23M, "Tag1", ServiceLevelType.OneDay ),            
             };
             rates[0].ShipmentType = ShipmentTypeCode.Express1Stamps;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Express1Endicia;
-            rates[3].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[5].ShipmentType = ShipmentTypeCode.Express1Endicia;
+            rates[2].ShipmentType = ShipmentTypeCode.Endicia;
+            rates[3].ShipmentType = ShipmentTypeCode.Express1Stamps;
+            rates[4].ShipmentType = ShipmentTypeCode.Express1Endicia;
 
             RateGroup rateGroup = new RateGroup(rates);
 
@@ -429,7 +425,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             {
                 Debug.WriteLine("====================================Iteration: " + i + ", " + rates.First().ShipmentType + rates.First().Description);
 
-                testObject = new RateGroupFilter(ServiceLevelType.Anytime);
+                testObject = new BestRateServiceTypeFilter();
                 RateGroup filteredGroup = testObject.Filter(rateGroup);
 
                 // Find the list of correct results based on the rate result description passed in.

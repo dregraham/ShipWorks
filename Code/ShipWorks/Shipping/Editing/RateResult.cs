@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Editing
             this.days = days;
 
             this.selectable = false;
+            this.IsCounterRate = false;
         }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace ShipWorks.Shipping.Editing
             this.tag = tag;
 
             this.selectable = true;
+            this.IsCounterRate = false;
         }
 
         /// <summary>
@@ -162,5 +164,13 @@ namespace ShipWorks.Shipping.Editing
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this [is a counter rate].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this [is a counter rate]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCounterRate { get; set; }
     }
 }

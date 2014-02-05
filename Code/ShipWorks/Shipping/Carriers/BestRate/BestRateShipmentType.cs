@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Settings.Origin;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -195,12 +197,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            RateGroup rateGroup = GetRates(shipment, true, ex =>
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, ex =>
             {
                 // Accumulate all of the broker exceptions for later use
                 log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
                 brokerExceptions.Add(ex);
             });
+
+            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
             // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
             IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
@@ -218,9 +222,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private RateGroup GetRates(ShipmentEntity shipment, bool createCounterRateBrokers, Action<BrokerException> exceptionHandler)
+        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
-            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, createCounterRateBrokers).ToList();
+            List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
             
             if (!bestRateShippingBrokers.Any())
             {
@@ -237,12 +241,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             tasks.ForEach(t => t.Wait());
             
-            IEnumerable<RateResult> allRates = tasks.SelectMany(x => x.Result.Rates);
+            return tasks.Select(x => x.Result);
 
-            RateGroup compiledRateGroup = new RateGroup(allRates);
+            //IEnumerable<RateGroup> 
+
+            //return CompileBestRates(shipment, allRates, tasks);
+        }
+
+        private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
+        {
+            RateGroup compiledRateGroup = new RateGroup(rateGroups.SelectMany(x => x.Rates));
 
             // Add the footnotes from all returned RateGroups into the new compiled RateGroup
-            foreach (IRateFootnoteFactory footnoteFactory in tasks.SelectMany(x => x.Result.FootnoteFactories))
+            foreach (IRateFootnoteFactory footnoteFactory in rateGroups.SelectMany(x => x.FootnoteFactories))
             {
                 compiledRateGroup.AddFootnoteFactory(footnoteFactory);
             }
@@ -322,16 +333,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
         /// <returns>This will return the shipping type of the best rate found.</returns>
-        public override ShipmentType PreProcess(ShipmentEntity shipment)
+        public override ShipmentType PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
             ShippingManager.EnsureShipmentLoaded(shipment);
-            RateGroup rateGroup;
+            IEnumerable<RateGroup> rateGroups;
 
             try
             {
-                rateGroup = GetRates(shipment, false, PreProcessExceptionHandler);
+                rateGroups = GetRates(shipment, PreProcessExceptionHandler);
             }
             catch (AggregateException ex)
             {
@@ -349,12 +360,38 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // first inner exception
                 throw ex.InnerExceptions.First();
             }
-            
-            RateResult bestRate = rateGroup.Rates.FirstOrDefault();
+
+            RateGroup filteredRates = CompileBestRates(shipment, rateGroups);
+            RateResult bestRate = filteredRates.Rates.FirstOrDefault();
 
             if (bestRate == null)
             {
                 throw new ShippingException("ShipWorks could not find any rates.");
+            }
+
+            // If the best rate is a counter rate, raise an event that will let the user sign up for the service
+            if (bestRate.IsCounterRate)
+            {
+                // Get all rates that meet the specified service level ordered by amount
+                BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
+                RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
+
+                // Determine what the actual shipment type should be for the selected best rate (i.e. use Endicia if a postal type was selected)
+                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(bestRate.ShipmentType);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
+
+                if (counterRatesProcessing != null)
+                {
+                    counterRatesProcessing(eventArgs);
+                    ShippingSettings.CheckForChangesNeeded();
+                }
+
+                if (eventArgs.SelectedRate == null)
+                {
+                    return null;
+                }
+
+                bestRate = eventArgs.SelectedRate;
             }
 
             ApplySelectedShipmentRate(shipment, bestRate);
@@ -365,6 +402,38 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return ShipmentTypeManager.GetType(shipment);
+        }
+
+        /// <summary>
+        /// For a given shipment type, determines which shipment type should be used for the setup wizard.
+        /// </summary>
+        private static ShipmentType DetermineCounterRateShipmentTypeForCounterRateSetupWizard(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShipmentType setupShipmentType;
+
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.UpsOnLineTools:
+                case ShipmentTypeCode.UpsWorldShip:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
+                    break;
+                case ShipmentTypeCode.Endicia:
+                case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.PostalWebTools:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Endicia:
+                case ShipmentTypeCode.Express1Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+                    break;
+                case ShipmentTypeCode.FedEx:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+                    break;
+                default:
+                    throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");
+            }
+
+            return setupShipmentType;
         }
 
         /// <summary>

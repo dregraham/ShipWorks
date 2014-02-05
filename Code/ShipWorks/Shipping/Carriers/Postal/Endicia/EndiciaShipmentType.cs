@@ -21,6 +21,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -110,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the Form used to do the setup for Endicia label server
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override WizardForm CreateSetupWizard()
         {
             return new EndiciaSetupWizard();
         }

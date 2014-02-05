@@ -1,72 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
 {
     /// <summary>
-    /// Implementation of IRateGroupFilter.  Used to filter Rate Results.
+    /// Filters rates by service type so that only one rate per service type is returned
     /// </summary>
-    public class RateGroupFilter : IRateGroupFilter
+    public class BestRateServiceTypeFilter : IRateGroupFilter
     {
-        private readonly ServiceLevelType serviceLevelType;
-
-        public RateGroupFilter(ServiceLevelType serviceLevelType)
-        {
-            this.serviceLevelType = serviceLevelType;
-        }
-
         /// <summary>
         /// Method that filters rate results and returns a new list of the filtered rate results.
         /// </summary>
         public RateGroup Filter(RateGroup rateGroup)
         {
-            IEnumerable<RateResult> rateResults = rateGroup.Rates;
-
-            ServiceLevelSpeedComparer serviceLevelSpeedComparer = new ServiceLevelSpeedComparer();
-
-            if (serviceLevelType != ServiceLevelType.Anytime)
-            {
-                DateTime? maxDeliveryDate = rateResults
-                    .Where(x => x.ServiceLevel != ServiceLevelType.Anytime)
-                    .Where(x => x.ServiceLevel <= serviceLevelType)
-                    .Max(x => x.ExpectedDeliveryDate);
-
-                rateResults = rateResults.Where(x => x.ExpectedDeliveryDate <= maxDeliveryDate || serviceLevelSpeedComparer.Compare(x.ServiceLevel, serviceLevelType) <= 0);
-            }
-
-            // We want the cheapest rates to appear first, and any ties to be ordered by service level
-            IEnumerable<RateResult> orderedRates = rateResults.OrderBy(r => r.Amount).ThenBy(r => r.ServiceLevel, serviceLevelSpeedComparer);
-
             // Now group by the ResultKey, so that we can then get the cheapest rate per group
-            orderedRates = orderedRates.GroupBy(reateResult => ((BestRateResultTag)reateResult.Tag).ResultKey,
+            IEnumerable<RateResult> orderedRates = rateGroup.Rates.GroupBy(reateResult => ((BestRateResultTag)reateResult.Tag).ResultKey,
                                                 (rateResultSource, rateResultSelector) => rateResultSelector.Aggregate(RateResultsGroupBySelector));
 
-            return CreateRateGroup(rateGroup, orderedRates);
-        }
-
-        /// <summary>
-        /// Creates a new rate group from an original rate group and a collection of rate results
-        /// </summary>
-        /// <param name="originalRateGroup">Rate group that should be copied</param>
-        /// <param name="rateResults">Collection of rate results that will be used for the new rate group</param>
-        /// <returns></returns>
-        private static RateGroup CreateRateGroup(RateGroup originalRateGroup, IEnumerable<RateResult> rateResults)
-        {
-            RateGroup newRateGroup = new RateGroup(rateResults)
-            {
-                Carrier = originalRateGroup.Carrier,
-                OutOfDate = originalRateGroup.OutOfDate
-            };
-
-            foreach (IRateFootnoteFactory factory in originalRateGroup.FootnoteFactories)
-            {
-                newRateGroup.AddFootnoteFactory(factory);
-            }
-
-            return newRateGroup;
+            return rateGroup.CopyWithRates(orderedRates);
         }
 
         /// <summary>
@@ -75,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
         /// </summary>
         private static int CarrierSortValue(RateResult rateResult)
         {
-            switch ((ShipmentTypeCode)rateResult.ShipmentType)
+            switch (rateResult.ShipmentType)
             {
                 case ShipmentTypeCode.Express1Endicia:
                     return 0;
