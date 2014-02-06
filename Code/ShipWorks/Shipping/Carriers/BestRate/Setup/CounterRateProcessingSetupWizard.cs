@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 {
+    /// <summary>
+    /// Wizard for creating a shipping account when a counter rate has been selected as
+    /// the cheapest/best rate.
+    /// </summary>
     public partial class CounterRateProcessingSetupWizard : WizardForm
     {
         private readonly RateResult absoluteBestRate;
@@ -67,29 +71,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             get;
             private set;
         }
-
-        /// <summary>
-        /// Gets the selected rate.
-        /// </summary>
-        public RateResult SelectedRate
-        {
-            get
-            {
-                RateResult selectedRate = absoluteBestRate;
-
-                if (IgnoreAllCounterRates)
-                {
-                    // The user opted to use a rate from an existing account, so grab the first 
-                    // non-counter rate from the list containing all of the rates. All rates is 
-                    // used as the source, so any service types that were filtered out based on 
-                    // the cheapest counter rate still applied appropriately
-                    selectedRate = AllRates.Rates.First(r => !r.IsCounterRate);
-                }
-
-                return selectedRate;
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets the selected shipment type based on the rate that
         /// the user selected.
@@ -142,16 +124,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // the wizard accordingly
                 addExistingAccountPanel.Visible = false;
                 useExistingAccountPanel.BringToFront();
-                Height = useExistingAccountPanel.Bottom + 135;
-                Width = useExistingAccountPanel.Width + 35;
+                Height = useExistingAccountPanel.Bottom + 185;
+                Width = useExistingAccountPanel.Width + 75;
 
-                useExistingCarrierLogo.Image = EnumHelper.GetImage(existingAccountRate.ShipmentType);
-                useExistingCarrierName.Text = EnumHelper.GetDescription(existingAccountRate.ShipmentType);
-                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingAccountRate.ShipmentType));
-               
-                //((BestRateResultTag)existingAccountRate.Tag).RateSelectionDelegate()
-                //TODO: useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace({"{AccountDescription}", existingAccountRate.})
+                // Populate information based on the rate's shipment type
+                ShipmentType existingRateShipmentType = GetShipmentType(existingAccountRate);
+                useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
+                useExistingCarrierName.Text = EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode);
+                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
 
+                // Pull the account description from the tag
+                BestRateResultTag bestRatetag = ((BestRateResultTag)existingAccountRate.Tag);
+                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{AccountDescription}", bestRatetag.AccountDescription);
+                
                 // Show the actual amount and the difference between the best rate and 
                 // the cheapest available rate
                 existingAccountRateAmount.Text = string.Format("{0:C2}", existingAccountRate.Amount);
@@ -165,11 +150,30 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // the user to select a rate from an existing account
                 useExistingAccountPanel.Visible = false;
                 addExistingAccountPanel.BringToFront();
-                Height = addExistingAccountPanel.Bottom + 150;
-                Width = addExistingAccountPanel.Width + 35;
+                Height = addExistingAccountPanel.Bottom + 200;
+                Width = addExistingAccountPanel.Width + 75;
 
                 LoadShippingProviders();
             }
+        }
+
+        /// <summary>
+        /// Gets the shipment type from the rate.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns>The ShipmentType object.</returns>
+        private ShipmentType GetShipmentType(RateResult rate)
+        {
+            NoncompetitiveRateResult result = rate as NoncompetitiveRateResult;
+
+            if (result != null)
+            {
+                // Need to use the shipment type code from the original rate, so we
+                // get the actual shipment type rather than the masked shipment type
+                return ShipmentTypeManager.GetType(result.OriginalRate.ShipmentType);
+            }
+
+            return ShipmentTypeManager.GetType(rate.ShipmentType);
         }
 
         /// <summary>
@@ -196,6 +200,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             setupExistingProvider.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Loads the text for describing the carrier that has the best rate.
+        /// </summary>
         private void LoadCreateCarrierDescriptionText()
         {
             string description = string.Empty;
@@ -231,6 +238,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             createCarrierAccountDescription.Text = description;
         }
+
         /// <summary>
         /// Called when the sign up button is clicked.
         /// </summary>
@@ -241,12 +249,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             SelectedShipmentType = ShipmentTypeManager.GetType(absoluteBestRate.ShipmentType);
             IgnoreAllCounterRates = false;
 
-            using (WizardForm setupWizard = SelectedShipmentType.CreateSetupWizard())
-            {
-                // TODO: Make smooth transition to the setup wizard for the actual shipment type
-                DialogResult = setupWizard.ShowDialog(this);
-                Close();
-            }
+            // Launch the setup wizard of the selected shipment type
+            DialogResult = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+            Close();
         }
 
         /// <summary>
@@ -267,12 +272,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 SelectedShipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)selectedItem.Value);
                 IgnoreAllCounterRates = true;
 
-                using (WizardForm setupWizard = SelectedShipmentType.CreateSetupWizard())
-                {
-                    // TODO: Make smooth transition to the setup wizard for the actual shipment type
-                    DialogResult = setupWizard.ShowDialog(this);
-                    Close();
-                }
+                // Launch the setup wizard of the selected shipment type
+                DialogResult = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+                Close();
             }
         }
 
@@ -283,17 +285,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnUseExistingAccount(object sender, System.EventArgs e)
         {
+            // Choosing to ignore counter rates for the rest of the batch
+            IgnoreAllCounterRates = true; 
+            
+            // Grab the shipment type of the first non-counter rate
             RateResult existingAccountRate = FilteredRates.Rates.First(r => !r.IsCounterRate);
-
-            SelectedShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
-            IgnoreAllCounterRates = true;
-
-            using (WizardForm setupWizard = SelectedShipmentType.CreateSetupWizard())
-            {
-                // TODO: Make smooth transition to the setup wizard for the actual shipment type
-                DialogResult = setupWizard.ShowDialog(this);
-                Close();
-            }
+            SelectedShipmentType = ShipmentTypeManager.GetType(GetShipmentType(existingAccountRate).ShipmentTypeCode);
+            
+            // Make sure to close the form with OK as the result
+            DialogResult = DialogResult.OK;
+            Close();
         }
     }
 }

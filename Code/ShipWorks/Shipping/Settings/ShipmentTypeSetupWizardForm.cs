@@ -11,36 +11,24 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Run the setup wizard.  Will return false if the user canceled.
         /// </summary>
-        public static bool RunWizard(IWin32Window owner, ShipmentType shipmentType)
+        public static DialogResult RunWizard(IWin32Window owner, ShipmentType shipmentType)
         {
             using (ShipmentTypeSetupWizardForm wizard = shipmentType.CreateSetupWizard())
             {
-                // If it was succesful, make sure our local list of stores is refreshed
-                if (wizard.ShowDialog(owner) == DialogResult.OK)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return wizard.ShowDialog(owner);
             }
         }
 
         /// <summary>
-        /// Designed to be called from the last step of another wizard; this makes it look to the user like the setup 
-        /// account wizard is a seamless continuation of the previous wizard.  The DialogResult of the Best Rate Process wizard
-        /// is used as the DialogResult that closes the original wizard.
+        /// Designed to be called from the last step of another wizard; this makes it look to the user like the setup
+        /// account wizard is a seamless continuation of the previous wizard.
         /// </summary>
-        public static void ContinueAfterCreateDatabase(WizardForm originalWizard, ShipmentType shipmentType)
+        /// <returns>The DialogResult of the shipment type's setup wizard.</returns>
+        public static DialogResult RunFromHostWizard(WizardForm hostWizard, ShipmentType shipmentType)
         {
-            originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
-
-            // Run the setup wizard
-            bool complete = RunWizard(originalWizard, shipmentType);
-
-            // Counts as a cancel on the original wizard if they didn't complete the setup.
-            originalWizard.DialogResult = complete ? DialogResult.OK : DialogResult.Cancel;
+            // Hide the host wizard and run the setup wizard for the shipment type
+            hostWizard.BeginInvoke(new MethodInvoker(hostWizard.Hide));
+            return RunWizard(hostWizard, shipmentType);
         }
     }
 }
