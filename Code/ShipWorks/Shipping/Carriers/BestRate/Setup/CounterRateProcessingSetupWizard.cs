@@ -124,8 +124,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // the wizard accordingly
                 addExistingAccountPanel.Visible = false;
                 useExistingAccountPanel.BringToFront();
-                Height = useExistingAccountPanel.Bottom + 185;
-                Width = useExistingAccountPanel.Width + 75;
 
                 // Populate information based on the rate's shipment type
                 ShipmentType existingRateShipmentType = GetShipmentType(existingAccountRate);
@@ -134,8 +132,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
 
                 // Pull the account description from the tag
-                BestRateResultTag bestRatetag = ((BestRateResultTag)existingAccountRate.Tag);
-                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{AccountDescription}", bestRatetag.AccountDescription);
+                BestRateResultTag bestRateTag = ((BestRateResultTag)existingAccountRate.Tag);
+                string accountDescription = bestRateTag.AccountDescription ?? string.Empty;
+                
+                if (accountDescription.Length >= 18)
+                {
+                    // Truncate the account description, so those having an address doesn't cause
+                    // the label text to run off the form
+                    accountDescription = StringUtility.Truncate(accountDescription, 15) + "...";
+                }
+
+                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{AccountDescription}", accountDescription);
                 
                 // Show the actual amount and the difference between the best rate and 
                 // the cheapest available rate
@@ -143,6 +150,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
                 decimal difference = existingAccountRate.Amount - absoluteBestRate.Amount;
                 existingAccountRateDifference.Text = string.Format("({0:C2} more)", difference);
+                existingAccountRateDifference.Left = existingAccountRateAmount.Right - 3;
+
+                Height = useExistingAccountPanel.Bottom + 185;
+                Width = useExistingAccountPanel.Width > createCarrierAccountDescription.Width ?
+                    useExistingAccountPanel.Width + 75
+                    : createCarrierAccountDescription.Width + 75;
             }
             else
             {
@@ -151,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingAccountPanel.Visible = false;
                 addExistingAccountPanel.BringToFront();
                 Height = addExistingAccountPanel.Bottom + 200;
-                Width = addExistingAccountPanel.Width + 75;
+                Width = createCarrierAccountDescription.Width + 150;
 
                 LoadShippingProviders();
             }
@@ -211,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             {
                 case ShipmentTypeCode.Endicia:
                     description = "USPS partners with Endicia to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " + 
-                                  "an account with Endicia. There is no monthly fee for the account.";
+                                  "an account with Endicia.";
                     break;
 
                 case ShipmentTypeCode.Express1Endicia:
@@ -222,7 +235,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     
                 case ShipmentTypeCode.Stamps:
                     description = "USPS partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
-                                  "an account with Stamps.com. There is no monthly fee for the account.";
+                                  "an account with Stamps.com.";
                     break;
 
                 case ShipmentTypeCode.FedEx:

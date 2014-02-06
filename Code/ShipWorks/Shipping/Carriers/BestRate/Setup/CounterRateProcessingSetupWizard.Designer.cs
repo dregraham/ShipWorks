@@ -46,11 +46,11 @@
             this.useExistingAccountButton = new System.Windows.Forms.Button();
             this.useExistingAccountDescription = new System.Windows.Forms.Label();
             this.addExistingAccountPanel = new System.Windows.Forms.Panel();
+            this.setupExistingProvider = new ShipWorks.UI.Controls.ImageComboBox();
             this.setupExistingAccountHeader = new System.Windows.Forms.Label();
             this.setupExistingAccountButton = new System.Windows.Forms.Button();
             this.setupExistingAccountDescription = new System.Windows.Forms.Label();
             this.setupExistingAccountProviderLabel = new System.Windows.Forms.Label();
-            this.setupExistingProvider = new ShipWorks.UI.Controls.ImageComboBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -117,7 +117,7 @@
             // signUpButton
             // 
             this.signUpButton.AutoSize = true;
-            this.signUpButton.Location = new System.Drawing.Point(50, 152);
+            this.signUpButton.Location = new System.Drawing.Point(50, 132);
             this.signUpButton.Name = "signUpButton";
             this.signUpButton.Size = new System.Drawing.Size(165, 23);
             this.signUpButton.TabIndex = 14;
@@ -129,7 +129,7 @@
             // 
             this.createCarrierAccountDescription.Location = new System.Drawing.Point(37, 99);
             this.createCarrierAccountDescription.Name = "createCarrierAccountDescription";
-            this.createCarrierAccountDescription.Size = new System.Drawing.Size(421, 50);
+            this.createCarrierAccountDescription.Size = new System.Drawing.Size(480, 30);
             this.createCarrierAccountDescription.TabIndex = 13;
             this.createCarrierAccountDescription.Text = "USPS partners with Express1 to enable printing USPS shipping labels directly from" +
     " your printer. To continue you\'ll need an account with Express1. There is no mon" +
@@ -140,7 +140,7 @@
             this.bestRateAmount.AutoSize = true;
             this.bestRateAmount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.bestRateAmount.ForeColor = System.Drawing.Color.Green;
-            this.bestRateAmount.Location = new System.Drawing.Point(80, 74);
+            this.bestRateAmount.Location = new System.Drawing.Point(77, 74);
             this.bestRateAmount.Name = "bestRateAmount";
             this.bestRateAmount.Size = new System.Drawing.Size(38, 13);
             this.bestRateAmount.TabIndex = 12;
@@ -150,7 +150,7 @@
             // 
             this.bestRateCarrierName.AutoSize = true;
             this.bestRateCarrierName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.bestRateCarrierName.Location = new System.Drawing.Point(80, 60);
+            this.bestRateCarrierName.Location = new System.Drawing.Point(77, 61);
             this.bestRateCarrierName.Name = "bestRateCarrierName";
             this.bestRateCarrierName.Size = new System.Drawing.Size(107, 13);
             this.bestRateCarrierName.TabIndex = 11;
@@ -159,9 +159,9 @@
             // createAccountCarrierLogo
             // 
             this.createAccountCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
-            this.createAccountCarrierLogo.Location = new System.Drawing.Point(50, 54);
+            this.createAccountCarrierLogo.Location = new System.Drawing.Point(50, 56);
             this.createAccountCarrierLogo.Name = "createAccountCarrierLogo";
-            this.createAccountCarrierLogo.Size = new System.Drawing.Size(24, 24);
+            this.createAccountCarrierLogo.Size = new System.Drawing.Size(20, 20);
             this.createAccountCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.createAccountCarrierLogo.TabIndex = 10;
             this.createAccountCarrierLogo.TabStop = false;
@@ -196,7 +196,7 @@
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountHeader);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountButton);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountDescription);
-            this.useExistingAccountPanel.Location = new System.Drawing.Point(23, 279);
+            this.useExistingAccountPanel.Location = new System.Drawing.Point(23, 264);
             this.useExistingAccountPanel.Name = "useExistingAccountPanel";
             this.useExistingAccountPanel.Size = new System.Drawing.Size(591, 148);
             this.useExistingAccountPanel.TabIndex = 7;
@@ -216,7 +216,7 @@
             // 
             this.existingAccountRateDifference.AutoSize = true;
             this.existingAccountRateDifference.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.existingAccountRateDifference.Location = new System.Drawing.Point(112, 64);
+            this.existingAccountRateDifference.Location = new System.Drawing.Point(97, 63);
             this.existingAccountRateDifference.Name = "existingAccountRateDifference";
             this.existingAccountRateDifference.Size = new System.Drawing.Size(70, 13);
             this.existingAccountRateDifference.TabIndex = 9;
@@ -227,17 +227,17 @@
             this.existingAccountRateAmount.AutoSize = true;
             this.existingAccountRateAmount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.existingAccountRateAmount.ForeColor = System.Drawing.Color.Red;
-            this.existingAccountRateAmount.Location = new System.Drawing.Point(66, 64);
+            this.existingAccountRateAmount.Location = new System.Drawing.Point(54, 63);
             this.existingAccountRateAmount.Name = "existingAccountRateAmount";
-            this.existingAccountRateAmount.Size = new System.Drawing.Size(38, 13);
+            this.existingAccountRateAmount.Size = new System.Drawing.Size(45, 13);
             this.existingAccountRateAmount.TabIndex = 8;
-            this.existingAccountRateAmount.Text = "$7.82";
+            this.existingAccountRateAmount.Text = "$17.82";
             // 
             // useExistingCarrierName
             // 
             this.useExistingCarrierName.AutoSize = true;
             this.useExistingCarrierName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.useExistingCarrierName.Location = new System.Drawing.Point(66, 50);
+            this.useExistingCarrierName.Location = new System.Drawing.Point(54, 50);
             this.useExistingCarrierName.Name = "useExistingCarrierName";
             this.useExistingCarrierName.Size = new System.Drawing.Size(40, 13);
             this.useExistingCarrierName.TabIndex = 7;
@@ -246,9 +246,9 @@
             // useExistingCarrierLogo
             // 
             this.useExistingCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
-            this.useExistingCarrierLogo.Location = new System.Drawing.Point(27, 44);
+            this.useExistingCarrierLogo.Location = new System.Drawing.Point(27, 46);
             this.useExistingCarrierLogo.Name = "useExistingCarrierLogo";
-            this.useExistingCarrierLogo.Size = new System.Drawing.Size(24, 24);
+            this.useExistingCarrierLogo.Size = new System.Drawing.Size(20, 20);
             this.useExistingCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.useExistingCarrierLogo.TabIndex = 6;
             this.useExistingCarrierLogo.TabStop = false;
@@ -265,7 +265,7 @@
             // 
             // useExistingAccountButton
             // 
-            this.useExistingAccountButton.Location = new System.Drawing.Point(27, 90);
+            this.useExistingAccountButton.Location = new System.Drawing.Point(27, 87);
             this.useExistingAccountButton.Name = "useExistingAccountButton";
             this.useExistingAccountButton.Size = new System.Drawing.Size(150, 23);
             this.useExistingAccountButton.TabIndex = 5;
@@ -290,10 +290,18 @@
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountButton);
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountDescription);
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountProviderLabel);
-            this.addExistingAccountPanel.Location = new System.Drawing.Point(23, 189);
+            this.addExistingAccountPanel.Location = new System.Drawing.Point(23, 174);
             this.addExistingAccountPanel.Name = "addExistingAccountPanel";
             this.addExistingAccountPanel.Size = new System.Drawing.Size(457, 88);
             this.addExistingAccountPanel.TabIndex = 6;
+            // 
+            // setupExistingProvider
+            // 
+            this.setupExistingProvider.FormattingEnabled = true;
+            this.setupExistingProvider.Location = new System.Drawing.Point(136, 49);
+            this.setupExistingProvider.Name = "setupExistingProvider";
+            this.setupExistingProvider.Size = new System.Drawing.Size(189, 21);
+            this.setupExistingProvider.TabIndex = 6;
             // 
             // setupExistingAccountHeader
             // 
@@ -332,14 +340,6 @@
             this.setupExistingAccountProviderLabel.Size = new System.Drawing.Size(93, 13);
             this.setupExistingAccountProviderLabel.TabIndex = 3;
             this.setupExistingAccountProviderLabel.Text = "Account Provider:";
-            // 
-            // setupExistingProvider
-            // 
-            this.setupExistingProvider.FormattingEnabled = true;
-            this.setupExistingProvider.Location = new System.Drawing.Point(136, 49);
-            this.setupExistingProvider.Name = "setupExistingProvider";
-            this.setupExistingProvider.Size = new System.Drawing.Size(189, 21);
-            this.setupExistingProvider.TabIndex = 6;
             // 
             // CounterRateProcessingSetupWizard
             // 
