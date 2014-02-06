@@ -20,14 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
     public class Express1StampsCounterRatesBroker : Express1StampsBestRateBroker
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1StampsCounterBestRateBroker"/> class.
+        /// Initializes a new instance of the <see cref="Express1StampsCounterRatesBroker"/> class.
         /// </summary>
         public Express1StampsCounterRatesBroker()
             : base(new Express1StampsShipmentType(), new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1StampsCounterBestRateBroker"/> class.
+        /// Initializes a new instance of the <see cref="Express1StampsCounterRatesBroker"/> class.
         /// </summary>
         /// <param name="shipmentType">The shipment type should be used with this broker</param>
         /// <param name="accountRepository">The account repository that should be used with this broker</param>
@@ -144,6 +144,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
             {
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Updates the shipment account with the actual account
+        /// </summary>
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, StampsAccountEntity account)
+        {
+            Express1StampsAccountRepository ar = new Express1StampsAccountRepository();
+            StampsAccountEntity stampsAccount = ar.Accounts.FirstOrDefault();
+
+            if (postalShipmentEntity.Stamps != null && stampsAccount != null)
+            {
+                postalShipmentEntity.Stamps.StampsAccountID = stampsAccount.StampsAccountID;
+                account = stampsAccount;
+            }
+
+            base.UpdateChildAccountId(postalShipmentEntity, account);
         }
     }
 }

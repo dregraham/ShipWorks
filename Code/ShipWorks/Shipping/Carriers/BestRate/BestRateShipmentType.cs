@@ -445,8 +445,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
                     break;
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
                     break;
                 case ShipmentTypeCode.FedEx:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
