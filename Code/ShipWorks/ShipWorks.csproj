@@ -611,6 +611,7 @@
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />

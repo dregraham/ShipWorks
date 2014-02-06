@@ -6,6 +6,7 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -575,7 +576,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of a StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new StampsBestRateBroker();
+            IBestRateShippingBroker counterBroker = new PostalWebShipmentType().GetShippingBroker(shipment);
+            return counterBroker is NullShippingBroker ? new StampsBestRateBroker() : counterBroker;
         }
     }
 }

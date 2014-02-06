@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
@@ -717,7 +718,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An instance of an EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new EndiciaBestRateBroker();
+            IBestRateShippingBroker counterBroker = new PostalWebShipmentType().GetShippingBroker(shipment);
+            return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
         }
     }
 }
