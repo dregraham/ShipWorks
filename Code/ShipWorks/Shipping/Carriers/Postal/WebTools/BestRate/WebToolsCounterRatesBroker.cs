@@ -8,7 +8,9 @@ using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 
@@ -17,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
     /// <summary>
     /// Gets counter rates for USPS
     /// </summary>
-    public class WebToolsCounterRatesBroker : WebToolsBestRateBroker
+    public class WebToolsCounterRatesBroker : PostalResellerBestRateBroker<NullEntity>
     {
         private readonly PostalShipmentType actualPostalShipmentType;
 
@@ -25,9 +27,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// Constructor
         /// </summary>
         public WebToolsCounterRatesBroker(PostalShipmentType actualPostalShipmentType)
+            : this(new PostalWebShipmentType(), new WebToolsAccountRepository())
         {
             this.actualPostalShipmentType = actualPostalShipmentType;
         }
+
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullEntity> accountRepository) :
+            base(shipmentType, accountRepository, "USPS (w/o Postage)")
+        {
+
+        }
+
+
 
         /// <summary>
         /// Gets the best rates for for WebTools counter-based prices.
@@ -82,8 +97,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// <param name="account">The account.</param>
         protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, NullEntity account)
         {
-            base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
-
             if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
                 || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
             {
@@ -140,6 +153,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         protected override void ChangeShipmentType(ShipmentEntity selectedShipment)
         {
             selectedShipment.ShipmentType = (int)actualPostalShipmentType.ShipmentTypeCode;
+        }
+
+        /// <summary>
+        /// Updates the account id on the postal reseller shipment
+        /// </summary>
+        /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>
+        /// <param name="account">Account that should be used for this shipment</param>
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
+        {
+
+        }
+
+        /// <summary>
+        /// Gets the insurance provider.
+        /// </summary>
+        public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
+        {
+            return InsuranceProvider.ShipWorks;
         }
     }
 }
