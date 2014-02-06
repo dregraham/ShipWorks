@@ -108,6 +108,7 @@
             this.signUpButton.TabIndex = 6;
             this.signUpButton.Text = "Continue and sign up >";
             this.signUpButton.UseVisualStyleBackColor = true;
+            this.signUpButton.Click += new System.EventHandler(this.OnSignUp);
             // 
             // CounterRateSignUpInformationControl
             // 
@@ -123,6 +124,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "CounterRateSignUpInformationControl";
             this.Size = new System.Drawing.Size(463, 176);
+            this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.carrierLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
