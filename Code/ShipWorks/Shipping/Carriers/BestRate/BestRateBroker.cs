@@ -144,7 +144,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     OriginalTag = rate.Tag,
                     ResultKey = GetResultKey(rate),
-                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag)
+                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag),
+                    AccountDescription = AccountDescription(accountLookup[rate])
                 };
                 
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
@@ -155,6 +156,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected virtual string AccountDescription(TAccount account)
+        {
+            return string.Empty;
         }
 
         /// <summary>
