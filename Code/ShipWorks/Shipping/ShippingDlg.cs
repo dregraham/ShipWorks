@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Divelements.SandGrid.Rendering;
 using System.Threading;
+using System.Windows.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -80,8 +81,8 @@ namespace ShipWorks.Shipping
 
         private List<ShipmentEntity> loadedShipmentEntities;
 
+        private DispatcherTimer getRatesTimer = new DispatcherTimer();
         BackgroundWorker getRatesBackgroundWorker;
-        private bool getRatesQueued = false;
 
         /// <summary>
         /// Constructor
@@ -102,6 +103,9 @@ namespace ShipWorks.Shipping
             {
                 throw new ArgumentNullException("shipments");
             }
+
+            getRatesTimer.Tick += OnGetRatesTimerTick;
+            getRatesTimer.Interval = new TimeSpan(0, 0, 0, 250);
 
             ThemedBorderProvider.Apply(rateControlArea);
 
@@ -866,15 +870,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Cancels the pending get rates.
-        /// </summary>
-        private void CancelPendingGetRates()
-        {
-            getRatesBackgroundWorker.CancelAsync();
-            getRatesQueued = false;
-        }
-
-        /// <summary>
         /// Clear the rates from the grid
         /// </summary>
         private void ClearRates(string reason)
@@ -1012,8 +1007,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         void OnRateCriteriaChanged(object sender, EventArgs e)
         {
-            CancelPendingGetRates();
-
             // Since this could change if customs needs generated, we need to save right now.
             SaveChangesToUIDisplayedShipments();
 
@@ -1676,6 +1669,20 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void GetRates()
         {
+            getRatesTimer.Start();
+        }
+
+        /// <summary>
+        /// Actually get the rates when the debounce timer has elapsed
+        /// </summary>
+        private void OnGetRatesTimerTick(object sender, EventArgs e)
+        {
+            if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
+            {
+                GetRates();
+                return;
+            }
+
             // Save changes to the current selection (NOT the ones we are processing) before we process it
             SaveChangesToUIDisplayedShipments();
 
@@ -1683,7 +1690,6 @@ namespace ShipWorks.Shipping
             bool noRates = false;
             bool anyAttempted = false;
 
- 
             if (uiDisplayedShipments.Count != 1)
             {
                 return;
@@ -1697,12 +1703,6 @@ namespace ShipWorks.Shipping
                 return;
             }
             
-            if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
-            {
-                getRatesQueued = true;
-                return;
-            }
-
             if (getRatesBackgroundWorker != null)
             {
                 getRatesBackgroundWorker.Dispose();
@@ -1764,21 +1764,11 @@ namespace ShipWorks.Shipping
 
                     //LoadSelectedShipments(true, false);
                 }
-
-                // If GetRates was called while processing the last rates.
-                if (getRatesQueued)
-                {
-                    GetRates();
-                }
             };
 
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
-                // sleep .25 seconds. Turn off queued rates if get rates was called a few times quickly
-                Thread.Sleep(250);
-                getRatesQueued = false;
-
                 var shipment = (ShipmentEntity)_e.Argument;
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
