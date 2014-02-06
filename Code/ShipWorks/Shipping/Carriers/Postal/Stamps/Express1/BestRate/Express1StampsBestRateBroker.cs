@@ -49,5 +49,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         {
             // Don't configure Express1 settings
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(StampsAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }

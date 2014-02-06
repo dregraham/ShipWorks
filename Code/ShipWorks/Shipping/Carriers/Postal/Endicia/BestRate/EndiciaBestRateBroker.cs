@@ -107,5 +107,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
 			
 			((EndiciaShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(EndiciaAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }
