@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Creates the wizard for configuring EquaShip 
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new EquashipSetupWizard();
         }

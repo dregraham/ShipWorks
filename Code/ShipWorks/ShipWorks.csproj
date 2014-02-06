@@ -629,6 +629,9 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
     <Compile Include="Shipping\Editing\FootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

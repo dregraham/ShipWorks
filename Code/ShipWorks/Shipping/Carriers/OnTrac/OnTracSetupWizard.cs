@@ -9,14 +9,13 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Controls;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     /// <summary>
     /// Setup wizard for processing shipments with Stamps.com
     /// </summary>
-    public partial class OnTracSetupWizard : WizardForm
+    public partial class OnTracSetupWizard : ShipmentTypeSetupWizardForm
     {
         OnTracAccountEntity account;
 

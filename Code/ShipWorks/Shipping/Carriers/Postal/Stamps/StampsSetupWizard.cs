@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings.WizardPages;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.Business;
-using System.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// Setup wizard for processing shipments with Stamps.com
     /// </summary>
-    public partial class StampsSetupWizard : WizardForm
+    public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private StampsAccountEntity stampsAccount;
         private StampsRegistration stampsRegistration;

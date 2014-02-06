@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the wizard used to do the one-time initial service setup
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new UpsSetupWizard(ShipmentTypeCode);
         }

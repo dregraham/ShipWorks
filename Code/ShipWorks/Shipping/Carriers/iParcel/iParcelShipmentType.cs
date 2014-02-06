@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// null if the shipment type does not require setup
         /// </summary>
         /// <returns>An iParcelSetupWizard object.</returns>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new iParcelSetupWizard();
         }
