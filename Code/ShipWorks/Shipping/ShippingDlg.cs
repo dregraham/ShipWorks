@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping
 
         private List<ShipmentEntity> loadedShipmentEntities;
 
-        private DispatcherTimer getRatesTimer = new DispatcherTimer();
+        private System.Windows.Forms.Timer getRatesTimer = new System.Windows.Forms.Timer();
         BackgroundWorker getRatesBackgroundWorker;
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping
             }
 
             getRatesTimer.Tick += OnGetRatesTimerTick;
-            getRatesTimer.Interval = new TimeSpan(0, 0, 0, 250);
+            getRatesTimer.Interval = 500;
 
             ThemedBorderProvider.Apply(rateControlArea);
 
@@ -1669,7 +1669,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void GetRates()
         {
+            getRatesTimer.Stop();
             getRatesTimer.Start();
+            rateControl.ClearRates("Fetching Rates...");
         }
 
         /// <summary>
@@ -1677,6 +1679,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnGetRatesTimerTick(object sender, EventArgs e)
         {
+            getRatesTimer.Stop();
+
             if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
             {
                 GetRates();
