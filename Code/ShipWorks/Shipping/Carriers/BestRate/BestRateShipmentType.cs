@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -386,12 +387,33 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShippingSettings.CheckForChangesNeeded();
                 }
 
-                if (eventArgs.SelectedRate == null)
+                // Select a rate based on the results of the dialog
+                if (eventArgs.SelectedRate != null)
                 {
+                    // The user has selected an existing rate, so just use it
+                    bestRate = eventArgs.SelectedRate;
+                }
+                else if (eventArgs.SelectedShipmentType != null)
+                {
+                    // Get the best rates for the newly created account
+                    IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
+                    RateGroup bestRateGroup = broker.GetBestRates(shipment, PreProcessExceptionHandler);
+
+                    // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
+                    // and filtered by service level
+                    bestRate = CompileBestRates(shipment, new List<RateGroup> { bestRateGroup }).Rates.FirstOrDefault();
+                }
+                else
+                {
+                    // This would mean the user canceled 
                     return null;
                 }
 
-                bestRate = eventArgs.SelectedRate;
+                // Ensure that the results of the dialog return an actual rate of some kind
+                if (bestRate == null)
+                {
+                    throw new ShippingException("ShipWorks could not find any rates.");
+                }
             }
 
             ApplySelectedShipmentRate(shipment, bestRate);
