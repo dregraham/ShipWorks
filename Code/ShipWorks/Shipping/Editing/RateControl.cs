@@ -103,10 +103,7 @@ namespace ShipWorks.Shipping.Editing
         {
             sandGrid.Rows.Clear();
 
-            if (rateGroup.Carrier == ShipmentTypeCode.BestRate)
-            {
-                gridColumnProvider.Visible = true;
-            }
+            gridColumnProvider.Visible = (rateGroup.Carrier == ShipmentTypeCode.BestRate);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
