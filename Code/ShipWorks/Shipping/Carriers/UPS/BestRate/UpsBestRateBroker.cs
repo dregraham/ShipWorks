@@ -273,5 +273,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         {
             package.UpsPackageID = packageId;
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(UpsAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }
