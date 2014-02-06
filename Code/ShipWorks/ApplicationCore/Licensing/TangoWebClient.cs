@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using System.Xml;
 using System.Net;
@@ -72,19 +73,65 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public static Dictionary<string, string> GetCounterRatesCredentials()
+        public static Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
         {
-            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
 
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string action = "getcounterratecredentials";
+
+            // Get the license from the store so we know how to log
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            // Get the store type
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // Create our http variable request submitter
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "getcounterratescredentials");
+            
+            // Both methods use the license key and action
+            postRequest.Variables.Add("license", license.Key);
+            postRequest.Variables.Add("action", action);
+            
+            // Trial shipment logging
+            if (license.IsTrial)
+            {
+                postRequest.Variables.Add("storecode", storeType.TangoCode);
+                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            
+            // Get the credentials from Tango
             XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
 
-            // Convert to an XEelement so we can use LINQ
-            IEnumerable<XElement> rootNodes = responseXmlDocument.ToXElement().DescendantNodes().OfType<XElement>();
-            results = rootNodes.ToDictionary(n => n.Name.ToString(), n => n.Value);
+            // Get the credentials
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", "/CounterRateCredentials/FedEx/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsPassword", "/CounterRateCredentials/UPS/Password", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results);
 
             return results;
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response.
+        /// </summary>
+        private static void AddCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                dictionary.Add(keyName, node.InnerText.Trim());
+            }
         }
 
         /// <summary>
