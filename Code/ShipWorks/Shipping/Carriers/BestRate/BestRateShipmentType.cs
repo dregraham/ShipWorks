@@ -377,8 +377,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
                 RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
 
-                // Determine what the actual shipment type should be for the selected best rate (i.e. use Endicia if a postal type was selected)
-                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(bestRate.ShipmentType);
+                // Determine what the actual shipment type should be for the selected best rate
+                // (i.e. use Endicia if a postal type was selected)
+                ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
+                NoncompetitiveRateResult noncompetitiveRateResult = bestRate as NoncompetitiveRateResult;
+
+                if (noncompetitiveRateResult != null)
+                {
+                    // Need to use the shipment type code from the original rate, so we
+                    // get the actual shipment type rather than the masked shipment type
+                    shipmentTypeCode = noncompetitiveRateResult.OriginalRate.ShipmentType;
+                }
+
+                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
                 CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
 
                 if (counterRatesProcessing != null)
