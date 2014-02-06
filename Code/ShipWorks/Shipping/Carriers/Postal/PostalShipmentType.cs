@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Tracking;
@@ -301,6 +307,52 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return confirmationTypes;
-        }        
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of a WebToolsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            // We want to return the null broker if there is already an Endicia or Stamps.com
+            // account setup, so postal rates for Web Tools aren't used as well (i.e. just use
+            // the provider that has an account instead of rates from web tools).
+            IBestRateShippingBroker broker = new NullShippingBroker();
+
+            bool stampsAccountsExist = StampsAccountManager.GetAccounts(false).Any();
+            bool endiciaAccountsExist = EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Any();
+
+            if (!stampsAccountsExist && !endiciaAccountsExist)
+            {
+                // There aren't any postal based accounts setup, so we want to see if we should 
+                // show counter rates (depending whether Endicia or Stamps.com have been excluded)
+
+                // We need to see which Postal provider to show when signing up for a postal account
+                // based on the global shipping settings and best rate settings with preference for Endicia
+                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+
+                if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
+                {
+                    // Endicia has not been excluded in the global shipping settings, has not been excluded 
+                    // from Best Rate, and there aren't any endicia accounts, so set the ShipmentType in the
+                    // web tool counter rates broker to be for Endicia
+                    broker = new EndiciaCounterRatesBroker(new EndiciaAccountRepository());
+                }
+                else if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Stamps) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
+                {
+                    // Endicia is not being used in best rate (for whatever reason), Stamps.com is has not been excluded 
+                    // in the global shipping settings and has not been excluded from Best Rate, so set the ShipmentType 
+                    // in the web tool counter rates broker to be for Stamps.com
+                    broker = new StampsCounterRatesBroker(new StampsAccountRepository());
+                }
+
+                // If neither of the above conditions were satisfied, Endicia and Stamps have both been excluded from Best Rate, so do nothing
+                // and just return the null broker
+            }
+
+            return broker;
+        }    
     }
 }

@@ -7,17 +7,21 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
+    /// <summary>
+    /// Filter postal counter rate brokers so that only one is used
+    /// </summary>
     public class PostalCounterBrokerFilter : IShippingBrokerFilter
     {
+        /// <summary>
+        /// Perform the filter
+        /// </summary>
         public IEnumerable<IBestRateShippingBroker> Filter(IEnumerable<IBestRateShippingBroker> brokers)
         {
             List<IBestRateShippingBroker> filteredBrokers = brokers.ToList();
-            WebToolsCounterRatesBroker webToolsBroker = filteredBrokers.OfType<EndiciaCounterRatesBroker>().FirstOrDefault();
 
-            if (webToolsBroker == null)
-            {
-                webToolsBroker = filteredBrokers.OfType<StampsCounterRatesBroker>().FirstOrDefault();
-            }
+            // Get the first Endicia broker, or if none exist, the first Stamps broker
+            WebToolsCounterRatesBroker webToolsBroker = filteredBrokers.OfType<EndiciaCounterRatesBroker>().FirstOrDefault() ??
+                                                        (WebToolsCounterRatesBroker) filteredBrokers.OfType<StampsCounterRatesBroker>().FirstOrDefault();
 
             return filteredBrokers.Where(x => !(x is WebToolsCounterRatesBroker) || x == webToolsBroker).ToList();
         }
