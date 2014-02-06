@@ -2,6 +2,7 @@
 using Divelements.SandGrid.Rendering;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using log4net;
 using RestSharp.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -2120,7 +2121,13 @@ namespace ShipWorks.Shipping
             // If the user has opted to not see counter rate setup wizard for this batch, just return.
             if (!showCounterRateSetupWizard)
             {
-                counterRatesProcessingArgs.SelectedRate = counterRatesProcessingArgs.FilteredRates.Rates.First(rr => !rr.IsCounterRate);
+                RateResult rateResult = counterRatesProcessingArgs.FilteredRates.Rates.FirstOrDefault(rr => !rr.IsCounterRate);
+                if (rateResult == null)
+                {
+                    throw new ShippingException("No rate was found for any of your accounts.");
+                }
+
+                counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateResult.ShipmentType);
                 return DialogResult.OK;
             }
 
@@ -2160,31 +2167,18 @@ namespace ShipWorks.Shipping
         private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs)
         {
             DialogResult setupWizardDialogResult;
-            RateResult wizardRateResultReturned;
 
-            ShipmentType shipmentType = counterRatesProcessingArgs.SetupShipmentType;
-
-            using (WizardForm wizardForm = shipmentType.CreateSetupWizard())
+            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard =
+                new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments))
             {
-                using (CounterRateProcessingWizardPage counterRateProcessingWizardPage =
-                    new CounterRateProcessingWizardPage(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments))
+                setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(this);
+
+                if (setupWizardDialogResult == DialogResult.OK)
                 {
-                    wizardForm.Pages.Insert(0, counterRateProcessingWizardPage);
-
-                    setupWizardDialogResult = wizardForm.ShowDialog(this);
-
-                    wizardRateResultReturned = counterRateProcessingWizardPage.SelectedRate;
-                    wizardRateResultReturned.ShipmentType = shipmentType.ShipmentTypeCode;
-                    ((BestRateResultTag) wizardRateResultReturned.Tag).SignUpAction = null;
-
-                    showCounterRateSetupWizard = !counterRateProcessingWizardPage.IgnoreAllCounterRates;
+                    showCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
+                    counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
+                    ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
                 }
-            }
-
-            if (setupWizardDialogResult == DialogResult.OK)
-            {
-                counterRatesProcessingArgs.SelectedRate = wizardRateResultReturned;
-                ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
             }
 
             return setupWizardDialogResult;
