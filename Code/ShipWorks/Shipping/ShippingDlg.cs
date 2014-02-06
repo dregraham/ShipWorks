@@ -2169,7 +2169,7 @@ namespace ShipWorks.Shipping
             DialogResult setupWizardDialogResult;
 
             using (CounterRateProcessingSetupWizard rateProcessingSetupWizard =
-                new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, counterRatesProcessingArgs.AllRates, shipmentControl.SelectedShipments))
+                new CounterRateProcessingSetupWizard(counterRatesProcessingArgs, shipmentControl.SelectedShipments))
             {
                 setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(this);
 

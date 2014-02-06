@@ -17,27 +17,28 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
     /// </summary>
     public partial class CounterRateProcessingSetupWizard : WizardForm
     {
+        private readonly ShipmentType setupShipmentType;
         private readonly RateResult absoluteBestRate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CounterRateProcessingSetupWizard"/> class.
         /// </summary>
-        /// <param name="filteredRates">The filtered rates.</param>
-        /// <param name="allRates">All rates.</param>
+        /// <param name="args">Arguments from the pre-process method.</param>
         /// <param name="shipmentsInBatch">The shipments in the batch.</param>
-        public CounterRateProcessingSetupWizard(RateGroup filteredRates, RateGroup allRates, IEnumerable<ShipmentEntity> shipmentsInBatch)
+        public CounterRateProcessingSetupWizard(CounterRatesProcessingArgs args, IEnumerable<ShipmentEntity> shipmentsInBatch)
         {
+            setupShipmentType = args.SetupShipmentType;
             InitializeComponent();
             
-            FilteredRates = filteredRates;
-            AllRates = allRates;
+            FilteredRates = args.FilteredRates;
+            AllRates = args.AllRates;
 
             // Assume the user will opt to use an existing account, so we only have to 
             // change the value in in one spot (when signing up for an account)
             IgnoreAllCounterRates = true;
 
             // Make note of this otherwise we'd be running Rates.First() a number of times
-            absoluteBestRate = filteredRates.Rates.FirstOrDefault();
+            absoluteBestRate = FilteredRates.Rates.FirstOrDefault();
 
             // Swap out the "tokenized" provider text with that of the provider with the best rate
             LoadBestRateInfo();
@@ -100,9 +101,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             LoadCreateCarrierDescriptionText();
             
-            bestRateCarrierName.Text = EnumHelper.GetDescription(absoluteBestRate.ShipmentType);
+            bestRateCarrierName.Text = EnumHelper.GetDescription(setupShipmentType.ShipmentTypeCode);
             bestRateAmount.Text = string.Format("{0:C2}", absoluteBestRate.Amount);
-            createAccountCarrierLogo.Image = EnumHelper.GetImage(absoluteBestRate.ShipmentType);
+            createAccountCarrierLogo.Image = EnumHelper.GetImage(setupShipmentType.ShipmentTypeCode);
         }
 
         /// <summary>
@@ -220,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             string description = string.Empty;
 
-            switch (absoluteBestRate.ShipmentType)
+            switch (setupShipmentType.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Endicia:
                     description = "USPS partners with Endicia to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " + 
@@ -259,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnSignUp(object sender, System.EventArgs e)
         {
-            SelectedShipmentType = ShipmentTypeManager.GetType(absoluteBestRate.ShipmentType);
+            SelectedShipmentType = ShipmentTypeManager.GetType(setupShipmentType.ShipmentTypeCode);
             IgnoreAllCounterRates = false;
 
             // Launch the setup wizard of the selected shipment type
