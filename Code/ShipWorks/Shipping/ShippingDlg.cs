@@ -2124,7 +2124,7 @@ namespace ShipWorks.Shipping
                 RateResult rateResult = counterRatesProcessingArgs.FilteredRates.Rates.FirstOrDefault(rr => !rr.IsCounterRate);
                 if (rateResult == null)
                 {
-                    throw new ShippingException("No rate was found for any of your accounts.");
+                    throw new ShippingException("No rate was found for any of your accounts, or you have not setup any accounts yet.");
                 }
 
                 counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateResult.ShipmentType);
@@ -2140,6 +2140,8 @@ namespace ShipWorks.Shipping
 
             if (setupWizardDialogResult != DialogResult.OK)
             {
+                showCounterRateSetupWizard = false;
+
                 this.Invoke((MethodInvoker)delegate
                 {
                     // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
