@@ -94,13 +94,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             
             // Both methods use the license key and action
             postRequest.Variables.Add("license", license.Key);
-            postRequest.Variables.Add("action", action);
             
             // Trial shipment logging
             if (license.IsTrial)
             {
                 postRequest.Variables.Add("storecode", storeType.TangoCode);
                 postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            else
+            {
+                postRequest.Variables.Add("action", action);
             }
             
             // Get the credentials from Tango
