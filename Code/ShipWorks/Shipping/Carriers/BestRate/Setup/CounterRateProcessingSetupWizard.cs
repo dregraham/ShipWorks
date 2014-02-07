@@ -201,7 +201,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             {
                 ShipmentTypeCode.BestRate,
                 ShipmentTypeCode.None,
-                ShipmentTypeCode.Other
+                ShipmentTypeCode.Other,
+                ShipmentTypeCode.PostalWebTools
             };
 
             setupExistingProvider.Items.Add("Choose...");
