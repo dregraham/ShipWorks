@@ -79,6 +79,7 @@ namespace ShipWorks.Shipping
         bool showCounterRateSetupWizard = true;
 
         private List<ShipmentEntity> loadedShipmentEntities;
+        private bool cancelProcessing;
 
         /// <summary>
         /// Constructor
@@ -1929,6 +1930,7 @@ namespace ShipWorks.Shipping
         private void Process(IEnumerable<ShipmentEntity> shipments)
         {
             Cursor.Current = Cursors.WaitCursor;
+            cancelProcessing = false;
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
@@ -2043,6 +2045,12 @@ namespace ShipWorks.Shipping
             // Code to execute for each shipment
             executor.ExecuteAsync((ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
             {
+                // Processing was canceled by the best rate processing dialog
+                if (cancelProcessing)
+                {
+                    return;
+                }
+                
                 long shipmentID = shipment.ShipmentID;
                 string errorMessage = null;
 
@@ -2140,6 +2148,7 @@ namespace ShipWorks.Shipping
 
             if (setupWizardDialogResult != DialogResult.OK)
             {
+                cancelProcessing = true;
                 showCounterRateSetupWizard = false;
 
                 this.Invoke((MethodInvoker)delegate
