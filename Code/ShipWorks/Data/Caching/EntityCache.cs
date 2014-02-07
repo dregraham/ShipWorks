@@ -206,7 +206,7 @@ namespace ShipWorks.Data.Caching
 
             cache.Set(
                 GetCacheKey(entityID),
-                EntityUtility.CloneEntity(entity, false),
+                EntityUtility.CloneEntity(entity, GetPrefetch(entityType) != null),
                 policy);
         }
 

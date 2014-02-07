@@ -129,7 +129,7 @@ namespace ShipWorks.Stores
         [Description("SellerVantage")]
         [StoreTypeIdentity("AUCTIONSOUND", "ASN")]
         [StoreTypeIcon("sellervantage")]
-        AuctionSound = 23,
+        SellerVantage = 23,
 
         [Description("Web Shop Manager")]
         [StoreTypeIdentity("WDSOLUTIONS", "WDS")]

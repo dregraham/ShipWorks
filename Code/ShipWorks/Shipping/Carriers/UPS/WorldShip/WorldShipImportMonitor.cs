@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Web.Routing;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -340,8 +339,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                             {
                                 // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
                                 // See if we can find a package that does not yet have a tracking number
-                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(p.TrackingNumber.Trim()) && !string.IsNullOrEmpty(import.TrackingNumber.Trim())) ||
-                                                                                            (string.IsNullOrEmpty(p.UspsTrackingNumber.Trim()) && !string.IsNullOrEmpty(import.UspsTrackingNumber.Trim())));
+
+                                upsPackage = upsShipment.Packages.FirstOrDefault(p => (string.IsNullOrEmpty(SafeTrim(p.TrackingNumber)) && !string.IsNullOrEmpty(SafeTrim(import.TrackingNumber))) ||
+                                                                                      (string.IsNullOrEmpty(SafeTrim(p.UspsTrackingNumber)) && !string.IsNullOrEmpty(SafeTrim(import.UspsTrackingNumber))));
                             }
 
                             // This is the case where the user created a new package in WS, so create a new one and add to the shipment
@@ -358,7 +358,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                 if (import.ServiceType != null)
                                 {
                                     // The user may have changed the service type and package type in WS, update locally so we are in sync.
-                                    string worldShipServiceType = import.ServiceType.ToUpperInvariant();
+                                    string worldShipServiceType = SafeTrim(import.ServiceType).ToUpperInvariant();
 
                                     UpsServiceManagerFactory upsServiceManagerFactory = new UpsServiceManagerFactory(upsShipment.Shipment);
                                     IUpsServiceManager upsServiceManager = upsServiceManagerFactory.Create(upsShipment.Shipment);
@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                 if (import.PackageType != null)
                                 {
                                     // Update the package type sent from WS
-                                    string worldShipPackageType = import.PackageType.ToUpperInvariant();
+                                    string worldShipPackageType = SafeTrim(import.PackageType).ToUpperInvariant();
                                     if (upsPackageTypeNames.ContainsKey(worldShipPackageType))
                                     {
                                         UpsPackagingType packageType = upsPackageTypeNames[worldShipPackageType];
@@ -401,8 +401,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                 if (import.DeclaredValueOption != null)
                                 {
                                     // Update the declared value
-                                    if (import.DeclaredValueOption.Trim().ToUpperInvariant() == "Y" &&
-                                        import.DeclaredValueAmount.HasValue)
+                                    if (import.DeclaredValueAmount.HasValue && SafeTrim(import.DeclaredValueOption).ToUpperInvariant() == "Y")
                                     {
                                         upsPackage.DeclaredValue = (decimal)import.DeclaredValueAmount.Value;
                                     }
@@ -580,6 +579,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                 adapter.Commit();
             }
+        }
+
+        /// <summary>
+        /// Helper method to safely trim a possibly null string
+        /// </summary>
+        private static string SafeTrim(string stringToTrim)
+        {
+            if (!string.IsNullOrWhiteSpace(stringToTrim))
+            {
+                return stringToTrim.Trim();
+            }
+             
+            return string.Empty;
         }
     }
 }

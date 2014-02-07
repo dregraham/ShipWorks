@@ -429,7 +429,8 @@ namespace ShipWorks.Data
                         }
                         catch (SqlException ex)
                         {
-                            if (ex.Message.Contains("SqlLockException"))
+                            string exceptionMessage = ex.Message.ToLower();
+                            if (exceptionMessage.Contains("sqllockexception") || exceptionMessage.Contains("could not acquire applock"))
                             {
                                 log.Warn(ex.Message);                                
                             }

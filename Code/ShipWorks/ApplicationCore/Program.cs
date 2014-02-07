@@ -1,7 +1,5 @@
-using System.Globalization;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -31,6 +29,9 @@ namespace ShipWorks
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
+        // Require at least 100 MB of free space to run ShipWorks successfully
+        const long minDriveSpace = 1024 * 1024 * 100;
 
         /// <summary>
         /// Single instance of the running application
@@ -211,14 +212,45 @@ namespace ShipWorks
                 return false;
             }
 
+            // Make sure the user has a minimum amount of disk space.
+            try
+            {
+                List<string> pathsToCheck = new List<string>() {DataPath.InstanceRoot, DataPath.ShipWorksTemp};
+                foreach (string pathToCheck in pathsToCheck)
+                {
+                    if (!CheckHardDiskSpaceOk(pathToCheck))
+                    {
+                        DriveInfo driveInfo = new DriveInfo(pathToCheck);
+                        ExecutionMode.ShowTerminationMessage(null,
+                            string.Format(
+                                "Your computer is running out of disk space.  Please free up disk space on drive {0} to continue using ShipWorks.",
+                                driveInfo.Name));
+
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                // If we couldn't check disk space for some reason, we'll handle that elsewhere with more context as to why.  So just continue on.
+            }
+
             return true;
         }
 
         /// <summary>
-        /// Checks to see if the DateTimeFormat is valid.  If not, it displays a message to the user on how to fix it.
-        /// 
+        /// Determines if the drive for the referenced path has a minimum amount of disk space for ShipWorks to run.
         /// </summary>
-        /// <returns></returns>
+        private static bool CheckHardDiskSpaceOk(string pathToCheck)
+        {
+            DriveInfo driveInfo = new DriveInfo(pathToCheck);
+
+            return driveInfo.TotalFreeSpace > minDriveSpace;
+        }
+
+        /// <summary>
+        /// Checks to see if the DateTimeFormat is valid.  If not, it displays a message to the user on how to fix it.
+        /// </summary>
         private static bool CheckDateTimeFormatSetting()
         {
             List<string> allowedShortDatePartterns = new List<string>() { "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy" };

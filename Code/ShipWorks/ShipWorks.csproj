@@ -2218,6 +2218,7 @@
     <Compile Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.Designer.cs">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Actions\ShopifyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyPaymentStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyFulfillmentStatusCondition.cs" />
@@ -3032,18 +3033,18 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceStoreSelectionPage.Designer.cs">
       <DependentUpon>AmeriCommerceStoreSelectionPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.designer.cs">
-      <DependentUpon>AuctionSoundAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.designer.cs">
+      <DependentUpon>SellerVantageAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundStoreType.cs" />
-    <Compile Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.cs">
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.Designer.cs">
-      <DependentUpon>AuctionSoundAccountPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.Designer.cs">
+      <DependentUpon>SellerVantageAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTask.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs">
@@ -8400,11 +8401,11 @@
     <EmbeddedResource Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceStoreSelectionPage.resx">
       <DependentUpon>AmeriCommerceStoreSelectionPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.resx">
-      <DependentUpon>AuctionSoundAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.resx">
+      <DependentUpon>SellerVantageAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.resx">
-      <DependentUpon>AuctionSoundAccountPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.resx">
+      <DependentUpon>SellerVantageAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\CommerceInterface\CoreExtensions\Actions\CommerceInterfaceShipmentUploadTaskEditor.resx">
       <DependentUpon>CommerceInterfaceShipmentUploadTaskEditor.cs</DependentUpon>
@@ -10168,6 +10169,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10515,6 +10517,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Amount\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\template.xsl" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\settings.xml" />

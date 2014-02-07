@@ -56,9 +56,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Get a page of orders from eBay
         /// </summary>
-        public GetOrdersResponseType GetOrders(DateTime rangeStart, DateTime rangeEnd)
+        public GetOrdersResponseType GetOrders(DateTime rangeStart, DateTime rangeEnd, int page)
         {
-            EbayGetOrdersRequest request = new EbayGetOrdersRequest(token, rangeStart, rangeEnd, 1);
+            EbayGetOrdersRequest request = new EbayGetOrdersRequest(token, rangeStart, rangeEnd, page);
 
             return request.Execute();
         }

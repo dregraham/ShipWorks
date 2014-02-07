@@ -101,6 +101,7 @@ namespace ShipWorks.Data.Administration
             usageAudit.Text = "";
             usageTotal.Text = "";
             usageRemaining.Text = "";
+            usageOther.Text = "";
             infotipSizeRemaining.Visible = false;
 
             if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
@@ -111,6 +112,7 @@ namespace ShipWorks.Data.Administration
                     usageResources.Text = StringUtility.FormatByteCount(SqlDiskUsage.ResourceUsage);
                     usageAudit.Text = StringUtility.FormatByteCount(SqlDiskUsage.AuditUsage);
                     usageTotal.Text = StringUtility.FormatByteCount(SqlDiskUsage.TotalUsage);
+                    usageOther.Text = StringUtility.FormatByteCount(SqlDiskUsage.OtherUsage);
 
                     long remaining = SqlDiskUsage.SpaceRemaining;
                     if (remaining == -1)

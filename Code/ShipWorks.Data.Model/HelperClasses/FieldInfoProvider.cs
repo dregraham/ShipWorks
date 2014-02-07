@@ -2679,8 +2679,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()
 		{
-			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentCustomsItemID", typeof(System.Int64), true, false, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, 0, 0, 19);
+			base.AddElementFieldInfo("WorldShipGoodsEntity", "WorldShipGoodsID", typeof(System.Int64), true, false, true, false,  (int)WorldShipGoodsFieldIndex.WorldShipGoodsID, 0, 0, 19);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentID", typeof(System.Int64), false, true, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentCustomsItemID", typeof(System.Int64), false, false, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, 0, 0, 19);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "Description", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.Description, 150, 0, 0);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "TariffCode", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.TariffCode, 15, 0, 0);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "CountryOfOrigin", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.CountryOfOrigin, 50, 0, 0);

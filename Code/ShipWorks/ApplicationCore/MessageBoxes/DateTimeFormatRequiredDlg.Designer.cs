@@ -64,8 +64,8 @@
             this.labelProblem.Name = "labelProblem";
             this.labelProblem.Size = new System.Drawing.Size(369, 34);
             this.labelProblem.TabIndex = 2;
-            this.labelProblem.Text = "ShipWorks currently requires your computer\'s long date format settings to be set " +
-    "to use the \'M/d/yyyy\'.";
+            this.labelProblem.Text = "ShipWorks currently requires your computer\'s date format settings to be set to us" +
+    "e the \'M/d/yyyy\'.";
             // 
             // close
             // 

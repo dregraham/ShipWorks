@@ -138,11 +138,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
                 catch (AmazonException ex)
                 {
-                    // This happens if the Marketplace doesn't support the Produts API - which is true (currently 9/5/2012) of Webstores
+                    // This happens if the Marketplace doesn't support the Products API - which is true (currently 9/5/2012) of Webstores
                     if (ex.Code == "InvalidParameterValue" && ex.Message.StartsWith("The given marketplace"))
                     {
                         log.WarnFormat("Adding store [{0}] to list of stores not supported by the Product API.", webClient.Store.StoreID);
                         unsupportedStores.Add(webClient.Store.StoreID);
+                    }
+                    else if (ex.Code == "InvalidParameterValue" && ex.Message.StartsWith("Invalid ASIN identifier"))
+                    {
+                        // Don't hold up the download if data for product data that could not be downloaded.
+                        log.WarnFormat("ShipWorks could not download product details (item weight and thumbnail image) for an ASIN. {0}", ex.Message);
                     }
                     else
                     {

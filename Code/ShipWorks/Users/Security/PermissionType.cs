@@ -13,6 +13,7 @@ namespace ShipWorks.Users.Security
     public enum PermissionType
     {
         [PermissionScope(PermissionScope.Global)] AlwaysGrant = 0,
+        [PermissionScope(PermissionScope.Global)] InterapptiveOnly = 1,
 
         [PermissionScope(PermissionScope.Global)] DatabaseSetup = 2,
         [PermissionScope(PermissionScope.Global)] DatabaseBackup = 3,

@@ -2527,6 +2527,50 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// The menu for this is only available to interapptive internal users.  This allows for re-sending shipment details to Tango.  This is for cases
+        /// when a shipment was succesfully processed, but Tango didn't properly handle logging the shipment details.  If tango already has the shipment, it won't log it again.
+        /// If tango doesn't have it, it will log it.
+        /// </summary>
+        private void OnRetryLogShipmentsToTango(object sender, EventArgs e)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(this,
+                "ShipWorks",
+                "Tango - Retry",
+                "Retrying {0} of {1}");
+
+            // What to execute then the async operation is done
+            executor.ExecuteCompleted += (s, args) =>
+                {
+
+                };
+
+            // What to execute for each input item
+            executor.ExecuteAsync((entityID, state, issueAdder) =>
+                {
+                    foreach (ShipmentEntity shipment in ShippingManager.GetShipments(entityID, false))
+                    {
+                        if (!shipment.Processed || shipment.Voided)
+                        {
+                            continue;
+                        }
+
+                        StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
+                        if (storeEntity == null)
+                        {
+                            continue;
+                        }
+
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+
+                        TangoWebClient.LogShipment(storeEntity, shipment, true);
+                    }
+                },
+
+            // The input items to execute each time for
+            gridControl.Selection.OrderedKeys);
+        }
+
+        /// <summary>
         /// An edit has occurred in one of hte panels
         /// </summary>
         private void OnPanelDataChanged(object sender, EventArgs e)
