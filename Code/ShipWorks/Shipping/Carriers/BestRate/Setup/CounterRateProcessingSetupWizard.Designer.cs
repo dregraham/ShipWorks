@@ -127,7 +127,7 @@
             // 
             // createCarrierAccountDescription
             // 
-            this.createCarrierAccountDescription.Location = new System.Drawing.Point(37, 99);
+            this.createCarrierAccountDescription.Location = new System.Drawing.Point(36, 99);
             this.createCarrierAccountDescription.Name = "createCarrierAccountDescription";
             this.createCarrierAccountDescription.Size = new System.Drawing.Size(480, 30);
             this.createCarrierAccountDescription.TabIndex = 13;
@@ -196,7 +196,7 @@
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountHeader);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountButton);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountDescription);
-            this.useExistingAccountPanel.Location = new System.Drawing.Point(23, 264);
+            this.useExistingAccountPanel.Location = new System.Drawing.Point(17, 264);
             this.useExistingAccountPanel.Name = "useExistingAccountPanel";
             this.useExistingAccountPanel.Size = new System.Drawing.Size(591, 148);
             this.useExistingAccountPanel.TabIndex = 7;
@@ -205,7 +205,7 @@
             // 
             this.useExistingAccountsForRemainingLabel.AutoSize = true;
             this.useExistingAccountsForRemainingLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.useExistingAccountsForRemainingLabel.Location = new System.Drawing.Point(24, 116);
+            this.useExistingAccountsForRemainingLabel.Location = new System.Drawing.Point(30, 116);
             this.useExistingAccountsForRemainingLabel.Name = "useExistingAccountsForRemainingLabel";
             this.useExistingAccountsForRemainingLabel.Size = new System.Drawing.Size(396, 13);
             this.useExistingAccountsForRemainingLabel.TabIndex = 10;
@@ -216,7 +216,7 @@
             // 
             this.existingAccountRateDifference.AutoSize = true;
             this.existingAccountRateDifference.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.existingAccountRateDifference.Location = new System.Drawing.Point(97, 63);
+            this.existingAccountRateDifference.Location = new System.Drawing.Point(103, 63);
             this.existingAccountRateDifference.Name = "existingAccountRateDifference";
             this.existingAccountRateDifference.Size = new System.Drawing.Size(70, 13);
             this.existingAccountRateDifference.TabIndex = 9;
@@ -227,7 +227,7 @@
             this.existingAccountRateAmount.AutoSize = true;
             this.existingAccountRateAmount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.existingAccountRateAmount.ForeColor = System.Drawing.Color.Red;
-            this.existingAccountRateAmount.Location = new System.Drawing.Point(54, 63);
+            this.existingAccountRateAmount.Location = new System.Drawing.Point(60, 63);
             this.existingAccountRateAmount.Name = "existingAccountRateAmount";
             this.existingAccountRateAmount.Size = new System.Drawing.Size(45, 13);
             this.existingAccountRateAmount.TabIndex = 8;
@@ -237,7 +237,7 @@
             // 
             this.useExistingCarrierName.AutoSize = true;
             this.useExistingCarrierName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.useExistingCarrierName.Location = new System.Drawing.Point(54, 50);
+            this.useExistingCarrierName.Location = new System.Drawing.Point(60, 50);
             this.useExistingCarrierName.Name = "useExistingCarrierName";
             this.useExistingCarrierName.Size = new System.Drawing.Size(40, 13);
             this.useExistingCarrierName.TabIndex = 7;
@@ -246,7 +246,7 @@
             // useExistingCarrierLogo
             // 
             this.useExistingCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
-            this.useExistingCarrierLogo.Location = new System.Drawing.Point(27, 46);
+            this.useExistingCarrierLogo.Location = new System.Drawing.Point(33, 46);
             this.useExistingCarrierLogo.Name = "useExistingCarrierLogo";
             this.useExistingCarrierLogo.Size = new System.Drawing.Size(20, 20);
             this.useExistingCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -265,7 +265,7 @@
             // 
             // useExistingAccountButton
             // 
-            this.useExistingAccountButton.Location = new System.Drawing.Point(27, 87);
+            this.useExistingAccountButton.Location = new System.Drawing.Point(33, 87);
             this.useExistingAccountButton.Name = "useExistingAccountButton";
             this.useExistingAccountButton.Size = new System.Drawing.Size(150, 23);
             this.useExistingAccountButton.TabIndex = 5;
@@ -276,7 +276,7 @@
             // useExistingAccountDescription
             // 
             this.useExistingAccountDescription.AutoSize = true;
-            this.useExistingAccountDescription.Location = new System.Drawing.Point(20, 22);
+            this.useExistingAccountDescription.Location = new System.Drawing.Point(19, 22);
             this.useExistingAccountDescription.Name = "useExistingAccountDescription";
             this.useExistingAccountDescription.Size = new System.Drawing.Size(556, 13);
             this.useExistingAccountDescription.TabIndex = 2;
@@ -290,7 +290,7 @@
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountButton);
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountDescription);
             this.addExistingAccountPanel.Controls.Add(this.setupExistingAccountProviderLabel);
-            this.addExistingAccountPanel.Location = new System.Drawing.Point(23, 174);
+            this.addExistingAccountPanel.Location = new System.Drawing.Point(17, 174);
             this.addExistingAccountPanel.Name = "addExistingAccountPanel";
             this.addExistingAccountPanel.Size = new System.Drawing.Size(457, 88);
             this.addExistingAccountPanel.TabIndex = 6;
@@ -298,7 +298,7 @@
             // setupExistingProvider
             // 
             this.setupExistingProvider.FormattingEnabled = true;
-            this.setupExistingProvider.Location = new System.Drawing.Point(136, 49);
+            this.setupExistingProvider.Location = new System.Drawing.Point(130, 48);
             this.setupExistingProvider.Name = "setupExistingProvider";
             this.setupExistingProvider.Size = new System.Drawing.Size(189, 21);
             this.setupExistingProvider.TabIndex = 6;
@@ -315,7 +315,7 @@
             // 
             // setupExistingAccountButton
             // 
-            this.setupExistingAccountButton.Location = new System.Drawing.Point(331, 47);
+            this.setupExistingAccountButton.Location = new System.Drawing.Point(325, 47);
             this.setupExistingAccountButton.Name = "setupExistingAccountButton";
             this.setupExistingAccountButton.Size = new System.Drawing.Size(99, 23);
             this.setupExistingAccountButton.TabIndex = 5;
@@ -326,7 +326,7 @@
             // setupExistingAccountDescription
             // 
             this.setupExistingAccountDescription.AutoSize = true;
-            this.setupExistingAccountDescription.Location = new System.Drawing.Point(20, 22);
+            this.setupExistingAccountDescription.Location = new System.Drawing.Point(19, 22);
             this.setupExistingAccountDescription.Name = "setupExistingAccountDescription";
             this.setupExistingAccountDescription.Size = new System.Drawing.Size(390, 13);
             this.setupExistingAccountDescription.TabIndex = 2;
@@ -335,7 +335,7 @@
             // setupExistingAccountProviderLabel
             // 
             this.setupExistingAccountProviderLabel.AutoSize = true;
-            this.setupExistingAccountProviderLabel.Location = new System.Drawing.Point(37, 51);
+            this.setupExistingAccountProviderLabel.Location = new System.Drawing.Point(31, 51);
             this.setupExistingAccountProviderLabel.Name = "setupExistingAccountProviderLabel";
             this.setupExistingAccountProviderLabel.Size = new System.Drawing.Size(93, 13);
             this.setupExistingAccountProviderLabel.TabIndex = 3;
