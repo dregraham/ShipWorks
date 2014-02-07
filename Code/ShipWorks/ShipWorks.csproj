@@ -633,6 +633,12 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Settings\ShippingSetupWizard.Designer.cs">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Setup\ShipWorksSetupManager.cs" />
     <Compile Include="ApplicationCore\ShipWorksCommandLine.cs" />
     <Compile Include="ApplicationCore\Help\RemoteAssistanceDlg.cs">
@@ -7038,6 +7044,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormDlg.resx">
       <DependentUpon>ScanFormDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
+      <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
