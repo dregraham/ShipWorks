@@ -106,18 +106,27 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Get the credentials from Tango
             XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
 
-            // Get the credentials
+            // Pull the credentials from the response; none of the fields are encrypted in the response
+            // so we can easily/quickly update them in Tango if they ever need to change
+
+            // FedEx fields - password needs to encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", "/CounterRateCredentials/FedEx/AccountNumber", results);
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results, "FedEx");
+            
+            // UPS fields - access key needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
             AddCounterRateDictionaryEntry(responseXmlDocument, "UpsPassword", "/CounterRateCredentials/UPS/Password", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results, "UPS");
+            
+            // Express1 for Endicia fields - passphrase needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
+
+            // Express1 for Stamps.com fields - password needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
             return results;
         }
@@ -131,6 +140,21 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (node != null)
             {
                 dictionary.Add(keyName, node.InnerText.Trim());
+            }
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response and encrypt the value. This is necessary
+        /// for a couple of the password and access key values since the API web clients are expecting these values to
+        /// be encrypted.
+        /// </summary>
+        private static void AddEncryptedCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary, string salt)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                string encryptedValue = SecureText.Encrypt(node.InnerText.Trim(), salt);
+                dictionary.Add(keyName, encryptedValue);
             }
         }
 
