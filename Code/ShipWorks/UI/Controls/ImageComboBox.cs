@@ -406,7 +406,8 @@ namespace ShipWorks.UI.Controls
                 return true;
             }
 
-            if (keyData >= Keys.A && keyData <= Keys.Z)
+            // If the combo box allows free text entering, don't override the keyboard behavior
+            if (DropDownStyle == ComboBoxStyle.DropDownList && keyData >= Keys.A && keyData <= Keys.Z)
             {
                 // Find the first occurrance of an item that begins with the specified letter that's AFTER the currently selected item.
                 // If that fails, try from the beginning.  That will let someone cycle through all the items that begin with a specific letter.
