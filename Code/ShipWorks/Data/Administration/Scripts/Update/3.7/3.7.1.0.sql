@@ -44,3 +44,4 @@ PRINT N'Adding foreign keys to [dbo].[WorldShipGoods]'
 GO
 ALTER TABLE [dbo].[WorldShipGoods] ADD CONSTRAINT [FK_WorldShipGoods_WorldShipShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[WorldShipShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
+
