@@ -943,7 +943,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns></returns>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            bool requiresCustoms = base.IsCustomsRequired(shipment);
+            bool requiresCustoms = base.IsCustomsRequiredByShipment(shipment);
 
             if (shipment.OriginCountryCode == "US")
             {
