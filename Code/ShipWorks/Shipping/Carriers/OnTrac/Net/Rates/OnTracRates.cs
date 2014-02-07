@@ -72,7 +72,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                         onTracServiceType)
                     {
                         ExpectedDeliveryDate = expectedDeliveryDate,
-                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays)
+                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays),
+                        ShipmentType = ShipmentTypeCode.OnTrac
                     });
             }
 

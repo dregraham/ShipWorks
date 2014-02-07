@@ -153,6 +153,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
+            if (!filteredRates.Any())
+            {
+                // With no rates for the group, the carrier will default to UPS, so set it correctly if there are no rates.
+                bestRateGroup.Carrier = this.ShipmentType.ShipmentTypeCode;
+            }
+
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;

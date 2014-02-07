@@ -2177,7 +2177,7 @@ namespace ShipWorks.Shipping
                 {
                     showCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
                     counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
-                    ShippingSettings.MarkAsConfigured(counterRatesProcessingArgs.SetupShipmentType.ShipmentTypeCode);
+                    ShippingSettings.MarkAsConfigured(rateProcessingSetupWizard.SelectedShipmentType.ShipmentTypeCode);
                 }
             }
 
