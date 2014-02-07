@@ -92,8 +92,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Create our http variable request submitter
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             
-            // Both methods use the license key and action
-            postRequest.Variables.Add("license", license.Key);
+            // Both methods use action
+            postRequest.Variables.Add("action", action);
             
             // Trial shipment logging
             if (license.IsTrial)
@@ -103,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                postRequest.Variables.Add("action", action);
+                postRequest.Variables.Add("license", license.Key);
             }
             
             // Get the credentials from Tango
