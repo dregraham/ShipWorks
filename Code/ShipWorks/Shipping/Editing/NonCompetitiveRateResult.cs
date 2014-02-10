@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.Editing
             {
                 Description = "Undisclosed " + maskedServiceTypeDescription;
                 CarrierDescription = "Undisclosed";
-                ShipmentType = ShipmentTypeCode.Other;
             }
         }
     }

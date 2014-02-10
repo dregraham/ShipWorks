@@ -2136,15 +2136,7 @@ namespace ShipWorks.Shipping
                 }
 
                 counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateResult.ShipmentType);
-                NoncompetitiveRateResult noncompetitiveRateResult = rateResult as NoncompetitiveRateResult;
-                if (noncompetitiveRateResult != null)
-                {
-                    // Need to use the shipment type code from the original rate, so we
-                    // get the actual shipment type rather than the masked shipment type
-                    counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(noncompetitiveRateResult.OriginalRate.ShipmentType);
-                }
-
-
+                
                 return DialogResult.OK;
             }
 

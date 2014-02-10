@@ -380,15 +380,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Determine what the actual shipment type should be for the selected best rate
                 // (i.e. use Endicia if a postal type was selected)
                 ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
-                NoncompetitiveRateResult noncompetitiveRateResult = bestRate as NoncompetitiveRateResult;
-
-                if (noncompetitiveRateResult != null)
-                {
-                    // Need to use the shipment type code from the original rate, so we
-                    // get the actual shipment type rather than the masked shipment type
-                    shipmentTypeCode = noncompetitiveRateResult.OriginalRate.ShipmentType;
-                }
-
+                
                 ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
                 CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
 

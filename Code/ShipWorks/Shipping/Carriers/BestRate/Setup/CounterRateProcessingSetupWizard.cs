@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingAccountPanel.BringToFront();
 
                 // Populate information based on the rate's shipment type
-                ShipmentType existingRateShipmentType = GetShipmentType(existingAccountRate);
+                ShipmentType existingRateShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
                 useExistingCarrierName.Text = EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode);
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
@@ -169,25 +169,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
                 LoadShippingProviders();
             }
-        }
-
-        /// <summary>
-        /// Gets the shipment type from the rate.
-        /// </summary>
-        /// <param name="rate">The rate.</param>
-        /// <returns>The ShipmentType object.</returns>
-        private ShipmentType GetShipmentType(RateResult rate)
-        {
-            NoncompetitiveRateResult result = rate as NoncompetitiveRateResult;
-
-            if (result != null)
-            {
-                // Need to use the shipment type code from the original rate, so we
-                // get the actual shipment type rather than the masked shipment type
-                return ShipmentTypeManager.GetType(result.OriginalRate.ShipmentType);
-            }
-
-            return ShipmentTypeManager.GetType(rate.ShipmentType);
         }
 
         /// <summary>
@@ -305,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             
             // Grab the shipment type of the first non-counter rate
             RateResult existingAccountRate = FilteredRates.Rates.First(r => !r.IsCounterRate);
-            SelectedShipmentType = ShipmentTypeManager.GetType(GetShipmentType(existingAccountRate).ShipmentTypeCode);
+            SelectedShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
             
             // Make sure to close the form with OK as the result
             DialogResult = DialogResult.OK;

@@ -108,8 +108,11 @@ namespace ShipWorks.Shipping.Editing
             foreach (RateResult rate in rateGroup.Rates)
             {
                 Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
-                if (rate.ShipmentType == ShipmentTypeCode.Other)
+
+                NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
+                if (noncompetitiveRateResult != null)
                 {
+                    // If non-competitive, show the blue truck.
                     providerLogo = ShippingIcons.truck_blue;
                 }
 
