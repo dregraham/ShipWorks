@@ -56,6 +56,8 @@
             this.sectionDiskUsage = new ShipWorks.UI.Controls.SectionTitle();
             this.configureDatabase = new System.Windows.Forms.Button();
             this.sectionConfiguration = new ShipWorks.UI.Controls.SectionTitle();
+            this.usageOther = new System.Windows.Forms.Label();
+            this.labelUsageOther = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // close
@@ -92,7 +94,7 @@
             // 
             this.usageRemaining.AutoSize = true;
             this.usageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageRemaining.Location = new System.Drawing.Point(124, 334);
+            this.usageRemaining.Location = new System.Drawing.Point(124, 350);
             this.usageRemaining.Name = "usageRemaining";
             this.usageRemaining.Size = new System.Drawing.Size(41, 13);
             this.usageRemaining.TabIndex = 82;
@@ -102,7 +104,7 @@
             // 
             this.labelUsageRemaining.AutoSize = true;
             this.labelUsageRemaining.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageRemaining.Location = new System.Drawing.Point(48, 334);
+            this.labelUsageRemaining.Location = new System.Drawing.Point(48, 350);
             this.labelUsageRemaining.Name = "labelUsageRemaining";
             this.labelUsageRemaining.Size = new System.Drawing.Size(70, 13);
             this.labelUsageRemaining.TabIndex = 81;
@@ -112,17 +114,16 @@
             // 
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(35, 309);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(35, 325);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(140, 1);
-            this.kryptonBorderEdge.TabIndex = 80;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // usageTotal
             // 
             this.usageTotal.AutoSize = true;
             this.usageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.usageTotal.Location = new System.Drawing.Point(124, 314);
+            this.usageTotal.Location = new System.Drawing.Point(124, 330);
             this.usageTotal.Name = "usageTotal";
             this.usageTotal.Size = new System.Drawing.Size(41, 13);
             this.usageTotal.TabIndex = 79;
@@ -132,7 +133,7 @@
             // 
             this.labelUsageTotal.AutoSize = true;
             this.labelUsageTotal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageTotal.Location = new System.Drawing.Point(79, 314);
+            this.labelUsageTotal.Location = new System.Drawing.Point(79, 330);
             this.labelUsageTotal.Name = "labelUsageTotal";
             this.labelUsageTotal.Size = new System.Drawing.Size(39, 13);
             this.labelUsageTotal.TabIndex = 78;
@@ -285,7 +286,7 @@
             // 
             this.infotipSizeRemaining.Caption = "SQL Server Express has a {0} GB size limit.  \r\n\r\nThere is no limit for paid editi" +
     "ons of SQL Server.";
-            this.infotipSizeRemaining.Location = new System.Drawing.Point(169, 335);
+            this.infotipSizeRemaining.Location = new System.Drawing.Point(169, 351);
             this.infotipSizeRemaining.Name = "infotipSizeRemaining";
             this.infotipSizeRemaining.Size = new System.Drawing.Size(12, 12);
             this.infotipSizeRemaining.TabIndex = 83;
@@ -331,6 +332,25 @@
             this.sectionConfiguration.TabIndex = 96;
             this.sectionConfiguration.Text = "Configuration";
             // 
+            // usageOther
+            // 
+            this.usageOther.AutoSize = true;
+            this.usageOther.Location = new System.Drawing.Point(124, 310);
+            this.usageOther.Name = "usageOther";
+            this.usageOther.Size = new System.Drawing.Size(36, 13);
+            this.usageOther.TabIndex = 98;
+            this.usageOther.Text = "14 MB";
+            // 
+            // labelUsageOther
+            // 
+            this.labelUsageOther.AutoSize = true;
+            this.labelUsageOther.Location = new System.Drawing.Point(79, 310);
+            this.labelUsageOther.Name = "labelUsageOther";
+            this.labelUsageOther.Size = new System.Drawing.Size(39, 13);
+            this.labelUsageOther.TabIndex = 97;
+            this.labelUsageOther.Text = "Other:";
+            this.labelUsageOther.UseMnemonic = false;
+            // 
             // DatabaseDetailsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -338,6 +358,8 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.close;
             this.ClientSize = new System.Drawing.Size(359, 403);
+            this.Controls.Add(this.usageOther);
+            this.Controls.Add(this.labelUsageOther);
             this.Controls.Add(this.sectionConfiguration);
             this.Controls.Add(this.configureDatabase);
             this.Controls.Add(this.sectionDiskUsage);
@@ -411,5 +433,7 @@
         private UI.Controls.SectionTitle sectionDiskUsage;
         private System.Windows.Forms.Button configureDatabase;
         private UI.Controls.SectionTitle sectionConfiguration;
+        private System.Windows.Forms.Label usageOther;
+        private System.Windows.Forms.Label labelUsageOther;
     }
 }

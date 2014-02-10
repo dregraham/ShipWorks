@@ -8880,10 +8880,12 @@ namespace ShipWorks.Data.Model
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
 	public enum WorldShipGoodsFieldIndex:int
 	{
-		///<summary>ShipmentCustomsItemID. </summary>
-		ShipmentCustomsItemID,
+		///<summary>WorldShipGoodsID. </summary>
+		WorldShipGoodsID,
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
+		///<summary>ShipmentCustomsItemID. </summary>
+		ShipmentCustomsItemID,
 		///<summary>Description. </summary>
 		Description,
 		///<summary>TariffCode. </summary>

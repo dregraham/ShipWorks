@@ -161,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.Miva
 
             if (result == -1)
             {
-                throw new InvalidOperationException("Invalid order number returned from Miva Merchant.");
+                throw new GenericStoreException("Invalid order number returned from Miva Merchant.");
             }
 
             return result;

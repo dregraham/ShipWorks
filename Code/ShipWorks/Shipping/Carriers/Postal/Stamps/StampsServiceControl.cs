@@ -77,6 +77,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new ArgumentNullException("shipments");
             }
 
+            SuspendRateCriteriaChangeEvent();
+
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
             // Load the origin
@@ -84,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (MultiValueScope scope = new MultiValueScope())
             {
-                foreach (ShipmentEntity shipment in shipments)
+                foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Stamps.RequireFullAddressValidation);
@@ -92,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
                 }
             }
+
+            ResumeRateCriteriaChangeEvent();
         }
 
         /// <summary>

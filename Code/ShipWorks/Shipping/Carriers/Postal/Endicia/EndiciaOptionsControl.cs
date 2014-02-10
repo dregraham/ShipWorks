@@ -19,10 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public partial class EndiciaOptionsControl : PostalOptionsControlBase
     {
-        // Endicia or a reseller like Express1
-        EndiciaReseller endiciaReseller = EndiciaReseller.None;
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaOptionsControl"/> class resulting
         /// in the EndiciaReseller value being None.
@@ -118,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            switch (endiciaReseller)
+            switch (Reseller)
             {
                 case EndiciaReseller.Express1:
                     {

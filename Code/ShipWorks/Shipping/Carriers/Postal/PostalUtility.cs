@@ -366,7 +366,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             return false;
         }
 
-	    /// <summary>
+        /// <summary>
         /// Determines whether [is country eligible for free international delivery confirmation] [the specified country code].
         /// </summary>
         /// <param name="countryCode">The country code.</param>
@@ -375,12 +375,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </returns>
         private static bool IsCountryEligibleForFreeInternationalDeliveryConfirmation(string countryCode)
         {
-            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark,
-            // France, Germany, Great Britain, Northern Ireland, Israel, Netherlands, New Zealand, 
-            // Spain, and Switzerland
+            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
+            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia, 
+            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, and Switzerland
             List<string> eligibleCountryCodes = new List<string>
             {
-                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH"
+                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH", 
+                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG"
             };
 
             return eligibleCountryCodes.Contains(countryCode);
