@@ -269,8 +269,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 IgnoreAllCounterRates = true;
 
                 // Launch the setup wizard of the selected shipment type
-                DialogResult = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
-                Close();
+                DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+                
+                if (result == DialogResult.OK)
+                {
+                    DialogResult = result;
+                    Close();
+                }
+                else
+                {
+                    // Give the user a chance to cancel out of the wizard if they accidentally 
+                    // chose the wrong provider type and canceled out of the wizard
+                    Show(this.Owner);
+                }
             }
         }
 
