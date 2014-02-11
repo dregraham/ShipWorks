@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.UI.Wizard;
 using System.Xml;
-using System.IO;
-using System.Drawing.Printing;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -30,7 +19,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
-using System.Diagnostics;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -38,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    public partial class UpsSetupWizard : WizardForm
+    public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
         ShipmentType shipmentType;
         bool forceAccountOnly;

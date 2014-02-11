@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Properties;
-using System.Diagnostics;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
@@ -30,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wizard Form for setting up shipping with endicia
     /// </summary>
-    public partial class EndiciaSetupWizard : WizardForm
+    public partial class EndiciaSetupWizard : ShipmentTypeSetupWizardForm
     {
         EndiciaAccountEntity account;
         EndiciaApiClient endiciaApiClient = new EndiciaApiClient();

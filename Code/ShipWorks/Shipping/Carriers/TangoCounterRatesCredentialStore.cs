@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -255,8 +257,14 @@ namespace ShipWorks.Shipping.Carriers
                     {
                         try
                         {
+                            StoreEntity firstStore = StoreManager.GetAllStores().OrderByDescending(s => s.Enabled).FirstOrDefault();
+                            if (firstStore == null)
+                            {
+                                return;
+                            }
+
                             // Try to get the counter rates credentials from Tango
-                            productionCredentials = TangoWebClient.GetCounterRatesCredentials();
+                            productionCredentials = TangoWebClient.GetCounterRatesCredentials(firstStore);
                         }
                         catch (TangoException ex)
                         {

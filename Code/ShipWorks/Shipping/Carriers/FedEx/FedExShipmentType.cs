@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the setup wizard used for setting up the shipment type
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new FedExSetupWizard();
         }

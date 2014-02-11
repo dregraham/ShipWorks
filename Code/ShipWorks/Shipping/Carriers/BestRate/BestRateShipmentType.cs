@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -228,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             if (!bestRateShippingBrokers.Any())
             {
-                string message = string.Format("There are not any accounts configured to use with best rate.{0}Check the shipping settings to ensure " +
+                string message = string.Format("No accounts are configured to use with best rate.{0}Check the shipping settings to ensure " +
                                                "your shipping accounts have been setup for the shipping providers being used with best rate.", Environment.NewLine);
 
                 throw new ShippingException(message);
@@ -376,8 +377,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
                 RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
 
-                // Determine what the actual shipment type should be for the selected best rate (i.e. use Endicia if a postal type was selected)
-                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(bestRate.ShipmentType);
+                // Determine what the actual shipment type should be for the selected best rate
+                // (i.e. use Endicia if a postal type was selected)
+                ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
+                
+                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
                 CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
 
                 if (counterRatesProcessing != null)
@@ -386,12 +390,33 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShippingSettings.CheckForChangesNeeded();
                 }
 
-                if (eventArgs.SelectedRate == null)
+                // Select a rate based on the results of the dialog
+                if (eventArgs.SelectedRate != null)
                 {
+                    // The user has selected an existing rate, so just use it
+                    bestRate = eventArgs.SelectedRate;
+                }
+                else if (eventArgs.SelectedShipmentType != null)
+                {
+                    // Get the best rates for the newly created account
+                    IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
+                    RateGroup bestRateGroup = broker.GetBestRates(shipment, PreProcessExceptionHandler);
+
+                    // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
+                    // and filtered by service level
+                    bestRate = CompileBestRates(shipment, new List<RateGroup> { bestRateGroup }).Rates.FirstOrDefault();
+                }
+                else
+                {
+                    // This would mean the user canceled 
                     return null;
                 }
 
-                bestRate = eventArgs.SelectedRate;
+                // Ensure that the results of the dialog return an actual rate of some kind
+                if (bestRate == null)
+                {
+                    throw new ShippingException("ShipWorks could not find any rates.");
+                }
             }
 
             ApplySelectedShipmentRate(shipment, bestRate);
@@ -423,8 +448,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
                     break;
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
                     break;
                 case ShipmentTypeCode.FedEx:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);

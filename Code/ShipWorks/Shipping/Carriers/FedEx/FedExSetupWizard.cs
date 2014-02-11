@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Wizard for registering to use FedEx
     /// </summary>
-    public partial class FedExSetupWizard : WizardForm
+    public partial class FedExSetupWizard : ShipmentTypeSetupWizardForm
     {
         FedExAccountEntity account;
 

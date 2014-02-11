@@ -144,7 +144,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     OriginalTag = rate.Tag,
                     ResultKey = GetResultKey(rate),
-                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag)
+                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag),
+                    AccountDescription = AccountDescription(accountLookup[rate])
                 };
                 
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
@@ -152,9 +153,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
+            if (!filteredRates.Any())
+            {
+                // With no rates for the group, the carrier will default to UPS, so set it correctly if there are no rates.
+                bestRateGroup.Carrier = this.ShipmentType.ShipmentTypeCode;
+            }
+
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected virtual string AccountDescription(TAccount account)
+        {
+            return string.Empty;
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the Setup Wizard used to setup the "Other" shipment type
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new OtherSetupWizard();
         }

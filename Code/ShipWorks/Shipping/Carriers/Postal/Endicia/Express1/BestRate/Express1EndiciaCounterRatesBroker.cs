@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -153,6 +154,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
             {
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Updates the shipment account with the actual account
+        /// </summary>
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, EndiciaAccountEntity account)
+        {
+            Express1EndiciaAccountRepository ar = new Express1EndiciaAccountRepository();
+            EndiciaAccountEntity endiciaAccount = ar.Accounts.FirstOrDefault();
+
+            if (postalShipmentEntity.Endicia != null && endiciaAccount != null)
+            {
+                postalShipmentEntity.Endicia.EndiciaAccountID = endiciaAccount.EndiciaAccountID;
+                account = endiciaAccount;
+            }
+
+            base.UpdateChildAccountId(postalShipmentEntity, account);
         }
     }
 }

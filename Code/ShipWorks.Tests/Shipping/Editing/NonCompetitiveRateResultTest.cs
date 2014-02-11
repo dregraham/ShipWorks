@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Editing
         [TestMethod]
         public void Constructor_CopiesAllProperties()
         {
-            RateResult originalRate = new RateResult("Test", "3", 12.1m, "Foo") { ServiceLevel = ServiceLevelType.ThreeDays };
+            RateResult originalRate = new RateResult("Test", "3", 12.1m, "Foo") { ServiceLevel = ServiceLevelType.ThreeDays, IsCounterRate = true};
             NoncompetitiveRateResult testObject = new NoncompetitiveRateResult(originalRate, "MaskedBar");
 
             Assert.AreEqual("Test", testObject.Description);
@@ -22,6 +22,7 @@ namespace ShipWorks.Tests.Shipping.Editing
             Assert.AreEqual("Foo", testObject.Tag);
             Assert.AreEqual(ServiceLevelType.ThreeDays, testObject.ServiceLevel);
             Assert.AreEqual(originalRate, testObject.OriginalRate);
+            Assert.AreEqual(originalRate.IsCounterRate, testObject.IsCounterRate);
         }
 
         [TestMethod]

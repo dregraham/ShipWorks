@@ -571,6 +571,12 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.Designer.cs">
+      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\CounterRateProcessingWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -605,6 +611,7 @@
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />
@@ -630,6 +637,9 @@
     <Compile Include="Shipping\Editing\ExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\FootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1037,7 +1047,6 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
@@ -2222,6 +2231,7 @@
     <Compile Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.Designer.cs">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Actions\ShopifyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyPaymentStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyFulfillmentStatusCondition.cs" />
@@ -3036,18 +3046,18 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceStoreSelectionPage.Designer.cs">
       <DependentUpon>AmeriCommerceStoreSelectionPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.designer.cs">
-      <DependentUpon>AuctionSoundAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.designer.cs">
+      <DependentUpon>SellerVantageAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\AuctionSoundStoreType.cs" />
-    <Compile Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.cs">
+    <Compile Include="Stores\Platforms\SellerVantage\SellerVantageStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.Designer.cs">
-      <DependentUpon>AuctionSoundAccountPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.Designer.cs">
+      <DependentUpon>SellerVantageAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTask.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\CoreExtensions\Actions\BigCommerceOrderUpdateTaskEditor.cs">
@@ -6829,6 +6839,9 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
+      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\CounterRateProcessingWizardPage.resx">
       <DependentUpon>CounterRateProcessingWizardPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -8407,11 +8420,11 @@
     <EmbeddedResource Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceStoreSelectionPage.resx">
       <DependentUpon>AmeriCommerceStoreSelectionPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\AuctionSound\AuctionSoundAccountSettingsControl.resx">
-      <DependentUpon>AuctionSoundAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\SellerVantage\SellerVantageAccountSettingsControl.resx">
+      <DependentUpon>SellerVantageAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\AuctionSound\WizardPages\AuctionSoundAccountPage.resx">
-      <DependentUpon>AuctionSoundAccountPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\SellerVantage\WizardPages\SellerVantageAccountPage.resx">
+      <DependentUpon>SellerVantageAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\CommerceInterface\CoreExtensions\Actions\CommerceInterfaceShipmentUploadTaskEditor.resx">
       <DependentUpon>CommerceInterfaceShipmentUploadTaskEditor.cs</DependentUpon>
@@ -10175,6 +10188,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10522,6 +10537,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Amount\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\template.xsl" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\settings.xml" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Standard\settings.xml" />
@@ -12022,7 +12039,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

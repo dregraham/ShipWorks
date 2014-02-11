@@ -1041,7 +1041,7 @@ namespace ShipWorks.Data.Administration
 
         /// <summary>
         /// The selected SQL Server instance has changed
-        /// </summa
+        /// </summary>
         private void OnChangeSelectedInstance(object sender, EventArgs e)
         {
             ImageComboBoxItem selected = comboSqlServers.SelectedItem as ImageComboBoxItem;

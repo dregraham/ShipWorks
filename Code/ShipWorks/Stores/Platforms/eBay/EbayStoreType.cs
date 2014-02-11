@@ -535,6 +535,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ElementOutline outline = container.AddElement("eBay");
             outline.AddElement("LastModifiedDate", () => order.Value.OnlineLastModified);
             outline.AddElement("BuyerID", () => order.Value.EbayBuyerID);
+            outline.AddElement("RecordNumber", () => order.Value.SellingManagerRecord);
+
+            // Selling Manager record (legacy way)
+            ElementOutline recordElement = outline.AddElement("SellingManager");
+            recordElement.AddAttributeLegacy2x();
+            recordElement.AddElement("RecordNumber", () => order.Value.SellingManagerRecord);
 
             outline.AddElement("EligibleForGSP", () => order.Value.GspEligible);
             outline.AddElement("ShippingMethod", () => EnumHelper.GetDescription((EbayShippingMethod)order.Value.SelectedShippingMethod));
@@ -573,6 +579,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("TransactionID", () => item.Value.EbayTransactionID);
             outline.AddElement("RecordNumber", () => item.Value.SellingManagerRecord);
 
+            // Selling Manager record (legacy way)
+            ElementOutline recordElement = outline.AddElement("SellingManager");
+            recordElement.AddAttributeLegacy2x();
+            recordElement.AddElement("RecordNumber", () => item.Value.SellingManagerRecord);
+
             // generate auction-specific xml
             GenerateTemplateCommonElements(outline, item);
         }
@@ -593,10 +604,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // checkout status
             outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectivePaymentStatus) item.Value.EffectiveCheckoutStatus));
             outline.AddElement("CheckoutComplete", () => EbayUtility.IsCheckoutStatusComplete(item.Value) ? "true" : "false");
-
-            // Selling Manager record
-            ElementOutline sellingElement = outline.AddElement("SellingManager");
-            sellingElement.AddElement("RecordNumber", () => item.Value.SellingManagerRecord.ToString());
 
             // only write out paypal stuff if we know the paypal transaction id
             ElementOutline paypalElement = outline.AddElement("PayPal", ElementOutline.If(() => item.Value.PayPalTransactionID.Length > 0));
@@ -755,7 +762,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
             finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
 
             List<long> orderIDs = context.SelectedKeys.ToList();
-            finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
+
+            try
+            {
+                finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
+            }
+            catch (EbayException ex)
+            {
+                context.Complete(MenuCommandResult.Error, ex.Message);
+            }
         }
 
         /// <summary>

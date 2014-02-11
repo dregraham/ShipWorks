@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             order.OnlineCustomerID = nsOrder.Customer == null ? null : nsOrder.Customer.CustomerId;
 
             // requested shipping
-            order.RequestedShipping = nsOrder.Shipping.Name;
+            order.RequestedShipping = nsOrder.Shipping == null ? string.Empty : nsOrder.Shipping.Name;
 
             // order status
             if (nsOrder.Status != null)

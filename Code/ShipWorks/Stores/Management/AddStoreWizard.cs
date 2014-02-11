@@ -612,9 +612,12 @@ namespace ShipWorks.Stores.Management
                 // Clear out any previous control they may have had
                 panelOnlineUpdatePlaceholder.Controls.Clear();
                 onlineUpdateConfiguredStoreID = 0;
+                panelUploadSettings.Visible = false;
 
                 return false;
             }
+
+            panelUploadSettings.Visible = true;
 
             // See if the existing one is already for this store
             if (store.StoreID == onlineUpdateConfiguredStoreID)
@@ -754,6 +757,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void SaveSettingsActions()
         {
+            // If this store does not support uploads, the online update placeholder will have no controls so just return.
+            if (panelOnlineUpdatePlaceholder.Controls.Count == 0)
+            {
+                return;
+            }
+
             OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
 
             // See what tasks are configured to be created

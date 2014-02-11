@@ -158,5 +158,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             package.FedExPackageID = packageId;
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(FedExAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }

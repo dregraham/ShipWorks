@@ -13,10 +13,12 @@ namespace ShipWorks.Shipping.Editing
         private readonly string maskedServiceTypeDescription;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NoncompetitiveRateResult"/> class.
         /// </summary>
-        public NoncompetitiveRateResult(RateResult originalRate, string maskedServiceTypeDescription) :
-            base(originalRate.Description, originalRate.Days, originalRate.Amount, originalRate.Tag)
+        /// <param name="originalRate">The original rate.</param>
+        /// <param name="maskedServiceTypeDescription">The masked service type description.</param>
+        public NoncompetitiveRateResult(RateResult originalRate, string maskedServiceTypeDescription) 
+            : base(originalRate.Description, originalRate.Days, originalRate.Amount, originalRate.Tag)
         {
             this.maskedServiceTypeDescription = maskedServiceTypeDescription;
             AmountFootnote = originalRate.AmountFootnote;
@@ -25,6 +27,7 @@ namespace ShipWorks.Shipping.Editing
             ExpectedDeliveryDate = originalRate.ExpectedDeliveryDate;
             CarrierDescription = originalRate.CarrierDescription;
             ShipmentType = originalRate.ShipmentType;
+            IsCounterRate = originalRate.IsCounterRate;
         }
 
         /// <summary>
@@ -43,7 +46,6 @@ namespace ShipWorks.Shipping.Editing
             {
                 Description = "Undisclosed " + maskedServiceTypeDescription;
                 CarrierDescription = "Undisclosed";
-                ShipmentType = ShipmentTypeCode.Other;
             }
         }
     }

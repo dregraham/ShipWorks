@@ -906,7 +906,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             }
                         }
 
-                        throw new EndiciaApiException(response.Status, errorMessage);
+                        throw new EndiciaApiException(response.Status, errorMessage ?? "ShipWorks was unable to get rates at this time.");
                     }
 
                     // No rates available for this service\class\type

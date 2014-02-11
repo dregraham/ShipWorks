@@ -100,5 +100,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 
             return base.WrapShippingException(ex);
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(OnTracAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }

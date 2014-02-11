@@ -88,7 +88,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Miva: return new Platforms.Miva.MivaStoreType(store);
                 case StoreTypeCode.MarketplaceAdvisor: return new Platforms.MarketplaceAdvisor.MarketplaceAdvisorStoreType(store);
                 case StoreTypeCode.Yahoo: return new Platforms.Yahoo.YahooStoreType(store);
-                case StoreTypeCode.AuctionSound: return new Platforms.AuctionSound.AuctionSoundStoreType(store);
+                case StoreTypeCode.SellerVantage: return new Platforms.SellerVantage.SellerVantageStoreType(store);
                 case StoreTypeCode.OrderDynamics: return new Platforms.OrderDynamics.OrderDynamicsStoreType(store);
                 case StoreTypeCode.WebShopManager: return new Platforms.WebShopManager.WebShopManagerStoreType(store);
                 case StoreTypeCode.SearchFit: return new Platforms.SearchFit.SearchFitStoreType(store);

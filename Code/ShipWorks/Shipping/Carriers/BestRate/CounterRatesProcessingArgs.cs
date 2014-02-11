@@ -51,6 +51,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// The ShipmentType that was selected from the wizard. This will be used by preprocessed once the wizard is closed.
+        /// </summary>
+        public ShipmentType SelectedShipmentType
+        {
+            get; 
+            set; 
+        }
+
+        /// <summary>
         /// Gets the rate that was selected by the event
         /// </summary>
         public RateResult SelectedRate

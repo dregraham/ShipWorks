@@ -28,5 +28,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// new carrier setup wizard needs displayed.
         /// </summary>
         public Func<bool> SignUpAction { get; set; }
+
+        /// <summary>
+        /// Gets or sets the account description.
+        /// </summary>
+        public string AccountDescription { get; set; }
     }
 }

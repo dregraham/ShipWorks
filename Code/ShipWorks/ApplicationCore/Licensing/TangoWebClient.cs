@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using System.Xml;
 using System.Net;
@@ -72,19 +73,92 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public static Dictionary<string, string> GetCounterRatesCredentials()
+        public static Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
         {
-            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
 
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string action = "getcounterratecredentials";
+
+            // Get the license from the store so we know how to log
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            // Get the store type
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // Create our http variable request submitter
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "getcounterratescredentials");
+            
+            // Both methods use action
+            postRequest.Variables.Add("action", action);
+            
+            // Trial shipment logging
+            if (license.IsTrial)
+            {
+                postRequest.Variables.Add("storecode", storeType.TangoCode);
+                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            else
+            {
+                postRequest.Variables.Add("license", license.Key);
+            }
+            
+            // Get the credentials from Tango
             XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
 
-            // Convert to an XEelement so we can use LINQ
-            IEnumerable<XElement> rootNodes = responseXmlDocument.ToXElement().DescendantNodes().OfType<XElement>();
-            results = rootNodes.ToDictionary(n => n.Name.ToString(), n => n.Value);
+            // Pull the credentials from the response; none of the fields are encrypted in the response
+            // so we can easily/quickly update them in Tango if they ever need to change
+
+            // FedEx fields - password needs to encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", "/CounterRateCredentials/FedEx/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results, "FedEx");
+            
+            // UPS fields - access key needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsPassword", "/CounterRateCredentials/UPS/Password", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results, "UPS");
+            
+            // Express1 for Endicia fields - passphrase needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
+
+            // Express1 for Stamps.com fields - password needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
             return results;
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response.
+        /// </summary>
+        private static void AddCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                dictionary.Add(keyName, node.InnerText.Trim());
+            }
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response and encrypt the value. This is necessary
+        /// for a couple of the password and access key values since the API web clients are expecting these values to
+        /// be encrypted.
+        /// </summary>
+        private static void AddEncryptedCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary, string salt)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                string encryptedValue = SecureText.Encrypt(node.InnerText.Trim(), salt);
+                dictionary.Add(keyName, encryptedValue);
+            }
         }
 
         /// <summary>
@@ -172,9 +246,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Log the given processed shipment to Tango
+        /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
+        /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public static void LogShipment(StoreEntity store, ShipmentEntity shipment)
+        public static void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
             {
@@ -241,6 +316,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                         .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                         .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier && choice.InsuranceValue > 0)
                         .Any();
+                }
+
+                if (isRetry)
+                {
+                    postRequest.Variables.Add("isretry", "1");
                 }
 
                 postRequest.Variables.Add("action", "logshipmentdetails");
@@ -598,7 +678,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
         {
             // Timeout
-            postRequest.Timeout = TimeSpan.FromSeconds(15);
+            postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Set the uri
             postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");

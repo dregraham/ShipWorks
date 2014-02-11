@@ -269,7 +269,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         protected virtual OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            int orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0);
+            long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
 
             // pull in pre/postfix options
             string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");

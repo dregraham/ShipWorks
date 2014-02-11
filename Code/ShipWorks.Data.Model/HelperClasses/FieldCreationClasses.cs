@@ -18727,15 +18727,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>
 	public partial class WorldShipGoodsFields
 	{
-		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentCustomsItemID field instance</summary>
-		public static EntityField2 ShipmentCustomsItemID
+		/// <summary>Creates a new WorldShipGoodsEntity.WorldShipGoodsID field instance</summary>
+		public static EntityField2 WorldShipGoodsID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentCustomsItemID);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.WorldShipGoodsID);}
 		}
 		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentID field instance</summary>
 		public static EntityField2 ShipmentID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentCustomsItemID field instance</summary>
+		public static EntityField2 ShipmentCustomsItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentCustomsItemID);}
 		}
 		/// <summary>Creates a new WorldShipGoodsEntity.Description field instance</summary>
 		public static EntityField2 Description

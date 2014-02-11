@@ -248,9 +248,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 
-				case "Goods":
-					this.Goods.Add((WorldShipGoodsEntity)relatedEntity);
-					break;
+
 				case "Packages":
 					this.Packages.Add((WorldShipPackageEntity)relatedEntity);
 					break;
@@ -271,9 +269,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 
-				case "Goods":
-					base.PerformRelatedEntityRemoval(this.Goods, relatedEntity, signalRelatedEntityManyToOne);
-					break;
+
 				case "Packages":
 					base.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
@@ -1568,7 +1564,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(_goods==null)
 				{
 					_goods = new EntityCollection<WorldShipGoodsEntity>(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipGoodsEntityFactory)));
-					_goods.SetContainingEntityInfo(this, "WorldShipShipment");
+
 				}
 				return _goods;
 			}

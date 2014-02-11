@@ -74,5 +74,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
 
             ((StampsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(StampsAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }

@@ -103,16 +103,16 @@ namespace ShipWorks.Shipping.Editing
         {
             sandGrid.Rows.Clear();
 
-            if (rateGroup.Carrier == ShipmentTypeCode.BestRate)
-            {
-                gridColumnProvider.Visible = true;
-            }
+            gridColumnProvider.Visible = (rateGroup.Carrier == ShipmentTypeCode.BestRate);
 
             foreach (RateResult rate in rateGroup.Rates)
             {
                 Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
-                if (rate.ShipmentType == ShipmentTypeCode.Other)
+
+                NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
+                if (noncompetitiveRateResult != null)
                 {
+                    // If non-competitive, show the blue truck.
                     providerLogo = ShippingIcons.truck_blue;
                 }
 

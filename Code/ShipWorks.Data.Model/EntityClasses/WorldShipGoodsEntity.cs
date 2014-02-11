@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-		private WorldShipShipmentEntity _worldShipShipment;
+
 
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,8 +53,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name WorldShipShipment</summary>
-			public static readonly string WorldShipShipment = "WorldShipShipment";
+
 
 
 
@@ -90,22 +89,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 				
 
 		/// <summary> CTor</summary>
-		/// <param name="shipmentCustomsItemID">PK value for WorldShipGoods which data should be fetched into this WorldShipGoods object</param>
+		/// <param name="worldShipGoodsID">PK value for WorldShipGoods which data should be fetched into this WorldShipGoods object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public WorldShipGoodsEntity(System.Int64 shipmentCustomsItemID):base("WorldShipGoodsEntity")
+		public WorldShipGoodsEntity(System.Int64 worldShipGoodsID):base("WorldShipGoodsEntity")
 		{
 			InitClassEmpty(null, CreateFields());
-			this.ShipmentCustomsItemID = shipmentCustomsItemID;
+			this.WorldShipGoodsID = worldShipGoodsID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="shipmentCustomsItemID">PK value for WorldShipGoods which data should be fetched into this WorldShipGoods object</param>
+		/// <param name="worldShipGoodsID">PK value for WorldShipGoods which data should be fetched into this WorldShipGoods object</param>
 		/// <param name="validator">The custom validator object for this WorldShipGoodsEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public WorldShipGoodsEntity(System.Int64 shipmentCustomsItemID, IValidator validator):base("WorldShipGoodsEntity")
+		public WorldShipGoodsEntity(System.Int64 worldShipGoodsID, IValidator validator):base("WorldShipGoodsEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
-			this.ShipmentCustomsItemID = shipmentCustomsItemID;
+			this.WorldShipGoodsID = worldShipGoodsID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
@@ -118,11 +117,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				_worldShipShipment = (WorldShipShipmentEntity)info.GetValue("_worldShipShipment", typeof(WorldShipShipmentEntity));
-				if(_worldShipShipment!=null)
-				{
-					_worldShipShipment.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
+
 
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -139,7 +134,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch((WorldShipGoodsFieldIndex)fieldIndex)
 			{
 				case WorldShipGoodsFieldIndex.ShipmentID:
-					DesetupSyncWorldShipShipment(true, false);
+
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -163,9 +158,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "WorldShipShipment":
-					this.WorldShipShipment = (WorldShipShipmentEntity)entity;
-					break;
+
 
 
 
@@ -190,9 +183,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "WorldShipShipment":
-					toReturn.Add(WorldShipGoodsEntity.Relations.WorldShipShipmentEntityUsingShipmentID);
-					break;
+
 
 
 
@@ -231,9 +222,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "WorldShipShipment":
-					SetupSyncWorldShipShipment(relatedEntity);
-					break;
+
 
 
 				default:
@@ -250,9 +239,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "WorldShipShipment":
-					DesetupSyncWorldShipShipment(false, true);
-					break;
+
 
 
 				default:
@@ -275,10 +262,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_worldShipShipment!=null)
-			{
-				toReturn.Add(_worldShipShipment);
-			}
+
 
 			return toReturn;
 		}
@@ -305,7 +289,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				info.AddValue("_worldShipShipment", (!this.MarkedForDeletion?_worldShipShipment:null));
+
 
 			}
 			
@@ -343,15 +327,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'WorldShipShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoWorldShipShipment()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(WorldShipShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
-			return bucket;
-		}
 
 	
 		
@@ -420,7 +395,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("WorldShipShipment", _worldShipShipment);
+
 
 
 
@@ -432,10 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-			if(_worldShipShipment!=null)
-			{
-				_worldShipShipment.ActiveContext = base.ActiveContext;
-			}
+
 
 		}
 
@@ -445,7 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_worldShipShipment = null;
+
 
 			PerformDependencyInjection();
 			
@@ -464,10 +436,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable = null;
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipmentCustomsItemID", fieldHashtable);
+			_fieldsCustomProperties.Add("WorldShipGoodsID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipmentCustomsItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Description", fieldHashtable);
@@ -495,38 +470,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _worldShipShipment</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncWorldShipShipment(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipGoodsEntity.Relations.WorldShipShipmentEntityUsingShipmentID, true, signalRelatedEntity, "Goods", resetFKFields, new int[] { (int)WorldShipGoodsFieldIndex.ShipmentID } );		
-			_worldShipShipment = null;
-		}
-
-		/// <summary> setups the sync logic for member _worldShipShipment</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncWorldShipShipment(IEntity2 relatedEntity)
-		{
-			if(_worldShipShipment!=relatedEntity)
-			{
-				DesetupSyncWorldShipShipment(true, true);
-				_worldShipShipment = (WorldShipShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _worldShipShipment, new PropertyChangedEventHandler( OnWorldShipShipmentPropertyChanged ), "WorldShipShipment", WorldShipGoodsEntity.Relations.WorldShipShipmentEntityUsingShipmentID, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnWorldShipShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
@@ -563,17 +506,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'WorldShipShipment' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathWorldShipShipment
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(WorldShipShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("WorldShipShipment")[0], (int)ShipWorks.Data.Model.EntityType.WorldShipGoodsEntity, (int)ShipWorks.Data.Model.EntityType.WorldShipShipmentEntity, 0, null, null, null, null, "WorldShipShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
-			}
-		}
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
@@ -600,15 +532,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return WorldShipGoodsEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShipmentCustomsItemID property of the Entity WorldShipGoods<br/><br/>
+		/// <summary> The WorldShipGoodsID property of the Entity WorldShipGoods<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "WorldShipGoods"."ShipmentCustomsItemID"<br/>
+		/// <remarks>Mapped on  table field: "WorldShipGoods"."WorldShipGoodsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ShipmentCustomsItemID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		public virtual System.Int64 WorldShipGoodsID
 		{
-			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, true); }
-			set	{ SetValue((int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, value); }
+			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.WorldShipGoodsID, true); }
+			set	{ SetValue((int)WorldShipGoodsFieldIndex.WorldShipGoodsID, value); }
 		}
 
 		/// <summary> The ShipmentID property of the Entity WorldShipGoods<br/><br/>
@@ -620,6 +552,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.ShipmentID, true); }
 			set	{ SetValue((int)WorldShipGoodsFieldIndex.ShipmentID, value); }
+		}
+
+		/// <summary> The ShipmentCustomsItemID property of the Entity WorldShipGoods<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "WorldShipGoods"."ShipmentCustomsItemID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 ShipmentCustomsItemID
+		{
+			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, true); }
+			set	{ SetValue((int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, value); }
 		}
 
 		/// <summary> The Description property of the Entity WorldShipGoods<br/><br/>
@@ -712,40 +655,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Gets / sets related entity of type 'WorldShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual WorldShipShipmentEntity WorldShipShipment
-		{
-			get
-			{
-				return _worldShipShipment;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncWorldShipShipment(value);
-				}
-				else
-				{
-					if(value==null)
-					{
-						if(_worldShipShipment != null)
-						{
-							_worldShipShipment.UnsetRelatedEntity(this, "Goods");
-						}
-					}
-					else
-					{
-						if(_worldShipShipment!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "Goods");
-						}
-					}
-				}
-			}
-		}
 
 	
 		

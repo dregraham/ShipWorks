@@ -15,9 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -50,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the Form used to do the setup for the Stamps.com API
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new StampsSetupWizard();
         }
@@ -575,7 +573,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of a StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new StampsBestRateBroker();
+            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
+            return counterBroker is NullShippingBroker ? new StampsBestRateBroker() : counterBroker;
         }
     }
 }

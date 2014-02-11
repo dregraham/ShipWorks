@@ -19,9 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -111,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the Form used to do the setup for Endicia label server
         /// </summary>
-        public override WizardForm CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new EndiciaSetupWizard();
         }
@@ -717,7 +715,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An instance of an EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new EndiciaBestRateBroker();
+            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
+            return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
         }
     }
 }
