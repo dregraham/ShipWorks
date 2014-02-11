@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Editing
 {
-    partial class ExceptionsRateFootNoteControl
+    partial class ExceptionsRateFootnoteControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -70,7 +70,7 @@
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.exceptionsLink);
             this.Controls.Add(this.errorMessage);
-            this.Name = "ExceptionsRateFootNoteControl";
+            this.Name = "ExceptionsRateFootnoteControl";
             this.Size = new System.Drawing.Size(396, 20);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);

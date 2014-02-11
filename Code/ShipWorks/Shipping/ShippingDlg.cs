@@ -1,15 +1,13 @@
-﻿using System.Drawing;
-using Divelements.SandGrid.Rendering;
-using System.Threading;
-using System.Windows.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.BestRate.Setup;
-using log4net;
-using RestSharp.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -21,8 +19,8 @@ using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Setup;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
@@ -33,15 +31,8 @@ using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Utility;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping
 {
@@ -51,46 +42,46 @@ namespace ShipWorks.Shipping
     partial class ShippingDlg : Form
     {
         // The singleton list of the current set of shipping errors.
-        static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
+        private static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
 
         // We load shipments asyncronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
-        bool loadingSelectedShipments = false;
+        private bool loadingSelectedShipments = false;
 
         // Usually when changing selected shipments if the service control type doesn't change we don't recreate it, we just load the new data into it.
         // But after changing shipping settings we need to make sure a new one gets initialized to pick up any new settings.
-        bool forceRecreateServiceControl = false;
+        private bool forceRecreateServiceControl = false;
 
         // Indicates if the tracking control will be initially displayed
-        bool initialDisplayTracking = false;
+        private bool initialDisplayTracking = false;
 
         // The list of shipments that are the ones currently shown in the UI, not necessarily the current selection dependong on async loading stuff
-        List<ShipmentEntity> uiDisplayedShipments = new List<ShipmentEntity>();
+        private List<ShipmentEntity> uiDisplayedShipments = new List<ShipmentEntity>();
 
         // List of shipment types that were "Activated" at the time the UI was loaded.  This is important b\c if it got activated after we loaded the UI from another machine,
         // and we used the "live" value, then we'd think a shipment was currently loaded when really it wasn't.
-        List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
+        private List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
 
         // Maps shipment ID's to the list of rates for the shipment
-        readonly Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
+        private readonly Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
 
         // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
         // counter rates during the current batch.  This variable will be for tracking that flag.
-        bool showCounterRateSetupWizard = true;
+        private bool showCounterRateSetupWizard = true;
 
         private List<ShipmentEntity> loadedShipmentEntities;
         private bool cancelProcessing;
 
         private System.Windows.Forms.Timer getRatesTimer = new System.Windows.Forms.Timer();
-        BackgroundWorker getRatesBackgroundWorker;
+        private BackgroundWorker getRatesBackgroundWorker;
+        private const int getRatesDebounceTime = 500;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDlg(List<ShipmentEntity> shipments)
             : this(shipments, false)
-        {
-        }
+        {}
 
         /// <summary>
         /// Constructor
@@ -105,7 +96,7 @@ namespace ShipWorks.Shipping
             }
 
             getRatesTimer.Tick += OnGetRatesTimerTick;
-            getRatesTimer.Interval = 500;
+            getRatesTimer.Interval = getRatesDebounceTime;
 
             ThemedBorderProvider.Apply(rateControlArea);
 
@@ -182,12 +173,12 @@ namespace ShipWorks.Shipping
 
             if (!multiValued && comboShipmentType.SelectedIndex >= 0)
             {
-                selected = (ShipmentTypeCode) comboShipmentType.SelectedValue;
+                selected = (ShipmentTypeCode)comboShipmentType.SelectedValue;
             }
 
             List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = ShipmentTypeManager.ShipmentTypes
-                .Where(t => ShippingManager.IsShipmentTypeEnabled(t.ShipmentTypeCode))
-                .Select(t => new KeyValuePair<string, ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode)).ToList();
+                   .Where(t => ShippingManager.IsShipmentTypeEnabled(t.ShipmentTypeCode))
+                   .Select(t => new KeyValuePair<string, ShipmentTypeCode>(t.ShipmentTypeName, t.ShipmentTypeCode)).ToList();
 
             if (selected != null && !enabledTypes.Any(p => p.Value == selected.Value))
             {
@@ -216,12 +207,12 @@ namespace ShipWorks.Shipping
         private void SortShipmentTypes(List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes)
         {
             enabledTypes.Sort(new Comparison<KeyValuePair<string, ShipmentTypeCode>>((left, right) =>
-                {
-                    string lValue = left.Key == "None" ? "z" : left.Key;
-                    string rValue = right.Key == "None" ? "z" : right.Key;
+            {
+                string lValue = left.Key == "None" ? "z" : left.Key;
+                string rValue = right.Key == "None" ? "z" : right.Key;
 
-                    return lValue.CompareTo(rValue);
-                }));
+                return lValue.CompareTo(rValue);
+            }));
         }
 
         /// <summary>
@@ -339,16 +330,17 @@ namespace ShipWorks.Shipping
             uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
-                "Preparing Shipments",
-                "ShipWorks is preparing the shipments.",
-                "Shipment {0} of {1}");
+            BackgroundExecutor<ShipmentEntity> executor = 
+				new BackgroundExecutor<ShipmentEntity>(this,
+                                                                                                 "Preparing Shipments",
+                                                                                                 "ShipWorks is preparing the shipments.",
+                                                                                                 "Shipment {0} of {1}");
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += LoadSelectedShipmentsCompleted;
 
             // User state that will get passed to the completed method
-            var userState = new Dictionary<string, object>();
+            Dictionary<string, object> userState = new Dictionary<string, object>();
             userState["loaded"] = loaded;
             userState["deleted"] = deleted;
             userState["resortWhenDone"] = resortWhenDone;
@@ -360,62 +352,60 @@ namespace ShipWorks.Shipping
 
             // Code to execute for each shipment
             executor.ExecuteAsync((shipment, state, issueAdder) =>
+            {
+                // If we already know its deleted, don't bother
+                if (shipment.DeletedFromDatabase)
                 {
-                    // If we already know its deleted, don't bother
-                    if (shipment.DeletedFromDatabase)
+                    deleted.Add(shipment);
+                }
+                else
+                {
+                    try
+                    {
+                        // Only load the specific data if the shipment type is setup, b\c if its not, 
+                        // then we don't have proper defaults to load from.
+                        if (IsShipmentTypeActivatedUI((ShipmentTypeCode)shipment.ShipmentType))
+                        {
+                            ShippingManager.EnsureShipmentLoaded(shipment);
+                        }
+                            // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
+                        else
+                        {
+                            CustomsManager.LoadCustomsItems(shipment, false);
+                        }
+
+                        loaded.Add(shipment);
+                    }
+                    catch (ObjectDeletedException)
                     {
                         deleted.Add(shipment);
                     }
-                    else
+                    catch (SqlForeignKeyException)
                     {
-                        try
-                        {
-                            // Only load the specific data if the shipment type is setup, b\c if its not, 
-                            // then we don't have proper defaults to load from.
-                            if (IsShipmentTypeActivatedUI((ShipmentTypeCode)shipment.ShipmentType))
-                            {
-                                ShippingManager.EnsureShipmentLoaded(shipment);
-                            }
-                            // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
-                            else
-                            {
-                                CustomsManager.LoadCustomsItems(shipment, false);
-                            }
-
-                            loaded.Add(shipment);
-                        }
-                        catch (ObjectDeletedException)
+                        deleted.Add(shipment);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
+                        // the New Shipment creation procedure can be initiated.  This can result in 
+                        // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
+                        if (ex.Data.Contains("UpdateDynamicData"))
                         {
                             deleted.Add(shipment);
                         }
-                        catch (SqlForeignKeyException)
+                        else
                         {
-                            deleted.Add(shipment);
-                        }
-                        catch (InvalidOperationException ex)
-                        {
-                            // If a processed shipment has been deleted by another SW instance and the user tries to load it here,
-                            // the New Shipment creation procedure can be initiated.  This can result in 
-                            // an InvalidOperationException.  It can only mean the base shipment entity has been deleted.
-                            if (ex.Data.Contains("UpdateDynamicData"))
-                            {
-                                deleted.Add(shipment);
-                            }
-                            else
-                            {
-                                // we don't want any other causes of InvalidOperationException to get eaten
-                                throw;
-                            }
+                            // we don't want any other causes of InvalidOperationException to get eaten
+                            throw;
                         }
                     }
-                },
-
-                // Each shipment to execute the code for
-                shipmentsToLoad,
-                
-                // User state
-                userState
-            );
+                }
+            },
+                                  // Each shipment to execute the code for
+                                  shipmentsToLoad,
+                                  // User state
+                                  userState
+                );
         }
 
         /// <summary>
@@ -430,14 +420,14 @@ namespace ShipWorks.Shipping
 
             // Save changes to the database for those entities that have been completely removed from the grid.  If we didn't do this now, then
             // the save would never happen, b\c we wouldnt have a reference to it when we closed.
-            var removedNeedsSaved = uiDisplayedShipments.Where(s => !s.DeletedFromDatabase && shipmentControl.FindRow(s.ShipmentID) == null).ToList();
+            List<ShipmentEntity> removedNeedsSaved = uiDisplayedShipments.Where(s => !s.DeletedFromDatabase && shipmentControl.FindRow(s.ShipmentID) == null).ToList();
 
             // For the one's that have been removed, ignore any concurrency\deleted errors
             SaveShipmentsToDatabase(removedNeedsSaved, false);
 
             // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
-            var destinationChangeNeedsSaved = uiDisplayedShipments.Except(removedNeedsSaved)
-                .Where(s => s.Fields[ShipmentFields.ShipStateProvCode.FieldIndex].IsChanged || s.Fields[ShipmentFields.ShipCountryCode.FieldIndex].IsChanged).ToList();
+            List<ShipmentEntity> destinationChangeNeedsSaved = uiDisplayedShipments.Except(removedNeedsSaved)
+                                                                                   .Where(s => s.Fields[ShipmentFields.ShipStateProvCode.FieldIndex].IsChanged || s.Fields[ShipmentFields.ShipCountryCode.FieldIndex].IsChanged).ToList();
 
             // We need to show the user if anything went wrong while doing that
             Dictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
@@ -462,7 +452,7 @@ namespace ShipWorks.Shipping
             }
 
             // Go through each one not known to be deleted and try to get it completely refreshed so we can update it's UI display
-            foreach (var pair in errors)
+            foreach (KeyValuePair<ShipmentEntity, Exception> pair in errors)
             {
                 ShipmentEntity shipment = pair.Key;
 
@@ -493,8 +483,8 @@ namespace ShipWorks.Shipping
                 else
                 {
                     MessageHelper.ShowError(this,
-                        "The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
-                        "The shipments will be refreshed to reflect the recent changes.");
+                                            "The selected shipments were edited or deleted by another ShipWorks user and your changes could not be saved.\n\n" +
+                                            "The shipments will be refreshed to reflect the recent changes.");
                 }
             }
 
@@ -505,15 +495,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The second part of the load selected shipments routine, after we have assurred all carrier specific data has been loaded
         /// </summary>
-        void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
+        private void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
         {
             loadingSelectedShipments = false;
 
             // Extract userState
-            var userState = (Dictionary<string, object>) e.UserState;
+            Dictionary<string, object> userState = (Dictionary<string, object>)e.UserState;
             loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
-            List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
-            bool resortWhenDone = (bool) userState["resortWhenDone"];
+            List<ShipmentEntity> deleted = (List<ShipmentEntity>)userState["deleted"];
+            bool resortWhenDone = (bool)userState["resortWhenDone"];
             bool getRatesWhenDone = (bool)userState["getRatesWhenDone"];
 
             // Go thread each shipment that we loaded and update the corresponding row in the grid with the latest shipment data
@@ -541,7 +531,7 @@ namespace ShipWorks.Shipping
             // that had been deleted too, but those will get wiped out when we do the RefreshAndRestor.
             if (e.Canceled)
             {
-                var notLoaded = shipmentControl.SelectedRows.Where(r => !loadedShipmentEntities.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
+                List<ShipmentGridRow> notLoaded = shipmentControl.SelectedRows.Where(r => !loadedShipmentEntities.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
 
                 if (notLoaded.Count > 0)
                 {
@@ -567,7 +557,7 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = null;
 
             bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed);
-            
+
             // To have editing enabled, its also necesary to have permissions for all of them
             if (enableEditing)
             {
@@ -603,7 +593,7 @@ namespace ShipWorks.Shipping
                 if (shipmentType != null)
                 {
                     // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
                     if (!enabledTypes.Any(p => p.Value == shipmentType.ShipmentTypeCode))
                     {
                         enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
@@ -667,7 +657,7 @@ namespace ShipWorks.Shipping
 
             if (getRatesWhenDone)
             {
-               GetRates(); 
+                GetRates();
             }
         }
 
@@ -684,7 +674,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool IsShipmentTypeActivatedUI(ShipmentEntity shipment)
         {
-            return IsShipmentTypeActivatedUI((ShipmentTypeCode) shipment.ShipmentType);
+            return IsShipmentTypeActivatedUI((ShipmentTypeCode)shipment.ShipmentType);
         }
 
         /// <summary>
@@ -725,7 +715,7 @@ namespace ShipWorks.Shipping
         {
             // Determine the current seelction - don't consider deleted, or based on where this function is called we'd end up
             // in a stack overflow.  The deleted ones will get unselected by the processing following this function call in LoadSelectedShipmentsCompleted.
-            var selected = shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase).ToDictionary(s => s.ShipmentID, s => true);
+            Dictionary<long, bool> selected = shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase).ToDictionary(s => s.ShipmentID, s => true);
 
             if (selected.Count != loaded.Count)
             {
@@ -759,7 +749,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Setup of the selected shipment type has completed, we can reload the UI
         /// </summary>
-        void OnShipmentTypeSetupComplete(object sender, EventArgs e)
+        private void OnShipmentTypeSetupComplete(object sender, EventArgs e)
         {
             LoadSelectedShipments(false);
         }
@@ -787,8 +777,8 @@ namespace ShipWorks.Shipping
                 if (newServiceControl != null)
                 {
                     // If the type we need didn't change, then don't change it
-                    if (!forceRecreateServiceControl && ServiceControl != null && 
-                        ServiceControl.GetType() == newServiceControl.GetType() && 
+                    if (!forceRecreateServiceControl && ServiceControl != null &&
+                        ServiceControl.GetType() == newServiceControl.GetType() &&
                         ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
                     {
                         // Get rid of the one we just created and use the old one
@@ -1005,7 +995,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The selected shipment(s) has been edited in a such a way that the rates are no longer valid.
         /// </summary>
-        void OnRateCriteriaChanged(object sender, EventArgs e)
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             // Since this could change if customs needs generated, we need to save right now.
             SaveChangesToUIDisplayedShipments();
@@ -1032,7 +1022,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// A full reload of rates is required
         /// </summary>
-        void OnRateReloadRequired(object sender, EventArgs e)
+        private void OnRateReloadRequired(object sender, EventArgs e)
         {
             // Clear out all of the rates, whether they are selected or not, since we know they need reloaded
             shipmentRateMap.Clear();
@@ -1150,7 +1140,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The user has changed the selected destination country\state changed
         /// </summary>
-        void OnRecipientDestinationChanged(object sender, EventArgs e)
+        private void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
             // Since this could change if customs needs generated, we need to save right now.
             bool success = SaveUIDisplayedShipments();
@@ -1171,7 +1161,7 @@ namespace ShipWorks.Shipping
                 // If we didn't successfully save, we need to reload the grid completely instead of just updating the customs display.
                 // Don't want to do it directly, as we're in the middle of a change event - and reloading the UI out from undering could 
                 // relaly goof that up.
-                BeginInvoke(new MethodInvoker(() => LoadSelectedShipments(true)));                
+                BeginInvoke(new MethodInvoker(() => LoadSelectedShipments(true)));
             }
         }
 
@@ -1370,13 +1360,12 @@ namespace ShipWorks.Shipping
             ToolStripMenuItem manageProfilesMenuItem = new ToolStripMenuItem("Manage Profiles...");
             manageProfilesMenuItem.Click += OnProfiles;
             contextMenuProfiles.Items.Add(manageProfilesMenuItem);
-
         }
 
         /// <summary>
         /// User has selected to apply a profile to the selected shipments
         /// </summary>
-        void OnApplyProfile(object sender, EventArgs e)
+        private void OnApplyProfile(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
@@ -1410,7 +1399,6 @@ namespace ShipWorks.Shipping
             // Determine if there is security allowed for all of them
             bool securityCreateEditProcess = uiDisplayedShipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.Order.OrderID));
             bool securityVoidDelete = uiDisplayedShipments.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, s.Order.OrderID));
-
 
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
@@ -1571,25 +1559,24 @@ namespace ShipWorks.Shipping
 
             // Executes after everyting is totally done, and is on the UI thread
             executor.ExecuteCompleted += (object s, BackgroundExecutorCompletedEventArgs<ShipmentEntity> args) =>
+            {
+                if (args.ErrorException != null)
                 {
-                    if (args.ErrorException != null)
+                    if (args.ErrorException is PrintingException)
                     {
-                        if (args.ErrorException is PrintingException)
+                        if (!(args.ErrorException is PrintingNoTemplateOutputException))
                         {
-                            if (!(args.ErrorException is PrintingNoTemplateOutputException))
-                            {
-                                MessageHelper.ShowError(this, args.ErrorException.Message);
-                            }
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
+                            MessageHelper.ShowError(this, args.ErrorException.Message);
                         }
                     }
-                };
+                    else
+                    {
+                        throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
+                    }
+                }
+            };
 
             executor.ExecuteAsync(
-
                 // What to do for each shipment
                 (ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
                 {
@@ -1645,19 +1632,9 @@ namespace ShipWorks.Shipping
                         }
                     }
                 },
-
                 // Each shipment to print.  Send in a cloned collection so changes on other threads don't affect it.
                 EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase && s.Processed && !s.Voided))
-            
-            );
-        }
-
-        /// <summary>
-        /// Get rates for the selected shipments
-        /// </summary>
-        private void OnGetRates(object sender, EventArgs e)
-        {
-            GetRates();
+                );
         }
 
         /// <summary>
@@ -1702,7 +1679,7 @@ namespace ShipWorks.Shipping
             {
                 return;
             }
-            
+
             if (getRatesBackgroundWorker != null)
             {
                 getRatesBackgroundWorker.Dispose();
@@ -1766,7 +1743,7 @@ namespace ShipWorks.Shipping
             // What to do for each shipment
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
-                var shipment = (ShipmentEntity)_e.Argument;
+                ShipmentEntity shipment = (ShipmentEntity)_e.Argument;
                 _e.Result = _e.Argument;
 
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
@@ -1859,7 +1836,7 @@ namespace ShipWorks.Shipping
 
             // Filter out the ones we know to be already processed, or are not ready. We need to process a copy of the shipments, since its going 
             // to be on the background thread.  Otherwise the UI could try to draw at the exact same time a shipment was being edited or saved.
-            var shipments = EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => s.Processed && !s.Voided));
+            List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => s.Processed && !s.Voided));
 
             // Clear all errors before starting the voiding process.  We'll just show the errors that happen during voiding.
             processingErrors.Clear();
@@ -1901,7 +1878,6 @@ namespace ShipWorks.Shipping
 
                 LoadSelectedShipments(true);
             };
-
 
             // Code to execute for each shipment
             executor.ExecuteAsync((ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
@@ -1958,9 +1934,8 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             },
-
-            // Each shipment to execute the code for
-            shipments);
+                                  // Each shipment to execute the code for
+                                  shipments);
         }
 
         /// <summary>
@@ -2112,7 +2087,7 @@ namespace ShipWorks.Shipping
                 {
                     return;
                 }
-                
+
                 long shipmentID = shipment.ShipmentID;
                 string errorMessage = null;
 
@@ -2177,9 +2152,8 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             },
-
-            // Each shipment to execute the code for
-            shipments);
+                                  // Each shipment to execute the code for
+                                  shipments);
         }
 
         /// <summary>
@@ -2198,7 +2172,7 @@ namespace ShipWorks.Shipping
                 }
 
                 counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateResult.ShipmentType);
-                
+
                 return DialogResult.OK;
             }
 
