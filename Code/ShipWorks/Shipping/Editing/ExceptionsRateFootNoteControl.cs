@@ -17,6 +17,8 @@ namespace ShipWorks.Shipping.Editing
         public ExceptionsRateFootNoteControl(string errorMessage)
         {
             errorMessageText = errorMessage;
+
+            InitializeComponent();
         }
 
         private void OnClickExceptionsLink(object sender, LinkLabelLinkClickedEventArgs e)

@@ -49,8 +49,6 @@ namespace ShipWorks.Shipping
     /// </summary>
     partial class ShippingDlg : Form
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
-
         // The singleton list of the current set of shipping errors.
         static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
 
@@ -73,7 +71,7 @@ namespace ShipWorks.Shipping
         List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
 
         // Maps shipment ID's to the list of rates for the shipment
-        Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
+        readonly Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>> shipmentRateMap = new Dictionary<long, Dictionary<ShipmentTypeCode, RateGroup>>();
 
         // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
         // counter rates during the current batch.  This variable will be for tracking that flag.
@@ -207,7 +205,7 @@ namespace ShipWorks.Shipping
                 comboShipmentType.SelectedValue = selected.Value;
             }
 
-            comboShipmentType.SelectedIndexChanged += this.OnChangeShipmentType;
+            comboShipmentType.SelectedIndexChanged += OnChangeShipmentType;
         }
 
         /// <summary>
@@ -511,7 +509,7 @@ namespace ShipWorks.Shipping
 
             // Extract userState
             var userState = (Dictionary<string, object>) e.UserState;
-            this.loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
+            loadedShipmentEntities = (List<ShipmentEntity>)userState["loaded"];
             List<ShipmentEntity> deleted = (List<ShipmentEntity>) userState["deleted"];
             bool resortWhenDone = (bool) userState["resortWhenDone"];
             bool getRatesWhenDone = (bool)userState["getRatesWhenDone"];
@@ -562,7 +560,7 @@ namespace ShipWorks.Shipping
             }
 
             // Turn selection processing back on
-            shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
+            shipmentControl.SelectionChanged += OnChangeSelectedShipments;
 
             ShipmentType shipmentType = null;
 
@@ -988,7 +986,7 @@ namespace ShipWorks.Shipping
                     }
                     else
                     {
-                        rateControl.ClearRates("Click 'Get Rates'.");
+                        rateControl.ClearRates("");
                     }
                 }
                 else if (rateGroup.Rates.Count == 0)
@@ -1442,7 +1440,6 @@ namespace ShipWorks.Shipping
             // Update enable state
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
-            getRates.Enabled = canGetRates;
             ratesSplitContainer.Panel2Collapsed = !canGetRates;
             print.Enabled = canPrint;
             voidSelected.Enabled = canVoid;
@@ -1554,11 +1551,8 @@ namespace ShipWorks.Shipping
             executor.PropagateException = true;
 
             // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (object s, EventArgs args) =>
-                {
-                    // Make sure all filters are up to date since the determination of what to print is based on filters
-                    FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-                };
+            executor.ExecuteStarting += (object s, EventArgs args) => 
+                FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
             // Some of the printing will be delayed b\c we are waiting for label sheets to fill up
             Dictionary<TemplateEntity, List<long>> delayedPrints = new Dictionary<TemplateEntity, List<long>>(TemplateHelper.TemplateEqualityComparer);
@@ -1750,10 +1744,6 @@ namespace ShipWorks.Shipping
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
                     RateGroup cachedRates = GetCachedRates(clonedShipment) ?? new RateGroup(new List<RateResult>());
-                    if (!cachedRates.Rates.Any())
-                    {
-                        cachedRates.Rates.Add(new RateResult("Oops",""));
-                    }
                     cachedRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(uiShipmentType, errorMessage));
                     SetCachedRates(clonedShipment, cachedRates);
                 }
@@ -1767,6 +1757,7 @@ namespace ShipWorks.Shipping
                     //ApplyShipmentToGridRow(clonedShipment);
 
                     //LoadSelectedShipments(true, false);
+                    shipmentControl.Refresh();
                 }
             };
 
@@ -1774,6 +1765,8 @@ namespace ShipWorks.Shipping
             getRatesBackgroundWorker.DoWork += (_sender, _e) =>
             {
                 var shipment = (ShipmentEntity)_e.Argument;
+                _e.Result = _e.Argument;
+
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
                 if (shipment.Processed || !shipmentType.SupportsGetRates || !IsShipmentTypeActivatedUI(shipment))
@@ -1795,6 +1788,7 @@ namespace ShipWorks.Shipping
                 }
                 catch (ShippingException ex)
                 {
+                    SetCachedRates(shipment, null);
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }
