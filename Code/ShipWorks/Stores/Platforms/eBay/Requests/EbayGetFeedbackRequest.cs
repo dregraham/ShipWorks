@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
 
             request.Pagination = new PaginationType
             {
-                EntriesPerPage = page,
+                EntriesPerPage = pageSize,
                 EntriesPerPageSpecified = true,
 
                 PageNumber = page,
