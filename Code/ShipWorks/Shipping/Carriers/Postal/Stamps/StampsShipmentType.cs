@@ -270,14 +270,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
                     else
                     {
-                        stampsRates.ForEach(x => x.ShipmentType = ShipmentTypeCode.Stamps);
-                        return new RateGroup(stampsRates);
+                        return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
                     }
                 }
                 else
                 {
-                    // Express1 rates - return as-is
-                    return new RateGroup(stampsRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
+                    // Express1 rates - return rates filtered by what is available to the user
+                    return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
                 }
             }
             catch(StampsException ex)
