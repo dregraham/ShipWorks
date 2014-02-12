@@ -101,9 +101,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             LoadCreateCarrierDescriptionText();
             
-            bestRateCarrierName.Text = EnumHelper.GetDescription(setupShipmentType.ShipmentTypeCode);
+            if (ShipmentTypeManager.IsPostal(setupShipmentType.ShipmentTypeCode))
+            {
+                // Use the general USPS logo for all postal types 
+                bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
+
+                // Some service types already contain USPS in the service description, so only add it if
+                // the service description does not already start with USPS
+                bestRateCarrierName.Text = string.Format("{0}{1}", absoluteBestRate.Description.StartsWith("USPS ", System.StringComparison.InvariantCultureIgnoreCase) ? string.Empty : "USPS ", absoluteBestRate.Description);
+            
+            }
+            else
+            {
+                // Use the actual logo and shipment type description for non-postal providers
+                bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(setupShipmentType.ShipmentTypeCode);
+                bestRateCarrierName.Text = string.Format("{0} {1}", EnumHelper.GetDescription(setupShipmentType.ShipmentTypeCode), absoluteBestRate.Description);
+            }
+
             bestRateAmount.Text = string.Format("{0:C2}", absoluteBestRate.Amount);
-            createAccountCarrierLogo.Image = EnumHelper.GetImage(setupShipmentType.ShipmentTypeCode);
         }
 
         /// <summary>
@@ -129,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // Populate information based on the rate's shipment type
                 ShipmentType existingRateShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
-                useExistingCarrierName.Text = EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode);
+                useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
 
                 // Pull the account description from the tag
