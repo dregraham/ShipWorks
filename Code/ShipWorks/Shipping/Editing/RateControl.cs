@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         /// <param name="rate">The rate.</param>
         /// <returns>The provider logo image.</returns>
-        private Image GetProviderLogo(RateResult rate)
+        private static Image GetProviderLogo(RateResult rate)
         {
             Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
 
