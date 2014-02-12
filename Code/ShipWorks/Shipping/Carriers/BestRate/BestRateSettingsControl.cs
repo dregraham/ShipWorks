@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            panelProviders.LoadProviders(ShipmentTypeManager.EnabledShipmentTypes.Where(IsCarrierShippingType), 
+            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes.Where(IsCarrierShippingType), 
                 typeCode => !settings.BestRateExcludedTypes.Contains((int)typeCode));
         }
 
