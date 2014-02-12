@@ -237,17 +237,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsPostal(ShipmentTypeCode shipmentTypeCode)
         {
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-                case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
-                    return true;
-            }
-
-            return false;
+            return PostalUtility.IsPostalShipmentType(shipmentTypeCode);
         }
 
         /// <summary>
