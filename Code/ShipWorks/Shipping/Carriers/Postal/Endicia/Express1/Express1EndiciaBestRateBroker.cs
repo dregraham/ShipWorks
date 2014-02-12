@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -34,13 +37,47 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
-            
+
+            RemoveInvalidExpress1Rates(rateGroup);
+
             // Set the shipment type to express1 for endicia
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Endicia);
 
             return rateGroup;
 		}
-			
+
+        /// <summary>
+        /// Remove rates for services that are not offered by Express 1
+        /// </summary>
+        private static void RemoveInvalidExpress1Rates(RateGroup rateGroup)
+        {
+            List<RateResult> invalidRates = rateGroup.Rates.Where(x => !IsValidExpress1Rate(x)).ToList();
+
+            foreach (RateResult rate in invalidRates)
+            {
+                rateGroup.Rates.Remove(rate);
+            }
+        }
+
+        /// <summary>
+        /// Check whether the specified rate is valid for Express 1
+        /// </summary>
+        private static bool IsValidExpress1Rate(RateResult rate)
+        {
+            BestRateResultTag tag = rate.Tag as BestRateResultTag;
+            if (tag != null)
+            {
+                PostalRateSelection postalTag = tag.OriginalTag as PostalRateSelection;
+                if (postalTag != null)
+                {
+                    return Express1Utilities.IsPostageSavingService(postalTag.ServiceType);
+                }
+            }
+
+            // If we couldn't get the tags cast correctly, then this rate certainly doesn't belong in here
+            return false;
+        }
+
         /// <summary>
         /// Configures extra settings required by the broker
         /// </summary>
