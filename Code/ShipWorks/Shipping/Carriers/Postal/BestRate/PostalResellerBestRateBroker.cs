@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using System;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -31,6 +32,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             exceptionHandler(new BrokerException(new ShippingException("Flat rate and regional boxes were not checked for best rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+
+            // Postal services do not ship weights over 70 lbs.  Return no rates if this is the case.
+            if (shipment.TotalWeight > 70)
+            {
+                return new RateGroup(new List<RateResult>());
+            }
 
             return base.GetBestRates(shipment, exceptionHandler);
         }

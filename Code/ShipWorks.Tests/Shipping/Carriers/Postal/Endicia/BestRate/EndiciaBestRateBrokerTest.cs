@@ -661,5 +661,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             Assert.AreEqual(checkExpress1, ((EndiciaShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy()
+        {
+            testShipment.TotalWeight = 70.1;
+            RateGroup rates = testObject.GetBestRates(testShipment, ex => { });
+
+            Assert.AreEqual(0, rates.Rates.Count);
+        }
     }
 }
