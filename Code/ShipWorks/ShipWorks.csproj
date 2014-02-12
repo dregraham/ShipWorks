@@ -10230,7 +10230,6 @@
     <None Include="Resources\fedex_Logo.gif" />
     <None Include="Resources\mail_forward3.png" />
     <None Include="Resources\glo_ups_brandmark_pfv1.gif" />
-    <None Include="Resources\EndiciaLogo.gif" />
     <None Include="Resources\lock1.png" />
     <None Include="Resources\Express1Logo.png" />
     <None Include="Resources\mailbox_empty.png" />
@@ -10298,6 +10297,7 @@
     <None Include="Resources\key11.png" />
     <None Include="Resources\check3.png" />
     <None Include="Resources\dashed_outline.png" />
+    <None Include="Resources\EndiciaLogo.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
