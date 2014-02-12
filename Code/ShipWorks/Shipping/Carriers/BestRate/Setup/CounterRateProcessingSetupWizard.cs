@@ -261,10 +261,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             IgnoreAllCounterRates = false;
 
             // Launch the setup wizard of the selected shipment type
-            DialogResult = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+            DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+
+            if (result == DialogResult.OK)
+            {
+                MarkSelectedShipmentTypeAsBeingUsed();
+            }
+            
+            // Close the dialog regardless of whether they canceled out of the setup wizard
+            DialogResult = result;
             Close();
         }
-
+        
         /// <summary>
         /// Called when the "Add my account" button is clicked.
         /// </summary>
@@ -287,7 +295,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
                 
                 if (result == DialogResult.OK)
-                {
+                {   
+                    MarkSelectedShipmentTypeAsBeingUsed();
+
                     DialogResult = result;
                     Close();
                 }
@@ -298,6 +308,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     Show(this.Owner);
                 }
             }
+        }
+
+        /// <summary>
+        /// Helper method to designate the selected shipment as being configured and 
+        /// included in the global shipping settings
+        /// </summary>
+        private void MarkSelectedShipmentTypeAsBeingUsed()
+        {
+            // Mark the shipment as being configured now that an account has been added
+            ShippingSettings.MarkAsConfigured(SelectedShipmentType.ShipmentTypeCode);
+
+            // We also want to ensure sure that the provider is no longer excluded in
+            // the global settings
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)SelectedShipmentType.ShipmentTypeCode).ToArray();
+
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>
