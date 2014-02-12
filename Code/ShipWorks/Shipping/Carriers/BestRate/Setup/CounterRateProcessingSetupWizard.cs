@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
                 // Some service types already contain USPS in the service description, so only add it if
                 // the service description does not already start with USPS
-                bestRateCarrierName.Text = string.Format("{0}{1}", absoluteBestRate.Description.StartsWith("USPS ", System.StringComparison.InvariantCultureIgnoreCase) ? string.Empty : "USPS ", absoluteBestRate.Description);
+                bestRateCarrierName.Text = string.Format("{0}{1}", absoluteBestRate.Description.StartsWith("USPS ", System.StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", absoluteBestRate.Description);
             
             }
             else
