@@ -650,7 +650,7 @@ namespace ShipWorks.Shipping
                 MessageHelper.ShowInformation(this, "Some of the shipments you selected were deleted by another user and have been removed from the list.");
             }
 
-            if (resortWhenDone)
+            if (resortWhenDone && !getRatesWhenDone)
             {
                 shipmentControl.RefreshAndResort();
             }
@@ -1644,7 +1644,6 @@ namespace ShipWorks.Shipping
         {
             getRatesTimer.Stop();
             getRatesTimer.Start();
-            rateControl.ClearRates("Fetching Rates...");
         }
 
         /// <summary>
@@ -1747,17 +1746,25 @@ namespace ShipWorks.Shipping
                 _e.Result = _e.Argument;
 
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
+                 
                 if (shipment.Processed || !shipmentType.SupportsGetRates || !IsShipmentTypeActivatedUI(shipment))
                 {
                     noRates = true;
                     return;
                 }
 
+                // At this point, we will attempt to get rates from the cache or from the carrier.
+                anyAttempted = true;
+
+                // get cached rates first.
+                RateGroup cachedRates = GetCachedRates(shipment);
+                if (cachedRates != null && !cachedRates.OutOfDate)
+                {
+                    return;
+                }
+
                 try
                 {
-                    anyAttempted = true;
-
                     RateGroup rateResults = ShippingManager.GetRates(shipment);
 
                     SetCachedRates(shipment, rateResults);
