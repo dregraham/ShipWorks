@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Editing
                 if (noncompetitiveRateResult != null)
                 {
                     // If non-competitive, show the blue truck.
-                    providerLogo = ShippingIcons.truck_blue;
+                    providerLogo = ShippingIcons.truck_brown;
                 }
 
                 GridRow row = new GridRow(new[]
