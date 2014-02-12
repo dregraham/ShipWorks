@@ -854,6 +854,16 @@ namespace ShipWorks.Shipping
             ShipmentEntity shipment = shipmentControl.SelectedShipments.First();
             ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
 
+            // Check that the combo box has the shipment type in it
+            List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+            if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
+            {
+                // The combo box does not have the shipment type in it, so we need to reload 
+                // it; this is probably due to an account being created via best rate that
+                // was previously a globally excluded shipment type
+                LoadShipmentTypeCombo();
+            }
+
             comboShipmentType.SelectedValue = shipmentTypeCode;
         }
 

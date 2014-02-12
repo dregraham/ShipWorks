@@ -333,18 +333,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 // based on the global shipping settings and best rate settings with preference for Endicia
                 ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
 
-                if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
+                if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
                 {
-                    // Endicia has not been excluded in the global shipping settings, has not been excluded 
-                    // from Best Rate, and there aren't any endicia accounts, so set the ShipmentType in the
-                    // web tool counter rates broker to be for Endicia
+                    // Endicia has not been excluded from Best Rate, and there aren't any 
+                    // Endicia accounts, so use the counter rates broker for Endicia
                     broker = new EndiciaCounterRatesBroker(new EndiciaAccountRepository());
                 }
-                else if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Stamps) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
+                else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
                 {
-                    // Endicia is not being used in best rate (for whatever reason), Stamps.com is has not been excluded 
-                    // in the global shipping settings and has not been excluded from Best Rate, so set the ShipmentType 
-                    // in the web tool counter rates broker to be for Stamps.com
+                    // Endicia is not being used in best rate (for whatever reason), and Stamps.com has
+                    // not been excluded from Best Rate, so use the counter rates broker for Stamps.com
                     broker = new StampsCounterRatesBroker(new StampsAccountRepository());
                 }
 

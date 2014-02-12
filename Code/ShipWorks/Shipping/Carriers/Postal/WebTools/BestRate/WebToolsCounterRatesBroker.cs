@@ -127,6 +127,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
                 if (result == DialogResult.OK)
                 {
                     ShippingSettings.MarkAsConfigured(actualPostalShipmentType.ShipmentTypeCode);
+
+                    // We also want to ensure sure that the provider is no longer excluded in
+                    // the global settings
+                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                    settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)actualPostalShipmentType.ShipmentTypeCode).ToArray();
+
+                    ShippingSettings.Save(settings);
                 }
 
                 return result == DialogResult.OK;
