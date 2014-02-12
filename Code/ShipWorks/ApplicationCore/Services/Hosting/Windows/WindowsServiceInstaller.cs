@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Interapptive.Shared.Utility;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.ComponentModel;
@@ -96,7 +97,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
             using (var serviceKey = Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Services\" + ServiceName, true))
             {
-                serviceKey.SetValue("ImagePath", (string)serviceKey.GetValue("ImagePath") + " /service=" + ServiceType);
+                serviceKey.SetValue("ImagePath", (string)serviceKey.GetValue("ImagePath") + " /service=" + EnumHelper.GetApiValue(ServiceType));
             }
         }
     }

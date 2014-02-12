@@ -33,14 +33,14 @@
             this.createCarrierAccountDescription = new System.Windows.Forms.Label();
             this.bestRateAmount = new System.Windows.Forms.Label();
             this.bestRateCarrierName = new System.Windows.Forms.Label();
-            this.createAccountCarrierLogo = new System.Windows.Forms.PictureBox();
+            this.bestRateAccountCarrierLogo = new System.Windows.Forms.PictureBox();
             this.rateFoundDescription = new System.Windows.Forms.Label();
             this.createAccountHeading = new System.Windows.Forms.Label();
             this.useExistingAccountPanel = new System.Windows.Forms.Panel();
             this.useExistingAccountsForRemainingLabel = new System.Windows.Forms.Label();
             this.existingAccountRateDifference = new System.Windows.Forms.Label();
             this.existingAccountRateAmount = new System.Windows.Forms.Label();
-            this.useExistingCarrierName = new System.Windows.Forms.Label();
+            this.useExistingCarrierServiceDescription = new System.Windows.Forms.Label();
             this.useExistingCarrierLogo = new System.Windows.Forms.PictureBox();
             this.useExistingAccountHeader = new System.Windows.Forms.Label();
             this.useExistingAccountButton = new System.Windows.Forms.Button();
@@ -55,7 +55,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageNoAccounts.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.createAccountCarrierLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bestRateAccountCarrierLogo)).BeginInit();
             this.useExistingAccountPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.useExistingCarrierLogo)).BeginInit();
             this.addExistingAccountPanel.SuspendLayout();
@@ -100,7 +100,7 @@
             this.wizardPageNoAccounts.Controls.Add(this.createCarrierAccountDescription);
             this.wizardPageNoAccounts.Controls.Add(this.bestRateAmount);
             this.wizardPageNoAccounts.Controls.Add(this.bestRateCarrierName);
-            this.wizardPageNoAccounts.Controls.Add(this.createAccountCarrierLogo);
+            this.wizardPageNoAccounts.Controls.Add(this.bestRateAccountCarrierLogo);
             this.wizardPageNoAccounts.Controls.Add(this.rateFoundDescription);
             this.wizardPageNoAccounts.Controls.Add(this.createAccountHeading);
             this.wizardPageNoAccounts.Controls.Add(this.useExistingAccountPanel);
@@ -158,13 +158,13 @@
             // 
             // createAccountCarrierLogo
             // 
-            this.createAccountCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
-            this.createAccountCarrierLogo.Location = new System.Drawing.Point(50, 56);
-            this.createAccountCarrierLogo.Name = "createAccountCarrierLogo";
-            this.createAccountCarrierLogo.Size = new System.Drawing.Size(20, 20);
-            this.createAccountCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.createAccountCarrierLogo.TabIndex = 10;
-            this.createAccountCarrierLogo.TabStop = false;
+            this.bestRateAccountCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
+            this.bestRateAccountCarrierLogo.Location = new System.Drawing.Point(50, 56);
+            this.bestRateAccountCarrierLogo.Name = "createAccountCarrierLogo";
+            this.bestRateAccountCarrierLogo.Size = new System.Drawing.Size(20, 20);
+            this.bestRateAccountCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.bestRateAccountCarrierLogo.TabIndex = 10;
+            this.bestRateAccountCarrierLogo.TabStop = false;
             // 
             // rateFoundDescription
             // 
@@ -191,7 +191,7 @@
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountsForRemainingLabel);
             this.useExistingAccountPanel.Controls.Add(this.existingAccountRateDifference);
             this.useExistingAccountPanel.Controls.Add(this.existingAccountRateAmount);
-            this.useExistingAccountPanel.Controls.Add(this.useExistingCarrierName);
+            this.useExistingAccountPanel.Controls.Add(this.useExistingCarrierServiceDescription);
             this.useExistingAccountPanel.Controls.Add(this.useExistingCarrierLogo);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountHeader);
             this.useExistingAccountPanel.Controls.Add(this.useExistingAccountButton);
@@ -235,13 +235,13 @@
             // 
             // useExistingCarrierName
             // 
-            this.useExistingCarrierName.AutoSize = true;
-            this.useExistingCarrierName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.useExistingCarrierName.Location = new System.Drawing.Point(60, 50);
-            this.useExistingCarrierName.Name = "useExistingCarrierName";
-            this.useExistingCarrierName.Size = new System.Drawing.Size(40, 13);
-            this.useExistingCarrierName.TabIndex = 7;
-            this.useExistingCarrierName.Text = "FedEx";
+            this.useExistingCarrierServiceDescription.AutoSize = true;
+            this.useExistingCarrierServiceDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.useExistingCarrierServiceDescription.Location = new System.Drawing.Point(60, 50);
+            this.useExistingCarrierServiceDescription.Name = "useExistingCarrierName";
+            this.useExistingCarrierServiceDescription.Size = new System.Drawing.Size(40, 13);
+            this.useExistingCarrierServiceDescription.TabIndex = 7;
+            this.useExistingCarrierServiceDescription.Text = "FedEx";
             // 
             // useExistingCarrierLogo
             // 
@@ -357,7 +357,7 @@
             this.topPanel.PerformLayout();
             this.wizardPageNoAccounts.ResumeLayout(false);
             this.wizardPageNoAccounts.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.createAccountCarrierLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bestRateAccountCarrierLogo)).EndInit();
             this.useExistingAccountPanel.ResumeLayout(false);
             this.useExistingAccountPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.useExistingCarrierLogo)).EndInit();
@@ -380,14 +380,14 @@
         private System.Windows.Forms.Label useExistingAccountDescription;
         private System.Windows.Forms.Panel addExistingAccountPanel;
         private System.Windows.Forms.Label existingAccountRateAmount;
-        private System.Windows.Forms.Label useExistingCarrierName;
+        private System.Windows.Forms.Label useExistingCarrierServiceDescription;
         private System.Windows.Forms.PictureBox useExistingCarrierLogo;
         private System.Windows.Forms.Label existingAccountRateDifference;
         private System.Windows.Forms.Button signUpButton;
         private System.Windows.Forms.Label createCarrierAccountDescription;
         private System.Windows.Forms.Label bestRateAmount;
         private System.Windows.Forms.Label bestRateCarrierName;
-        private System.Windows.Forms.PictureBox createAccountCarrierLogo;
+        private System.Windows.Forms.PictureBox bestRateAccountCarrierLogo;
         private System.Windows.Forms.Label rateFoundDescription;
         private System.Windows.Forms.Label createAccountHeading;
         private System.Windows.Forms.Label useExistingAccountsForRemainingLabel;

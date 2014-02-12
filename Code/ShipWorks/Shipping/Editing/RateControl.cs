@@ -107,18 +107,9 @@ namespace ShipWorks.Shipping.Editing
 
             foreach (RateResult rate in rateGroup.Rates)
             {
-                Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
-
-                NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
-                if (noncompetitiveRateResult != null)
-                {
-                    // If non-competitive, show the blue truck.
-                    providerLogo = ShippingIcons.truck_blue;
-                }
-
                 GridRow row = new GridRow(new[]
                 {
-                    new GridCell(providerLogo ?? ShippingIcons.other),
+                    new GridCell(GetProviderLogo(rate)),
                     new GridCell(rate.Description),
                     new GridCell(rate.Days),
                     new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
@@ -133,6 +124,33 @@ namespace ShipWorks.Shipping.Editing
             UpdateFootnotes(rateGroup);
         }
 
+        /// <summary>
+        /// Gets the provider logo.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns>The provider logo image.</returns>
+        private static Image GetProviderLogo(RateResult rate)
+        {
+            Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
+
+            // If a postal provider, show USPS logo:
+
+            if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
+            {
+                providerLogo = ShippingIcons.usps;
+            }
+
+            // If non-competitive, show the blue truck.
+            NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
+            if (noncompetitiveRateResult != null)
+            {
+                providerLogo = ShippingIcons.truck_brown;
+            }
+
+            // If null, return the 'other' icon
+            return providerLogo ?? ShippingIcons.other;
+        }
+        
         /// <summary>
         /// Resets the footnotes with what are contained in the specified rate group
         /// </summary>
