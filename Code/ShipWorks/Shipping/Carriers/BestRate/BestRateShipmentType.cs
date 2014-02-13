@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -353,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
         /// <returns>This will return the shipping type of the best rate found.</returns>
-        public override ShipmentType PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
@@ -389,17 +390,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 throw new ShippingException("ShipWorks could not find any rates.");
             }
 
+            List<RateResult> ratesToApplyToReturnedShipments;
+
             // If the best rate is a counter rate, raise an event that will let the user sign up for the service
             if (bestRate.IsCounterRate)
             {
                 // Get all rates that meet the specified service level ordered by amount
-                BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType) shipment.BestRate.ServiceLevel);
+                BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel);
                 RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
 
                 // Determine what the actual shipment type should be for the selected best rate
                 // (i.e. use Endicia if a postal type was selected)
                 ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
-                
+
                 ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
                 CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
 
@@ -436,16 +439,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     throw new ShippingException("ShipWorks could not find any rates.");
                 }
+
+                ratesToApplyToReturnedShipments = new List<RateResult> { bestRate };
             }
-
-            ApplySelectedShipmentRate(shipment, bestRate);
-
-            using (SqlAdapter adapter = new SqlAdapter())
+            else
             {
-                adapter.SaveAndRefetch(shipment);
+                ratesToApplyToReturnedShipments = rateGroups
+                    .SelectMany(x => x.Rates)
+                    .Where(r => !r.IsCounterRate && r.Amount == bestRate.Amount)
+                    .ToList();
             }
 
-            return ShipmentTypeManager.GetType(shipment);
+            List<ShipmentEntity> shipmentsToReturn = new List<ShipmentEntity>();
+            foreach (RateResult rateToApply in ratesToApplyToReturnedShipments)
+            {
+                ApplySelectedShipmentRate(shipment, rateToApply);   
+                shipmentsToReturn.Add(shipment);
+            }
+            
+            return shipmentsToReturn;
         }
 
         /// <summary>

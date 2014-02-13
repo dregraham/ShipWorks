@@ -565,13 +565,13 @@ namespace ShipWorks.Shipping
 		/// <summary>
 		/// Preferences the process.
 		/// </summary>
-		/// <returns>
+		/// <returns> 
 		/// Most shipment types don't do any pre-processing and will return themselves.  
 		/// This will return a different shipping type for BestRate
 		/// </returns>
-        public virtual ShipmentType PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
 		{
-			return this;
+		    return new List<ShipmentEntity> { shipment };
 		}
 
 		/// <summary>
