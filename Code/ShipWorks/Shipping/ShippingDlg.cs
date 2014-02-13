@@ -1678,9 +1678,6 @@ namespace ShipWorks.Shipping
             {
                 if (anyAttempted)
                 {
-                    // This is not necessary since we reload completely anyway, but it reduces the percieved load time by getting these displayed ASAP
-                    LoadDisplayedRates();
-
                     // Apply any changes made during processing to the grid
                     ApplyShipmentsToGridRows(shipments);
                 }
