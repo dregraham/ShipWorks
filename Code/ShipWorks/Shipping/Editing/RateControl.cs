@@ -97,6 +97,22 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Shows the spinner to indicate that rates are being retrieved.
+        /// </summary>
+        public void ShowSpinner()
+        {
+            loadingRatesPanel.BringToFront();
+        }
+
+        /// <summary>
+        /// Hides the spinner.
+        /// </summary>
+        public void HideSpinner()
+        {
+            loadingRatesPanel.SendToBack();
+        }
+
+        /// <summary>
         /// Load the rates into the control
         /// </summary>
         public void LoadRates(RateGroup rateGroup)

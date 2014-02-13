@@ -1690,7 +1690,8 @@ namespace ShipWorks.Shipping
                 WorkerSupportsCancellation = true
             };
 
-            rateControl.ClearRates("Fetching Rates...");
+            rateControl.ClearRates(String.Empty);
+            rateControl.ShowSpinner();
 
             // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(uiShipment);
@@ -1728,6 +1729,7 @@ namespace ShipWorks.Shipping
 
                 if (anyAttempted)
                 {
+                    rateControl.HideSpinner();
                     // This is not necessary since we reload completely anyway, but it reduces the percieved load time by getting these displayed ASAP
                     LoadDisplayedRates();
 
