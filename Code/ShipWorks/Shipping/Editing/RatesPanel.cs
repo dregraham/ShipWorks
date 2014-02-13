@@ -13,14 +13,28 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Editing
 {
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
+        private BackgroundWorker ratesWorker;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RatesPanel"/> class.
+        /// </summary>
         public RatesPanel()
         {
             InitializeComponent();
+
+            ratesWorker = new BackgroundWorker()
+            {
+                WorkerReportsProgress = false,
+                WorkerSupportsCancellation = true
+            };
+
+            rateControl.RateSelected += OnRateSelected;
         }
 
         /// <summary>
@@ -72,26 +86,41 @@ namespace ShipWorks.Shipping.Editing
             OrderEntity order = DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity;
             if (order != null)
             {
+                if (ratesWorker.IsBusy && !ratesWorker.CancellationPending)
+                {
+                    ratesWorker.CancelAsync();
+                }
+
+                RateGroup rateGroup = new RateGroup(new List<RateResult>());
+
                 rateControl.ClearRates(string.Empty);
                 rateControl.ShowSpinner();
 
-                ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
-                ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)shipment.ShipmentType);
-                
-                RateGroup rateGroup = shipmentType.GetRates(shipment);
+                ratesWorker.DoWork += (sender, args) =>
+                {
+                    ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)shipment.ShipmentType);
 
-                rateControl.HideSpinner();
-                rateControl.LoadRates(rateGroup);
+                    rateGroup = shipmentType.GetRates(shipment);
+                };
+
+                ratesWorker.RunWorkerCompleted += (sender, args) =>
+                {
+                    rateControl.HideSpinner();
+                    rateControl.LoadRates(rateGroup);
+                };
+
+                ratesWorker.RunWorkerAsync();
             }
         }
-
+        
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
         public void ReloadContent()
         {
-            //throw new NotImplementedException();
+            // Do nothing
         }
 
         /// <summary>
@@ -100,7 +129,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void UpdateContent()
         {
-            //throw new NotImplementedException();
+            // Do nothing
         }
 
         /// <summary>
@@ -108,7 +137,18 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void UpdateStoreDependentUI()
         {
-            //throw new NotImplementedException();
+            // Do nothing
+        }
+
+
+        /// <summary>
+        /// Called when [rate selected].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
+        private void OnRateSelected(object sender, RateSelectedEventArgs rateSelectedEventArgs)
+        {
+            MessageHelper.ShowMessage(this, "A rate was selected");
         }
     }
 }
