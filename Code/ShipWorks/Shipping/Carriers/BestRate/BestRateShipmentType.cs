@@ -243,10 +243,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             tasks.ForEach(t => t.Wait());
             
             return tasks.Select(x => x.Result);
-
-            //IEnumerable<RateGroup> 
-
-            //return CompileBestRates(shipment, allRates, tasks);
         }
 
         private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)

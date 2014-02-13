@@ -150,7 +150,6 @@ namespace ShipWorks.Shipping.Editing
             Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
 
             // If a postal provider, show USPS logo:
-
             if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
             {
                 providerLogo = ShippingIcons.usps;

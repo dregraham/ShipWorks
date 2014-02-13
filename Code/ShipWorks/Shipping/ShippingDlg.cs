@@ -76,6 +76,10 @@ namespace ShipWorks.Shipping
         private BackgroundWorker getRatesBackgroundWorker;
         private const int getRatesDebounceTime = 500;
 
+        // Track which shipment and shipment type for which rates were last retrieved so we can use the cache if possible
+        private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
+        private long lastRateCheckShipmentId = -1;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -1727,16 +1731,13 @@ namespace ShipWorks.Shipping
                     SetCachedRates(clonedShipment, cachedRates);
                 }
 
-                if (anyAttempted)
+                if (anyAttempted && !getRatesTimer.Enabled)
                 {
                     rateControl.HideSpinner();
+
                     // This is not necessary since we reload completely anyway, but it reduces the percieved load time by getting these displayed ASAP
                     LoadDisplayedRates();
 
-                    // Apply any changes made during processing to the grid
-                    //ApplyShipmentToGridRow(clonedShipment);
-
-                    //LoadSelectedShipments(true, false);
                     shipmentControl.Refresh();
                 }
             };
@@ -1758,11 +1759,22 @@ namespace ShipWorks.Shipping
                 // At this point, we will attempt to get rates from the cache or from the carrier.
                 anyAttempted = true;
 
-                // get cached rates first.
-                RateGroup cachedRates = GetCachedRates(shipment);
-                if (cachedRates != null && !cachedRates.OutOfDate)
+                bool shouldCheckRateCache = shipment.ShipmentID != lastRateCheckShipmentId ||
+                                            shipment.ShipmentType != (int) lastRateCheckShipmentTypeCode;
+
+                lastRateCheckShipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
+                lastRateCheckShipmentId = shipment.ShipmentID;
+
+                // Since we're only checking rates when a shipment data changes, only check the cache when the user
+                // has just changed shipment or shipment type as this should be the only time the cache could be valid
+                if (shouldCheckRateCache)
                 {
-                    return;
+                    // get cached rates first.
+                    RateGroup cachedRates = GetCachedRates(shipment);
+                    if (cachedRates != null && !cachedRates.OutOfDate)
+                    {
+                        return;
+                    }
                 }
 
                 try
