@@ -273,8 +273,8 @@ namespace ShipWorks.Shipping.Editing
             // 
             // loadingRatesPanel
             // 
-            this.loadingRatesPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.loadingRatesPanel.AutoSize = true;
             this.loadingRatesPanel.BackColor = System.Drawing.Color.White;
             this.loadingRatesPanel.Controls.Add(this.loadingRatesLabel);
             this.loadingRatesPanel.Controls.Add(this.loadingImage);
@@ -314,6 +314,7 @@ namespace ShipWorks.Shipping.Editing
             this.loadingRatesPanel.ResumeLayout(false);
             this.loadingRatesPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
