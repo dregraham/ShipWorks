@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
-            UpdateMiAndSurePostSpecificVisibility(GetLoadedServiceTypes());
+            UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() {(UpsServiceType)service.SelectedValue});
 
             SaveToShipments();
             RaiseShipmentServiceChanged();
@@ -885,7 +885,5 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpdateBillingSectionDisplay();
         }
-    
-    
     }
 }
