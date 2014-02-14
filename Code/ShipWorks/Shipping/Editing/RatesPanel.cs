@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadState()
         {
-            //throw new NotImplementedException();
+            // Do nothing
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void SaveState()
         {
-            //throw new NotImplementedException();
+            // Do nothing
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Editing
                     }
                     else
                     {
-                        rateControl.ClearRates("All shipments for this order have processed.");
+                        rateControl.ClearRates("All shipments for this order have been processed.");
                     }
                 }
             }
