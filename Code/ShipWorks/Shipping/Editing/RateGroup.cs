@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
         {
-            OutOfDate = false;
             this.Rates = rates.ToList();
             footnoteFactories = new List<IRateFootnoteFactory>();
         }

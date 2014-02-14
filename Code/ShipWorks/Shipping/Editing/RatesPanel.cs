@@ -203,6 +203,7 @@ namespace ShipWorks.Shipping.Editing
 
             // Execute the work to get the rates
             ratesWorker.RunWorkerAsync();
+            ratesWorker.Dispose();
         }
 
         /// <summary>
