@@ -23,17 +23,17 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the rates
         /// </summary>
-        public List<RateResult> Rates { get; private set; }
+        public virtual List<RateResult> Rates { get; private set; }
 
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
         /// </summary>
-        public bool OutOfDate { get; set; }
+        public virtual bool OutOfDate { get; set; }
 
         /// <summary>
         /// Gets the footnote factories.
         /// </summary>
-        public IEnumerable<IRateFootnoteFactory> FootnoteFactories
+        public virtual IEnumerable<IRateFootnoteFactory> FootnoteFactories
         {
             get { return footnoteFactories; }
         }
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Gets or sets the carrier.
         /// </summary>
-        public ShipmentTypeCode Carrier { get; set; }
+        public virtual ShipmentTypeCode Carrier { get; set; }        
 
         /// <summary>
         /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates

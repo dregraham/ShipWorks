@@ -46,13 +46,14 @@ namespace ShipWorks.Shipping.Editing
         {
             InitializeComponent();
 
+            RateGroup = new RateGroup(new List<RateResult>());
             sandGrid.Rows.Clear();
 
             gridColumnSelect.ButtonClicked += OnSelectRate;
-
             this.ReloadRatesRequired += OnReloadRatesRequired;
         }
 
+        
         /// <summary>
         /// Initialize the rate control
         /// </summary>
@@ -117,6 +118,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
+            RateGroup = rateGroup;
             sandGrid.Rows.Clear();
 
             gridColumnProvider.Visible = (rateGroup.Carrier == ShipmentTypeCode.BestRate);
@@ -139,6 +141,12 @@ namespace ShipWorks.Shipping.Editing
 
             UpdateFootnotes(rateGroup);
         }
+
+        /// <summary>
+        /// Gets the rate group loaded in the control. If a rate group has not been loaded
+        /// into the control, a group without any rate results is returned.
+        /// </summary>
+        public RateGroup RateGroup { get; private set; }
 
         /// <summary>
         /// Gets the provider logo.

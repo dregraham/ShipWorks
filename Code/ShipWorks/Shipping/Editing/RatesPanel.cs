@@ -8,7 +8,6 @@ using ShipWorks.Filters;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -23,7 +22,8 @@ namespace ShipWorks.Shipping.Editing
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
         private BackgroundWorker ratesWorker;
-        private readonly LruCache<long, RateGroup> cachedRates;
+        private readonly LruCache<long, ShipmentRateGroup> cachedRates;
+
         private long selectedOrderID;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Editing
         {
             InitializeComponent();
 
-            cachedRates = new LruCache<long, RateGroup>(1000);
+            cachedRates = new LruCache<long, ShipmentRateGroup>(1000);
             selectedOrderID = 0;
 
             rateControl.RateSelected += OnRateSelected;
@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Editing
 
             // We're going to be going over the network to get rates from the provider, so show the spinner
             // while rates are being fetched to give the user some indication that we're working
-            RateGroup rateGroup = new RateGroup(new List<RateResult>());
+            ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
             rateControl.ShowSpinner();
 
             // Setup the worker with the work to perform asynchronously
@@ -161,8 +161,8 @@ namespace ShipWorks.Shipping.Editing
                     args.Result = shipment;
 
                     // Fetch the rates and add them to the cache
-                    rateGroup = ShippingManager.GetRates(shipment);
-                    cachedRates[shipment.ShipmentID] = rateGroup;
+                    panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                    cachedRates[shipment.ShipmentID] = panelRateGroup;
                 }
                 catch (ShippingException ex)
                 {
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Editing
                         // order to avoid the appearance of lag when a user is quickly clicking around
                         // the rate grid
                         rateControl.HideSpinner();
-                        rateControl.LoadRates(rateGroup);
+                        rateControl.LoadRates(panelRateGroup);
                     }
                 }
             };
@@ -230,16 +230,21 @@ namespace ShipWorks.Shipping.Editing
         {
             // Do nothing
         }
-
-
+        
         /// <summary>
-        /// Called when [rate selected].
+        /// Called when a [rate is selected].
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
         private void OnRateSelected(object sender, RateSelectedEventArgs rateSelectedEventArgs)
         {
-            MessageHelper.ShowMessage(this, "A rate was selected. This still needs to be implemented");
+            ShipmentRateGroup rateGroup = (ShipmentRateGroup)rateControl.RateGroup;
+            ShipmentEntity shipment = rateGroup.Shipment;
+
+            using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs))
+            {
+                dialog.ShowDialog(this);
+            }
         }
     }
 }
