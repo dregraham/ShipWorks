@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Editing
         {
             InitializeComponent();
 
-            cachedRates = new LruCache<long, RateGroup>(100);
+            cachedRates = new LruCache<long, RateGroup>(1000);
             selectedOrderID = 0;
 
             rateControl.RateSelected += OnRateSelected;
@@ -139,32 +139,58 @@ namespace ShipWorks.Shipping.Editing
             rateControl.ClearRates(string.Empty);
             rateControl.ShowSpinner();
 
+            // Setup the worker with the work to perform asynchronously
             ratesWorker.DoWork += (sender, args) =>
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-
-                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
-                args.Result = clonedShipment;
-
-                //ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)clonedShipment.ShipmentType);
-                //rateGroup = shipmentType.GetRates(clonedShipment);
-                rateGroup = ShippingManager.GetRates(clonedShipment);
-
-                cachedRates[clonedShipment.ShipmentID] = rateGroup;
-            };
-
-            ratesWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
-                if (ratedShipment.OrderID == selectedOrderID)
+                try
                 {
-                    rateControl.HideSpinner();
-                    rateControl.LoadRates(rateGroup);
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+
+                    //ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+                    //args.Result = clonedShipment;
+
+                    rateGroup = ShippingManager.GetRates(shipment);
+                    cachedRates[shipment.ShipmentID] = rateGroup;
+                }
+                catch (ShippingException ex)
+                {
+                    ex.Data.Add("orderID", shipment.OrderID);
+                    args.Result = ex;
                 }
             };
 
+            // What to run when the work has been completed
+            ratesWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                ShippingException exception = args.Result as ShippingException;
+                if (exception != null)
+                {
+                    if (exception.Data.Contains("orderID") && (long)exception.Data["orderID"] == selectedOrderID)
+                    {
+                        // Update the rate control if the selected order is the one that 
+                        // produced the error
+                        rateControl.HideSpinner();
+                        rateControl.ClearRates(exception.Message);
+                    }
+                }
+                else
+                {
+                    ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                    if (ratedShipment != null && ratedShipment.OrderID == selectedOrderID)
+                    {
+                        // Only update the rate control if the shipment is for the currently selected 
+                        // order to avoid the appearance of lag when a user is quickly clicking around
+                        // the rate grid
+                        rateControl.HideSpinner();
+                        rateControl.LoadRates(rateGroup);
+                    }
+                }
+            };
+
+            // Execute the work to get the rates
             ratesWorker.RunWorkerAsync();
         }
+
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
