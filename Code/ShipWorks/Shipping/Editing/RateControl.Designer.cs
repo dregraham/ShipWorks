@@ -274,13 +274,13 @@ namespace ShipWorks.Shipping.Editing
             // 
             // loadingRatesPanel
             // 
-            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.loadingRatesPanel.AutoSize = true;
             this.loadingRatesPanel.BackColor = System.Drawing.Color.White;
             this.loadingRatesPanel.Controls.Add(this.loadingRatesLabel);
             this.loadingRatesPanel.Controls.Add(this.loadingImage);
-            this.loadingRatesPanel.Location = new System.Drawing.Point(199, 50);
-            this.loadingRatesPanel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.loadingRatesPanel.Location = new System.Drawing.Point(199, 60);
+            this.loadingRatesPanel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.loadingRatesPanel.Name = "loadingRatesPanel";
             this.loadingRatesPanel.Size = new System.Drawing.Size(95, 87);
             this.loadingRatesPanel.TabIndex = 10;
