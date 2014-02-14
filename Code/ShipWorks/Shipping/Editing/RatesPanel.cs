@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.Stores.Content.Panels;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Editing
 {
+    /// <summary>
+    /// An implementation of IDockingPanelContent interface that will fetch and 
+    /// show rates for an order that has been selected. Rates for the last 1000
+    /// shipments get cached. If an order doesn't have any shipments, a shipment
+    /// will be created; for orders that have multiple shipments, the first 
+    /// unprocessed shipment is used for rating. Rates are not retrieved for
+    /// orders that only have processed shipments.
+    /// </summary>
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
         private BackgroundWorker ratesWorker;
@@ -89,15 +91,20 @@ namespace ShipWorks.Shipping.Editing
 
                 if (order != null)
                 {
+                    // Make note of the selected order ID - we'll use this later to determine if the
+                    // user has clicked off of the order. We don't want to load the rates grid for
+                    // a shipment that is not for the currently selected order
                     selectedOrderID = order.OrderID;
 
                     List<ShipmentEntity> shipments = ShippingManager.GetShipments(order.OrderID, true);
                     if (shipments.Any(s => !s.Processed))
                     {
+                        // Grab the first unprocessed shipment
                         ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
 
                         if (cachedRates.Contains(shipmentForRating.ShipmentID))
                         {
+                            // Rates for this shipment have already been cached
                             RateGroup rateGroup = cachedRates[shipmentForRating.ShipmentID];
                             
                             rateControl.HideSpinner();
@@ -106,6 +113,8 @@ namespace ShipWorks.Shipping.Editing
                         }
                         else
                         {
+                            // We need to fetch the rates from the provider
+                            rateControl.ClearRates(string.Empty);
                             FetchRates(shipmentForRating);
                         }
                     }
@@ -135,8 +144,9 @@ namespace ShipWorks.Shipping.Editing
                 WorkerSupportsCancellation = true
             };
 
+            // We're going to be going over the network to get rates from the provider, so show the spinner
+            // while rates are being fetched to give the user some indication that we're working
             RateGroup rateGroup = new RateGroup(new List<RateResult>());
-            rateControl.ClearRates(string.Empty);
             rateControl.ShowSpinner();
 
             // Setup the worker with the work to perform asynchronously
@@ -144,16 +154,20 @@ namespace ShipWorks.Shipping.Editing
             {
                 try
                 {
+                    // Load all the child shipment data otherwise we'll get null reference
+                    // errors when getting rates; we're going to use the shipment in the
+                    // completed event handler to see if we should load the grid or not
                     ShippingManager.EnsureShipmentLoaded(shipment);
+                    args.Result = shipment;
 
-                    //ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
-                    //args.Result = clonedShipment;
-
+                    // Fetch the rates and add them to the cache
                     rateGroup = ShippingManager.GetRates(shipment);
                     cachedRates[shipment.ShipmentID] = rateGroup;
                 }
                 catch (ShippingException ex)
                 {
+                    // Add the order ID to the exception data, so we can determine whether
+                    // to update the rate control
                     ex.Data.Add("orderID", shipment.OrderID);
                     args.Result = ex;
                 }
@@ -225,7 +239,7 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
         private void OnRateSelected(object sender, RateSelectedEventArgs rateSelectedEventArgs)
         {
-            MessageHelper.ShowMessage(this, "A rate was selected");
+            MessageHelper.ShowMessage(this, "A rate was selected. This still needs to be implemented");
         }
     }
 }
