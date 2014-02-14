@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content.Panels;
@@ -20,6 +21,8 @@ namespace ShipWorks.Shipping.Editing
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
         private BackgroundWorker ratesWorker;
+        private readonly LruCache<long, RateGroup> cachedRates;
+        private long selectedOrderID;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -28,11 +31,8 @@ namespace ShipWorks.Shipping.Editing
         {
             InitializeComponent();
 
-            ratesWorker = new BackgroundWorker()
-            {
-                WorkerReportsProgress = false,
-                WorkerSupportsCancellation = true
-            };
+            cachedRates = new LruCache<long, RateGroup>(100);
+            selectedOrderID = 0;
 
             rateControl.RateSelected += OnRateSelected;
         }
@@ -83,37 +83,88 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="selection"></param>
         public void ChangeContent(Data.Grid.IGridSelection selection)
         {
-            OrderEntity order = DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity;
-            if (order != null)
+            if (selection.Count == 1)
             {
-                if (ratesWorker.IsBusy && !ratesWorker.CancellationPending)
+                OrderEntity order = DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity;
+
+                if (order != null)
                 {
-                    ratesWorker.CancelAsync();
+                    selectedOrderID = order.OrderID;
+
+                    List<ShipmentEntity> shipments = ShippingManager.GetShipments(order.OrderID, true);
+                    if (shipments.Any(s => !s.Processed))
+                    {
+                        ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
+
+                        if (cachedRates.Contains(shipmentForRating.ShipmentID))
+                        {
+                            RateGroup rateGroup = cachedRates[shipmentForRating.ShipmentID];
+                            
+                            rateControl.HideSpinner();
+                            rateControl.LoadRates(rateGroup);
+                            
+                        }
+                        else
+                        {
+                            FetchRates(shipmentForRating);
+                        }
+                    }
+                    else
+                    {
+                        rateControl.ClearRates("All shipments for this order have processed.");
+                    }
                 }
+            }
+        }
 
-                RateGroup rateGroup = new RateGroup(new List<RateResult>());
+        /// <summary>
+        /// Fetches the rates from the shipment type and 
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        private void FetchRates(ShipmentEntity shipment)
+        {
+            if (ratesWorker != null && ratesWorker.IsBusy && !ratesWorker.CancellationPending)
+            {
+                ratesWorker.CancelAsync();
+                ratesWorker.Dispose();
+            }
 
-                rateControl.ClearRates(string.Empty);
-                rateControl.ShowSpinner();
+            ratesWorker = new BackgroundWorker()
+            {
+                WorkerReportsProgress = false,
+                WorkerSupportsCancellation = true
+            };
 
-                ratesWorker.DoWork += (sender, args) =>
-                {
-                    ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)shipment.ShipmentType);
+            RateGroup rateGroup = new RateGroup(new List<RateResult>());
+            rateControl.ClearRates(string.Empty);
+            rateControl.ShowSpinner();
 
-                    rateGroup = shipmentType.GetRates(shipment);
-                };
+            ratesWorker.DoWork += (sender, args) =>
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
 
-                ratesWorker.RunWorkerCompleted += (sender, args) =>
+                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+                args.Result = clonedShipment;
+
+                //ShipmentType shipmentType = ShipmentTypeManager.GetType((ShipmentTypeCode)clonedShipment.ShipmentType);
+                //rateGroup = shipmentType.GetRates(clonedShipment);
+                rateGroup = ShippingManager.GetRates(clonedShipment);
+
+                cachedRates[clonedShipment.ShipmentID] = rateGroup;
+            };
+
+            ratesWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                if (ratedShipment.OrderID == selectedOrderID)
                 {
                     rateControl.HideSpinner();
                     rateControl.LoadRates(rateGroup);
-                };
+                }
+            };
 
-                ratesWorker.RunWorkerAsync();
-            }
+            ratesWorker.RunWorkerAsync();
         }
-        
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
