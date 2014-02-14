@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Editing
             // 
             // outOfDateBar
             // 
-            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outOfDateBar.GroupBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderRowList;
             this.outOfDateBar.GroupBorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
@@ -191,11 +191,12 @@ namespace ShipWorks.Shipping.Editing
             this.outOfDateBar.Size = new System.Drawing.Size(485, 24);
             this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(235)))));
             this.outOfDateBar.StateCommon.Border.Color1 = System.Drawing.Color.Silver;
-            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom)
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left)
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.outOfDateBar.StateCommon.Border.Rounding = 4;
             this.outOfDateBar.TabIndex = 6;
+
             // 
             // labelSecondary
             // 
@@ -273,12 +274,13 @@ namespace ShipWorks.Shipping.Editing
             // 
             // loadingRatesPanel
             // 
-            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.loadingRatesPanel.AutoSize = true;
             this.loadingRatesPanel.BackColor = System.Drawing.Color.White;
             this.loadingRatesPanel.Controls.Add(this.loadingRatesLabel);
             this.loadingRatesPanel.Controls.Add(this.loadingImage);
-            this.loadingRatesPanel.Location = new System.Drawing.Point(199, 49);
+            this.loadingRatesPanel.Location = new System.Drawing.Point(199, 50);
+            this.loadingRatesPanel.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.loadingRatesPanel.Name = "loadingRatesPanel";
             this.loadingRatesPanel.Size = new System.Drawing.Size(95, 87);
             this.loadingRatesPanel.TabIndex = 10;
