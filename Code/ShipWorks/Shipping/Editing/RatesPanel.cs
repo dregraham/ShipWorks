@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
-        private BackgroundWorker ratesWorker;
         private readonly LruCache<long, ShipmentRateGroup> cachedRates;
 
         private long selectedOrderID;
@@ -76,7 +75,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public EntityType EntityType
         {
-            get { return EntityType.OrderEntity; }
+            get { return EntityType.ShipmentEntity; }
         }
 
         /// <summary>
@@ -132,78 +131,72 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="shipment">The shipment.</param>
         private void FetchRates(ShipmentEntity shipment)
         {
-            if (ratesWorker != null && ratesWorker.IsBusy && !ratesWorker.CancellationPending)
+            using (BackgroundWorker ratesWorker = new BackgroundWorker())
             {
-                ratesWorker.CancelAsync();
-                ratesWorker.Dispose();
+                ratesWorker.WorkerReportsProgress = false;
+                ratesWorker.WorkerSupportsCancellation = true;
+
+
+                // We're going to be going over the network to get rates from the provider, so show the spinner
+                // while rates are being fetched to give the user some indication that we're working
+                ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
+                rateControl.ShowSpinner();
+
+                // Setup the worker with the work to perform asynchronously
+                ratesWorker.DoWork += (sender, args) =>
+                {
+                    try
+                    {
+                        // Load all the child shipment data otherwise we'll get null reference
+                        // errors when getting rates; we're going to use the shipment in the
+                        // completed event handler to see if we should load the grid or not
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        args.Result = shipment;
+
+                        // Fetch the rates and add them to the cache
+                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                        cachedRates[shipment.ShipmentID] = panelRateGroup;
+                    }
+                    catch (ShippingException ex)
+                    {
+                        // Add the order ID to the exception data, so we can determine whether
+                        // to update the rate control
+                        ex.Data.Add("orderID", shipment.OrderID);
+                        args.Result = ex;
+                    }
+                };
+
+                // What to run when the work has been completed
+                ratesWorker.RunWorkerCompleted += (sender, args) =>
+                {
+                    ShippingException exception = args.Result as ShippingException;
+                    if (exception != null)
+                    {
+                        if (exception.Data.Contains("orderID") && (long)exception.Data["orderID"] == selectedOrderID)
+                        {
+                            // Update the rate control if the selected order is the one that 
+                            // produced the error
+                            rateControl.HideSpinner();
+                            rateControl.ClearRates(exception.Message);
+                        }
+                    }
+                    else
+                    {
+                        ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                        if (ratedShipment != null && ratedShipment.OrderID == selectedOrderID)
+                        {
+                            // Only update the rate control if the shipment is for the currently selected 
+                            // order to avoid the appearance of lag when a user is quickly clicking around
+                            // the rate grid
+                            rateControl.HideSpinner();
+                            rateControl.LoadRates(panelRateGroup);
+                        }
+                    }
+                };
+
+                // Execute the work to get the rates
+                ratesWorker.RunWorkerAsync();
             }
-
-            ratesWorker = new BackgroundWorker()
-            {
-                WorkerReportsProgress = false,
-                WorkerSupportsCancellation = true
-            };
-
-            // We're going to be going over the network to get rates from the provider, so show the spinner
-            // while rates are being fetched to give the user some indication that we're working
-            ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
-            rateControl.ShowSpinner();
-
-            // Setup the worker with the work to perform asynchronously
-            ratesWorker.DoWork += (sender, args) =>
-            {
-                try
-                {
-                    // Load all the child shipment data otherwise we'll get null reference
-                    // errors when getting rates; we're going to use the shipment in the
-                    // completed event handler to see if we should load the grid or not
-                    ShippingManager.EnsureShipmentLoaded(shipment);
-                    args.Result = shipment;
-
-                    // Fetch the rates and add them to the cache
-                    panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-                    cachedRates[shipment.ShipmentID] = panelRateGroup;
-                }
-                catch (ShippingException ex)
-                {
-                    // Add the order ID to the exception data, so we can determine whether
-                    // to update the rate control
-                    ex.Data.Add("orderID", shipment.OrderID);
-                    args.Result = ex;
-                }
-            };
-
-            // What to run when the work has been completed
-            ratesWorker.RunWorkerCompleted += (sender, args) =>
-            {
-                ShippingException exception = args.Result as ShippingException;
-                if (exception != null)
-                {
-                    if (exception.Data.Contains("orderID") && (long)exception.Data["orderID"] == selectedOrderID)
-                    {
-                        // Update the rate control if the selected order is the one that 
-                        // produced the error
-                        rateControl.HideSpinner();
-                        rateControl.ClearRates(exception.Message);
-                    }
-                }
-                else
-                {
-                    ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
-                    if (ratedShipment != null && ratedShipment.OrderID == selectedOrderID)
-                    {
-                        // Only update the rate control if the shipment is for the currently selected 
-                        // order to avoid the appearance of lag when a user is quickly clicking around
-                        // the rate grid
-                        rateControl.HideSpinner();
-                        rateControl.LoadRates(panelRateGroup);
-                    }
-                }
-            };
-
-            // Execute the work to get the rates
-            ratesWorker.RunWorkerAsync();
-            ratesWorker.Dispose();
         }
 
         /// <summary>
