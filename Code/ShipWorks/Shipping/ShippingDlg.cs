@@ -82,12 +82,24 @@ namespace ShipWorks.Shipping
         private long lastRateCheckShipmentId = -1;
         private ShipmentEntity clonedShipmentEntityForRates;
 
+        private RateSelectedEventArgs preSelectedRateEventArgs;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDlg(List<ShipmentEntity> shipments)
             : this(shipments, false)
         {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShippingDlg"/> class. This is intended
+        /// to be used when a rate has been selected outside of the shipping dialog.
+        /// </summary>
+        public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs)
+            : this(new List<ShipmentEntity> { shipment }, false)
+        {
+            this.preSelectedRateEventArgs = preSelectedRateEventArgs;
+        }
 
         /// <summary>
         /// Constructor
@@ -289,7 +301,7 @@ namespace ShipWorks.Shipping
                 return serviceControlArea.Controls[0] as ServiceControlBase;
             }
         }
-
+        
         /// <summary>
         /// Gets the customs control that is currently displayed
         /// </summary>
@@ -659,6 +671,16 @@ namespace ShipWorks.Shipping
             if (resortWhenDone && !getRatesWhenDone)
             {
                 shipmentControl.RefreshAndResort();
+            }
+            
+            if (preSelectedRateEventArgs != null)
+            {
+                // A rate has been preselected outside of this dialog, so trigger the 
+                // service control event handler to load the correct service type
+                ServiceControl.OnRateSelected(this, preSelectedRateEventArgs);
+
+                // We only want to do this once for the initial load
+                preSelectedRateEventArgs = null;
             }
 
             if (getRatesWhenDone)
