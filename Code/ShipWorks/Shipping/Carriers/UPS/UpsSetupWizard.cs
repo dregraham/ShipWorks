@@ -232,6 +232,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
+                if (string.IsNullOrWhiteSpace(account.Text))
+                {
+                    // Note: this will need to be refactored when we unhide the ability to create 
+                    // a new UPS account from ShipWorks
+                    MessageHelper.ShowMessage(this, "Please enter your account number.");
+                    e.NextPage = CurrentPage;
+                }
+
                 // Make sure one of the check boxes is checked.
                 if (!newAccount.Checked && !existingAccount.Checked)
                 {
