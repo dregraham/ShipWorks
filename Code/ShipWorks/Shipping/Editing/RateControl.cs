@@ -29,17 +29,6 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler ReloadRatesRequired;
 
         /// <summary>
-        /// Event raised indicating that a full reload of the rates is required
-        /// </summary>
-        protected void OnReloadRatesRequired(object sender, EventArgs e)
-        {
-            if (this.ReloadRatesRequired != null)
-            {
-                ReloadRatesRequired(this, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public RateControl()
@@ -50,7 +39,6 @@ namespace ShipWorks.Shipping.Editing
             sandGrid.Rows.Clear();
 
             gridColumnSelect.ButtonClicked += OnSelectRate;
-            this.ReloadRatesRequired += OnReloadRatesRequired;
         }
 
         
@@ -256,6 +244,17 @@ namespace ShipWorks.Shipping.Editing
             if (RateSelected != null)
             {
                 RateSelected(this, new RateSelectedEventArgs(rate));
+            }
+        }
+
+        /// <summary>
+        /// Event raised indicating that a full reload of the rates is required
+        /// </summary>
+        protected void OnReloadRatesRequired(object sender, EventArgs e)
+        {
+            if (this.ReloadRatesRequired != null)
+            {
+                ReloadRatesRequired(this, EventArgs.Empty);
             }
         }
 
