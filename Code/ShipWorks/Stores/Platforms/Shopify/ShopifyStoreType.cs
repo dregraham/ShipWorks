@@ -93,6 +93,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             shopifyStore.ShopifyAccessToken = string.Empty;
             shopifyStore.ShopifyShopUrlName = string.Empty;
             shopifyStore.ShopifyShopDisplayName = string.Empty;
+            shopifyStore.ShopifyRequestedShippingOption = (int) ShopifyRequestedShippingField.Title;
 
             return shopifyStore;
         }
@@ -287,6 +288,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 // add the error to issues for the user
                 issueAdder.Add(orderID, ex);
             }
+        }
+
+        /// <summary>
+        /// Create and return the Shopify store settings control.
+        /// </summary>
+        public override StoreSettingsControlBase CreateStoreSettingsControl()
+        {
+            return new ShopifyStoreSettingsControl();
         }
     }
 }

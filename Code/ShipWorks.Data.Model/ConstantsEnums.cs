@@ -7716,6 +7716,8 @@ namespace ShipWorks.Data.Model
 		ShopifyShopDisplayName,
 		///<summary>ShopifyAccessToken. </summary>
 		ShopifyAccessToken,
+		///<summary>ShopifyRequestedShippingOption. </summary>
+		ShopifyRequestedShippingOption,
 		/// <summary></summary>
 		AmountOfFields
 	}
