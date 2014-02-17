@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -79,7 +80,7 @@ namespace ShipWorks.Shipping
         // Track which shipment and shipment type for which rates were last retrieved so we can use the cache if possible
         private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
         private long lastRateCheckShipmentId = -1;
-        private ShipmentEntity clonedRatesEntity;
+        private ShipmentEntity clonedShipmentEntityForRates;
 
         /// <summary>
         /// Constructor
@@ -1647,6 +1648,16 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void GetRates()
         {
+            GetRates(true);
+        }
+
+        /// <summary>
+        /// Gets rates for the selected shipments
+        /// </summary>
+        /// <param name="cloneShipment">Inidicates whether the currently selected shipment should be cloned. This should only
+        /// be true on calls raised because the shipment changed. It should be false on calls from the debounce logic.</param>
+        private void GetRates(bool cloneShipment)
+        {
             getRatesTimer.Stop();
 
             // There's no need to bother doing anything if we don't have exactly one shipment because
@@ -1656,12 +1667,17 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            // Save changes to the current selection (NOT the ones we are processing) before we process it
-            SaveChangesToUIDisplayedShipments();
+            // Don't save and clone the current shipment if this is being executed from the debounce logic,
+            // since it causes concurrency issues
+            if (cloneShipment)
+            {
+                // Save changes to the current selection (NOT the ones we are processing) before we process it
+                SaveChangesToUIDisplayedShipments();
 
-            // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
-            ShipmentEntity uiShipment = uiDisplayedShipments.First();
-            clonedRatesEntity = EntityUtility.CloneEntity(uiShipment);
+                // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
+                ShipmentEntity uiShipment = uiDisplayedShipments.First();
+                clonedShipmentEntityForRates = EntityUtility.CloneEntity(uiShipment);   
+            }
 
             getRatesTimer.Start();
         }
@@ -1671,14 +1687,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnGetRatesTimerTick(object sender, EventArgs e)
         {
-            ShipmentEntity clonedShipment = clonedRatesEntity;
+            ShipmentEntity clonedShipment = clonedShipmentEntityForRates;
             ShipmentType uiShipmentType = ShipmentTypeManager.GetType(clonedShipment);
 
             getRatesTimer.Stop();
 
             if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
             {
-                GetRates();
+                GetRates(false);
                 return;
             }
 
