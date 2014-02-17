@@ -79,6 +79,7 @@ namespace ShipWorks.Shipping
         // Track which shipment and shipment type for which rates were last retrieved so we can use the cache if possible
         private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
         private long lastRateCheckShipmentId = -1;
+        private ShipmentEntity clonedRatesEntity;
 
         /// <summary>
         /// Constructor
@@ -1647,6 +1648,21 @@ namespace ShipWorks.Shipping
         private void GetRates()
         {
             getRatesTimer.Stop();
+
+            // There's no need to bother doing anything if we don't have exactly one shipment because
+            // the grid does not show rates otherwise
+            if (uiDisplayedShipments.Count != 1)
+            {
+                return;
+            }
+
+            // Save changes to the current selection (NOT the ones we are processing) before we process it
+            SaveChangesToUIDisplayedShipments();
+
+            // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
+            ShipmentEntity uiShipment = uiDisplayedShipments.First();
+            clonedRatesEntity = EntityUtility.CloneEntity(uiShipment);
+
             getRatesTimer.Start();
         }
 
@@ -1655,6 +1671,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnGetRatesTimerTick(object sender, EventArgs e)
         {
+            ShipmentEntity clonedShipment = clonedRatesEntity;
+            ShipmentType uiShipmentType = ShipmentTypeManager.GetType(clonedShipment);
+
             getRatesTimer.Stop();
 
             if (getRatesBackgroundWorker != null && getRatesBackgroundWorker.IsBusy)
@@ -1663,22 +1682,11 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            // Save changes to the current selection (NOT the ones we are processing) before we process it
-            SaveChangesToUIDisplayedShipments();
-
             List<string> newErrors = new List<string>();
             bool noRates = false;
             bool anyAttempted = false;
 
-            if (uiDisplayedShipments.Count != 1)
-            {
-                return;
-            }
-
-            ShipmentEntity uiShipment = uiDisplayedShipments.First();
-            ShipmentType uiShipmentType = ShipmentTypeManager.GetType(uiShipment);
-
-            if (!uiShipmentType.SupportsGetRates || uiShipment.Processed || !IsShipmentTypeActivatedUI(uiShipment))
+            if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed || !IsShipmentTypeActivatedUI(clonedShipment))
             {
                 return;
             }
@@ -1696,9 +1704,6 @@ namespace ShipWorks.Shipping
 
             rateControl.ClearRates(String.Empty);
             rateControl.ShowSpinner();
-
-            // The list of shipments to get rates for.  A cloned collection to changes in the background don't have thread issues with the foreground
-            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(uiShipment);
 
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
