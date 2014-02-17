@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -36,6 +37,9 @@ namespace ShipWorks.Shipping.Editing
             selectedOrderID = 0;
 
             rateControl.RateSelected += OnRateSelected;
+
+            // Force the rates to be refreshed when the rate control tells us
+            rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
         }
 
         /// <summary>
