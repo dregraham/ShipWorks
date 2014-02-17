@@ -24,6 +24,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public event RateSelectedEventHandler RateSelected;
 
+        public event RateSelectedEventHandler ConfigureRateClicked;
+
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
         /// </summary>
@@ -39,7 +41,7 @@ namespace ShipWorks.Shipping.Editing
             RateGroup = new RateGroup(new List<RateResult>());
             sandGrid.Rows.Clear();
 
-            gridColumnSelect.ButtonClicked += OnSelectRate;
+            gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
         }
 
         
@@ -50,6 +52,25 @@ namespace ShipWorks.Shipping.Editing
         {
             this.footnoteParameters = parameters;
         }
+
+        /// <summary>
+        /// Gets the rate group loaded in the control. If a rate group has not been loaded
+        /// into the control, a group without any rate results is returned.
+        /// </summary>
+        public RateGroup RateGroup { get; private set; }
+
+        /// <summary>
+        /// Return the displayed height of the footnote section
+        /// </summary>
+        public int FootnoteHeight
+        {
+            get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to [show the configure link].
+        /// </summary>
+        public bool ShowConfigureLink { get; set; }
 
         /// <summary>
         /// Clear the rates in the grid and display the given reason for having no rates displayed.
@@ -117,9 +138,13 @@ namespace ShipWorks.Shipping.Editing
                     new GridCell(GetProviderLogo(rate)),
                     new GridCell(rate.Description),
                     new GridCell(rate.Days),
-                    new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote),
-                    new GridHyperlinkCell(rate.SelectionText)
+                    new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
                 }) { Tag = rate };
+
+                if (ShowConfigureLink)
+                {
+                    row.Cells.Add(new GridHyperlinkCell("Configure"));
+                }
 
                 sandGrid.Rows.Add(row);
             }
@@ -171,12 +196,6 @@ namespace ShipWorks.Shipping.Editing
                 sandGrid.Rows.Add(row);
             }
         }
-
-        /// <summary>
-        /// Gets the rate group loaded in the control. If a rate group has not been loaded
-        /// into the control, a group without any rate results is returned.
-        /// </summary>
-        public RateGroup RateGroup { get; private set; }
 
         /// <summary>
         /// Gets the provider logo.
@@ -271,10 +290,7 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
-        /// <summary>
-        /// User has clicked to select a rate
-        /// </summary>
-        private void OnSelectRate(object sender, GridRowColumnEventArgs e)
+        private void OnConfigureRateClicked(object sender, GridRowColumnEventArgs e)
         {
             RateResult rate = e.Row.Tag as RateResult;
             if (!rate.Selectable)
@@ -282,9 +298,9 @@ namespace ShipWorks.Shipping.Editing
                 return;
             }
 
-            if (RateSelected != null)
+            if (ConfigureRateClicked != null)
             {
-                RateSelected(this, new RateSelectedEventArgs(rate));
+                ConfigureRateClicked(this, new RateSelectedEventArgs(rate));
             }
         }
 
@@ -300,11 +316,24 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Return the displayed height of the footnote section
+        /// Called when the [selected rate row has changed].
         /// </summary>
-        public int FootnoteHeight
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
+        private void OnSelectedRateChanged(object sender, SelectionChangedEventArgs e)
         {
-            get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
+            GridRow selectedRow = e.Grid.SelectedElements.OfType<GridRow>().FirstOrDefault();
+            if (selectedRow != null)
+            {
+                RateResult selectedRate = selectedRow.Tag as RateResult;
+                if (selectedRate.Selectable && RateGroup.Carrier != ShipmentTypeCode.BestRate)
+                {
+                    if (RateSelected != null)
+                    {
+                        RateSelected(this, new RateSelectedEventArgs(selectedRate));
+                    }
+                }
+            }
         }
     }
 }

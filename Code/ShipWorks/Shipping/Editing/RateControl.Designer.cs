@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Editing
             this.sandGrid.PrimaryColumn = this.gridColumnService;
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
-            this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
+            this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
                         new Divelements.SandGrid.GridCell("USPS"),
@@ -122,6 +122,7 @@ namespace ShipWorks.Shipping.Editing
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
             this.sandGrid.TabIndex = 1;
+            this.sandGrid.SelectionChanged += OnSelectedRateChanged;
             // 
             // gridColumnProvider
             // 
@@ -170,7 +171,7 @@ namespace ShipWorks.Shipping.Editing
             this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
-            this.gridColumnSelect.HeaderText = "Select";
+            this.gridColumnSelect.HeaderText = "";
             this.gridColumnSelect.Width = 37;
             // 
             // outOfDateBar
