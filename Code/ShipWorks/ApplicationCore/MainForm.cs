@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Divelements.SandRibbon;
+using ICSharpCode.SharpZipLib.Zip;
+using Interapptive.Shared.IO.Zip;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -877,6 +881,10 @@ namespace ShipWorks
             // Load the user's saved state
             windowLayoutProvider.LoadLayout(settings.WindowLayout);
 
+            // Make sure any users upgrading from a previous version will always see (and 
+            // be made aware of) the rate panel; they can still choose to remove it later
+            OpenRatePanelForUpgrade(settings);
+            
             // Load the user's saved menu settings
             gridMenuLayoutProvider.LoadLayout(settings.GridMenuLayout);
 
@@ -891,6 +899,62 @@ namespace ShipWorks
 
             // Make the filter tree
             filterTree.Focus();
+        }
+
+        /// <summary>
+        /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
+        /// version of ShipWorks that didn't have the rate panel and opens the rate panel so everyone
+        /// is aware of it and users don't have to manually enabled it. 
+        /// </summary>
+        /// <param name="settings">The user settings being inspected.</param>
+        /// <exception cref="AppearanceException">The file is not a valid ShipWorks layout.</exception>
+        private void OpenRatePanelForUpgrade(UserSettingsEntity settings)
+        {
+            // Write out the user's current window layout to disk
+            string tempFile = Path.Combine(DataPath.ShipWorksTemp, Guid.NewGuid().ToString("N") + ".swl");
+            File.WriteAllBytes(tempFile, settings.WindowLayout);
+
+            // The path that items from the .swl file will be extracted to
+            string tempPath = DataPath.CreateUniqueTempPath();
+
+            try
+            {
+                // Write all the contents out to a temporary folder
+                using (ZipReader reader = new ZipReader(tempFile))
+                {
+                    foreach (ZipReaderItem item in reader.ReadItems())
+                    {
+                        item.Extract(Path.Combine(tempPath, item.Name));
+                    }
+                }
+            }
+            catch (ZipException ex)
+            {
+                throw new AppearanceException("The file is not a valid ShipWorks layout.", ex);
+            }
+
+            // Read the panels.xml file that was extracted
+            string panelXml = File.ReadAllText(Path.Combine(tempPath, "panels.xml"), Encoding.Unicode);
+
+            // Check to see if the Window GUID for the rates panel is present
+            XmlDocument panelDoc = new XmlDocument();
+            panelDoc.LoadXml(panelXml);
+
+            // The GUID value is set at design-time by the designer sandDockManager, so we can look for it
+            const string RatePanelID = "61946061-0df9-4143-92ed-0e71826d7d5f";
+            XmlNode ratePanelNode = panelDoc.SelectSingleNode(string.Format("/Layout/Window[@Guid='{0}']", RatePanelID));
+
+            if (ratePanelNode == null)
+            {
+                // There wasn't an item in the user settings for the rate panel, meaning the user just 
+                // upgraded from a previous version without the rate panel 
+                DockControl dockControl = sandDockManager.GetDockControls().FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
+                if (dockControl != null)
+                {
+                    // We want to display the rate panel for everyone after an upgrade by default
+                    dockControl.Open(WindowOpenMethod.OnScreen);
+                }
+            }
         }
 
         /// <summary>
