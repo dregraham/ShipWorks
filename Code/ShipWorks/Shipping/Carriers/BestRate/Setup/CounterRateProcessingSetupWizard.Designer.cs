@@ -302,6 +302,7 @@
             this.setupExistingProvider.Name = "setupExistingProvider";
             this.setupExistingProvider.Size = new System.Drawing.Size(189, 21);
             this.setupExistingProvider.TabIndex = 6;
+            this.setupExistingProvider.SelectedIndexChanged += new System.EventHandler(this.OnSetupExistingProviderChanged);
             // 
             // setupExistingAccountHeader
             // 
@@ -315,6 +316,7 @@
             // 
             // setupExistingAccountButton
             // 
+            this.setupExistingAccountButton.Enabled = false;
             this.setupExistingAccountButton.Location = new System.Drawing.Point(325, 47);
             this.setupExistingAccountButton.Name = "setupExistingAccountButton";
             this.setupExistingAccountButton.Size = new System.Drawing.Size(99, 23);

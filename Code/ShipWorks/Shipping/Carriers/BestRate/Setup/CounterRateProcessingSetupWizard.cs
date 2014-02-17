@@ -259,7 +259,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             DialogResult = result;
             Close();
         }
-        
+
+        /// <summary>
+        /// Called when the value in the setup existing provider drop down list has changed.
+        /// </summary>
+        private void OnSetupExistingProviderChanged(object sender, System.EventArgs e)
+        {
+            // Disable the "Add my account" button if a provider is not selected
+            ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
+            setupExistingAccountButton.Enabled = selectedItem != null;
+        }
+
         /// <summary>
         /// Called when the "Add my account" button is clicked.
         /// </summary>
