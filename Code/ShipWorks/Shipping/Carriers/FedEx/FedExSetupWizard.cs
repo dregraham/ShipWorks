@@ -119,6 +119,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             WebHelper.OpenUrl("http://www.fedex.com/us/oadr/en/discounts/index.html", this);
         }
 
+
+        /// <summary>
+        /// Stepping next from the initial page.
+        /// </summary>
+        private void OnStepNextInitialPage(object sender, WizardStepEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(accountNumber.Text))
+            {
+                MessageHelper.ShowInformation(this, "Please enter your FedEx account number.");
+                e.NextPage = CurrentPage;
+            }
+        }
+
         /// <summary>
         /// Stepping next from the account information page
         /// </summary>
