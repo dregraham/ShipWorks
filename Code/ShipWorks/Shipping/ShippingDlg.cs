@@ -856,6 +856,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked += newServiceControl.OnRateSelected;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -871,6 +872,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked -= oldServiceControl.OnRateSelected;
 
                     oldServiceControl.Dispose();
                 }
@@ -1025,6 +1027,8 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
+                    // Only show the configure link for the best rate shipment type
+                    rateControl.ShowConfigureLink = rateGroup.Carrier == ShipmentTypeCode.BestRate;
                     rateControl.LoadRates(rateGroup);
                 }
             }
