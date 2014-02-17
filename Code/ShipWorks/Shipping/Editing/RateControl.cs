@@ -104,8 +104,6 @@ namespace ShipWorks.Shipping.Editing
         {
             sandGrid.Rows.Clear();
 
-            gridColumnProvider.Visible = (rateGroup.Carrier == ShipmentTypeCode.BestRate);
-
             foreach (RateResult rate in rateGroup.Rates)
             {
                 GridRow row = new GridRow(new[]
