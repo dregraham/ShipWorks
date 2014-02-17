@@ -146,19 +146,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
                 useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
-
-                // Pull the account description from the tag
-                BestRateResultTag bestRateTag = ((BestRateResultTag)existingAccountRate.Tag);
-                string accountDescription = bestRateTag.AccountDescription ?? string.Empty;
-                
-                if (accountDescription.Length >= 18)
-                {
-                    // Truncate the account description, so those having an address doesn't cause
-                    // the label text to run off the form
-                    accountDescription = StringUtility.Truncate(accountDescription, 15) + "...";
-                }
-
-                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{AccountDescription}", accountDescription);
                 
                 // Show the actual amount and the difference between the best rate and 
                 // the cheapest available rate

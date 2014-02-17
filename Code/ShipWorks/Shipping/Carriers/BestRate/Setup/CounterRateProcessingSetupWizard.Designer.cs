@@ -156,11 +156,11 @@
             this.bestRateCarrierName.TabIndex = 11;
             this.bestRateCarrierName.Text = "USPS Priority Mail";
             // 
-            // createAccountCarrierLogo
+            // bestRateAccountCarrierLogo
             // 
             this.bestRateAccountCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
             this.bestRateAccountCarrierLogo.Location = new System.Drawing.Point(50, 56);
-            this.bestRateAccountCarrierLogo.Name = "createAccountCarrierLogo";
+            this.bestRateAccountCarrierLogo.Name = "bestRateAccountCarrierLogo";
             this.bestRateAccountCarrierLogo.Size = new System.Drawing.Size(20, 20);
             this.bestRateAccountCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.bestRateAccountCarrierLogo.TabIndex = 10;
@@ -233,12 +233,12 @@
             this.existingAccountRateAmount.TabIndex = 8;
             this.existingAccountRateAmount.Text = "$17.82";
             // 
-            // useExistingCarrierName
+            // useExistingCarrierServiceDescription
             // 
             this.useExistingCarrierServiceDescription.AutoSize = true;
             this.useExistingCarrierServiceDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.useExistingCarrierServiceDescription.Location = new System.Drawing.Point(60, 50);
-            this.useExistingCarrierServiceDescription.Name = "useExistingCarrierName";
+            this.useExistingCarrierServiceDescription.Name = "useExistingCarrierServiceDescription";
             this.useExistingCarrierServiceDescription.Size = new System.Drawing.Size(40, 13);
             this.useExistingCarrierServiceDescription.TabIndex = 7;
             this.useExistingCarrierServiceDescription.Text = "FedEx";
@@ -278,10 +278,10 @@
             this.useExistingAccountDescription.AutoSize = true;
             this.useExistingAccountDescription.Location = new System.Drawing.Point(19, 22);
             this.useExistingAccountDescription.Name = "useExistingAccountDescription";
-            this.useExistingAccountDescription.Size = new System.Drawing.Size(556, 13);
+            this.useExistingAccountDescription.Size = new System.Drawing.Size(447, 13);
             this.useExistingAccountDescription.TabIndex = 2;
-            this.useExistingAccountDescription.Text = "If you\'d rather not sign up right now, your {ProviderName} account \'{AccountDescr" +
-    "iption}\' had the next best rate:";
+            this.useExistingAccountDescription.Text = "If you\'d rather not sign up right now, your {ProviderName} account had the next b" +
+    "est rate:";
             // 
             // addExistingAccountPanel
             // 
