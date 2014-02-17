@@ -2243,6 +2243,10 @@ namespace ShipWorks.Shipping
                 dlg.ShowDialog(this);
             }
 
+            // Any of the shipping settings could have changed, which could invalidate the rate cache.  To be safe,
+            // clear the rates so that the are re-fetched.
+            ClearRates("Provider shiping settings may have been modified.");
+
             LoadShipmentTypeCombo();
 
             // Reload the selected shipments in case the settings affected their values

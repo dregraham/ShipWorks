@@ -20,6 +20,14 @@ namespace ShipWorks.Shipping.Insurance
         List<InsuranceChoice> loadedInsurance = new List<InsuranceChoice>();
 
         /// <summary>
+        /// The user has edited\changed something about the insurance
+        /// </summary>
+        public event EventHandler InsuranceOptionsChanged;
+
+        // So we know when not to raise the changed event
+        bool loading = false;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public InsuranceSelectionControl()
@@ -32,6 +40,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void LoadInsuranceChoices(IEnumerable<InsuranceChoice> choices)
         {
+            loading = true;
+
             loadedInsurance = choices.ToList();
 
             bool allFedEx = true;
@@ -131,6 +141,8 @@ namespace ShipWorks.Shipping.Insurance
                 ClearInsuranceCost();
             }
 
+            loading = false;
+
             OnChangeUseInsurance(null, EventArgs.Empty);
         }
 
@@ -155,6 +167,8 @@ namespace ShipWorks.Shipping.Insurance
 
             insuredValue.Enabled = inputEnabled;
             labelCost.ForeColor = inputEnabled ? Color.Green : Color.DarkGray;
+
+            OnInsuranceOptionsChanged(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -408,6 +422,24 @@ namespace ShipWorks.Shipping.Insurance
             if (loadedInsurance != null && loadedInsurance.Count == 1 && !insuredValue.MultiValued)
             {
                 UpdateCostDisplay(loadedInsurance[0].Shipment, insuredValue.Amount);
+            }
+
+            OnInsuranceOptionsChanged(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Indicates that the user has changed insurance values 
+        /// </summary>
+        private void OnInsuranceOptionsChanged(object sender, EventArgs e)
+        {
+            if (loading)
+            {
+                return;
+            }
+
+            if (InsuranceOptionsChanged != null)
+            {
+                InsuranceOptionsChanged(this, EventArgs.Empty);
             }
         }
     }
