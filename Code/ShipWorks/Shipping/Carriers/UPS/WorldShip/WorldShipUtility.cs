@@ -1098,6 +1098,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     WorldShipProcessedEntity wspToCopy = worldShipProcessedEntries.FirstOrDefault(x => x.WorldShipShipmentID == wsp.WorldShipShipmentID
                         && !string.IsNullOrWhiteSpace(x.ShipmentID)
+                        && long.TryParse(x.ShipmentID, out testShipmentID)
                         && x.WorldShipProcessedID != wsp.WorldShipProcessedID);
 
                     wsp.ShipmentID = wspToCopy != null ? wspToCopy.ShipmentID : null;
