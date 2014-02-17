@@ -41,8 +41,9 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// The supported filter targets that the panel can display for.
         /// </summary>
-        public Filters.FilterTarget[] SupportedTargets
+        public FilterTarget[] SupportedTargets
         {
+            // Need to know when the selected order has been changed
             get { return new FilterTarget[] { FilterTarget.Orders }; }
         }
 
@@ -75,6 +76,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public EntityType EntityType
         {
+            // The rates panel is interested in shipment entities - when an entity has
+            // been added, removed, or modified, the panel needs to be refreshed
             get { return EntityType.ShipmentEntity; }
         }
 
@@ -86,7 +89,47 @@ namespace ShipWorks.Shipping.Editing
         {
             if (selection.Count == 1)
             {
-                OrderEntity order = DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity;
+                // Make note of the selected order ID - we'll use this later to determine if the
+                // user has clicked off of the order. We don't want to load the rates grid for
+                // a shipment that is not for the currently selected order
+                selectedOrderID = selection.Keys.FirstOrDefault();
+
+                // Refresh the rates in the panel; using cached rates is fine here since nothing
+                // about the shipment has changed, so don't force a re-fetch
+                RefreshRates(false);
+            }
+        }
+
+        /// <summary>
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
+        /// list with up-to-date displayed entity content.
+        /// </summary>
+        public void ReloadContent()
+        {
+            // A row has been added/removed, so force the rates to be refreshed to reflect the change
+            RefreshRates(true);
+        }
+
+        /// <summary>
+        /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
+        /// the known existing rows and their known corresponding entities.
+        /// </summary>
+        public void UpdateContent()
+        {
+            // Something about the shipment has changed, so we need to refresh the rates
+            RefreshRates(true);
+        }
+
+        /// <summary>
+        /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
+        /// </summary>
+        private void RefreshRates(bool forceFetch)
+        {
+            // This will be 0 when ShipWorks is first started and an order 
+            // has not been selected yet
+            if (selectedOrderID > 0)
+            {
+                OrderEntity order = DataProvider.GetEntity(selectedOrderID) as OrderEntity;
 
                 if (order != null)
                 {
@@ -101,14 +144,14 @@ namespace ShipWorks.Shipping.Editing
                         // Grab the first unprocessed shipment
                         ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
 
-                        if (cachedRates.Contains(shipmentForRating.ShipmentID))
+                        if (cachedRates.Contains(shipmentForRating.ShipmentID) && !forceFetch)
                         {
                             // Rates for this shipment have already been cached
                             RateGroup rateGroup = cachedRates[shipmentForRating.ShipmentID];
-                            
+
                             rateControl.HideSpinner();
                             rateControl.LoadRates(rateGroup);
-                            
+
                         }
                         else
                         {
@@ -119,6 +162,7 @@ namespace ShipWorks.Shipping.Editing
                     }
                     else
                     {
+                        rateControl.HideSpinner();
                         rateControl.ClearRates("All shipments for this order have been processed.");
                     }
                 }
@@ -135,7 +179,6 @@ namespace ShipWorks.Shipping.Editing
             {
                 ratesWorker.WorkerReportsProgress = false;
                 ratesWorker.WorkerSupportsCancellation = true;
-
 
                 // We're going to be going over the network to get rates from the provider, so show the spinner
                 // while rates are being fetched to give the user some indication that we're working
@@ -197,24 +240,6 @@ namespace ShipWorks.Shipping.Editing
                 // Execute the work to get the rates
                 ratesWorker.RunWorkerAsync();
             }
-        }
-
-        /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
-        /// list with up-to-date displayed entity content.
-        /// </summary>
-        public void ReloadContent()
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
-        /// the known existing rows and their known corresponding entities.
-        /// </summary>
-        public void UpdateContent()
-        {
-            // Do nothing
         }
 
         /// <summary>
