@@ -275,6 +275,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
+            SyncSelectedRate();
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
             if (!service.MultiValued)
             {
                 iParcelServiceType serviceType = (iParcelServiceType)service.SelectedValue;

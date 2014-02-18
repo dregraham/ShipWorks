@@ -637,7 +637,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
 
-                SyncSelectedRate(serviceType);
+                SyncSelectedRate();
             }
             else
             {
@@ -653,19 +653,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
         }
 
-        private void SyncSelectedRate(FedExServiceType serviceType)
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
         {
-            RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+            if (!service.MultiValued && service.SelectedValue != null)
             {
-                if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
-                    return false;
-                }
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                    {
+                        return false;
+                    }
 
-                return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
-            });
+                    return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
+                });
 
-            RateControl.SelectRate(matchingRate);
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
 
         /// <summary>

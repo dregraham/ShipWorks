@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping
         private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
         private long lastRateCheckShipmentId = -1;
         private ShipmentEntity clonedShipmentEntityForRates;
-
+        
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping
             {
                 throw new ArgumentNullException("shipments");
             }
-
+            
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
 
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping
 
             // Save all changes from the UI to the previous entity selection
             SaveUIDisplayedShipments();
-
+            
             // Reload the displayed shipments so that they show the new shipment type UI
             LoadSelectedShipments(true);
         }
@@ -348,11 +348,7 @@ namespace ShipWorks.Shipping
             uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
-            BackgroundExecutor<ShipmentEntity> executor = 
-				new BackgroundExecutor<ShipmentEntity>(this,
-                                                                                                 "Preparing Shipments",
-                                                                                                 "ShipWorks is preparing the shipments.",
-                                                                                                 "Shipment {0} of {1}");
+            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += LoadSelectedShipmentsCompleted;
@@ -1030,6 +1026,8 @@ namespace ShipWorks.Shipping
                     // Only show the configure link for the best rate shipment type
                     rateControl.ShowConfigureLink = rateGroup.Carrier == ShipmentTypeCode.BestRate;
                     rateControl.LoadRates(rateGroup);
+                    
+                    ServiceControl.SyncSelectedRate();
                 }
             }
         }

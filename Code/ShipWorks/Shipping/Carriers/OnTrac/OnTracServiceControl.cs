@@ -338,7 +338,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
         /// </summary>
-        private void SyncSelectedRate()
+        public override void SyncSelectedRate()
         {
             if (!service.MultiValued)
             {

@@ -450,6 +450,12 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public virtual void SyncSelectedRate()
+        { }
+
+        /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
         private void OnRecipientDestinationChanged(object sender, EventArgs e)

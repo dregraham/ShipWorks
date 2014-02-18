@@ -200,5 +200,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             ClearRatesAction(string.Empty);
         }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (LoadedShipments.Count > 1 || serviceLevel.MultiValued)
+            {
+                RateControl.ClearSelection();
+            }
+            else
+            {
+                // Always select the first rate since all the rates already take the service 
+                // level and the other fields into account when compiling the list of rates
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault();
+                RateControl.SelectRate(matchingRate);
+            }
+        }
+        
     }
 }

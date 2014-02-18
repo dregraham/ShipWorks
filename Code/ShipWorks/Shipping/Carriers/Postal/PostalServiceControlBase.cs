@@ -219,6 +219,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // Update the descriptive section text
             UpdateSectionDescription();
+
+            SyncSelectedRate();
         }
 
         /// <summary>
@@ -366,7 +368,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Synchronizes the selected rate in the rate control.
         /// </summary>
-        protected virtual void SyncSelectedRate()
+        public override void SyncSelectedRate()
         {
             PostalServiceType serviceType = (PostalServiceType)service.SelectedValue;
             PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType)confirmation.SelectedValue;
@@ -377,8 +379,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
-                    PostalRateSelection current = (PostalRateSelection)r.Tag;
-                    if (current == null || r.ShipmentType != (ShipmentTypeCode)LoadedShipments.FirstOrDefault().ShipmentType)
+                    if (r.Tag == null)
+                    {
+                        // The rates in the rates grid hasn't caught up or something else wacky is going on
+                        return false;
+                    }
+
+                    PostalRateSelection current = r.Tag as PostalRateSelection;
+                    if (current == null)
                     {
                         // This isn't an actual rate - just a row in the grid for the section header
                         return false;
