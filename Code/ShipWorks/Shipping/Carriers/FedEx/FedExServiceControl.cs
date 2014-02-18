@@ -636,14 +636,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 nonStandardPackaging.Visible =
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
+
+                SyncSelectedRate(serviceType);
             }
             else
             {
                 UpdatePackagingChoices(null);
+
+                // Don't show any selection when multiple services are selected
+                RateControl.ClearSelection();
             }
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+
+            
+        }
+
+        private void SyncSelectedRate(FedExServiceType serviceType)
+        {
+            RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+            {
+                if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                {
+                    return false;
+                }
+
+                return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
+            });
+
+            RateControl.SelectRate(matchingRate);
         }
 
         /// <summary>
