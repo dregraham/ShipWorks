@@ -245,6 +245,7 @@
             this.isDeliveryDutyPaid.TabIndex = 8;
             this.isDeliveryDutyPaid.Text = "Duty Delivery Paid";
             this.isDeliveryDutyPaid.UseVisualStyleBackColor = false;
+            this.isDeliveryDutyPaid.CheckStateChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelDeliveryDutyPaid
             // 
@@ -266,6 +267,7 @@
             this.emailTrack.TabIndex = 5;
             this.emailTrack.Text = "Track By Email";
             this.emailTrack.UseVisualStyleBackColor = false;
+            this.emailTrack.CheckStateChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelNotification
             // 
