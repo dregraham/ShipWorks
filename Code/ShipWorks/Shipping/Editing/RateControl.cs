@@ -198,6 +198,50 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Selects the rate in the grid. If the rate is not found, no rows are selected.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        public void SelectRate(RateResult rate)
+        {
+            ClearSelection();
+            
+            int rateIndex = RateGroup.Rates.IndexOf(rate);
+            if (rateIndex >= 0)
+            {
+                // The rate index corresponds to a row in the grid based on how the 
+                // rate results are being loaded
+                GridRow selectedRow = sandGrid.Rows[rateIndex];
+                selectedRow.EnsureVisible();
+                
+                foreach (GridCell cell in selectedRow.Cells)
+                {
+                    // Highlight the selected row otherwise it's just a light shade of gray
+                    // that can be hard to tell which row is selected
+                    cell.BackColor = Color.DodgerBlue;
+                }
+
+                sandGrid.SelectRow(selectedRow);
+            }
+        }
+
+        /// <summary>
+        /// Clears any row selection in the grid.
+        /// </summary>
+        public void ClearSelection()
+        {
+            // Remove any highlighting from previously selected rows
+            foreach (GridRow row in sandGrid.Rows)
+            {
+                foreach (GridCell cell in row.Cells)
+                {
+                    cell.BackColor = Color.Empty;
+                }
+            }
+
+            sandGrid.SelectedElements.Clear();
+        }
+
+        /// <summary>
         /// Gets the provider logo.
         /// </summary>
         /// <param name="rate">The rate.</param>
