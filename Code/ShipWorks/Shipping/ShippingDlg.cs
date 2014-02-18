@@ -1696,6 +1696,7 @@ namespace ShipWorks.Shipping
             // the grid does not show rates otherwise
             if (uiDisplayedShipments.Count != 1)
             {
+                ClearRates("(Multiple)");
                 return;
             }
 
