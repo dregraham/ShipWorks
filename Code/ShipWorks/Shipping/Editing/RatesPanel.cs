@@ -157,6 +157,11 @@ namespace ShipWorks.Shipping.Editing
                             rateControl.LoadRates(rateGroup);
 
                         }
+                        if (shipmentForRating.ShipmentType == 99 || shipmentForRating.ShipmentType == 5)
+                        {
+                            rateControl.HideSpinner();
+                            rateControl.ClearRates("The selected carrier does not support fetching rates.");
+                        }
                         else
                         {
                             // We need to fetch the rates from the provider
