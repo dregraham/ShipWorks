@@ -107,6 +107,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             bool allInternational = LoadedShipments.Any(shipment => !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode));
 
             // Update the service types
+            service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(!allInternational);
 
             using (new MultiValueScope())
@@ -127,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     referenceNumber2.ApplyMultiText(shipment.OnTrac.Reference2);
                     instructions.ApplyMultiText(shipment.OnTrac.Instructions);
 
-                    // Sets service type only if it is avalable
+                    // Sets service type only if it is available
                     var onTracServiceType = (OnTracServiceType) shipment.OnTrac.Service;
                     if (((EnumList<OnTracServiceType>) service.DataSource).Any(x => x.Value == onTracServiceType))
                     {
@@ -141,7 +142,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     dimensions.Add(new DimensionsAdapter(shipment.OnTrac));
                 }
             }
-            
+
+
+            service.SelectedValueChanged += OnServiceChanged;
+
             //Load the dimensions
             dimensionsControl.LoadDimensions(dimensions);
         }
@@ -321,6 +325,34 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Called when the service type has changed.
+        /// </summary>
+        private void OnServiceChanged(object sender, EventArgs e)
+        {
+            if (!service.MultiValued)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
+
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
+                    {
+                        return false;
+                    }
+
+                    return (OnTracServiceType)r.Tag == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }

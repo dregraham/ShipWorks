@@ -405,6 +405,7 @@
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(175, 21);
             this.service.TabIndex = 65;
+            this.service.SelectedIndexChanged += new System.EventHandler(this.OnServiceChanged);
             // 
             // labelShipDate
             // 
