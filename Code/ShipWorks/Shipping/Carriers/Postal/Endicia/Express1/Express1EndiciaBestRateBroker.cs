@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -34,13 +37,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
-            
+
             // Set the shipment type to express1 for endicia
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Endicia);
 
             return rateGroup;
 		}
-			
+
         /// <summary>
         /// Configures extra settings required by the broker
         /// </summary>

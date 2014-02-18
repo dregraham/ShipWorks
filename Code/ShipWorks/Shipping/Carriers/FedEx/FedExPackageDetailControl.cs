@@ -20,6 +20,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         List<ShipmentEntity> loadedShipments;
 
+        /// <summary>
+        /// The user has edited\changed something
+        /// </summary>
+        public event EventHandler PackageDetailsChanged;
+
+        // So we know when not to raise the changed event
+        bool loading = false;
+
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
@@ -33,6 +41,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void LoadShipments(List<ShipmentEntity> shipments, bool enableEditing)
         {
+            loading = true;
+
             packagesGrid.SelectionChanged -= this.OnChangeSelectedPackages;
 
             loadedShipments = shipments;
@@ -96,6 +106,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateLayout();
             UpdateFreightUI();
+
+            loading = false;
         }
 
         /// <summary>
@@ -265,6 +277,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // package count wouldn't change if control weren't editable.
             LoadShipments(loadedShipments,true);
+        }
+
+        /// <summary>
+        /// Indicates that the user has changed values 
+        /// </summary>
+        private void OnPackageDetailsChanged(object sender, EventArgs e)
+        {
+            if (loading)
+            {
+                return;
+            }
+
+            if (PackageDetailsChanged != null)
+            {
+                PackageDetailsChanged(this, EventArgs.Empty);
+            }
         }
     }
 }

@@ -198,6 +198,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Size = new System.Drawing.Size(267, 21);
+            this.residentialDetermination.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // sectionReturns
             // 
@@ -527,6 +528,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.confirmation.PromptText = "(Multiple Values)";
             this.confirmation.Size = new System.Drawing.Size(175, 21);
             this.confirmation.TabIndex = 73;
+            this.confirmation.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelConfirmation
             // 
@@ -1349,6 +1351,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.packageDetailsControl.Name = "packageDetailsControl";
             this.packageDetailsControl.Size = new System.Drawing.Size(431, 181);
             this.packageDetailsControl.TabIndex = 0;
+            this.packageDetailsControl.PackageDetailsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageDetailsControl.SizeChanged += new System.EventHandler(this.OnPackageDetailsControlSizeChanged);
             // 
             // UpsServiceControl

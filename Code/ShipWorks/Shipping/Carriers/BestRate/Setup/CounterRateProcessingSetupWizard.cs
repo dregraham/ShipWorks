@@ -146,19 +146,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
                 useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
-
-                // Pull the account description from the tag
-                BestRateResultTag bestRateTag = ((BestRateResultTag)existingAccountRate.Tag);
-                string accountDescription = bestRateTag.AccountDescription ?? string.Empty;
-                
-                if (accountDescription.Length >= 18)
-                {
-                    // Truncate the account description, so those having an address doesn't cause
-                    // the label text to run off the form
-                    accountDescription = StringUtility.Truncate(accountDescription, 15) + "...";
-                }
-
-                useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{AccountDescription}", accountDescription);
                 
                 // Show the actual amount and the difference between the best rate and 
                 // the cheapest available rate
@@ -261,8 +248,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             IgnoreAllCounterRates = false;
 
             // Launch the setup wizard of the selected shipment type
-            DialogResult = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+            DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+
+            if (result == DialogResult.OK)
+            {
+                MarkSelectedShipmentTypeAsBeingUsed();
+            }
+            
+            // Close the dialog regardless of whether they canceled out of the setup wizard
+            DialogResult = result;
             Close();
+        }
+
+        /// <summary>
+        /// Called when the value in the setup existing provider drop down list has changed.
+        /// </summary>
+        private void OnSetupExistingProviderChanged(object sender, System.EventArgs e)
+        {
+            // Disable the "Add my account" button if a provider is not selected
+            ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
+            setupExistingAccountButton.Enabled = selectedItem != null;
         }
 
         /// <summary>
@@ -287,7 +292,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
                 
                 if (result == DialogResult.OK)
-                {
+                {   
+                    MarkSelectedShipmentTypeAsBeingUsed();
+
                     DialogResult = result;
                     Close();
                 }
@@ -298,6 +305,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     Show(this.Owner);
                 }
             }
+        }
+
+        /// <summary>
+        /// Helper method to designate the selected shipment as being configured and 
+        /// included in the global shipping settings
+        /// </summary>
+        private void MarkSelectedShipmentTypeAsBeingUsed()
+        {
+            // Mark the shipment as being configured now that an account has been added
+            ShippingSettings.MarkAsConfigured(SelectedShipmentType.ShipmentTypeCode);
+
+            // We also want to ensure sure that the provider is no longer excluded in
+            // the global settings
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)SelectedShipmentType.ShipmentTypeCode).ToArray();
+
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>

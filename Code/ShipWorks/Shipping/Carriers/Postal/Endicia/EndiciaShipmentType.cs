@@ -462,15 +462,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
                     else
                     {
-                        endiciaRates.ForEach(x => x.ShipmentType = ShipmentTypeCode.Endicia);
-                        return new RateGroup(endiciaRates);
+                        return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
                     }
                     
                 }
                 else
                 {
-                    // Express1 rates - return as-is
-                    return new RateGroup(endiciaRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
+                    // Express1 rates - return rates filtered by what is available to the user
+                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
                 }
             }
             catch (EndiciaException ex)

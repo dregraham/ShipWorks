@@ -577,12 +577,6 @@
     <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.Designer.cs">
       <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\CounterRateProcessingWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\CounterRateProcessingWizardPage.Designer.cs">
-      <DependentUpon>CounterRateProcessingWizardPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressException.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesProcessingArgs.cs" />
@@ -6856,9 +6850,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
       <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\CounterRateProcessingWizardPage.resx">
-      <DependentUpon>CounterRateProcessingWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.resx">
       <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>

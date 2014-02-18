@@ -967,7 +967,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (confirmationOptions.Count > 0)
                         {
                             // Add the 'base' rate for the service type, without any confirmations\extras
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days));
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) { Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None) });
 
                             if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
                             {

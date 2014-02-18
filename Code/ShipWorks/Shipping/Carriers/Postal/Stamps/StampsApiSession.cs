@@ -254,7 +254,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            stampsRate.DeliverDays.Replace("Days", ""));
+                            stampsRate.DeliverDays.Replace("Days", ""))
+                        {
+                            Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None)
+                        };
                     }
                     else
                     {

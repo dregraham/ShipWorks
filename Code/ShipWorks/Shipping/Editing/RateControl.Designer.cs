@@ -133,7 +133,6 @@ namespace ShipWorks.Shipping.Editing
             this.gridColumnProvider.Clickable = false;
             this.gridColumnProvider.HeaderText = "Provider";
             this.gridColumnProvider.MinimumWidth = 50;
-            this.gridColumnProvider.Visible = false;
             this.gridColumnProvider.Width = 75;
             // 
             // gridColumnService

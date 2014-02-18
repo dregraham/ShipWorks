@@ -333,18 +333,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 // based on the global shipping settings and best rate settings with preference for Endicia
                 ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
 
-                if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
+                if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
                 {
-                    // Endicia has not been excluded in the global shipping settings, has not been excluded 
-                    // from Best Rate, and there aren't any endicia accounts, so set the ShipmentType in the
-                    // web tool counter rates broker to be for Endicia
+                    // Endicia has not been excluded from Best Rate, and there aren't any 
+                    // Endicia accounts, so use the counter rates broker for Endicia
                     broker = new EndiciaCounterRatesBroker(new EndiciaAccountRepository());
                 }
-                else if (!shippingSettings.ExcludedTypes.Contains((int)ShipmentTypeCode.Stamps) && !shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
+                else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
                 {
-                    // Endicia is not being used in best rate (for whatever reason), Stamps.com is has not been excluded 
-                    // in the global shipping settings and has not been excluded from Best Rate, so set the ShipmentType 
-                    // in the web tool counter rates broker to be for Stamps.com
+                    // Endicia is not being used in best rate (for whatever reason), and Stamps.com has
+                    // not been excluded from Best Rate, so use the counter rates broker for Stamps.com
                     broker = new StampsCounterRatesBroker(new StampsAccountRepository());
                 }
 
@@ -353,6 +351,30 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return broker;
-        }    
+        }
+
+        /// <summary>
+        /// Builds a RateGroup from a list of express 1 rates
+        /// </summary>
+        /// <param name="rates">List of rates that should be filtered and added to the group</param>
+        /// <param name="express1ShipmentType">Express1 shipment type</param>
+        /// <param name="baseShipmentType">Base type of the shipment</param>
+        /// <returns></returns>
+        protected static RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
+        {
+            // Express1 rates - return rates filtered by what is available to the user
+            List<PostalServiceType> availabelServiceTypes =
+                PostalUtility.GetDomesticServices(express1ShipmentType)
+                    .Concat(PostalUtility.GetInternationalServices(express1ShipmentType))
+                    .ToList();
+
+            var validExpress1Rates = rates
+                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.Tag).ServiceType))
+                .ToList();
+
+            validExpress1Rates.ForEach(e => e.ShipmentType = baseShipmentType);
+
+            return new RateGroup(validExpress1Rates);
+        }
     }
 }

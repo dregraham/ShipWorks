@@ -247,7 +247,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 {
                     rates.Add(new RateResult(
                         EnumHelper.GetDescription(serviceType),
-                        PostalUtility.GetServiceTransitDays(serviceType)));
+                        PostalUtility.GetServiceTransitDays(serviceType))
+                    {
+                        Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery)
+                    });
 
                     decimal deliveryAmount = (serviceType == PostalServiceType.PriorityMail || serviceType == PostalServiceType.FirstClass) ? 0m : .19m;
                     decimal signatureAmount = 1.80m;

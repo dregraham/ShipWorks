@@ -133,6 +133,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 if (result == DialogResult.OK)
                 {
                     ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
+
+                    // We also want to ensure sure that the provider is no longer excluded in
+                    // the global settings
+                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                    settings.ExcludedTypes = settings.ExcludedTypes.Where(shipmentType => shipmentType != (int)ShipmentType.ShipmentTypeCode).ToArray();
+
+                    ShippingSettings.Save(settings);
                 }
 
                 return result == DialogResult.OK;

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -11,6 +12,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class UpsContactInfoControl : UserControl, IShippingProfileControl
     {
+        /// <summary>
+        /// The user has edited\changed something
+        /// </summary>
+        public event EventHandler ContactInfoChanged;
+
+        // So we know when not to raise the changed event
+        bool loading = false;
+
         /// <summary>
         /// Initializes a new <see cref="UpsContactInfoControl"/> instance.
         /// </summary>
@@ -65,10 +74,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="package">Package from which values will be applied</param>
         public void ApplyFrom(UpsPackageEntity package)
         {
+            loading = true;
+
             verbalConfirmationRequired.ApplyMultiCheck(package.VerbalConfirmationEnabled);
             nameTextBox.ApplyMultiText(package.VerbalConfirmationName);
             phoneNumberTextBox.ApplyMultiText(package.VerbalConfirmationPhone);
             phoneExtensionTextBox.ApplyMultiText(package.VerbalConfirmationPhoneExtension);
+
+            loading = false;
         }
 
         /// <summary>
@@ -104,6 +117,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="entity">Profile from which the verbal confirmation information should be loaded</param>
         public void LoadFromEntity(EntityBase2 entity)
         {
+            loading = true;
+
             UpsProfilePackageEntity packageEntity = entity as UpsProfilePackageEntity;
             if (packageEntity == null)
             {
@@ -114,6 +129,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             nameTextBox.Text = packageEntity.VerbalConfirmationName;
             phoneNumberTextBox.Text = packageEntity.VerbalConfirmationPhone;
             phoneExtensionTextBox.Text = packageEntity.VerbalConfirmationPhoneExtension;
+
+            loading = false;
         }
 
         /// <summary>
@@ -122,6 +139,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnVerbalConfirmationChanged(object sender, System.EventArgs e)
         {
             tableLayoutPanel.Enabled = verbalConfirmationRequired.Checked;
+
+            OnContactInfoChanged(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Indicates that the user has changed contact info
+        /// </summary>
+        private void OnContactInfoChanged(object sender, EventArgs e)
+        {
+            if (loading)
+            {
+                return;
+            }
+
+            if (ContactInfoChanged != null)
+            {
+                ContactInfoChanged(this, EventArgs.Empty);
+            }
         }
     }
 }

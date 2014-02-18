@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -109,8 +110,6 @@ namespace ShipWorks.Shipping.Editing
             RateGroup = rateGroup;
             sandGrid.Rows.Clear();
 
-            gridColumnProvider.Visible = (rateGroup.Carrier == ShipmentTypeCode.BestRate);
-
             foreach (RateResult rate in rateGroup.Rates)
             {
                 GridRow row = new GridRow(new[]
@@ -124,10 +123,52 @@ namespace ShipWorks.Shipping.Editing
 
                 sandGrid.Rows.Add(row);
             }
-            
+
+            // Add a show more rates row to the grid if allowed.
+            AddShowMoreRatesRow(rateGroup);
+
             panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
 
             UpdateFootnotes(rateGroup);
+        }
+
+        /// <summary>
+        /// If the shipment type is BestRate and the rateGroup.ShowMoreRateResult is not null,
+        /// adds a row to the grid to allow showing more rates.
+        /// </summary>
+        private void AddShowMoreRatesRow(RateGroup rateGroup)
+        {
+            // If we are best rate and there is a show more rates rate result, add a row to the grid
+            if (rateGroup.Carrier == ShipmentTypeCode.BestRate && rateGroup.ShowMoreRateResult != null)
+            {
+                RateResult rate = rateGroup.ShowMoreRateResult;
+                RateGroup originaRateGroup = rate.Tag as RateGroup;
+
+                // If we go from BestRate to another carrier and back to BestRate, the rate.Tag is a best rate result tag, 
+                // so we skip creating the best rate result tag.
+                if (originaRateGroup != null)
+                {
+                    rate.Tag = new BestRateResultTag()
+                    {
+                        RateSelectionDelegate = entity =>
+                        {
+                            originaRateGroup.ShowMoreRateResult = null;
+                            LoadRates(originaRateGroup);
+                        }
+                    };
+                }
+
+                GridRow row = new GridRow(new[]
+                {
+                    new GridCell(""),
+                    new GridHyperlinkCell(rate.Description),
+                    new GridCell(""),
+                    new GridCell(""),
+                    new GridHyperlinkCell("More...")
+                }) { Tag = rate };
+
+                sandGrid.Rows.Add(row);
+            }
         }
 
         /// <summary>
