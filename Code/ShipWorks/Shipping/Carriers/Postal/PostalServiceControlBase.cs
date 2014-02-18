@@ -145,6 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
+            confirmation.SelectedIndexChanged -= OnConfirmationChanged;
 
             // If they are all international we can load up all the international services
             if (allInternational)
@@ -166,6 +167,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 service.DataSource = new KeyValuePair<string, PostalServiceType>[0];
             }
+            service.DisplayMember = "Key";
+            service.ValueMember = "Value";
 
             // If they all have confirmation load the confirmation types
             if (availableConfirmations.Count > 0)
@@ -178,6 +181,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 confirmation.DataSource = new KeyValuePair<string, PostalConfirmationType>[0];
                 confirmation.Enabled = true;
             }
+            confirmation.DisplayMember = "Key";
+            confirmation.ValueMember = "Value";
 
             // Load all the shipment values
             using (MultiValueScope scope = new MultiValueScope())
@@ -210,6 +215,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // Rehook events
             service.SelectedIndexChanged += new EventHandler(OnServiceChanged);
+            confirmation.SelectedIndexChanged += OnConfirmationChanged;
 
             // Update the descriptive section text
             UpdateSectionDescription();
@@ -353,6 +359,40 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateSectionDescription();
 
             UpdateAvailableShipmentOptions((PostalPackagingType?) packagingType.SelectedValue);
+
+            SyncSelectedRate();
+        }
+        
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        protected virtual void SyncSelectedRate()
+        {
+            PostalServiceType serviceType = (PostalServiceType)service.SelectedValue;
+            PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType)confirmation.SelectedValue;
+
+            if (!service.MultiValued && !confirmation.MultiValued)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    PostalRateSelection current = (PostalRateSelection)r.Tag;
+                    if (current == null)
+                    {
+                        // This isn't an actual rate - just a row in the grid for the section header
+                        return false;
+                    }
+
+                    return current.ConfirmationType == rateSelection.ConfirmationType && current.ServiceType == rateSelection.ServiceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
 
         /// <summary>
@@ -382,6 +422,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             // Update section description
             UpdateSectionDescription();
+
+            SyncSelectedRate();
         }
 
         /// <summary>
