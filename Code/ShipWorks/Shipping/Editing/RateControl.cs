@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Editing
 
         public event RateSelectedEventHandler ConfigureRateClicked;
 
-        public object syncLock = new object();
+        private object syncLock = new object();
 
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
