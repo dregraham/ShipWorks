@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping.Editing
 
         public event RateSelectedEventHandler ConfigureRateClicked;
 
+        public object syncLock = new object();
+
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
         /// </summary>
@@ -86,17 +88,20 @@ namespace ShipWorks.Shipping.Editing
         /// <remarks>This version will display any footnotes associated with the rate group</remarks>
         public void ClearRates(string emptyReason, RateGroup rateGroup)
         {
-            Debug.Assert(sandGrid.EmptyText != null, "sandGrid.EmptyText != null");
-                
-            sandGrid.EmptyText = emptyReason;
-
-            if (sandGrid.Rows.Count > 0)
+            lock (syncLock)
             {
-                sandGrid.Rows.Clear();
-            }
+                Debug.Assert(sandGrid.EmptyText != null, "sandGrid.EmptyText != null");
 
-            panelOutOfDate.Visible = false;
-            UpdateFootnotes(rateGroup);
+                sandGrid.EmptyText = emptyReason;
+
+                if (sandGrid.Rows.Count > 0)
+                {
+                    sandGrid.Rows.Clear();
+                }
+
+                panelOutOfDate.Visible = false;
+                UpdateFootnotes(rateGroup);
+            }
         }
 
         /// <summary>
@@ -128,33 +133,36 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadRates(RateGroup rateGroup)
         {
-            RateGroup = rateGroup;
-            sandGrid.Rows.Clear();
-
-            foreach (RateResult rate in rateGroup.Rates)
+            lock (syncLock)
             {
-                GridRow row = new GridRow(new[]
-                {
-                    new GridCell(GetProviderLogo(rate)),
-                    new GridCell(rate.Description),
-                    new GridCell(rate.Days),
-                    new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
-                }) { Tag = rate };
+                RateGroup = rateGroup;
+                sandGrid.Rows.Clear();
 
-                if (ShowConfigureLink)
+                foreach (RateResult rate in rateGroup.Rates)
                 {
-                    row.Cells.Add(new GridHyperlinkCell("Configure"));
+                    GridRow row = new GridRow(new[]
+                    {
+                        new GridCell(GetProviderLogo(rate)),
+                        new GridCell(rate.Description),
+                        new GridCell(rate.Days),
+                        new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
+                    }) { Tag = rate };
+
+                    if (ShowConfigureLink)
+                    {
+                        row.Cells.Add(new GridHyperlinkCell("Configure"));
+                    }
+
+                    sandGrid.Rows.Add(row);
                 }
 
-                sandGrid.Rows.Add(row);
-            }
+	            // Add a show more rates row to the grid if allowed.
+	            AddShowMoreRatesRow(rateGroup);
 
-            // Add a show more rates row to the grid if allowed.
-            AddShowMoreRatesRow(rateGroup);
+                panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
 
-            panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
-
-            UpdateFootnotes(rateGroup);
+                UpdateFootnotes(rateGroup);
+			}
         }
 
         /// <summary>
@@ -203,24 +211,28 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="rate">The rate.</param>
         public void SelectRate(RateResult rate)
         {
-            ClearSelection();
-            
-            int rateIndex = RateGroup.Rates.IndexOf(rate);
-            if (rateIndex >= 0)
+            lock (syncLock)
             {
-                // The rate index corresponds to a row in the grid based on how the 
-                // rate results are being loaded
-                GridRow selectedRow = sandGrid.Rows[rateIndex];
-                selectedRow.EnsureVisible();
-                
-                foreach (GridCell cell in selectedRow.Cells)
-                {
-                    // Highlight the selected row otherwise it's just a light shade of gray
-                    // that can be hard to tell which row is selected
-                    cell.BackColor = Color.DodgerBlue;
-                }
+                ClearSelection();
 
-                sandGrid.SelectRow(selectedRow);
+                int rateIndex = RateGroup.Rates.IndexOf(rate);
+                if (rateIndex >= 0)
+                {
+                    if (sandGrid.Rows.Count > rateIndex)
+                    {
+                        GridRow selectedRow = sandGrid.Rows[rateIndex];
+                        selectedRow.EnsureVisible();
+
+                        foreach (GridCell cell in selectedRow.Cells)
+                        {
+                            // Highlight the selected row otherwise it's just a light shade of gray
+                            // that can be hard to tell which row is selected
+                            cell.BackColor = Color.DodgerBlue;
+                        }
+
+                        sandGrid.SelectRow(selectedRow);
+                    }
+                }
             }
         }
 
