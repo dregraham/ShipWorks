@@ -417,6 +417,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // The user has selected an existing rate, so just use it
                     bestRate = eventArgs.SelectedRate;
+                    ratesToApplyToReturnedShipments = allRates
+                        .Rates
+                        .Where(r => r.ShipmentType == bestRate.ShipmentType && r.Amount == eventArgs.SelectedRate.Amount)
+                        .ToList();
                 }
                 else if (eventArgs.SelectedShipmentType != null)
                 {
@@ -427,6 +431,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
                     // and filtered by service level
                     bestRate = CompileBestRates(shipment, new List<RateGroup> { bestRateGroup }).Rates.FirstOrDefault();
+
+                    ratesToApplyToReturnedShipments = new List<RateResult> { bestRate };
                 }
                 else
                 {
@@ -439,8 +445,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     throw new ShippingException("ShipWorks could not find any rates.");
                 }
-
-                ratesToApplyToReturnedShipments = new List<RateResult> { bestRate };
             }
             else
             {
