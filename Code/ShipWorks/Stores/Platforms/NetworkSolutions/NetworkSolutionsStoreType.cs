@@ -180,6 +180,19 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             outline.AddElement("NetworkSolutionsOrderId", () => order.Value.NetworkSolutionsOrderID);
         }
 
+        /// <summary>
+        /// Indicates if the display of the given "Online" column is allowed.  
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
+
         #region Online Update Commands
 
         /// <summary>
