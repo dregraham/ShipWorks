@@ -395,6 +395,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 UpdateBillingSectionDisplay();
+
+                // Update the selected rate in the rate control to coincide with the service change
+                UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
+                
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r => (UpsServiceType)r.Tag == selectedServiceType);
+                RateControl.SelectRate(matchingRate);
             }
         }
 
