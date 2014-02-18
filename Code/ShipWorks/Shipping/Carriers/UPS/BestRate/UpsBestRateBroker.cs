@@ -52,13 +52,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Gets a list of UPS rates
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
-        /// <param name="exceptionHandler">Action that performs exception handling</param>
+        /// <param name="brokerExceptions">Action that performs exception handling</param>
         /// <returns>List of NoncompetitiveRateResults</returns>
         /// <remarks>This is overridden because Ups has a requirement that we have to hide their branding if
         /// other carriers rates are present</remarks>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            RateGroup bestRates = base.GetBestRates(shipment, exceptionHandler);
+            RateGroup bestRates = base.GetBestRates(shipment, brokerExceptions);
             List<RateResult> modifiedRates = bestRates.Rates.Select(x => new NoncompetitiveRateResult(x, GetServiceTypeDescription(x))).ToList<RateResult>();
             
             bestRates.Rates.Clear();
@@ -66,14 +66,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             if (isMailInnovationsAvailable)
             {
-                exceptionHandler(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("UPS doesn't provide rates for Mail Innovations."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
             if (canUseSurePost && !bestRates.Rates.Any(r => UpsUtility.IsUpsSurePostService(((UpsServiceType)((BestRateResultTag)r.Tag).OriginalTag))))
             {
                 // The account is configured to use SurePost, but there weren't any SurePost rates returned, so
                 // we want to flag this in the from of sending a BrokerException to the exception handler
-                exceptionHandler(new BrokerException(new ShippingException("UPS did not provide SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("UPS did not provide SurePost rates."), BrokerExceptionSeverityLevel.Warning, ShipmentType));
             }
             
             return bestRates;

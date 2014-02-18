@@ -199,13 +199,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, ex =>
-            {
-                // Accumulate all of the broker exceptions for later use
-                log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
-                brokerExceptions.Add(ex);
-            });
-
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+            
             RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
             // If there are more than 5 rates, we only want to show the top 5, but create a rate result for 
@@ -243,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
             
@@ -297,9 +292,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">Shipment for which to get rates</param>
         /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
         /// <returns>A task that will contain the results</returns>
-        private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, exceptionHandler));
+            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, brokerExceptions));
         }
 
         /// <summary>
@@ -359,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
-                rateGroups = GetRates(shipment, PreProcessExceptionHandler);
+                rateGroups = GetRates(shipment, new List<BrokerException>());
             }
             catch (AggregateException ex)
             {
@@ -418,7 +413,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 {
                     // Get the best rates for the newly created account
                     IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
-                    RateGroup bestRateGroup = broker.GetBestRates(shipment, PreProcessExceptionHandler);
+                    RateGroup bestRateGroup = broker.GetBestRates(shipment, new List<BrokerException>());
 
                     // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
                     // and filtered by service level

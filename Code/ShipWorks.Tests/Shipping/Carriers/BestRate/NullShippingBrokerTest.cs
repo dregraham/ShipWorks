@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsEmptyList_Test()
         {
-            IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), ex => { }).Rates;
+            IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), new List<BrokerException>()).Rates;
 
             Assert.IsTrue(!rates.Any());
         }
