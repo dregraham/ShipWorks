@@ -76,8 +76,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
                 }
 
-                // Since we sent our own exception handler to the GetBestRates method, we need to 
-                // call the exception handler that was provided with any broker exceptions
+                // Since counter rate exceptions are not important, we want to set them to the 'Information' severity level
                 foreach (BrokerException brokerException in brokerExceptions)
                 {
                     brokerException.SeverityLevel = BrokerExceptionSeverityLevel.Information;
