@@ -80,16 +80,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // call the exception handler that was provided with any broker exceptions
                 foreach (BrokerException brokerException in brokerExceptions)
                 {
-                    if (brokerException.SeverityLevel != BrokerExceptionSeverityLevel.Information)
-                    {
-                        // Translate the broker exception to an informational severity level before
-                        // sending it to the exception handler
-                        brokerExceptions.Add(new BrokerException(brokerException, BrokerExceptionSeverityLevel.Information, brokerException.ShipmentType));
-                    }
-                    else
-                    {
-                        brokerExceptions.Add(brokerException);
-                    }
+                    brokerException.SeverityLevel = BrokerExceptionSeverityLevel.Information;
                 }
             }
             catch (AggregateException ex)

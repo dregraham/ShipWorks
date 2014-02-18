@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Editing
                 providerLogo = ShippingIcons.usps;
             }
 
-            // If non-competitive, show the blue truck.
+            // If non-competitive, show the brown truck.
             NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
             if (noncompetitiveRateResult != null)
             {

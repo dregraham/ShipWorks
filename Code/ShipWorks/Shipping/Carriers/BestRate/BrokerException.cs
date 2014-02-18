@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the severity level of the exception.
         /// </summary>
-        public BrokerExceptionSeverityLevel SeverityLevel { get; private set; }
+        public BrokerExceptionSeverityLevel SeverityLevel { get; set; }
 
         /// <summary>
         /// Gets the shipment type.
