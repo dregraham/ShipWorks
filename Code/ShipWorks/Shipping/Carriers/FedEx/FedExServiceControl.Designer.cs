@@ -246,6 +246,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Size = new System.Drawing.Size(405, 21);
+            this.residentialDetermination.SelectedIndexChanged += new System.EventHandler(this.OnResidentialDeterminationChanged);
             // 
             // sectionReturns
             // 
@@ -561,6 +562,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fromAddressType.PromptText = "(Multiple Values)";
             this.fromAddressType.Size = new System.Drawing.Size(404, 21);
             this.fromAddressType.TabIndex = 2;
+            this.fromAddressType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // nonStandardPackaging
             // 
@@ -925,6 +927,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.signature.PromptText = "(Multiple Values)";
             this.signature.Size = new System.Drawing.Size(175, 21);
             this.signature.TabIndex = 1;
+            this.signature.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelSignature
             // 
@@ -1858,6 +1861,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageDetailsControl.Name = "packageDetailsControl";
             this.packageDetailsControl.Size = new System.Drawing.Size(345, 300);
             this.packageDetailsControl.TabIndex = 0;
+            this.packageDetailsControl.PackageDetailsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageDetailsControl.Resize += new System.EventHandler(this.OnPackageDetailsResize);
             // 
             // labelDropoffType
@@ -1879,6 +1883,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dropoffType.PromptText = "(Multiple Values)";
             this.dropoffType.Size = new System.Drawing.Size(175, 21);
             this.dropoffType.TabIndex = 60;
+            this.dropoffType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // sectionServiceOptions
             // 

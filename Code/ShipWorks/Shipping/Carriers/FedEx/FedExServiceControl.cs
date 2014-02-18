@@ -1000,6 +1000,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 infotipSmartPostConfirmation.Visible = true;
                 smartConfirmation.Enabled = true;
             }
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -1069,6 +1071,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             otherPackageHolder.Height = packageDetailsControl.Bottom;
             sectionPackageDetails.Height = packageDetailsControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
+        }
+
+        /// <summary>
+        /// Signal that rates are now invalid due to the residential flag changing.
+        /// </summary>
+        private void OnResidentialDeterminationChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
         }
     }
 }
