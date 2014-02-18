@@ -8,6 +8,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateResultTag
     {
+        bool isRealRate = true;
+
         /// <summary>
         /// Original value of the rate result's tag
         /// </summary>
@@ -33,5 +35,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets or sets the account description.
         /// </summary>
         public string AccountDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this is a real rate or some kind of placeholder
+        /// </summary>
+        public bool IsRealRate
+        {
+            get
+            {
+                return isRealRate;
+            }
+            set
+            {
+                isRealRate = value;
+            }
+        }
     }
 }

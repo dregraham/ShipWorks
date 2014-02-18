@@ -153,7 +153,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
-            
+
+            // Don't raise event if it was just the 'More...' link:
+            BestRateResultTag bestRateResultTag = e.Rate.Tag as BestRateResultTag;
+            if (bestRateResultTag != null && !bestRateResultTag.IsRealRate) return;
+
             RaiseShipmentTypeChanged();
         }
 

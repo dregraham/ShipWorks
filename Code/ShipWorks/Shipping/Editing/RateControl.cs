@@ -142,19 +142,20 @@ namespace ShipWorks.Shipping.Editing
             if (rateGroup.Carrier == ShipmentTypeCode.BestRate && rateGroup.ShowMoreRateResult != null)
             {
                 RateResult rate = rateGroup.ShowMoreRateResult;
-                RateGroup originaRateGroup = rate.Tag as RateGroup;
+                RateGroup originalRateGroup = rate.Tag as RateGroup;
 
                 // If we go from BestRate to another carrier and back to BestRate, the rate.Tag is a best rate result tag, 
                 // so we skip creating the best rate result tag.
-                if (originaRateGroup != null)
+                if (originalRateGroup != null)
                 {
                     rate.Tag = new BestRateResultTag()
                     {
                         RateSelectionDelegate = entity =>
                         {
-                            originaRateGroup.ShowMoreRateResult = null;
-                            LoadRates(originaRateGroup);
-                        }
+                            originalRateGroup.ShowMoreRateResult = null;
+                            LoadRates(originalRateGroup);
+                        },
+                        IsRealRate = false
                     };
                 }
 
