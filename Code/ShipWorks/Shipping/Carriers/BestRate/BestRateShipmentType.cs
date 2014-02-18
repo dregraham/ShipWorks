@@ -132,9 +132,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new BestRateServiceControl(ShipmentTypeCode);
+            return new BestRateServiceControl(ShipmentTypeCode, rateControl);
         }
 
         /// <summary>

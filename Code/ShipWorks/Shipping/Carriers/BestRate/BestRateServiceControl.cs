@@ -14,10 +14,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly BestRateShipmentType bestRateShipment;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BestRateServiceControl"/> class.
         /// </summary>
-        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode)
-            : base (shipmentTypeCode)
+        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+            : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
             
@@ -200,5 +200,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             ClearRatesAction(string.Empty);
         }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (LoadedShipments.Count > 1 || serviceLevel.MultiValued)
+            {
+                RateControl.ClearSelection();
+            }
+            else
+            {
+                // Always select the first rate since all the rates already take the service 
+                // level and the other fields into account when compiling the list of rates
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault();
+                RateControl.SelectRate(matchingRate);
+            }
+        }
+        
     }
 }

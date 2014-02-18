@@ -37,7 +37,10 @@ namespace ShipWorks.Shipping.Editing
             cachedRates = new LruCache<long, ShipmentRateGroup>(1000);
             selectedOrderID = 0;
 
-            rateControl.RateSelected += OnRateSelected;
+            // We want to show the configure link for all rates, so we
+            // can open the shipping dialog
+            rateControl.ShowConfigureLink = true;
+            rateControl.ConfigureRateClicked += OnConfigureRateClicked;
 
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
@@ -265,7 +268,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="rateSelectedEventArgs">The <see cref="RateSelectedEventArgs"/> instance containing the event data.</param>
-        private void OnRateSelected(object sender, RateSelectedEventArgs rateSelectedEventArgs)
+        private void OnConfigureRateClicked(object sender, RateSelectedEventArgs rateSelectedEventArgs)
         {
             ShipmentRateGroup rateGroup = (ShipmentRateGroup)rateControl.RateGroup;
             ShipmentEntity shipment = rateGroup.Shipment;

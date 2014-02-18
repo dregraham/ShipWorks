@@ -48,9 +48,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Creates the Express1/Stamps service control.
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new Express1StampsServiceControl();
+            return new Express1StampsServiceControl(rateControl);
         }
 
         /// <summary>

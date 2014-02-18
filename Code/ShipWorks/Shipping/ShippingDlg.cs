@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping
         private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
         private long lastRateCheckShipmentId = -1;
         private ShipmentEntity clonedShipmentEntityForRates;
-
+        
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping
             {
                 throw new ArgumentNullException("shipments");
             }
-
+            
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
 
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping
 
             // Save all changes from the UI to the previous entity selection
             SaveUIDisplayedShipments();
-
+            
             // Reload the displayed shipments so that they show the new shipment type UI
             LoadSelectedShipments(true);
         }
@@ -348,11 +348,7 @@ namespace ShipWorks.Shipping
             uiActivatedShipmentTypes = ShippingSettings.Fetch().ActivatedTypes.Select(v => (ShipmentTypeCode) v).ToList();
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
-            BackgroundExecutor<ShipmentEntity> executor = 
-				new BackgroundExecutor<ShipmentEntity>(this,
-                                                                                                 "Preparing Shipments",
-                                                                                                 "ShipWorks is preparing the shipments.",
-                                                                                                 "Shipment {0} of {1}");
+            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += LoadSelectedShipmentsCompleted;
@@ -794,12 +790,12 @@ namespace ShipWorks.Shipping
                 // If its null, its multi select
                 if (shipmentType == null)
                 {
-                    newServiceControl = new MultiSelectServiceControl();
+                    newServiceControl = new MultiSelectServiceControl(rateControl);
                 }
 
                 else if (IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
                 {
-                    newServiceControl = shipmentType.CreateServiceControl();
+                    newServiceControl = shipmentType.CreateServiceControl(rateControl);
                 }
 
                 if (newServiceControl != null)
@@ -856,6 +852,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked += newServiceControl.OnRateSelected;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -871,6 +868,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked -= oldServiceControl.OnRateSelected;
 
                     oldServiceControl.Dispose();
                 }
@@ -1025,7 +1023,11 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
+                    // Only show the configure link for the best rate shipment type
+                    rateControl.ShowConfigureLink = rateGroup.Carrier == ShipmentTypeCode.BestRate;
                     rateControl.LoadRates(rateGroup);
+                    
+                    ServiceControl.SyncSelectedRate();
                 }
             }
         }
