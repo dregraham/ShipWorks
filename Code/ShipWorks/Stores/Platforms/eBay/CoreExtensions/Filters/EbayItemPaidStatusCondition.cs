@@ -14,15 +14,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
     /// <summary>
     /// Condition for testing Checkout Status of an eBay order item.
     /// </summary>
-    [ConditionElement("My eBay (Shipped)", "EbayOrderItem.ShippedStatus")]
+    [ConditionElement("My eBay (Paid)", "EbayOrderItem.PaidStatus")]
     [ConditionStoreType(StoreTypeCode.Ebay)]
-    public class EbayItemShippedStatusCondition : BooleanCondition
+    public class EbayItemPaidStatusCondition : BooleanCondition
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayItemShippedStatusCondition()
-            : base("Shipped", "Not Shipped")
+        public EbayItemPaidStatusCondition()
+            : base("Paid", "Not Paid")
         {
 
         }
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
         {
             using (SqlGenerationScope scope = context.PushScope(OrderItemFields.OrderItemID, EbayOrderItemFields.OrderItemID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderItemFields.MyEbayShipped), context));
+                return scope.Adorn(base.GenerateSql(context.GetColumnReference(EbayOrderItemFields.MyEbayPaid), context));
             }
         }
     }

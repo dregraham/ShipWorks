@@ -2042,6 +2042,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorFlagType.cs" />
     <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemPaidStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemShippedStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenFactory.cs" />
@@ -2157,6 +2158,7 @@
     <Compile Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.Designer.cs">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Shopify\Enums\ShopifyRequestedShippingField.cs" />
     <Compile Include="Stores\Platforms\SellerVantage\SellerVantageWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Actions\ShopifyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyPaymentStatusCondition.cs" />
@@ -2178,6 +2180,12 @@
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.Designer.cs">
+      <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyConstants.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyEndpoints.cs" />
@@ -7076,6 +7084,9 @@
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.resx">
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.resx">
+      <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -10099,6 +10110,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

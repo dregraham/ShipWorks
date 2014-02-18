@@ -578,7 +578,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
             orderItem.Quantity = transaction.QuantityPurchased;
             orderItem.Name = transaction.Item.Title;
-            orderItem.SKU = transaction.Item.SKU ?? "";
+            UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
             orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
@@ -617,10 +617,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 orderItem.Name = transaction.Variation.VariationTitle;
             }
 
-            // Overwrite the SKU if a variation SKU is provided
-            if (!string.IsNullOrEmpty(transaction.Variation.SKU))
+            // Overwrite the SKU if a variation SKU is provided.  FreshDesk #517760 - SKU was coming down literally as "null"
+            if (!string.IsNullOrWhiteSpace(transaction.Variation.SKU) && string.Compare(transaction.Variation.SKU, "null", StringComparison.InvariantCultureIgnoreCase) != 0)
             {
-                orderItem.SKU = transaction.Variation.SKU;
+                UpdateTransactionSKU(orderItem, transaction.Variation.SKU);
             }
 
             // If this is a new item and one with variations, we can add attributes now
@@ -637,6 +637,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         attribute.UnitPrice = 0;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update the SKU of the given item with the given SKU
+        /// </summary>
+        private void UpdateTransactionSKU(EbayOrderItemEntity orderItem, string sku)
+        {
+            // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overrwrite, such as SKUVault
+            if (string.IsNullOrWhiteSpace(orderItem.SKU))
+            {
+                orderItem.SKU = sku;
             }
         }
 
