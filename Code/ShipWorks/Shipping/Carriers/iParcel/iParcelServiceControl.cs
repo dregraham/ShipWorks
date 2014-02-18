@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages
@@ -268,6 +268,34 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private void OnPackageControlSizeChanged(object sender, EventArgs e)
         {
             sectionShipment.Height = (sectionShipment.Height - sectionShipment.ContentPanel.Height) + packageControl.Bottom + 4;
+        }
+
+        /// <summary>
+        /// Called when the selected service is changed.
+        /// </summary>
+        private void OnServiceChanged(object sender, EventArgs e)
+        {
+            if (!service.MultiValued)
+            {
+                iParcelServiceType serviceType = (iParcelServiceType)service.SelectedValue;
+
+                // Update the selected rate in the rate control to coincide with the service change
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.iParcel)
+                    {
+                        return false;
+                    }
+
+                    return ((iParcelRateSelection)r.Tag).ServiceType == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }
