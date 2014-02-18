@@ -396,12 +396,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 UpdateBillingSectionDisplay();
 
-                // Update the selected rate in the rate control to coincide with the service change
-                UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
-                
-                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r => (UpsServiceType)r.Tag == selectedServiceType);
-                RateControl.SelectRate(matchingRate);
+                SyncSelectedRate();
             }
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        private void SyncSelectedRate()
+        {
+            // Update the selected rate in the rate control to coincide with the service change
+            UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
+
+            RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r => (r.ShipmentType == ShipmentTypeCode.UpsOnLineTools || r.ShipmentType == ShipmentTypeCode.UpsWorldShip) 
+                                                                                            && (UpsServiceType)r.Tag == selectedServiceType);
+            RateControl.SelectRate(matchingRate);
         }
 
         /// <summary>

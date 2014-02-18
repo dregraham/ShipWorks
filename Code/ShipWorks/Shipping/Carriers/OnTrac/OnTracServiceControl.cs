@@ -332,6 +332,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
+            SyncSelectedRate();
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        private void SyncSelectedRate()
+        {
             if (!service.MultiValued)
             {
                 // Update the selected rate in the rate control to coincide with the service change

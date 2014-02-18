@@ -378,7 +378,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     PostalRateSelection current = (PostalRateSelection)r.Tag;
-                    if (current == null)
+                    if (current == null || r.ShipmentType != (ShipmentTypeCode)LoadedShipments.FirstOrDefault().ShipmentType)
                     {
                         // This isn't an actual rate - just a row in the grid for the section header
                         return false;
