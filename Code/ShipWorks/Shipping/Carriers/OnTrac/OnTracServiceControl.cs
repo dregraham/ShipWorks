@@ -16,16 +16,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OnTracServiceControl"/> class.
         /// </summary>
-        public OnTracServiceControl()
-            : base(ShipmentTypeCode.OnTrac)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public OnTracServiceControl(RateControl rateControl)
+            : base(ShipmentTypeCode.OnTrac, rateControl)
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Initialie the comboboxes
+        /// Initialize the comboboxes
         /// </summary>
         public override void Initialize()
         {

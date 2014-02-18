@@ -18,7 +18,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelServiceControl" /> class.
         /// </summary>
-        public iParcelServiceControl() : base(ShipmentTypeCode.iParcel)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public iParcelServiceControl(RateControl rateControl) 
+            : base(ShipmentTypeCode.iParcel, rateControl)
         {
             InitializeComponent();
         }

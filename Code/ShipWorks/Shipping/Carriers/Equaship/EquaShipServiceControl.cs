@@ -24,8 +24,10 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Constructor
         /// </summary>
-        public EquaShipServiceControl() 
-            : base(ShipmentTypeCode.EquaShip)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public EquaShipServiceControl(RateControl rateControl) 
+            : base(ShipmentTypeCode.EquaShip, rateControl)
         {
             InitializeComponent();
         }

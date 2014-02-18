@@ -14,10 +14,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly BestRateShipmentType bestRateShipment;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BestRateServiceControl"/> class.
         /// </summary>
-        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode)
-            : base (shipmentTypeCode)
+        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+            : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
             

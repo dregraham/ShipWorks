@@ -18,10 +18,12 @@ namespace ShipWorks.Shipping.Carriers.Other
     public partial class OtherServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OtherServiceControl"/> class.
         /// </summary>
-        public OtherServiceControl() 
-            : base(ShipmentTypeCode.Other)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public OtherServiceControl(RateControl rateControl) 
+            : base(ShipmentTypeCode.Other, rateControl)
         {
             InitializeComponent();
         }

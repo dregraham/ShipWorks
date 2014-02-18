@@ -111,9 +111,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the user control used to edit UPS shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new UpsServiceControl(ShipmentTypeCode);
+            return new UpsServiceControl(ShipmentTypeCode, rateControl);
         }
 
         /// <summary>

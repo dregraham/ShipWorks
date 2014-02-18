@@ -32,10 +32,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         bool updatingPayorChoices = false;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FedExServiceControl"/> class.
         /// </summary>
-        public FedExServiceControl()
-            : base (ShipmentTypeCode.FedEx)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public FedExServiceControl(RateControl rateControl)
+            : base (ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
         }

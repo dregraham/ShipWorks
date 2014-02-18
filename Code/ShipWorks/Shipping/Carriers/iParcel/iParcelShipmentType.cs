@@ -449,10 +449,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Creates the UserControl that is used to edit service options for the shipment type
         /// </summary>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <returns>An iParcelServiceControl object.</returns>
-        public override ServiceControlBase CreateServiceControl()
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new iParcelServiceControl();
+            return new iParcelServiceControl(rateControl);
         }
 
         /// <summary>

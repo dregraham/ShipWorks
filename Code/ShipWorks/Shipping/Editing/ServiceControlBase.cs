@@ -74,10 +74,11 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode)
+        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
+            this.RateControl = rateControl;
         }
 
         /// <summary>
@@ -90,6 +91,12 @@ namespace ShipWorks.Shipping.Editing
                 return shipmentTypeCode;
             }
         }
+        
+        /// <summary>
+        /// A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control
+        /// </summary>
+        protected RateControl RateControl { get; private set; }
 
         /// <summary>
         /// The shipments last past to LoadShipments

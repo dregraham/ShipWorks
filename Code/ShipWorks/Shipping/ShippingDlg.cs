@@ -794,12 +794,12 @@ namespace ShipWorks.Shipping
                 // If its null, its multi select
                 if (shipmentType == null)
                 {
-                    newServiceControl = new MultiSelectServiceControl();
+                    newServiceControl = new MultiSelectServiceControl(rateControl);
                 }
 
                 else if (IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
                 {
-                    newServiceControl = shipmentType.CreateServiceControl();
+                    newServiceControl = shipmentType.CreateServiceControl(rateControl);
                 }
 
                 if (newServiceControl != null)

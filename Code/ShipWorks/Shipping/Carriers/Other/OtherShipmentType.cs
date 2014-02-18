@@ -46,9 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the control needed to edit service options for the type
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new OtherServiceControl();
+            return new OtherServiceControl(rateControl);
         }
 
         /// <summary>

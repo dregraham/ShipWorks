@@ -73,9 +73,11 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Service Control
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new EquaShipServiceControl();
+            return new EquaShipServiceControl(rateControl);
         }
 
         /// <summary>

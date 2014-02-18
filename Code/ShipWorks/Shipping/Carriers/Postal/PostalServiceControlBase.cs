@@ -24,10 +24,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public partial class PostalServiceControlBase : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Prevents a default instance of the <see cref="PostalServiceControlBase"/> class from being created.
         /// </summary>
-        private PostalServiceControlBase()
-            : base(ShipmentTypeCode.None)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        private PostalServiceControlBase(RateControl rateControl)
+            : base(ShipmentTypeCode.None, rateControl)
         {
             InitializeComponent();
         }
@@ -35,8 +37,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// For inherited designer support
         /// </summary>
-        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode) 
-            : base(shipmentTypeCode)
+        /// <param name="shipmentTypeCode"></param>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        protected PostalServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl) 
+            : base(shipmentTypeCode, rateControl)
         {
             InitializeComponent();
         }
