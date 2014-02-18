@@ -9,6 +9,7 @@ using ShipWorks.Filters;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -148,19 +149,19 @@ namespace ShipWorks.Shipping.Editing
                         // Grab the first unprocessed shipment
                         ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
 
-                        if (cachedRates.Contains(shipmentForRating.ShipmentID) && !forceFetch)
+                        if ((ShipmentTypeCode)shipmentForRating.ShipmentType == ShipmentTypeCode.Other || (ShipmentTypeCode)shipmentForRating.ShipmentType == ShipmentTypeCode.None)
+                        {
+                            rateControl.HideSpinner();
+                            rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.", 
+                                EnumHelper.GetDescription((ShipmentTypeCode)shipmentForRating.ShipmentType)));
+                        }
+                        else if (cachedRates.Contains(shipmentForRating.ShipmentID) && !forceFetch)
                         {
                             // Rates for this shipment have already been cached
                             RateGroup rateGroup = cachedRates[shipmentForRating.ShipmentID];
 
                             rateControl.HideSpinner();
                             rateControl.LoadRates(rateGroup);
-
-                        }
-                        if (shipmentForRating.ShipmentType == 99 || shipmentForRating.ShipmentType == 5)
-                        {
-                            rateControl.HideSpinner();
-                            rateControl.ClearRates("The selected carrier does not support fetching rates.");
                         }
                         else
                         {
