@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// If this rate group should show a row in the grid for "show more rates", this is the rate result to do so.
         /// </summary>
-        public RateResult ShowMoreRateResult
+        public virtual RateResult ShowMoreRateResult
         {
             get; 
             set;

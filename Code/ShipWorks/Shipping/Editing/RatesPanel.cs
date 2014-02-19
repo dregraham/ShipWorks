@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -124,8 +125,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void UpdateContent()
         {
-            // Something about the shipment has changed, so we need to refresh the rates
-            RefreshRates(true);
+            // Something about the shipment has changed, so we need to refresh the rates            
+            RefreshRates(false);
         }
 
         /// <summary>
@@ -211,6 +212,11 @@ namespace ShipWorks.Shipping.Editing
 
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                        if (panelRateGroup.ShowMoreRateResult != null)
+                        {
+                            panelRateGroup.ShowMoreRateResult.Tag = new ShipmentRateGroup((RateGroup)panelRateGroup.ShowMoreRateResult.Tag, shipment);
+                        }
+
                         cachedRates[shipment.ShipmentID] = panelRateGroup;
                     }
                     catch (ShippingException ex)
@@ -244,7 +250,7 @@ namespace ShipWorks.Shipping.Editing
                             // Only update the rate control if the shipment is for the currently selected 
                             // order to avoid the appearance of lag when a user is quickly clicking around
                             // the rate grid
-                            rateControl.HideSpinner();
+                            rateControl.HideSpinner();                            
                             rateControl.LoadRates(panelRateGroup);
                         }
                     }
@@ -273,9 +279,17 @@ namespace ShipWorks.Shipping.Editing
             ShipmentRateGroup rateGroup = (ShipmentRateGroup)rateControl.RateGroup;
             ShipmentEntity shipment = rateGroup.Shipment;
 
-            using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs))
+            BestRateResultTag resultTag = rateSelectedEventArgs.Rate.Tag as BestRateResultTag;
+            if (resultTag != null && !resultTag.IsRealRate)
             {
-                dialog.ShowDialog(this);
+                resultTag.RateSelectionDelegate(shipment);
+            }
+            else
+            {
+                using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs))
+                {
+                    dialog.ShowDialog(this);
+                }
             }
         }
     }

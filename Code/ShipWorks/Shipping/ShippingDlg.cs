@@ -673,7 +673,7 @@ namespace ShipWorks.Shipping
             {
                 // A rate has been preselected outside of this dialog, so trigger the 
                 // service control event handler to load the correct service type
-                ServiceControl.OnRateSelected(this, preSelectedRateEventArgs);
+                ServiceControl.OnConfigureRateClick(this, preSelectedRateEventArgs);
 
                 // We only want to do this once for the initial load
                 preSelectedRateEventArgs = null;

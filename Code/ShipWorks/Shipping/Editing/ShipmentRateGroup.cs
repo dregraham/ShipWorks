@@ -57,6 +57,15 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// If this rate group should show a row in the grid for "show more rates", this is the rate result to do so.
+        /// </summary>
+        public override RateResult ShowMoreRateResult
+        {
+            get { return rateGroup.ShowMoreRateResult; }
+            set { rateGroup.ShowMoreRateResult = value; }
+        }
+
+        /// <summary>
         /// Gets the shipment that the rate group was created for.
         /// </summary>
         public ShipmentEntity Shipment { get; private set; }
