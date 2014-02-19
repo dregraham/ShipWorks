@@ -57,6 +57,15 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Adds a footnote factory to the FootnoteFactories collection.
+        /// </summary>
+        /// <param name="factory">The factory.</param>
+        public override void AddFootnoteFactory(IRateFootnoteFactory factory)
+        {
+            rateGroup.AddFootnoteFactory(factory);
+        }
+
+        /// <summary>
         /// If this rate group should show a row in the grid for "show more rates", this is the rate result to do so.
         /// </summary>
         public override RateResult ShowMoreRateResult

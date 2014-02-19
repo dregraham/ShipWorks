@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Editing
         /// Adds a footnote factory to the FootnoteFactories collection.
         /// </summary>
         /// <param name="factory">The factory.</param>
-        public void AddFootnoteFactory(IRateFootnoteFactory factory)
+        public virtual void AddFootnoteFactory(IRateFootnoteFactory factory)
         {
             footnoteFactories.Add(factory);
         }

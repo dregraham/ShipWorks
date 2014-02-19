@@ -204,6 +204,9 @@ namespace ShipWorks.Shipping.Editing
                 // so we skip creating the best rate result tag.
                 if (originalRateGroup != null)
                 {
+                    // Copy over the footers, so they still appear after the more link is clicked
+                    rateGroup.FootnoteFactories.ToList().ForEach(f => originalRateGroup.AddFootnoteFactory(f));
+
                     rate.Tag = new BestRateResultTag()
                     {
                         RateSelectionDelegate = entity =>
