@@ -24,6 +24,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             bestRateShipment = new BestRateShipmentType();
             bestRateShipment.SignUpForProviderAccountCompleted += OnAccountSignUp;
+
+            RateControl.ShowAllRates = false;
         }
 
         /// <summary>

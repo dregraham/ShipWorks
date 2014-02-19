@@ -78,7 +78,11 @@ namespace ShipWorks.Shipping.Editing
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
-            this.RateControl = rateControl;
+            
+            // Make sure the rate control shows all rates by default; other 
+            // service controls (i.e. best rate) can override this as needed 
+            RateControl = rateControl;
+            RateControl.ShowAllRates = true;
         }
 
         /// <summary>
@@ -223,6 +227,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
+            OnRateSelected(sender, e);
         }
 
         /// <summary>

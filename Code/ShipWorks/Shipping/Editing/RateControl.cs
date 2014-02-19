@@ -17,6 +17,10 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RateControl : UserControl
     {
+        // This is the maximum rates to display when the control is configured 
+        // with ShowAllRates = false
+        private const short RestrictedRateCount = 5;
+
         private FootnoteParameters footnoteParameters;
 
         private readonly object syncLock = new object();
@@ -44,6 +48,8 @@ namespace ShipWorks.Shipping.Editing
             sandGrid.Rows.Clear();
 
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
+
+            ShowAllRates = true;
         }
 
         
@@ -73,6 +79,8 @@ namespace ShipWorks.Shipping.Editing
         /// Gets or sets a value indicating whether to [show the configure link].
         /// </summary>
         public bool ShowConfigureLink { get; set; }
+
+        public bool ShowAllRates { get; set; }
 
         /// <summary>
         /// Gets the rate that is selected in the grid. A null value is returned if there
@@ -162,7 +170,9 @@ namespace ShipWorks.Shipping.Editing
                 RateGroup = rateGroup;
                 sandGrid.Rows.Clear();
 
-                foreach (RateResult rate in rateGroup.Rates)
+                List<RateResult> ratesToShow = ShowAllRates ? rateGroup.Rates : rateGroup.Rates.Take(RestrictedRateCount).ToList();
+
+                foreach (RateResult rate in ratesToShow)
                 {
                     GridRow row = new GridRow(new[]
                     {
@@ -180,8 +190,11 @@ namespace ShipWorks.Shipping.Editing
                     sandGrid.Rows.Add(row);
                 }
 
-	            // Add a show more rates row to the grid if allowed.
-	            AddShowMoreRatesRow(rateGroup);
+	            if (!ShowAllRates)
+	            {
+                    // Add a show more rates row to the grid if allowed.
+	                AddShowMoreRatesRow(rateGroup);
+	            }
 
                 panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
                 UpdateFootnotes(rateGroup);
@@ -194,38 +207,34 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void AddShowMoreRatesRow(RateGroup rateGroup)
         {
-            // If we are best rate and there is a show more rates rate result, add a row to the grid
-            if (rateGroup.Carrier == ShipmentTypeCode.BestRate && rateGroup.ShowMoreRateResult != null)
+            // Honor the restricted rate count setting
+            if (rateGroup.Rates.Count > RestrictedRateCount)
             {
-                RateResult rate = rateGroup.ShowMoreRateResult;
-                RateGroup originalRateGroup = rate.Tag as RateGroup;
+                // Make a copy of the original full list, it's needed for showing all
+                RateGroup originalRateGroup = rateGroup.CopyWithRates(rateGroup.Rates);
 
-                // If we go from BestRate to another carrier and back to BestRate, the rate.Tag is a best rate result tag, 
-                // so we skip creating the best rate result tag.
-                if (originalRateGroup != null)
+                string description = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - RestrictedRateCount);
+                RateResult showMoreRatesRateResult = new RateResult(description, "", 0, originalRateGroup)
                 {
-                    // Copy over the footers, so they still appear after the more link is clicked
-                    rateGroup.FootnoteFactories.ToList().ForEach(f => originalRateGroup.AddFootnoteFactory(f));
-
-                    rate.Tag = new BestRateResultTag()
+                    Tag = new BestRateResultTag()
                     {
+                        IsRealRate = false,
                         RateSelectionDelegate = entity =>
                         {
-                            originalRateGroup.ShowMoreRateResult = null;
+                            ShowAllRates = true;
                             LoadRates(originalRateGroup);
-                        },
-                        IsRealRate = false
-                    };
-                }
+                        }
+                    }
+                };
 
                 GridRow row = new GridRow(new[]
                 {
                     new GridCell(""),
-                    new GridHyperlinkCell(rate.Description),
+                    new GridCell(showMoreRatesRateResult.Description),
                     new GridCell(""),
                     new GridCell(""),
                     new GridHyperlinkCell("More...")
-                }) { Tag = rate };
+                }) { Tag = showMoreRatesRateResult };
 
                 sandGrid.Rows.Add(row);
             }
