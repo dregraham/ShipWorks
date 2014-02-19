@@ -19,14 +19,14 @@ namespace ShipWorks.Shipping.Editing
     {
         private FootnoteParameters footnoteParameters;
 
+        private readonly object syncLock = new object();
+
         /// <summary>
         /// Raised when the user clicks "Select" to select a rate
         /// </summary>
         public event RateSelectedEventHandler RateSelected;
 
         public event RateSelectedEventHandler ConfigureRateClicked;
-
-        private object syncLock = new object();
 
         /// <summary>
         /// Raised when its necessary for the rates to be reloaded
