@@ -852,7 +852,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked += newServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked += newServiceControl.OnConfigureRateClick;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);

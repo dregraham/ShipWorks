@@ -219,6 +219,13 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Called when the configure rate is clicked
+        /// </summary>
+        public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
+        {
+        }
+
+        /// <summary>
         /// Save returns
         /// </summary>
         private void SaveReturnsToShipments()

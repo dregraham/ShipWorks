@@ -379,10 +379,11 @@ namespace ShipWorks.Shipping.Editing
         private void OnSelectedRateChanged(object sender, SelectionChangedEventArgs e)
         {
             GridRow selectedRow = e.Grid.SelectedElements.OfType<GridRow>().FirstOrDefault();
+
             if (selectedRow != null)
             {
                 RateResult selectedRate = selectedRow.Tag as RateResult;
-                if (selectedRate.Selectable && RateGroup.Carrier != ShipmentTypeCode.BestRate)
+                if (selectedRate.Selectable)
                 {
                     if (RateSelected != null)
                     {
