@@ -835,6 +835,7 @@ namespace ShipWorks
             // 
             // dockableWindowRates
             // 
+            this.dockableWindowRates.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowRates.Controls.Add(this.ratesPanel);
             this.dockableWindowRates.Guid = new System.Guid("61946061-0df9-4143-92ed-0e71826d7d5f");
             this.dockableWindowRates.Location = new System.Drawing.Point(4, 21);
@@ -844,7 +845,7 @@ namespace ShipWorks
             this.dockableWindowRates.Size = new System.Drawing.Size(306, 283);
             this.dockableWindowRates.TabImage = global::ShipWorks.Properties.Resources.currency_dollar_green16;
             this.dockableWindowRates.TabIndex = 0;
-            this.dockableWindowRates.Text = "Rates";
+            this.dockableWindowRates.Text = "Shipment Rates";
             // 
             // ratesPanel
             // 
