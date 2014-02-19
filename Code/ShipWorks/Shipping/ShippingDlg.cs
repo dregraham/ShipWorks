@@ -2175,7 +2175,7 @@ namespace ShipWorks.Shipping
                     {
                         throw concurrencyEx;
                     }
-
+                    
                     // Process it
                     ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing);
 
@@ -2228,9 +2228,7 @@ namespace ShipWorks.Shipping
                 {
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
-            },
-                                  // Each shipment to execute the code for
-                                  shipments);
+            }, shipments); // Each shipment to execute the code for
         }
 
         /// <summary>
@@ -2255,9 +2253,19 @@ namespace ShipWorks.Shipping
 
             DialogResult setupWizardDialogResult = DialogResult.Cancel;
 
+
             this.Invoke((MethodInvoker)delegate
             {
-                setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
+                if (rateControl.SelectedRate.IsCounterRate)
+                {
+                    setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
+                }
+                else
+                {
+                    //The select rate is not a counter rate, so we just set the shipment type
+                    counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateControl.SelectedRate.ShipmentType);
+                    setupWizardDialogResult = DialogResult.OK;
+                }
             });
 
             if (setupWizardDialogResult != DialogResult.OK)
@@ -2268,7 +2276,7 @@ namespace ShipWorks.Shipping
                 this.Invoke((MethodInvoker)delegate
                 {
                     // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
-                    // (after we call LoadRates on the ratecontrol below, later on the rates try to be loaded from cache)
+                    // (after we call LoadRates on the rate control below, later on the rates try to be loaded from cache)
                     Dictionary<ShipmentTypeCode, RateGroup> rateMap;
                     if (!shipmentRateMap.TryGetValue(counterRatesProcessingArgs.ShipmentID, out rateMap))
                     {
@@ -2292,8 +2300,7 @@ namespace ShipWorks.Shipping
         {
             DialogResult setupWizardDialogResult;
 
-            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard =
-                new CounterRateProcessingSetupWizard(counterRatesProcessingArgs, shipmentControl.SelectedShipments))
+            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard = new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, rateControl.SelectedRate, shipmentControl.SelectedShipments))
             {
                 setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(this);
 

@@ -888,6 +888,9 @@ namespace ShipWorks.Shipping
             return overriddenShipment;
         }
 
+        /// <summary>
+        /// Processes the shipment.
+        /// </summary>
         public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
@@ -920,7 +923,6 @@ namespace ShipWorks.Shipping
 
                     // Get the ShipmentType instance
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(bestRateShipment);
-
                     List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(bestRateShipment, counterRatesProcessing);
 
                     // A null value returned from the pre-process method means the user has opted to not continue 

@@ -9,17 +9,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class CounterRatesProcessingArgs
     {
         /// <summary>
-        /// Constructur
+        /// Constructor
         /// </summary>
         /// <param name="allRates">A list of all available rates</param>
         /// <param name="filteredRates">A list of rates that have been filtered as they would exist in the main rates grid</param>
         /// <param name="setupShipmentType">The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.</param>
         /// <param name="shipmentID">The shipment ID for this counter rate.</param>
-        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, ShipmentType setupShipmentType, long shipmentID)
+        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, long shipmentID)
         {
             AllRates = allRates;
             FilteredRates = filteredRates;
-            SetupShipmentType = setupShipmentType;
             ShipmentID = shipmentID;
         }
 
@@ -40,16 +39,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             get; 
             private set;
         }
-
-        /// <summary>
-        /// The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.
-        /// </summary>
-        public ShipmentType SetupShipmentType
-        {
-            get;
-            private set;
-        }
-
+        
         /// <summary>
         /// The ShipmentType that was selected from the wizard. This will be used by preprocessed once the wizard is closed.
         /// </summary>
@@ -58,16 +48,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             get; 
             set; 
         }
-
-        /// <summary>
-        /// Gets the rate that was selected by the event
-        /// </summary>
-        public RateResult SelectedRate
-        {
-            get; 
-            set;
-        }
-
+        
         public long ShipmentID
         {
             get; 

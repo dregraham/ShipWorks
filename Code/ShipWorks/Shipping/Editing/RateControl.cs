@@ -75,6 +75,30 @@ namespace ShipWorks.Shipping.Editing
         public bool ShowConfigureLink { get; set; }
 
         /// <summary>
+        /// Gets the rate that is selected in the grid. A null value is returned if there
+        /// is not a rate that has been selected.
+        /// </summary>
+        public RateResult SelectedRate
+        {
+            get
+            {
+                RateResult selectedRate = null;
+
+                // Acquire the lock so the grid isn't reloaded while trying to find the selected rate
+                lock (syncLock)
+                {
+                    GridRow selectedRow = sandGrid.SelectedElements.OfType<GridRow>().FirstOrDefault();
+                    if (selectedRow != null)
+                    {
+                        selectedRate = selectedRow.Tag as RateResult;
+                    }
+                }
+
+                return selectedRate;
+            }
+        }
+
+        /// <summary>
         /// Clear the rates in the grid and display the given reason for having no rates displayed.
         /// </summary>
         public void ClearRates(string emptyReason)
@@ -160,7 +184,6 @@ namespace ShipWorks.Shipping.Editing
 	            AddShowMoreRatesRow(rateGroup);
 
                 panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
-
                 UpdateFootnotes(rateGroup);
 			}
         }

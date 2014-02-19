@@ -394,10 +394,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 // Determine what the actual shipment type should be for the selected best rate
                 // (i.e. use Endicia if a postal type was selected)
-                ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
+                //ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
 
-                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
+                //ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment.ShipmentID);
 
                 if (counterRatesProcessing != null)
                 {
@@ -405,17 +405,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShippingSettings.CheckForChangesNeeded();
                 }
 
-                // Select a rate based on the results of the dialog
-                if (eventArgs.SelectedRate != null)
-                {
-                    // The user has selected an existing rate, so just use it
-                    bestRate = eventArgs.SelectedRate;
-                    ratesToApplyToReturnedShipments = allRates
-                        .Rates
-                        .Where(r => r.ShipmentType == bestRate.ShipmentType && r.Amount == eventArgs.SelectedRate.Amount)
-                        .ToList();
-                }
-                else if (eventArgs.SelectedShipmentType != null)
+               if (eventArgs.SelectedShipmentType != null)
                 {
                     // Get the best rates for the newly created account
                     IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
@@ -456,41 +446,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             return shipmentsToReturn;
         }
-
-        /// <summary>
-        /// For a given shipment type, determines which shipment type should be used for the setup wizard.
-        /// </summary>
-        private static ShipmentType DetermineCounterRateShipmentTypeForCounterRateSetupWizard(ShipmentTypeCode shipmentTypeCode)
-        {
-            ShipmentType setupShipmentType;
-
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
-                    break;
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalWebTools:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-                    break;
-                case ShipmentTypeCode.FedEx:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
-                    break;
-                default:
-                    throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");
-            }
-
-            return setupShipmentType;
-        }
-
+        
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address and any store specific logic that may impact whether customs
