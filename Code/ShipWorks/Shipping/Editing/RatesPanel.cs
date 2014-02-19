@@ -41,6 +41,8 @@ namespace ShipWorks.Shipping.Editing
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
             rateControl.ShowConfigureLink = true;
+            rateControl.ShowAllRates = true;
+
             rateControl.ConfigureRateClicked += OnConfigureRateClicked;
 
             // Force the rates to be refreshed when the rate control tells us
@@ -126,7 +128,7 @@ namespace ShipWorks.Shipping.Editing
         public void UpdateContent()
         {
             // Something about the shipment has changed, so we need to refresh the rates            
-            RefreshRates(false);
+            RefreshRates(true);
         }
 
         /// <summary>
@@ -212,10 +214,6 @@ namespace ShipWorks.Shipping.Editing
 
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-                        if (panelRateGroup.ShowMoreRateResult != null)
-                        {
-                            panelRateGroup.ShowMoreRateResult.Tag = new ShipmentRateGroup((RateGroup)panelRateGroup.ShowMoreRateResult.Tag, shipment);
-                        }
 
                         cachedRates[shipment.ShipmentID] = panelRateGroup;
                     }

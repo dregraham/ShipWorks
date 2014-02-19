@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates
         /// </summary>
-        public RateGroup CopyWithRates(IEnumerable<RateResult> rates)
+        public virtual RateGroup CopyWithRates(IEnumerable<RateResult> rates)
         {
             RateGroup newRateGroup = new RateGroup(rates)
             {
@@ -68,15 +68,6 @@ namespace ShipWorks.Shipping.Editing
             }
 
             return newRateGroup;
-        }
-
-        /// <summary>
-        /// If this rate group should show a row in the grid for "show more rates", this is the rate result to do so.
-        /// </summary>
-        public virtual RateResult ShowMoreRateResult
-        {
-            get; 
-            set;
         }
     }
 }

@@ -205,25 +205,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
-            // If there are more than 5 rates, we only want to show the top 5, but create a rate result for 
-            // showing more rates.
-            if (rateGroup.Rates.Count > 5)
-            {
-                // Make a copy of the original full list, it's needed for showing all
-                RateGroup originalRateGroup = rateGroup.CopyWithRates(rateGroup.Rates);
-
-                // Update the rate group to only have the top 5
-                rateGroup = rateGroup.CopyWithRates(rateGroup.Rates.Take(5));
-
-                // This is the text to display in the grid column
-                string linkText = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - 5);
-
-                RateResult showMoreRatesRateResult = new RateResult(linkText, "", 0, originalRateGroup);
-
-                // Set the show more rate result on the rate group so the rate control knows how to build the grid row
-                rateGroup.ShowMoreRateResult = showMoreRatesRateResult;
-            }
-
             // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
             IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
                                                                                 .GroupBy(e => e.Message)
