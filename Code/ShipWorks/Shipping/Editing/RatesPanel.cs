@@ -283,6 +283,7 @@ namespace ShipWorks.Shipping.Editing
             if (resultTag != null && !resultTag.IsRealRate)
             {
                 resultTag.RateSelectionDelegate(shipment);
+                cachedRates[shipment.ShipmentID] = new ShipmentRateGroup(rateControl.RateGroup, shipment);
             }
             else
             {
