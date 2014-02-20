@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void Initialize(FootnoteParameters parameters)
         {
-            this.footnoteParameters = parameters;
+            footnoteParameters = parameters;
         }
 
         /// <summary>
@@ -80,6 +80,14 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public bool ShowConfigureLink { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to [show all rates]. If false, then a subset
+        /// of rates will be displayed with the last result having a "More" link to view the
+        /// full list of results.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show all rates]; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowAllRates { get; set; }
 
         /// <summary>
@@ -189,29 +197,26 @@ namespace ShipWorks.Shipping.Editing
 
                     sandGrid.Rows.Add(row);
                 }
-
-	            if (!ShowAllRates)
-	            {
-                    // Add a show more rates row to the grid if allowed.
-	                AddShowMoreRatesRow(rateGroup);
-	            }
+                
+                AddShowMoreRatesRow();
 
                 panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
                 UpdateFootnotes(rateGroup);
-			}
+            }
         }
 
         /// <summary>
-        /// If the shipment type is BestRate and the rateGroup.ShowMoreRateResult is not null,
-        /// adds a row to the grid to allow showing more rates.
+        /// Adds the show more rates row if the control is configured to not show all rates and 
+        /// the list of rates exceeds the restricted rate count.
         /// </summary>
-        private void AddShowMoreRatesRow(RateGroup rateGroup)
+        /// <param name="rateGroup">The rate group.</param>
+        private void AddShowMoreRatesRow()
         {
             // Honor the restricted rate count setting
-            if (rateGroup.Rates.Count > RestrictedRateCount)
+            if (!ShowAllRates && RateGroup.Rates.Count > RestrictedRateCount)
             {
                 // Make a copy of the original full list, it's needed for showing all
-                RateGroup originalRateGroup = rateGroup.CopyWithRates(rateGroup.Rates);
+                RateGroup originalRateGroup = RateGroup.CopyWithRates(RateGroup.Rates);
 
                 string description = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - RestrictedRateCount);
                 RateResult showMoreRatesRateResult = new RateResult(description, "", 0, originalRateGroup)
@@ -221,12 +226,15 @@ namespace ShipWorks.Shipping.Editing
                         IsRealRate = false,
                         RateSelectionDelegate = entity =>
                         {
+                            // The user wants to expand the rates, so set the ShowAllRates
+                            // to true and load the full list of original rates
                             ShowAllRates = true;
                             LoadRates(originalRateGroup);
                         }
                     }
                 };
 
+                // Create the row with the "More" link
                 GridRow row = new GridRow(new[]
                 {
                     new GridCell(""),
@@ -400,7 +408,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected void OnReloadRatesRequired(object sender, EventArgs e)
         {
-            if (this.ReloadRatesRequired != null)
+            if (ReloadRatesRequired != null)
             {
                 ReloadRatesRequired(this, EventArgs.Empty);
             }
