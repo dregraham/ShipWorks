@@ -821,10 +821,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanBasedReturn"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> ScanBasedReturn
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ScanBasedReturn
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, false); }
+			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, true); }
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, value); }
 		}
 
