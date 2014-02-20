@@ -504,6 +504,12 @@
     <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.Designer.cs">
       <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
+      <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -5796,6 +5802,9 @@
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\EnglishCultureRequiredDlg.resx">
       <DependentUpon>EnglishCultureRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.resx">
+      <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>

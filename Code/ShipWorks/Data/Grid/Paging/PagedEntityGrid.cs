@@ -553,12 +553,7 @@ namespace ShipWorks.Data.Grid.Paging
             // See if we were able to load all the keys upfront
             if (count.LoadingComplete)
             {
-                // If we weren't cleared, then the selection was preserved.  However this means there may now be things
-                // selected that aren't actually in our keyset anymore.  Here we check this.
-                if (!wasCleared)
-                {
-                    CheckVirtualSelectionForRemoved();
-                }
+                OnGatewayLoadingComplete(count.Count, wasCleared);
             }
 
             // If the count wasn't complete, we need to watch for it and keep increasing our row count
@@ -601,12 +596,7 @@ namespace ShipWorks.Data.Grid.Paging
 
                             if (updatedCount.LoadingComplete)
                             {
-                                // If we weren't cleared, then the selection was preserved.  However this means there may now be things
-                                // selected that aren't actually in our keyset anymore.  Here we check this.
-                                if (!wasCleared)
-                                {
-                                    CheckVirtualSelectionForRemoved();
-                                }
+                                OnGatewayLoadingComplete(updatedCount.Count, wasCleared);
 
                                 timer.Dispose();
                             }
@@ -614,6 +604,19 @@ namespace ShipWorks.Data.Grid.Paging
                     };
 
                 timer.Start();
+            }
+        }
+
+        /// <summary>
+        /// Called when the current gateway has been completely loaded. Indicates the number of rows loaded, and if the selection had been previously cleared
+        /// </summary>
+        protected virtual void OnGatewayLoadingComplete(int rows, bool wasCleared)
+        {
+            // If we weren't cleared, then the selection was preserved.  However this means there may now be things
+            // selected that aren't actually in our keyset anymore.  Here we check this.
+            if (!wasCleared)
+            {
+                CheckVirtualSelectionForRemoved();
             }
         }
 

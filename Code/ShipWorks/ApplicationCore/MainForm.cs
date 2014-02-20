@@ -808,10 +808,10 @@ namespace ShipWorks
             // See if its too new
             if (installedVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
             {
-                MessageHelper.ShowMessage(this,
-                    "The version of your ShipWorks database is newer than this version\n" +
-                    "of ShipWorks.\n\n" +
-                    "You will need to upgrade ShipWorks before you can continue.");
+                using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
+                {
+                    dlg.ShowDialog(this);
+                }
 
                 return false;
             }

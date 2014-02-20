@@ -574,11 +574,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateTransaction(EbayOrderItemEntity orderItem, OrderType orderType, TransactionType transaction)
         {
-            orderItem.Code = transaction.Item.ItemID;
+            if (string.IsNullOrWhiteSpace(orderItem.Code)) { orderItem.Code = transaction.Item.ItemID; }
+            if (string.IsNullOrWhiteSpace(orderItem.Name)) { orderItem.Name = transaction.Item.Title; }
+            UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
+
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
             orderItem.Quantity = transaction.QuantityPurchased;
-            orderItem.Name = transaction.Item.Title;
-            UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
             orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
@@ -617,8 +618,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 orderItem.Name = transaction.Variation.VariationTitle;
             }
 
-            // Overwrite the SKU if a variation SKU is provided.  FreshDesk #517760 - SKU was coming down literally as "null"
-            if (!string.IsNullOrWhiteSpace(transaction.Variation.SKU) && string.Compare(transaction.Variation.SKU, "null", StringComparison.InvariantCultureIgnoreCase) != 0)
+            // Overwrite the SKU if a variation SKU is provided.  
+            if (!string.IsNullOrWhiteSpace(transaction.Variation.SKU))
             {
                 UpdateTransactionSKU(orderItem, transaction.Variation.SKU);
             }
@@ -646,7 +647,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void UpdateTransactionSKU(EbayOrderItemEntity orderItem, string sku)
         {
             // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overrwrite, such as SKUVault
-            if (string.IsNullOrWhiteSpace(orderItem.SKU))
+            if (!string.IsNullOrWhiteSpace(orderItem.SKU))
+            {
+                return;
+            }
+
+            // FreshDesk #517760 - SKU was coming down literally as "null"
+            if (string.Compare(sku, "null", StringComparison.InvariantCultureIgnoreCase) != 0)
             {
                 orderItem.SKU = sku;
             }
