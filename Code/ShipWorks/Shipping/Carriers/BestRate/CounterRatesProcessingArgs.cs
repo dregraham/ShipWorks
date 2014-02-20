@@ -1,4 +1,5 @@
 using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -14,12 +15,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="allRates">A list of all available rates</param>
         /// <param name="filteredRates">A list of rates that have been filtered as they would exist in the main rates grid</param>
         /// <param name="setupShipmentType">The ShipmentType that the process click determined to use.  This will be the used to get the setup wizard.</param>
-        /// <param name="shipmentID">The shipment ID for this counter rate.</param>
-        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, long shipmentID)
+        /// <param name="shipment">The shipment for this counter rate.</param>
+        public CounterRatesProcessingArgs(RateGroup allRates, RateGroup filteredRates, ShipmentEntity shipment)
         {
             AllRates = allRates;
             FilteredRates = filteredRates;
-            ShipmentID = shipmentID;
+            Shipment = shipment;
         }
 
         /// <summary>
@@ -48,8 +49,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             get; 
             set; 
         }
-        
-        public long ShipmentID
+
+        /// <summary>
+        /// Gets the shipment that the rates are for.
+        /// </summary>
+        public ShipmentEntity Shipment
         {
             get; 
             private set;

@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Editing
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
 
-                        RateCache.Instance.Add(shipment, panelRateGroup);
+                        RateCache.Instance.Save(shipment, panelRateGroup);
                     }
                     catch (ShippingException ex)
                     {
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Editing
             if (resultTag != null && !resultTag.IsRealRate)
             {
                 resultTag.RateSelectionDelegate(shipment);
-                RateCache.Instance.Add(shipment, new ShipmentRateGroup(rateControl.RateGroup, shipment));
+                RateCache.Instance.Save(shipment, new ShipmentRateGroup(rateControl.RateGroup, shipment));
             }
             else
             {

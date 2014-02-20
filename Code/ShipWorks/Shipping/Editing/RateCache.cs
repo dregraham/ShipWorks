@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -35,9 +38,11 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Adds an entry in the cache for the given key/value pair
+        /// Save an entry in the cache for the given key/value pair. If an entry already
+        /// exists, meaning an entry for both the shipment entity and the shipment type 
+        /// code is present, it is overwritten.
         /// </summary>
-        public void Add(ShipmentEntity key, RateGroup value)
+        public void Save(ShipmentEntity key, RateGroup value)
         {
             string keyValue = GetCacheKey(key);
 
@@ -68,6 +73,20 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Clears rates for the given key.
+        /// </summary>
+        public void Clear(ShipmentEntity key)
+        {
+            string keyValue = GetCacheKey(key);
+
+            if (cachedRates.Contains(keyValue))
+            {
+                cachedRates[keyValue].Clear();
+            }
+        }
+
+
+        /// <summary>
         /// Determines whether the cache [contains] [the specified key].
         /// </summary>
         public bool Contains(ShipmentEntity key)
@@ -87,6 +106,25 @@ namespace ShipWorks.Shipping.Editing
             }
 
             return containsItem;
+        }
+
+        /// <summary>
+        /// Invalids the rates for the given shipment.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        public void InvalidateRates(ShipmentEntity key)
+        {
+            string keyValue = GetCacheKey(key);
+
+            if (cachedRates.Contains(keyValue))
+            {
+                Dictionary<ShipmentTypeCode, RateGroup> rateMap = cachedRates[keyValue];
+                foreach (RateGroup group in rateMap.Values)
+                {
+                    group.OutOfDate = true;
+                }
+            }
         }
 
         /// <summary>

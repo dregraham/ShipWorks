@@ -987,7 +987,7 @@ namespace ShipWorks.Shipping
                 if (uiDisplayedShipments.Count == 1)
                 {
                     ShipmentEntity uiShipment = uiDisplayedShipments[0];
-                    rateGroup = GetCachedRates(uiShipment);
+                    rateGroup = RateCache.Instance.GetValue(uiShipment);
                 }
 
                 this.LoadRates(rateGroup);
@@ -1045,17 +1045,9 @@ namespace ShipWorks.Shipping
 
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                Dictionary<ShipmentTypeCode, RateGroup> rateMap;
-                if (shipmentRateMap.TryGetValue(shipment.ShipmentID, out rateMap))
-                {
-                    foreach (RateGroup group in rateMap.Values)
-                    {
-                        group.OutOfDate = true;
-                    }
-                }
+                RateCache.Instance.InvalidateRates(shipment);
             }
 
-            // LoadDisplayedRates();
             GetRates();
         }
 
@@ -1688,7 +1680,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets rates for the selected shipments
         /// </summary>
-        /// <param name="cloneShipment">Inidicates whether the currently selected shipment should be cloned. This should only
+        /// <param name="cloneShipment">Indicates whether the currently selected shipment should be cloned. This should only
         /// be true on calls raised because the shipment changed. It should be false on calls from the debounce logic.</param>
         private void GetRates(bool cloneShipment)
         {
@@ -1787,9 +1779,10 @@ namespace ShipWorks.Shipping
 
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    RateGroup cachedRates = GetCachedRates(clonedShipment) ?? new RateGroup(new List<RateResult>());
+                    RateGroup cachedRates = RateCache.Instance.GetValue(clonedShipment) ?? new RateGroup(new List<RateResult>());
                     cachedRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(uiShipmentType, errorMessage));
-                    SetCachedRates(clonedShipment, cachedRates);
+
+                    RateCache.Instance.Save(clonedShipment, cachedRates);
                 }
 
                 if (anyAttempted && !getRatesTimer.Enabled)
@@ -1831,7 +1824,7 @@ namespace ShipWorks.Shipping
                 if (shouldCheckRateCache)
                 {
                     // get cached rates first.
-                    RateGroup cachedRates = GetCachedRates(shipment);
+                    RateGroup cachedRates = RateCache.Instance.GetValue(shipment);
                     if (cachedRates != null && !cachedRates.OutOfDate)
                     {
                         return;
@@ -1842,14 +1835,14 @@ namespace ShipWorks.Shipping
                 {
                     RateGroup rateResults = ShippingManager.GetRates(shipment);
 
-                    SetCachedRates(shipment, rateResults);
+                    RateCache.Instance.Save(shipment, rateResults);
 
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
                 catch (ShippingException ex)
                 {
-                    SetCachedRates(shipment, null);
+                    RateCache.Instance.Save(shipment, null);
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }
@@ -1857,48 +1850,7 @@ namespace ShipWorks.Shipping
 
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
         }
-
-        /// <summary>
-        /// Set the cached rate for the shipment.
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="rateResults"></param>
-        private void SetCachedRates(ShipmentEntity shipment, RateGroup rateResults)
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
-            Dictionary<ShipmentTypeCode, RateGroup> rateMap;
-            if (!shipmentRateMap.TryGetValue(shipment.ShipmentID, out rateMap))
-            {
-                rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
-                shipmentRateMap[shipment.ShipmentID] = rateMap;
-            }
-
-            rateMap[shipmentType.ShipmentTypeCode] = rateResults;
-        }
-
-        /// <summary>
-        /// Get the cached rates for the shipment, or null if there are none
-        /// </summary>
-        private RateGroup GetCachedRates(ShipmentEntity shipment)
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-            if (shipmentType.SupportsGetRates)
-            {
-                Dictionary<ShipmentTypeCode, RateGroup> rateMap;
-                if (shipmentRateMap.TryGetValue(shipment.ShipmentID, out rateMap))
-                {
-                    RateGroup rateGroup;
-                    if (rateMap.TryGetValue(shipmentType.ShipmentTypeCode, out rateGroup))
-                    {
-                        return rateGroup;
-                    }
-                }
-            }
-
-            return null;
-        }
-
+        
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
         /// </summary>
@@ -2282,13 +2234,7 @@ namespace ShipWorks.Shipping
                 {
                     // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
                     // (after we call LoadRates on the rate control below, later on the rates try to be loaded from cache)
-                    Dictionary<ShipmentTypeCode, RateGroup> rateMap;
-                    if (!shipmentRateMap.TryGetValue(counterRatesProcessingArgs.ShipmentID, out rateMap))
-                    {
-                        rateMap = new Dictionary<ShipmentTypeCode, RateGroup>();
-                        rateMap[ShipmentTypeCode.BestRate] = counterRatesProcessingArgs.FilteredRates;
-                        shipmentRateMap[counterRatesProcessingArgs.ShipmentID] = rateMap;
-                    }
+                    RateCache.Instance.Save(counterRatesProcessingArgs.Shipment, counterRatesProcessingArgs.FilteredRates);
 
                     // Now we can load the rates and they will display
                     rateControl.LoadRates(counterRatesProcessingArgs.FilteredRates);

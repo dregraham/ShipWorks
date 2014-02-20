@@ -378,7 +378,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 //ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
 
                 //ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment.ShipmentID);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment);
 
                 if (counterRatesProcessing != null)
                 {
