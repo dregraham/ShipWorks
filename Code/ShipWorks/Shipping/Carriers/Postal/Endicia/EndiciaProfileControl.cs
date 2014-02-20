@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -29,6 +30,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             InitializeComponent();
 
             this.endiciaReseller = endiciaReseller;
+
+            if (!IsScanBasedReturnsEnabled())
+            {
+                scanBasedPaymentState.Visible = false;
+                scanBasedPayment.Visible = false;
+                groupReturns.Height -= scanBasedPayment.Bottom - returnShipment.Bottom;
+            }
         }
 
         /// <summary>
@@ -58,8 +66,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             AddValueMapping(endiciaProfile, EndiciaProfileFields.RubberStamp2, stateRubberStamp2, rubberStamp2, labelRubberStamp2);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.RubberStamp3, stateRubberStamp3, rubberStamp3, labelRubberStamp3);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.ReferenceID, stateReferenceID, referenceID, labelReferenceID);
-            AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);
 
+            if (IsScanBasedReturnsEnabled())
+            {
+                AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);    
+            }
+            
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
             AddValueMapping(profile.Postal, PostalProfileFields.EntryFacility, stateEntryFacility, entryFacility, labelEntryFacility);
         }
@@ -82,6 +94,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 endiciaAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
                 endiciaAccount.Enabled = false;
             }
+        }
+
+        /// <summary>
+        /// Determines if endicia scan-based returns are enabled.
+        /// </summary>
+        private static bool IsScanBasedReturnsEnabled()
+        {
+            return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None;
         }
     }
 }
