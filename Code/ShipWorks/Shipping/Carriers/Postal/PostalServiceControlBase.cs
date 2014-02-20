@@ -348,6 +348,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateSectionDescription();
 
             UpdateAvailableShipmentOptions((PostalPackagingType?) packagingType.SelectedValue);
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
         }
 
         /// <summary>
