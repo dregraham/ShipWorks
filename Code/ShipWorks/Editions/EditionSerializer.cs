@@ -107,6 +107,9 @@ namespace ShipWorks.Editions
 
                 bool endiciaConsolidator = xOptions.Descendants("EndiciaConsolidator").Any() && (bool) xOptions.Element("EndiciaConsolidator");
                 edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
+
+                bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool)xOptions.Element("EndiciaScanBasedReturns");
+                edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
             }
         }
 
@@ -164,7 +167,8 @@ namespace ShipWorks.Editions
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
-                new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled)));
+                new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
+                new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled)));
 
             return elements;
         }

@@ -121,6 +121,12 @@ namespace ShipWorks.Editions
                 AddRestriction(EditionFeature.EndiciaConsolidator, EditionRestrictionLevel.Hidden);
             }
 
+            // Endicia Scan Based Returns
+            if (!sharedOptions.EndiciaScanBasedReturnEnabled)
+            {
+                AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
+            }
+
             restrictionsFinalized = true;
 
             return restrictions;

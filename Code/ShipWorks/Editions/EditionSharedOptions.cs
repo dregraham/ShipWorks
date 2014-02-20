@@ -30,5 +30,10 @@ namespace ShipWorks.Editions
         /// Indicates whether consolidator support is enabled for the customer's endicia account
         /// </summary>
         public bool EndiciaConsolidatorEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates whether scan based payment returns support is enabled for the customer's endicia account
+        /// </summary>
+        public bool EndiciaScanBasedReturnEnabled { get; set; }
     }
 }
