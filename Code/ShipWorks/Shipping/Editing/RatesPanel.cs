@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Editing
                         else if (RateCache.Instance.Contains(shipmentForRating) && !forceFetch)
                         {
                             // Rates for this shipment have already been cached
-                            RateGroup rateGroup = RateCache.Instance[shipmentForRating];
+                            RateGroup rateGroup = RateCache.Instance.GetValue(shipmentForRating);
                             LoadRates(ToShipmentRateGroup(rateGroup, shipmentForRating));
                         }
                         else
@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Editing
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
 
-                        RateCache.Instance[shipment] = panelRateGroup;
+                        RateCache.Instance.Add(shipment, panelRateGroup);
                     }
                     catch (ShippingException ex)
                     {
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Editing
             if (resultTag != null && !resultTag.IsRealRate)
             {
                 resultTag.RateSelectionDelegate(shipment);
-                RateCache.Instance[shipment] = new ShipmentRateGroup(rateControl.RateGroup, shipment);
+                RateCache.Instance.Add(shipment, new ShipmentRateGroup(rateControl.RateGroup, shipment));
             }
             else
             {
