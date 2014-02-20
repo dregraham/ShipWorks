@@ -1701,6 +1701,11 @@ namespace ShipWorks.Shipping
                 ClearRates("(Multiple)");
                 return;
             }
+            if (uiDisplayedShipments.Count == 0)
+            {
+                ClearRates(string.Empty);
+                return;
+            }
 
             // Don't save and clone the current shipment if this is being executed from the debounce logic,
             // since it causes concurrency issues
