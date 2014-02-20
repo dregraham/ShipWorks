@@ -1,4 +1,8 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia
+﻿using System.Security.AccessControl;
+using Microsoft.Web.Services3.Security;
+using ShipWorks.Data;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     partial class EndiciaProfileControl
     {
@@ -63,6 +67,8 @@
             this.stateSortType = new System.Windows.Forms.CheckBox();
             this.entryFacility = new System.Windows.Forms.ComboBox();
             this.sortType = new System.Windows.Forms.ComboBox();
+            this.scanBasedPayment = new System.Windows.Forms.CheckBox();
+            this.scanBasedPaymentState = new System.Windows.Forms.CheckBox();
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.tabPage.SuspendLayout();
@@ -145,7 +151,12 @@
             this.tabPage.Controls.SetChildIndex(this.groupBoxFrom, 0);
             // 
             // groupReturns
-            // 
+            //
+            this.groupReturns.Controls.Add(this.scanBasedPaymentState);
+            this.groupReturns.Controls.Add(this.scanBasedPayment);
+            this.groupReturns.Size = new System.Drawing.Size(417, 79);
+            this.groupReturns.Controls.SetChildIndex(this.scanBasedPayment, 0);
+            this.groupReturns.Controls.SetChildIndex(this.scanBasedPaymentState, 0);
             this.groupReturns.Location = new System.Drawing.Point(8, 861);
             // 
             // groupInsurance
@@ -414,6 +425,26 @@
             this.labelRubberStamp1.Size = new System.Drawing.Size(88, 13);
             this.labelRubberStamp1.TabIndex = 86;
             this.labelRubberStamp1.Text = "Rubber Stamp 1:";
+            //            
+            // scanBasedPaymentState
+            // 
+            this.scanBasedPaymentState.AutoSize = true;
+            this.scanBasedPaymentState.Location = new System.Drawing.Point(9, 46);
+            this.scanBasedPaymentState.Name = "scanBasedPaymentState";
+            this.scanBasedPaymentState.Size = new System.Drawing.Size(15, 14);
+            this.scanBasedPaymentState.TabIndex = 98;
+            this.scanBasedPaymentState.UseVisualStyleBackColor = true;
+            // 
+            // scanBasedPayment
+            // 
+            this.scanBasedPayment.AutoSize = true;
+            this.scanBasedPayment.BackColor = System.Drawing.Color.Transparent;
+            this.scanBasedPayment.Location = new System.Drawing.Point(47, 45);
+            this.scanBasedPayment.Name = "scanBasedPayment";
+            this.scanBasedPayment.Size = new System.Drawing.Size(127, 17);
+            this.scanBasedPayment.TabIndex = 99;
+            this.scanBasedPayment.Text = "Scan-Based Payment";
+            this.scanBasedPayment.UseVisualStyleBackColor = false;
             // 
             // groupParcelSelect
             // 
@@ -559,5 +590,7 @@
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge6;
         private System.Windows.Forms.ComboBox entryFacility;
         private System.Windows.Forms.ComboBox sortType;
+        private System.Windows.Forms.CheckBox scanBasedPayment;
+        private System.Windows.Forms.CheckBox scanBasedPaymentState;
     }
 }

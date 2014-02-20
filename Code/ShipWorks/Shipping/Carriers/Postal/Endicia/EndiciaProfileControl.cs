@@ -58,6 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             AddValueMapping(endiciaProfile, EndiciaProfileFields.RubberStamp2, stateRubberStamp2, rubberStamp2, labelRubberStamp2);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.RubberStamp3, stateRubberStamp3, rubberStamp3, labelRubberStamp3);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.ReferenceID, stateReferenceID, referenceID, labelReferenceID);
+            AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);
 
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
             AddValueMapping(profile.Postal, PostalProfileFields.EntryFacility, stateEntryFacility, entryFacility, labelEntryFacility);
