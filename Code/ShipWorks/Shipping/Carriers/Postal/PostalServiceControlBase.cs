@@ -370,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override void SyncSelectedRate()
         {
-            PostalServiceType serviceType = (PostalServiceType)service.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
             PostalConfirmationType confirmationType = confirmation.SelectedValue == null ? PostalConfirmationType.None : (PostalConfirmationType)confirmation.SelectedValue;
 
             if (!service.MultiValued && !confirmation.MultiValued)
