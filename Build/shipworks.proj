@@ -298,7 +298,7 @@
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
     <ObfuscationExcludedAssemblies Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27" />
-    <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
+    <ObfuscationExcludedAssemblies Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
