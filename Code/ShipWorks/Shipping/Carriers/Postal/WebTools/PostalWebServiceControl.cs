@@ -19,10 +19,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     public partial class PostalWebServiceControl : PostalServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PostalWebServiceControl"/> class.
         /// </summary>
-        public PostalWebServiceControl()
-            : base(ShipmentTypeCode.PostalWebTools)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public PostalWebServiceControl(RateControl rateControl)
+            : base(ShipmentTypeCode.PostalWebTools, rateControl)
         {
             InitializeComponent();
         }

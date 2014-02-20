@@ -217,6 +217,7 @@
       <Condition identifier="EbayOrderItem.PaymentMethod" />
       <Condition identifier="EbayOrderItem.CheckoutStatus" />
       <Condition identifier="EbayOrderItem.ShippedStatus" />
+      <Condition identifier="EbayOrderItem.PaidStatus" />
       <Condition identifier="EbayOrderItem.PayPalAddressStatus" />
     </Category>
 

@@ -110,15 +110,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
+        /// <param name="brokerExceptions"></param>
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
-        public virtual RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public virtual RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             List<TAccount> accounts = AccountRepository.Accounts.ToList();
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
-                a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, exceptionHandler)));
+                a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, brokerExceptions)));
 
             Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
             IDictionary<TAccount, RateGroup> accountRateGroups = accountRateTasks.Where(x => x.Value.Result != null)
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="account">Account for which rates will be retrieved</param>
         /// <param name="exceptionHandler">Exceptions will be given to this action for handling</param>
         /// <returns></returns>
-        private RateGroup GetRatesForAccount(ShipmentEntity shipment, TAccount account, Action<BrokerException> exceptionHandler)
+        private RateGroup GetRatesForAccount(ShipmentEntity shipment, TAccount account, List<BrokerException> exceptionHandler)
         {
             try
             {
@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             catch (ShippingException ex)
             {
                 // Offload exception handling to the passed in exception handler
-                exceptionHandler(WrapShippingException(ex));
+                exceptionHandler.Add(WrapShippingException(ex));
                 return null;
             }
         }
@@ -271,14 +271,30 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Create a clone so we don't have to worry about modifying the original shipment
                     ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
                     ChangeShipmentType(selectedShipment);
-
-                    ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
+                    
+                    LoadShipment(selectedShipment);
+                    
                     SelectRate(selectedShipment);
                     UpdateChildShipmentSettings(selectedShipment, originalShipment, account);
 
                     SetServiceTypeFromTag(selectedShipment, originalTag);
                 };
+        }
+
+        /// <summary>
+        /// Loads the shipment.
+        /// </summary>
+        private static void LoadShipment(ShipmentEntity selectedShipment)
+        {
+            try
+            {
+                ShippingManager.EnsureShipmentLoaded(selectedShipment);
+            }
+            catch (NotFoundException)
+            {
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(selectedShipment);
+                shipmentType.ConfigureNewShipment(selectedShipment);
+            }
         }
 
         /// <summary>

@@ -2363,11 +2363,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShopifyStoreEntity's mappings</summary>
 		private void InitShopifyStoreEntityMappings()
 		{
-			base.AddElementMapping( "ShopifyStoreEntity", "ShipWorksLocal", @"dbo", "ShopifyStore", 4 );
+			base.AddElementMapping( "ShopifyStoreEntity", "ShipWorksLocal", @"dbo", "ShopifyStore", 5 );
 			base.AddElementFieldMapping( "ShopifyStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShopifyStoreEntity", "ShopifyShopUrlName", "ShopifyShopUrlName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShopifyStoreEntity", "ShopifyShopDisplayName", "ShopifyShopDisplayName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ShopifyStoreEntity", "ShopifyAccessToken", "ShopifyAccessToken", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "ShopifyStoreEntity", "ShopifyRequestedShippingOption", "ShopifyRequestedShippingOption", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 		}
 		/// <summary>Inits ShopSiteStoreEntity's mappings</summary>
 		private void InitShopSiteStoreEntityMappings()

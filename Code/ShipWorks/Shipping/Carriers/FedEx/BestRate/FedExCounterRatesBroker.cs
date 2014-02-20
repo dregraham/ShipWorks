@@ -44,9 +44,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// Gets the best rates for for FedEx counter-based prices.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler">The exception handler.</param>
+        /// <param name="brokerExceptions">The exception handler.</param>
         /// <returns>A RateGroup containing the counter rates for a generic FedEx account.</returns>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
@@ -57,13 +57,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             FedExAccountEntity account = AccountRepository.GetAccount(0);
             if (account == null || string.IsNullOrEmpty(account.AccountNumber))
             {
-                exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for FedEx"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("Could not get counter rates for FedEx"), BrokerExceptionSeverityLevel.Information, ShipmentType));
                 return bestRates;
             }
 
             try
             {
-                bestRates = base.GetBestRates(shipment, exceptionHandler);
+                bestRates = base.GetBestRates(shipment, brokerExceptions);
 
                 foreach (BestRateResultTag bestRateResultTag in bestRates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
                 {

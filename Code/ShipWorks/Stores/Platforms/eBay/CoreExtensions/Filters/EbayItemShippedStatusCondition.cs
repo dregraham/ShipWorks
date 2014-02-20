@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
     /// <summary>
     /// Condition for testing Checkout Status of an eBay order item.
     /// </summary>
-    [ConditionElement("eBay Shipped Status", "EbayOrderItem.ShippedStatus")]
+    [ConditionElement("My eBay (Shipped)", "EbayOrderItem.ShippedStatus")]
     [ConditionStoreType(StoreTypeCode.Ebay)]
     public class EbayItemShippedStatusCondition : BooleanCondition
     {

@@ -32,10 +32,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         bool updatingPayorChoices = false;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FedExServiceControl"/> class.
         /// </summary>
-        public FedExServiceControl()
-            : base (ShipmentTypeCode.FedEx)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public FedExServiceControl(RateControl rateControl)
+            : base (ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
         }
@@ -634,14 +636,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 nonStandardPackaging.Visible =
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
+
+                SyncSelectedRate();
             }
             else
             {
                 UpdatePackagingChoices(null);
+
+                // Don't show any selection when multiple services are selected
+                RateControl.ClearSelection();
             }
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+
+            
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                    {
+                        return false;
+                    }
+
+                    return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
 
         /// <summary>

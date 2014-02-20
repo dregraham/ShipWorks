@@ -74,10 +74,15 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode)
+        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
+            
+            // Make sure the rate control shows all rates by default; other 
+            // service controls (i.e. best rate) can override this as needed 
+            RateControl = rateControl;
+            RateControl.ShowAllRates = true;
         }
 
         /// <summary>
@@ -90,6 +95,12 @@ namespace ShipWorks.Shipping.Editing
                 return shipmentTypeCode;
             }
         }
+        
+        /// <summary>
+        /// A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control
+        /// </summary>
+        protected RateControl RateControl { get; private set; }
 
         /// <summary>
         /// The shipments last past to LoadShipments
@@ -209,6 +220,14 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public virtual void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
+        }
+
+        /// <summary>
+        /// Called when the configure rate is clicked
+        /// </summary>
+        public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
+        {
+            OnRateSelected(sender, e);
         }
 
         /// <summary>
@@ -441,6 +460,12 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentsAdded(this, new ShipmentsAddedRemovedEventArgs(shipments));
             }
         }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public virtual void SyncSelectedRate()
+        { }
 
         /// <summary>
         /// User has changed the recipient state\country

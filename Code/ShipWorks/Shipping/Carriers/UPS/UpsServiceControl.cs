@@ -35,10 +35,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public partial class UpsServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="UpsServiceControl"/> class.
         /// </summary>
-        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode)
-            : base (shipmentTypeCode)
+        /// <param name="shipmentTypeCode"></param>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+            : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
 
@@ -392,6 +395,43 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 UpdateBillingSectionDisplay();
+
+                SyncSelectedRate();
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
+
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    List<ShipmentTypeCode> upsTypeCodes = new List<ShipmentTypeCode> { ShipmentTypeCode.UpsWorldShip, ShipmentTypeCode.UpsOnLineTools };
+
+                    if (!upsTypeCodes.Contains(r.ShipmentType))
+                    {
+                        return false;
+                    }
+
+                    if (r.Tag == null)
+                    {
+                        return false;
+                    }
+
+                    return (UpsServiceType)r.Tag == selectedServiceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
             }
         }
 
@@ -782,12 +822,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             int oldIndex = service.SelectedIndex;
 
-            UpsServiceType servicetype = (UpsServiceType) e.Rate.Tag;
-
-            service.SelectedValue = servicetype;
-            if (service.SelectedIndex == -1 && oldIndex != -1)
+            if (e.Rate.Tag is UpsServiceType)
             {
-                service.SelectedIndex = oldIndex;
+                UpsServiceType serviceType = (UpsServiceType)e.Rate.Tag;
+
+                service.SelectedValue = serviceType;
+                if (service.SelectedIndex == -1 && oldIndex != -1)
+                {
+                    service.SelectedIndex = oldIndex;
+                }
             }
         }
 

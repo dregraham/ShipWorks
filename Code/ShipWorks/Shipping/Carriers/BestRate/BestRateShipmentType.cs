@@ -132,9 +132,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new BestRateServiceControl(ShipmentTypeCode);
+            return new BestRateServiceControl(ShipmentTypeCode, rateControl);
         }
 
         /// <summary>
@@ -199,33 +201,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, ex =>
-            {
-                // Accumulate all of the broker exceptions for later use
-                log.WarnFormat("Received an error while obtaining rates from a carrier. {0}", ex.Message);
-                brokerExceptions.Add(ex);
-            });
-
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+            
             RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
-
-            // If there are more than 5 rates, we only want to show the top 5, but create a rate result for 
-            // showing more rates.
-            if (rateGroup.Rates.Count > 5)
-            {
-                // Make a copy of the original full list, it's needed for showing all
-                RateGroup originalRateGroup = rateGroup.CopyWithRates(rateGroup.Rates);
-
-                // Update the rate group to only have the top 5
-                rateGroup = rateGroup.CopyWithRates(rateGroup.Rates.Take(5));
-
-                // This is the text to display in the grid column
-                string linkText = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - 5);
-
-                RateResult showMoreRatesRateResult = new RateResult(linkText, "", 0, originalRateGroup);
-
-                // Set the show more rate result on the rate group so the rate control knows how to build the grid row
-                rateGroup.ShowMoreRateResult = showMoreRatesRateResult;
-            }
 
             // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
             IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
@@ -243,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private IEnumerable<RateGroup> GetRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
             
@@ -263,10 +241,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             tasks.ForEach(t => t.Wait());
             
             return tasks.Select(x => x.Result);
-
-            //IEnumerable<RateGroup> 
-
-            //return CompileBestRates(shipment, allRates, tasks);
         }
 
         private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
@@ -301,9 +275,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">Shipment for which to get rates</param>
         /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
         /// <returns>A task that will contain the results</returns>
-        private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, exceptionHandler));
+            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, brokerExceptions));
         }
 
         /// <summary>
@@ -363,7 +337,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
-                rateGroups = GetRates(shipment, PreProcessExceptionHandler);
+                rateGroups = GetRates(shipment, new List<BrokerException>());
             }
             catch (AggregateException ex)
             {
@@ -401,10 +375,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 // Determine what the actual shipment type should be for the selected best rate
                 // (i.e. use Endicia if a postal type was selected)
-                ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
+                //ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
 
-                ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, setupShipmentType, shipment.ShipmentID);
+                //ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment.ShipmentID);
 
                 if (counterRatesProcessing != null)
                 {
@@ -412,21 +386,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     ShippingSettings.CheckForChangesNeeded();
                 }
 
-                // Select a rate based on the results of the dialog
-                if (eventArgs.SelectedRate != null)
-                {
-                    // The user has selected an existing rate, so just use it
-                    bestRate = eventArgs.SelectedRate;
-                    ratesToApplyToReturnedShipments = allRates
-                        .Rates
-                        .Where(r => r.ShipmentType == bestRate.ShipmentType && r.Amount == eventArgs.SelectedRate.Amount)
-                        .ToList();
-                }
-                else if (eventArgs.SelectedShipmentType != null)
+               if (eventArgs.SelectedShipmentType != null)
                 {
                     // Get the best rates for the newly created account
                     IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
-                    RateGroup bestRateGroup = broker.GetBestRates(shipment, PreProcessExceptionHandler);
+                    RateGroup bestRateGroup = broker.GetBestRates(shipment, new List<BrokerException>());
 
                     // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
                     // and filtered by service level
@@ -463,41 +427,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             
             return shipmentsToReturn;
         }
-
-        /// <summary>
-        /// For a given shipment type, determines which shipment type should be used for the setup wizard.
-        /// </summary>
-        private static ShipmentType DetermineCounterRateShipmentTypeForCounterRateSetupWizard(ShipmentTypeCode shipmentTypeCode)
-        {
-            ShipmentType setupShipmentType;
-
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
-                    break;
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalWebTools:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-                    break;
-                case ShipmentTypeCode.FedEx:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
-                    break;
-                default:
-                    throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");
-            }
-
-            return setupShipmentType;
-        }
-
+        
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address and any store specific logic that may impact whether customs

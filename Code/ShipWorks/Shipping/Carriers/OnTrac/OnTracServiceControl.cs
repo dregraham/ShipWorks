@@ -16,16 +16,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OnTracServiceControl"/> class.
         /// </summary>
-        public OnTracServiceControl()
-            : base(ShipmentTypeCode.OnTrac)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public OnTracServiceControl(RateControl rateControl)
+            : base(ShipmentTypeCode.OnTrac, rateControl)
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Initialie the comboboxes
+        /// Initialize the comboboxes
         /// </summary>
         public override void Initialize()
         {
@@ -105,6 +107,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             bool allInternational = LoadedShipments.Any(shipment => !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode));
 
             // Update the service types
+            service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(!allInternational);
 
             using (new MultiValueScope())
@@ -125,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     referenceNumber2.ApplyMultiText(shipment.OnTrac.Reference2);
                     instructions.ApplyMultiText(shipment.OnTrac.Instructions);
 
-                    // Sets service type only if it is avalable
+                    // Sets service type only if it is available
                     var onTracServiceType = (OnTracServiceType) shipment.OnTrac.Service;
                     if (((EnumList<OnTracServiceType>) service.DataSource).Any(x => x.Value == onTracServiceType))
                     {
@@ -139,7 +142,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     dimensions.Add(new DimensionsAdapter(shipment.OnTrac));
                 }
             }
-            
+
+
+            service.SelectedValueChanged += OnServiceChanged;
+
             //Load the dimensions
             dimensionsControl.LoadDimensions(dimensions);
         }
@@ -319,6 +325,42 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Called when the service type has changed.
+        /// </summary>
+        private void OnServiceChanged(object sender, EventArgs e)
+        {
+            SyncSelectedRate();
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
+
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
+                    {
+                        return false;
+                    }
+
+                    return (OnTracServiceType)r.Tag == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }

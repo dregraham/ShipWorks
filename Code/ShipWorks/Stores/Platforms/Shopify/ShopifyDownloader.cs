@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         int totalCount = 0;
+        private ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
 
         ShopifyWebClient webClient = null;
 
@@ -37,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         public ShopifyDownloader(ShopifyStoreEntity store)
             : base(store)
         {
+            requestedShippingField = (ShopifyRequestedShippingField)store.ShopifyRequestedShippingOption;
         }
 
         /// <summary>
@@ -262,7 +264,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 order.OnlineCustomerID = (onlineCustomerID == -1) ? (int?)null : onlineCustomerID;
 
                 //Requested shipping
-                order.RequestedShipping = jsonOrder.GetValue<string>("shipping_lines[0].code", string.Empty);
+                if (requestedShippingField == ShopifyRequestedShippingField.Code)
+                {
+                    order.RequestedShipping = jsonOrder.GetValue<string>("shipping_lines[0].code", string.Empty);
+                }
+                else
+                {
+                    order.RequestedShipping = jsonOrder.GetValue<string>("shipping_lines[0].title", string.Empty);
+                }
 
                 //Set OnlineLastModified to their last modified date
                 order.OnlineLastModified = jsonOrder.GetValue<DateTime>("updated_at", order.OnlineLastModified).ToUniversalTime();

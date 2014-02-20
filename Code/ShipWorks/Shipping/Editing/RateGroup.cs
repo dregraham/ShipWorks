@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public RateGroup(IEnumerable<RateResult> rates)
         {
-            OutOfDate = false;
             this.Rates = rates.ToList();
             footnoteFactories = new List<IRateFootnoteFactory>();
         }
@@ -23,17 +22,17 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the rates
         /// </summary>
-        public List<RateResult> Rates { get; private set; }
+        public virtual List<RateResult> Rates { get; private set; }
 
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
         /// </summary>
-        public bool OutOfDate { get; set; }
+        public virtual bool OutOfDate { get; set; }
 
         /// <summary>
         /// Gets the footnote factories.
         /// </summary>
-        public IEnumerable<IRateFootnoteFactory> FootnoteFactories
+        public virtual IEnumerable<IRateFootnoteFactory> FootnoteFactories
         {
             get { return footnoteFactories; }
         }
@@ -42,7 +41,7 @@ namespace ShipWorks.Shipping.Editing
         /// Adds a footnote factory to the FootnoteFactories collection.
         /// </summary>
         /// <param name="factory">The factory.</param>
-        public void AddFootnoteFactory(IRateFootnoteFactory factory)
+        public virtual void AddFootnoteFactory(IRateFootnoteFactory factory)
         {
             footnoteFactories.Add(factory);
         }
@@ -50,12 +49,12 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Gets or sets the carrier.
         /// </summary>
-        public ShipmentTypeCode Carrier { get; set; }
+        public virtual ShipmentTypeCode Carrier { get; set; }        
 
         /// <summary>
         /// Creates a new rate group by copying the current group settings and replacing the rates with the passed in rates
         /// </summary>
-        public RateGroup CopyWithRates(IEnumerable<RateResult> rates)
+        public virtual RateGroup CopyWithRates(IEnumerable<RateResult> rates)
         {
             RateGroup newRateGroup = new RateGroup(rates)
             {
@@ -69,15 +68,6 @@ namespace ShipWorks.Shipping.Editing
             }
 
             return newRateGroup;
-        }
-
-        /// <summary>
-        /// If this rate group should show a row in the grid for "show more rates", this is the rate result to do so.
-        /// </summary>
-        public RateResult ShowMoreRateResult
-        {
-            get; 
-            set;
         }
     }
 }

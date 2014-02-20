@@ -34,9 +34,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Get best rates for Express 1
         /// </summary>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
+            RateGroup rateGroup = base.GetBestRates(shipment, brokerExceptions);
 
             // Set the shipment type to express1 for endicia
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Endicia);

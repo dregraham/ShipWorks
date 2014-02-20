@@ -44,9 +44,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Gets a list of UPS rates
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
-        /// <param name="exceptionHandler">Action that performs exception handling</param>
+        /// <param name="brokerExceptions">Action that performs exception handling</param>
         /// <returns>A RateGroup containing the counter rates for a generic UPS account.</returns>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             RateGroup rates = new RateGroup(new List<RateResult>());
             ((UpsShipmentType)ShipmentType).SettingsRepository = SettingsRepository;
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             UpsAccountEntity account = AccountRepository.GetAccount(0);
             if (account == null || string.IsNullOrEmpty(account.UserID))
             {
-                exceptionHandler(new BrokerException(new ShippingException("Could not get counter rates for UPS"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("Could not get counter rates for UPS"), BrokerExceptionSeverityLevel.Information, ShipmentType));
                 return rates;
             }
 
@@ -66,8 +66,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // any SurePost exceptions generated will display as having a Warning severity level; later
                 // on we're going to make sure any broker exceptions have the severity level set to 
                 // information and then call the exception handler provided.
-                List<BrokerException> brokerExceptions = new List<BrokerException>();
-                rates = base.GetBestRates(shipment, brokerExceptions.Add);
+                rates = base.GetBestRates(shipment, brokerExceptions);
 
                 foreach (BestRateResultTag bestRateResultTag in rates.Rates.Select(rate => (BestRateResultTag)rate.Tag))
                 {
@@ -77,20 +76,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     bestRateResultTag.SignUpAction = new Func<bool>(DisplaySetupWizard);
                 }
 
-                // Since we sent our own exception handler to the GetBestRates method, we need to 
-                // call the exception handler that was provided with any broker exceptions
+                // Since counter rate exceptions are not important, we want to set them to the 'Information' severity level
                 foreach (BrokerException brokerException in brokerExceptions)
                 {
-                    if (brokerException.SeverityLevel != BrokerExceptionSeverityLevel.Information)
-                    {
-                        // Translate the broker exception to an informational severity level before
-                        // sending it to the exception handler
-                        exceptionHandler(new BrokerException(brokerException, BrokerExceptionSeverityLevel.Information, brokerException.ShipmentType));
-                    }
-                    else
-                    {
-                        exceptionHandler(brokerException);
-                    }
+                    brokerException.SeverityLevel = BrokerExceptionSeverityLevel.Information;
                 }
             }
             catch (AggregateException ex)

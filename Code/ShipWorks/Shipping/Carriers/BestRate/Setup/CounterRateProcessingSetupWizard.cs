@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
@@ -17,31 +18,31 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
     /// </summary>
     public partial class CounterRateProcessingSetupWizard : WizardForm
     {
-        private readonly ShipmentType setupShipmentType;
-        private readonly RateResult absoluteBestRate;
+        private readonly ShipmentType initialShipmentType;
+        private readonly RateResult initialRate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CounterRateProcessingSetupWizard"/> class.
+        /// Initializes a new instance of the <see cref="CounterRateProcessingSetupWizard" /> class.
         /// </summary>
-        /// <param name="args">Arguments from the pre-process method.</param>
+        /// <param name="filteredRates">The filtered rates.</param>
+        /// <param name="selectedRate">The selected rate that is going to be in the "Sign up" section of the wizard.</param>
         /// <param name="shipmentsInBatch">The shipments in the batch.</param>
-        public CounterRateProcessingSetupWizard(CounterRatesProcessingArgs args, IEnumerable<ShipmentEntity> shipmentsInBatch)
+        public CounterRateProcessingSetupWizard(RateGroup filteredRates, RateResult selectedRate, IEnumerable<ShipmentEntity> shipmentsInBatch)
         {
-            setupShipmentType = args.SetupShipmentType;
             InitializeComponent();
-            
-            FilteredRates = args.FilteredRates;
-            AllRates = args.AllRates;
+
+            FilteredRates = filteredRates;
 
             // Assume the user will opt to use an existing account, so we only have to 
             // change the value in in one spot (when signing up for an account)
             IgnoreAllCounterRates = true;
 
             // Make note of this otherwise we'd be running Rates.First() a number of times
-            absoluteBestRate = FilteredRates.Rates.FirstOrDefault();
+            initialRate = selectedRate ?? FilteredRates.Rates.FirstOrDefault();
+            initialShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(initialRate.ShipmentType);
 
-            // Swap out the "tokenized" provider text with that of the provider with the best rate
-            LoadBestRateInfo();
+            // Swap out the "tokenized" provider text with that of the provider of the initial rate
+            LoadInitialRateInfo();
             LoadExistingAccountRateInfo();
 
             if (shipmentsInBatch.Count() <= 1)
@@ -55,14 +56,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             NextVisible = false;
         }
 
-        /// <summary>
-        /// Gets all rates.
-        /// </summary>
-        public RateGroup AllRates
-        {
-            get;
-            private set;
-        }
 
         /// <summary>
         /// Gets the filtered rates.
@@ -97,28 +90,28 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <summary>
         /// Loads the rate information for the best rate that was found.
         /// </summary>
-        private void LoadBestRateInfo()
+        private void LoadInitialRateInfo()
         {
             LoadCreateCarrierDescriptionText();
             
-            if (ShipmentTypeManager.IsPostal(setupShipmentType.ShipmentTypeCode))
+            if (ShipmentTypeManager.IsPostal(initialShipmentType.ShipmentTypeCode))
             {
                 // Use the general USPS logo for all postal types 
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
 
                 // Some service types already contain USPS in the service description, so only add it if
                 // the service description does not already start with USPS
-                bestRateCarrierName.Text = string.Format("{0}{1}", absoluteBestRate.Description.StartsWith("USPS ", System.StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", absoluteBestRate.Description);
+                bestRateCarrierName.Text = string.Format("{0}{1}", initialRate.Description.StartsWith("USPS ", StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", initialRate.Description);
             
             }
             else
             {
                 // Use the actual logo and shipment type description for non-postal providers
-                bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(setupShipmentType.ShipmentTypeCode);
-                bestRateCarrierName.Text = string.Format("{0} {1}", EnumHelper.GetDescription(setupShipmentType.ShipmentTypeCode), absoluteBestRate.Description);
+                bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
+                bestRateCarrierName.Text = string.Format("{0} {1}", EnumHelper.GetDescription(initialShipmentType.ShipmentTypeCode), initialRate.Description);
             }
 
-            bestRateAmount.Text = string.Format("{0:C2}", absoluteBestRate.Amount);
+            bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
         }
 
         /// <summary>
@@ -151,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // the cheapest available rate
                 existingAccountRateAmount.Text = string.Format("{0:C2}", existingAccountRate.Amount);
 
-                decimal difference = existingAccountRate.Amount - absoluteBestRate.Amount;
+                decimal difference = existingAccountRate.Amount - initialRate.Amount;
                 existingAccountRateDifference.Text = string.Format("({0:C2} more)", difference);
                 existingAccountRateDifference.Left = existingAccountRateAmount.Right - 3;
 
@@ -205,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             string description = string.Empty;
 
-            switch (setupShipmentType.ShipmentTypeCode)
+            switch (initialShipmentType.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Endicia:
                     description = "USPS partners with Endicia to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " + 
@@ -244,15 +237,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnSignUp(object sender, System.EventArgs e)
         {
-            SelectedShipmentType = ShipmentTypeManager.GetType(setupShipmentType.ShipmentTypeCode);
             IgnoreAllCounterRates = false;
 
             // Launch the setup wizard of the selected shipment type
-            DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, SelectedShipmentType);
+            DialogResult result = ShipmentTypeSetupWizardForm.RunFromHostWizard(this, initialShipmentType);
 
             if (result == DialogResult.OK)
             {
                 MarkSelectedShipmentTypeAsBeingUsed();
+                SelectedShipmentType = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode);
             }
             
             // Close the dialog regardless of whether they canceled out of the setup wizard
@@ -341,6 +334,40 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             // Make sure to close the form with OK as the result
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        /// <summary>
+        /// For a given shipment type, determines which shipment type should be used for the setup wizard.
+        /// </summary>
+        private static ShipmentType DetermineCounterRateShipmentTypeForCounterRateSetupWizard(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShipmentType setupShipmentType;
+
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.UpsOnLineTools:
+                case ShipmentTypeCode.UpsWorldShip:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
+                    break;
+                case ShipmentTypeCode.Endicia:
+                case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.PostalWebTools:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Endicia:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
+                    break;
+                case ShipmentTypeCode.Express1Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
+                    break;
+                case ShipmentTypeCode.FedEx:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+                    break;
+                default:
+                    throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");
+            }
+
+            return setupShipmentType;
         }
     }
 }

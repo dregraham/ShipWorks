@@ -1,4 +1,8 @@
-﻿namespace ShipWorks.Shipping.Editing
+﻿using System.Drawing;
+using System.Windows.Forms;
+using ShipWorks.Properties;
+
+namespace ShipWorks.Shipping.Editing
 {
     partial class RateControl
     {
@@ -42,13 +46,16 @@
             this.panelOutOfDate = new System.Windows.Forms.Panel();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.loadingImage = new System.Windows.Forms.PictureBox();
+            this.loadingRatesPanel = new System.Windows.Forms.Panel();
+            this.loadingRatesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).BeginInit();
             this.outOfDateBar.Panel.SuspendLayout();
-            this.outOfDateBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.panelOutOfDate.SuspendLayout();
             this.panelFootnote.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
+            this.loadingRatesPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sandGrid
@@ -70,7 +77,7 @@
             this.sandGrid.PrimaryColumn = this.gridColumnService;
             this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
-            this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
+            this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
             this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
                         new Divelements.SandGrid.GridCell("USPS"),
@@ -115,6 +122,7 @@
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 145);
             this.sandGrid.TabIndex = 1;
+            this.sandGrid.SelectionChanged += OnSelectedRateChanged;
             // 
             // gridColumnProvider
             // 
@@ -163,12 +171,12 @@
             this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
-            this.gridColumnSelect.HeaderText = "Select";
+            this.gridColumnSelect.HeaderText = "";
             this.gridColumnSelect.Width = 37;
             // 
             // outOfDateBar
             // 
-            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outOfDateBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outOfDateBar.GroupBackStyle = ComponentFactory.Krypton.Toolkit.PaletteBackStyle.GridHeaderRowList;
             this.outOfDateBar.GroupBorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.ControlRibbon;
@@ -183,11 +191,12 @@
             this.outOfDateBar.Size = new System.Drawing.Size(485, 24);
             this.outOfDateBar.StateCommon.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(235)))));
             this.outOfDateBar.StateCommon.Border.Color1 = System.Drawing.Color.Silver;
-            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            this.outOfDateBar.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)((((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom)
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left)
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.outOfDateBar.StateCommon.Border.Rounding = 4;
             this.outOfDateBar.TabIndex = 6;
+
             // 
             // labelSecondary
             // 
@@ -250,28 +259,64 @@
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 0);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(493, 1);
-            this.kryptonBorderEdge.TabIndex = 3;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
+            // 
+            // loadingImage
+            // 
+            this.loadingImage.BackColor = System.Drawing.Color.White;
+            this.loadingImage.Image = global::ShipWorks.Properties.Resources.squares_circle_green;
+            this.loadingImage.Location = new System.Drawing.Point(28, 3);
+            this.loadingImage.Name = "loadingImage";
+            this.loadingImage.Size = new System.Drawing.Size(39, 40);
+            this.loadingImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.loadingImage.TabIndex = 9;
+            this.loadingImage.TabStop = false;
+            // 
+            // loadingRatesPanel
+            // 
+            this.loadingRatesPanel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.loadingRatesPanel.AutoSize = true;
+            this.loadingRatesPanel.BackColor = System.Drawing.Color.White;
+            this.loadingRatesPanel.Controls.Add(this.loadingRatesLabel);
+            this.loadingRatesPanel.Controls.Add(this.loadingImage);
+            this.loadingRatesPanel.Location = new System.Drawing.Point(199, 60);
+            this.loadingRatesPanel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.loadingRatesPanel.Name = "loadingRatesPanel";
+            this.loadingRatesPanel.Size = new System.Drawing.Size(95, 87);
+            this.loadingRatesPanel.TabIndex = 10;
+            // 
+            // loadingRatesLabel
+            // 
+            this.loadingRatesLabel.AutoSize = true;
+            this.loadingRatesLabel.Location = new System.Drawing.Point(3, 44);
+            this.loadingRatesLabel.Name = "loadingRatesLabel";
+            this.loadingRatesLabel.Size = new System.Drawing.Size(88, 13);
+            this.loadingRatesLabel.TabIndex = 10;
+            this.loadingRatesLabel.Text = "Fetching rates...";
+            this.loadingRatesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RateControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.loadingRatesPanel);
             this.Controls.Add(this.sandGrid);
             this.Controls.Add(this.panelOutOfDate);
             this.Controls.Add(this.panelFootnote);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RateControl";
             this.Size = new System.Drawing.Size(493, 205);
-            ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar.Panel)).EndInit();
             this.outOfDateBar.Panel.ResumeLayout(false);
             this.outOfDateBar.Panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outOfDateBar)).EndInit();
-            this.outOfDateBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.panelOutOfDate.ResumeLayout(false);
             this.panelFootnote.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).EndInit();
+            this.loadingRatesPanel.ResumeLayout(false);
+            this.loadingRatesPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -290,5 +335,8 @@
         private System.Windows.Forms.Panel panelFootnote;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
+        private PictureBox loadingImage;
+        private Panel loadingRatesPanel;
+        private Label loadingRatesLabel;
     }
 }

@@ -47,9 +47,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
+        /// <param name="brokerExceptions"></param>
         /// <returns>An empty list of RateResult objects.</returns>
-        public RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             return new RateGroup(new List<RateResult>());
         }

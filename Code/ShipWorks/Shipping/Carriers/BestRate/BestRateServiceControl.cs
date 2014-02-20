@@ -12,17 +12,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public partial class BestRateServiceControl : ServiceControlBase
     {
         private readonly BestRateShipmentType bestRateShipment;
+        private RateResult cachedRate;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="BestRateServiceControl"/> class.
         /// </summary>
-        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode)
-            : base (shipmentTypeCode)
+        public BestRateServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+            : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
             
             bestRateShipment = new BestRateShipmentType();
             bestRateShipment.SignUpForProviderAccountCompleted += OnAccountSignUp;
+
+            RateControl.ShowAllRates = false;
         }
 
         /// <summary>
@@ -146,17 +149,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             RaiseRateCriteriaChanged();
         }
-
-        /// <summary>
-        /// Event raised when Rate is selected in rate control.
-        /// </summary>
-        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
-        {
-            bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
-            
-            RaiseShipmentTypeChanged();
-        }
-
+        
         /// <summary>
         /// Event raised when the origin address has changed
         /// </summary>
@@ -195,6 +188,63 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnAccountSignUp(object sender, EventArgs e)
         {
             ClearRatesAction(string.Empty);
+        }
+
+        /// <summary>
+        /// Called when the configure rate is clicked
+        /// </summary>
+        public override void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
+        {
+            bestRateShipment.ApplySelectedShipmentRate(LoadedShipments[0], e.Rate);
+
+            // Don't raise event if it was just the 'More...' link:
+            BestRateResultTag bestRateResultTag = e.Rate.Tag as BestRateResultTag;
+            if (bestRateResultTag != null && !bestRateResultTag.IsRealRate)
+            {
+                return;
+            }
+
+            RaiseShipmentTypeChanged();
+        }
+
+        /// <summary>
+        /// Event raised when Rate is selected in rate control.
+        /// </summary>
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            // Due to some weird behavior with the show more link and the previous 
+            // selection not being cleared out when a new row was selected in the grid, 
+            // we need to compare the currently selected rate with what the service 
+            // control thinks is the selected rate. If they're different we have to 
+            // explicitly call the SelectRate method on the rate control again. This will
+            // fire another RateSelected event, but this time the e.Rate and the 
+            // cachedRate will be the same.
+            if (e.Rate != cachedRate)
+            {
+                cachedRate = e.Rate;
+                RateControl.SelectRate(e.Rate);
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (LoadedShipments.Count > 1 || serviceLevel.MultiValued)
+            {
+                RateControl.ClearSelection();
+                cachedRate = null;
+            }
+            else
+            {
+                // Always select the first rate since all the rates already take the service 
+                // level and the other fields into account when compiling the list of rates
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault();
+                
+                cachedRate = matchingRate;
+                RateControl.SelectRate(matchingRate);
+            }
         }
     }
 }

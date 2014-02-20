@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Get best rates for Express 1
         /// </summary>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
             

@@ -43,9 +43,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             };
 
             List<BrokerException> brokerExceptions = new List<BrokerException>();
-            Action<BrokerException> exceptionHandler = brokerExceptions.Add;
-
-            testObject.GetBestRates(shipment, exceptionHandler);
+           
+            testObject.GetBestRates(shipment, brokerExceptions);
 
             Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
         }

@@ -482,6 +482,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShopifyAccessToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShopifyRequestedShippingOption", fieldHashtable);
 		}
 		#endregion
 
@@ -586,6 +589,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ShopifyAccessToken, true); }
 			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyAccessToken, value); }
+		}
+
+		/// <summary> The ShopifyRequestedShippingOption property of the Entity ShopifyStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyRequestedShippingOption"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShopifyRequestedShippingOption
+		{
+			get { return (System.Int32)GetValue((int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, true); }
+			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, value); }
 		}
 
 

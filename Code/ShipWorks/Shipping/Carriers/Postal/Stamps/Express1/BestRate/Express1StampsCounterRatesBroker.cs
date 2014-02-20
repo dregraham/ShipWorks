@@ -39,9 +39,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// Gets the best rates for for Express1Stamps counter-based prices.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler">The exception handler.</param>
+        /// <param name="brokerExceptions">The exception handler.</param>
         /// <returns>A RateGroup containing the counter rates for an Express1Stamps account.</returns>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
             try
             {
-                bestRates = base.GetBestRates(shipment, exceptionHandler);
+                bestRates = base.GetBestRates(shipment, brokerExceptions);
 
                 foreach (RateResult rateResult in bestRates.Rates)
                 {

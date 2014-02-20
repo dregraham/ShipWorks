@@ -504,6 +504,12 @@
     <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.Designer.cs">
       <DependentUpon>DateTimeFormatRequiredDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
+      <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -622,8 +628,22 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Editing\ExceptionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ExceptionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\FootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\ShipmentRateGroup.cs" />
+    <Compile Include="Shipping\Editing\RatesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\RatesPanel.Designer.cs">
+      <DependentUpon>RatesPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2103,6 +2123,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorFlagType.cs" />
     <Compile Include="Stores\Platforms\CommerceInterface\CoreExtensions\Filters\CommerceInterfaceNumberCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemPaidStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayItemShippedStatusCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderSellingManagerRecordCondition.cs" />
     <Compile Include="Stores\Platforms\Ebay\Tokens\EbayTokenFactory.cs" />
@@ -2218,6 +2239,7 @@
     <Compile Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.Designer.cs">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Shopify\Enums\ShopifyRequestedShippingField.cs" />
     <Compile Include="Stores\Platforms\SellerVantage\SellerVantageWebClient.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Actions\ShopifyShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Shopify\CoreExtensions\Filters\ShopifyPaymentStatusCondition.cs" />
@@ -2239,6 +2261,12 @@
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.Designer.cs">
+      <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyConstants.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyEndpoints.cs" />
@@ -5775,6 +5803,9 @@
       <DependentUpon>EnglishCultureRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.resx">
+      <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -7012,6 +7043,12 @@
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsMailInnovationsOptionControl.resx">
       <DependentUpon>UpsMailInnovationsOptionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ExceptionsRateFootnoteControl.resx">
+      <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\RatesPanel.resx">
+      <DependentUpon>RatesPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -7146,6 +7183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.resx">
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.resx">
+      <DependentUpon>ShopifyStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.resx">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
@@ -10170,6 +10210,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />

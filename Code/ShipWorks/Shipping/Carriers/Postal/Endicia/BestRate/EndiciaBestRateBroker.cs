@@ -78,18 +78,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         /// <returns>Best rates from Endicia</returns>
         /// <remarks>Adds an informational error when no DHL rates are returned</remarks>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            RateGroup rates = base.GetBestRates(shipment, exceptionHandler);
+            RateGroup rates = base.GetBestRates(shipment, brokerExceptions);
 
             if (isEndiciaDhlEnabled)
             {
-                exceptionHandler(new BrokerException(new ShippingException("Endicia did not provide DHL rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("Endicia did not provide DHL rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
             if (isEndiciaConsolidatorEnabled)
             {
-                exceptionHandler(new BrokerException(new ShippingException("Endicia did not provide consolidator rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("Endicia did not provide consolidator rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
             }
 
             return rates;

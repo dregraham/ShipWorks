@@ -65,10 +65,14 @@ namespace ShipWorks.UI.Controls
 
         // Controls if the weigh button and live weight display is shown
         bool showWeighButton = true;
+        private bool ignoreWeightChanges;
         const int weightButtonArea = 123;
 
         // Raised whenever the value changes
         public event EventHandler WeightChanged;
+
+        // Raised whenever the text changes to a valid, parsed weight
+        public event EventHandler ValidWeightParsed;
 
         /// <summary>
         /// Constructor
@@ -113,22 +117,25 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                ParseWeight();
+                double? parsedWeight = ParseWeight(textBox.Text);
 
-                return currentWeight;
+                return parsedWeight.HasValue ? parsedWeight.Value : currentWeight;
             }
             set
             {
-                MultiValued = false;
-                cleared = false;
-
-                if (ValidateRange(value))
+                if (!ignoreWeightChanges)
                 {
-                    SetCurrentWeight(value);
-                    ClearError();
-                }
+                    MultiValued = false;
+                    cleared = false;
 
-                FormatWeightText();
+                    if (ValidateRange(value))
+                    {
+                        SetCurrentWeight(value);
+                        ClearError();
+                    }
+
+                    FormatWeightText();   
+                }
             }
         }
 
@@ -337,10 +344,71 @@ namespace ShipWorks.UI.Controls
             DisplayFormat = WeightDisplayFormat.PoundsOunces;
         }
 
+        private double? ParseWeight(string weight)
+        {
+            double? newWeight = 0.0;
+
+            try
+            {
+                // See if both pounds and ounces are present
+                Match poundsOzMatch = poundsOzRegex.Match(weight);
+
+                // Did it match
+                if (poundsOzMatch.Success)
+                {
+                    double pounds = double.Parse(poundsOzMatch.Groups["Pounds"].Value);
+                    double ounces = double.Parse(poundsOzMatch.Groups["Ounces"].Value);
+
+                    newWeight = pounds + ounces / 16.0;
+                }
+
+                else
+                {
+                    // Now see if just ounces are present
+                    Match ouncesMatch = ouncesRegex.Match(weight);
+
+                    // Did it match
+                    if (ouncesMatch.Success)
+                    {
+                        newWeight = double.Parse(ouncesMatch.Groups["Ounces"].Value) / 16.0;
+                    }
+
+                    else
+                    {
+                        // Now see if just pounds are present
+                        Match poundsMatch = poundsRegex.Match(weight);
+
+                        // Did it match
+                        if (poundsMatch.Success)
+                        {
+                            newWeight = double.Parse(poundsMatch.Groups["Pounds"].Value);
+                        }
+                        else
+                        {
+                            // Nothing worked!
+                            newWeight = null;
+                        }
+                    }
+                }
+
+                // Ensure the range is valid
+                if (newWeight.HasValue && ValidateRange(newWeight.Value))
+                {
+                    return newWeight;
+                }
+            }
+            catch (FormatException)
+            {
+                // There's nothing to do here; a failed parsed will just return null
+            }
+
+            return null;
+        }
+
         /// <summary>
-        /// Parse the weight in the text box
+        /// Sets the parsed weight in the text
         /// </summary>
-        private void ParseWeight()
+        private void SetParsedWeight()
         {
             // If its cleared, then no need to parse
             if (textBox.Text.Length == 0 && cleared)
@@ -356,60 +424,14 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            double newWeight = 0.0;
+            double? parsedWeight = ParseWeight(textBox.Text);
 
-            try
+            if (parsedWeight.HasValue)
             {
-
-                // See if both pounds and ounces are present
-                Match poundsOzMatch = poundsOzRegex.Match(text);
-
-                // Did it match
-                if (poundsOzMatch.Success)
-                {
-                    double pounds = double.Parse(poundsOzMatch.Groups["Pounds"].Value);
-                    double ounces = double.Parse(poundsOzMatch.Groups["Ounces"].Value);
-
-                    newWeight = pounds + ounces / 16.0;
-                }
-
-                else
-                {
-                    // Now see if just ounces are present
-                    Match ouncesMatch = ouncesRegex.Match(text);
-
-                    // Did it match
-                    if (ouncesMatch.Success)
-                    {
-                        newWeight = double.Parse(ouncesMatch.Groups["Ounces"].Value) / 16.0;
-                    }
-
-                    else
-                    {
-                        // Now see if just pounds are present
-                        Match poundsMatch = poundsRegex.Match(text);
-
-                        // Did it match
-                        if (poundsMatch.Success)
-                        {
-                            newWeight = double.Parse(poundsMatch.Groups["Pounds"].Value);
-                        }
-                        else
-                        {
-                            // Nothing worked!
-                            throw new FormatException("The input was not valid.");
-                        }
-                    }
-                }
-
-                // Ensure the range is valid
-                if (ValidateRange(newWeight))
-                {
-                    SetCurrentWeight(newWeight);
-                    ClearError();
-                }
+                SetCurrentWeight(parsedWeight.Value);
+                ClearError();
             }
-            catch (FormatException)
+            else
             {
                 SetError("The input was not valid.");
             }
@@ -531,13 +553,24 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
+        /// Called whenever a valid weight is parsed.
+        /// </summary>
+        protected virtual void OnValidWeightParsed()
+        {
+            if (ValidWeightParsed != null)
+            {
+                ValidWeightParsed(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
         /// Trap the enter key
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if (keyData == Keys.Enter)
             {
-                ParseWeight();
+                SetParsedWeight();
 
                 return true;
             }
@@ -552,7 +585,7 @@ namespace ShipWorks.UI.Controls
         {
             if (!MultiValued)
             {
-                ParseWeight();
+                SetParsedWeight();
             }
 
  	        base.OnLeave(e);
@@ -645,6 +678,16 @@ namespace ShipWorks.UI.Controls
         private void ClearError()
         {
             errorProvider.SetError(weighToolbar, null);
+        }
+
+        private void OnTextBoxChanged(object sender, EventArgs e)
+        {
+            if (ParseWeight(textBox.Text).HasValue)
+            {
+                ignoreWeightChanges = true;
+                OnWeightChanged();
+                ignoreWeightChanges = false;
+            }
         }
     }
 }

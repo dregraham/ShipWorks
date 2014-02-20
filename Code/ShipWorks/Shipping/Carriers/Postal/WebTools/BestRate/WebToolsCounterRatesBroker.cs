@@ -48,15 +48,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// Gets the best rates for for WebTools counter-based prices.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler">The exception handler.</param>
+        /// <param name="brokerExceptions">The exception handler.</param>
         /// <returns>A RateGroup containing the counter rates for a generic WebTools account.</returns>
-        public override RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
             try
             {
-                bestRates = base.GetBestRates(shipment, exceptionHandler);
+                bestRates = base.GetBestRates(shipment, brokerExceptions);
 
                 foreach (RateResult rateResult in bestRates.Rates)
                 {

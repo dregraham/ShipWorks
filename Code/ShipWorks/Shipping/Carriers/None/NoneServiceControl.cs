@@ -16,10 +16,12 @@ namespace ShipWorks.Shipping.Carriers.None
     public partial class NoneServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NoneServiceControl"/> class.
         /// </summary>
-        public NoneServiceControl() : 
-            base (ShipmentTypeCode.None)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public NoneServiceControl(RateControl rateControl) : 
+            base (ShipmentTypeCode.None, rateControl)
         {
             InitializeComponent();
         }
