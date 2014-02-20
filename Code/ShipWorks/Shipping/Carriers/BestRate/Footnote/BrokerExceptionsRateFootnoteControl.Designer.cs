@@ -37,7 +37,7 @@
             // errorMessage
             // 
             this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(29, 4);
+            this.errorMessage.Location = new System.Drawing.Point(29, 6);
             this.errorMessage.Name = "errorMessage";
             this.errorMessage.Size = new System.Drawing.Size(241, 13);
             this.errorMessage.TabIndex = 0;
@@ -46,7 +46,7 @@
             // moreInfoLink
             // 
             this.moreInfoLink.AutoSize = true;
-            this.moreInfoLink.Location = new System.Drawing.Point(267, 4);
+            this.moreInfoLink.Location = new System.Drawing.Point(267, 6);
             this.moreInfoLink.Name = "moreInfoLink";
             this.moreInfoLink.Size = new System.Drawing.Size(64, 13);
             this.moreInfoLink.TabIndex = 1;
@@ -57,7 +57,7 @@
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.flag_red;
-            this.pictureBox.Location = new System.Drawing.Point(4, 4);
+            this.pictureBox.Location = new System.Drawing.Point(4, 6);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.TabIndex = 2;
@@ -72,7 +72,7 @@
             this.Controls.Add(this.errorMessage);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "BrokerExceptionsRateFootnoteControl";
-            this.Size = new System.Drawing.Size(362, 20);
+            this.Size = new System.Drawing.Size(362, 26);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

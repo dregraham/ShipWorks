@@ -163,7 +163,7 @@ namespace ShipWorks
             this.contextOrderQuickPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuTemplatesPlaceholder = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuTemplatesPlaceholderItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCustomerPreview = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerSaveOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep4 = new System.Windows.Forms.ToolStripSeparator();
@@ -172,11 +172,11 @@ namespace ShipWorks
             this.contextOrderSep5 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderSave = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSaveOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerEmailNow = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerSave = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerComposeEmail = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerPrint = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCustomerSaveOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuCustomerGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextCustomerEditCustomer = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerCustomActionsSep = new System.Windows.Forms.ToolStripSeparator();
@@ -840,7 +840,7 @@ namespace ShipWorks
             this.dockableWindowRates.Guid = new System.Guid("61946061-0df9-4143-92ed-0e71826d7d5f");
             this.dockableWindowRates.Location = new System.Drawing.Point(4, 21);
             this.dockableWindowRates.Name = "dockableWindowRates";
-            this.dockableWindowRates.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.dockableWindowRates.Padding = new System.Windows.Forms.Padding(4, 0, 0, 4);
             this.dockableWindowRates.ShowOptions = false;
             this.dockableWindowRates.Size = new System.Drawing.Size(306, 283);
             this.dockableWindowRates.TabImage = global::ShipWorks.Properties.Resources.currency_dollar_green16;
@@ -852,9 +852,9 @@ namespace ShipWorks
             this.ratesPanel.BackColor = System.Drawing.Color.White;
             this.ratesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ratesPanel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ratesPanel.Location = new System.Drawing.Point(4, 0);
+            this.ratesPanel.Location = new System.Drawing.Point(5, 1);
             this.ratesPanel.Name = "ratesPanel";
-            this.ratesPanel.Size = new System.Drawing.Size(302, 283);
+            this.ratesPanel.Size = new System.Drawing.Size(300, 277);
             this.ratesPanel.TabIndex = 0;
             // 
             // sandDockManager
@@ -1565,7 +1565,7 @@ namespace ShipWorks
             this.contextMenuTemplatesPlaceholder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextMenuTemplatesPlaceholderItem});
             this.contextMenuTemplatesPlaceholder.Name = "contextMenuTemplatesPlaceholder";
-            this.contextMenuTemplatesPlaceholder.OwnerItem = this.contextCustomerSaveOpen;
+            this.contextMenuTemplatesPlaceholder.OwnerItem = this.contextCustomerPrint;
             this.contextMenuTemplatesPlaceholder.Size = new System.Drawing.Size(137, 26);
             // 
             // contextMenuTemplatesPlaceholderItem
@@ -1574,17 +1574,17 @@ namespace ShipWorks
             this.contextMenuTemplatesPlaceholderItem.Size = new System.Drawing.Size(136, 22);
             this.contextMenuTemplatesPlaceholderItem.Text = "Placeholder";
             // 
-            // contextCustomerPreview
+            // contextCustomerSaveOpen
             // 
-            this.contextCustomerPreview.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerPreview, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
-            this.contextCustomerPreview.Image = global::ShipWorks.Properties.Resources.printer_view16;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPreview, new System.Guid("bc35d3c7-5a87-4cc1-8a2b-1d6cba92f22a"));
-            this.contextCustomerPreview.Name = "contextCustomerPreview";
-            this.contextCustomerPreview.Size = new System.Drawing.Size(159, 22);
-            this.contextCustomerPreview.Text = "Preview";
-            this.contextCustomerPreview.Visible = false;
-            this.contextCustomerPreview.DropDownOpening += new System.EventHandler(this.OnPreviewMenuOpening);
+            this.contextCustomerSaveOpen.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
+            this.contextCustomerSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window1;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSaveOpen, new System.Guid("a51ed164-e911-4e9c-9b6c-ead7435456de"));
+            this.contextCustomerSaveOpen.Name = "contextCustomerSaveOpen";
+            this.contextCustomerSaveOpen.Size = new System.Drawing.Size(159, 22);
+            this.contextCustomerSaveOpen.Text = "Save and Open";
+            this.contextCustomerSaveOpen.Visible = false;
+            this.contextCustomerSaveOpen.DropDownOpening += new System.EventHandler(this.OnSaveAndOpenMenuOpening);
             // 
             // contextOrderPrint
             // 
@@ -1670,6 +1670,18 @@ namespace ShipWorks
             this.contextOrderSaveOpen.Visible = false;
             this.contextOrderSaveOpen.DropDownOpening += new System.EventHandler(this.OnSaveAndOpenMenuOpening);
             // 
+            // contextCustomerPreview
+            // 
+            this.contextCustomerPreview.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerPreview, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
+            this.contextCustomerPreview.Image = global::ShipWorks.Properties.Resources.printer_view16;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerPreview, new System.Guid("bc35d3c7-5a87-4cc1-8a2b-1d6cba92f22a"));
+            this.contextCustomerPreview.Name = "contextCustomerPreview";
+            this.contextCustomerPreview.Size = new System.Drawing.Size(159, 22);
+            this.contextCustomerPreview.Text = "Preview";
+            this.contextCustomerPreview.Visible = false;
+            this.contextCustomerPreview.DropDownOpening += new System.EventHandler(this.OnPreviewMenuOpening);
+            // 
             // contextCustomerEmailNow
             // 
             this.contextCustomerEmailNow.DropDown = this.contextMenuTemplatesPlaceholder;
@@ -1719,18 +1731,6 @@ namespace ShipWorks
             this.contextCustomerPrint.Text = "Print";
             this.contextCustomerPrint.Visible = false;
             this.contextCustomerPrint.DropDownOpening += new System.EventHandler(this.OnPrintMenuOpening);
-            // 
-            // contextCustomerSaveOpen
-            // 
-            this.contextCustomerSaveOpen.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
-            this.contextCustomerSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window1;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSaveOpen, new System.Guid("a51ed164-e911-4e9c-9b6c-ead7435456de"));
-            this.contextCustomerSaveOpen.Name = "contextCustomerSaveOpen";
-            this.contextCustomerSaveOpen.Size = new System.Drawing.Size(159, 22);
-            this.contextCustomerSaveOpen.Text = "Save and Open";
-            this.contextCustomerSaveOpen.Visible = false;
-            this.contextCustomerSaveOpen.DropDownOpening += new System.EventHandler(this.OnSaveAndOpenMenuOpening);
             // 
             // contextMenuCustomerGrid
             // 
