@@ -1696,7 +1696,7 @@ namespace ShipWorks.Shipping
 
             // There's no need to bother doing anything if we don't have exactly one shipment because
             // the grid does not show rates otherwise
-            if (uiDisplayedShipments.Count != 1)
+            if (uiDisplayedShipments.Count > 1)
             {
                 ClearRates("(Multiple)");
                 return;

@@ -271,14 +271,30 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Create a clone so we don't have to worry about modifying the original shipment
                     ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
                     ChangeShipmentType(selectedShipment);
-
-                    ShippingManager.EnsureShipmentLoaded(selectedShipment);
-
+                    
+                    LoadShipment(selectedShipment);
+                    
                     SelectRate(selectedShipment);
                     UpdateChildShipmentSettings(selectedShipment, originalShipment, account);
 
                     SetServiceTypeFromTag(selectedShipment, originalTag);
                 };
+        }
+
+        /// <summary>
+        /// Loads the shipment.
+        /// </summary>
+        private static void LoadShipment(ShipmentEntity selectedShipment)
+        {
+            try
+            {
+                ShippingManager.EnsureShipmentLoaded(selectedShipment);
+            }
+            catch (NotFoundException)
+            {
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(selectedShipment);
+                shipmentType.ConfigureNewShipment(selectedShipment);
+            }
         }
 
         /// <summary>
