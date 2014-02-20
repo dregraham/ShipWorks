@@ -4,7 +4,9 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -720,6 +722,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
             return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
+        }
+
+        /// <summary>
+        /// Returns the Endicia Returns Control
+        /// </summary>
+        public override ReturnsControlBase CreateReturnsControl()
+        {
+            // If scan based returns is not allowed, show the the default returns control
+            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None)
+            {
+                return base.CreateReturnsControl();
+            }
+
+            // It's allowed, so show the scan based returns control.
+            return new EndiciaReturnsControl();
         }
     }
 }

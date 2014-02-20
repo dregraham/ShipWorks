@@ -854,7 +854,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "TransactionID", "TransactionID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RefundFormID", "RefundFormID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 11 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
 		}
 		/// <summary>Inits EquaShipAccountEntity's mappings</summary>
 		private void InitEquaShipAccountEntityMappings()
