@@ -868,7 +868,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked -= oldServiceControl.OnRateSelected;
+                    rateControl.ConfigureRateClicked -= oldServiceControl.OnConfigureRateClick;
 
                     oldServiceControl.Dispose();
                 }
