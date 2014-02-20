@@ -164,10 +164,8 @@ namespace ShipWorks.Shipping.Editing
                         else if (cachedRates.Contains(GetCacheKey(shipmentForRating)) && !forceFetch)
                         {
                             // Rates for this shipment have already been cached
-                            RateGroup rateGroup = cachedRates[GetCacheKey(shipmentForRating)];
-
-                            rateControl.HideSpinner();
-                            rateControl.LoadRates(rateGroup);
+                            ShipmentRateGroup rateGroup = cachedRates[GetCacheKey(shipmentForRating)];
+                            LoadRates(rateGroup);
                         }
                         else
                         {
@@ -248,8 +246,7 @@ namespace ShipWorks.Shipping.Editing
                             // Only update the rate control if the shipment is for the currently selected 
                             // order to avoid the appearance of lag when a user is quickly clicking around
                             // the rate grid
-                            rateControl.HideSpinner();                            
-                            rateControl.LoadRates(panelRateGroup);
+                            LoadRates(panelRateGroup);
                         }
                     }
                 };
@@ -265,6 +262,19 @@ namespace ShipWorks.Shipping.Editing
         public void UpdateStoreDependentUI()
         {
             // Do nothing
+        }
+
+        /// <summary>
+        /// A helper method for loading the rates in the rate control.
+        /// </summary>
+        /// <param name="rateGroup">The rate group.</param>
+        private void LoadRates(ShipmentRateGroup rateGroup)
+        {
+            // Only show the More link for the best rate shipment type
+            rateControl.ShowAllRates = rateGroup.Carrier != ShipmentTypeCode.BestRate;
+
+            rateControl.HideSpinner();
+            rateControl.LoadRates(rateGroup);
         }
         
         /// <summary>
