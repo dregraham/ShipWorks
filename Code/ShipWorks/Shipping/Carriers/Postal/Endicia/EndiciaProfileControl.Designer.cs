@@ -136,6 +136,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 232);
             // 
+            // kryptonBorderEdge3
+            // 
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 46);
+            // 
             // tabPage
             // 
             this.tabPage.Controls.Add(this.groupBoxRubberStamps);
@@ -154,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             //
             this.groupReturns.Controls.Add(this.scanBasedPaymentState);
             this.groupReturns.Controls.Add(this.scanBasedPayment);
-            this.groupReturns.Size = new System.Drawing.Size(417, 79);
+            this.groupReturns.Size = new System.Drawing.Size(417, 76);
             this.groupReturns.Controls.SetChildIndex(this.scanBasedPayment, 0);
             this.groupReturns.Controls.SetChildIndex(this.scanBasedPaymentState, 0);
             this.groupReturns.Location = new System.Drawing.Point(8, 861);
