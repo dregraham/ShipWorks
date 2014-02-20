@@ -206,9 +206,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
             // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
-            IEnumerable<BrokerException> distinctExceptions = brokerExceptions.OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                                                                                .GroupBy(e => e.Message)
-                                                                                .Select(m => m.First()).ToList();
+            IEnumerable<BrokerException> distinctExceptions = brokerExceptions
+                .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
+                .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
+                .GroupBy(e => e.Message)
+                .Select(m => m.First()).ToList();
             if (distinctExceptions.Any())
             {
                 rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
