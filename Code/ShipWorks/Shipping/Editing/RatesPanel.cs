@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RatesPanel : UserControl, IDockingPanelContent
     {
-        private readonly LruCache<long, ShipmentRateGroup> cachedRates;
+        private readonly LruCache<string, ShipmentRateGroup> cachedRates;
 
         private long selectedOrderID;
 
@@ -35,13 +35,13 @@ namespace ShipWorks.Shipping.Editing
         {
             InitializeComponent();
 
-            cachedRates = new LruCache<long, ShipmentRateGroup>(1000);
+            cachedRates = new LruCache<string, ShipmentRateGroup>(1000);
             selectedOrderID = 0;
 
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
             rateControl.ShowConfigureLink = true;
-            rateControl.ShowAllRates = true;
+            rateControl.ShowAllRates = false;
 
             rateControl.ConfigureRateClicked += OnConfigureRateClicked;
 
@@ -161,10 +161,10 @@ namespace ShipWorks.Shipping.Editing
                             rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.", 
                                 EnumHelper.GetDescription((ShipmentTypeCode)shipmentForRating.ShipmentType)));
                         }
-                        else if (cachedRates.Contains(shipmentForRating.ShipmentID) && !forceFetch)
+                        else if (cachedRates.Contains(GetCacheKey(shipmentForRating)) && !forceFetch)
                         {
                             // Rates for this shipment have already been cached
-                            RateGroup rateGroup = cachedRates[shipmentForRating.ShipmentID];
+                            RateGroup rateGroup = cachedRates[GetCacheKey(shipmentForRating)];
 
                             rateControl.HideSpinner();
                             rateControl.LoadRates(rateGroup);
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Editing
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
 
-                        cachedRates[shipment.ShipmentID] = panelRateGroup;
+                        cachedRates[GetCacheKey(shipment)] = panelRateGroup;
                     }
                     catch (ShippingException ex)
                     {
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Editing
             if (resultTag != null && !resultTag.IsRealRate)
             {
                 resultTag.RateSelectionDelegate(shipment);
-                cachedRates[shipment.ShipmentID] = new ShipmentRateGroup(rateControl.RateGroup, shipment);
+                cachedRates[GetCacheKey(shipment)] = new ShipmentRateGroup(rateControl.RateGroup, shipment);
             }
             else
             {
@@ -290,6 +290,18 @@ namespace ShipWorks.Shipping.Editing
                     dialog.ShowDialog(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// A helper method to build the key used in the cache. The key is the 
+        /// string representation of the RowVersion property, so the rates are
+        /// only re-fetched when there is an actual change to the shipment.
+        /// </summary>
+        private static string GetCacheKey(ShipmentEntity shipment)
+        {
+            // Use the string value of the row version; using the byte[] was not
+            // being indexed/looked up correctly in the cache
+            return BitConverter.ToString(shipment.RowVersion);
         }
     }
 }
