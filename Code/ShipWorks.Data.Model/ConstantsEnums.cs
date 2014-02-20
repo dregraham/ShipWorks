@@ -2353,6 +2353,8 @@ namespace ShipWorks.Data.Model
 		RubberStamp2,
 		///<summary>RubberStamp3. </summary>
 		RubberStamp3,
+		///<summary>ScanBasedReturn. </summary>
+		ScanBasedReturn,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2413,6 +2415,8 @@ namespace ShipWorks.Data.Model
 		RefundFormID,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
+		///<summary>ScanBasedReturn. </summary>
+		ScanBasedReturn,
 		/// <summary></summary>
 		AmountOfFields
 	}

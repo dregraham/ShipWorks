@@ -4997,6 +4997,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp3);}
 		}
+		/// <summary>Creates a new EndiciaProfileEntity.ScanBasedReturn field instance</summary>
+		public static EntityField2 ScanBasedReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ScanBasedReturn);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaScanFormEntity</summary>
@@ -5101,6 +5106,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ScanFormBatchID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanFormBatchID);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ScanBasedReturn field instance</summary>
+		public static EntityField2 ScanBasedReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanBasedReturn);}
 		}
 	}
 
