@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Editing
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
             this.gridColumnSelect.HeaderText = "";
-            this.gridColumnSelect.Width = 37;
+            this.gridColumnSelect.Width = 0;
             // 
             // outOfDateBar
             // 

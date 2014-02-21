@@ -103,11 +103,9 @@ namespace ShipWorks.Shipping.Editing
                 // Acquire the lock so the grid isn't reloaded while trying to find the selected rate
                 lock (syncLock)
                 {
-                    GridRow selectedRow = sandGrid.SelectedElements.OfType<GridRow>().FirstOrDefault();
-                    if (selectedRow != null)
-                    {
-                        selectedRate = selectedRow.Tag as RateResult;
-                    }
+                    IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>();
+                    if (selectedRows.Any())
+                    selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable == true);
                 }
 
                 return selectedRate;
@@ -177,6 +175,8 @@ namespace ShipWorks.Shipping.Editing
             {
                 RateGroup = rateGroup;
                 sandGrid.Rows.Clear();
+
+                gridColumnSelect.Visible = ShowConfigureLink;
 
                 List<RateResult> ratesToShow = ShowAllRates ? rateGroup.Rates : rateGroup.Rates.Take(RestrictedRateCount).ToList();
 
@@ -423,16 +423,16 @@ namespace ShipWorks.Shipping.Editing
         {
             GridRow selectedRow = e.Grid.SelectedElements.OfType<GridRow>().FirstOrDefault();
 
-            if (selectedRow != null)
+            if (SelectedRate != null)
             {
-                RateResult selectedRate = selectedRow.Tag as RateResult;
-                if (selectedRate.Selectable)
+                if (RateSelected != null)
                 {
-                    if (RateSelected != null)
-                    {
-                        RateSelected(this, new RateSelectedEventArgs(selectedRate));
-                    }
+                    RateSelected(this, new RateSelectedEventArgs(SelectedRate));
                 }
+            }
+            else if (selectedRow != null)
+            {
+                selectedRow.Selected = false;
             }
         }
     }
