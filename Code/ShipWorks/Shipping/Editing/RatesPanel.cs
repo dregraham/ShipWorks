@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Editing
             rateControl.ConfigureRateClicked += OnConfigureRateClicked;
 
             // Force the rates to be refreshed when the rate control tells us
-            rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
+            rateControl.ReloadRatesRequired += (sender, args) => RefreshRates();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Editing
 
                 // Refresh the rates in the panel; using cached rates is fine here since nothing
                 // about the shipment has changed, so don't force a re-fetch
-                RefreshRates(false);
+                RefreshRates();
             }
         }
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Editing
         public void ReloadContent()
         {
             // A row has been added/removed, so force the rates to be refreshed to reflect the change
-            RefreshRates(true);
+            RefreshRates();
         }
 
         /// <summary>
@@ -124,13 +124,13 @@ namespace ShipWorks.Shipping.Editing
         public void UpdateContent()
         {
             // Something about the shipment has changed, so we need to refresh the rates            
-            RefreshRates(false);
+            RefreshRates();
         }
 
         /// <summary>
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
-        private void RefreshRates(bool forceFetch)
+        private void RefreshRates()
         {
             // This will be 0 when ShipWorks is first started and an order 
             // has not been selected yet
@@ -265,24 +265,7 @@ namespace ShipWorks.Shipping.Editing
         {
             // Do nothing
         }
-
-        /// <summary>
-        /// Converts the given rate group to a ShipmentRateGroup if it isn't already.
-        /// </summary>
-        private static ShipmentRateGroup ToShipmentRateGroup(RateGroup rateGroup, ShipmentEntity shipment)
-        {
-            ShipmentRateGroup shipmentRateGroup = rateGroup as ShipmentRateGroup;
-
-            if (shipmentRateGroup == null)
-            {
-                // This rate wasn't obtained from this panel, so we need to create a rate group that
-                // has the shipment it was for.
-                shipmentRateGroup = new ShipmentRateGroup(rateGroup, shipment);
-            }
-
-            return shipmentRateGroup;
-        }
-
+        
         /// <summary>
         /// A helper method for loading the rates in the rate control.
         /// </summary>
