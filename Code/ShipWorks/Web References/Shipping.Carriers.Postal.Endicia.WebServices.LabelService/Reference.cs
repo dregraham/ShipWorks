@@ -6331,7 +6331,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ChangePassPhraseRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsItem))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsInfo))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CommonLabelRequestAndPostageRateRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LabelRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PostageRateRequest))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RecreditRequest))]
@@ -9292,154 +9291,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(LabelRequest))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PostageRateRequest))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18408")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public abstract partial class CommonLabelRequestAndPostageRateRequest : DataValidator {
-        
-        private string mailpieceShapeField;
-        
-        private string mailClassField;
-        
-        private double weightOzField;
-        
-        private string packageTypeIndicatorField;
-        
-        private int dateAdvanceField;
-        
-        private string pricingField;
-        
-        private string sundayHolidayDeliveryField;
-        
-        private string liveAnimalSurchargeField;
-        
-        private string extensionField;
-        
-        private Dimensions mailpieceDimensionsField;
-        
-        public CommonLabelRequestAndPostageRateRequest() {
-            this.dateAdvanceField = 0;
-        }
-        
-        /// <remarks/>
-        public string MailpieceShape {
-            get {
-                return this.mailpieceShapeField;
-            }
-            set {
-                this.mailpieceShapeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MailClass {
-            get {
-                return this.mailClassField;
-            }
-            set {
-                this.mailClassField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public double WeightOz {
-            get {
-                return this.weightOzField;
-            }
-            set {
-                this.weightOzField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PackageTypeIndicator {
-            get {
-                return this.packageTypeIndicatorField;
-            }
-            set {
-                this.packageTypeIndicatorField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(0)]
-        public int DateAdvance {
-            get {
-                return this.dateAdvanceField;
-            }
-            set {
-                this.dateAdvanceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Pricing {
-            get {
-                return this.pricingField;
-            }
-            set {
-                this.pricingField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SundayHolidayDelivery {
-            get {
-                return this.sundayHolidayDeliveryField;
-            }
-            set {
-                this.sundayHolidayDeliveryField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string LiveAnimalSurcharge {
-            get {
-                return this.liveAnimalSurchargeField;
-            }
-            set {
-                this.liveAnimalSurchargeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Extension {
-            get {
-                return this.extensionField;
-            }
-            set {
-                this.extensionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Dimensions MailpieceDimensions {
-            get {
-                return this.mailpieceDimensionsField;
-            }
-            set {
-                this.mailpieceDimensionsField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.18408")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class LabelRequest : CommonLabelRequestAndPostageRateRequest {
+    public partial class LabelRequest : DataValidator {
         
         private string requesterIDField;
         
         private string accountIDField;
-        
+
         private string passPhraseField;
+
+        private string mailpieceShapeField;
+
+        private string mailClassField;
+
+        private double weightOzField;
+
+        private string packageTypeIndicatorField;
+
+        private int dateAdvanceField;
+
+        private string pricingField;
+
+        private string sundayHolidayDeliveryField;
+
+        private string liveAnimalSurchargeField;
+
+        private string extensionField;
+
+        private Dimensions mailpieceDimensionsField;
         
         private string automationRateField;
         
@@ -9779,6 +9662,137 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
             }
             set {
                 this.passPhraseField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailClass
+        {
+            get
+            {
+                return this.mailClassField;
+            }
+            set
+            {
+                this.mailClassField = value;
+            }
+        }
+
+        /// <remarks/>
+        public double WeightOz
+        {
+            get
+            {
+                return this.weightOzField;
+            }
+            set
+            {
+                this.weightOzField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailpieceShape
+        {
+            get
+            {
+                return this.mailpieceShapeField;
+            }
+            set
+            {
+                this.mailpieceShapeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string PackageTypeIndicator
+        {
+            get
+            {
+                return this.packageTypeIndicatorField;
+            }
+            set
+            {
+                this.packageTypeIndicatorField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int DateAdvance
+        {
+            get
+            {
+                return this.dateAdvanceField;
+            }
+            set
+            {
+                this.dateAdvanceField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Pricing
+        {
+            get
+            {
+                return this.pricingField;
+            }
+            set
+            {
+                this.pricingField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SundayHolidayDelivery
+        {
+            get
+            {
+                return this.sundayHolidayDeliveryField;
+            }
+            set
+            {
+                this.sundayHolidayDeliveryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LiveAnimalSurcharge
+        {
+            get
+            {
+                return this.liveAnimalSurchargeField;
+            }
+            set
+            {
+                this.liveAnimalSurchargeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Extension
+        {
+            get
+            {
+                return this.extensionField;
+            }
+            set
+            {
+                this.extensionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
+                return this.mailpieceDimensionsField;
+            }
+            set
+            {
+                this.mailpieceDimensionsField = value;
             }
         }
         
@@ -11359,7 +11373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="www.envmgr.com/LabelService")]
-    public partial class PostageRateRequest : CommonLabelRequestAndPostageRateRequest {
+    public partial class PostageRateRequest : DataValidator {
         
         private string requesterIDField;
         
@@ -11406,8 +11420,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
         private string deliveryTimeDaysField;
         
         private string printScanBasedPaymentLabelField;
-        
+
         private string specialContentsField;
+
+        private string mailpieceShapeField;
+
+        private string mailClassField;
+
+        private double weightOzField;
+
+        private string packageTypeIndicatorField;
+
+        private int dateAdvanceField;
+
+        private string pricingField;
+
+        private string sundayHolidayDeliveryField;
+
+        private string liveAnimalSurchargeField;
+
+        private string extensionField;
+
+        private Dimensions mailpieceDimensionsField;
         
         public PostageRateRequest() {
             this.cODAmountField = 0D;
@@ -11421,6 +11455,137 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
             }
             set {
                 this.requesterIDField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailpieceShape
+        {
+            get
+            {
+                return this.mailpieceShapeField;
+            }
+            set
+            {
+                this.mailpieceShapeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailClass
+        {
+            get
+            {
+                return this.mailClassField;
+            }
+            set
+            {
+                this.mailClassField = value;
+            }
+        }
+
+        /// <remarks/>
+        public double WeightOz
+        {
+            get
+            {
+                return this.weightOzField;
+            }
+            set
+            {
+                this.weightOzField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string PackageTypeIndicator
+        {
+            get
+            {
+                return this.packageTypeIndicatorField;
+            }
+            set
+            {
+                this.packageTypeIndicatorField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int DateAdvance
+        {
+            get
+            {
+                return this.dateAdvanceField;
+            }
+            set
+            {
+                this.dateAdvanceField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Pricing
+        {
+            get
+            {
+                return this.pricingField;
+            }
+            set
+            {
+                this.pricingField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string SundayHolidayDelivery
+        {
+            get
+            {
+                return this.sundayHolidayDeliveryField;
+            }
+            set
+            {
+                this.sundayHolidayDeliveryField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string LiveAnimalSurcharge
+        {
+            get
+            {
+                return this.liveAnimalSurchargeField;
+            }
+            set
+            {
+                this.liveAnimalSurchargeField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string Extension
+        {
+            get
+            {
+                return this.extensionField;
+            }
+            set
+            {
+                this.extensionField = value;
+            }
+        }
+
+        /// <remarks/>
+        public Dimensions MailpieceDimensions
+        {
+            get
+            {
+                return this.mailpieceDimensionsField;
+            }
+            set
+            {
+                this.mailpieceDimensionsField = value;
             }
         }
         
