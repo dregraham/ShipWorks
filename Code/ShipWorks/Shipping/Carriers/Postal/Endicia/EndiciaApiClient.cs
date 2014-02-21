@@ -363,6 +363,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (shipment.ReturnShipment)
             {
                 request.ReplyPostage = "TRUE";
+
+                try
+                {
+                    if (EndiciaShipmentType.IsScanBasedReturnsAllowed(shipment))
+                    {
+                        request.PrintScanBasedPaymentLabel = "TRUE";
+                    }
+                }
+                catch (ShippingException)
+                {
+                    // If a ShippingException is thrown, Scan Based Returns is not allowed, so just continue on
+                }
             }
 
             // Not sure why these are required fields - i don't think they show up anywhere
