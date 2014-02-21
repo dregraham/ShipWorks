@@ -77,6 +77,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 			repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
 			repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
+            RateCache.Instance.Clear();
+
 			testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object);
 		}
 
