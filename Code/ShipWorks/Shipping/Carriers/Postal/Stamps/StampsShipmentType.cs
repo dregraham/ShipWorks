@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 else
                 {
                     // Express1 rates - return rates filtered by what is available to the user
-                    return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
+                    RateGroup rateGroup = BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
                     RateCache.Instance.Save(rateHash, rateGroup);
 
                     return rateGroup;
@@ -299,7 +299,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             catch(StampsException ex)
             {
-                throw new ShippingException(ex.Message, ex);
+                // This is a bad configuration on some level, so cache an empty rate group
+                // before throwing throwing the exceptions
+                ShippingException shippingException = new ShippingException(ex.Message, ex);
+                CacheInvalidRateGroup(shipment, shippingException);
+
+                throw shippingException;
             }
         }
 

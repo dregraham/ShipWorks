@@ -77,9 +77,6 @@ namespace ShipWorks.Shipping
         private BackgroundWorker getRatesBackgroundWorker;
         private const int getRatesDebounceTime = 500;
 
-        // Track which shipment and shipment type for which rates were last retrieved so we can use the cache if possible
-        private ShipmentTypeCode lastRateCheckShipmentTypeCode = ShipmentTypeCode.None;
-        private long lastRateCheckShipmentId = -1;
         private ShipmentEntity clonedShipmentEntityForRates;
         
         private RateSelectedEventArgs preSelectedRateEventArgs;
@@ -987,7 +984,6 @@ namespace ShipWorks.Shipping
                 if (uiDisplayedShipments.Count == 1)
                 {
                     ShipmentEntity uiShipment = uiDisplayedShipments[0];
-                    //rateGroup = RateCache.Instance.GetValue(uiShipment);
                     rateGroup = ShippingManager.GetRates(uiShipment);
                 }
 
@@ -1733,7 +1729,6 @@ namespace ShipWorks.Shipping
             }
 
             List<string> newErrors = new List<string>();
-            bool noRates = false;
             bool anyAttempted = false;
 
             if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed || !IsShipmentTypeActivatedUI(clonedShipment))
@@ -1758,42 +1753,12 @@ namespace ShipWorks.Shipping
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
             {
-                string errorMessage = string.Empty;
-
-                if (newErrors.Count > 0)
-                {
-                    foreach (string error in newErrors.Take(3))
-                    {
-                        errorMessage += error + "\n\n";
-                    }
-
-                    if (newErrors.Count > 3)
-                    {
-                        errorMessage += "See the shipment list for all errors.";
-                    }
-                }
-                else if (noRates)
-                {
-                    errorMessage =
-                        "Rates could not be obtained for every shipment.\n\nThis could be because the shipment is already processed or " +
-                        "getting rates for the selected carrier is not supported.";
-                }
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    RateGroup cachedRates = ShippingManager.GetRates(clonedShipment) ?? new RateGroup(new List<RateResult>());
-                    cachedRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(uiShipmentType, errorMessage));
-
-                    //RateCache.Instance.Save(clonedShipment, cachedRates);
-                }
-
                 if (anyAttempted && !getRatesTimer.Enabled)
                 {
                     rateControl.HideSpinner();
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates();
-
                     shipmentControl.Refresh();
                 }
             };
@@ -1803,49 +1768,17 @@ namespace ShipWorks.Shipping
             {
                 ShipmentEntity shipment = (ShipmentEntity)_e.Argument;
                 _e.Result = _e.Argument;
-
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                 
-                if (shipment.Processed || !shipmentType.SupportsGetRates || !IsShipmentTypeActivatedUI(shipment))
-                {
-                    noRates = true;
-                    return;
-                }
-
-                // At this point, we will attempt to get rates from the cache or from the carrier.
-                anyAttempted = true;
-
-                //bool shouldCheckRateCache = shipment.ShipmentID != lastRateCheckShipmentId ||
-                //                            shipment.ShipmentType != (int) lastRateCheckShipmentTypeCode;
-
-                lastRateCheckShipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
-                lastRateCheckShipmentId = shipment.ShipmentID;
-
-                //// Since we're only checking rates when a shipment data changes, only check the cache when the user
-                //// has just changed shipment or shipment type as this should be the only time the cache could be valid
-                //if (shouldCheckRateCache)
-                //{
-                //    // get cached rates first.
-                //    RateGroup cachedRates = RateCache.Instance.GetValue(shipment);
-                //    if (cachedRates != null && !cachedRates.OutOfDate)
-                //    {
-                //        return;
-                //    }
-                //}
-
+                
                 try
                 {
-                    //RateGroup rateResults = ShippingManager.GetRates(shipment);
+                    anyAttempted = true;
                     ShippingManager.GetRates(shipment);
-
-                    //RateCache.Instance.Save(shipment, rateResults);
 
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
                 catch (ShippingException ex)
                 {
-                    //RateCache.Instance.Save(shipment, null);
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }

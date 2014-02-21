@@ -334,8 +334,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return RateCache.Instance.GetValue(rateHash);
             }
 
-
-
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
 
@@ -376,11 +374,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository);
 
                 List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
-                    endiciaApiClient.GetRatesSlow(shipment, this) :
+                    endiciaApiClient.GetRatesSlow(shipment, this) : 
                     endiciaApiClient.GetRatesFast(shipment, this);
 
                 // For endicia, we want to either promote Express1 or show the Express1 savings
-                if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
+                if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
                 {
                     if (ShouldRetrieveExpress1Rates)
                     {
@@ -480,12 +478,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         return rateGroup;
                     }
-                    
+
                 }
                 else
                 {
                     // Express1 rates - return rates filtered by what is available to the user
-                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
+                    RateGroup rateGroup = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                     RateCache.Instance.Save(rateHash, rateGroup);
 
                     return rateGroup;
@@ -493,7 +491,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             catch (EndiciaException ex)
             {
-                throw new ShippingException(ex.Message, ex);
+                // This is a bad configuration on some level, so cache an empty rate group
+                // before throwing throwing the exceptions
+                ShippingException shippingException = new ShippingException(ex.Message, ex);
+                CacheInvalidRateGroup(shipment, shippingException);
+
+                throw shippingException;
             }
         }
 

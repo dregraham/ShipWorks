@@ -150,25 +150,20 @@ namespace ShipWorks.Shipping.Editing
                     {
                         // Grab the first unprocessed shipment
                         ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
+                        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentForRating);
 
-                        if ((ShipmentTypeCode)shipmentForRating.ShipmentType == ShipmentTypeCode.Other || (ShipmentTypeCode)shipmentForRating.ShipmentType == ShipmentTypeCode.None)
+                        if (!shipmentType.SupportsGetRates)
                         {
                             rateControl.HideSpinner();
-                            rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.", 
-                                EnumHelper.GetDescription((ShipmentTypeCode)shipmentForRating.ShipmentType)));
+                            rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
+                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
                         }
-                        //else if (RateCache.Instance.Contains(shipmentForRating) && !forceFetch)
-                        //{
-                        //    // Rates for this shipment have already been cached
-                        //    RateGroup rateGroup = RateCache.Instance.GetValue(shipmentForRating);
-                        //    LoadRates(ToShipmentRateGroup(rateGroup, shipmentForRating));
-                        //}
-                        //else
-                        //{
+                        else
+                        {
                             // We need to fetch the rates from the provider
                             rateControl.ClearRates(string.Empty);
                             FetchRates(shipmentForRating);
-                        //}
+                        }
                     }
                     else
                     {
@@ -208,11 +203,13 @@ namespace ShipWorks.Shipping.Editing
 
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-
-                        //RateCache.Instance.Save(shipment, panelRateGroup);
                     }
                     catch (ShippingException ex)
                     {
+                        // The invalid rate group should be cached, so use the shipping manager to get the rate
+                        // so we can have access to the exception footer.
+                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+
                         // Add the order ID to the exception data, so we can determine whether
                         // to update the rate control
                         ex.Data.Add("orderID", shipment.OrderID);
@@ -231,7 +228,16 @@ namespace ShipWorks.Shipping.Editing
                             // Update the rate control if the selected order is the one that 
                             // produced the error
                             rateControl.HideSpinner();
-                            rateControl.ClearRates(exception.Message);
+
+                            if (panelRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any())
+                            {
+                                rateControl.LoadRates(panelRateGroup);
+                            }
+                            else
+                            {
+                                rateControl.ClearRates(exception.Message);
+                            }
+                            
                         }
                     }
                     else

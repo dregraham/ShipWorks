@@ -325,7 +325,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
                 catch (OnTracException ex)
                 {
-                    throw new ShippingException(ex.Message, ex);
+                    // This is a bad configuration on some level, so cache an empty rate group
+                    // before throwing throwing the exceptions
+                    ShippingException shippingException = new ShippingException(ex.Message, ex);
+                    CacheInvalidRateGroup(shipment, shippingException);
+
+                    throw shippingException;
                 }
             }
 

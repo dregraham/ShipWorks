@@ -607,20 +607,44 @@ namespace ShipWorks.Shipping
 	        return fields;
 	    }
 
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
 	    public virtual string GetRatingHash(ShipmentEntity shipment)
 	    {
 	        StringBuilder valueToBeHashed = new StringBuilder();
-
             IEnumerable<IEntityField2> ratingFields = GetRatingFields(shipment);
 
             foreach (IEntityField2 field in ratingFields)
             {
                 valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
             }
-
-            // TODO: actually hash the value
+            
 	        return valueToBeHashed.ToString();
 	    }
+
+        /// <summary>
+        /// This is intended to be used when there is (most likely) a bad configuration
+        /// with the shipment on some level, so an empty rate group with a exception footer
+        /// is cached.
+        /// </summary>
+        /// <param name="shipment">The shipment that generated the given exception.</param>
+        /// <param name="exception">The exception.</param>
+        protected void CacheInvalidRateGroup(ShipmentEntity shipment, ShippingException exception)
+        {
+            RateGroup rateGroup = new RateGroup(new List<RateResult>());
+            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, exception.Message));
+
+            if (!rateGroup.Rates.Any())
+            {
+                RateResult infoResult = new RateResult("No rates are available for this shipment.", string.Empty);
+                infoResult.ShipmentType = ShipmentTypeCode;
+
+                rateGroup.Rates.Add(infoResult);
+            }
+
+            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
+        }
 
 		/// <summary>
 		/// Preferences the process.
