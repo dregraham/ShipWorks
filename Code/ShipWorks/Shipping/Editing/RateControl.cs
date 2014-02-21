@@ -103,9 +103,11 @@ namespace ShipWorks.Shipping.Editing
                 // Acquire the lock so the grid isn't reloaded while trying to find the selected rate
                 lock (syncLock)
                 {
-                    IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>();
+                    IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>().ToList();
                     if (selectedRows.Any())
-                    selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable == true);
+                    {
+                        selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable);
+                    }
                 }
 
                 return selectedRate;
