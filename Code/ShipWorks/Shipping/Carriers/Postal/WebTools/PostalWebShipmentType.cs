@@ -148,26 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             outline.AddElement("LabelOnlyRot90", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot270", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate270FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
         }
-
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
-        {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
-                {
-                    shipment.Postal.Fields[StampsShipmentFields.StampsAccountID.FieldIndex],
-                    shipment.Postal.Stamps.Fields[StampsShipmentFields.OriginalStampsAccountID.FieldIndex],
-                }
-            );
-
-            return fields;
-        }
-
+        
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
