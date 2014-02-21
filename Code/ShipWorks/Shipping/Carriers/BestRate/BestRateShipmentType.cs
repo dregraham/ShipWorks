@@ -199,34 +199,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = null;
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
-            string rateHash = GetRatingHash(shipment);
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                rateGroup = RateCache.Instance.GetValue(rateHash);
-            }
-            else
-            {
-                List<BrokerException> brokerExceptions = new List<BrokerException>();
-                IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                rateGroup = CompileBestRates(shipment, rateGroups);
+            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
-                // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
                                                                     .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
                                                                     .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
                                                                     .GroupBy(e => e.Message)
                                                                     .Select(m => m.First()).ToList();
 
-                if (distinctExceptions.Any())
-                {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
-                }
-
-                RateCache.Instance.Save(rateHash, rateGroup);
+            if (distinctExceptions.Any())
+            {
+                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
             }
 
             return rateGroup;

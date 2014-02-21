@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Filter the returned rates
             List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
                                                          .Where(IsValidRate)
-                                                         .Where(r => !IsExcludedServiceType(r.Tag))
+                                                         .Where(r => !IsExcludedServiceType(GetOriginalTag(r)))
                                                          .ToList();
 
             // Create a dictionary of rates with their associated accounts for lookup later
@@ -139,12 +139,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             foreach (RateResult rate in filteredRates)
             {
+                // Account for the rate being a previously cached rate where the tag is already a best rate tag
+                object originalTag = GetOriginalTag(rate);
+
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = new BestRateResultTag
                 {
-                    OriginalTag = rate.Tag,
+                    OriginalTag = originalTag,
                     ResultKey = GetResultKey(rate),
-                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], rate.Tag),
+                    RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], originalTag),
                     AccountDescription = AccountDescription(accountLookup[rate])
                 };
                 
@@ -170,6 +173,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual string AccountDescription(TAccount account)
         {
             return string.Empty;
+        }
+
+        /// <summary>
+        /// A helper method to get the original tag of a rate to handle cases where the
+        /// rate is a cached rate best rate result.
+        /// </summary>
+        protected virtual object GetOriginalTag(RateResult rate)
+        {
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag
+            return rate.Tag is BestRateResultTag ? ((BestRateResultTag)rate.Tag).OriginalTag : rate.Tag;
         }
 
         /// <summary>

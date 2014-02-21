@@ -161,7 +161,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected override string GetResultKey(RateResult rate)
         {
-            return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(rate.Tag));
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // we need to pass the original tag that is a postal service type
+            object originalTag = GetOriginalTag(rate);
+            return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(originalTag));
         }
 
         /// <summary>

@@ -114,7 +114,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected override string GetResultKey(RateResult rate)
         {
-            return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(rate.Tag));
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // we need to pass the original tag that is a FedEx service type
+            object originalTag = GetOriginalTag(rate);
+            return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(originalTag));
         }
 
         /// <summary>
