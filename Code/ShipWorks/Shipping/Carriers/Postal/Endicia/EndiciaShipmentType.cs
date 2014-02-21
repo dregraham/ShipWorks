@@ -294,7 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Validate that scan based payment returns is allowed
         /// </summary>
-        private static bool IsScanBasedReturnsAllowed(ShipmentEntity shipment)
+        public static bool IsScanBasedReturnsAllowed(ShipmentEntity shipment)
         {
             if (shipment.ReturnShipment &&
                 shipment.Postal.Endicia.ScanBasedReturn &&
@@ -340,9 +340,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     throw new ShippingException("Endicia scan based payment returns are not available for insured shipments.");
                 }
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
