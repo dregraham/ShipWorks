@@ -273,6 +273,7 @@ namespace ShipWorks.Shipping.Editing
                             // Highlight the selected row otherwise it's just a light shade of gray
                             // that can be hard to tell which row is selected
                             cell.BackColor = Color.DodgerBlue;
+                            cell.ForeColor = Color.White;
                         }
 
                         sandGrid.SelectRow(selectedRow);
@@ -432,10 +433,13 @@ namespace ShipWorks.Shipping.Editing
                     RateSelected(this, new RateSelectedEventArgs(SelectedRate));
                 }
             }
-            else if (selectedRow != null)
+            else
             {
-                selectedRow.Selected = false;
+                this.sandGrid.SelectionChanged -= OnSelectedRateChanged;
+                ClearSelection();
+                this.sandGrid.SelectionChanged += OnSelectedRateChanged;
             }
         }
+
     }
 }
