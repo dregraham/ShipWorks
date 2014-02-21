@@ -345,7 +345,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1, LogActionType.GetRates))
             {
                 RateV11[] ratesArray;
 

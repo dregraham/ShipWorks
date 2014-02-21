@@ -60,7 +60,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
                 xmlWriter.WriteElementString("LogShipWorks", logShipWorks.ToString());
                 xmlWriter.WriteElementString("LogServices", logServices.ToString());
-                xmlWriter.WriteElementString("LogRateCalls", logServices.ToString());
+                xmlWriter.WriteElementString("LogRateCalls", logRateCalls.ToString());
                 xmlWriter.WriteElementString("MaxLogAgeDays", maxLogAgeDays.ToString());
                 
                 xmlWriter.WriteEndElement();
