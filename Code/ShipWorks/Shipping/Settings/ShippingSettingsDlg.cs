@@ -245,6 +245,10 @@ namespace ShipWorks.Shipping.Settings
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
+
+            // Clear the rate cache since it may now be out of date due to 
+            // settings be altered, accounts being deleted, etc.
+            RateCache.Instance.Clear();
         }
 
         /// <summary>

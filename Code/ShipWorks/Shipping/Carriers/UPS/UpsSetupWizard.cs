@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Wizard;
 using System.Xml;
 using Interapptive.Shared.Net;
@@ -684,6 +685,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (DialogResult == DialogResult.Cancel && upsAccount != null && !upsAccount.IsNew)
             {
                 UpsAccountManager.DeleteAccount(upsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
@@ -125,6 +126,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (DialogResult != DialogResult.OK && iParcelAccount != null && !iParcelAccount.IsNew)
             {
                 iParcelAccountManager.DeleteAccount(iParcelAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
     }

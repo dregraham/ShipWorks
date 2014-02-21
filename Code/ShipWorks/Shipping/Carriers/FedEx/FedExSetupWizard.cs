@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -225,6 +226,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     account.RollbackChanges();
                 }
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
     }

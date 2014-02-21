@@ -6,6 +6,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
@@ -134,6 +135,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (DialogResult != DialogResult.OK && account != null)
             {
                 OnTracAccountManager.DeleteAccount(account);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
     }

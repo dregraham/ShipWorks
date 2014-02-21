@@ -16,6 +16,7 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -829,6 +830,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Make sure any pending changes have been saved
             EndiciaAccountManager.SaveAccount(account);
+
+            // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+            // that a new account has been added.
+            RateCache.Instance.Clear();
+
         }
     }
 }

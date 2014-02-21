@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -412,6 +413,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (DialogResult != DialogResult.OK && stampsAccount != null && !stampsAccount.IsNew)
             {
                 StampsAccountManager.DeleteAccount(stampsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
 
