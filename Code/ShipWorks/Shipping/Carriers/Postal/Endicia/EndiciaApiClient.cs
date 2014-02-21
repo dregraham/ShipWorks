@@ -154,24 +154,36 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private EwsLabelService CreateWebService(string logName, EndiciaReseller reseller)
         {
+            return CreateWebService(logName, reseller, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private EwsLabelService CreateWebService(string logName, EndiciaReseller reseller, LogActionType logActionType)
+        {
             EwsLabelService webService = null;
             switch (reseller)
             {
                 // Express1
                 case EndiciaReseller.Express1:
-                    {
-                        webService = new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
-                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
-                        break;
-                    }
+                {
+                    webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
+                                     new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName)) :
+                                     new Express1EndiciaServiceWrapper();
+                    webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
+                    break;
+                }
 
-                // Endicia Label Server
+                    // Endicia Label Server
                 default:
-                    {
-                        webService = new EwsLabelService(new ApiLogEntry(ApiLogSource.UspsEndicia, logName));
-                        webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
-                        break;
-                    }
+                {
+                    webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
+                                     new EwsLabelService(new ApiLogEntry(ApiLogSource.UspsEndicia, logName)) :
+                                     new EwsLabelService();
+                    webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
+                    break;
+                }
             }
 
             return webService;
@@ -875,7 +887,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
                     PostageRatesResponse response = service.CalculatePostageRates(request);
 
@@ -1309,7 +1321,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
                     PostageRateResponse response = service.CalculatePostageRate(request);
 

@@ -105,15 +105,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlRequest = writer.ToString();
             }
 
-            // Log the request
+            
             ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UspsNoPostage, "Rate");
-            logger.LogRequest(xmlRequest);
+
+            // Log the request
+            if (LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates))
+            {
+                logger.LogRequest(xmlRequest);
+            }
 
             // Process the request
             string xmlResponse = ProcessXmlRequest(xmlRequest, PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) ? "RateV3" : "IntlRate");
 
             // Log the response
-            logger.LogResponse(xmlResponse);
+            if (LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates))
+            {
+                logger.LogResponse(xmlResponse);
+            }
 
             // Load the USPS response
             XmlDocument xmlDocument = new XmlDocument();

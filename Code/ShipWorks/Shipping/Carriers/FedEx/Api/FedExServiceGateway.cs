@@ -380,8 +380,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // RateService object here (i.e. no more abstractions can be made)
-                using (RateService service = new RateService(new ApiLogEntry(ApiLogSource.FedEx, "Rates")))
+                RateService service = null;
+                try
                 {
+                    service = LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates) ?
+                                  new RateService(new ApiLogEntry(ApiLogSource.FedEx, "Rates")) :
+                                  new RateService();
+
                     // Point the service to the correct endpoint
                     service.Url = settings.EndpointUrl;
 
@@ -400,8 +405,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                             FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
                         }
                         catch
-                        {
-                        }
+                        {}
+                    }
+                }
+                finally
+                {
+                    if (service!=null)
+                    {
+                        service.Dispose();
                     }
                 }
 

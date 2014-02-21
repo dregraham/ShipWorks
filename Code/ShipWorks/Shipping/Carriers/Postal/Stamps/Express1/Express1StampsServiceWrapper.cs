@@ -38,6 +38,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public Express1StampsServiceWrapper()
+        {
+
+        }
+
+        /// <summary>
         /// Adjusts the Soap Action to reflect the new endpoint
         /// </summary>
         private void FixupOutgoingSoapMessage(SoapClientMessage message)

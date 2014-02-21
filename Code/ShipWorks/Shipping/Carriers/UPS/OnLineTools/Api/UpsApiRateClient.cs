@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using ShipWorks.Editions;
@@ -233,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // Process the request
-            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter);
+            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates);
 
             return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
         }

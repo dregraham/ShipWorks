@@ -89,20 +89,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private static SwsimV29 CreateWebService(string logName, bool isExpress1)
         {
+            return CreateWebService(logName, isExpress1, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private static SwsimV29 CreateWebService(string logName, bool isExpress1, LogActionType logActionType)
+        {
             SwsimV29 webService;
             if (isExpress1)
             {
-                webService = new Express1StampsServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Stamps, logName))
-                    {
-                        Url = express1StampsConnectionDetails.ServiceUrl
-                    };
+                webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
+                                 new Express1StampsServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Stamps, logName)) :
+                                 new Express1StampsServiceWrapper();
+
+                webService.Url = express1StampsConnectionDetails.ServiceUrl;
             }
             else
             {
-                webService = new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName))
-                    {
-                        Url = productionUrl
-                    };
+                webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
+                                 new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName)) :
+                                 new SwsimV29();
+                webService.Url = productionUrl;
             }
 
             return webService;

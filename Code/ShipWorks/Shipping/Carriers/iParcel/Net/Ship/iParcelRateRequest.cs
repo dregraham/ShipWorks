@@ -56,23 +56,25 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
         /// <returns>The raw response from iParcel in the form of a DataSet.</returns>
         public override DataSet Submit()
         {
+            XMLSOAP iParcelWebService = null;
             try
             {
-                using (XMLSOAP iParcelWebService = new XMLSOAP(new ApiLogEntry(ApiLogSource.iParcel, RequestTypeName)))
-                {
-                    // Use the UploadXMLFileString method and load the XML into a DataSet. This response does
-                    // not have all of the schema information like the UploadXMLFile method does, so the 
-                    // DataSet loads without any problem
-                    string xmlResponse = iParcelWebService.UploadXMLFileString(OperationName, GetRequestXml());
-                    using (DataSet dataSet = new DataSet())
-                    {
-                        using (StringReader reader = new StringReader(xmlResponse))
-                        {
-                            dataSet.ReadXml(reader, XmlReadMode.Auto);
-                            CheckForErrors(dataSet);
+                iParcelWebService = LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates) ?
+                                        new XMLSOAP(new ApiLogEntry(ApiLogSource.iParcel, RequestTypeName)) :
+                                        new XMLSOAP();
 
-                            return dataSet;
-                        }
+                // Use the UploadXMLFileString method and load the XML into a DataSet. This response does
+                // not have all of the schema information like the UploadXMLFile method does, so the 
+                // DataSet loads without any problem
+                string xmlResponse = iParcelWebService.UploadXMLFileString(OperationName, GetRequestXml());
+                using (DataSet dataSet = new DataSet())
+                {
+                    using (StringReader reader = new StringReader(xmlResponse))
+                    {
+                        dataSet.ReadXml(reader, XmlReadMode.Auto);
+                        CheckForErrors(dataSet);
+
+                        return dataSet;
                     }
                 }
             }
@@ -80,6 +82,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
             {
                 log.Error("Error in ExecuteLoggedRequest", ex);
                 throw WebHelper.TranslateWebException(ex, typeof(iParcelException));
+            }
+            finally
+            {
+                if (iParcelWebService != null)
+                {
+                    iParcelWebService.Dispose();
+                }
             }
         }
     }

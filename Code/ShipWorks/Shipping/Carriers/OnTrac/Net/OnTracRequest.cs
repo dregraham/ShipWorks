@@ -107,19 +107,39 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <param name="request">The request to serialize and send to OnTrac</param>
         protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request)
         {
+            return ExecuteLoggedRequest<T>(request, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Makes the actual call to OnTrac
+        /// </summary>
+        /// <typeparam name="T">Return Type to serailze the response to</typeparam>
+        /// <param name="request">The request to serialize and send to OnTrac</param>
+        /// <param name="logActionType">Type of the log action.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">request;null variable in ExecuteLoggedRequest</exception>
+        /// <exception cref="OnTracException">OnTrac returned an invalid response.</exception>
+        protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request, LogActionType logActionType)
+        {
             if (request == null)
             {
                 throw new ArgumentNullException("request", "null variable in ExecuteLoggedRequest");
             }
             try
             {
-                apiLogger.LogRequest(request);
+                if (LogSession.IsApiLogActionTypeEnabled(logActionType))
+                {
+                    apiLogger.LogRequest(request);                    
+                }
 
                 using (IHttpResponseReader onTracResponse = request.GetResponse())
                 {
                     string onTracResponseText = onTracResponse.ReadResult();
 
-                    apiLogger.LogResponse(onTracResponseText);
+                    if (LogSession.IsApiLogActionTypeEnabled(logActionType))
+                    {
+                        apiLogger.LogResponse(onTracResponseText);
+                    }
 
                     CheckForErrors(onTracResponseText);
 
