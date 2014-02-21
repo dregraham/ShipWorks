@@ -647,7 +647,7 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
-            // Show the setup control if setup is required.  Dont go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
+            // Show the setup control if setup is required.  Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
             if (shipmentType != null && !IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
             {
                 ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
@@ -987,7 +987,8 @@ namespace ShipWorks.Shipping
                 if (uiDisplayedShipments.Count == 1)
                 {
                     ShipmentEntity uiShipment = uiDisplayedShipments[0];
-                    rateGroup = RateCache.Instance.GetValue(uiShipment);
+                    //rateGroup = RateCache.Instance.GetValue(uiShipment);
+                    rateGroup = ShippingManager.GetRates(uiShipment);
                 }
 
                 this.LoadRates(rateGroup);
@@ -1040,12 +1041,13 @@ namespace ShipWorks.Shipping
             // Since this could change if customs needs generated, we need to save right now.
             SaveChangesToUIDisplayedShipments();
 
-            // Shipping rate changes will also affect insurace rates
+            // Shipping rate changes will also affect insurance rates
             UpdateInsuranceDisplay();
 
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                RateCache.Instance.InvalidateRates(shipment);
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                RateCache.Instance.InvalidateRates(shipmentType.GetRatingHash(shipment));
             }
 
             GetRates();
@@ -1779,17 +1781,17 @@ namespace ShipWorks.Shipping
 
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    RateGroup cachedRates = RateCache.Instance.GetValue(clonedShipment) ?? new RateGroup(new List<RateResult>());
+                    RateGroup cachedRates = ShippingManager.GetRates(clonedShipment) ?? new RateGroup(new List<RateResult>());
                     cachedRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(uiShipmentType, errorMessage));
 
-                    RateCache.Instance.Save(clonedShipment, cachedRates);
+                    //RateCache.Instance.Save(clonedShipment, cachedRates);
                 }
 
                 if (anyAttempted && !getRatesTimer.Enabled)
                 {
                     rateControl.HideSpinner();
 
-                    // This is not necessary since we reload completely anyway, but it reduces the percieved load time by getting these displayed ASAP
+                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates();
 
                     shipmentControl.Refresh();
@@ -1813,36 +1815,37 @@ namespace ShipWorks.Shipping
                 // At this point, we will attempt to get rates from the cache or from the carrier.
                 anyAttempted = true;
 
-                bool shouldCheckRateCache = shipment.ShipmentID != lastRateCheckShipmentId ||
-                                            shipment.ShipmentType != (int) lastRateCheckShipmentTypeCode;
+                //bool shouldCheckRateCache = shipment.ShipmentID != lastRateCheckShipmentId ||
+                //                            shipment.ShipmentType != (int) lastRateCheckShipmentTypeCode;
 
                 lastRateCheckShipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
                 lastRateCheckShipmentId = shipment.ShipmentID;
 
-                // Since we're only checking rates when a shipment data changes, only check the cache when the user
-                // has just changed shipment or shipment type as this should be the only time the cache could be valid
-                if (shouldCheckRateCache)
-                {
-                    // get cached rates first.
-                    RateGroup cachedRates = RateCache.Instance.GetValue(shipment);
-                    if (cachedRates != null && !cachedRates.OutOfDate)
-                    {
-                        return;
-                    }
-                }
+                //// Since we're only checking rates when a shipment data changes, only check the cache when the user
+                //// has just changed shipment or shipment type as this should be the only time the cache could be valid
+                //if (shouldCheckRateCache)
+                //{
+                //    // get cached rates first.
+                //    RateGroup cachedRates = RateCache.Instance.GetValue(shipment);
+                //    if (cachedRates != null && !cachedRates.OutOfDate)
+                //    {
+                //        return;
+                //    }
+                //}
 
                 try
                 {
-                    RateGroup rateResults = ShippingManager.GetRates(shipment);
+                    //RateGroup rateResults = ShippingManager.GetRates(shipment);
+                    ShippingManager.GetRates(shipment);
 
-                    RateCache.Instance.Save(shipment, rateResults);
+                    //RateCache.Instance.Save(shipment, rateResults);
 
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
                 catch (ShippingException ex)
                 {
-                    RateCache.Instance.Save(shipment, null);
+                    //RateCache.Instance.Save(shipment, null);
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
                     processingErrors[shipment.ShipmentID] = ex;
                 }
@@ -2234,7 +2237,7 @@ namespace ShipWorks.Shipping
                 {
                     // When processing, we do not cache the rates, so we need to cache them now so they will get displayed.
                     // (after we call LoadRates on the rate control below, later on the rates try to be loaded from cache)
-                    RateCache.Instance.Save(counterRatesProcessingArgs.Shipment, counterRatesProcessingArgs.FilteredRates);
+                    //RateCache.Instance.Save(counterRatesProcessingArgs.Shipment, counterRatesProcessingArgs.FilteredRates);
 
                     // Now we can load the rates and they will display
                     rateControl.LoadRates(counterRatesProcessingArgs.FilteredRates);

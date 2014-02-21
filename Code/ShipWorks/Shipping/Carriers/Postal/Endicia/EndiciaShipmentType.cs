@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -326,6 +327,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetValue(rateHash);
+            }
+
+
+
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
 
@@ -460,11 +470,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             }
                         }
 
+                        RateCache.Instance.Save(rateHash, finalGroup);
                         return finalGroup;
                     }
                     else
                     {
-                        return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
+                        RateGroup rateGroup = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
+                        RateCache.Instance.Save(rateHash, rateGroup);
+
+                        return rateGroup;
                     }
                     
                 }
@@ -472,6 +486,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     // Express1 rates - return rates filtered by what is available to the user
                     return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
+                    RateCache.Instance.Save(rateHash, rateGroup);
+
+                    return rateGroup;
                 }
             }
             catch (EndiciaException ex)
@@ -718,6 +735,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
             return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.EndiciaAccountID.FieldIndex],
+                    shipment.Postal.Endicia.Fields[EndiciaShipmentFields.OriginalEndiciaAccountID.FieldIndex],
+                }
+            );
+
+            return fields;
         }
     }
 }

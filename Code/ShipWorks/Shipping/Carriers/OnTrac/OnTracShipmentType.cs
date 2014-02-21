@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -306,18 +307,29 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            try
-            {
-                var rateRequest = new OnTracRates(GetAccountForShipment(shipment));
+            RateGroup rateGroup = null;
+            string rateHash = GetRatingHash(shipment);
 
-                RateGroup rates = rateRequest.GetRates(shipment);
-
-                return rates;
-            }
-            catch (OnTracException ex)
+            if (RateCache.Instance.Contains(rateHash))
             {
-                throw new ShippingException(ex.Message, ex);
+                rateGroup = RateCache.Instance.GetValue(rateHash);
             }
+            else
+            {
+                try
+                {
+                    OnTracRates rateRequest = new OnTracRates(GetAccountForShipment(shipment));
+                    rateGroup = rateRequest.GetRates(shipment);
+
+                    RateCache.Instance.Save(rateHash, rateGroup);
+                }
+                catch (OnTracException ex)
+                {
+                    throw new ShippingException(ex.Message, ex);
+                }
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
@@ -497,6 +509,36 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new OnTracBestRateBroker();
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.OnTrac.Fields[OnTracShipmentFields.OnTracAccountID.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.CodAmount.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.CodType.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DeclaredValue.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.PackagingType.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsAddWeight.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsHeight.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsLength.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWidth.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWeight.FieldIndex],
+                }
+            );
+
+            return fields;
         }
     }
 }

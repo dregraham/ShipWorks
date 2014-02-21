@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -81,7 +83,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return new RateGroup(PostalWebClientRates.GetRates(shipment));
+            RateGroup rateGroup = null;
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                rateGroup = RateCache.Instance.GetValue(rateHash);
+            }
+            else
+            {
+                rateGroup = new RateGroup(PostalWebClientRates.GetRates(shipment));
+                RateCache.Instance.Save(rateHash, rateGroup);
+            }
+
+            return rateGroup;
         }
 
         /// <summary>
@@ -132,6 +147,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             outline.AddElement("LabelOnly", () => primaryLabelPath.Value, ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot90", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot270", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate270FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.Postal.Fields[StampsShipmentFields.StampsAccountID.FieldIndex],
+                    shipment.Postal.Stamps.Fields[StampsShipmentFields.OriginalStampsAccountID.FieldIndex],
+                }
+            );
+
+            return fields;
         }
 
         /// <summary>

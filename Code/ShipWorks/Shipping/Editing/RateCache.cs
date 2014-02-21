@@ -19,14 +19,14 @@ namespace ShipWorks.Shipping.Editing
     public class RateCache
     {
         private static readonly Lazy<RateCache> lazyInstance = new Lazy<RateCache>(() => new RateCache());
-        private readonly LruCache<string, Dictionary<ShipmentTypeCode, RateGroup>> cachedRates;
+        private readonly LruCache<string, RateGroup> cachedRates;
 
         /// <summary>
         /// Prevents a default instance of the <see cref="RateCache"/> class from being created.
         /// </summary>
         private RateCache()
         {
-            cachedRates = new LruCache<string, Dictionary<ShipmentTypeCode, RateGroup>>(10000);
+            cachedRates = new LruCache<string, RateGroup>(10000);
         }
 
         /// <summary>
@@ -37,93 +37,100 @@ namespace ShipWorks.Shipping.Editing
             get { return lazyInstance.Value; }
         }
 
+        ///// <summary>
+        ///// Save an entry in the cache for the given key/value pair. If an entry already
+        ///// exists, meaning an entry for both the shipment entity and the shipment type 
+        ///// code is present, it is overwritten.
+        ///// </summary>
+        //public void Save(ShipmentEntity key, RateGroup value)
+        //{
+        //    string keyValue = GetCacheKey(key);
+        //    cachedRates[keyValue] = value;
+        //}
+
         /// <summary>
         /// Save an entry in the cache for the given key/value pair. If an entry already
         /// exists, meaning an entry for both the shipment entity and the shipment type 
         /// code is present, it is overwritten.
         /// </summary>
-        public void Save(ShipmentEntity key, RateGroup value)
+        public void Save(string key, RateGroup value)
         {
-            string keyValue = GetCacheKey(key);
-
-            if (!cachedRates.Contains(keyValue))
-            {
-                cachedRates[keyValue] = new Dictionary<ShipmentTypeCode, RateGroup>();
-            }
-
-            Dictionary<ShipmentTypeCode, RateGroup> rateMap = cachedRates[keyValue];
-            rateMap[(ShipmentTypeCode)key.ShipmentType] = value;
-
-            cachedRates[keyValue] = rateMap;
+            cachedRates[key] = value;
         }
+
+        ///// <summary>
+        ///// Gets the rate group for the given key.
+        ///// </summary>
+        //public RateGroup GetValue(ShipmentEntity key)
+        //{
+        //    return cachedRates[GetCacheKey(key)];
+        //}
 
         /// <summary>
         /// Gets the rate group for the given key.
         /// </summary>
-        public RateGroup GetValue(ShipmentEntity key)
+        public RateGroup GetValue(string key)
         {
-            RateGroup rateGroup = null;
-
-            if (this.Contains(key))
-            {
-                rateGroup = cachedRates[GetCacheKey(key)][(ShipmentTypeCode)key.ShipmentType];
-            }
-
-            return rateGroup;
+            return cachedRates[key];
         }
+        
+        ///// <summary>
+        ///// Clears rates for the given key.
+        ///// </summary>
+        //public void Clear(ShipmentEntity key)
+        //{
+        //    cachedRates.Remove(GetCacheKey(key));
+        //}
 
         /// <summary>
         /// Clears rates for the given key.
         /// </summary>
-        public void Clear(ShipmentEntity key)
+        public void Clear(string key)
         {
-            string keyValue = GetCacheKey(key);
-
-            if (cachedRates.Contains(keyValue))
-            {
-                cachedRates[keyValue].Clear();
-            }
+            cachedRates.Remove(key);
         }
 
+        ///// <summary>
+        ///// Determines whether the cache [contains] [the specified key].
+        ///// </summary>
+        //public bool Contains(ShipmentEntity key)
+        //{
+        //    return cachedRates.Contains(GetCacheKey(key));
+        //}
 
         /// <summary>
         /// Determines whether the cache [contains] [the specified key].
         /// </summary>
-        public bool Contains(ShipmentEntity key)
+        public bool Contains(string key)
         {
-            bool containsItem = false;
-            string keyValue = GetCacheKey(key);
-            
-            if (cachedRates.Contains(keyValue))
-            {
-                // The shipment is in the cache, but now we have to see if we have rates for 
-                // the specific shipment type
-                Dictionary<ShipmentTypeCode, RateGroup> rateMap = cachedRates[keyValue];
-                if (rateMap.ContainsKey((ShipmentTypeCode)key.ShipmentType))
-                {
-                    containsItem = true;
-                }
-            }
-
-            return containsItem;
+            return cachedRates.Contains(key);
         }
+
+        ///// <summary>
+        ///// Invalids the rates for the given shipment.
+        ///// </summary>
+        ///// <param name="key">The key.</param>
+        ///// <returns></returns>
+        //public void InvalidateRates(ShipmentEntity key)
+        //{
+        //    string keyValue = GetCacheKey(key);
+
+        //    if (cachedRates.Contains(keyValue))
+        //    {
+        //        cachedRates[keyValue].OutOfDate = true;
+        //    }
+        //}
 
         /// <summary>
         /// Invalids the rates for the given shipment.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public void InvalidateRates(ShipmentEntity key)
+        public void InvalidateRates(string key)
         {
-            string keyValue = GetCacheKey(key);
-
-            if (cachedRates.Contains(keyValue))
+            if (cachedRates.Contains(key))
             {
-                Dictionary<ShipmentTypeCode, RateGroup> rateMap = cachedRates[keyValue];
-                foreach (RateGroup group in rateMap.Values)
-                {
-                    group.OutOfDate = true;
-                }
+                cachedRates[key].OutOfDate = true;
             }
         }
 
@@ -134,9 +141,36 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private static string GetCacheKey(ShipmentEntity shipment)
         {
+            //ShipmentEntity filledShipment = ShippingManager.GetShipment(shipment.ShipmentID);
+            return ShipmentTypeManager.GetType(shipment).GetRatingHash(shipment);
+
+
+            //StringBuilder valueToBeHashed = new StringBuilder();
+
+            //foreach (IEntityField2 field in filledShipment.Fields)
+            //{
+            //    if (field.Name != ShipmentFields.RowVersion.Name)
+            //    {
+            //        valueToBeHashed.Append(field.CurrentValue);
+            //    }
+            //}
+
+            //List<IEntity2> shipmentGraph = new ObjectGraphUtils().ProduceTopologyOrderedList(filledShipment);
+            //foreach (IEntity2 entity in shipmentGraph)
+            //{
+            //    foreach (IEntityField2 field in entity.Fields)
+            //    {
+            //        valueToBeHashed.Append(field.CurrentValue);
+            //    }
+            //}
+
+
+
+
+
             // Use the string value of the row version; using the byte[] was not
             // being indexed/looked up correctly in the cache
-            return BitConverter.ToString(shipment.RowVersion);
+            //return BitConverter.ToString(shipment.RowVersion);
         }
     }
 }

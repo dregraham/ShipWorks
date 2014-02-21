@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -140,6 +141,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetValue(rateHash);
+            }
+
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
@@ -268,17 +276,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             }
                         }
 
+                        RateCache.Instance.Save(rateHash, finalGroup);
                         return finalGroup;
                     }
                     else
                     {
-                        return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
+                        RateGroup rateGroup = BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
+                        RateCache.Instance.Save(rateHash, rateGroup);
+
+                        return rateGroup;
+
                     }
                 }
                 else
                 {
                     // Express1 rates - return rates filtered by what is available to the user
                     return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
+                    RateCache.Instance.Save(rateHash, rateGroup);
+
+                    return rateGroup;
                 }
             }
             catch(StampsException ex)
@@ -576,6 +592,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
             return counterBroker is NullShippingBroker ? new StampsBestRateBroker() : counterBroker;
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.Postal.Stamps.Fields[StampsShipmentFields.StampsAccountID.FieldIndex],
+                    shipment.Postal.Stamps.Fields[StampsShipmentFields.OriginalStampsAccountID.FieldIndex],
+                }
+            );
+
+            return fields;
         }
     }
 }

@@ -419,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         return false;
                     }
 
-                    if (r.Tag == null)
+                    if (r.Tag == null || !(r.Tag is UpsServiceType))
                     {
                         return false;
                     }

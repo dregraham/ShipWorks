@@ -872,9 +872,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetValue(rateHash);
+            }
+
             try
             {
-                return new FedExShippingClerk(SettingsRepository).GetRates(shipment);
+                RateGroup rateGroup = new FedExShippingClerk(SettingsRepository).GetRates(shipment);
+                RateCache.Instance.Save(rateHash, rateGroup);
+
+                return rateGroup;
             }
             catch (FedExException ex)
             {
@@ -1048,6 +1058,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // their own account in ShipWorks
                 return new FedExCounterRatesBroker();
             }
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.FedEx.Fields[FedExShipmentFields.FedExAccountID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.WeightUnitType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Signature.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Service.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.PackagingType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.DropoffType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.OriginResidentialDetermination.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostHubID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                }
+            );
+
+            // Grab all the fields for all the package in this shipment
+            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+            {
+                fields.Add(package.Fields[FedExPackageFields.DimsWeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DeclaredValue.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsLength.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
+            }
+
+            return fields;
         }
 
         /// <summary>

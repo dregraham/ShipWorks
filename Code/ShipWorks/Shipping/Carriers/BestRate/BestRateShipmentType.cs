@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -198,22 +199,34 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            RateGroup rateGroup = null;
             AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
-            List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
-            
-            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
-
-            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
-            IEnumerable<BrokerException> distinctExceptions = brokerExceptions
-                .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
-                .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                .GroupBy(e => e.Message)
-                .Select(m => m.First()).ToList();
-            if (distinctExceptions.Any())
+            string rateHash = GetRatingHash(shipment);
+            if (RateCache.Instance.Contains(rateHash))
             {
-                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
+                rateGroup = RateCache.Instance.GetValue(rateHash);
+            }
+            else
+            {
+                List<BrokerException> brokerExceptions = new List<BrokerException>();
+                IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+
+                rateGroup = CompileBestRates(shipment, rateGroups);
+
+                // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+                IEnumerable<BrokerException> distinctExceptions = brokerExceptions
+                                                                    .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
+                                                                    .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
+                                                                    .GroupBy(e => e.Message)
+                                                                    .Select(m => m.First()).ToList();
+
+                if (distinctExceptions.Any())
+                {
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
+                }
+
+                RateCache.Instance.Save(rateHash, rateGroup);
             }
 
             return rateGroup;
@@ -516,6 +529,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
         }
 
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+                (
+                    new List<IEntityField2>
+                    {
+                        shipment.BestRate.Fields[BestRateShipmentFields.DimsAddWeight.FieldIndex],
+                        shipment.BestRate.Fields[BestRateShipmentFields.DimsHeight.FieldIndex],
+                        shipment.BestRate.Fields[BestRateShipmentFields.DimsLength.FieldIndex],
+                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWeight.FieldIndex],
+                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWidth.FieldIndex]
+                    }
+                );
+
+            return fields;
+        }
+
         /// <summary>
         /// Gets the shipment insurance provider based on carriers selected.
         /// </summary>
@@ -553,7 +585,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return shipmentInsuranceProvider;
         }
-
+        
         /// <summary>
         /// Adds the best rate event.
         /// </summary>

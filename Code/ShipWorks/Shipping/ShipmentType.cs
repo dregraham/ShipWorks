@@ -564,6 +564,64 @@ namespace ShipWorks.Shipping
 		/// <returns>An instance of an IBestRateShippingBroker.</returns>
 		public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
+	    /// <summary>
+	    /// Gets the fields used for rating a shipment.
+	    /// </summary>
+	    protected virtual IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+	    {
+	        List<IEntityField2> fields = new List<IEntityField2>()
+	        {
+	            shipment.Fields[ShipmentFields.ShipmentType.FieldIndex],
+	            shipment.Fields[ShipmentFields.ContentWeight.FieldIndex],
+	            shipment.Fields[ShipmentFields.TotalWeight.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipmentCost.FieldIndex],
+	            shipment.Fields[ShipmentFields.CustomsValue.FieldIndex],
+
+                shipment.Fields[ShipmentFields.ShipDate.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipCompany.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipStreet1.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipStreet2.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipStreet3.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipCity.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipStateProvCode.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipPostalCode.FieldIndex],
+	            shipment.Fields[ShipmentFields.ShipCountryCode.FieldIndex],
+	            shipment.Fields[ShipmentFields.ResidentialDetermination.FieldIndex],
+	            shipment.Fields[ShipmentFields.ResidentialResult.FieldIndex],
+
+	            shipment.Fields[ShipmentFields.OriginOriginID.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginCompany.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginStreet1.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginStreet2.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginStreet3.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginCity.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginStateProvCode.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginPostalCode.FieldIndex],
+	            shipment.Fields[ShipmentFields.OriginCountryCode.FieldIndex],
+
+	            shipment.Fields[ShipmentFields.ReturnShipment.FieldIndex],
+	            shipment.Fields[ShipmentFields.Insurance.FieldIndex],
+	            shipment.Fields[ShipmentFields.InsuranceProvider.FieldIndex]
+	        };
+
+	        return fields;
+	    }
+
+	    public virtual string GetRatingHash(ShipmentEntity shipment)
+	    {
+	        StringBuilder valueToBeHashed = new StringBuilder();
+
+            IEnumerable<IEntityField2> ratingFields = GetRatingFields(shipment);
+
+            foreach (IEntityField2 field in ratingFields)
+            {
+                valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
+            }
+
+            // TODO: actually hash the value
+	        return valueToBeHashed.ToString();
+	    }
+
 		/// <summary>
 		/// Preferences the process.
 		/// </summary>

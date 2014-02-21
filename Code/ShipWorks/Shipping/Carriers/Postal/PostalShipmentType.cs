@@ -354,6 +354,34 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+                (
+                    new List<IEntityField2>()
+                    {
+                        shipment.Postal.Fields[PostalShipmentFields.PackagingType.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsHeight.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsLength.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsWidth.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsAddWeight.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsWeight.FieldIndex],                        
+                        shipment.Postal.Fields[PostalShipmentFields.NonMachinable.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.NonRectangular.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.InsuranceValue.FieldIndex]
+                    }
+                );
+
+            return fields;
+        }
+
+        /// <summary>
         /// Builds a RateGroup from a list of express 1 rates
         /// </summary>
         /// <param name="rates">List of rates that should be filtered and added to the group</param>
