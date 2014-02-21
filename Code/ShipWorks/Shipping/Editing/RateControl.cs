@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Editing
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
                     }) { Tag = rate };
 
-                    if (ShowConfigureLink)
+                    if (ShowConfigureLink && rate.Selectable)
                     {
                         row.Cells.Add(new GridHyperlinkCell("Configure"));
                     }
