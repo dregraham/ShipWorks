@@ -471,7 +471,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     // Express1 rates - return rates filtered by what is available to the user
-                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
+                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                 }
             }
             catch (EndiciaException ex)

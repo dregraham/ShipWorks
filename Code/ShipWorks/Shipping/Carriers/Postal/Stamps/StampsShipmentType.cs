@@ -278,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 else
                 {
                     // Express1 rates - return rates filtered by what is available to the user
-                    return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
+                    return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
                 }
             }
             catch(StampsException ex)
