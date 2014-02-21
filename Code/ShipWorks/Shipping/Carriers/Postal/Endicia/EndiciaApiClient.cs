@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     break;
                 }
 
-                    // Endicia Label Server
+                // Endicia Label Server
                 default:
                 {
                     webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
