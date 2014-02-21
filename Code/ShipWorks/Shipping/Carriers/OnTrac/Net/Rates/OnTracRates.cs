@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
             httpVariableRequestSubmitter.Uri = new Uri(sbRequestUrl.ToString());
             httpVariableRequestSubmitter.Verb = HttpVerb.Get;
 
-            RateShipmentList result = ExecuteLoggedRequest<RateShipmentList>(httpVariableRequestSubmitter);
+            RateShipmentList result = ExecuteLoggedRequest<RateShipmentList>(httpVariableRequestSubmitter, LogActionType.GetRates);
 
             // OnTrac may not return any rating results
             if (result.Shipments == null || !result.Shipments.Any())
