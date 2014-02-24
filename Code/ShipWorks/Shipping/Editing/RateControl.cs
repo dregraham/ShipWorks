@@ -429,8 +429,6 @@ namespace ShipWorks.Shipping.Editing
         /// <param name="e">The <see cref="SelectionChangedEventArgs"/> instance containing the event data.</param>
         private void OnSelectedRateChanged(object sender, SelectionChangedEventArgs e)
         {
-            GridRow selectedRow = e.Grid.SelectedElements.OfType<GridRow>().FirstOrDefault();
-
             if (SelectedRate != null)
             {
                 if (RateSelected != null)
@@ -440,9 +438,9 @@ namespace ShipWorks.Shipping.Editing
             }
             else
             {
-                this.sandGrid.SelectionChanged -= OnSelectedRateChanged;
+                sandGrid.SelectionChanged -= OnSelectedRateChanged;
                 ClearSelection();
-                this.sandGrid.SelectionChanged += OnSelectedRateChanged;
+                sandGrid.SelectionChanged += OnSelectedRateChanged;
             }
         }
 
