@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -41,6 +42,23 @@ namespace ShipWorks.Shipping.Editing
 
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates();
+
+            rateControl.Initialize(new FootnoteParameters(RefreshRates, GetStoreForCurrentShipment));
+        }
+
+        /// <summary>
+        /// Gets the store for the current order, if only one is selected
+        /// </summary>
+        private StoreEntity GetStoreForCurrentShipment()
+        {
+            OrderEntity order = DataProvider.GetEntity(selectedOrderID) as OrderEntity;
+
+            if (order != null)
+            {
+                return StoreManager.GetStore(order.StoreID);
+            }
+
+            return null;
         }
 
         /// <summary>
