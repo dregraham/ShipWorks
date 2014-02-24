@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Editing
                     IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>().ToList();
                     if (selectedRows.Any())
                     {
-                        selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable);
+                        selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable && ((BestRateResultTag)f.Tag).IsRealRate);
                     }
                 }
 
