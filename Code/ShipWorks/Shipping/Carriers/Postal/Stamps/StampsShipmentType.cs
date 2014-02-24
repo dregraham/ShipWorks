@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if (RateCache.Instance.Contains(rateHash))
             {
-                return RateCache.Instance.GetValue(rateHash);
+                return RateCache.Instance.GetRateGroup(rateHash);
             }
 
             List<RateResult> express1Rates = null;

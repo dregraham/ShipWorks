@@ -876,7 +876,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (RateCache.Instance.Contains(rateHash))
             {
-                return RateCache.Instance.GetValue(rateHash);
+                return RateCache.Instance.GetRateGroup(rateHash);
             }
 
             try

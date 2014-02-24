@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (RateCache.Instance.Contains(rateHash))
             {
-                rateGroup = RateCache.Instance.GetValue(rateHash);
+                rateGroup = RateCache.Instance.GetRateGroup(rateHash);
             }
             else
             {

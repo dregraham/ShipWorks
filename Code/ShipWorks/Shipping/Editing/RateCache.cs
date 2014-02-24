@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Gets the rate group for the given key.
         /// </summary>
-        public RateGroup GetValue(string key)
+        public RateGroup GetRateGroup(string key)
         {
             return cachedRates[key];
         }
