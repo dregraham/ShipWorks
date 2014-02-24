@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Insurance
         // So we know when not to raise the changed event
         bool loading = false;
 
+        // The last valud value. This tracks if the value has changed.
+        private decimal? lastValue = null;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -415,7 +418,6 @@ namespace ShipWorks.Shipping.Insurance
             set { labelValue.Text = value; }
         }
 
-        private decimal? lastValue = null;
         /// <summary>
         /// Called when [text changed].
         /// </summary>
