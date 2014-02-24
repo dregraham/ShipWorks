@@ -1765,7 +1765,6 @@ namespace ShipWorks.Shipping
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates();
-                    shipmentControl.Refresh();
                 }
             };
 
@@ -1786,7 +1785,6 @@ namespace ShipWorks.Shipping
                 catch (ShippingException ex)
                 {
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
-                    processingErrors[shipment.ShipmentID] = ex;
                 }
             };
             
