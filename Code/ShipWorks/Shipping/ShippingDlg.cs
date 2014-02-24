@@ -1737,7 +1737,6 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            List<string> newErrors = new List<string>();
             bool anyAttempted = false;
 
             if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed || !IsShipmentTypeActivatedUI(clonedShipment))
@@ -1782,9 +1781,9 @@ namespace ShipWorks.Shipping
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
-                catch (ShippingException ex)
+                catch (ShippingException)
                 {
-                    newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + ex.Message);
+                    // Eat it ('< .  .  . 
                 }
             };
             
