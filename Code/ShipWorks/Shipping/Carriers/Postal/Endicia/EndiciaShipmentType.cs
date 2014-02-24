@@ -259,16 +259,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)
         {
+            List<PostalConfirmationType> availablePostalConfirmationTypes = new List<PostalConfirmationType>();
+
             // If we don't know the packaging or country, it doesn't matter
             if (!string.IsNullOrWhiteSpace(countryCode) && packaging != null)
             {
                 if (PostalUtility.IsFreeInternationalDeliveryConfirmation(countryCode, service, packaging.Value))
                 {
-                    return new List<PostalConfirmationType> { PostalConfirmationType.Delivery };
+                    availablePostalConfirmationTypes.Add(PostalConfirmationType.Delivery);
+                    return availablePostalConfirmationTypes;
                 }
             }
 
-            return base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+            availablePostalConfirmationTypes = base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+
+            if (service == PostalServiceType.ParcelSelect)
+            {
+                availablePostalConfirmationTypes.Add(PostalConfirmationType.None);
+            }
+
+            return availablePostalConfirmationTypes;
         }
 
         /// <summary>
@@ -325,14 +335,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Validate that scan based payment returns is allowed
+        /// Checks to see if the shipment allows scan based payment returns
         /// </summary>
         public static bool IsScanBasedReturnsAllowed(ShipmentEntity shipment)
         {
-            if (shipment.ReturnShipment &&
-                shipment.Postal.Endicia.ScanBasedReturn &&
-                shipment.ShipmentType == (int)ShipmentTypeCode.Endicia &&
-                EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None)
+            return shipment.ReturnShipment &&
+                   shipment.Postal.Endicia.ScanBasedReturn &&
+                   shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
+                   EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None;
+        }
+
+        /// <summary>
+        /// Validate that scan based payment returns is allowed
+        /// </summary>
+        public static void ValidateScanBasedReturns(ShipmentEntity shipment)
+        {
+            if (IsScanBasedReturnsAllowed(shipment))
             {
                 if (!IsDomestic(shipment))
                 {
@@ -345,9 +363,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 switch (postalServiceType)
                 {
                     case PostalServiceType.ParcelSelect:
-                        if (postalConfirmationType == PostalConfirmationType.Delivery)
+                        if (postalConfirmationType != PostalConfirmationType.None)
                         {
-                            throw new ShippingException("Endicia scan based payment returns are not available for Parcel Select with Delivery Confirmation shipments.");
+                            throw new ShippingException("Endicia scan based payment returns are only available for Parcel Select with No Confirmation shipments.");
                         }
                         break;
                     case PostalServiceType.FirstClass:
@@ -363,21 +381,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                         break;
                     case PostalServiceType.ExpressMail:
-                        // Priority Mail Express is allowed for all confirmations, so just pass through with no exception.
+                        if (!shipment.Postal.ExpressSignatureWaiver)
+                        {
+                            throw new ShippingException("Endicia Express Mail scan based payment returns require Express Signature Waiver to be checked.");
+                        }
                         break;
                     default:
-                        throw new ShippingException(string.Format("Endicia scan based payment returns are not available for {0} shipments.", EnumHelper.GetDescription(postalServiceType)));
+                        string errorMessage =
+                            string.Format("Endicia scan based payment returns are only available for {0}, {1}, {2}, and {3} services.",
+                                EnumHelper.GetDescription(PostalServiceType.ParcelSelect),
+                                EnumHelper.GetDescription(PostalServiceType.FirstClass),
+                                EnumHelper.GetDescription(PostalServiceType.PriorityMail),
+                                EnumHelper.GetDescription(PostalServiceType.ExpressMail));
+
+                        throw new ShippingException(errorMessage);
                 }
 
                 if (shipment.Insurance)
                 {
                     throw new ShippingException("Endicia scan based payment returns are not available for insured shipments.");
                 }
-
-                return true;
             }
-
-            return false;
         }
 
         /// <summary>
@@ -423,7 +447,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Validate that scan based payment returns is allowed.
             // This method throws if not allowed.
-            IsScanBasedReturnsAllowed(shipment);
+            ValidateScanBasedReturns(shipment);
 
             try
             {
@@ -654,7 +678,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Validate that scan based payment returns is allowed.
             // This method throws if not allowed.
-            IsScanBasedReturnsAllowed(shipment);
+            ValidateScanBasedReturns(shipment);
         }
 
         /// <summary>
