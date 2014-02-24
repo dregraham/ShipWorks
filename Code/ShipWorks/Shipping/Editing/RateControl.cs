@@ -106,7 +106,11 @@ namespace ShipWorks.Shipping.Editing
                     IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>().ToList();
                     if (selectedRows.Any())
                     {
-                        selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable && ((BestRateResultTag)f.Tag).IsRealRate);
+                        selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable);
+                        if(selectedRate != null && selectedRate.Tag is BestRateResultTag && !((BestRateResultTag)selectedRate.Tag).IsRealRate)
+                        {
+                            selectedRate = null;
+                        }
                     }
                 }
 
@@ -276,7 +280,8 @@ namespace ShipWorks.Shipping.Editing
                             cell.ForeColor = Color.White;
                         }
 
-                        sandGrid.SelectRow(selectedRow);
+                        // sandGrid.SelectRow(selectedRow);
+                        selectedRow.Selected = true;
                     }
                 }
             }
