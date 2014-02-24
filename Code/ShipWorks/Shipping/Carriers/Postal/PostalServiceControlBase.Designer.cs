@@ -257,6 +257,7 @@
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(464, 50);
             this.insuranceControl.TabIndex = 50;
+            this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // sectionExpress
             // 

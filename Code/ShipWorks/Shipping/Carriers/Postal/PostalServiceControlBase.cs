@@ -269,7 +269,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override void UpdateInsuranceDisplay()
         {
+            insuranceControl.InsuranceOptionsChanged -= OnRateCriteriaChanged;
             insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+            insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
