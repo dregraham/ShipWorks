@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 // BigCommerce sometimes returns "null" in the response for some reason which was causing
                 // a NullReferenceException to bubble up and crash ShipWorks
-                throw new BigCommerceException("ShipWorks received an invalid response from BigCommerce. Please try again later.");
+                throw new BigCommerceException("ShipWorks received an invalid response from BigCommerce. Please check that your store credentials are correct.");
             }
 
             return restResponse;
