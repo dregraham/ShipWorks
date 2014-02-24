@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping
             this.menuProcessAll = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuProfiles = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuProfilePlaceholder = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelPrep = new System.Windows.Forms.Label();
             this.print = new System.Windows.Forms.Button();
             this.panelEditButtons = new System.Windows.Forms.Panel();
             this.processDropDownButton = new ShipWorks.UI.Controls.DropDownButton();
@@ -77,7 +76,7 @@ namespace ShipWorks.Shipping
             this.labelTrackingMessage = new System.Windows.Forms.Label();
             this.labelRates = new System.Windows.Forms.Label();
             this.rateControlArea = new System.Windows.Forms.Panel();
-            this.rateControl = new RateControl();
+            this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -124,7 +123,7 @@ namespace ShipWorks.Shipping
             // 
             this.voidSelected.Image = global::ShipWorks.Properties.Resources.cancel16;
             this.voidSelected.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.voidSelected.Location = new System.Drawing.Point(7, 122);
+            this.voidSelected.Location = new System.Drawing.Point(7, 103);
             this.voidSelected.Name = "voidSelected";
             this.voidSelected.Size = new System.Drawing.Size(150, 23);
             this.voidSelected.TabIndex = 6;
@@ -145,7 +144,7 @@ namespace ShipWorks.Shipping
             // 
             this.menuProcessSelected.Name = "menuProcessSelected";
             this.menuProcessSelected.Size = new System.Drawing.Size(161, 22);
-            this.menuProcessSelected.Text = "Process Selected";
+            this.menuProcessSelected.Text = "Process";
             this.menuProcessSelected.Click += new System.EventHandler(this.OnProcessSelected);
             // 
             // menuProcessAll
@@ -170,21 +169,11 @@ namespace ShipWorks.Shipping
             this.menuProfilePlaceholder.Size = new System.Drawing.Size(114, 22);
             this.menuProfilePlaceholder.Text = "Profile1";
             // 
-            // labelPrep
-            // 
-            this.labelPrep.AutoSize = true;
-            this.labelPrep.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPrep.Location = new System.Drawing.Point(6, 48);
-            this.labelPrep.Name = "labelPrep";
-            this.labelPrep.Size = new System.Drawing.Size(119, 13);
-            this.labelPrep.TabIndex = 2;
-            this.labelPrep.Text = "Selected Shipments";
-            // 
             // print
             // 
             this.print.Image = global::ShipWorks.Properties.Resources.printer1;
             this.print.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.print.Location = new System.Drawing.Point(7, 93);
+            this.print.Location = new System.Drawing.Point(7, 74);
             this.print.Name = "print";
             this.print.Size = new System.Drawing.Size(150, 23);
             this.print.TabIndex = 5;
@@ -202,11 +191,10 @@ namespace ShipWorks.Shipping
             this.panelEditButtons.Controls.Add(this.applyProfile);
             this.panelEditButtons.Controls.Add(this.labelProcessing);
             this.panelEditButtons.Controls.Add(this.voidSelected);
-            this.panelEditButtons.Controls.Add(this.labelPrep);
             this.panelEditButtons.Controls.Add(this.print);
             this.panelEditButtons.Location = new System.Drawing.Point(665, 12);
             this.panelEditButtons.Name = "panelEditButtons";
-            this.panelEditButtons.Size = new System.Drawing.Size(160, 240);
+            this.panelEditButtons.Size = new System.Drawing.Size(160, 220);
             this.panelEditButtons.TabIndex = 1;
             // 
             // processDropDownButton
@@ -219,7 +207,7 @@ namespace ShipWorks.Shipping
             this.processDropDownButton.Size = new System.Drawing.Size(150, 23);
             this.processDropDownButton.SplitContextMenu = this.contextMenuProcess;
             this.processDropDownButton.TabIndex = 14;
-            this.processDropDownButton.Text = "Process Selected";
+            this.processDropDownButton.Text = "Process";
             this.processDropDownButton.UseVisualStyleBackColor = true;
             this.processDropDownButton.Click += new System.EventHandler(this.OnProcessSelected);
             // 
@@ -227,7 +215,7 @@ namespace ShipWorks.Shipping
             // 
             this.panelSettingsButtons.Controls.Add(this.label1);
             this.panelSettingsButtons.Controls.Add(this.shippingServices);
-            this.panelSettingsButtons.Location = new System.Drawing.Point(0, 147);
+            this.panelSettingsButtons.Location = new System.Drawing.Point(0, 129);
             this.panelSettingsButtons.Name = "panelSettingsButtons";
             this.panelSettingsButtons.Size = new System.Drawing.Size(160, 45);
             this.panelSettingsButtons.TabIndex = 3;
@@ -258,7 +246,7 @@ namespace ShipWorks.Shipping
             // 
             this.labelInternal.AutoSize = true;
             this.labelInternal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInternal.Location = new System.Drawing.Point(4, 191);
+            this.labelInternal.Location = new System.Drawing.Point(4, 175);
             this.labelInternal.Name = "labelInternal";
             this.labelInternal.Size = new System.Drawing.Size(53, 13);
             this.labelInternal.TabIndex = 10;
@@ -268,7 +256,7 @@ namespace ShipWorks.Shipping
             // 
             this.unprocess.Image = global::ShipWorks.Properties.Resources.skull;
             this.unprocess.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.unprocess.Location = new System.Drawing.Point(6, 208);
+            this.unprocess.Location = new System.Drawing.Point(6, 192);
             this.unprocess.Name = "unprocess";
             this.unprocess.Size = new System.Drawing.Size(151, 23);
             this.unprocess.TabIndex = 11;
@@ -281,7 +269,7 @@ namespace ShipWorks.Shipping
             this.applyProfile.AutoSize = true;
             this.applyProfile.ContextMenuStrip = this.contextMenuProfiles;
             this.applyProfile.Image = global::ShipWorks.Properties.Resources.document_out;
-            this.applyProfile.Location = new System.Drawing.Point(7, 64);
+            this.applyProfile.Location = new System.Drawing.Point(7, 45);
             this.applyProfile.Name = "applyProfile";
             this.applyProfile.Size = new System.Drawing.Size(150, 23);
             this.applyProfile.SplitButton = false;
@@ -577,7 +565,7 @@ namespace ShipWorks.Shipping
             this.rateControlArea.Controls.Add(this.rateControl);
             this.rateControlArea.Location = new System.Drawing.Point(0, 17);
             this.rateControlArea.Name = "rateControlArea";
-            this.rateControlArea.Size = new System.Drawing.Size(354, 118);
+            this.rateControlArea.Size = new System.Drawing.Size(354, 136);
             this.rateControlArea.TabIndex = 3;
             // 
             // rateControl
@@ -590,7 +578,9 @@ namespace ShipWorks.Shipping
             this.rateControl.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.rateControl.Size = new System.Drawing.Size(352, 117);
+            this.rateControl.ShowAllRates = true;
+            this.rateControl.ShowConfigureLink = false;
+            this.rateControl.Size = new System.Drawing.Size(352, 135);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
@@ -661,7 +651,6 @@ namespace ShipWorks.Shipping
         private System.Windows.Forms.ToolStripMenuItem menuProfilePlaceholder;
         private ShipWorks.UI.Controls.MultiValueComboBox comboShipmentType;
         private System.Windows.Forms.Label labelService;
-        private System.Windows.Forms.Label labelPrep;
         private System.Windows.Forms.Panel serviceControlArea;
         private System.Windows.Forms.Button print;
         private System.Windows.Forms.Panel panelEditButtons;
