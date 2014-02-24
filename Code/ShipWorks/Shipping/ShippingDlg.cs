@@ -263,7 +263,20 @@ namespace ShipWorks.Shipping
                 LoadSelectedShipments(false);
 
                 GetRates();
+
+                UpdateSelectedShipmentCount();
             }
+        }
+
+        /// <summary>
+        /// Updates the selected shipment count.
+        /// </summary>
+        private void UpdateSelectedShipmentCount()
+        {
+            int selectedShipmentCount = shipmentControl.SelectedShipments.Count();
+            const string labelProcessingMask = "Shipments Selected ({0})";
+            
+            labelProcessing.Text = string.Format(labelProcessingMask, selectedShipmentCount);
         }
 
         /// <summary>
