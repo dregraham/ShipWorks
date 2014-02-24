@@ -834,11 +834,11 @@ namespace ShipWorks.Shipping
                 // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
                 if (newServiceControl != null)
                 {
-                    newServiceControl.RecipientDestinationChanged += this.OnRecipientDestinationChanged;
-                    newServiceControl.ShipmentServiceChanged += this.OnShipmentServiceChanged;
-                    newServiceControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
-                    newServiceControl.ShipmentsAdded += this.OnServiceControlShipmentsAdded;
-                    newServiceControl.ShipmentTypeChanged += this.OnShipmentTypeChanged;
+                    newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
+                    newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+                    newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+                    newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+                    newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
                     rateControl.ConfigureRateClicked += newServiceControl.OnConfigureRateClick;
@@ -850,10 +850,10 @@ namespace ShipWorks.Shipping
                 // Finally, remove the old service control, or the blank panel we created
                 if (oldServiceControl != null)
                 {
-                    oldServiceControl.RecipientDestinationChanged -= this.OnRecipientDestinationChanged;
-                    oldServiceControl.ShipmentServiceChanged -= this.OnShipmentServiceChanged;
-                    oldServiceControl.RateCriteriaChanged -= this.OnRateCriteriaChanged;
-                    oldServiceControl.ShipmentsAdded -= this.OnServiceControlShipmentsAdded;
+                    oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
+                    oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+                    oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                    oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
@@ -869,6 +869,9 @@ namespace ShipWorks.Shipping
 
             // Update the custom's control
             LoadCustomsControl(shipments, shipmentType, enableEditing);
+
+            // Update the provider in the shipment grid
+            shipmentControl.Refresh();
 
             //// Update the displayed rates
             //LoadDisplayedRates();
