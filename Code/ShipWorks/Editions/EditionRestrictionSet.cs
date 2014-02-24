@@ -77,7 +77,6 @@ namespace ShipWorks.Editions
                 case EditionFeature.MyFilters:
                 case EditionFeature.AddOrderCustomer:
                 case EditionFeature.EndiciaScanForm:
-                case EditionFeature.EndiciaScanBasedReturns:
                     return CheckExistanceRestriction(feature);
 
                 case EditionFeature.PostalApoFpoPoboxOnly:
@@ -87,6 +86,7 @@ namespace ShipWorks.Editions
                 case EditionFeature.EndiciaDhl:
                 case EditionFeature.UpsSurePost:
                 case EditionFeature.EndiciaConsolidator:
+                case EditionFeature.EndiciaScanBasedReturns:
                     return CheckNonExistanceRestriction(feature);
             }
 

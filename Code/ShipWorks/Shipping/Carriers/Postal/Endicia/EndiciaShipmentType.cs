@@ -309,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             return shipment.ReturnShipment &&
                    shipment.Postal.Endicia.ScanBasedReturn &&
                    shipment.ShipmentType == (int) ShipmentTypeCode.Endicia &&
-                   EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None;
+                   EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None;
         }
 
         /// <summary>
@@ -768,7 +768,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override ReturnsControlBase CreateReturnsControl()
         {
             // If scan based returns is not allowed, show the the default returns control
-            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level == EditionRestrictionLevel.None)
+            if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaScanBasedReturns).Level != EditionRestrictionLevel.None)
             {
                 return base.CreateReturnsControl();
             }
