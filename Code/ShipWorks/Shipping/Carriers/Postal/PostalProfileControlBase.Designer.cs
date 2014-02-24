@@ -673,7 +673,7 @@
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         protected System.Windows.Forms.TabPage tabPage;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private System.Windows.Forms.CheckBox returnShipment;
+        protected System.Windows.Forms.CheckBox returnShipment;
         private System.Windows.Forms.CheckBox returnState;
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
         private System.Windows.Forms.CheckBox insuranceState;

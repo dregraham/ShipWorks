@@ -1295,7 +1295,8 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RubberStamp1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RubberStamp2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ScanBasedReturn] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaProfile] on [dbo].[EndiciaProfile]'
@@ -1376,7 +1377,8 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
-[ScanFormBatchID] [bigint] NULL
+[ScanFormBatchID] [bigint] NULL,
+[ScanBasedReturn] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'

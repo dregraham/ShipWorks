@@ -360,12 +360,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             shipment.ThermalType = (int?) thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
 
-            // Set if this is reply postage
-            if (shipment.ReturnShipment)
-            {
-                request.ReplyPostage = "TRUE";
-            }
-
             // Not sure why these are required fields - i don't think they show up anywhere
             request.PartnerCustomerID = shipment.Order.CustomerID.ToString();
             request.PartnerTransactionID = shipment.ShipmentID.ToString();
@@ -526,6 +520,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (CustomsManager.IsCustomsRequired(shipment))
             {
                 ApplyCustoms(request, shipment);
+            }
+
+            // Set if this is reply postage
+            if (shipment.ReturnShipment)
+            {
+                request.ReplyPostage = "TRUE";
+
+                // If this is a scan based return, we need to modify the properties we are sending.
+                if (EndiciaShipmentType.IsScanBasedReturnsAllowed(shipment))
+                {
+                    // As per Nandita, ReplyPostage should be set to false for a scan based return.
+                    request.ReplyPostage = "FALSE";
+                    request.PrintScanBasedPaymentLabel = "TRUE";
+
+                    if (serviceType == PostalServiceType.ParcelSelect)
+                    {
+                        // Only none is allowed for parcel select, so set these to OFF
+                        request.Services.SignatureConfirmation = "OFF";
+                        request.Services.DeliveryConfirmation = "OFF";
+                    }
+                    else if (serviceType == PostalServiceType.ExpressMail)
+                    {
+                        // SignatureWaiver must be TRUE or null.  False will return an error.
+                        request.SignatureWaiver = shipment.Postal.ExpressSignatureWaiver ? request.SignatureWaiver : null;
+                    }
+                }
             }
 
             try

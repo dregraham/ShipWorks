@@ -531,6 +531,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ScanFormBatchID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ScanBasedReturn", fieldHashtable);
 		}
 		#endregion
 
@@ -812,6 +815,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EndiciaShipmentFieldIndex.ScanFormBatchID, false); }
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanFormBatchID, value); }
+		}
+
+		/// <summary> The ScanBasedReturn property of the Entity EndiciaShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanBasedReturn"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ScanBasedReturn
+		{
+			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, value); }
 		}
 
 

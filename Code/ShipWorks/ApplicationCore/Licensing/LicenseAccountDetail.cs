@@ -119,6 +119,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia consolidation is allowed
             bool endiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
+
+            // Check if Endicia scan based payment returns is allowed
+            bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
+            edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
             
             return edition;
         }
