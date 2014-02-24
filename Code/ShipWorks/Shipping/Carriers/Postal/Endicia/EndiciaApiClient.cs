@@ -16,6 +16,7 @@ using System.Drawing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Templates.Tokens;

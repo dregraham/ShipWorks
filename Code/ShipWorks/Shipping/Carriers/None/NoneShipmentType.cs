@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;

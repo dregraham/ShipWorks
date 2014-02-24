@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping
+﻿using ShipWorks.Shipping.Editing.Rating;
+
+namespace ShipWorks.Shipping
 {
     partial class ShippingDlg
     {
@@ -75,7 +77,7 @@
             this.labelTrackingMessage = new System.Windows.Forms.Label();
             this.labelRates = new System.Windows.Forms.Label();
             this.rateControlArea = new System.Windows.Forms.Panel();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
+            this.rateControl = new RateControl();
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -684,7 +686,7 @@
         private System.Windows.Forms.Button shippingServices;
         private System.Windows.Forms.Panel rateControlArea;
         private System.Windows.Forms.SplitContainer ratesSplitContainer;
-        private Editing.RateControl rateControl;
+        private RateControl rateControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelRates;
     }

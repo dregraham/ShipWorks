@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {

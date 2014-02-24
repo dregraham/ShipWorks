@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Editing
+﻿namespace ShipWorks.Shipping.Editing.Rating
 {
     partial class RatesPanel
     {
@@ -29,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
+            this.rateControl = new RateControl();
             this.SuspendLayout();
             // 
             // rateControl

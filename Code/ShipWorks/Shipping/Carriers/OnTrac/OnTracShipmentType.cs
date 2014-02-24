@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;

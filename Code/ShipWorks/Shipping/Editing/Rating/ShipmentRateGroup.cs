@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Editing
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// A decorator of the RateGroup intended to be used within the rates panel. This version of a 

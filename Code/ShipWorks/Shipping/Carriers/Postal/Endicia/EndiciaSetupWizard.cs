@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Data.Connection;

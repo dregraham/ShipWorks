@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Editing
+﻿namespace ShipWorks.Shipping.Editing.Rating
 {
     partial class ExceptionsRateFootnoteControl
     {

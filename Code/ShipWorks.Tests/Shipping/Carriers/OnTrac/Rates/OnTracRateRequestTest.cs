@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 {

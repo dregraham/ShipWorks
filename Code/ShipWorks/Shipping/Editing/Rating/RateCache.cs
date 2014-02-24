@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Collections;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 
-namespace ShipWorks.Shipping.Editing
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// A singleton for caching rates for a version of a shipment. To simplify using this

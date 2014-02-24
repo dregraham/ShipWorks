@@ -1,4 +1,6 @@
 ﻿using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
     /// <summary>

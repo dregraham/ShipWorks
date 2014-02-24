@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;

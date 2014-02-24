@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {

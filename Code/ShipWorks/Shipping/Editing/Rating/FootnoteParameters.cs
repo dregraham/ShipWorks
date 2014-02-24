@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Editing
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// Parameters that can be used by footnotes to interact with the rate grid

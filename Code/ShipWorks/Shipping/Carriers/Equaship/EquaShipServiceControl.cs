@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.EquaShip.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Stores;
 using ShipWorks.Data;

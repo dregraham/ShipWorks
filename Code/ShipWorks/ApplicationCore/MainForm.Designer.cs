@@ -1,3 +1,5 @@
+using ShipWorks.Shipping.Editing.Rating;
+
 namespace ShipWorks
 {
     partial class MainForm
@@ -89,7 +91,7 @@ namespace ShipWorks
             this.gridControl = new ShipWorks.ApplicationCore.MainGridControl();
             this.dockContainer2 = new TD.SandDock.DockContainer();
             this.dockableWindowRates = new TD.SandDock.DockableWindow();
-            this.ratesPanel = new ShipWorks.Shipping.Editing.RatesPanel();
+            this.ratesPanel = new RatesPanel();
             this.sandDockManager = new TD.SandDock.SandDockManager();
             this.dockContainer1 = new TD.SandDock.DockContainer();
             this.dockableWindowOrders = new TD.SandDock.DockableWindow();
@@ -3000,7 +3002,7 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
         private System.Windows.Forms.ToolStripMenuItem logShipmentToTangoRetryToolStripMenuItem;
         private TD.SandDock.DockableWindow dockableWindowRates;
-        private Shipping.Editing.RatesPanel ratesPanel;
+        private RatesPanel ratesPanel;
         private TD.SandDock.DockContainer dockContainer2;
     }
 }

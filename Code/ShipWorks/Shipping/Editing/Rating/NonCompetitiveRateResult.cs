@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
+﻿using System.Linq;
 
-namespace ShipWorks.Shipping.Editing
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// Defines a rate result that has non-compete rules for displaying service type around other carriers

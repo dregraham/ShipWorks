@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI;

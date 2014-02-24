@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Utility;

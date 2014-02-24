@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using log4net;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;

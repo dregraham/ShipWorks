@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
 using Divelements.SandGrid;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {

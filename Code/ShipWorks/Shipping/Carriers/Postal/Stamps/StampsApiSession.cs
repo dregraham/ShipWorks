@@ -21,6 +21,7 @@ using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;

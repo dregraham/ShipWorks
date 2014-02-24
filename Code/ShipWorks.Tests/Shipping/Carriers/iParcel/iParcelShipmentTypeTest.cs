@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping;
 using System.IO;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Common.IO.Hardware.Printers;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.BestRate.Fake;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

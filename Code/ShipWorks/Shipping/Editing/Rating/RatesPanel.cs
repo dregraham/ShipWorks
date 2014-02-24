@@ -11,7 +11,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Stores;
 
-namespace ShipWorks.Shipping.Editing
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// An implementation of IDockingPanelContent interface that will fetch and 

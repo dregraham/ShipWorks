@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {

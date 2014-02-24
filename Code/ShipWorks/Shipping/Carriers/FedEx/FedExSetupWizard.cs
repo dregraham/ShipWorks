@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;

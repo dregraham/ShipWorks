@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
 

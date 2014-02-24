@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;

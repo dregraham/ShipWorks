@@ -1,4 +1,6 @@
 ﻿using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
     public partial class Express1StampsServiceControl : StampsServiceControl

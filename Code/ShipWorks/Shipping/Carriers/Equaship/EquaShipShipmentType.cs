@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Carriers.EquaShip.Enums;

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Settings.Origin;
