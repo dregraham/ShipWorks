@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.ApplicationCore.Interaction;
@@ -293,7 +291,6 @@ namespace ShipWorks.Shipping.Editing
             if (resultTag != null && !resultTag.IsRealRate)
             {
                 resultTag.RateSelectionDelegate(shipment);
-                //RateCache.Instance.Save(shipment, new ShipmentRateGroup(rateControl.RateGroup, shipment));
             }
             else
             {
