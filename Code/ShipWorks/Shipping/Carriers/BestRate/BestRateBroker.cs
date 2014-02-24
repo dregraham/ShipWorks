@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected virtual string GetResultKey(RateResult rate)
         {
-            return carrierDescription + rate.Tag;
+            return carrierDescription + GetOriginalTag(rate);
         }
 
         /// <summary>
