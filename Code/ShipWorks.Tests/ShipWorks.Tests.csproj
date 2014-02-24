@@ -342,8 +342,8 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
-    <Compile Include="Shipping\Editing\RateResultTest.cs" />
-    <Compile Include="Shipping\Editing\NonCompetitiveRateResultTest.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
+    <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResultTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />

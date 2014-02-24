@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Tests.Shipping.Editing
+namespace ShipWorks.Tests.Shipping.Editing.Rating
 {
     [TestClass]
     public class RateResultTest
