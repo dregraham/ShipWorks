@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -414,17 +415,38 @@ namespace ShipWorks.Shipping.Insurance
             set { labelValue.Text = value; }
         }
 
+        private decimal? lastValue = null;
         /// <summary>
-        /// The insured amount changed
+        /// Called when [text changed].
         /// </summary>
-        private void OnAmountChanged(object sender, EventArgs e)
+        private void OnTextChanged(object sender, EventArgs e)
         {
+            bool valueChanged = false;
+
             if (loadedInsurance != null && loadedInsurance.Count == 1 && !insuredValue.MultiValued)
             {
-                UpdateCostDisplay(loadedInsurance[0].Shipment, insuredValue.Amount);
+                decimal amount;
+
+                if (decimal.TryParse(insuredValue.Text, NumberStyles.Currency, null, out amount))
+                {
+                    if (lastValue.HasValue && amount != lastValue.Value)
+                    {
+                        valueChanged = true;
+                    }
+
+                    lastValue = amount;
+                }
             }
 
-            OnInsuranceOptionsChanged(this, EventArgs.Empty);
+            if (valueChanged)
+            {
+                UpdateCostDisplay(loadedInsurance[0].Shipment, lastValue.Value);
+                SaveToInsuranceChoices();
+
+                insuredValue.IgnoreSet = true;
+                OnInsuranceOptionsChanged(this, EventArgs.Empty);
+                insuredValue.IgnoreSet = false;
+            }
         }
 
         /// <summary>

@@ -1031,12 +1031,6 @@ namespace ShipWorks.Shipping
             // Shipping rate changes will also affect insurance rates
             UpdateInsuranceDisplay();
 
-            foreach (ShipmentEntity shipment in uiDisplayedShipments)
-            {
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                RateCache.Instance.InvalidateRates(shipmentType.GetRatingHash(shipment));
-            }
-
             GetRates();
         }
 

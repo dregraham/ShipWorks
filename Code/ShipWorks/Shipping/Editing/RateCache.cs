@@ -89,18 +89,5 @@ namespace ShipWorks.Shipping.Editing
         {
             return cachedRates.Contains(key);
         }
-        
-        /// <summary>
-        /// Invalids the rates for the given shipment.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        public void InvalidateRates(string key)
-        {
-            if (cachedRates.Contains(key))
-            {
-                cachedRates[key].OutOfDate = true;
-            }
-        }
     }
 }

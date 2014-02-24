@@ -71,9 +71,6 @@ namespace ShipWorks.UI.Controls
         // Raised whenever the value changes
         public event EventHandler WeightChanged;
 
-        // Raised whenever the text changes to a valid, parsed weight
-        public event EventHandler ValidWeightParsed;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -549,17 +546,6 @@ namespace ShipWorks.UI.Controls
             if (WeightChanged != null)
             {
                 WeightChanged(this, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Called whenever a valid weight is parsed.
-        /// </summary>
-        protected virtual void OnValidWeightParsed()
-        {
-            if (ValidWeightParsed != null)
-            {
-                ValidWeightParsed(this, EventArgs.Empty);
             }
         }
 
