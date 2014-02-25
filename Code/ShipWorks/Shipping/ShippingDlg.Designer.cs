@@ -578,9 +578,7 @@ namespace ShipWorks.Shipping
             this.rateControl.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.rateControl.ShowAllRates = true;
-            this.rateControl.ShowConfigureLink = false;
-            this.rateControl.Size = new System.Drawing.Size(352, 135);
+            this.rateControl.Size = new System.Drawing.Size(352, 117);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
