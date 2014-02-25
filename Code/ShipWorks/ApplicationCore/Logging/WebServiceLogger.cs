@@ -16,12 +16,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
     partial class SwsimV29
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV29(ApiLogEntry logEntry)
+        internal SwsimV29(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -143,12 +143,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
     partial class EwsLabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal EwsLabelService(ApiLogEntry logEntry)
+        internal EwsLabelService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -270,12 +270,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
     partial class ELSServicesService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ELSServicesService(ApiLogEntry logEntry)
+        internal ELSServicesService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -397,12 +397,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
     partial class CustomerService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal CustomerService(ApiLogEntry logEntry)
+        internal CustomerService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -419,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -524,12 +524,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
     partial class EwsLabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal EwsLabelService(ApiLogEntry logEntry)
+        internal EwsLabelService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -546,7 +546,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -651,12 +651,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
     partial class RegisterMgrAcctService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RegisterMgrAcctService(ApiLogEntry logEntry)
+        internal RegisterMgrAcctService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -673,7 +673,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -778,12 +778,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
     partial class ShippingService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ShippingService(ApiLogEntry logEntry)
+        internal ShippingService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -800,7 +800,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -905,12 +905,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
     partial class OrderService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OrderService(ApiLogEntry logEntry)
+        internal OrderService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -927,7 +927,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1032,12 +1032,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
     partial class InventoryService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal InventoryService(ApiLogEntry logEntry)
+        internal InventoryService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1054,7 +1054,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1159,12 +1159,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
     partial class AdminService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AdminService(ApiLogEntry logEntry)
+        internal AdminService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1181,7 +1181,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1286,12 +1286,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
     partial class RegistrationService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RegistrationService(ApiLogEntry logEntry)
+        internal RegistrationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1308,7 +1308,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1413,12 +1413,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
     partial class RateService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RateService(ApiLogEntry logEntry)
+        internal RateService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1435,7 +1435,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1540,12 +1540,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
     partial class ShipService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ShipService(ApiLogEntry logEntry)
+        internal ShipService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1562,7 +1562,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1667,12 +1667,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
     partial class TrackService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal TrackService(ApiLogEntry logEntry)
+        internal TrackService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1689,7 +1689,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1794,12 +1794,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
     partial class PackageMovementInformationService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal PackageMovementInformationService(ApiLogEntry logEntry)
+        internal PackageMovementInformationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1816,7 +1816,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -1921,12 +1921,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
     partial class AddressValidationService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AddressValidationService(ApiLogEntry logEntry)
+        internal AddressValidationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1943,7 +1943,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2048,12 +2048,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
     partial class CloseService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal CloseService(ApiLogEntry logEntry)
+        internal CloseService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2070,7 +2070,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2175,12 +2175,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
     partial class GlobalShipAddressService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GlobalShipAddressService(ApiLogEntry logEntry)
+        internal GlobalShipAddressService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2197,7 +2197,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2302,12 +2302,12 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
     partial class InfopiaWebService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal InfopiaWebService(ApiLogEntry logEntry)
+        internal InfopiaWebService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2324,7 +2324,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2429,12 +2429,12 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
     partial class PayPalAPISoapBinding
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal PayPalAPISoapBinding(ApiLogEntry logEntry)
+        internal PayPalAPISoapBinding(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2451,7 +2451,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2556,12 +2556,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
     partial class merchantinterfacedime
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal merchantinterfacedime(ApiLogEntry logEntry)
+        internal merchantinterfacedime(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2578,7 +2578,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2683,12 +2683,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
     partial class eBayAPIInterfaceService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal eBayAPIInterfaceService(ApiLogEntry logEntry)
+        internal eBayAPIInterfaceService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2705,7 +2705,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2810,12 +2810,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
     partial class OMService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OMService(ApiLogEntry logEntry)
+        internal OMService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2832,7 +2832,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -2937,12 +2937,12 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
     partial class AmeriCommerceDatabaseIO
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AmeriCommerceDatabaseIO(ApiLogEntry logEntry)
+        internal AmeriCommerceDatabaseIO(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2959,7 +2959,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3064,12 +3064,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
     partial class NetSolEcomService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal NetSolEcomService(ApiLogEntry logEntry)
+        internal NetSolEcomService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3086,7 +3086,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3191,12 +3191,12 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
     partial class MagentoService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal MagentoService(ApiLogEntry logEntry)
+        internal MagentoService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3213,7 +3213,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3318,12 +3318,12 @@ namespace ShipWorks.Shipping.Carriers.EquaShip.WebServices
     partial class EquashipAPI
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal EquashipAPI(ApiLogEntry logEntry)
+        internal EquashipAPI(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3340,7 +3340,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3445,12 +3445,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
     partial class cartAPIAdvanced
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal cartAPIAdvanced(ApiLogEntry logEntry)
+        internal cartAPIAdvanced(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3467,7 +3467,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3572,12 +3572,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
     partial class cartAPI
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal cartAPI(ApiLogEntry logEntry)
+        internal cartAPI(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3594,7 +3594,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3699,12 +3699,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
     partial class XMLSOAP
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal XMLSOAP(ApiLogEntry logEntry)
+        internal XMLSOAP(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3721,7 +3721,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3826,12 +3826,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
     partial class OpenAccountService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OpenAccountService(ApiLogEntry logEntry)
+        internal OpenAccountService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3848,7 +3848,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}
@@ -3953,12 +3953,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
     partial class SDCV24Service
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SDCV24Service(ApiLogEntry logEntry)
+        internal SDCV24Service(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3975,7 +3975,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}

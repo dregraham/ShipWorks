@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -30,14 +31,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             ShouldRetrieveExpress1Rates = true;
 
-            // Use the "live" versions of the repository by default
+            // Use the "live" versions by default
             AccountRepository = new StampsAccountRepository();
+            LogEntryFactory = new LogEntryFactory();
+            
         }
 
         /// <summary>
         /// Gets or sets the repository that should be used when retrieving account information.
         /// </summary>
         public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
+
+        /// <summary>
+        /// Gets or sets the log entry factory.
+        /// </summary>
+        public LogEntryFactory LogEntryFactory { get; set; }
 
         /// <summary>
         /// The ShipmentTypeCode enumeration value
@@ -186,7 +194,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                List<RateResult> stampsRates = new StampsApiSession(AccountRepository).GetRates(shipment);
+                List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory).GetRates(shipment);
 
                 // For Stamps, we want to either promote Express1 or show the Express1 savings
                 if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)

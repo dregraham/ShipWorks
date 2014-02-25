@@ -220,6 +220,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </exception>
         public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter)
         {
+            return ProcessRequest(xmlWriter, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Process the given request and return the response
+        /// </summary>
+        /// <exception cref="UpsApiException">
+        /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
+        /// or
+        /// </exception>
+        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType)
+        {
             // Close out the XML
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
@@ -236,7 +248,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             OnLineToolInfo toolInfo = DetermineOnLineTool(requestXml);
 
             // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix);
+            IApiLogEntry logger = (new LogEntryFactory()).GetLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix, logActionType);
+
             logger.LogRequest(requestXml);
 
             string toolUrl;

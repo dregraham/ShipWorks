@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -93,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
             else
             {
-                rateGroup = new RateGroup(PostalWebClientRates.GetRates(shipment));
+                rateGroup = new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
                 RateCache.Instance.Save(rateHash, rateGroup);
             }
 

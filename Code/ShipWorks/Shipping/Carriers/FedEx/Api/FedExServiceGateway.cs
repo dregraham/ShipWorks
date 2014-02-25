@@ -27,14 +27,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// </summary>
     public class FedExServiceGateway : IFedExServiceGateway
     {
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly FedExSettings settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExServiceGateway" /> class.
         /// </summary>
         /// <param name="settingsRepository">The settings repository.</param>
-        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository)
+        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository) 
+			: this(settingsRepository, new LogEntryFactory())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExServiceGateway" /> class.
+        /// </summary>
+        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository, ILogEntryFactory logEntryFactory)
         {
+            this.logEntryFactory = logEntryFactory;
             // Tell the FedEx settings which data source to use 
             settings = new FedExSettings(settingsRepository);
         }
@@ -380,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // RateService object here (i.e. no more abstractions can be made)
-                using (RateService service = new RateService(new ApiLogEntry(ApiLogSource.FedEx, "Rates")))
+                using (RateService service = new RateService(logEntryFactory.GetLogEntry(ApiLogSource.FedEx, "Rates", LogActionType.GetRates)))
                 {
                     // Point the service to the correct endpoint
                     service.Url = settings.EndpointUrl;

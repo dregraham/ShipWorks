@@ -47,10 +47,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
 
             //Setup Logger           
             mockedLogger = new Mock<IApiLogEntry>();
+            
+            Mock<ILogEntryFactory> mockedLogFactory = new Mock<ILogEntryFactory>();
+            mockedLogFactory
+                .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(mockedLogger.Object);
 
             //Create Actual OnTracTrackingRequest with mock submitter and mock logger
             testObject = new OnTracShipmentRequest(
-                37, "testpass", mockedHttpRequestSubmitterFactory.Object, mockedLogger.Object);
+                37, "testpass", mockedHttpRequestSubmitterFactory.Object, mockedLogFactory.Object);
         }
 
         [TestMethod]

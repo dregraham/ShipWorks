@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using System.Xml.XPath;
@@ -38,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             var upsTransitTimes = new List<UpsTransitTime>();
             try
             {
-                XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter);
+                XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates);
 
                 // Process the request
                 upsTransitTimes = ProcessApiResponse(xmlDocument, shipment);

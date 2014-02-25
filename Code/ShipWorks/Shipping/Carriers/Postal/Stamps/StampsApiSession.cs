@@ -42,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public class StampsApiSession
     {
         private readonly ILog log;
+        private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
         static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV29.asmx";
@@ -63,16 +64,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Initializes a new instance of the <see cref="StampsApiSession"/> class.
         /// </summary>
         public StampsApiSession()
-            : this(new StampsAccountRepository())
+            : this(new StampsAccountRepository(), new LogEntryFactory())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsApiSession" /> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository)
+        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
         {
             this.accountRepository = accountRepository;
+            this.logEntryFactory = logEntryFactory;
             this.log = LogManager.GetLogger(typeof(StampsApiSession));
         }
 
@@ -88,19 +90,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private static SwsimV29 CreateWebService(string logName, bool isExpress1)
+        private SwsimV29 CreateWebService(string logName, bool isExpress1)
+        {
+            return CreateWebService(logName, isExpress1, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private SwsimV29 CreateWebService(string logName, bool isExpress1, LogActionType logActionType)
         {
             SwsimV29 webService;
             if (isExpress1)
             {
-                webService = new Express1StampsServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Stamps, logName))
+                webService = new Express1StampsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
                     {
                         Url = express1StampsConnectionDetails.ServiceUrl
                     };
             }
             else
             {
-                webService = new SwsimV29(new ApiLogEntry(ApiLogSource.UspsStamps, logName))
+                webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
                     {
                         Url = productionUrl
                     };
@@ -337,7 +347,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1, LogActionType.GetRates))
             {
                 RateV11[] ratesArray;
 

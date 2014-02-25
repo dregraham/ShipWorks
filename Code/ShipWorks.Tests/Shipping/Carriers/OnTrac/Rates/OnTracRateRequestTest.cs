@@ -39,7 +39,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
             mockedLogger = new Mock<IApiLogEntry>();
 
-            testObject = new OnTracRates(42, "testpass", mockedLogger.Object, mockedSubmitter.Object);
+            Mock<ILogEntryFactory> mockedLogFactory = new Mock<ILogEntryFactory>();
+            mockedLogFactory
+                .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(mockedLogger.Object);
+
+            testObject = new OnTracRates(42, "testpass", mockedSubmitter.Object, mockedLogFactory.Object);
 
             shipment = new ShipmentEntity(1)
             {

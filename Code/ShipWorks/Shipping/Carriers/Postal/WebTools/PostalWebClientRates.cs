@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
-        public static List<RateResult> GetRates(ShipmentEntity shipment)
+        public static List<RateResult> GetRates(ShipmentEntity shipment, LogEntryFactory logEntryFactory)
         {
             string xmlRequest;
 
@@ -106,8 +106,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlRequest = writer.ToString();
             }
 
-            // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UspsNoPostage, "Rate");
+            
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.UspsNoPostage, "Rate", LogActionType.GetRates);
+
             logger.LogRequest(xmlRequest);
 
             // Process the request
