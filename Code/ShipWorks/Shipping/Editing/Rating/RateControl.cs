@@ -146,7 +146,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                     sandGrid.Rows.Clear();
                 }
 
-                panelOutOfDate.Visible = false;
                 UpdateFootnotes(rateGroup);
             }
         }
@@ -164,7 +163,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ShowSpinner()
         {
-            loadingRatesPanel.BringToFront();
+            loadingImage.BringToFront();
+            loadingRatesLabel.BringToFront();
         }
 
         /// <summary>
@@ -172,7 +172,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void HideSpinner()
         {
-            loadingRatesPanel.SendToBack();
+            loadingImage.SendToBack();
+            loadingRatesLabel.SendToBack();
         }
 
         /// <summary>
@@ -209,7 +210,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                 
                 AddShowMoreRatesRow();
 
-                panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
                 UpdateFootnotes(rateGroup);
             }
         }

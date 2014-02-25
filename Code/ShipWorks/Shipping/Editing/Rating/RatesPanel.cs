@@ -172,12 +172,11 @@ namespace ShipWorks.Shipping.Editing.Rating
                         {
                             rateControl.HideSpinner();
                             rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
-                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
+                                                                 EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
                         }
                         else
                         {
                             // We need to fetch the rates from the provider
-                            rateControl.ClearRates(string.Empty);
                             FetchRates(shipmentForRating);
                         }
                     }
@@ -204,7 +203,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                 // We're going to be going over the network to get rates from the provider, so show the spinner
                 // while rates are being fetched to give the user some indication that we're working
                 ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
-                rateControl.ShowSpinner();
 
                 // Setup the worker with the work to perform asynchronously
                 ratesWorker.DoWork += (sender, args) =>
@@ -270,6 +268,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 };
 
                 // Execute the work to get the rates
+                rateControl.ShowSpinner();
                 ratesWorker.RunWorkerAsync();
             }
         }
