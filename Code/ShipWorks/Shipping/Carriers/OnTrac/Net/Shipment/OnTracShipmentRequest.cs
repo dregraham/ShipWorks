@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
-using log4net;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
 {
@@ -15,8 +14,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
     public class OnTracShipmentRequest : OnTracRequest
     {
         readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
-
-        static readonly ILog log = LogManager.GetLogger(typeof(OnTracShipmentRequest));
 
         /// <summary>
         /// Constructor
@@ -30,8 +27,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracShipmentRequest(int accountNumber, string password, IHttpRequestSubmitterFactory submitterFactory, IApiLogEntry logger)
-            : base(accountNumber,password,logger)
+        public OnTracShipmentRequest(int accountNumber, string password, IHttpRequestSubmitterFactory submitterFactory, ILogEntryFactory logEntryFactory)
+            : base(accountNumber, password, logEntryFactory, ApiLogSource.OnTrac, "OnTracShipmentRequest", LogActionType.Other)
         {
             httpRequestSubmitterFactory = submitterFactory;
         }

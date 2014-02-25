@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -52,6 +53,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public bool ShouldRetrieveExpress1Rates { get; set; }
 
         /// <summary>
+        /// Gets or sets the log entry factory.
+        /// </summary>
+        public LogEntryFactory LogEntryFactory { get; set; }
+
+        /// <summary>
         /// Gets or sets the repository that should be used for retrieving accounts
         /// </summary>
         public ICarrierAccountRepository<EndiciaAccountEntity> AccountRepository
@@ -74,6 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public EndiciaShipmentType()
         {
             ShouldRetrieveExpress1Rates = true;
+            LogEntryFactory = new LogEntryFactory();
         }
 
         /// <summary>
@@ -363,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository);
+                EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
 
                 List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
                     endiciaApiClient.GetRatesSlow(shipment, this) :
@@ -493,7 +500,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository);
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
 
             if (useExpress1)
             {

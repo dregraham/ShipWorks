@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public class EndiciaApiClient
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private readonly LogEntryFactory logEntryFactory;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
         private const string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaApiClient() : this(new EndiciaAccountRepository())
+        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory())
         {
             
         }
@@ -61,10 +62,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="accountRepository">Repository that should be used to retrieve account data</param>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
         {
             this.accountRepository = accountRepository;
+            this.logEntryFactory = logEntryFactory;
         }
 
         /// <summary>
@@ -168,9 +169,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Express1
                 case EndiciaReseller.Express1:
                 {
-                    webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
-                                     new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName)) :
-                                     new Express1EndiciaServiceWrapper();
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
+
+                    webService = new Express1EndiciaServiceWrapper(apiLogEntry);
+                                 
                     webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
                     break;
                 }
@@ -178,9 +180,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Endicia Label Server
                 default:
                 {
-                    webService = LogSession.IsApiLogActionTypeEnabled(logActionType) ?
-                                     new EwsLabelService(new ApiLogEntry(ApiLogSource.UspsEndicia, logName)) :
-                                     new EwsLabelService();
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
+
+                    webService = new EwsLabelService(apiLogEntry);
                     webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
                     break;
                 }
@@ -1126,7 +1128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     try
                     {
-                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment);
+                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment, logEntryFactory);
 
                         List<RateResult> resultsWithDays = new List<RateResult>();
 

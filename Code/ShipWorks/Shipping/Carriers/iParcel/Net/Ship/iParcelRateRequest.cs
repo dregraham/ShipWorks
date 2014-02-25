@@ -13,14 +13,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
     /// </summary>
     public class iParcelRateRequest : iParcelRequest
     {
+        private readonly ILogEntryFactory logEntryFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelRateRequest" /> class.
         /// </summary>
-        /// <param name="credentials">The credentials.</param>
-        /// <param name="shipment">The shipment.</param>
         public iParcelRateRequest(iParcelCredentials credentials, ShipmentEntity shipment)
+            : this(credentials, shipment, new LogEntryFactory())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="iParcelRateRequest" /> class.
+        /// </summary>
+        public iParcelRateRequest(iParcelCredentials credentials, ShipmentEntity shipment, ILogEntryFactory logEntryFactory)
             : base(credentials, "iParcelRateRequest")
         {
+            this.logEntryFactory = logEntryFactory;
             bool isDomestic = shipment.OriginCountryCode.ToUpperInvariant() == shipment.ShipCountryCode.ToUpperInvariant();
 
             // Default the validation element to domestic for now
@@ -56,25 +64,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
         /// <returns>The raw response from iParcel in the form of a DataSet.</returns>
         public override DataSet Submit()
         {
-            XMLSOAP iParcelWebService = null;
             try
             {
-                iParcelWebService = LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates) ?
-                                        new XMLSOAP(new ApiLogEntry(ApiLogSource.iParcel, RequestTypeName)) :
-                                        new XMLSOAP();
-
-                // Use the UploadXMLFileString method and load the XML into a DataSet. This response does
-                // not have all of the schema information like the UploadXMLFile method does, so the 
-                // DataSet loads without any problem
-                string xmlResponse = iParcelWebService.UploadXMLFileString(OperationName, GetRequestXml());
-                using (DataSet dataSet = new DataSet())
+                using (XMLSOAP iParcelWebService = new XMLSOAP(logEntryFactory.GetLogEntry(ApiLogSource.iParcel, RequestTypeName, LogActionType.GetRates)))
                 {
-                    using (StringReader reader = new StringReader(xmlResponse))
+                    // Use the UploadXMLFileString method and load the XML into a DataSet. This response does
+                    // not have all of the schema information like the UploadXMLFile method does, so the 
+                    // DataSet loads without any problem
+                    string xmlResponse = iParcelWebService.UploadXMLFileString(OperationName, GetRequestXml());
+                    using (DataSet dataSet = new DataSet())
                     {
-                        dataSet.ReadXml(reader, XmlReadMode.Auto);
-                        CheckForErrors(dataSet);
+                        using (StringReader reader = new StringReader(xmlResponse))
+                        {
+                            dataSet.ReadXml(reader, XmlReadMode.Auto);
+                            CheckForErrors(dataSet);
 
-                        return dataSet;
+                            return dataSet;
+                        }
                     }
                 }
             }
@@ -82,13 +88,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
             {
                 log.Error("Error in ExecuteLoggedRequest", ex);
                 throw WebHelper.TranslateWebException(ex, typeof(iParcelException));
-            }
-            finally
-            {
-                if (iParcelWebService != null)
-                {
-                    iParcelWebService.Dispose();
-                }
             }
         }
     }

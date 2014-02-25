@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
     {
         static readonly ILog log = LogManager.GetLogger(typeof(OnTracRequest));
 
-        readonly IApiLogEntry apiLogger;
+        readonly IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
@@ -34,25 +34,22 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <summary>
         /// Constructor
         /// </summary>
-        protected OnTracRequest(int onTracAccountNumber, string onTracPassword, string actionDescriptionToLog)
-            : this(onTracAccountNumber, onTracPassword, new ApiLogEntry(ApiLogSource.OnTrac, actionDescriptionToLog))
+        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, string actionDescriptionToLog)
+            : this(onTracAccountNumber, onTracPassword,new LogEntryFactory(), ApiLogSource.OnTrac, actionDescriptionToLog, LogActionType.Other)
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="onTracAccountNumber">The on trac account number.</param>
-        /// <param name="onTracPassword">The on trac password.</param>
-        /// <param name="apiLogger">IApiLogEntry - I see this primarily used for testing</param>
-        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, IApiLogEntry apiLogger)
+        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, ILogEntryFactory logEntryFactory, ApiLogSource logSource, string actionDescriptionToLog, LogActionType logActionType)
         {
             //THIS CONSTRUCTOR MUST BE CALLED IN THE CONSTRUCTION CHAIN
 
-            this.apiLogger = apiLogger;
+            logEntry = logEntryFactory.GetLogEntry(logSource, actionDescriptionToLog, logActionType);
 
-            this.AccountNumber = onTracAccountNumber;
-            this.OnTracPassword = onTracPassword;
+            AccountNumber = onTracAccountNumber;
+            OnTracPassword = onTracPassword;
 
             BaseUrlUsedToCallOnTrac = UseTestServer
                           ? "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v1/"
@@ -107,39 +104,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <param name="request">The request to serialize and send to OnTrac</param>
         protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request)
         {
-            return ExecuteLoggedRequest<T>(request, LogActionType.Other);
-        }
-
-        /// <summary>
-        /// Makes the actual call to OnTrac
-        /// </summary>
-        /// <typeparam name="T">Return Type to serailze the response to</typeparam>
-        /// <param name="request">The request to serialize and send to OnTrac</param>
-        /// <param name="logActionType">Type of the log action.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException">request;null variable in ExecuteLoggedRequest</exception>
-        /// <exception cref="OnTracException">OnTrac returned an invalid response.</exception>
-        protected T ExecuteLoggedRequest<T>(HttpRequestSubmitter request, LogActionType logActionType)
-        {
             if (request == null)
             {
                 throw new ArgumentNullException("request", "null variable in ExecuteLoggedRequest");
             }
             try
             {
-                if (LogSession.IsApiLogActionTypeEnabled(logActionType))
-                {
-                    apiLogger.LogRequest(request);                    
-                }
+                logEntry.LogRequest(request);
 
                 using (IHttpResponseReader onTracResponse = request.GetResponse())
                 {
                     string onTracResponseText = onTracResponse.ReadResult();
 
-                    if (LogSession.IsApiLogActionTypeEnabled(logActionType))
-                    {
-                        apiLogger.LogResponse(onTracResponseText);
-                    }
+                    logEntry.LogResponse(onTracResponseText);
 
                     CheckForErrors(onTracResponseText);
 

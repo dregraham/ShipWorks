@@ -31,16 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsServiceWrapper(ApiLogEntry logEntry)
+        public Express1StampsServiceWrapper(IApiLogEntry logEntry)
             : base(logEntry)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public Express1StampsServiceWrapper()
         {
 
         }

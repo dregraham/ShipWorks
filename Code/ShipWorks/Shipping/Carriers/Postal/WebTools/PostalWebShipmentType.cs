@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -81,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return new RateGroup(PostalWebClientRates.GetRates(shipment));
+            return new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
         }
 
         /// <summary>

@@ -26,10 +26,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// Constructor
         /// </summary>
         public OnTracRates(OnTracAccountEntity account)
-            : base(
+            : this(
                 account.AccountNumber,
                 SecureText.Decrypt(account.Password, account.AccountNumber.ToString()),
-                "OnTracRateRequest")
+                new HttpVariableRequestSubmitter(), 
+                new LogEntryFactory())
         {
             httpVariableRequestSubmitter = new HttpVariableRequestSubmitter();
         }
@@ -37,12 +38,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracRates(
-            long onTracAccountNumber,
-            string onTracPassword,
-            IApiLogEntry apiLogEntry,
-            HttpVariableRequestSubmitter httpVariableRequestSubmitter)
-            : base(onTracAccountNumber, onTracPassword, apiLogEntry)
+        public OnTracRates(long onTracAccountNumber, string onTracPassword, HttpVariableRequestSubmitter httpVariableRequestSubmitter, ILogEntryFactory logEntryFactory)
+            : base(onTracAccountNumber, onTracPassword, logEntryFactory, ApiLogSource.OnTrac, "OnTracRateRequest", LogActionType.GetRates)
         {
             this.httpVariableRequestSubmitter = httpVariableRequestSubmitter;
         }
@@ -146,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
             httpVariableRequestSubmitter.Uri = new Uri(sbRequestUrl.ToString());
             httpVariableRequestSubmitter.Verb = HttpVerb.Get;
 
-            RateShipmentList result = ExecuteLoggedRequest<RateShipmentList>(httpVariableRequestSubmitter, LogActionType.GetRates);
+            RateShipmentList result = ExecuteLoggedRequest<RateShipmentList>(httpVariableRequestSubmitter);
 
             // OnTrac may not return any rating results
             if (result.Shipments == null || !result.Shipments.Any())

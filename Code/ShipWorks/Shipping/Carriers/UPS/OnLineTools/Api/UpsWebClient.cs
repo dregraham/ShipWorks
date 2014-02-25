@@ -248,12 +248,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             OnLineToolInfo toolInfo = DetermineOnLineTool(requestXml);
 
             // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix);
+            IApiLogEntry logger = (new LogEntryFactory()).GetLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix, logActionType);
 
-            if (LogSession.IsApiLogActionTypeEnabled(logActionType))
-            {
-                logger.LogRequest(requestXml);                
-            }
+            logger.LogRequest(requestXml);
 
             string toolUrl;
 
@@ -279,10 +276,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     string responseXml = response.ReadResult(StringUtility.Iso8859Encoding);
 
                     // Log the response
-                    if (LogSession.IsApiLogActionTypeEnabled(logActionType))
-                    {
-                        logger.LogResponse(responseXml);
-                    }
+                    logger.LogResponse(responseXml);
 
                     // Load the response and return it
                     XmlDocument xmlResponse = new XmlDocument();

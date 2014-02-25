@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
-        public static List<RateResult> GetRates(ShipmentEntity shipment)
+        public static List<RateResult> GetRates(ShipmentEntity shipment, LogEntryFactory logEntryFactory)
         {
             string xmlRequest;
 
@@ -106,22 +106,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UspsNoPostage, "Rate");
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.UspsNoPostage, "Rate", LogActionType.GetRates);
 
-            // Log the request
-            if (LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates))
-            {
-                logger.LogRequest(xmlRequest);
-            }
+            logger.LogRequest(xmlRequest);
 
             // Process the request
             string xmlResponse = ProcessXmlRequest(xmlRequest, PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) ? "RateV3" : "IntlRate");
 
             // Log the response
-            if (LogSession.IsApiLogActionTypeEnabled(LogActionType.GetRates))
-            {
-                logger.LogResponse(xmlResponse);
-            }
+            logger.LogResponse(xmlResponse);
 
             // Load the USPS response
             XmlDocument xmlDocument = new XmlDocument();

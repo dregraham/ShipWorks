@@ -35,7 +35,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             //Setup Logger
             mockedLogger = new Mock<IApiLogEntry>();
 
-            testObject = new OnTracAuthentication(42, "test", mockedSubmitter.Object, mockedLogger.Object);
+            Mock<ILogEntryFactory> mockedLogFactory = new Mock<ILogEntryFactory>();
+            mockedLogFactory
+                .Setup(f=>f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(),It.IsAny<LogActionType>()))
+                .Returns(mockedLogger.Object);
+
+            testObject = new OnTracAuthentication(42, "test", mockedSubmitter.Object, mockedLogFactory.Object);
         }
 
         [TestMethod]
