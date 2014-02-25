@@ -40,6 +40,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
                 return true;
             }
         }
+        
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
 
         /// <summary>
         /// Create the settings control for UPS

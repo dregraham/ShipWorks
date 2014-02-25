@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using log4net;
 
@@ -45,7 +46,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// values for the "live" FedEx settings repository and FedEx request factory.
         /// </summary>
         public FedExShippingClerk()
-            : this(new FedExSettingsRepository(), new FedExRequestFactory(), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+            : this(new FedExSettingsRepository())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExShippingClerk"/> class.
+        /// </summary>
+        /// <param name="settingsRepository">The settings repository.</param>
+        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository)
+            : this(settingsRepository, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
         {
         }
 
@@ -469,7 +479,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory();
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
             FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
             FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
@@ -677,7 +687,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                                 new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays)
+                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ShipmentType = ShipmentTypeCode.FedEx
                 });
             }
 

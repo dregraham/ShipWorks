@@ -395,6 +395,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>A ClientDetail object for a rate API request.</returns>
         public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account, FedExSettings settings)
         {
+            if (account == null)
+            {
+                account = new FedExAccountEntity();
+            }
+
             return new WebServices.Rate.ClientDetail
             {
                 AccountNumber = account.AccountNumber,

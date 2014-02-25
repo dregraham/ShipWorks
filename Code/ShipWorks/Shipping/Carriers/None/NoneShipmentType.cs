@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
@@ -27,9 +28,11 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// The UserControl for editing the settings of this type
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new NoneServiceControl();
+            return new NoneServiceControl(rateControl);
         }
 
         /// <summary>
@@ -73,10 +76,11 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the None shipment type.
+        /// Gets an instance to the best rate shipping broker for the None shipment type based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
         }

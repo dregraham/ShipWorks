@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using System.Web.UI.WebControls;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 
@@ -20,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
     /// <summary>
     /// Setup Wizard for EquaShip
     /// </summary>
-    public partial class EquashipSetupWizard : WizardForm
+    public partial class EquashipSetupWizard : ShipmentTypeSetupWizardForm
     {
         EquaShipAccountEntity account;
 

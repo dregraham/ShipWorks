@@ -212,8 +212,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                         if (add)
                         {
-                            // add it to the this combined order
-                            components.Add(new EbayCombinedOrderComponent(foundOrder, true));
+                            // add it to the this combined order.  For ones we find that aren't in the original selection, don't check them by default for the combined order screen.
+                            components.Add(new EbayCombinedOrderComponent(foundOrder, false));
                         }
                     }
                 }
@@ -355,14 +355,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     // Save the order, which will include all moved items, payments, and charges
                     adapter.SaveAndRefetch(newOrder);
 
-                    // Now we need to go through each old order, copy over the notes and shipments, and delete toe original order
+                    // Now we need to go through each old order, copy over the notes and shipments, and delete the original order
                     foreach (OrderEntity order in toCombine.Select(c => c.Order))
                     {
                         OrderUtility.CopyNotes(order.OrderID, newOrder);
 
                         OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                        DeletionService.DeleteOrder(order.OrderID);
+                        DeletionService.DeleteOrder(order.OrderID, adapter);
                     }
 
                     // commit the transaction

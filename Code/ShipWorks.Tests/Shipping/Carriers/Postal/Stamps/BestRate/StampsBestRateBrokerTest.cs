@@ -9,11 +9,13 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
@@ -91,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             testObject = new StampsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
-                GetRatesAction = shipment => genericShipmentTypeMock.Object.GetRates(shipment)
+                GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
             };
 
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };
@@ -128,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void GetBestRates_RetrievesAllAccounts()
         {
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             genericRepositoryMock.Verify(x => x.Accounts);
         }
@@ -136,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void GetBestRates_CallsConfigureNewShipmentForEachAccount()
         {
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             genericShipmentTypeMock.Verify(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
         }
@@ -144,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void GetBestRates_CallsGetRatesForEachAccount()
         {
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             genericShipmentTypeMock.Verify(x => x.GetRates(It.IsAny<ShipmentEntity>()), Times.Exactly(3));
 
@@ -158,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsAllRates_WithNoFilter()
         {
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.AreEqual(5, rates.Rates.Count);
             Assert.IsTrue(rates.Rates.Contains(account1Rate1));
@@ -169,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsFirstRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
+        public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -180,14 +182,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsCheapestRate_WhenTwoRatesHaveSameTypeLevel()
+        public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevel()
         {
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
@@ -198,10 +200,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(1, rates.Rates.Count);
+            Assert.AreEqual(2, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -216,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsTrue(rates.Rates.Contains(result1));
             Assert.IsTrue(rates.Rates.Contains(result2));
@@ -235,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsTrue(rates.Rates.Contains(result1));
             Assert.IsTrue(rates.Rates.Contains(result2));
@@ -254,7 +256,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup1.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsFalse(rates.Rates.Contains(result1));
             Assert.IsTrue(rates.Rates.Contains(result2));
@@ -302,7 +304,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Add(result1);
             rateGroup1.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsFalse(rates.Rates.Contains(result1), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
             Assert.IsTrue(rates.Rates.Contains(result2));
@@ -326,10 +328,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup3.Rates.Add(result3);
             rateGroup3.Rates.Add(result4);
 
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.AreEqual("Stamps Foo Bar", result2.Description);
-            Assert.AreEqual("Stamps Baz Other", result4.Description);
+            Assert.AreEqual("USPS Foo Bar", result2.Description);
+            Assert.AreEqual("USPS Baz Other", result4.Description);
             Assert.AreEqual("4", result2.Days);
             Assert.AreEqual("3", result4.Days);
         }
@@ -339,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         {
             PostalShipmentEntity StampsShipment = new PostalShipmentEntity();
             testShipment.Postal = StampsShipment;
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.AreEqual(StampsShipment, testShipment.Postal);
         }
@@ -354,7 +356,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
                                        if (s.Postal.Stamps.StampsAccountID == 2) throw new ShippingException();
                                    });
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.AreEqual(5, rates.Rates.Count);
         }
@@ -363,7 +365,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         public void GetBestRates_CallsHandler_WhenShippingExceptionIsThrown()
         {
             ShippingException exception = new ShippingException();
-            ShippingException calledException = null;
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
 
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                                    .Returns((ShipmentEntity s) => rateResults[s.Postal.Stamps.StampsAccountID])
@@ -372,9 +374,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
                                        if (s.Postal.Stamps.StampsAccountID == 2) throw exception;
                                    });
 
-            testObject.GetBestRates(testShipment, ex => calledException = ex);
+            testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(exception, calledException.InnerException);
+            Assert.IsTrue(brokerExceptions.Any(e=>e.InnerException.Equals(exception)));
         }
 
         [TestMethod]
@@ -384,7 +386,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             testShipment.BestRate.DimsWidth = 5;
             testShipment.BestRate.DimsLength = 2;
 
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
@@ -406,7 +408,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
                                        x.Postal.PackagingType = (int) PostalPackagingType.FlatRateSmallBox;
                                    });
 
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
@@ -424,7 +426,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
                                        x.Postal.Stamps.StampsAccountID = 999;
                                    });
 
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.IsTrue(getRatesShipments.Any(x => x.Postal.Stamps.StampsAccountID == 1));
             Assert.IsTrue(getRatesShipments.Any(x => x.Postal.Stamps.StampsAccountID == 2));
@@ -441,7 +443,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
                                        x.ContentWeight = 123;
                                    });
 
-            testObject.GetBestRates(testShipment, ex => { });
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
@@ -452,7 +454,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsRatesAsRegularRateResults()
         {
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (var rate in rates.Rates)
             {
@@ -461,14 +463,43 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_SetsTagToAction()
+        public void GetBestRates_SetsTagToBestRateResultTag()
         {
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             foreach (var rate in rates.Rates)
             {
-                Assert.IsInstanceOfType(rate.Tag, typeof(Action<ShipmentEntity>));
+                BestRateResultTag tag = rate.Tag as BestRateResultTag;
+
+                if (tag == null)
+                {
+                    Assert.Fail("Tag is {0} instead of BestRateResultTag", rate.Tag.GetType());
+                }
+
+                Assert.IsInstanceOfType(tag.RateSelectionDelegate, typeof(Action<ShipmentEntity>));
+                Assert.IsNotNull(tag.OriginalTag);
+                Assert.IsNotNull(tag.ResultKey);
             }
+        }
+
+        [TestMethod]
+        public void GetBestRates_SetsTagResultKeyToPostalAndServiceType()
+        {
+            rateGroup1.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result1 = new RateResult("Stamps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+
+            rateGroup1.Rates.Add(result1);
+            rateGroup3.Rates.Add(result2);
+
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
+
+            var resultKeys = rates.Rates.Select(x => x.Tag).Cast<BestRateResultTag>().Select(x => x.ResultKey).ToList();
+
+            Assert.IsTrue(resultKeys.Contains("PostalExpress Mail (Premium)"));
+            Assert.IsTrue(resultKeys.Contains("PostalStandard Post"));
         }
 
         //[TestMethod]
@@ -514,16 +545,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup1.Rates.Clear();
             rateGroup3.Rates.Clear();
 
-            RateResult result1 = new RateResult("Stamps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("USPS Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
             RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup1.Rates.Add(result1);
             rateGroup3.Rates.Add(result2);
 
-            var rates = testObject.GetBestRates(testShipment, ex => { });
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Stamps Ground"));
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("Stamps Some Service"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("USPS Some Service"));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -531,6 +562,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         public void GetInsuranceProvider_ReturnsShipWorks_Test()
         {
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity()));
+        }
+
+        [TestMethod]
+        public void Configure_ShouldCallCheckExpress1RatesOnSettings_WithShipmentType()
+        {
+            var brokerSettings = new Mock<IBestRateBrokerSettings>();
+
+            testObject.Configure(brokerSettings.Object);
+
+            brokerSettings.Verify(x => x.CheckExpress1Rates(testObject.ShipmentType));
+        }
+
+        [TestMethod]
+        public void Configure_SetsRetrieveExpress1RatesToTrue_WhenConfigurationIsTrue()
+        {
+            Configure_ShouldRetrieveExpress1RatesTest(true);
+        }
+
+        [TestMethod]
+        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse()
+        {
+            Configure_ShouldRetrieveExpress1RatesTest(false);
+        }
+
+        private void Configure_ShouldRetrieveExpress1RatesTest(bool checkExpress1)
+        {
+            var brokerSettings = new Mock<IBestRateBrokerSettings>();
+            brokerSettings.Setup(x => x.CheckExpress1Rates(It.IsAny<ShipmentType>())).Returns(checkExpress1);
+
+            testObject.Configure(brokerSettings.Object);
+
+            Assert.AreEqual(checkExpress1, ((StampsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
+        }
+
+        [TestMethod]
+        public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy()
+        {
+            testShipment.TotalWeight = 70.1;
+            RateGroup rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
+
+            Assert.AreEqual(0, rates.Rates.Count);
         }
     }
 }

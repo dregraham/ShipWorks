@@ -7,9 +7,11 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -37,6 +39,7 @@ using log4net;
 using log4net.Repository.Hierarchy;
 using System.Globalization;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -45,6 +48,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public abstract class UpsShipmentType : ShipmentType
     {
+        protected UpsShipmentType()
+        {
+            // Use the "live" versions of the repository by default
+            AccountRepository = new UpsAccountRepository();
+            SettingsRepository = new UpsSettingsRepository();
+        }
+
         /// <summary>
         /// UPS supports getting rates
         /// </summary>
@@ -62,6 +72,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets or sets the account repository that the shipment type should use
+        /// to obtain Ups related account information. This provides
+        /// the ability to use different UPS account info depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic UPS account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain Ups related settings information. This provides
+        /// the ability to use different UPS settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic UPS account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierSettingsRepository SettingsRepository { get; set; }
+
+        /// <summary>
         /// UPS always uses the residential indicator
         /// </summary>
         public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
@@ -72,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the wizard used to do the one-time initial service setup
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new UpsSetupWizard(ShipmentTypeCode);
         }
@@ -80,9 +112,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Create the user control used to edit UPS shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new UpsServiceControl(ShipmentTypeCode);
+            return new UpsServiceControl(ShipmentTypeCode, rateControl);
         }
 
         /// <summary>
@@ -710,76 +744,93 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
             List<RateResult> rates = new List<RateResult>();
+            string rateHash = GetRatingHash(shipment);
 
-            try
+            if (RateCache.Instance.Contains(rateHash))
             {
-                // Get the transit times and services
-
-                List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment);
-
-                List<UpsServiceRate> serviceRates = UpsApiRateClient.GetRates(shipment);
-
-                if (!serviceRates.Any())
-                {
-                    rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
-                }
-                else
-                {
-                    // Determine if the user is hoping to get negotiated rates back
-                    bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment).RateType == (int)UpsRateType.Negotiated;
-
-                    // Indicates if any of the rates returned were negotiated.
-                    bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
-                    bool allNegotiated = serviceRates.All(s => s.Negotiated);
-
-                    // Add a rate for each service
-                    foreach (UpsServiceRate serviceRate in serviceRates)
-                    {
-                        UpsServiceType service = serviceRate.Service;
-
-                        UpsTransitTime transitTime =  transitTimes.SingleOrDefault(t => t.Service == service);
-
-                        RateResult rateResult = new RateResult(
-                            (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
-                            GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
-                            serviceRate.Amount,
-                            service)
-                        {
-                            ServiceLevel = GetServiceLevel(serviceRate, transitTime),
-                            ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate
-                        };
-
-                        rates.Add(rateResult);
-                    }
-
-                    // If they wanted negotiated rates, we have to show some results
-                    if (wantedNegotiated)
-                    {
-                        if (allNegotiated)
-                        {
-                            rates.Add(new RateResult("* All rates are negotiated rates.", ""));
-                        }
-                        else if (anyNegotiated)
-                        {
-                            rates.Add(new RateResult("* Indicates a negotiated rate.", ""));
-                        }
-                        else
-                        {
-                            rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
-                        }
-                    }
-
-                    if (shipment.ReturnShipment)
-                    {
-                        rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
-                    }
-                }
-
-                return new RateGroup(rates);
+                return RateCache.Instance.GetRateGroup(rateHash);
             }
-            catch (UpsException ex)
+            else
             {
-                throw new ShippingException(ex.Message, ex);
+                try
+                {
+                    // Get the transit times and services
+                    List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository);
+
+                    UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository);
+                    List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
+
+                    if (!serviceRates.Any())
+                    {
+                        rates.Add(new RateResult("* No rates were returned for the selected Service.", ""));
+                    }
+                    else
+                    {
+                        // Determine if the user is hoping to get negotiated rates back
+                        bool wantedNegotiated = UpsApiCore.GetUpsAccount(shipment, AccountRepository).RateType == (int)UpsRateType.Negotiated;
+
+                        // Indicates if any of the rates returned were negotiated.
+                        bool anyNegotiated = serviceRates.Any(s => s.Negotiated);
+                        bool allNegotiated = serviceRates.All(s => s.Negotiated);
+
+                        // Add a rate for each service
+                        foreach (UpsServiceRate serviceRate in serviceRates)
+                        {
+                            UpsServiceType service = serviceRate.Service;
+
+                            UpsTransitTime transitTime = transitTimes.SingleOrDefault(t => t.Service == service);
+
+                            RateResult rateResult = new RateResult(
+                                (serviceRate.Negotiated && !allNegotiated ? "* " : "") + EnumHelper.GetDescription(service),
+                                GetServiceTransitDays(transitTime) + " " + GetServiceEstimatedArrivalTime(transitTime),
+                                serviceRate.Amount,
+                                service)
+                            {
+                                ServiceLevel = GetServiceLevel(serviceRate, transitTime),
+                                ExpectedDeliveryDate = transitTime == null ? ShippingManager.CalculateExpectedDeliveryDate(serviceRate.GuaranteedDaysToDelivery, DayOfWeek.Saturday, DayOfWeek.Sunday) : transitTime.ArrivalDate,
+                                ShipmentType = ShipmentTypeCode.UpsOnLineTools
+                            };
+
+                            rates.Add(rateResult);
+                        }
+
+                        // If they wanted negotiated rates, we have to show some results
+                        if (wantedNegotiated)
+                        {
+                            if (allNegotiated)
+                            {
+                                rates.Add(new RateResult("* All rates are negotiated rates.", ""));
+                            }
+                            else if (anyNegotiated)
+                            {
+                                rates.Add(new RateResult("* Indicates a negotiated rate.", ""));
+                            }
+                            else
+                            {
+                                rates.Add(new RateResult("* Negotiated rates were not returned. Contact Interapptive.", ""));
+                            }
+                        }
+
+                        if (shipment.ReturnShipment)
+                        {
+                            rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
+                        }
+                    }
+
+                    RateGroup rateGroup = new RateGroup(rates);
+                    RateCache.Instance.Save(rateHash, rateGroup);
+
+                    return rateGroup;
+                }
+                catch (UpsException ex)
+                {
+                    // This is a bad configuration on some level, so cache an empty rate group
+                    // before throwing throwing the exceptions
+                    ShippingException shippingException = new ShippingException(ex.Message, ex);
+                    CacheInvalidRateGroup(shipment, shippingException);
+
+                    throw shippingException;
+                }
             }
         }
 
@@ -804,7 +855,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the service estimated arrival time for the given service type if it's available.
         /// </summary>
-        /// <param name="service">The service.</param>
         /// <param name="transitTime">The transit time.</param>
         /// <returns>A string value of the arrival time in the format of "DayOfWeek h:mm tt" (e.g. Friday 4:00 PM)</returns>
         private static string GetServiceEstimatedArrivalTime(UpsTransitTime transitTime)
@@ -937,12 +987,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the UPS shipment type.
+        /// Gets an instance to the best rate shipping broker for the UPS shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an UpsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new UpsBestRateBroker();
+            return UpsAccountManager.Accounts.Any() ? new UpsBestRateBroker() : new UpsCounterRatesBroker();
         }
 
         /// <summary>
@@ -964,6 +1015,48 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return GetServiceLevel(serviceRate.Service, expectedDays);
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+                (
+                    new List<IEntityField2>()
+                    {
+                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.UpsAccountID.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.SaturdayDelivery.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex]
+                    }
+                );
+
+            // Grab all the fields for all the package in this shipment
+            foreach (UpsPackageEntity package in shipment.Ups.Packages)
+            {
+                fields.Add(package.Fields[UpsPackageFields.PackagingType.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DeclaredValue.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.VerbalConfirmationEnabled.FieldIndex]);
+
+                fields.Add(package.Fields[UpsPackageFields.DimsWeight.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DimsLength.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DimsHeight.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DimsWidth.FieldIndex]);
+
+                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DryIceRegulationSet.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DryIceWeight.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DryIceEnabled.FieldIndex]);
+                fields.Add(package.Fields[UpsPackageFields.DryIceIsForMedicalUse.FieldIndex]);
+            }
+
+            return fields;
         }
 
         /// <summary>

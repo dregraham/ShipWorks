@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
-using ShipWorks.Data;
-using ShipWorks.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Properties;
-using System.Diagnostics;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
@@ -24,15 +17,17 @@ using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
     /// Wizard Form for setting up shipping with endicia
     /// </summary>
-    public partial class EndiciaSetupWizard : WizardForm
+    public partial class EndiciaSetupWizard : ShipmentTypeSetupWizardForm
     {
         EndiciaAccountEntity account;
+        EndiciaApiClient endiciaApiClient = new EndiciaApiClient();
 
         // track if the account is one being migrated from 2
         bool migratingDazzleAccount = false;
@@ -606,7 +601,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 if (!account.TestAccount)
                 {
                     // This is required to activate the account
-                    account.ApiUserPassword = EndiciaApiClient.ChangeApiPassphrase(
+                    account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(
                         account.AccountNumber,
                         (EndiciaReseller) account.EndiciaReseller,
                         SecureText.Decrypt(account.ApiInitialPassword, "Endicia"),
@@ -738,12 +733,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         string oldPassword = passwordExisting.Text + "_initial";
                         string newPassword = passwordExisting.Text;
 
-                        account.ApiUserPassword = EndiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
+                        account.ApiUserPassword = endiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, oldPassword, newPassword);
                     }
                 }
 
                 // See if we can connect
-                EndiciaApiClient.GetAccountStatus(account);
+                endiciaApiClient.GetAccountStatus(account);
 
                 // Freemium flow...
                 if (freemiumEdition != null)
@@ -836,6 +831,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Make sure any pending changes have been saved
             EndiciaAccountManager.SaveAccount(account);
+
+            // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+            // that a new account has been added.
+            RateCache.Instance.Clear();
+
         }
     }
 }

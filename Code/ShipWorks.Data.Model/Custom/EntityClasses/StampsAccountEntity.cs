@@ -31,7 +31,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
                 StringBuilder description = new StringBuilder(descriptionBase);
 
-                if (Street1.Length > 0)
+                if (!string.IsNullOrEmpty(Street1))
                 {
                     if (description.Length > 0)
                     {
@@ -41,7 +41,7 @@ namespace ShipWorks.Data.Model.EntityClasses
                     description.Append(Street1);
                 }
 
-                if (PostalCode.Length > 0)
+                if (!string.IsNullOrEmpty(PostalCode))
                 {
                     if (description.Length > 0)
                     {

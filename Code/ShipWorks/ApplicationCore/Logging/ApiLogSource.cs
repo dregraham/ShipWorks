@@ -27,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Logging
         VirtueMart,
         Magento,
         Amazon,
-        AuctionSound,
+        SellerVantage,
         OrderDynamics,
         WebShopManager,
         SearchFit,

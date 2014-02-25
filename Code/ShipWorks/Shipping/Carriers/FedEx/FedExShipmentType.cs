@@ -17,9 +17,11 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -29,6 +31,8 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Api;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -37,6 +41,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentType : ShipmentType
     {
+        private ICarrierSettingsRepository settingsRepository;
+
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -82,9 +88,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain FedEx related settings and account information. This provides
+        /// the ability to use different FedEx settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic FedEx account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierSettingsRepository SettingsRepository
+        {
+            get
+            {
+                // Default the settings repository to the "live" FedExSettingsRepository if
+                // it hasn't been set already
+                return settingsRepository ?? (settingsRepository = new FedExSettingsRepository());
+            }
+            set
+            {
+                settingsRepository = value;
+            }
+        }
+
+        /// <summary>
         /// Create the setup wizard used for setting up the shipment type
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new FedExSetupWizard();
         }
@@ -92,9 +129,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to handle FedEx shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new FedExServiceControl();
+            return new FedExServiceControl(rateControl);
         }
 
         /// <summary>
@@ -834,13 +873,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetRateGroup(rateHash);
+            }
+
             try
             {
-                return new FedExShippingClerk().GetRates(shipment);
+                RateGroup rateGroup = new FedExShippingClerk(SettingsRepository).GetRates(shipment);
+                RateCache.Instance.Save(rateHash, rateGroup);
+
+                return rateGroup;
             }
             catch (FedExException ex)
             {
-                throw new ShippingException(ex.Message, ex);
+                // This is a bad configuration on some level, so cache an empty rate group
+                // before throwing throwing the exceptions
+                ShippingException shippingException = new ShippingException(ex.Message, ex);
+                CacheInvalidRateGroup(shipment, shippingException);
+
+                throw shippingException;
             }
         }
 
@@ -994,12 +1048,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the FedEx shipment type.
+        /// Gets an instance to the best rate shipping broker for the FedEx shipment type based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a FedExBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new FedExBestRateBroker();
+            if (FedExAccountManager.Accounts.Any())
+            {
+                return new FedExBestRateBroker();
+            }
+            else
+            {
+                // We want to be able to show counter rates to users that don't have 
+                // their own account in ShipWorks
+                return new FedExCounterRatesBroker();
+            }
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.FedEx.Fields[FedExShipmentFields.FedExAccountID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.WeightUnitType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Signature.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Service.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.PackagingType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.DropoffType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.OriginResidentialDetermination.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostHubID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                }
+            );
+
+            // Grab all the fields for all the package in this shipment
+            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+            {
+                fields.Add(package.Fields[FedExPackageFields.DimsWeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DeclaredValue.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsLength.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
+            }
+
+            return fields;
         }
 
         /// <summary>

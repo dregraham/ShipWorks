@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                string passphrase = EndiciaApiClient.ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller) account.EndiciaReseller, current.Text, newPassphrase.Text);
+                string passphrase = (new EndiciaApiClient()).ChangeApiPassphrase(account.AccountNumber, (EndiciaReseller)account.EndiciaReseller, current.Text, newPassphrase.Text);
 
                 // We need to update the account entity with the updated passphrase
                 account.ApiUserPassword = passphrase;

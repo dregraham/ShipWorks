@@ -18,6 +18,7 @@ using System.Diagnostics;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
 using NDesk.Options;
+using System.Collections.Generic;
 
 namespace ShipWorks
 {
@@ -28,6 +29,9 @@ namespace ShipWorks
 
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
+        // Require at least 100 MB of free space to run ShipWorks successfully
+        const long minDriveSpace = 1024 * 1024 * 100;
 
         /// <summary>
         /// Single instance of the running application
@@ -192,6 +196,14 @@ namespace ShipWorks
                 return false;
             }
 
+            // Check to see if the DateTimeFormat is valid.
+            if (!CheckDateTimeFormatSetting())
+            {
+                ExecutionMode.ShowTerminationMessage(new DateTimeFormatRequiredDlg(), "English US date format is required");
+
+                return false;
+            }
+
             // See if a reboot is required
             if (StartupController.CheckRebootRequired())
             {
@@ -200,9 +212,59 @@ namespace ShipWorks
                 return false;
             }
 
+            // Make sure the user has a minimum amount of disk space.
+            try
+            {
+                List<string> pathsToCheck = new List<string>() {DataPath.InstanceRoot, DataPath.ShipWorksTemp};
+                foreach (string pathToCheck in pathsToCheck)
+                {
+                    if (!CheckHardDiskSpaceOk(pathToCheck))
+                    {
+                        DriveInfo driveInfo = new DriveInfo(pathToCheck);
+                        ExecutionMode.ShowTerminationMessage(null,
+                            string.Format(
+                                "Your computer is running out of disk space.  Please free up disk space on drive {0} to continue using ShipWorks.",
+                                driveInfo.Name));
+
+                        return false;
+                    }
+                }
+            }
+            catch
+            {
+                // If we couldn't check disk space for some reason, we'll handle that elsewhere with more context as to why.  So just continue on.
+            }
+
             return true;
         }
-        
+
+        /// <summary>
+        /// Determines if the drive for the referenced path has a minimum amount of disk space for ShipWorks to run.
+        /// </summary>
+        private static bool CheckHardDiskSpaceOk(string pathToCheck)
+        {
+            DriveInfo driveInfo = new DriveInfo(pathToCheck);
+
+            return driveInfo.TotalFreeSpace > minDriveSpace;
+        }
+
+        /// <summary>
+        /// Checks to see if the DateTimeFormat is valid.  If not, it displays a message to the user on how to fix it.
+        /// </summary>
+        private static bool CheckDateTimeFormatSetting()
+        {
+            List<string> allowedShortDatePartterns = new List<string>() { "M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy" };
+
+            string currentShortDatePattern = Thread.CurrentThread.CurrentCulture.DateTimeFormat.ShortDatePattern;
+
+            if (!allowedShortDatePartterns.Contains(currentShortDatePattern))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Sets up the application exception handling policy
         /// </summary>

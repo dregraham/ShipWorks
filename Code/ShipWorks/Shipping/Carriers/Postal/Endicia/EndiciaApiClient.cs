@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using System.Web.Services.Protocols;
@@ -15,7 +16,9 @@ using System.Drawing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Templates.Tokens;
 using log4net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
@@ -38,14 +41,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// <summary>
     /// Wraps access to the Endicia API
     /// </summary>
-    public static class EndiciaApiClient
+    public class EndiciaApiClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
+        private readonly LogEntryFactory logEntryFactory;
+        readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
-        static string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
+        private const string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
 
-        static string standardEndiciaPartnerID = "lswk";
-        static string freemiumEndiciaPartnerID = "lseb";
+        private const string standardEndiciaPartnerID = "lswk";
+        private const string freemiumEndiciaPartnerID = "lseb";
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory())
+        {
+            
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
+        {
+            this.accountRepository = accountRepository;
+            this.logEntryFactory = logEntryFactory;
+        }
 
         /// <summary>
         /// Indicates if the test server should be used instead of the live server
@@ -132,26 +154,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private static EwsLabelService CreateWebService(string logName, EndiciaReseller reseller)
+        private EwsLabelService CreateWebService(string logName, EndiciaReseller reseller)
+        {
+            return CreateWebService(logName, reseller, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private EwsLabelService CreateWebService(string logName, EndiciaReseller reseller, LogActionType logActionType)
         {
             EwsLabelService webService = null;
             switch (reseller)
             {
                 // Express1
                 case EndiciaReseller.Express1:
-                    {
-                        webService = new Express1EndiciaServiceWrapper(new ApiLogEntry(ApiLogSource.UspsExpress1Endicia, logName));
-                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
-                        break;
-                    }
+                {
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
+
+                    webService = new Express1EndiciaServiceWrapper(apiLogEntry);
+                                 
+                    webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
+                    break;
+                }
 
                 // Endicia Label Server
                 default:
-                    {
-                        webService = new EwsLabelService(new ApiLogEntry(ApiLogSource.UspsEndicia, logName));
-                        webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
-                        break;
-                    }
+                {
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
+
+                    webService = new EwsLabelService(apiLogEntry);
+                    webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
+                    break;
+                }
             }
 
             return webService;
@@ -160,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
-        public static void ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public void ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
 
@@ -339,12 +374,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             shipment.ThermalType = (int?) thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
 
-            // Set if this is reply postage
-            if (shipment.ReturnShipment)
-            {
-                request.ReplyPostage = "TRUE";
-            }
-
             // Not sure why these are required fields - i don't think they show up anywhere
             request.PartnerCustomerID = shipment.Order.CustomerID.ToString();
             request.PartnerTransactionID = shipment.ShipmentID.ToString();
@@ -432,7 +461,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // as that is what the user will expect.
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia && shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
-                mailingPostOfficeAccount = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.OriginalEndiciaAccountID.Value) ?? account;
+                mailingPostOfficeAccount = accountRepository.GetAccount(shipment.Postal.Endicia.OriginalEndiciaAccountID.Value) ?? account;
             }
 
             // We can only using the MailingPostalCode configured for the account if it's not a Return Shipment - since it's not coming from this account if its a return
@@ -507,6 +536,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ApplyCustoms(request, shipment);
             }
 
+            // Set if this is reply postage
+            if (shipment.ReturnShipment)
+            {
+                request.ReplyPostage = "TRUE";
+
+                // If this is a scan based return, we need to modify the properties we are sending.
+                if (EndiciaShipmentType.IsScanBasedReturnsAllowed(shipment))
+                {
+                    // As per Nandita, ReplyPostage should be set to false for a scan based return.
+                    request.ReplyPostage = "FALSE";
+                    request.PrintScanBasedPaymentLabel = "TRUE";
+
+                    if (serviceType == PostalServiceType.ParcelSelect)
+                    {
+                        // Only none is allowed for parcel select, so set these to OFF
+                        request.Services.SignatureConfirmation = "OFF";
+                        request.Services.DeliveryConfirmation = "OFF";
+                    }
+                    else if (serviceType == PostalServiceType.ExpressMail)
+                    {
+                        // SignatureWaiver must be TRUE or null.  False will return an error.
+                        request.SignatureWaiver = shipment.Postal.ExpressSignatureWaiver ? request.SignatureWaiver : null;
+                    }
+                }
+            }
+
             try
             {
                 using (EwsLabelService service = CreateWebService("Process", GetReseller(account, shipment)))
@@ -556,9 +611,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the account to use for the given shipment
         /// </summary>
-        private static EndiciaAccountEntity GetAccount(PostalShipmentEntity postal)
+        private EndiciaAccountEntity GetAccount(PostalShipmentEntity postal)
         {
-            EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(postal.Endicia.EndiciaAccountID);
+            EndiciaAccountEntity account = accountRepository.GetAccount(postal.Endicia.EndiciaAccountID);
             if (account == null)
             {
                 throw new EndiciaException("No Endicia account is selected for the shipment.");
@@ -576,7 +631,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     throw new ShippingException(accountRestriction.GetDescription());
                 }
 
-                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, EndiciaAccountManager.EndiciaAccounts.Count);
+                var quantityRestriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaAccountLimit, accountRepository.Accounts.Count());
                 if (quantityRestriction.Level != EditionRestrictionLevel.None)
                 {
                     throw new ShippingException(quantityRestriction.GetDescription());
@@ -656,15 +711,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             customs.CustomsItems = customsItems.ToArray();
         }
-
-        /// <summary>
-        /// Our pseudo duck typing that sets the given property to the specified value on the given object
-        /// </summary>
-        private static void SetReflectedValue(object duck, string property, object value)
-        {
-            duck.GetType().GetProperty(property).SetValue(duck, value, null);
-        }
-
+        
         /// <summary>
         /// Get the country code given the specified country.  This gives us an opportunity to use Endicia specific country name values, if necessary, 
         /// which i think it will be.
@@ -762,7 +809,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
-        public static List<RateResult> GetRatesFast(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public List<RateResult> GetRatesFast(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
 
@@ -781,8 +828,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Weight
-            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
 
@@ -863,7 +910,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
                     PostageRatesResponse response = service.CalculatePostageRates(request);
 
@@ -872,17 +919,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         string errorMessage = response.ErrorMessage;
 
-                        if (response.Status == 55001)
+                        if (response.Status == 55001 && errorMessage != null)
                         {
                             // We know error code 55001 maps to cubic pricing not being supported, but it also could mask other messages such as 
                             // an authentication error message in the response; do some fuzzy logic to determine what the error actually is
-                            if (response.ErrorMessage.ToUpperInvariant().Contains("CUBIC") && !response.ErrorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
+                            if (errorMessage.ToUpperInvariant().Contains("CUBIC") && !errorMessage.ToUpperInvariant().StartsWith("DIMENSIONS"))
                             {
                                 // The error is in reference to cubic packaging; use our own error message, here so we can 
                                 // direct the user to contact Express1 to try to reduce ShipWorks call volume
                                 errorMessage = "The selected Express1 account does not support cubic pricing. Please contact Express1 to apply.";
                             }
-                            else if (response.ErrorMessage.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
+                            else if (errorMessage.ToUpperInvariant().Contains("UNABLE TO AUTHENTICATE"))
                             {
                                 // Use an error message that is slightly more informative, to let the user know which of their accounts
                                 // had the problem in the event that they have multiple accounts for Endicia and/or have an Express1 account
@@ -894,7 +941,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             }
                         }
 
-                        throw new EndiciaApiException(response.Status, errorMessage);
+                        throw new EndiciaApiException(response.Status, errorMessage ?? "ShipWorks was unable to get rates at this time.");
                     }
 
                     // No rates available for this service\class\type
@@ -955,7 +1002,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (confirmationOptions.Count > 0)
                         {
                             // Add the 'base' rate for the service type, without any confirmations\extras
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days));
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) { Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None) });
 
                             if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
                             {
@@ -1027,7 +1074,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
-        public static List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             List<RateResult> results = new List<RateResult>();
             List<Exception> errors = new List<Exception>();
@@ -1102,7 +1149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     try
                     {
-                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment);
+                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment, logEntryFactory);
 
                         List<RateResult> resultsWithDays = new List<RateResult>();
 
@@ -1170,7 +1217,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the rate for the service with all possible confirmation types and add to the rate result list
         /// </summary>
-        private static Exception AddRateResultsWithConfirmationOptions(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, List<RateResult> results)
+        private Exception AddRateResultsWithConfirmationOptions(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, List<RateResult> results)
         {
             // Ensures all or nothing if error
             List<RateResult> localResults = new List<RateResult>();
@@ -1197,7 +1244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the postal rate for the given shipment, service, and confirmation selection.
         /// </summary>
-        private static RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
+        private RateResult GetRate(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, PostalConfirmationType confirmation)
         {
             PostalShipmentEntity postal = shipment.Postal;
 
@@ -1216,8 +1263,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Weight
-            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
 
             // Service and packaging
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
@@ -1297,7 +1344,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment)))
+                using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
                     PostageRateResponse response = service.CalculatePostageRate(request);
 
@@ -1366,7 +1413,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Purchase postage for the given amount
         /// </summary>
-        public static void BuyPostage(EndiciaAccountEntity account, decimal amount)
+        public void BuyPostage(EndiciaAccountEntity account, decimal amount)
         {
             if (amount < 10)
             {
@@ -1411,7 +1458,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Get the account status of the account, including the current postage balance.
         /// </summary>
-        public static EndiciaAccountStatus GetAccountStatus(EndiciaAccountEntity account)
+        public EndiciaAccountStatus GetAccountStatus(EndiciaAccountEntity account)
         {
             try
             {
@@ -1447,7 +1494,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Change the api passphrase for the given account.  Returns the encrypted updated password if successful
         /// </summary>
-        public static string ChangeApiPassphrase(string accountNumber, EndiciaReseller reseller, string oldPassword, string newPassword)
+        public string ChangeApiPassphrase(string accountNumber, EndiciaReseller reseller, string oldPassword, string newPassword)
         {
             try
             {

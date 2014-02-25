@@ -786,6 +786,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp1", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp1, 300, 0, 0);
 			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp2", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp2, 300, 0, 0);
 			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp3", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp3, 300, 0, 0);
+			base.AddElementFieldInfo("EndiciaProfileEntity", "ScanBasedReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.ScanBasedReturn, 0, 0, 0);
 		}
 		/// <summary>Inits EndiciaScanFormEntity's FieldInfo objects</summary>
 		private void InitEndiciaScanFormEntityInfos()
@@ -813,6 +814,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "TransactionID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.TransactionID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "RefundFormID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.RefundFormID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanBasedReturn", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ScanBasedReturn, 0, 0, 0);
 		}
 		/// <summary>Inits EquaShipAccountEntity's FieldInfo objects</summary>
 		private void InitEquaShipAccountEntityInfos()
@@ -2241,6 +2243,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyShopUrlName", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyShopUrlName, 100, 0, 0);
 			base.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyShopDisplayName", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyShopDisplayName, 100, 0, 0);
 			base.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyAccessToken", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyAccessToken, 255, 0, 0);
+			base.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyRequestedShippingOption", typeof(System.Int32), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, 0, 0, 10);
 		}
 		/// <summary>Inits ShopSiteStoreEntity's FieldInfo objects</summary>
 		private void InitShopSiteStoreEntityInfos()
@@ -2679,8 +2682,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Inits WorldShipGoodsEntity's FieldInfo objects</summary>
 		private void InitWorldShipGoodsEntityInfos()
 		{
-			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentCustomsItemID", typeof(System.Int64), true, false, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, 0, 0, 19);
+			base.AddElementFieldInfo("WorldShipGoodsEntity", "WorldShipGoodsID", typeof(System.Int64), true, false, true, false,  (int)WorldShipGoodsFieldIndex.WorldShipGoodsID, 0, 0, 19);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentID", typeof(System.Int64), false, true, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("WorldShipGoodsEntity", "ShipmentCustomsItemID", typeof(System.Int64), false, false, false, false,  (int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, 0, 0, 19);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "Description", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.Description, 150, 0, 0);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "TariffCode", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.TariffCode, 15, 0, 0);
 			base.AddElementFieldInfo("WorldShipGoodsEntity", "CountryOfOrigin", typeof(System.String), false, false, false, false,  (int)WorldShipGoodsFieldIndex.CountryOfOrigin, 50, 0, 0);

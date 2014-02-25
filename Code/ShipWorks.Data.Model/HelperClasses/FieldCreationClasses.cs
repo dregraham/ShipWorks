@@ -4997,6 +4997,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp3);}
 		}
+		/// <summary>Creates a new EndiciaProfileEntity.ScanBasedReturn field instance</summary>
+		public static EntityField2 ScanBasedReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ScanBasedReturn);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaScanFormEntity</summary>
@@ -5101,6 +5106,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ScanFormBatchID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanFormBatchID);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ScanBasedReturn field instance</summary>
+		public static EntityField2 ScanBasedReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ScanBasedReturn);}
 		}
 	}
 
@@ -16402,6 +16412,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyAccessToken);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ShopifyRequestedShippingOption field instance</summary>
+		public static EntityField2 ShopifyRequestedShippingOption
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyRequestedShippingOption);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopSiteStoreEntity</summary>
@@ -18727,15 +18742,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 	/// <summary>Field Creation Class for entity WorldShipGoodsEntity</summary>
 	public partial class WorldShipGoodsFields
 	{
-		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentCustomsItemID field instance</summary>
-		public static EntityField2 ShipmentCustomsItemID
+		/// <summary>Creates a new WorldShipGoodsEntity.WorldShipGoodsID field instance</summary>
+		public static EntityField2 WorldShipGoodsID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentCustomsItemID);}
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.WorldShipGoodsID);}
 		}
 		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentID field instance</summary>
 		public static EntityField2 ShipmentID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new WorldShipGoodsEntity.ShipmentCustomsItemID field instance</summary>
+		public static EntityField2 ShipmentCustomsItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WorldShipGoodsFieldIndex.ShipmentCustomsItemID);}
 		}
 		/// <summary>Creates a new WorldShipGoodsEntity.Description field instance</summary>
 		public static EntityField2 Description

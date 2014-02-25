@@ -777,6 +777,15 @@ namespace ShipWorks.Data.Administration
                         }
                     }
 
+                    // newConfiguration can be null if none of the credentials we tried were able to log in
+                    if (newConfiguration == null)
+                    {
+                        MessageHelper.ShowError(this, "ShipWorks could not connect to the selected instance.");
+
+                        e.NextPage = CurrentPage;
+                        return;
+                    }
+
                     sqlSession.Configuration.ServerInstance = newConfiguration.ServerInstance;
                     sqlSession.Configuration.Username = newConfiguration.Username;
                     sqlSession.Configuration.Password = newConfiguration.Password;
@@ -1042,7 +1051,7 @@ namespace ShipWorks.Data.Administration
 
         /// <summary>
         /// The selected SQL Server instance has changed
-        /// </summa
+        /// </summary>
         private void OnChangeSelectedInstance(object sender, EventArgs e)
         {
             ImageComboBoxItem selected = comboSqlServers.SelectedItem as ImageComboBoxItem;

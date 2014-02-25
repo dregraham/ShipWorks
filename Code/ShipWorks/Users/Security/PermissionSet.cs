@@ -13,6 +13,7 @@ using System.Transactions;
 using System.Collections;
 using System.Reflection;
 using ShipWorks.Data.Model;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Users.Security
 {
@@ -70,6 +71,11 @@ namespace ShipWorks.Users.Security
             if (type == PermissionType.AlwaysGrant)
             {
                 return true;
+            }
+
+            if (type == PermissionType.InterapptiveOnly)
+            {
+                return InterapptiveOnly.IsInterapptiveUser;
             }
 
             return FindPermission(permissions, type, objectID) != null;

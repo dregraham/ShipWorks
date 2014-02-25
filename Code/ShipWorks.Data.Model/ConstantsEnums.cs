@@ -2353,6 +2353,8 @@ namespace ShipWorks.Data.Model
 		RubberStamp2,
 		///<summary>RubberStamp3. </summary>
 		RubberStamp3,
+		///<summary>ScanBasedReturn. </summary>
+		ScanBasedReturn,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2413,6 +2415,8 @@ namespace ShipWorks.Data.Model
 		RefundFormID,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
+		///<summary>ScanBasedReturn. </summary>
+		ScanBasedReturn,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7716,6 +7720,8 @@ namespace ShipWorks.Data.Model
 		ShopifyShopDisplayName,
 		///<summary>ShopifyAccessToken. </summary>
 		ShopifyAccessToken,
+		///<summary>ShopifyRequestedShippingOption. </summary>
+		ShopifyRequestedShippingOption,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8880,10 +8886,12 @@ namespace ShipWorks.Data.Model
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
 	public enum WorldShipGoodsFieldIndex:int
 	{
-		///<summary>ShipmentCustomsItemID. </summary>
-		ShipmentCustomsItemID,
+		///<summary>WorldShipGoodsID. </summary>
+		WorldShipGoodsID,
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
+		///<summary>ShipmentCustomsItemID. </summary>
+		ShipmentCustomsItemID,
 		///<summary>Description. </summary>
 		Description,
 		///<summary>TariffCode. </summary>

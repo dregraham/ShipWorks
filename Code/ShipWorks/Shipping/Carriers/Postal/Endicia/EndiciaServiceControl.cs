@@ -6,9 +6,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -22,16 +24,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaServiceControl()
-            : this (ShipmentTypeCode.Endicia, EndiciaReseller.None)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public EndiciaServiceControl(RateControl rateControl)
+            : this (ShipmentTypeCode.Endicia, EndiciaReseller.None, rateControl)
         {
         }
 
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EndiciaServiceControl"/> class.
         /// </summary>
-        protected EndiciaServiceControl(ShipmentTypeCode shipmentTypeCode, EndiciaReseller endiciaReseller)
-            : base(shipmentTypeCode)
+        /// <param name="shipmentTypeCode">The shipment type code.</param>
+        /// <param name="endiciaReseller">The endicia reseller.</param>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        protected EndiciaServiceControl(ShipmentTypeCode shipmentTypeCode, EndiciaReseller endiciaReseller, RateControl rateControl)
+            : base(shipmentTypeCode, rateControl)
         {
             this.endiciaReseller = endiciaReseller;
 

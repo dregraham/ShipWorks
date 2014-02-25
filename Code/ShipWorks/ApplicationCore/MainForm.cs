@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Divelements.SandRibbon;
+using ICSharpCode.SharpZipLib.Zip;
+using Interapptive.Shared.IO.Zip;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Crashes;
@@ -816,10 +821,10 @@ namespace ShipWorks
             // See if its too new
             if (softwareSchemaComparedToDatabaseSchema == SchemaVersionComparisonResult.Older)
             {
-                MessageHelper.ShowMessage(this,
-                    "The version of your ShipWorks database is newer than this version\n" +
-                    "of ShipWorks.\n\n" +
-                    "You will need to upgrade ShipWorks before you can continue.");
+                using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
+                {
+                    dlg.ShowDialog(this);
+                }
 
                 return false;
             }
@@ -889,6 +894,10 @@ namespace ShipWorks
             // Load the user's saved state
             windowLayoutProvider.LoadLayout(settings.WindowLayout);
 
+            // Make sure any users upgrading from a previous version will always see (and 
+            // be made aware of) the rate panel; they can still choose to remove it later
+            OpenRatePanelForUpgrade(settings);
+            
             // Load the user's saved menu settings
             gridMenuLayoutProvider.LoadLayout(settings.GridMenuLayout);
 
@@ -903,6 +912,62 @@ namespace ShipWorks
 
             // Make the filter tree
             filterTree.Focus();
+        }
+
+        /// <summary>
+        /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
+        /// version of ShipWorks that didn't have the rate panel and opens the rate panel so everyone
+        /// is aware of it and users don't have to manually enabled it. 
+        /// </summary>
+        /// <param name="settings">The user settings being inspected.</param>
+        /// <exception cref="AppearanceException">The file is not a valid ShipWorks layout.</exception>
+        private void OpenRatePanelForUpgrade(UserSettingsEntity settings)
+        {
+            // Write out the user's current window layout to disk
+            string tempFile = Path.Combine(DataPath.ShipWorksTemp, Guid.NewGuid().ToString("N") + ".swl");
+            File.WriteAllBytes(tempFile, settings.WindowLayout);
+
+            // The path that items from the .swl file will be extracted to
+            string tempPath = DataPath.CreateUniqueTempPath();
+
+            try
+            {
+                // Write all the contents out to a temporary folder
+                using (ZipReader reader = new ZipReader(tempFile))
+                {
+                    foreach (ZipReaderItem item in reader.ReadItems())
+                    {
+                        item.Extract(Path.Combine(tempPath, item.Name));
+                    }
+                }
+            }
+            catch (ZipException ex)
+            {
+                throw new AppearanceException("The file is not a valid ShipWorks layout.", ex);
+            }
+
+            // Read the panels.xml file that was extracted
+            string panelXml = File.ReadAllText(Path.Combine(tempPath, "panels.xml"), Encoding.Unicode);
+
+            // Check to see if the Window GUID for the rates panel is present
+            XmlDocument panelDoc = new XmlDocument();
+            panelDoc.LoadXml(panelXml);
+
+            // The GUID value is set at design-time by the designer sandDockManager, so we can look for it
+            const string RatePanelID = "61946061-0df9-4143-92ed-0e71826d7d5f";
+            XmlNode ratePanelNode = panelDoc.SelectSingleNode(string.Format("/Layout/Window[@Guid='{0}']", RatePanelID));
+
+            if (ratePanelNode == null)
+            {
+                // There wasn't an item in the user settings for the rate panel, meaning the user just 
+                // upgraded from a previous version without the rate panel 
+                DockControl dockControl = sandDockManager.GetDockControls().FirstOrDefault(c => c.Guid == Guid.Parse(RatePanelID));
+                if (dockControl != null)
+                {
+                    // We want to display the rate panel for everyone after an upgrade by default
+                    dockControl.Open(WindowOpenMethod.OnScreen);
+                }
+            }
         }
 
         /// <summary>
@@ -1764,6 +1829,13 @@ namespace ShipWorks
                 {
                     ForceHeartbeat(HeartbeatOptions.None);
                 }));
+
+            if (RateCache.Instance.IsEmpty)
+            {
+                // The rates cache may have been cleared while the modal dialog is open (due to
+                // an account being created), so we need to force the content to be updated
+                ratesPanel.UpdateContent();
+            }
         }
 
         /// <summary>
@@ -2536,6 +2608,50 @@ namespace ShipWorks
 
                 deleter.DeleteAsync(gridControl.Selection.OrderedKeys);
             }
+        }
+
+        /// <summary>
+        /// The menu for this is only available to interapptive internal users.  This allows for re-sending shipment details to Tango.  This is for cases
+        /// when a shipment was succesfully processed, but Tango didn't properly handle logging the shipment details.  If tango already has the shipment, it won't log it again.
+        /// If tango doesn't have it, it will log it.
+        /// </summary>
+        private void OnRetryLogShipmentsToTango(object sender, EventArgs e)
+        {
+            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(this,
+                "ShipWorks",
+                "Tango - Retry",
+                "Retrying {0} of {1}");
+
+            // What to execute then the async operation is done
+            executor.ExecuteCompleted += (s, args) =>
+                {
+
+                };
+
+            // What to execute for each input item
+            executor.ExecuteAsync((entityID, state, issueAdder) =>
+                {
+                    foreach (ShipmentEntity shipment in ShippingManager.GetShipments(entityID, false))
+                    {
+                        if (!shipment.Processed || shipment.Voided)
+                        {
+                            continue;
+                        }
+
+                        StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
+                        if (storeEntity == null)
+                        {
+                            continue;
+                        }
+
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+
+                        TangoWebClient.LogShipment(storeEntity, shipment, true);
+                    }
+                },
+
+            // The input items to execute each time for
+            gridControl.Selection.OrderedKeys);
         }
 
         /// <summary>

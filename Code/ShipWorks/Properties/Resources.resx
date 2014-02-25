@@ -128,7 +128,7 @@
     <value>..\Resources\form_blue.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="EndiciaLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EndiciaLogo.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\EndiciaLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="order_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\order_delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1488,5 +1488,8 @@
   </data>
   <data name="box_closed2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\box_closed5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="squares_circle_green_transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Progress\squares_circle_green_transparent.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

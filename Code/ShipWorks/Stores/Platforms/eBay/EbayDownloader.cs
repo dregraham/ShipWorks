@@ -7,6 +7,7 @@ using Common.Logging;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -97,6 +98,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private bool DownloadOrders()
         {
+            // Controls wether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
+            bool usePagedDownload = true;
+
             // Get the date\time to start downloading from
             DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
@@ -107,10 +111,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
             }
 
+            int page = 1;
+
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd);
+                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
 
                 // Grab the total expected account from the first page
                 if (expectedCount < 0)
@@ -131,10 +137,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     
                     // Skip any that are out of range.  We take any that are a day out of range back, b\c eBay's API sometimes returns stuff in the next page that should have been on the previous.
                     // I have open bug reports with them.  12/18/13
-                    if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
+                    if (!usePagedDownload)
                     {
-                        log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
-                        continue;
+                        if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
+                        {
+                            log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
+                            continue;
+                        }
                     }
 
                     ProcessOrder(orderType);
@@ -143,9 +152,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
                     // Update the range for the next time around.  Should always be ascending
-                    if (lastModified > rangeStart)
+                    if (!usePagedDownload)
                     {
-                        rangeStart = lastModified;
+                        if (lastModified > rangeStart)
+                        {
+                            rangeStart = lastModified;
+                        }
                     }
                 }
 
@@ -153,6 +165,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (!response.HasMoreOrders)
                 {
                     return true;
+                }
+
+                // Increment the page, if that's the method we are using
+                if (usePagedDownload)
+                {
+                    page++;
                 }
             }
         }
@@ -264,6 +282,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         // Detatch it from the order
                         affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+
+                        // Deleted all the attributes
+                        foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
+                        {
+                            adapter.DeleteEntity(attribute);
+                        }
 
                         // And delete it
                         adapter.DeleteEntity(item);
@@ -550,11 +574,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateTransaction(EbayOrderItemEntity orderItem, OrderType orderType, TransactionType transaction)
         {
-            orderItem.Code = transaction.Item.ItemID;
+            if (string.IsNullOrWhiteSpace(orderItem.Code)) { orderItem.Code = transaction.Item.ItemID; }
+            if (string.IsNullOrWhiteSpace(orderItem.Name)) { orderItem.Name = transaction.Item.Title; }
+            UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");
+
             orderItem.UnitPrice = (decimal) transaction.TransactionPrice.Value;
             orderItem.Quantity = transaction.QuantityPurchased;
-            orderItem.Name = transaction.Item.Title;
-            orderItem.SKU = transaction.Item.SKU ?? "";
 
             // Checkout (from order - these can be moved up in the database from the item to the order level)
             orderItem.PaymentMethod = (int) orderType.CheckoutStatus.PaymentMethod;
@@ -593,10 +618,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 orderItem.Name = transaction.Variation.VariationTitle;
             }
 
-            // Overwrite the SKU if a variation SKU is provided
-            if (!string.IsNullOrEmpty(transaction.Variation.SKU))
+            // Overwrite the SKU if a variation SKU is provided.  
+            if (!string.IsNullOrWhiteSpace(transaction.Variation.SKU))
             {
-                orderItem.SKU = transaction.Variation.SKU;
+                UpdateTransactionSKU(orderItem, transaction.Variation.SKU);
             }
 
             // If this is a new item and one with variations, we can add attributes now
@@ -613,6 +638,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         attribute.UnitPrice = 0;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update the SKU of the given item with the given SKU
+        /// </summary>
+        private void UpdateTransactionSKU(EbayOrderItemEntity orderItem, string sku)
+        {
+            // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overrwrite, such as SKUVault
+            if (!string.IsNullOrWhiteSpace(orderItem.SKU))
+            {
+                return;
+            }
+
+            // FreshDesk #517760 - SKU was coming down literally as "null"
+            if (string.Compare(sku, "null", StringComparison.InvariantCultureIgnoreCase) != 0)
+            {
+                orderItem.SKU = sku;
             }
         }
 

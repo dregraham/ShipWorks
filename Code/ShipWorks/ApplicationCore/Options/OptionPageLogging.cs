@@ -46,6 +46,7 @@ namespace ShipWorks.ApplicationCore.Options
             LogOptions options = LogSession.Options;
             logShipWorks.Checked = options.LogShipWorks;
             logApiCalls.Checked = options.LogServices;
+            logRateCalls.Checked = options.LogRateCalls;
 
             SetMaxAgeSeletion(options.MaxLogAgeDays);
 
@@ -101,6 +102,7 @@ namespace ShipWorks.ApplicationCore.Options
             LogOptions options = new LogOptions();
             options.LogShipWorks = logShipWorks.Checked;
             options.LogServices = logApiCalls.Checked;
+            options.LogRateCalls = logRateCalls.Checked;
             options.MaxLogAgeDays = GetMaxAgeSelection();
 
             LogSession.Configure(options);

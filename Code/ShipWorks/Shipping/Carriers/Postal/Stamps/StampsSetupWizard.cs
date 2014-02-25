@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings.WizardPages;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.Business;
-using System.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// Setup wizard for processing shipments with Stamps.com
     /// </summary>
-    public partial class StampsSetupWizard : WizardForm
+    public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private StampsAccountEntity stampsAccount;
         private StampsRegistration stampsRegistration;
@@ -359,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                StampsApiSession.AuthenticateUser(userID, password.Text, false);
+                new StampsApiSession().AuthenticateUser(userID, password.Text, false);
 
                 if (stampsAccount == null)
                 {
@@ -419,6 +414,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (DialogResult != DialogResult.OK && stampsAccount != null && !stampsAccount.IsNew)
             {
                 StampsAccountManager.DeleteAccount(stampsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
 

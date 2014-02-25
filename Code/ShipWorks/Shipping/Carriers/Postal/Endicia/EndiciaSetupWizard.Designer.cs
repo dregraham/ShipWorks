@@ -88,6 +88,7 @@
             this.panelBuyPostage = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.buyPostage = new System.Windows.Forms.Button();
+            this.labelBuyPostage = new System.Windows.Forms.Label();
             this.pictureComplete = new System.Windows.Forms.PictureBox();
             this.labelFinish1 = new System.Windows.Forms.Label();
             this.wizardPagePlan = new ShipWorks.UI.Wizard.WizardPage();
@@ -111,13 +112,12 @@
             this.accountExisting = new System.Windows.Forms.TextBox();
             this.labelAccountExisting = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.labelBuyPostage = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageAccountType.SuspendLayout();
             this.panelNewOrExisting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxDazzleNote)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDazzleNote)).BeginInit();
             this.wizardPageAddress.SuspendLayout();
             this.wizardPagePasswords.SuspendLayout();
             this.wizardPagePayment.SuspendLayout();
@@ -125,19 +125,17 @@
             this.panelFreemiumSwFees.SuspendLayout();
             this.wizardPageFinish.SuspendLayout();
             this.panelBuyPostage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureComplete)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureComplete)).BeginInit();
             this.wizardPagePlan.SuspendLayout();
             this.wizardPageOptions.SuspendLayout();
             this.wizardPageAccountNumber.SuspendLayout();
             this.wizardPageExisting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(387, 542);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -149,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinish);
+            this.mainPanel.Controls.Add(this.wizardPagePlan);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -159,9 +157,10 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Image = ((System.Drawing.Image) (resources.GetObject("pictureBox.Image")));
+            this.pictureBox.Image = global::ShipWorks.Properties.Resources.EndiciaLogo;
             this.pictureBox.Location = new System.Drawing.Point(392, 5);
             this.pictureBox.Size = new System.Drawing.Size(164, 46);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             // 
             // topPanel
             // 
@@ -173,7 +172,7 @@
             this.wizardPageAccountType.Controls.Add(this.labelInfo1);
             this.wizardPageAccountType.Description = "Setup ShipWorks to work with an Endicia account.";
             this.wizardPageAccountType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountType.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountType.Name = "wizardPageAccountType";
             this.wizardPageAccountType.Size = new System.Drawing.Size(555, 470);
@@ -214,7 +213,7 @@
             this.labelDazzleNoteContent.Size = new System.Drawing.Size(427, 44);
             this.labelDazzleNoteContent.TabIndex = 8;
             this.labelDazzleNoteContent.Text = "You do not need an Endicia DAZzle account or the DAZzle software installed to use" +
-                " ShipWorks.";
+    " ShipWorks.";
             // 
             // radioExistingAccount
             // 
@@ -229,7 +228,7 @@
             // labelDazzleNote
             // 
             this.labelDazzleNote.AutoSize = true;
-            this.labelDazzleNote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelDazzleNote.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDazzleNote.Location = new System.Drawing.Point(25, 81);
             this.labelDazzleNote.Name = "labelDazzleNote";
             this.labelDazzleNote.Size = new System.Drawing.Size(33, 13);
@@ -253,15 +252,15 @@
             this.labelInfo1.Size = new System.Drawing.Size(483, 47);
             this.labelInfo1.TabIndex = 4;
             this.labelInfo1.Text = "This wizard will assist you in creating an Endicia account for use with ShipWorks" +
-                ". This enables you to begin shipping, tracking, and printing USPS labels with po" +
-                "stage directly from ShipWorks.";
+    ". This enables you to begin shipping, tracking, and printing USPS labels with po" +
+    "stage directly from ShipWorks.";
             // 
             // wizardPageAddress
             // 
             this.wizardPageAddress.Controls.Add(this.personControl);
             this.wizardPageAddress.Description = "Enter the address for your Endicia account.";
             this.wizardPageAddress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAddress.Name = "wizardPageAddress";
             this.wizardPageAddress.Size = new System.Drawing.Size(555, 470);
@@ -271,16 +270,16 @@
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-                        | ShipWorks.Data.Controls.PersonFields.Street)
-                        | ShipWorks.Data.Controls.PersonFields.City)
-                        | ShipWorks.Data.Controls.PersonFields.State)
-                        | ShipWorks.Data.Controls.PersonFields.Postal)
-                        | ShipWorks.Data.Controls.PersonFields.Residential)
-                        | ShipWorks.Data.Controls.PersonFields.Email)
-                        | ShipWorks.Data.Controls.PersonFields.Phone)
-                        | ShipWorks.Data.Controls.PersonFields.Fax)));
-            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Residential) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone) 
+            | ShipWorks.Data.Controls.PersonFields.Fax)));
+            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 9);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 344);
@@ -309,7 +308,7 @@
             this.wizardPagePasswords.Controls.Add(this.labelPasswords);
             this.wizardPagePasswords.Description = "Create a new Endicia account for use with ShipWorks.";
             this.wizardPagePasswords.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPagePasswords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPagePasswords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePasswords.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePasswords.Name = "wizardPagePasswords";
             this.wizardPagePasswords.Size = new System.Drawing.Size(555, 470);
@@ -373,13 +372,13 @@
             this.termsAndConditions.Size = new System.Drawing.Size(487, 34);
             this.termsAndConditions.TabIndex = 8;
             this.termsAndConditions.Text = "I certify that all information furnished is accurate and truthful.  I also certif" +
-                "y that I have read and understand";
+    "y that I have read and understand";
             this.termsAndConditions.UseVisualStyleBackColor = true;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label11.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label11.Location = new System.Drawing.Point(25, 306);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(129, 13);
@@ -487,7 +486,7 @@
             // labelTaq
             // 
             this.labelTaq.AutoSize = true;
-            this.labelTaq.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelTaq.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTaq.Location = new System.Drawing.Point(22, 144);
             this.labelTaq.Name = "labelTaq";
             this.labelTaq.Size = new System.Drawing.Size(167, 13);
@@ -497,7 +496,7 @@
             // labelPasswords
             // 
             this.labelPasswords.AutoSize = true;
-            this.labelPasswords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelPasswords.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPasswords.Location = new System.Drawing.Point(22, 8);
             this.labelPasswords.Name = "labelPasswords";
             this.labelPasswords.Size = new System.Drawing.Size(67, 13);
@@ -520,7 +519,7 @@
             this.wizardPagePayment.Controls.Add(this.personCreditCard);
             this.wizardPagePayment.Description = "Create a new Endicia account for use with ShipWorks.";
             this.wizardPagePayment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPagePayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPagePayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePayment.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePayment.Name = "wizardPagePayment";
             this.wizardPagePayment.Size = new System.Drawing.Size(555, 470);
@@ -547,7 +546,7 @@
             // labelPostagePayments
             // 
             this.labelPostagePayments.AutoSize = true;
-            this.labelPostagePayments.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelPostagePayments.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPostagePayments.Location = new System.Drawing.Point(11, 5);
             this.labelPostagePayments.Name = "labelPostagePayments";
             this.labelPostagePayments.Size = new System.Drawing.Size(145, 13);
@@ -654,12 +653,12 @@
             this.labelSwFreemiumFees.Size = new System.Drawing.Size(473, 31);
             this.labelSwFreemiumFees.TabIndex = 12;
             this.labelSwFreemiumFees.Text = "Your ShipWorks service fees are free, but if you choose to use ShipWorks Insuranc" +
-                "e for your shipments a credit card is required.";
+    "e for your shipments a credit card is required.";
             // 
             // labelShipWorksFees
             // 
             this.labelShipWorksFees.AutoSize = true;
-            this.labelShipWorksFees.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelShipWorksFees.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelShipWorksFees.Location = new System.Drawing.Point(2, 2);
             this.labelShipWorksFees.Name = "labelShipWorksFees";
             this.labelShipWorksFees.Size = new System.Drawing.Size(178, 13);
@@ -673,7 +672,7 @@
             this.labelCreditCardFees.Size = new System.Drawing.Size(495, 20);
             this.labelCreditCardFees.TabIndex = 1;
             this.labelCreditCardFees.Text = "Your account fees are free, but you are still required to pay for any postage and" +
-                " insurance that you use.";
+    " insurance that you use.";
             // 
             // cardExpireYear
             // 
@@ -765,7 +764,7 @@
             // labelEndiciaFee
             // 
             this.labelEndiciaFee.AutoSize = true;
-            this.labelEndiciaFee.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelEndiciaFee.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelEndiciaFee.Location = new System.Drawing.Point(22, 8);
             this.labelEndiciaFee.Name = "labelEndiciaFee";
             this.labelEndiciaFee.Size = new System.Drawing.Size(174, 13);
@@ -774,10 +773,10 @@
             // 
             // personCreditCard
             // 
-            this.personCreditCard.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City)
-                        | ShipWorks.Data.Controls.PersonFields.State)
-                        | ShipWorks.Data.Controls.PersonFields.Postal)));
-            this.personCreditCard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.personCreditCard.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.personCreditCard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personCreditCard.Location = new System.Drawing.Point(42, 24);
             this.personCreditCard.Name = "personCreditCard";
             this.personCreditCard.Size = new System.Drawing.Size(358, 158);
@@ -790,7 +789,7 @@
             this.wizardPageFinish.Controls.Add(this.labelFinish1);
             this.wizardPageFinish.Description = "Registration complete!";
             this.wizardPageFinish.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageFinish.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageFinish.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinish.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinish.Name = "wizardPageFinish";
             this.wizardPageFinish.Size = new System.Drawing.Size(555, 470);
@@ -810,7 +809,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(20, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
@@ -826,6 +825,15 @@
             this.buyPostage.Text = "Buy Postage...";
             this.buyPostage.UseVisualStyleBackColor = true;
             this.buyPostage.Click += new System.EventHandler(this.OnBuyPostage);
+            // 
+            // labelBuyPostage
+            // 
+            this.labelBuyPostage.AutoSize = true;
+            this.labelBuyPostage.Location = new System.Drawing.Point(21, 25);
+            this.labelBuyPostage.Name = "labelBuyPostage";
+            this.labelBuyPostage.Size = new System.Drawing.Size(359, 13);
+            this.labelBuyPostage.TabIndex = 6;
+            this.labelBuyPostage.Text = "Before you begin shipping you may need to buy postage for the account:";
             // 
             // pictureComplete
             // 
@@ -845,7 +853,7 @@
             this.labelFinish1.Size = new System.Drawing.Size(439, 13);
             this.labelFinish1.TabIndex = 0;
             this.labelFinish1.Text = "Registration for your Endicia account is complete.  There are just a few more thi" +
-                "ngs to do:\r\n";
+    "ngs to do:\r\n";
             // 
             // wizardPagePlan
             // 
@@ -858,7 +866,7 @@
             this.wizardPagePlan.Controls.Add(this.radioPlanStandard);
             this.wizardPagePlan.Description = "Create a new Endicia account for use with ShipWorks.";
             this.wizardPagePlan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPagePlan.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPagePlan.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePlan.ForeColor = System.Drawing.Color.DimGray;
             this.wizardPagePlan.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePlan.Name = "wizardPagePlan";
@@ -877,7 +885,7 @@
             this.labelPremiumDescription.Size = new System.Drawing.Size(457, 29);
             this.labelPremiumDescription.TabIndex = 6;
             this.labelPremiumDescription.Text = "Preumium services include all of the Standard services plus the ability to create" +
-                " SCAN forms.";
+    " SCAN forms.";
             // 
             // labelStandardDescription
             // 
@@ -887,7 +895,7 @@
             this.labelStandardDescription.Size = new System.Drawing.Size(457, 37);
             this.labelStandardDescription.TabIndex = 5;
             this.labelStandardDescription.Text = "Standard services include calculating postage rates, generating labels, tracking " +
-                "packages, and buying postage.";
+    "packages, and buying postage.";
             // 
             // labelPremiumCost
             // 
@@ -917,12 +925,12 @@
             this.labelServiceTypes.Size = new System.Drawing.Size(449, 37);
             this.labelServiceTypes.TabIndex = 2;
             this.labelServiceTypes.Text = "Endicia offers two levels of service for use with ShipWorks.  Select the option t" +
-                "hat best suits your needs.";
+    "hat best suits your needs.";
             // 
             // radioPlanPremium
             // 
             this.radioPlanPremium.AutoSize = true;
-            this.radioPlanPremium.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.radioPlanPremium.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioPlanPremium.ForeColor = System.Drawing.SystemColors.ControlText;
             this.radioPlanPremium.Location = new System.Drawing.Point(23, 117);
             this.radioPlanPremium.Name = "radioPlanPremium";
@@ -935,7 +943,7 @@
             // radioPlanStandard
             // 
             this.radioPlanStandard.AutoSize = true;
-            this.radioPlanStandard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.radioPlanStandard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.radioPlanStandard.ForeColor = System.Drawing.SystemColors.ControlText;
             this.radioPlanStandard.Location = new System.Drawing.Point(23, 53);
             this.radioPlanStandard.Name = "radioPlanStandard";
@@ -950,7 +958,7 @@
             this.wizardPageOptions.Controls.Add(this.optionsControl);
             this.wizardPageOptions.Description = "Configure Endicia settings.";
             this.wizardPageOptions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptions.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptions.Name = "wizardPageOptions";
             this.wizardPageOptions.Size = new System.Drawing.Size(555, 470);
@@ -960,9 +968,10 @@
             // 
             // optionsControl
             // 
-            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(15, 9);
             this.optionsControl.Name = "optionsControl";
+            this.optionsControl.Reseller = ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller.None;
             this.optionsControl.Size = new System.Drawing.Size(476, 170);
             this.optionsControl.TabIndex = 0;
             // 
@@ -973,7 +982,7 @@
             this.wizardPageAccountNumber.Controls.Add(this.labelEnterAccountNumber);
             this.wizardPageAccountNumber.Description = "Create a new Endicia account for use with ShipWorks.";
             this.wizardPageAccountNumber.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAccountNumber.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAccountNumber.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountNumber.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountNumber.Name = "wizardPageAccountNumber";
             this.wizardPageAccountNumber.Size = new System.Drawing.Size(555, 470);
@@ -1005,7 +1014,7 @@
             this.labelEnterAccountNumber.Size = new System.Drawing.Size(495, 33);
             this.labelEnterAccountNumber.TabIndex = 0;
             this.labelEnterAccountNumber.Text = "You should soon receive an email from Endicia that contains your account number. " +
-                " When you receive the email enter the account number below.";
+    " When you receive the email enter the account number below.";
             // 
             // wizardPageExisting
             // 
@@ -1016,7 +1025,7 @@
             this.wizardPageExisting.Controls.Add(this.labelAccountExisting);
             this.wizardPageExisting.Description = "Enter your existing account information.";
             this.wizardPageExisting.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageExisting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageExisting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageExisting.Location = new System.Drawing.Point(0, 0);
             this.wizardPageExisting.Name = "wizardPageExisting";
             this.wizardPageExisting.Size = new System.Drawing.Size(555, 470);
@@ -1069,21 +1078,11 @@
             this.labelAccountExisting.TabIndex = 0;
             this.labelAccountExisting.Text = "Endicia account number:";
             // 
-            // labelBuyPostage
-            // 
-            this.labelBuyPostage.AutoSize = true;
-            this.labelBuyPostage.Location = new System.Drawing.Point(21, 25);
-            this.labelBuyPostage.Name = "labelBuyPostage";
-            this.labelBuyPostage.Size = new System.Drawing.Size(359, 13);
-            this.labelBuyPostage.TabIndex = 6;
-            this.labelBuyPostage.Text = "Before you begin shipping you may need to buy postage for the account:";
-            // 
             // EndiciaSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(555, 577);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EndiciaSetupWizard";
             this.NextVisible = true;
@@ -1101,13 +1100,13 @@
             this.Text = "Endicia Setup Wizard";
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageAccountType.ResumeLayout(false);
             this.panelNewOrExisting.ResumeLayout(false);
             this.panelNewOrExisting.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxDazzleNote)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDazzleNote)).EndInit();
             this.wizardPageAddress.ResumeLayout(false);
             this.wizardPagePasswords.ResumeLayout(false);
             this.wizardPagePasswords.PerformLayout();
@@ -1121,7 +1120,7 @@
             this.wizardPageFinish.PerformLayout();
             this.panelBuyPostage.ResumeLayout(false);
             this.panelBuyPostage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureComplete)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureComplete)).EndInit();
             this.wizardPagePlan.ResumeLayout(false);
             this.wizardPagePlan.PerformLayout();
             this.wizardPageOptions.ResumeLayout(false);
@@ -1129,7 +1128,7 @@
             this.wizardPageAccountNumber.PerformLayout();
             this.wizardPageExisting.ResumeLayout(false);
             this.wizardPageExisting.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }

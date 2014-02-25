@@ -52,8 +52,8 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
-                    // Hiding for now while not ready to release
-                    if (typeCode == ShipmentTypeCode.BestRate)
+                    // Ability to hide best-rate via registry until it's public
+                    if (typeCode == ShipmentTypeCode.BestRate && InterapptiveOnly.Registry.GetValue("HideBestRate", false))
                     {
                         continue;
                     }
@@ -174,20 +174,20 @@ namespace ShipWorks.Shipping
         {
             switch (shipmentTypeCode)
             {
-                case ShipmentTypeCode.FedEx: return 1;
-                case ShipmentTypeCode.UpsOnLineTools: return 2;
-                case ShipmentTypeCode.UpsWorldShip: return 3;
-                case ShipmentTypeCode.Endicia: return 4;
-                case ShipmentTypeCode.Express1Endicia: return 5;
-                case ShipmentTypeCode.Stamps: return 6;
-                case ShipmentTypeCode.Express1Stamps: return 7;
-                case ShipmentTypeCode.PostalWebTools: return 8;
-                case ShipmentTypeCode.EquaShip: return 9;
-                case ShipmentTypeCode.OnTrac: return 10;
-                case ShipmentTypeCode.iParcel: return 11;
-                case ShipmentTypeCode.Other: return 12;
-                case ShipmentTypeCode.None: return 13;
-                case ShipmentTypeCode.BestRate: return 14;
+                case ShipmentTypeCode.BestRate: return 1;
+                case ShipmentTypeCode.FedEx: return 2;
+                case ShipmentTypeCode.UpsOnLineTools: return 3;
+                case ShipmentTypeCode.UpsWorldShip: return 4;
+                case ShipmentTypeCode.Endicia: return 5;
+                case ShipmentTypeCode.Express1Endicia: return 6;
+                case ShipmentTypeCode.Stamps: return 7;
+                case ShipmentTypeCode.Express1Stamps: return 8;
+                case ShipmentTypeCode.PostalWebTools: return 9;
+                case ShipmentTypeCode.EquaShip: return 10;
+                case ShipmentTypeCode.OnTrac: return 11;
+                case ShipmentTypeCode.iParcel: return 12;
+                case ShipmentTypeCode.Other: return 13;
+                case ShipmentTypeCode.None: return 14;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");
@@ -243,17 +243,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsPostal(ShipmentTypeCode shipmentTypeCode)
         {
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-                case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
-                    return true;
-            }
-
-            return false;
+            return PostalUtility.IsPostalShipmentType(shipmentTypeCode);
         }
 
         /// <summary>

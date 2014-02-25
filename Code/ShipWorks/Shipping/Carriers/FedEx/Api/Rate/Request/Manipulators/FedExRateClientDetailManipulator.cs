@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // We can safely cast this since we've passed validation
             RateRequest nativeRequest = request.NativeRequest as RateRequest;
             nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRateClientDetail(account, fedExSettings);
-            
         }
 
         /// <summary>

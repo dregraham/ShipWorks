@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Destination Delivery Unit")]
         DDU = 2,
 
-        [Description("Destionation SCF")]
+        [Description("Destination SCF")]
         DSCF = 3,
 
         [Description("Origin BMC")]

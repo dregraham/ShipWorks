@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI;
@@ -245,6 +246,10 @@ namespace ShipWorks.Shipping.Settings
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
             SaveSettings();
+
+            // Clear the rate cache since it may now be out of date due to 
+            // settings be altered, accounts being deleted, etc.
+            RateCache.Instance.Clear();
         }
 
         /// <summary>

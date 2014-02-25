@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -18,14 +19,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelServiceControl" /> class.
         /// </summary>
-        public iParcelServiceControl() : base(ShipmentTypeCode.iParcel)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public iParcelServiceControl(RateControl rateControl) 
+            : base(ShipmentTypeCode.iParcel, rateControl)
         {
             InitializeComponent();
-
-            // OnReloadRatesRequired is part of ServiceControlBase, so if we define it in the designer class we get the following error:
-            // The method 'xxx' cannot be the method for an event because a class this class derives from already defines the method
-            // So set it here instead.
-            rateControl.ReloadRatesRequired += new System.EventHandler(OnReloadRatesRequired);
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages
@@ -249,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 
@@ -270,6 +269,42 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private void OnPackageControlSizeChanged(object sender, EventArgs e)
         {
             sectionShipment.Height = (sectionShipment.Height - sectionShipment.ContentPanel.Height) + packageControl.Bottom + 4;
+        }
+
+        /// <summary>
+        /// Called when the selected service is changed.
+        /// </summary>
+        private void OnServiceChanged(object sender, EventArgs e)
+        {
+            SyncSelectedRate();
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued)
+            {
+                iParcelServiceType serviceType = (iParcelServiceType)service.SelectedValue;
+
+                // Update the selected rate in the rate control to coincide with the service change
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.iParcel)
+                    {
+                        return false;
+                    }
+
+                    return ((iParcelRateSelection)r.Tag).ServiceType == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }

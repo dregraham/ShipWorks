@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Carriers.EquaShip.Enums;
@@ -18,6 +19,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.EquaShip
 {
@@ -56,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Creates the wizard for configuring EquaShip 
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new EquashipSetupWizard();
         }
@@ -72,9 +74,11 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Service Control
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new EquaShipServiceControl();
+            return new EquaShipServiceControl(rateControl);
         }
 
         /// <summary>
@@ -463,10 +467,11 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Equaship shipment type.
+        /// Gets an instance to the best rate shipping broker for EquaShip based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
         }

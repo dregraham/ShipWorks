@@ -37,8 +37,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
         /// </summary>
-        public FedExRequestFactory()
-            : this(new FedExServiceGateway(new FedExSettingsRepository()), new FedExSettingsRepository(), new FedExShipmentTokenProcessor(),  new FedExResponseFactory())
+        public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExServiceGateway(settingsRepository), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
         { }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExRegistrationWebAuthenticationDetailManipulator(),
+                new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExRegistrationClientDetailManipulator(settingsRepository),
                 new FedExRegistrationVersionManipulator()
             };
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExPackageMovementWebAuthenticationDetailManipulator(),
+                new FedExPackageMovementWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExPackageMovementClientDetailManipulator(settingsRepository),
                 new FedExPackageMovementVersionManipulator()
             };
@@ -297,21 +297,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// FedEx for obtaining shipping rates.</returns>
         public CarrierRequest CreateRateRequest(ShipmentEntity shipmentEntity, IEnumerable<ICarrierRequestManipulator> specializedManipulators)
         {
+            FedExSettings settings = new FedExSettings(settingsRepository);
+
             // Create the "standard" manipulators for a FedEx rate request
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRateClientDetailManipulator(settingsRepository),
-                new FedExRateWebAuthenticationManipulator(),
+                new FedExRateWebAuthenticationManipulator(settings),
                 new FedExRateVersionManipulator(),
                 new FedExRateReturnTransitManipulator(),
                 new FedExRateShipperManipulator(),
                 new FedExRateRecipientManipulator(),
                 new FedExRateShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTotalInsuredValueManipulator(),
+                new FedExRateTotalInsuredValueManipulator(settings),
                 new FedExRateTotalWeightManipulator(),
                 new FedExRateRateTypeManipulator(settingsRepository),
                 new FedExRatePickupManipulator(),
-                new FedExRatePackageDetailsManipulator(),
+                new FedExRatePackageDetailsManipulator(settings),
                 new FedExRatePackageSpecialServicesManipulator(),
                 new FedExRatePackagingTypeManipulator()
             };
@@ -322,7 +324,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 manipulators.AddRange(specializedManipulators);
             }
 
-            return new FedExRateRequest(manipulators, shipmentEntity);
+            return new FedExRateRequest(manipulators, shipmentEntity, settingsRepository);
         }
 
         /// <summary>

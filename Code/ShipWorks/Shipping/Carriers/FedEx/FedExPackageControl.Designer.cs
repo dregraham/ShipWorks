@@ -35,10 +35,10 @@
             this.packagesGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumn = new Divelements.SandGrid.GridColumn();
             this.panelPackage = new System.Windows.Forms.Panel();
+            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.packageCountCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.panelPackage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -110,6 +110,16 @@
             this.panelPackage.Size = new System.Drawing.Size(675, 165);
             this.panelPackage.TabIndex = 3;
             // 
+            // insuranceControl
+            // 
+            this.insuranceControl.BackColor = System.Drawing.Color.White;
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(46, 113);
+            this.insuranceControl.Name = "insuranceControl";
+            this.insuranceControl.Size = new System.Drawing.Size(416, 46);
+            this.insuranceControl.TabIndex = 26;
+            this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            // 
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
@@ -154,15 +164,6 @@
             this.packageCountCombo.PromptText = "(Multiple Values)";
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);
             this.packageCountCombo.TabIndex = 1;
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.BackColor = System.Drawing.Color.White;
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceControl.Location = new System.Drawing.Point(46, 113);
-            this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(416, 46);
-            this.insuranceControl.TabIndex = 26;
             // 
             // FedExPackageControl
             // 

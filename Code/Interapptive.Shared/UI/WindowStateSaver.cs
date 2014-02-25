@@ -291,6 +291,7 @@ namespace Interapptive.Shared.UI
                 windowStateMap[windowName] = state;
             }
         }
+
         /// <summary>
         /// Adds the SplitContainer to the elements being remembered
         /// </summary>

@@ -11,10 +11,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
         /// <param name="severityLevel">The severity level.</param>
-        public BrokerException(ShippingException innerException, BrokerExceptionSeverityLevel severityLevel)
+        /// <param name="shipmentType">TThe shipment type.</param>
+        public BrokerException(ShippingException innerException, BrokerExceptionSeverityLevel severityLevel, ShipmentType shipmentType)
             : base(string.Empty, innerException)
         {
             SeverityLevel = severityLevel;
+            ShipmentType = shipmentType;
         }
 
         /// <summary>
@@ -28,6 +30,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the severity level of the exception.
         /// </summary>
-        public BrokerExceptionSeverityLevel SeverityLevel { get; private set; }
+        public BrokerExceptionSeverityLevel SeverityLevel { get; set; }
+
+        /// <summary>
+        /// Gets the shipment type.
+        /// </summary>
+        public ShipmentType ShipmentType { get; private set; }
     }
 }

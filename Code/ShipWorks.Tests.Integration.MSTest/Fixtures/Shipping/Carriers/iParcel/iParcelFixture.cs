@@ -8,6 +8,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.iParcel

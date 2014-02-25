@@ -34,6 +34,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         }
 
         /// <summary>
+        /// Calculate the weight of the package.
+        /// </summary>
+        public virtual double CalculateWeight(UpsPackageEntity packageEntity, UpsServicePackageTypeSetting upsSetting)
+        {
+            double weight = UpsUtility.GetPackageTotalWeight(packageEntity);
+
+            weight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, upsSetting.WeightUnitOfMeasure, weight);
+
+            return weight;
+        }
+
+        /// <summary>
         /// Writes the weight element to the XML writer.
         /// </summary>
         /// <param name="upsShipment">The ups shipment.</param>
@@ -60,9 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // UPS required the unit of measurement be in OZS if the service type is SurePost less than a pound
             bool useOunces = upsSetting.WeightUnitOfMeasure == WeightUnitOfMeasure.Ounces || serviceType == UpsServiceType.UpsSurePostLessThan1Lb;
 
-            double weight = UpsUtility.GetPackageTotalWeight(package);
-
-            weight = WeightUtility.Convert(WeightUnitOfMeasure.Pounds, upsSetting.WeightUnitOfMeasure, weight);
+            double weight = CalculateWeight(package, upsSetting);
 
             // write out the UnitOfMeasurement
             xmlWriter.WriteStartElement("UnitOfMeasurement");

@@ -9,6 +9,8 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
@@ -18,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// <summary>
     /// Wizard for setting up shipping with Express1
     /// </summary>
-    public partial class Express1SetupWizard : WizardForm
+    public partial class Express1SetupWizard : ShipmentTypeSetupWizardForm
     {
         private bool hideDetailedConfiguration;
         private PersonAdapter initialAccountAddress;
@@ -449,6 +451,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 // account that may have been created since the account is saved in ShipWorks as 
                 // soon as possible
                 registration.DeleteAccount();
+            }
+            else
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
     }

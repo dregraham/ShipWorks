@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using System.Xml;
-using System.IO;
-using System.Drawing.Printing;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -30,7 +21,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
-using System.Diagnostics;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -38,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    public partial class UpsSetupWizard : WizardForm
+    public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
         ShipmentType shipmentType;
         bool forceAccountOnly;
@@ -244,6 +234,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
+                if (string.IsNullOrWhiteSpace(account.Text))
+                {
+                    // Note: this will need to be refactored when we unhide the ability to create 
+                    // a new UPS account from ShipWorks
+                    MessageHelper.ShowMessage(this, "Please enter your account number.");
+                    e.NextPage = CurrentPage;
+                }
+
                 // Make sure one of the check boxes is checked.
                 if (!newAccount.Checked && !existingAccount.Checked)
                 {
@@ -346,17 +344,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnSteppingNextAgreement(object sender, WizardStepEventArgs e)
         {
+            // Code below was for certification purposes
+
             //
             // This is a UPS requirement - but it causes annoyance and problems for our customers. They probably will never notice.
             //
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
+            //NativeMethods.POINT point = new NativeMethods.POINT();
+            //NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
 
-            if (point.y <= 7550)
-            {
-                MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
-                e.NextPage = CurrentPage;
-            }
+            //if (point.y <= 7550)
+            //{
+            //    MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
+            //    e.NextPage = CurrentPage;
+            //}
         }
 
         /// <summary>
@@ -686,6 +686,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (DialogResult == DialogResult.Cancel && upsAccount != null && !upsAccount.IsNew)
             {
                 UpsAccountManager.DeleteAccount(upsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
 

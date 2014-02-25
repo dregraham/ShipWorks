@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Static list of UpsServicePackageTypeSettings
         /// The list is defined in the ServicePackageValidationSettings getter
         /// </summary>
-        static List<UpsServicePackageTypeSetting> servicePackageSettings;
+        static Lazy<List<UpsServicePackageTypeSetting>> servicePackageSettings = new Lazy<List<UpsServicePackageTypeSetting>>(()=> GetServicePackageSettings());
 
         readonly UpsServiceType serviceType;
         readonly UpsPackagingType packageType;
@@ -273,357 +273,361 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// This is the list of allowed service/packge types, along with approved weight and packge counts
         /// </summary>
+        private static List<UpsServicePackageTypeSetting> GetServicePackageSettings()
+        {
+            // In v16 (2013), Tube is no longer valid for SurePost.  So find out what version we are running, and don't add Tube
+            // if we are greater than the legacy version.
+            bool isWsVersionGreaterThanLegacyVersion = WorldShipUtility.WorldShipMajorVersion > legacyWorldShipVersion;
+
+             List<UpsServicePackageTypeSetting> localServicePackageSettings = new List<UpsServicePackageTypeSetting>();
+
+            // SurePost Less than 1 lb
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsSurePostLessThan1Lb, UpsPackagingType.Custom, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
+            if (!isWsVersionGreaterThanLegacyVersion)
+            {
+                localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                    UpsServiceType.UpsSurePostLessThan1Lb, UpsPackagingType.Tube, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
+            }
+
+            // SurePost 1 lb or Greater
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsSurePost1LbOrGreater, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
+            if (!isWsVersionGreaterThanLegacyVersion)
+            {
+                localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                                               UpsServiceType.UpsSurePost1LbOrGreater, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
+            }
+
+            // SurePost Bound Printed Matter
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsSurePostBoundPrintedMatter, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 15.00f, 1, false, false, false));
+            if (!isWsVersionGreaterThanLegacyVersion)
+            {
+                localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                                               UpsServiceType.UpsSurePostBoundPrintedMatter, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 15.00f, 1, false, false, false));
+            }
+
+            // SurePost Media
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsSurePostMedia, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
+            if (!isWsVersionGreaterThanLegacyVersion)
+            {
+                localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                                               UpsServiceType.UpsSurePostMedia, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
+            }
+
+            // Mail Innovations Expedited
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.BPMFlats, WeightUnitOfMeasure.Pounds, 0.1f, 15.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.BPMParcels, WeightUnitOfMeasure.Pounds, 0.1f, 15.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.Irregulars, WeightUnitOfMeasure.Ounces, 1.0f, 15.99f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.Machinables, WeightUnitOfMeasure.Ounces, 6.0f, 15.99f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.MediaMail, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.ParcelPost, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.StandardFlats, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
+
+            // Mail Innovations Priority
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsPriority, UpsPackagingType.PriorityMail, WeightUnitOfMeasure.Pounds, 0.9f, 70.0f, 1, false, false, false));
+
+            // Mail Innovations First Class
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsFirstClass, UpsPackagingType.FirstClassMail, WeightUnitOfMeasure.Ounces, 0.1f, 13.0f, 1, false, false, false));
+
+            // International Mail Innovations Economy
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.BPM, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.Flats, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.Parcels, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+
+            // International Mail Innovations Priority
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.BPM, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.Flats, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.Parcels, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
+
+            // International Worldwide Express Plus
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // International Worldwide Express
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // International Worldwide Saver
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // International Worldwide Expedited
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.WorldwideExpedited, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // Next Day Air Early AM
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
+
+            // Next Day Air 
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAir, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // Next Day Air Saver
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // 2nd Day Air AM
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAirAM, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // 2nd Day Air 
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups2DayAir, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // 3 day select
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups3DaySelect, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+
+            // 3 day select from Canada
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.Ups3DaySelectFromCanada, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // Ground
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsGround, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // UPS Standard
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsStandard, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+            // UpsExpress
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+
+            // UpsExpressEarlyAM
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+
+            // UpsExpressSaver
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpressSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
+
+            // UpsExpedited
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpedited, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpedited, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpedited, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpedited, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsExpedited, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+
+            // UpsCAWorldWideExpressSaver
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+
+            // UpsCaWorldWideExpressPlus
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+
+            // UpsCaWorldWideExpress
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+            localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
+                UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+
+
+            return localServicePackageSettings;
+        }
+
+
+        /// <summary>
+        /// Gets the service package validation settings.
+        /// </summary>
+        /// <value>
+        /// The service package validation settings.
+        /// </value>
         public static List<UpsServicePackageTypeSetting> ServicePackageValidationSettings
         {
-            get
-            {
-                if (servicePackageSettings != null && servicePackageSettings.Count > 0)
-                {
-                    return servicePackageSettings;
-                }
-
-                // In v16 (2013), Tube is no longer valid for SurePost.  So find out what version we are running, and don't add Tube
-                // if we are greater than the legacy version.
-                bool isWsVersionGreaterThanLegacyVersion = WorldShipUtility.WorldShipMajorVersion > legacyWorldShipVersion;
-
-                servicePackageSettings = new List<UpsServicePackageTypeSetting>();
-
-                // SurePost Less than 1 lb
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsSurePostLessThan1Lb, UpsPackagingType.Custom, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
-                if (!isWsVersionGreaterThanLegacyVersion)
-                {
-                    servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                        UpsServiceType.UpsSurePostLessThan1Lb, UpsPackagingType.Tube, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
-                }
-
-                // SurePost 1 lb or Greater
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsSurePost1LbOrGreater, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
-                if (!isWsVersionGreaterThanLegacyVersion)
-                {
-                    servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                                                   UpsServiceType.UpsSurePost1LbOrGreater, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
-                }
-
-                // SurePost Bound Printed Matter
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsSurePostBoundPrintedMatter, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 15.00f, 1, false, false, false));
-                if (!isWsVersionGreaterThanLegacyVersion)
-                {
-                    servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                                                   UpsServiceType.UpsSurePostBoundPrintedMatter, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 15.00f, 1, false, false, false));
-                }
-
-                // SurePost Media
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsSurePostMedia, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
-                if (!isWsVersionGreaterThanLegacyVersion)
-                {
-                    servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                                                   UpsServiceType.UpsSurePostMedia, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 1f, 70.00f, 1, false, false, false));
-                }
-
-                // Mail Innovations Expedited
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.BPMFlats, WeightUnitOfMeasure.Pounds, 0.1f, 15.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.BPMParcels, WeightUnitOfMeasure.Pounds, 0.1f, 15.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.Irregulars, WeightUnitOfMeasure.Ounces, 1.0f, 15.99f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.Machinables, WeightUnitOfMeasure.Ounces, 6.0f, 15.99f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.MediaMail, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.ParcelPost, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsExpedited, UpsPackagingType.StandardFlats, WeightUnitOfMeasure.Ounces, 0.1f, 15.99f, 1, false, false, false));
-
-                // Mail Innovations Priority
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsPriority, UpsPackagingType.PriorityMail, WeightUnitOfMeasure.Pounds, 0.9f, 70.0f, 1, false, false, false));
-
-                // Mail Innovations First Class
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsFirstClass, UpsPackagingType.FirstClassMail, WeightUnitOfMeasure.Ounces, 0.1f, 13.0f, 1, false, false, false));
-
-                // International Mail Innovations Economy
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.BPM, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.Flats, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntEconomy, UpsPackagingType.Parcels, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-
-                // International Mail Innovations Priority
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.BPM, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.Flats, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsMailInnovationsIntPriority, UpsPackagingType.Parcels, WeightUnitOfMeasure.Pounds, 0.1f, 70.0f, 1, false, false, false));
-
-                // International Worldwide Express Plus
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpressPlus, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // International Worldwide Express
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // International Worldwide Saver
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Box10Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Box25Kg, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // International Worldwide Expedited
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.WorldwideExpedited, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // Next Day Air Early AM
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirAM, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, true));
-
-                // Next Day Air 
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAir, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // Next Day Air Saver
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsNextDayAirSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // 2nd Day Air AM
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAirAM, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // 2nd Day Air 
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressLarge, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressMedium, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.BoxExpressSmall, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.Letter, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups2DayAir, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // 3 day select
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups3DaySelect, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-
-                // 3 day select from Canada
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.Ups3DaySelectFromCanada, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // Ground
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsGround, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // UPS Standard
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsStandard, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-                // UpsExpress
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-
-                // UpsExpressEarlyAM
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressEarlyAm, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-
-                // UpsExpressSaver
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpressSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
-
-                // UpsExpedited
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpedited, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpedited, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpedited, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpedited, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsExpedited, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-
-                // UpsCAWorldWideExpressSaver
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressSaver, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-
-                // UpsCaWorldWideExpressPlus
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpressPlus, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-
-                // UpsCaWorldWideExpress
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.BoxExpress, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.ExpressEnvelope, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 1, false, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Pak, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-                servicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                    UpsServiceType.UpsCaWorldWideExpress, UpsPackagingType.Tube, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
-
-
-                return servicePackageSettings;
-            }
+            get { return servicePackageSettings.Value; }
         }
     }
 }

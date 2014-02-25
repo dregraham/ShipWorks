@@ -30,15 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostalWebSetupWizard));
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
-            this.labelInfo1 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelInfo1 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageWelcome.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -85,31 +85,20 @@
             this.wizardPageWelcome.Controls.Add(this.labelInfo1);
             this.wizardPageWelcome.Description = "Setup ShipWorks to print USPS labels.";
             this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
             this.wizardPageWelcome.Size = new System.Drawing.Size(602, 388);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup USPS Shipping";
             // 
-            // labelInfo1
+            // label2
             // 
-            this.labelInfo1.Location = new System.Drawing.Point(23, 10);
-            this.labelInfo1.Name = "labelInfo1";
-            this.labelInfo1.Size = new System.Drawing.Size(486, 34);
-            this.labelInfo1.TabIndex = 4;
-            this.labelInfo1.Text = "This wizard will assist you in configuring ShipWorks to download USPS shipping la" +
-                "bels. This enables you to begin shipping, tracking, and printing USPS labels dir" +
-                "ectly from ShipWorks.";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.label1.Location = new System.Drawing.Point(43, 50);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Important";
+            this.label2.Location = new System.Drawing.Point(115, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(419, 110);
+            this.label2.TabIndex = 7;
+            this.label2.Text = resources.GetString("label2.Text");
             // 
             // pictureBox1
             // 
@@ -121,33 +110,46 @@
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
-            // label2
+            // label1
             // 
-            this.label2.Location = new System.Drawing.Point(115, 51);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(419, 110);
-            this.label2.TabIndex = 7;
-            this.label2.Text = resources.GetString("label2.Text");
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(43, 50);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Important";
+            // 
+            // labelInfo1
+            // 
+            this.labelInfo1.Location = new System.Drawing.Point(23, 10);
+            this.labelInfo1.Name = "labelInfo1";
+            this.labelInfo1.Size = new System.Drawing.Size(486, 34);
+            this.labelInfo1.TabIndex = 4;
+            this.labelInfo1.Text = "This wizard will assist you in configuring ShipWorks to download USPS shipping la" +
+    "bels. This enables you to begin shipping, tracking, and printing USPS labels dir" +
+    "ectly from ShipWorks.";
             // 
             // PostalWebSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(602, 495);
-            this.ControlBox = false;
             this.Name = "PostalWebSetupWizard";
+            this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageWelcome});
             this.Text = "USPS w/o Postage Setup Wizard";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageWelcome.ResumeLayout(false);
             this.wizardPageWelcome.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

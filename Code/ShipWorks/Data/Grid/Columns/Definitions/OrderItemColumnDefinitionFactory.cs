@@ -207,8 +207,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{B79CDE81-97FA-4F09-B900-5F26DA061232}",
-                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "Shipped Status", true,
+                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "My eBay (Shipped)", true,
                             EbayOrderItemFields.MyEbayShipped)
+                            {
+                                StoreTypeCode = StoreTypeCode.Ebay
+                            },
+
+                        new GridColumnDefinition("{8E552A78-A06F-457E-80D9-415BEAFC5143}",
+                            new GridBooleanDisplayType() { TrueText = "Paid", FalseText = "Not Paid" }, "My eBay (Paid)", true,
+                            EbayOrderItemFields.MyEbayPaid)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
                             },

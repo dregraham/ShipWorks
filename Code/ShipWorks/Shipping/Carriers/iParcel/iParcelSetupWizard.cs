@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business;
 
@@ -20,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// The setup wizard used for adding a new i-parcel account to ShipWorks.
     /// </summary>
-    public partial class iParcelSetupWizard : WizardForm
+    public partial class iParcelSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly IParcelAccountEntity iParcelAccount;
         
@@ -132,6 +127,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (DialogResult != DialogResult.OK && iParcelAccount != null && !iParcelAccount.IsNew)
             {
                 iParcelAccountManager.DeleteAccount(iParcelAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
     }

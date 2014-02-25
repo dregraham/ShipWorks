@@ -183,3 +183,112 @@ namespace :test do
 		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", "/resultsfile:TestResults/integration-results.trx"
 	end
 end
+
+
+########################################################################
+## Tasks for creating and seeding the database 
+########################################################################
+namespace :db do
+
+	desc "Create and populate a new ShipWorks database with seed data"
+	task :rebuild => [:create, :schema, :seed]	
+
+	desc "Drop and create the ShipWorks_SeedData database"
+	task :create do
+
+		# Drop the seed database if it exists
+		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
+		
+		print "Killing all connections and dropping database...\r\n"
+		dropSqlText = "
+			DECLARE @DatabaseName nvarchar(50)
+			SET @DatabaseName = N'ShipWorks_SeedData'
+
+			DECLARE @SQL varchar(max)
+
+			SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
+			FROM MASTER..SysProcesses
+			WHERE DBId = DB_ID(@DatabaseName) AND SPId <> @@SPId
+			
+			EXEC (@SQL)
+			GO
+
+
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = N'ShipWorks_SeedData')
+				DROP DATABASE [ShipWorks_SeedData] "
+
+		File.open("./DropSeedDatabase.sql", "w") {|file| file.puts dropSqlText}
+		sh "sqlcmd -S (local) -i DropSeedDatabase.sql"
+
+		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
+		
+
+		# We're good to create a new seed database
+		puts "Creating the database...\r\n"
+		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
+		
+		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used 
+		# by the ShipWorks application
+		sqlText = File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateDatabase.sql")
+		sqlText = sqlText.gsub(/{DBNAME}/, "ShipWorks_SeedData")
+		sqlText = sqlText.gsub(/{FILEPATH}/, "C:\\Program Files\\Microsoft SQL Server\\MSSQL10_50.DEVELOPMENT\\MSSQL\\DATA\\")
+		sqlText = sqlText.gsub(/{FILENAME}/, "ShipWorks_SeedData")
+
+		# Write the script to disk, so we can execute it via shell
+		File.open("./CreateSeedDatabase.sql", "w") {|file| file.puts sqlText}
+		sh "sqlcmd -S (local) -i CreateSeedDatabase.sql"
+
+		# Clean up the temporary script
+		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
+	end
+
+	desc "Build the ShipWorks_SeedData database schema from scratch"
+	task :schema do
+		puts "Creating the database schema..."
+				
+		# Clean up any remnants of the temporary script that may exist from a previous run
+		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
+
+		# We're going to use the schema script in the ShipWorks project, but we're going to write it
+		# to a temporary file, so we can tell prefix the script to use our seed database
+		sqlText = "
+		USE ShipWorks_SeedData
+		GO
+		"
+		
+		# Concatenate the schema script to our string
+		sqlText.concat(File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateSchema.sql"))
+
+		# Write our script to a temporary file and execute the SQL
+		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
+		sh "sqlcmd -S (local) -i CreateSeedSchema.sql"
+
+		# Clean up the temporary script
+		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
+	end
+
+	desc "Populate the ShipWorks_SeedData database with order, shipment, and carrier account data"
+	task :seed do
+		puts "Populating data..."
+
+		# Clean up any remnants of the temporary script that may exist from a previous run
+		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
+
+		# We're going to write the static seed data to a temporary file, so we can tell prefix the script 
+		# to use our seed database
+		sqlText = "
+		USE ShipWorks_SeedData
+		GO
+		"
+		
+		# Concatenate the script containing our seed data to the string
+		sqlText.concat(File.read("./SeedData.sql"))
+
+		# Write our script to a temporary file and execute the SQL
+		File.open("./TempSeedData.sql", "w") {|file| file.puts sqlText}
+		sh "sqlcmd -S (local) -i TempSeedData.sql"
+
+		# Clean up the temporary script
+		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
+	end
+end
