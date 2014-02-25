@@ -9,6 +9,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.Filters;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -50,6 +52,8 @@ namespace ShipWorks.Shipping.Editing.Rating
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
 
             ShowAllRates = true;
+
+            sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
         }
 
         
@@ -265,24 +269,12 @@ namespace ShipWorks.Shipping.Editing.Rating
                 ClearSelection();
 
                 int rateIndex = RateGroup.Rates.IndexOf(rate);
-                if (rateIndex >= 0)
+                if (rateIndex >= 0 && sandGrid.Rows.Count > rateIndex)
                 {
-                    if (sandGrid.Rows.Count > rateIndex)
-                    {
-                        GridRow selectedRow = sandGrid.Rows[rateIndex];
-                        selectedRow.EnsureVisible();
+                    GridRow selectedRow = sandGrid.Rows[rateIndex];
+                    selectedRow.EnsureVisible();
 
-                        foreach (GridCell cell in selectedRow.Cells)
-                        {
-                            // Highlight the selected row otherwise it's just a light shade of gray
-                            // that can be hard to tell which row is selected
-                            cell.BackColor = Color.DodgerBlue;
-                            cell.ForeColor = Color.White;
-                        }
-
-                        // sandGrid.SelectRow(selectedRow);
-                        selectedRow.Selected = true;
-                    }
+                    selectedRow.Selected = true;
                 }
             }
         }
@@ -397,6 +389,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
         }
 
+        /// <summary>
+        /// Called when 'Configure' is clicked on a rate result
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="GridRowColumnEventArgs"/> instance containing the event data.</param>
         private void OnConfigureRateClicked(object sender, GridRowColumnEventArgs e)
         {
             RateResult rate = e.Row.Tag as RateResult;
@@ -443,6 +440,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                 sandGrid.SelectionChanged += OnSelectedRateChanged;
             }
         }
+
+
 
     }
 }

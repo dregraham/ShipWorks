@@ -886,9 +886,6 @@ namespace ShipWorks.Shipping
 
             // Update the provider in the shipment grid
             shipmentControl.Refresh();
-
-            //// Update the displayed rates
-            //LoadDisplayedRates();
         }
 
         /// <summary>
