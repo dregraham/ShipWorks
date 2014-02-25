@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         else
                         {
                             // We need to fetch the rates from the provider
-                            rateControl.ClearRates(string.Empty);
+                            //rateControl.ClearRates(string.Empty);
                             FetchRates(shipmentForRating);
                         }
                     }

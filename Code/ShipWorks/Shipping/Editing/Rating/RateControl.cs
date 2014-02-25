@@ -50,9 +50,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
 
             ShowAllRates = true;
+
+            loadingRatesPanel.Visible = false;
         }
 
-        
+
         /// <summary>
         /// Initialize the rate control
         /// </summary>
@@ -143,7 +145,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     sandGrid.Rows.Clear();
                 }
 
-                panelOutOfDate.Visible = false;
+                statusPanel.Visible = false;
                 UpdateFootnotes(rateGroup);
             }
         }
@@ -161,7 +163,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ShowSpinner()
         {
-            loadingRatesPanel.BringToFront();
+            //loadingRatesPanel.BringToFront();
+            labelStatus.Text = "Fetching rates...";
         }
 
         /// <summary>
@@ -169,7 +172,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void HideSpinner()
         {
-            loadingRatesPanel.SendToBack();
+            //loadingRatesPanel.SendToBack();
+            labelStatus.Text = "Rates are up to date";
         }
 
         /// <summary>
@@ -206,7 +210,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 
                 AddShowMoreRatesRow();
 
-                panelOutOfDate.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
+                statusPanel.Visible = rateGroup.Rates.Count > 0 && rateGroup.OutOfDate;
                 UpdateFootnotes(rateGroup);
             }
         }
