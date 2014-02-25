@@ -130,8 +130,19 @@ namespace ShipWorks.Shipping
 
             rateControl.Initialize(new FootnoteParameters(GetRates, GetStoreForCurrentShipment));
 
-            // Default the minimum size of the tab control panel to be 2/3rds the hight of the shipping dialog.
-            ratesSplitContainer.Panel1MinSize = 2*(Size.Height/3);
+            // Ensure that the rate control cannot take up more than 1/3rd the height of the dialog, even after resizing
+            SetServiceControlMinimumHeight();
+
+            ResizeBegin += (sender, args) => ratesSplitContainer.Panel1MinSize = 0;
+            ResizeEnd += (sender, args) => SetServiceControlMinimumHeight();
+        }
+
+        /// <summary>
+        /// Ensure that the service control is always at least 2/3rds the height of the shipping dialog
+        /// </summary>
+        private void SetServiceControlMinimumHeight()
+        {
+            ratesSplitContainer.Panel1MinSize = 2 * (ratesSplitContainer.Height / 3);
         }
 
         /// <summary>

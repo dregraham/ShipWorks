@@ -565,7 +565,7 @@ namespace ShipWorks.Shipping
             this.rateControlArea.Controls.Add(this.rateControl);
             this.rateControlArea.Location = new System.Drawing.Point(0, 17);
             this.rateControlArea.Name = "rateControlArea";
-            this.rateControlArea.Size = new System.Drawing.Size(354, 136);
+            this.rateControlArea.Size = new System.Drawing.Size(354, 118);
             this.rateControlArea.TabIndex = 3;
             // 
             // rateControl
