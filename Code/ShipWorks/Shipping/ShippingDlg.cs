@@ -1733,9 +1733,6 @@ namespace ShipWorks.Shipping
                 WorkerSupportsCancellation = true
             };
 
-            rateControl.ClearRates(String.Empty);
-            rateControl.ShowSpinner();
-
             // What to do when done.  Runs on the UI thread.
             getRatesBackgroundWorker.RunWorkerCompleted += (_sender, _e) =>
             {
@@ -1769,7 +1766,8 @@ namespace ShipWorks.Shipping
                     processingErrors[shipment.ShipmentID] = ex;
                 }
             };
-
+            
+            rateControl.ShowSpinner();
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
         }
         
