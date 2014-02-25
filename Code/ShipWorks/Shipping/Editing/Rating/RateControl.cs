@@ -56,7 +56,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
         }
 
-        
         /// <summary>
         /// Initialize the rate control
         /// </summary>
@@ -219,7 +218,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
         /// </summary>
-        /// <param name="rateGroup">The rate group.</param>
         private void AddShowMoreRatesRow()
         {
             // Honor the restricted rate count setting
@@ -440,8 +438,5 @@ namespace ShipWorks.Shipping.Editing.Rating
                 sandGrid.SelectionChanged += OnSelectedRateChanged;
             }
         }
-
-
-
     }
 }
