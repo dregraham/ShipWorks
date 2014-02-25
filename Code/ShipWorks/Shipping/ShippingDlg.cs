@@ -108,6 +108,11 @@ namespace ShipWorks.Shipping
                 throw new ArgumentNullException("shipments");
             }
             
+            // Manage the window positioning
+            WindowStateSaver windowSaver = new WindowStateSaver(this);
+            windowSaver.ManageSplitter(splitContainer, "Splitter");
+            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
 
@@ -134,11 +139,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
-            windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
-
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
 
