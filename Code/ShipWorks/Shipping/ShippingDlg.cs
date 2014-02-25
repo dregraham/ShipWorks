@@ -904,6 +904,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void ClearRates(string reason)
         {
+            rateControl.HideSpinner();
             rateControl.ClearRates(reason);
         }
 
@@ -1015,7 +1016,7 @@ namespace ShipWorks.Shipping
         {
             if (this.loadedShipmentEntities.Count > 1)
             {
-                rateControl.ClearRates("(Multiple)");
+                ClearRates("(Multiple)");
             }
             else
             {
@@ -1023,15 +1024,16 @@ namespace ShipWorks.Shipping
                 {
                     if (this.loadedShipmentEntities.Count == 1 && this.loadedShipmentEntities[0].Processed)
                     {
-                        rateControl.ClearRates("The shipment has already been processed.");
+                        ClearRates("The shipment has already been processed.");
                     }
                     else
                     {
-                        rateControl.ClearRates("");
+                        ClearRates(string.Empty);
                     }
                 }
                 else if (rateGroup.Rates.Count == 0)
                 {
+                    rateControl.HideSpinner();
                     rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
                 }
                 else
