@@ -35,6 +35,7 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using log4net;
 
 namespace ShipWorks.Shipping
 {
@@ -43,6 +44,9 @@ namespace ShipWorks.Shipping
     /// </summary>
     partial class ShippingDlg : Form
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
+
         // The singleton list of the current set of shipping errors.
         private static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
 
@@ -1781,9 +1785,9 @@ namespace ShipWorks.Shipping
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
-                catch (ShippingException)
+                catch (ShippingException ex)
                 {
-                    // Eat it ('< .  .  . 
+                    log.Error("Shipping exception encountered while getting rates", ex);
                 }
             };
             
