@@ -31,7 +31,7 @@ namespace ShipWorks.Data.Administration.Versioning
         public List<string> FromVersion
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>

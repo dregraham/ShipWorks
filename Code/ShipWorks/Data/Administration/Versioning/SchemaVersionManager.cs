@@ -135,20 +135,6 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
-        /// Gets the serialized schema version information.
-        /// </summary>
-        /// <value>
-        /// The serialized schema version information.
-        /// </value>
-        public string SerializedSchemaVersionInfo
-        {
-            get
-            {
-                return serializedSchemaVersionInfo;
-            }
-        }
-
-        /// <summary>
         /// Deserailize serializedVersions
         /// </summary>
         public List<UpgradePath> GetAllVersions(string serializedVersions)
