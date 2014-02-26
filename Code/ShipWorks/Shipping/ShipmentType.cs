@@ -29,6 +29,7 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
+using System.Security.Cryptography;
 
 namespace ShipWorks.Shipping
 {
@@ -620,9 +621,13 @@ namespace ShipWorks.Shipping
             {
                 valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
             }
-            
-	        return valueToBeHashed.ToString();
-	    }
+
+            using (SHA256Managed sha256 = new SHA256Managed())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
+                return Convert.ToBase64String(bytes);
+            }
+        }
 
         /// <summary>
         /// This is intended to be used when there is (most likely) a bad configuration
