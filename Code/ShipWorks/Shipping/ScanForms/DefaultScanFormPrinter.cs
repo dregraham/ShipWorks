@@ -51,18 +51,30 @@ namespace ShipWorks.Shipping.ScanForms
         public bool Print(IWin32Window owner, ScanFormBatch scanFormBatch)
         {
             List<Image> scanFormImages = new List<Image>();
-            foreach (ScanForm scanForm in scanFormBatch.ScanForms)
+            try
             {
-                DataResourceReference resource = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId).FirstOrDefault();
-                if (resource == null)
+                foreach (ScanForm scanForm in scanFormBatch.ScanForms)
                 {
-                    throw new InvalidOperationException("No resource saved for scan form " + scanForm.ScanFormId);
+                    DataResourceReference resource = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId).FirstOrDefault();
+                    if (resource == null)
+                    {
+                        throw new InvalidOperationException("No resource saved for scan form " + scanForm.ScanFormId);
+                    }
+
+                    scanFormImages.Add(Image.FromFile(resource.GetCachedFilename()));
                 }
 
-                scanFormImages.Add(Image.FromFile(resource.GetCachedFilename()));
+                return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Forms", scanFormImages.ToList(), true, true);
             }
-
-            return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Forms", scanFormImages.ToList(), true, true);
+            finally
+            {
+                scanFormImages.ForEach(i =>
+                { 
+                    i.Dispose();
+                    scanFormImages.Remove(i);
+                });
+                
+            }
         }
     }
 }

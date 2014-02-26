@@ -25,6 +25,7 @@ using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Grid.DetailView;
 using ShipWorks.Filters.Grid;
+using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Filters.Grid
 {
@@ -51,6 +52,11 @@ namespace ShipWorks.Filters.Grid
         // Allows overriding the default empty text and the font used to display it
         string overrideEmptyText = string.Empty;
 
+        // Indicates if the first row of the grid should be automatically selected after the grid loads.  This is currently a hidden reg
+        // setting intended for demoing.  Hopefully will be an official feature soon.  If and when it's a feature, it will be much more complicated than a flag.  Probably
+        // a filter setting.
+        bool autoSelectSingleSearchResult = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -66,6 +72,9 @@ namespace ShipWorks.Filters.Grid
             InitializeColumns(new FilterGridColumnStrategy());
 
             this.Disposed += new EventHandler(OnDisposed);
+
+            RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Options");
+            autoSelectSingleSearchResult = registry.GetValue("AutoSelectSingleSearch", false);
         }
 
         /// <summary>
@@ -228,6 +237,19 @@ namespace ShipWorks.Filters.Grid
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// The loading of the gateway (filter rows) has completed
+        /// </summary>
+        protected override void OnGatewayLoadingComplete(int rows, bool wasCleared)
+        {
+            base.OnGatewayLoadingComplete(rows, wasCleared);
+
+            if (autoSelectSingleSearchResult && rows == 1 && BuiltinFilter.IsSearchPlaceholderKey(ActiveFilterNode.FilterID))
+            {
+                this.Rows[0].Selected = true;
+            }
         }
 
         /// <summary>
