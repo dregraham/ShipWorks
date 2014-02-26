@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// Constructor
         /// </summary>
         private WebToolsCounterRatesBroker(PostalWebShipmentType shipmentType, ICarrierAccountRepository<NullEntity> accountRepository) :
-            base(shipmentType, accountRepository, "USPS (w/o Postage)")
+            base(shipmentType, accountRepository, "USPS")
         {
 
         }
