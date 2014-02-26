@@ -200,26 +200,43 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
-
-            List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
-
-            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
-
-            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
-                IEnumerable<BrokerException> distinctExceptions = brokerExceptions
-                                                                    .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
-                                                                    .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                                                                    .GroupBy(e => e.Message)
-                                                                    .Select(m => m.First()).ToList();
-
-            if (distinctExceptions.Any())
+            try
             {
-                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
-            }
+                AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
-            return rateGroup;
+                List<BrokerException> brokerExceptions = new List<BrokerException>();
+                IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
+
+                // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+                IEnumerable<BrokerException> distinctExceptions = brokerExceptions
+                    .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
+                    .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
+                    .GroupBy(e => e.Message)
+                    .Select(m => m.First()).ToList();
+
+                if (distinctExceptions.Any())
+                {
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
+                }
+
+                return rateGroup;
+            }
+            catch (BestRateException ex)
+            {
+                // A problem occurred that is germane to the BestRateShipmentType (and not within any 
+                // brokers or shipment types); this is most likely there aren't any providers/accounts 
+                // setup to use with best rate, so we'll just return a rate group communicating the 
+                // problem to the user
+                RateResult rateResult = new RateResult("No rates are available for the shipment.", string.Empty);
+                rateResult.ShipmentType = ShipmentTypeCode;
+
+                RateGroup errorGroup = new RateGroup(new List<RateResult> { rateResult });
+                errorGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeManager.GetType(shipment), ex.Message));
+
+                return errorGroup;
+            }
         }
 
         /// <summary>
@@ -235,7 +252,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 string message = string.Format("No accounts are configured to use with best rate.{0}Check the shipping settings to ensure " +
                                                "your shipping accounts have been setup for the shipping providers being used with best rate.", Environment.NewLine);
 
-                throw new ShippingException(message);
+                throw new BestRateException(message);
             }
 
             // Start getting rates from each enabled carrier

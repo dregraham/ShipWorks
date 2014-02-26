@@ -335,6 +335,48 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
+        public void GetRates_ReturnsRateGroup_WhenFactoryCreatesZeroBrokers_Test()
+        {
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
+            
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.IsNotNull(rateGroup);
+        }
+
+        [TestMethod]
+        public void GetRates_RateGroupHasExceptionFootnoteFactory_WhenFactoryCreatesZeroBrokers_Test()
+        {
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.AreEqual(1, rateGroup.FootnoteFactories.Count());
+            Assert.IsInstanceOfType(rateGroup.FootnoteFactories.First(), typeof(ExceptionsRateFootnoteFactory));
+        }
+
+
+        [TestMethod]
+        public void GetRates_RateGroupHasOneRateResult_WhenFactoryCreatesZeroBrokers_Test()
+        {
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.AreEqual(1, rateGroup.Rates.Count);
+        }
+
+        [TestMethod]
+        public void GetRates_RateResultShipmentTypeIsBestRate_WhenFactoryCreatesZeroBrokers_Test()
+        {
+            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
+
+            RateGroup rateGroup = testObject.GetRates(shipment);
+
+            Assert.AreEqual(ShipmentTypeCode.BestRate, rateGroup.Rates[0].ShipmentType);
+        }
+
+        [TestMethod]
         public void SupportsGetRates_ReturnsTrue_Test()
         {
             Assert.IsTrue(testObject.SupportsGetRates);
