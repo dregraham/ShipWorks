@@ -380,7 +380,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 // Update the selected rate in the rate control to coincide with the service change
                 PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
-                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
                 {
                     if (r.Tag == null)
                     {
