@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             int oldIndex = service.SelectedIndex;
 
-            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.Tag;
+            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.OriginalTag;
 
             service.SelectedValue = servicetype;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -355,7 +355,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                         return false;
                     }
 
-                    return (OnTracServiceType)r.Tag == serviceType;
+                    return (OnTracServiceType)r.OriginalTag == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);

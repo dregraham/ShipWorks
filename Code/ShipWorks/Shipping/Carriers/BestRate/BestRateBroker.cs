@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Filter the returned rates
             List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
                                                          .Where(IsValidRate)
-                                                         .Where(r => !IsExcludedServiceType(GetOriginalTag(r)))
+                                                         .Where(r => !IsExcludedServiceType(r.OriginalTag))
                                                          .ToList();
 
             // Create a dictionary of rates with their associated accounts for lookup later
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             foreach (RateResult rate in filteredRates)
             {
                 // Account for the rate being a previously cached rate where the tag is already a best rate tag
-                object originalTag = GetOriginalTag(rate);
+                object originalTag = rate.OriginalTag;
 
                 // Replace the service type with a function that will select the correct shipment type
                 rate.Tag = new BestRateResultTag
@@ -177,16 +177,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// A helper method to get the original tag of a rate to handle cases where the
-        /// rate is a cached rate best rate result.
-        /// </summary>
-        protected virtual object GetOriginalTag(RateResult rate)
-        {
-            // Account for the rate being a previously cached rate where the tag is already a best rate tag
-            return rate.Tag is BestRateResultTag ? ((BestRateResultTag)rate.Tag).OriginalTag : rate.Tag;
-        }
-
-        /// <summary>
         /// Configures the broker using the given settings.
         /// </summary>
         /// <param name="brokerSettings">The broker settings.</param>
@@ -202,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>Concatenation of the carrier description and the original rate tag</returns>
         protected virtual string GetResultKey(RateResult rate)
         {
-            return carrierDescription + GetOriginalTag(rate);
+            return carrierDescription + rate.OriginalTag;
         }
 
         /// <summary>

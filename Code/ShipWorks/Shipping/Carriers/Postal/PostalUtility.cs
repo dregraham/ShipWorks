@@ -412,7 +412,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="baseRate">Rate on which service level details should be set</param>
         public static void SetServiceDetails(RateResult baseRate)
         {
-            PostalRateSelection rateSelection = baseRate.Tag as PostalRateSelection;
+            PostalRateSelection rateSelection = baseRate.OriginalTag as PostalRateSelection;
 
             if (rateSelection != null)
             {

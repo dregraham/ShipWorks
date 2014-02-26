@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
             // we need to pass the original tag that is a postal service type
-            object originalTag = GetOriginalTag(rate);
+            object originalTag = rate.OriginalTag;
             return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(originalTag));
         }
 

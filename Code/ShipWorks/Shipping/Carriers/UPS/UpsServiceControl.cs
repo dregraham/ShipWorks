@@ -420,12 +420,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         return false;
                     }
 
-                    if (r.Tag == null || !(r.Tag is UpsServiceType))
+                    if (r.Tag == null || !(r.OriginalTag is UpsServiceType))
                     {
                         return false;
                     }
 
-                    return (UpsServiceType)r.Tag == selectedServiceType;
+                    return (UpsServiceType)r.OriginalTag == selectedServiceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -823,9 +823,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             int oldIndex = service.SelectedIndex;
 
-            if (e.Rate.Tag is UpsServiceType)
+            if (e.Rate.OriginalTag is UpsServiceType)
             {
-                UpsServiceType serviceType = (UpsServiceType)e.Rate.Tag;
+                UpsServiceType serviceType = (UpsServiceType)e.Rate.OriginalTag;
 
                 service.SelectedValue = serviceType;
                 if (service.SelectedIndex == -1 && oldIndex != -1)

@@ -483,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         // Go through each Endicia rate
                         foreach (RateResult endiciaRate in endiciaRates)
                         {
-                            PostalRateSelection endiciaRateDetail = (PostalRateSelection)endiciaRate.Tag;
+                            PostalRateSelection endiciaRateDetail = (PostalRateSelection)endiciaRate.OriginalTag;
 
                             // If it's a rate they could (or have) saved on with Express1, we modify it
                             if (endiciaRate.Selectable &&
@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 if (express1Rates != null)
                                 {
                                     express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                        ((PostalRateSelection)e1r.Tag).ServiceType == endiciaRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == endiciaRateDetail.ConfirmationType);
+                                        ((PostalRateSelection)e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == endiciaRateDetail.ConfirmationType);
                                 }
 
                                 // If Express1 returned a rate, check to make sure it is a lower amount
@@ -526,7 +526,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 else
                                 {
                                     // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
                                     {
                                         rate.AmountFootnote = Resources.star_green;
                                     }
@@ -623,8 +623,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Check Endicia amount
                     List<RateResult> endiciaRates = endiciaApiClient.GetRatesFast(shipment, this);
                     RateResult endiciaRate = endiciaRates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                    ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                    && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+                                                                                                    ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                                                                                                    && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
 
                     // Check Express1 amount
                     shipment.ShipmentType = (int)ShipmentTypeCode.Express1Endicia;
@@ -633,8 +633,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     List<RateResult> express1Rates = endiciaApiClient.GetRatesFast(shipment, this);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                      ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                      && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+                                                                                                      ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                                                                                                      && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
 
                     // Now set useExpress1 to true only if the express 1 rate is less than the endicia amount
                     if (endiciaRate != null && express1Rate != null)

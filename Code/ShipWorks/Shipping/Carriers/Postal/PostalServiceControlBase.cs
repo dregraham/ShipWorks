@@ -388,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         return false;
                     }
 
-                    PostalRateSelection current = r.Tag as PostalRateSelection;
+                    PostalRateSelection current = r.OriginalTag as PostalRateSelection;
                     if (current == null)
                     {
                         // This isn't an actual rate - just a row in the grid for the section header
@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            PostalRateSelection rate = e.Rate.Tag as PostalRateSelection;
+            PostalRateSelection rate = e.Rate.OriginalTag as PostalRateSelection;
 
             service.SelectedValue = rate.ServiceType;
 

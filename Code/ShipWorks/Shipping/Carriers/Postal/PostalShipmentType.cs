@@ -398,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     .ToList();
 
             var validExpress1Rates = rates
-                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.Tag).ServiceType))
+                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
                 .ToList();
 
             validExpress1Rates.ForEach(e => e.ShipmentType = baseShipmentType);

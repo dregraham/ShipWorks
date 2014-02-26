@@ -208,7 +208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         // Go through each Stamps rate
                         foreach (RateResult stampsRate in stampsRates)
                         {
-                            PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.Tag;
+                            PostalRateSelection stampsRateDetail = (PostalRateSelection)stampsRate.OriginalTag;
                             stampsRate.ShipmentType = ShipmentTypeCode.Stamps;
 
                             // If it's a rate they could (or have) saved on with Express1, we modify it
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                                 if (express1Rates != null && express1Rates.Any(e1r => e1r.Selectable))
                                 {
                                     express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                        ((PostalRateSelection)e1r.Tag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.Tag).ConfirmationType == stampsRateDetail.ConfirmationType);
+                                        ((PostalRateSelection)e1r.OriginalTag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == stampsRateDetail.ConfirmationType);
                                     express1Rate.ShipmentType = stampsRate.ShipmentType;
                                 }
 
@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                                 else
                                 {
                                     // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.Tag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
                                     {
                                         rate.AmountFootnote = Resources.star_green;
                                     }
@@ -346,8 +346,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Check Stamps.com amount
                     List<RateResult> stampsRates = new StampsApiSession().GetRates(shipment);
                     RateResult stampsRate = stampsRates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                  ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                  && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+                                                                                                  ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                                                                                                  && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
 
                     // Check Express1 amount
                     shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
@@ -356,8 +356,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     List<RateResult> express1Rates = new StampsApiSession().GetRates(shipment);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
-                                                                                                      ((PostalRateSelection)er.Tag).ServiceType == (PostalServiceType)shipment.Postal.Service
-                                                                                                      && ((PostalRateSelection)er.Tag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
+                                                                                                      ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
+                                                                                                      && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
 
                     // Now set useExpress1 to true only if the express 1 rate is less than the Stamps amount
                     if (stampsRate != null && express1Rate != null)

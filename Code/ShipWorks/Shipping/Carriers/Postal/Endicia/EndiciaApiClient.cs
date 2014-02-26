@@ -1024,7 +1024,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     if (isDomestic && (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope))
                     {
                         // Special case - endicia not returning a rate for first class envelopes
-                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.FirstClass))
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.FirstClass))
                         {
                             try
                             {
@@ -1041,7 +1041,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning Standard Post instead.  If we can't find Parcel Select, try
                         // to get those rates manually.  In the future if Endicia updates\fixes it we may be able to remove this.
-                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.ParcelSelect))
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
                         {
                             try
                             {
@@ -1155,7 +1155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         foreach (RateResult result in results)
                         {
-                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.Tag).ServiceType == ((PostalRateSelection) result.Tag).ServiceType);
+                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.OriginalTag).ServiceType == ((PostalRateSelection) result.OriginalTag).ServiceType);
                             if (webToolRate != null)
                             {
                                 resultsWithDays.Add(new RateResult(

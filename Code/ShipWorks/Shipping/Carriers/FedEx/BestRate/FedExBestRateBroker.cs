@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
             // we need to pass the original tag that is a FedEx service type
-            object originalTag = GetOriginalTag(rate);
+            object originalTag = rate.OriginalTag;
             return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(originalTag));
         }
 

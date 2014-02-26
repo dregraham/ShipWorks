@@ -252,7 +252,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             int oldIndex = service.SelectedIndex;
 
-            iParcelRateSelection rate = e.Rate.Tag as iParcelRateSelection;
+            iParcelRateSelection rate = e.Rate.OriginalTag as iParcelRateSelection;
 
             service.SelectedValue = rate.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -296,7 +296,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         return false;
                     }
 
-                    return ((iParcelRateSelection)r.Tag).ServiceType == serviceType;
+                    return ((iParcelRateSelection)r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);

@@ -65,6 +65,19 @@ namespace ShipWorks.Shipping.Editing.Rating
         public string Description { get; set; }
 
         /// <summary>
+        /// A helper property to get the original tag of a rate to handle cases where the
+        /// rate is a cached rate best rate result.
+        /// </summary>
+        public object OriginalTag
+        {
+            get
+            {
+                // Account for the rate being a previously cached rate where the tag is already a best rate tag
+                return Tag is BestRateResultTag ? ((BestRateResultTag)Tag).OriginalTag : Tag;
+            }
+        }
+
+        /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever
         /// </summary>
         public string Days
@@ -140,27 +153,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             get { return carrierDescription; }
             set { carrierDescription = value; }
-        }
-
-        /// <summary>
-        /// Returns the test to display for the rate selection link, i.e. "Select" or "Sign up!"
-        /// </summary>
-        public string SelectionText
-        {
-            get
-            {
-                if (Tag is BestRateResultTag && ((BestRateResultTag)Tag).SignUpAction != null)
-                {
-                    return "Sign Up!";
-                }
-
-                if (Selectable)
-                {
-                    return "Select";
-                }
-
-                return string.Empty;
-            }
         }
 
         /// <summary>

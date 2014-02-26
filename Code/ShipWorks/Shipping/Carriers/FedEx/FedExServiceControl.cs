@@ -669,7 +669,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         return false;
                     }
 
-                    return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
+                    return ((FedExRateSelection)r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -869,7 +869,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             int oldIndex = service.SelectedIndex;
 
-            FedExRateSelection rate = e.Rate.Tag as FedExRateSelection;
+            FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
 
             service.SelectedValue = rate.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
