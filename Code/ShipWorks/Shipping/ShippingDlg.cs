@@ -996,16 +996,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the rates displayed in the Rates section
         /// </summary>
-        private void LoadDisplayedRates()
+        private void LoadDisplayedRates(RateGroup rateGroup)
         {
             if (ServiceControl != null)
             {
-                RateGroup rateGroup = null;
-
-                if (uiDisplayedShipments.Count == 1)
+                if (uiDisplayedShipments.Count != 1)
                 {
-                    ShipmentEntity uiShipment = uiDisplayedShipments[0];
-                    rateGroup = ShippingManager.GetRates(uiShipment);
+                    rateGroup = null;
                 }
 
                 LoadRates(rateGroup);
@@ -1767,7 +1764,7 @@ namespace ShipWorks.Shipping
                     rateControl.HideSpinner();
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates();
+                    LoadDisplayedRates(_e.Result as RateGroup);
                 }
             };
 
@@ -1776,14 +1773,19 @@ namespace ShipWorks.Shipping
             {
                 ShipmentEntity shipment = (ShipmentEntity)_e.Argument;
                 _e.Result = _e.Argument;
-                
+
                 try
                 {
                     anyAttempted = true;
-                    ShippingManager.GetRates(shipment);
+                    _e.Result = ShippingManager.GetRates(shipment);
 
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
+                }
+                catch (InvalidRateGroupShippingException ex)
+                {
+                    log.Error("Shipping exception encountered while getting rates", ex);
+                    _e.Result = ex.InvalidRates;
                 }
                 catch (ShippingException ex)
                 {

@@ -220,10 +220,18 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     catch (ShippingException ex)
                     {
-                        // The invalid rate group should be cached, so use the shipping manager to get the rate
-                        // so we can have access to the exception footer.
-                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-
+                        InvalidRateGroupShippingException invalidRateGroupException = ex as InvalidRateGroupShippingException;
+                        if (invalidRateGroupException != null)
+                        {
+                            panelRateGroup = new ShipmentRateGroup(invalidRateGroupException.InvalidRates, shipment);
+                        }
+                        else
+                        {
+                            // The invalid rate group should be cached, so use the shipping manager to get the rate
+                            // so we can have access to the exception footer.
+                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment); 
+                        }
+                        
                         // Add the order ID to the exception data, so we can determine whether
                         // to update the rate control
                         ex.Data.Add("orderID", shipment.OrderID);

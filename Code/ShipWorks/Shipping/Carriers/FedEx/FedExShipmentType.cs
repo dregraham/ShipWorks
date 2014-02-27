@@ -873,29 +873,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            string rateHash = GetRatingHash(shipment);
+            return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
+        }
 
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                return RateCache.Instance.GetRateGroup(rateHash);
-            }
-
-            try
-            {
-                RateGroup rateGroup = new FedExShippingClerk(SettingsRepository).GetRates(shipment);
-                RateCache.Instance.Save(rateHash, rateGroup);
-
-                return rateGroup;
-            }
-            catch (FedExException ex)
-            {
-                // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
-                ShippingException shippingException = new ShippingException(ex.Message, ex);
-                CacheInvalidRateGroup(shipment, shippingException);
-
-                throw shippingException;
-            }
+        /// <summary>
+        /// Get a list of rates for the FedEx shipment from the FedEx api
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            return new FedExShippingClerk(SettingsRepository).GetRates(shipment);
         }
 
         /// <summary>

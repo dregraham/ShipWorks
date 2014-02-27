@@ -647,6 +647,7 @@
     </Compile>
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\FootnoteParameters.cs" />
+    <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
     <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />

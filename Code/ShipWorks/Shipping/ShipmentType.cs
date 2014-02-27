@@ -629,17 +629,17 @@ namespace ShipWorks.Shipping
             }
         }
 
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        /// <param name="shipment">The shipment that generated the given exception.</param>
-        /// <param name="exception">The exception.</param>
-        protected void CacheInvalidRateGroup(ShipmentEntity shipment, ShippingException exception)
+	    /// <summary>
+	    /// This is intended to be used when there is (most likely) a bad configuration
+	    /// with the shipment on some level, so an empty rate group with a exception footer
+	    /// is cached.
+	    /// </summary>
+	    /// <param name="shipment">The shipment that generated the given exception.</param>
+	    /// <param name="errorMessage">The exception message</param>
+	    protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, string errorMessage)
         {
             RateGroup rateGroup = new RateGroup(new List<RateResult>());
-            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, exception.Message));
+            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, errorMessage));
 
             if (!rateGroup.Rates.Any())
             {
@@ -650,7 +650,43 @@ namespace ShipWorks.Shipping
             }
 
             RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
+
+	        return rateGroup;
         }
+
+        /// <summary>
+        /// Gets rates, retrieving them from the cache if possible
+        /// </summary>
+        /// <typeparam name="T">Type of exception that the carrier will throw on an error</typeparam>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        /// <param name="getRatesFunction">Function to retrieve the rates from the carrier if not in the cache</param>
+        /// <returns></returns>
+	    protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
+	    {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetRateGroup(rateHash);
+            }
+
+            try
+            {
+                RateGroup rateGroup = getRatesFunction(shipment);
+                RateCache.Instance.Save(rateHash, rateGroup);
+
+                return rateGroup;
+            }
+            catch (T ex)
+            {
+                // This is a bad configuration on some level, so cache an empty rate group
+                // before throwing throwing the exceptions
+                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex.Message);
+                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
+
+                throw shippingException;
+            }
+	    }
 
 		/// <summary>
 		/// Preferences the process.

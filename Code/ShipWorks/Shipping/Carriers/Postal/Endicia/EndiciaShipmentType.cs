@@ -416,13 +416,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            string rateHash = GetRatingHash(shipment);
+            return GetCachedRates<EndiciaException>(shipment, GetRatesFromApi);
+        }
 
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                return RateCache.Instance.GetRateGroup(rateHash);
-            }
-
+        /// <summary>
+        /// Get postal rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
 
@@ -450,6 +452,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() : 
                         new List<RateResult>();
                 }
+                catch (ShippingException)
+                {
+                    // Eat the exception; we don't want to stop someone from using Endicia if Express1 can't get rates
+                }
                 finally
                 {
                     shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -458,134 +464,115 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            try
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
+
+            List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
+                endiciaApiClient.GetRatesSlow(shipment, this) : 
+                endiciaApiClient.GetRatesFast(shipment, this);
+
+            // For endicia, we want to either promote Express1 or show the Express1 savings
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
             {
-                EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
-
-                List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
-                    endiciaApiClient.GetRatesSlow(shipment, this) : 
-                    endiciaApiClient.GetRatesFast(shipment, this);
-
-                // For endicia, we want to either promote Express1 or show the Express1 savings
-                if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
+                if (ShouldRetrieveExpress1Rates)
                 {
-                    if (ShouldRetrieveExpress1Rates)
+                    List<RateResult> finalRates = new List<RateResult>();
+
+                    bool hasExpress1Savings = false;
+
+                    if (settings == null) settings = ShippingSettings.Fetch();
+
+                    // Go through each Endicia rate
+                    foreach (RateResult endiciaRate in endiciaRates)
                     {
-                        List<RateResult> finalRates = new List<RateResult>();
+                        PostalRateSelection endiciaRateDetail = (PostalRateSelection)endiciaRate.OriginalTag;
 
-                        bool hasExpress1Savings = false;
-
-                        if (settings == null) settings = ShippingSettings.Fetch();
-
-                        // Go through each Endicia rate
-                        foreach (RateResult endiciaRate in endiciaRates)
+                        // If it's a rate they could (or have) saved on with Express1, we modify it
+                        if (endiciaRate.Selectable &&
+                            endiciaRateDetail != null &&
+                            Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
                         {
-                            PostalRateSelection endiciaRateDetail = (PostalRateSelection)endiciaRate.OriginalTag;
-
-                            // If it's a rate they could (or have) saved on with Express1, we modify it
-                            if (endiciaRate.Selectable &&
-                                endiciaRateDetail != null &&
-                                Express1Utilities.IsPostageSavingService(endiciaRateDetail.ServiceType))
+                            // See if Express1 returned a rate for this servie
+                            RateResult express1Rate = null;
+                            if (express1Rates != null)
                             {
-                                // See if Express1 returned a rate for this servie
-                                RateResult express1Rate = null;
-                                if (express1Rates != null)
-                                {
-                                    express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                        ((PostalRateSelection)e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == endiciaRateDetail.ConfirmationType);
-                                }
+                                express1Rate = express1Rates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
+                                    ((PostalRateSelection)e1r.OriginalTag).ServiceType == endiciaRateDetail.ServiceType && ((PostalRateSelection)e1r.OriginalTag).ConfirmationType == endiciaRateDetail.ConfirmationType);
+                            }
 
-                                // If Express1 returned a rate, check to make sure it is a lower amount
-                                if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
-                                {
-                                    finalRates.Add(express1Rate);
-                                    hasExpress1Savings = true;
-                                }
-                                else
-                                {
-                                    finalRates.Add(endiciaRate);
-
-                                    // Set the express rate to null so that it doesn't add the icon later
-                                    express1Rate = null;
-                                }
-
-                                RateResult rate = finalRates[finalRates.Count - 1];
-
-                                // If user wanted Express 1 rates
-                                if (settings.EndiciaAutomaticExpress1)
-                                {
-                                    // If they actually got the rate, show the check
-                                    if (express1Rate != null)
-                                    {
-                                        rate.AmountFootnote = Resources.check2;
-                                    }
-                                }
-                                else
-                                {
-                                    // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
-                                    {
-                                        rate.AmountFootnote = Resources.star_green;
-                                    }
-                                }
+                            // If Express1 returned a rate, check to make sure it is a lower amount
+                            if (express1Rate != null && express1Rate.Amount <= endiciaRate.Amount)
+                            {
+                                finalRates.Add(express1Rate);
+                                hasExpress1Savings = true;
                             }
                             else
                             {
                                 finalRates.Add(endiciaRate);
+
+                                // Set the express rate to null so that it doesn't add the icon later
+                                express1Rate = null;
                             }
-                        }
 
-                        RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
+                            RateResult rate = finalRates[finalRates.Count - 1];
 
-                        if (settings.EndiciaAutomaticExpress1)
-                        {
-                            if (hasExpress1Savings)
+                            // If user wanted Express 1 rates
+                            if (settings.EndiciaAutomaticExpress1)
                             {
-                                finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, endiciaRates, express1Rates));
+                                // If they actually got the rate, show the check
+                                if (express1Rate != null)
+                                {
+                                    rate.AmountFootnote = Resources.check2;
+                                }
                             }
                             else
                             {
-                                finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
+                                // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
+                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                {
+                                    rate.AmountFootnote = Resources.star_green;
+                                }
                             }
                         }
                         else
                         {
-                            if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
-                            {
-                                IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
-                                finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
-                            }
+                            finalRates.Add(endiciaRate);
                         }
+                    }
 
-                        RateCache.Instance.Save(rateHash, finalGroup);
-                        return finalGroup;
+                    RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
+
+                    if (settings.EndiciaAutomaticExpress1)
+                    {
+                        if (hasExpress1Savings)
+                        {
+                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, endiciaRates, express1Rates));
+                        }
+                        else
+                        {
+                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
+                        }
                     }
                     else
                     {
-                        RateGroup rateGroup = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
-                        RateCache.Instance.Save(rateHash, rateGroup);
-
-                        return rateGroup;
+                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
+                        {
+                            IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
+                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
+                        }
                     }
 
+                    return finalGroup;
                 }
                 else
                 {
-                    // Express1 rates - return rates filtered by what is available to the user
-                    RateGroup rateGroup = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
-                    RateCache.Instance.Save(rateHash, rateGroup);
-
-                    return rateGroup;
+                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
                 }
-            }
-            catch (EndiciaException ex)
-            {
-                // This is a bad configuration on some level, so cache an empty rate group
-                // before throwing throwing the exceptions
-                ShippingException shippingException = new ShippingException(ex.Message, ex);
-                CacheInvalidRateGroup(shipment, shippingException);
 
-                throw shippingException;
+            }
+            else
+            {
+                // Express1 rates - return rates filtered by what is available to the user
+                return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
             }
         }
 

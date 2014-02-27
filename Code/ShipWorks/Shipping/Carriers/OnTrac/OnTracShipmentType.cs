@@ -308,34 +308,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = null;
-            string rateHash = GetRatingHash(shipment);
+            return GetCachedRates<OnTracException>(shipment, GetRatesFromApi);  
+        }
 
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                rateGroup = RateCache.Instance.GetRateGroup(rateHash);
-            }
-            else
-            {
-                try
-                {
-                    OnTracRates rateRequest = new OnTracRates(GetAccountForShipment(shipment));
-                    rateGroup = rateRequest.GetRates(shipment);
-
-                    RateCache.Instance.Save(rateHash, rateGroup);
-                }
-                catch (OnTracException ex)
-                {
-                    // This is a bad configuration on some level, so cache an empty rate group
-                    // before throwing throwing the exceptions
-                    ShippingException shippingException = new ShippingException(ex.Message, ex);
-                    CacheInvalidRateGroup(shipment, shippingException);
-
-                    throw shippingException;
-                }
-            }
-
-            return rateGroup;
+        /// <summary>
+        /// Gets rates from the OnTrac api
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            OnTracRates rateRequest = new OnTracRates(GetAccountForShipment(shipment));
+            return rateRequest.GetRates(shipment);
         }
 
         /// <summary>
