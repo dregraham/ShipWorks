@@ -390,10 +390,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                         break;
                     case PostalServiceType.ExpressMail:
-                        if (!shipment.Postal.ExpressSignatureWaiver)
-                        {
-                            throw new ShippingException("Endicia Express Mail scan based payment returns require Express Signature Waiver to be checked.");
-                        }
+                        // nothing to check
                         break;
                     default:
                         string errorMessage =
