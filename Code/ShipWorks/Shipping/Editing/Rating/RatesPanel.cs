@@ -290,6 +290,14 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Only show the More link for the best rate shipment type
             rateControl.ShowAllRates = rateGroup.Carrier != ShipmentTypeCode.BestRate;
 
+            if (!rateGroup.Rates.Any())
+            {
+                RateResult emptyRate = new RateResult("No rates are available for this shipment.", string.Empty);
+                emptyRate.ShipmentType = rateGroup.Carrier;
+
+                rateGroup.Rates.Add(emptyRate);
+
+            }
             rateControl.HideSpinner();
             rateControl.LoadRates(rateGroup);
         }
