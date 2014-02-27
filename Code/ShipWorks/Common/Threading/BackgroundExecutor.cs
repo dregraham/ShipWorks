@@ -38,6 +38,9 @@ namespace ShipWorks.Common.Threading
         string progressDescription;
         string progressDetail;
 
+        // Whether to delay showing the progress dialog
+        private readonly bool delayProgressDialog;
+
         // Flag to indicate the user of the executor knows that exceptions can occur and is prepared to handle them.
         bool propagateException = false;
 
@@ -65,6 +68,13 @@ namespace ShipWorks.Common.Threading
         /// Create a new instance of the background updater
         /// </summary>
         public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail)
+            : this (owner, progressTitle, progressDescription, progressDetail, true)
+        { }
+
+        /// <summary>
+        /// Create a new instance of the background updater
+        /// </summary>
+        public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail, bool delayProgressDialog)
         {
             if (owner == null)
             {
@@ -76,6 +86,7 @@ namespace ShipWorks.Common.Threading
             this.progressTitle = progressTitle;
             this.progressDescription = progressDescription;
             this.progressDetail = progressDetail;
+            this.delayProgressDialog = delayProgressDialog;
         }
 
         /// <summary>
@@ -168,7 +179,7 @@ namespace ShipWorks.Common.Threading
             ProgressItem workProgress = new ProgressItem(progressTitle);
             progressProvider.ProgressItems.Add(workProgress);
 
-            // Proress Dialog
+            // Progress Dialog
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
             progressDlg.Title = progressTitle;
             progressDlg.Description = progressDescription;
@@ -190,8 +201,11 @@ namespace ShipWorks.Common.Threading
                     DisplayDelayer = delayer 
                 });
 
-            // Show the progrss window only after a certain amount of time goes by
-            delayer.ShowAfter(owner, TimeSpan.FromSeconds(.25));
+            // Show the progress window only after a certain amount of time goes by 
+            // if configured to do so
+            double delaySeconds = delayProgressDialog ? .25 : 0;
+            delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
+
         }
 
         /// <summary>

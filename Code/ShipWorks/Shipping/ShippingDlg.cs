@@ -1975,10 +1975,15 @@ namespace ShipWorks.Shipping
                 return;
             }
 
+            // Don't delay the progress dialog from showing if any of the shipments are a best rate
+            // shipment in case the counter rate wizard needs to be shown; otherwise the progress
+            // dialog will appear over the counter rate setup wizard if rates have been cached.
+            bool delayProgressDialog = !shipments.Any(s => s.ShipmentType == (int)ShipmentTypeCode.BestRate);
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
                 "Processing Shipments",
                 "ShipWorks is processing the shipments.",
-                "Shipment {0} of {1}");
+                "Shipment {0} of {1}",
+                delayProgressDialog);
 
             List<string> newErrors = new List<string>();
             Dictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
@@ -2077,7 +2082,7 @@ namespace ShipWorks.Shipping
                         throw concurrencyEx;
                     }
                     
-                    // Process it
+                    // Process it                                        
                     ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing);
 
                     // Clear any previous errors
@@ -2191,6 +2196,7 @@ namespace ShipWorks.Shipping
             using (CounterRateProcessingSetupWizard rateProcessingSetupWizard = new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, rateControl.SelectedRate, shipmentControl.SelectedShipments))
             {
                 setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(this);
+                rateProcessingSetupWizard.BringToFront();
 
                 if (setupWizardDialogResult == DialogResult.OK)
                 {
