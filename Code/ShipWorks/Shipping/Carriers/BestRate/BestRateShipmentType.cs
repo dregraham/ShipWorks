@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="rate">The rate.</param>
         /// <returns></returns>
-        private void MaskUspsLogo(RateResult rate)
+        private static void MaskUspsLogo(RateResult rate)
         {
             if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
             {
