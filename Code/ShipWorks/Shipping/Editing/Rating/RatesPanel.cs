@@ -203,6 +203,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 // We're going to be going over the network to get rates from the provider, so show the spinner
                 // while rates are being fetched to give the user some indication that we're working
                 ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
+                rateControl.ClearRates(string.Empty);
 
                 // Setup the worker with the work to perform asynchronously
                 ratesWorker.DoWork += (sender, args) =>
