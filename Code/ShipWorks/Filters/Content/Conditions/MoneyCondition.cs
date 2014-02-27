@@ -9,6 +9,15 @@ namespace ShipWorks.Filters.Content.Conditions
     public abstract class MoneyCondition : NumericCondition<decimal>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MoneyCondition"/> class.
+        /// </summary>
+        public MoneyCondition()
+        {
+            // Format as currency
+            format = "C";
+        }
+
+        /// <summary>
         /// Creates the editor.
         /// </summary>
         public override ValueEditor CreateEditor()

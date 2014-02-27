@@ -10,15 +10,6 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     public class OrderTotalCondition : MoneyCondition
     {
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderTotalCondition()
-        {
-            // Format as currency
-            format = "C";
-        }
-
-        /// <summary>
         /// Generate the SQL for the element
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)

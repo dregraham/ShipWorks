@@ -12951,3 +12951,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountBusinessAddressException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Filters.Content.Conditions.MoneyCondition.#CreateEditor()")]
