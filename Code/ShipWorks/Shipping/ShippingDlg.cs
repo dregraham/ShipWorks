@@ -1785,14 +1785,11 @@ namespace ShipWorks.Shipping
                     // Just in case it used to have an error remove it
                     processingErrors.Remove(shipment.ShipmentID);
                 }
-                catch (InvalidRateGroupShippingException ex)
-                {
-                    log.Error("Shipping exception encountered while getting rates", ex);
-                    _e.Result = ex.InvalidRates;
-                }
                 catch (ShippingException ex)
                 {
                     log.Error("Shipping exception encountered while getting rates", ex);
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    _e.Result = shipmentType.CacheInvalidRateGroup(shipment, ex.Message);
                 }
             };
             
