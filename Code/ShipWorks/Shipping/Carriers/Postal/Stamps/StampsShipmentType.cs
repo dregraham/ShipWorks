@@ -171,7 +171,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 if (express1Account == null)
                 {
-                    throw new InvalidRateGroupShippingException(CacheInvalidRateGroup(shipment, "The Express1 account to automatically use when processing with Stamps.com has not been selected."));
+                    string exceptionMsg = "The Express1 account to automatically use when processing with Stamps.com has not been selected.";
+                    throw new InvalidRateGroupShippingException(CacheInvalidRateGroup(shipment, exceptionMsg), exceptionMsg);
                 }
 
                 // We temporarily turn this into an Exprss1 shipment to get rated

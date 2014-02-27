@@ -437,7 +437,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 if (express1Account == null)
                 {
-                    throw new InvalidRateGroupShippingException(CacheInvalidRateGroup(shipment, "The Express1 account to automatically use when processing with Endicia has not been selected."));
+                    string exceptionMsg = "The Express1 account to automatically use when processing with Endicia has not been selected.";
+                    throw new InvalidRateGroupShippingException(CacheInvalidRateGroup(shipment, exceptionMsg), exceptionMsg);
                 }
                 
                 // We temporarily turn this into an Exprss1 shipment to get rated
