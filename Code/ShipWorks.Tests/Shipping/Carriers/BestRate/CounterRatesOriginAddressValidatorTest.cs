@@ -9,56 +9,56 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
 
         [TestMethod]
-        public void Validate_ReturnsFalse_WhenOriginStreet1IsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginStreet1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStreet1 = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [TestMethod]
-        public void Validate_ReturnsFalse_WhenOriginCityIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginCityIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCity = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [TestMethod]
-        public void Validate_ReturnsFalse_WhenOriginStateIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginStateIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStateProvCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [TestMethod]
-        public void Validate_ReturnsFalse_WhenOriginPostalCode1IsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginPostalCode1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginPostalCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [TestMethod]
-        public void Validate_ReturnsFalse_WhenOriginCountryCodeIsEmpty_Test()
+        public void IsValid_ReturnsFalse_WhenOriginCountryCodeIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCountryCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [TestMethod]
-        public void Validate_ReturnsTrue_WhenOriginAddressIsComplete_Test()
+        public void IsValid_ReturnsTrue_WhenOriginAddressIsComplete_Test()
         {
             ShipmentEntity shipment = CreateShipment();
 
-            Assert.IsTrue(CounterRatesOriginAddressValidator.IsValidate(shipment));
+            Assert.IsTrue(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         private ShipmentEntity CreateShipment()

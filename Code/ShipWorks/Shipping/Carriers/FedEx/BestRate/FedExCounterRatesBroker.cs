@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
 
             if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
+                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValid(currentShipment)))
             {
                 // We don't have an account for counter rates or "Other" is selected and is incomplete, 
                 // so we'll try to use the store address
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
                 PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
             }
 
-            if (!CounterRatesOriginAddressValidator.IsValidate(currentShipment))
+            if (!CounterRatesOriginAddressValidator.IsValid(currentShipment))
             {
                 // The store address is incomplete, too, so the origin address is still incomplete
                 throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");

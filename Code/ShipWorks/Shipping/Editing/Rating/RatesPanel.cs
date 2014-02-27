@@ -304,8 +304,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                 emptyRate.ShipmentType = rateGroup.Carrier;
 
                 rateGroup.Rates.Add(emptyRate);
-
             }
+
             rateControl.HideSpinner();
             rateControl.LoadRates(rateGroup);
         }

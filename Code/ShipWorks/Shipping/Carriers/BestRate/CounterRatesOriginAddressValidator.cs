@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="CounterRatesOriginAddressException">Thrown when the origin address is missing a required data point.</exception>
-        public static bool IsValidate(ShipmentEntity shipment)
+        public static bool IsValid(ShipmentEntity shipment)
         {
             // Check to see if the address is incomplete
             if (string.IsNullOrWhiteSpace(shipment.OriginStreet1) || string.IsNullOrWhiteSpace(shipment.OriginCity) || string.IsNullOrWhiteSpace(shipment.OriginStateProvCode)
