@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             // If a postal provider, show USPS logo:
-            compiledRateGroup.Rates.ForEach(f => MaskUspsLogo(f));
+            compiledRateGroup.Rates.ForEach(f => UseUspsLogoForPostalCounterRate(f));
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
@@ -299,7 +299,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="rate">The rate.</param>
         /// <returns></returns>
-        private static void MaskUspsLogo(RateResult rate)
+        private static void UseUspsLogoForPostalCounterRate(RateResult rate)
         {
             if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
             {
