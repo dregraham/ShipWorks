@@ -636,7 +636,7 @@ namespace ShipWorks.Shipping
 	    /// </summary>
 	    /// <param name="shipment">The shipment that generated the given exception.</param>
 	    /// <param name="errorMessage">The exception message</param>
-	    public RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, string errorMessage)
+	    protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, string errorMessage)
         {
             RateGroup rateGroup = new RateGroup(new List<RateResult>());
             rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, errorMessage));

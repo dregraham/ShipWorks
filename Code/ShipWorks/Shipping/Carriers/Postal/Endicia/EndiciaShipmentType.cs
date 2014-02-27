@@ -437,7 +437,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 if (express1Account == null)
                 {
-                    throw new ShippingException("The Express1 account to automatically use when processing with Endicia has not been selected.");
+                    throw new EndiciaException("The Express1 account to automatically use when processing with Endicia has not been selected.");
                 }
                 
                 // We temporarily turn this into an Exprss1 shipment to get rated

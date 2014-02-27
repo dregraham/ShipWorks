@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 if (express1Account == null)
                 {
-                    throw new ShippingException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
+                    throw new StampsException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
                 }
 
                 // We temporarily turn this into an Exprss1 shipment to get rated
