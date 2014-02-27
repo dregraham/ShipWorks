@@ -277,6 +277,7 @@ namespace ShipWorks.Shipping
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
 
+                ClearRates(string.Empty);
                 GetRates();
 
                 UpdateSelectedShipmentCount();
@@ -699,6 +700,7 @@ namespace ShipWorks.Shipping
 
             if (getRatesWhenDone)
             {
+                ClearRates(string.Empty);
                 GetRates();
             }
         }
@@ -932,6 +934,7 @@ namespace ShipWorks.Shipping
 
             comboShipmentType.SelectedValue = shipmentTypeCode;
 
+            ClearRates(string.Empty);
             GetRates();
         }
 
