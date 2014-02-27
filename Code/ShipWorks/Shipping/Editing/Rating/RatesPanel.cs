@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -41,9 +42,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateControl.ConfigureRateClicked += OnConfigureRateClicked;
 
             // Force the rates to be refreshed when the rate control tells us
-            rateControl.ReloadRatesRequired += (sender, args) => RefreshRates();
+            rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
 
-            rateControl.Initialize(new FootnoteParameters(RefreshRates, GetStoreForCurrentShipment));
+            rateControl.Initialize(new FootnoteParameters(() => RefreshRates(), GetStoreForCurrentShipment));
         }
 
         /// <summary>
@@ -146,7 +147,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
-        private void RefreshRates()
+        /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        private void RefreshRates(bool ignoreCache = false)
         {
             // This will be 0 when ShipWorks is first started and an order 
             // has not been selected yet
@@ -177,7 +179,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         else
                         {
                             // We need to fetch the rates from the provider
-                            FetchRates(shipmentForRating);
+                            FetchRates(shipmentForRating, ignoreCache);
                         }
                     }
                     else
@@ -193,7 +195,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Fetches the rates from the shipment type and 
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        private void FetchRates(ShipmentEntity shipment)
+        /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
             using (BackgroundWorker ratesWorker = new BackgroundWorker())
             {
@@ -216,6 +219,13 @@ namespace ShipWorks.Shipping.Editing.Rating
                         ShippingManager.EnsureShipmentLoaded(shipment);
                         args.Result = shipment;
 
+                        // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
+                        // footer raises the event and we want to include Express1 rates in that case
+                        if (ignoreCache)
+                        {
+                            ShippingManager.RemoveShipmentFromCache(shipment);
+                        }
+
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
                     }
@@ -230,9 +240,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                         {
                             // The invalid rate group should be cached, so use the shipping manager to get the rate
                             // so we can have access to the exception footer.
-                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment); 
+                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
                         }
-                        
+
                         // Add the order ID to the exception data, so we can determine whether
                         // to update the rate control
                         ex.Data.Add("orderID", shipment.OrderID);
@@ -260,7 +270,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                             {
                                 rateControl.ClearRates(exception.Message);
                             }
-                            
                         }
                     }
                     else
@@ -289,7 +298,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             // Do nothing
         }
-        
+
         /// <summary>
         /// A helper method for loading the rates in the rate control.
         /// </summary>
@@ -310,7 +319,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateControl.HideSpinner();
             rateControl.LoadRates(rateGroup);
         }
-        
+
         /// <summary>
         /// Called when a [rate is selected].
         /// </summary>

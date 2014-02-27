@@ -703,6 +703,25 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Removes the specified shipment from the cache
+        /// </summary>
+        /// <param name="shipment">Shipment that should be removed from cache</param>
+        /// <returns></returns>
+        public static void RemoveShipmentFromCache(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                return;
+            }
+
+            // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
+            // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            string cacheHash = shipmentType.GetRatingHash(shipment);
+            RateCache.Instance.Remove(cacheHash);
+        }
+
+        /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment)

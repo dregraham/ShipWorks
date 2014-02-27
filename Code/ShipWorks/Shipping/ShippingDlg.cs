@@ -1073,6 +1073,10 @@ namespace ShipWorks.Shipping
             // Then go ahead and do a Get Rates and whatever is selected
             if (uiDisplayedShipments.Count == 1)
             {
+                // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
+                // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
+                ShippingManager.RemoveShipmentFromCache(uiDisplayedShipments.FirstOrDefault());
+
                 GetRates();
             }
         }

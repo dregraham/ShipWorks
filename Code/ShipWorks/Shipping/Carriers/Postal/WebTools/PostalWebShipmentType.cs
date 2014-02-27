@@ -85,20 +85,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = null;
-            string rateHash = GetRatingHash(shipment);
+            return GetCachedRates<ShippingException>(shipment, GetRatesFromApi);
+        }
 
-            if (RateCache.Instance.Contains(rateHash))
-            {
-                rateGroup = RateCache.Instance.GetRateGroup(rateHash);
-            }
-            else
-            {
-                rateGroup = new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
-                RateCache.Instance.Save(rateHash, rateGroup);
-            }
-
-            return rateGroup;
+        /// <summary>
+        /// Get the rates from the postal api
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            return new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
         }
 
         /// <summary>

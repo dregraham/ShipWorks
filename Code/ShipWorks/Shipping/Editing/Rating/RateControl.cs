@@ -382,17 +382,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Event raised indicating that a full reload of the rates is required
-        /// </summary>
-        protected void OnReloadRatesRequired(object sender, EventArgs e)
-        {
-            if (ReloadRatesRequired != null)
-            {
-                ReloadRatesRequired(this, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
         /// Called when the [selected rate row has changed].
         /// </summary>
         /// <param name="sender">The sender.</param>
