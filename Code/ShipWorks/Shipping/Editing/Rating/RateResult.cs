@@ -162,5 +162,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         ///   <c>true</c> if this [is a counter rate]; otherwise, <c>false</c>.
         /// </value>
         public bool IsCounterRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the provider logo.
+        /// </summary>
+        /// <value>
+        /// The provider logo.
+        /// </value>
+        public Image ProviderLogo { get; set; }
     }
 }

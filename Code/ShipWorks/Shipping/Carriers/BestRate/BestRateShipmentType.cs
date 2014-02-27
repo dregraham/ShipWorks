@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Data;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -281,6 +282,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 compiledRateGroup = rateGroupFilter.Filter(compiledRateGroup);
             }
 
+            // If a postal provider, show USPS logo:
+            compiledRateGroup.Rates.ForEach(f => MaskUspsLogo(f));
+
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
@@ -288,6 +292,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
             return compiledRateGroup;
+        }
+
+        /// <summary>
+        /// Masks the usps logo.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns></returns>
+        private void MaskUspsLogo(RateResult rate)
+        {
+            if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
+            {
+                rate.ProviderLogo = ShippingIcons.usps;
+            }
         }
 
         /// <summary>

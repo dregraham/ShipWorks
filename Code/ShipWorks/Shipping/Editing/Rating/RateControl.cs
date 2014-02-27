@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 {
                     GridRow row = new GridRow(new[]
                     {
-                        new GridCell(GetProviderLogo(rate)),
+                        new GridCell(rate.ProviderLogo ?? EnumHelper.GetImage(rate.ShipmentType)),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
@@ -294,31 +294,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             sandGrid.SelectedElements.Clear();
         }
 
-        /// <summary>
-        /// Gets the provider logo.
-        /// </summary>
-        /// <param name="rate">The rate.</param>
-        /// <returns>The provider logo image.</returns>
-        private static Image GetProviderLogo(RateResult rate)
-        {
-            Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
-
-            // If a postal provider, show USPS logo:
-            if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
-            {
-                providerLogo = ShippingIcons.usps;
-            }
-
-            // If non-competitive, show the brown truck.
-            NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
-            if (noncompetitiveRateResult != null)
-            {
-                providerLogo = ShippingIcons.truck_brown;
-            }
-
-            // If null, return the 'other' icon
-            return providerLogo ?? ShippingIcons.other;
-        }
         
         /// <summary>
         /// Resets the footnotes with what are contained in the specified rate group

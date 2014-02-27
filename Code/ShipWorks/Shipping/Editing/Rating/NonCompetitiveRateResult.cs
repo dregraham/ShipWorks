@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using ShipWorks.Properties;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -43,6 +44,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 Description = "Undisclosed " + maskedServiceTypeDescription;
                 CarrierDescription = "Undisclosed";
+                ProviderLogo = ShippingIcons.truck_brown;
             }
         }
     }
