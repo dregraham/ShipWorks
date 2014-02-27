@@ -245,8 +245,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             if (result == DialogResult.OK)
             {
-                MarkSelectedShipmentTypeAsBeingUsed();
                 SelectedShipmentType = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode);
+                MarkSelectedShipmentTypeAsBeingUsed();
             }
             
             // Close the dialog regardless of whether they canceled out of the setup wizard
