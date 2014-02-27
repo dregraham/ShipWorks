@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -275,7 +276,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // Create a clone so we don't have to worry about modifying the original shipment
                     ShipmentEntity originalShipment = EntityUtility.CloneEntity(selectedShipment);
                     ChangeShipmentType(selectedShipment);
-                    
+
+                    // Since the list of providers used in best rate settings is independent than the global
+                    // list we need to make sure the shipment type is removed from the excluded list if needed
+                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                    if (settings.ExcludedTypes.Contains(selectedShipment.ShipmentType))
+                    {
+                        settings.ExcludedTypes = settings.ExcludedTypes.Where(t => t != selectedShipment.ShipmentType).ToArray();
+                        ShippingSettings.Save(settings);
+                    }
+ 
                     LoadShipment(selectedShipment);
                     
                     SelectRate(selectedShipment);
