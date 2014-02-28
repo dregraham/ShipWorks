@@ -221,12 +221,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
+            string accountNumber = EnteredAccountNumber();
+
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
                 if (!worldShipAgree1.Checked || !worldShipAgree2.Checked)
                 {
-                    MessageHelper.ShowInformation(this,
-                                                  "You must read and agree to the WorldShip information statements.");
+                    MessageHelper.ShowInformation(this, "You must read and agree to the WorldShip information statements.");
 
                     e.NextPage = CurrentPage;
                     return;
@@ -234,20 +235,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(account.Text))
-                {
-                    // Note: this will need to be refactored when we unhide the ability to create 
-                    // a new UPS account from ShipWorks
-                    MessageHelper.ShowMessage(this, "Please enter your account number.");
-                    e.NextPage = CurrentPage;
-                }
-
                 // Make sure one of the check boxes is checked.
                 if (!newAccount.Checked && !existingAccount.Checked)
                 {
                     MessageHelper.ShowMessage(this, "Please select an account option, New or Existing.");
                     e.NextPage = CurrentPage;
                 }
+            }
+
+            // Validate the entered account number
+            if (string.IsNullOrWhiteSpace(accountNumber))
+            {
+                // Note: this will need to be refactored when we unhide the ability to create 
+                // a new UPS account from ShipWorks
+                MessageHelper.ShowMessage(this, "Please enter your account number.");
+                e.NextPage = CurrentPage;
             }
 
             // Start with a fresh page collection
@@ -395,12 +397,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the account number the user entered
+        /// </summary>
+        /// <returns></returns>
+        private string EnteredAccountNumber()
+        {
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+            {
+                return wsUpsAccountNumber.Text.Trim();
+            }
+            else
+            {
+                return account.Text.Trim();
+            }
+        }
+
+        /// <summary>
         /// Stepping next from the account page
         /// </summary>
         private void OnStepNextAccount(object sender, WizardStepEventArgs e)
         {
             personControl.SaveToEntity();
-            upsAccount.AccountNumber = account.Text.Trim();
+            upsAccount.AccountNumber = EnteredAccountNumber();
 
             // Edition check
             if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber)))
