@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
 
