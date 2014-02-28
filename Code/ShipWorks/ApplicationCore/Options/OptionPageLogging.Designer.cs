@@ -43,8 +43,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.label3 = new System.Windows.Forms.Label();
             this.logAge = new System.Windows.Forms.ComboBox();
             this.panelContentOptions = new System.Windows.Forms.Panel();
-            this.panelLogFiles = new System.Windows.Forms.Panel();
             this.logRateCalls = new System.Windows.Forms.CheckBox();
+            this.panelLogFiles = new System.Windows.Forms.Panel();
             this.panelLogContent.SuspendLayout();
             this.panelOtherOptions.SuspendLayout();
             this.panelContentOptions.SuspendLayout();
@@ -207,6 +207,16 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelContentOptions.Size = new System.Drawing.Size(350, 71);
             this.panelContentOptions.TabIndex = 12;
             // 
+            // logRateCalls
+            // 
+            this.logRateCalls.AutoSize = true;
+            this.logRateCalls.Location = new System.Drawing.Point(34, 48);
+            this.logRateCalls.Name = "logRateCalls";
+            this.logRateCalls.Size = new System.Drawing.Size(109, 17);
+            this.logRateCalls.TabIndex = 12;
+            this.logRateCalls.Text = "Log rate API calls";
+            this.logRateCalls.UseVisualStyleBackColor = true;
+            // 
             // panelLogFiles
             // 
             this.panelLogFiles.Controls.Add(this.sectionTitle1);
@@ -220,16 +230,6 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelLogFiles.Name = "panelLogFiles";
             this.panelLogFiles.Size = new System.Drawing.Size(390, 99);
             this.panelLogFiles.TabIndex = 15;
-            // 
-            // logRateCalls
-            // 
-            this.logRateCalls.AutoSize = true;
-            this.logRateCalls.Location = new System.Drawing.Point(34, 48);
-            this.logRateCalls.Name = "logRateCalls";
-            this.logRateCalls.Size = new System.Drawing.Size(94, 17);
-            this.logRateCalls.TabIndex = 12;
-            this.logRateCalls.Text = "Log Rate Calls";
-            this.logRateCalls.UseVisualStyleBackColor = true;
             // 
             // OptionPageLogging
             // 
