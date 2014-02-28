@@ -138,7 +138,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // Populate information based on the rate's shipment type
                 ShipmentType existingRateShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
-                useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
+
+                // "Unmask" the description of non-competitive rates to be consistent with the logo
+                NoncompetitiveRateResult noncompetitiveRate = existingAccountRate as NoncompetitiveRateResult;
+                useExistingCarrierServiceDescription.Text = noncompetitiveRate == null ? existingAccountRate.Description : noncompetitiveRate.OriginalRate.Description;
+
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
                 
                 // Show the actual amount and the difference between the best rate and 
