@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlTypes;
-using ShipWorks.Filters.Content.Editors.ValueEditors;
 
 namespace ShipWorks.Filters.Content.Conditions
 {
@@ -11,24 +10,13 @@ namespace ShipWorks.Filters.Content.Conditions
         /// <summary>
         /// Initializes a new instance of the <see cref="MoneyCondition"/> class.
         /// </summary>
-        public MoneyCondition()
+        protected MoneyCondition()
         {
+            minimumValue = SqlMoney.MinValue.ToDecimal();
+            maximumValue = SqlMoney.MaxValue.ToDecimal();
+
             // Format as currency
             format = "C";
-        }
-
-        /// <summary>
-        /// Creates the editor.
-        /// </summary>
-        public override ValueEditor CreateEditor()
-        {
-            NumericValueEditor<decimal> editor = new NumericValueEditor<decimal>(this);
-
-            editor.Format = format;
-            editor.MinimumValue = SqlMoney.MinValue.ToDecimal();
-            editor.MaximumValue = SqlMoney.MaxValue.ToDecimal();
-
-            return editor;
         }
     }
 }
