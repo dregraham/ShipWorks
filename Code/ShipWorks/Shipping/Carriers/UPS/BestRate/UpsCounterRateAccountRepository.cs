@@ -65,6 +65,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             try
             {
+                // Set the account number to an empty string because the edition check assumes it will not be null.
+                // This will prevent any other consumers from having to worry about calling ToLower or anything else on a null string.
                 UpsAccountEntity upsAccountEntity = new UpsAccountEntity
                 {
                     UserID = counterRatesCredentialStore.UpsUserId,
@@ -72,7 +74,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                     PostalCode = "63102",
                     CountryCode = "US",
                     RateType = (int)UpsRateType.Retail,
-                    UpsAccountID = -1056
+                    UpsAccountID = -1056,
+                    AccountNumber = string.Empty
                 };
 
                 accounts.Add(upsAccountEntity);

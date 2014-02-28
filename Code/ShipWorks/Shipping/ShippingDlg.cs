@@ -2168,14 +2168,17 @@ namespace ShipWorks.Shipping
             DialogResult setupWizardDialogResult = DialogResult.Cancel;
             this.Invoke((MethodInvoker)delegate
             {
-                if (rateControl.SelectedRate.IsCounterRate)
+                RateResult selectedRate = rateControl.SelectedRate ??
+                                          counterRatesProcessingArgs.FilteredRates.Rates.First();
+
+                if (selectedRate.IsCounterRate)
                 {
-                    setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs);
+                    setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs, selectedRate);
                 }
                 else
                 {
                     //The select rate is not a counter rate, so we just set the shipment type
-                    counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(rateControl.SelectedRate.ShipmentType);
+                    counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(selectedRate.ShipmentType);
                     setupWizardDialogResult = DialogResult.OK;
                 }
             });
@@ -2198,11 +2201,16 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Shows the counter rate carrier setup wizard, and handles the result of the wizard.
         /// </summary>
-        private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        /// <param name="counterRatesProcessingArgs">Arguments passed from the counter rate event</param>
+        /// <param name="selectedRate">Rate that has been selected</param>
+        /// <remarks>The selected rate is passed into the method instead of checking the selected rate from the rate control
+        /// because there is no selected rate when processing multiple shipments.  Also, it is simply for a user to deselect a rate,
+        /// in which case, we should just use the cheapest.</remarks>
+        private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs, RateResult selectedRate)
         {
             DialogResult setupWizardDialogResult;
 
-            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard = new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, rateControl.SelectedRate, shipmentControl.SelectedShipments))
+            using (CounterRateProcessingSetupWizard rateProcessingSetupWizard = new CounterRateProcessingSetupWizard(counterRatesProcessingArgs.FilteredRates, selectedRate, shipmentControl.SelectedShipments))
             {
                 setupWizardDialogResult = rateProcessingSetupWizard.ShowDialog(this);
                 rateProcessingSetupWizard.BringToFront();
