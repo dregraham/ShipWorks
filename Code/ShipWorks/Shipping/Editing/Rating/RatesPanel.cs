@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
 
-            rateControl.Initialize(new FootnoteParameters(() => RefreshRates(), GetStoreForCurrentShipment));
+            rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 // Refresh the rates in the panel; using cached rates is fine here since nothing
                 // about the shipment has changed, so don't force a re-fetch
-                RefreshRates();
+                RefreshRates(false);
             }
         }
 
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void ReloadContent()
         {
             // A row has been added/removed, so force the rates to be refreshed to reflect the change
-            RefreshRates();
+            RefreshRates(false);
         }
 
         /// <summary>
@@ -141,14 +141,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void UpdateContent()
         {
             // Something about the shipment has changed, so we need to refresh the rates            
-            RefreshRates();
+            RefreshRates(false);
         }
 
         /// <summary>
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
-        private void RefreshRates(bool ignoreCache = false)
+        private void RefreshRates(bool ignoreCache)
         {
             // This will be 0 when ShipWorks is first started and an order 
             // has not been selected yet
