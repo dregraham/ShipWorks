@@ -196,10 +196,18 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Get rates across all carriers
+        /// </summary>
+        public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            return GetCachedRates<BestRateException>(shipment, GetRatesFromApi);
+        }
+
+        /// <summary>
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             try
             {
