@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping
 
             initialDisplayTracking = trackingPage;
 
-            rateControl.Initialize(new FootnoteParameters(GetRates, GetStoreForCurrentShipment));
+            rateControl.Initialize(new FootnoteParameters(()=> LoadSelectedShipments(false) , GetStoreForCurrentShipment));
 
             // Ensure that the rate control cannot take up more than 1/3rd the height of the dialog, even after resizing
             SetServiceControlMinimumHeight();
@@ -2333,6 +2333,9 @@ namespace ShipWorks.Shipping
             return null;
         }
 
+        /// <summary>
+        /// Called when [tab selecting].
+        /// </summary>
         private void OnTabSelecting(object sender, TabControlCancelEventArgs e)
         {
             // Hide the rates panel if we aren't on the service tab.
