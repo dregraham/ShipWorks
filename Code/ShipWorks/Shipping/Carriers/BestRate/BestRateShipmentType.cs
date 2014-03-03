@@ -209,43 +209,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            try
+            AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
+
+            List<BrokerException> brokerExceptions = new List<BrokerException>();
+            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+
+            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
+
+            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+            IEnumerable<BrokerException> distinctExceptions = brokerExceptions
+                .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
+                .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
+                .GroupBy(e => e.Message)
+                .Select(m => m.First()).ToList();
+
+            if (distinctExceptions.Any())
             {
-                AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
-
-                List<BrokerException> brokerExceptions = new List<BrokerException>();
-                IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
-
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
-
-                // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
-                IEnumerable<BrokerException> distinctExceptions = brokerExceptions
-                    .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
-                    .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                    .GroupBy(e => e.Message)
-                    .Select(m => m.First()).ToList();
-
-                if (distinctExceptions.Any())
-                {
-                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
-                }
-
-                return rateGroup;
+                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
             }
-            catch (BestRateException ex)
-            {
-                // A problem occurred that is germane to the BestRateShipmentType (and not within any 
-                // brokers or shipment types); this is most likely there aren't any providers/accounts 
-                // setup to use with best rate, so we'll just return a rate group communicating the 
-                // problem to the user
-                RateResult rateResult = new RateResult("No rates are available for the shipment.", string.Empty);
-                rateResult.ShipmentType = ShipmentTypeCode;
 
-                RateGroup errorGroup = new RateGroup(new List<RateResult> { rateResult });
-                errorGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeManager.GetType(shipment), ex.Message));
-
-                return errorGroup;
-            }
+            return rateGroup;
         }
 
         /// <summary>
@@ -274,6 +257,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             return tasks.Select(x => x.Result);
         }
 
+        /// <summary>
+        /// Create a single, filtered rate group from a collection of rate groups
+        /// </summary>
         private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups)
         {
             RateGroup compiledRateGroup = new RateGroup(rateGroups.SelectMany(x => x.Rates));

@@ -641,13 +641,10 @@ namespace ShipWorks.Shipping
             RateGroup rateGroup = new RateGroup(new List<RateResult>());
             rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, errorMessage));
 
-            if (!rateGroup.Rates.Any())
-            {
-                RateResult infoResult = new RateResult("No rates are available for this shipment.", string.Empty);
-                infoResult.ShipmentType = ShipmentTypeCode;
+            RateResult infoResult = new RateResult("No rates are available for this shipment.", string.Empty);
+            infoResult.ShipmentType = ShipmentTypeCode;
 
-                rateGroup.Rates.Add(infoResult);
-            }
+            rateGroup.Rates.Add(infoResult);
 
             RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
 
