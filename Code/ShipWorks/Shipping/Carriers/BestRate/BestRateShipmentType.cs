@@ -196,39 +196,43 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
-        /// Get rates across all carriers
-        /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-            return GetCachedRates<BestRateException>(shipment, GetRatesFromApi);
-        }
-
-        /// <summary>
         /// Called to get the latest rates for the shipment. This implementation will accumulate the 
         /// best shipping rate for all of the individual carrier-accounts within ShipWorks.
         /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
-
-            List<BrokerException> brokerExceptions = new List<BrokerException>();
-            IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
-
-            RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
-
-            // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
-            IEnumerable<BrokerException> distinctExceptions = brokerExceptions
-                .Where(ex => ex != null) // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
-                .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                .GroupBy(e => e.Message)
-                .Select(m => m.First()).ToList();
-
-            if (distinctExceptions.Any())
+            try
             {
-                rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
-            }
+                AddBestRateEvent(shipment, BestRateEventTypes.RatesCompared);
 
-            return rateGroup;
+                List<BrokerException> brokerExceptions = new List<BrokerException>();
+                IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
+
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
+
+                // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
+                IEnumerable<BrokerException> distinctExceptions = brokerExceptions
+                    .Where(ex => ex != null)
+                    // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
+                    .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
+                    .GroupBy(e => e.Message)
+                    .Select(m => m.First()).ToList();
+
+                if (distinctExceptions.Any())
+                {
+                    rateGroup.AddFootnoteFactory(new BrokerExceptionsRateFootnoteFactory(this, distinctExceptions));
+                }
+
+                return rateGroup;
+            }
+            catch (BestRateException ex)
+            {
+                // A problem occurred that is germane to the BestRateShipmentType (and not within any 
+                // brokers or shipment types); this is most likely there aren't any providers/accounts 
+                // setup to use with best rate, so we'll just return a rate group communicating the 
+                // problem to the user
+                return new InvalidRateGroup(this, ex);
+            }
         }
 
         /// <summary>
