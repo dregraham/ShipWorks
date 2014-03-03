@@ -230,13 +230,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // brokers or shipment types); this is most likely there aren't any providers/accounts 
                 // setup to use with best rate, so we'll just return a rate group communicating the 
                 // problem to the user
-                RateResult rateResult = new RateResult("No rates are available for the shipment.", string.Empty);
-                rateResult.ShipmentType = ShipmentTypeCode;
-
-                RateGroup errorGroup = new RateGroup(new List<RateResult> { rateResult });
-                errorGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeManager.GetType(shipment), ex.Message));
-
-                return errorGroup;
+                return new InvalidRateGroup(this, ex);
             }
         }
 

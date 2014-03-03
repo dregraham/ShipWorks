@@ -240,7 +240,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // Denote whether the rate is a counter or not based on the broker
                 // that was retrieving the rates
                 RateGroup rateGroup = GetRates(testRateShipment);
-                rateGroup.Rates.ForEach(r => r.IsCounterRate = this.IsCounterRate);
+
+                // Verify that the rates returned are actually valid and add the exception
+                // if they aren't
+                InvalidRateGroup invalidRateGroup = rateGroup as InvalidRateGroup;
+                if (invalidRateGroup != null)
+                {
+                    exceptionHandler.Add(WrapShippingException(invalidRateGroup.ShippingException));
+                    return null;
+                }
+
+                rateGroup.Rates.ForEach(r => r.IsCounterRate = IsCounterRate);
 
                 return rateGroup;
             }
