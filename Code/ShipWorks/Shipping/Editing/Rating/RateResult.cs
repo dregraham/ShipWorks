@@ -25,13 +25,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         protected RateResult()
         {
-            
+            RateID = Guid.NewGuid();
         }
 
         /// <summary>
         /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
-        public RateResult(string description, string days)
+        public RateResult(string description, string days) : this()
         {
             this.Description = description;
             this.days = days;
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, object tag)
+        public RateResult(string description, string days, decimal amount, object tag) : this()
         {
             this.Description = description;
             this.days = days;
@@ -53,6 +53,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.selectable = true;
             this.IsCounterRate = false;
         }
+
+        /// <summary>
+        /// Value to uniquely identify the rate.
+        /// </summary>
+        public Guid RateID { get; set; }
 
         /// <summary>
         /// Gets or sets the service level.
@@ -126,6 +131,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public bool Selectable
         {
             get { return selectable; }
+            set { selectable = value; }
         }
 
         /// <summary>
@@ -170,5 +176,27 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// The provider logo.
         /// </value>
         public Image ProviderLogo { get; set; }
+
+        /// <summary>
+        /// Copies this instance.
+        /// </summary>
+        public RateResult Copy()
+        {
+            //Description,days,amount, tag
+            RateResult coppiedRate = new RateResult(Description, days, amount, tag)
+            {
+                AmountFootnote = amountFootnote,
+                CarrierDescription = carrierDescription,
+                ExpectedDeliveryDate = ExpectedDeliveryDate,
+                IsCounterRate = IsCounterRate,
+                Selectable = selectable,
+                RateID = RateID,
+                ServiceLevel = ServiceLevel,
+                ShipmentType = ShipmentType,
+                ProviderLogo = ProviderLogo
+            };
+
+            return coppiedRate;
+        }
     }
 }

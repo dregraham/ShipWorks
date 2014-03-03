@@ -163,11 +163,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.AreEqual(5, rates.Rates.Count);
-            Assert.IsTrue(rates.Rates.Contains(account1Rate1));
-            Assert.IsTrue(rates.Rates.Contains(account1Rate2));
-            Assert.IsTrue(rates.Rates.Contains(account1Rate3));
-            Assert.IsTrue(rates.Rates.Contains(account3Rate1));
-            Assert.IsTrue(rates.Rates.Contains(account3Rate2));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == account1Rate1.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == account1Rate2.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == account1Rate3.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == account3Rate1.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == account3Rate2.RateID));
         }
 
         [TestMethod]
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result1.RateID));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -220,8 +220,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result1.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -239,8 +239,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result1.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -258,8 +258,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsFalse(rates.Rates.Contains(result1));
-            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.IsFalse(rates.Rates.Any(r=>r.RateID == result1.RateID));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.AreEqual(1, rates.Rates.Count);
         }
 
@@ -306,8 +306,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsFalse(rates.Rates.Contains(result1), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
-            Assert.IsTrue(rates.Rates.Contains(result2));
+            Assert.IsFalse(rates.Rates.Any(r => r.RateID == result1.RateID), "Returned rates should not include {0}", EnumHelper.GetDescription(excludedServiceType));
+            Assert.IsTrue(rates.Rates.Any(r => r.RateID == result2.RateID));
             Assert.AreEqual(1, rates.Rates.Count);
         }
 
@@ -328,12 +328,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             rateGroup3.Rates.Add(result3);
             rateGroup3.Rates.Add(result4);
 
-            testObject.GetBestRates(testShipment, new List<BrokerException>());
+            RateGroup bestRates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.AreEqual("USPS Foo Bar", result2.Description);
-            Assert.AreEqual("USPS Baz Other", result4.Description);
-            Assert.AreEqual("4", result2.Days);
-            Assert.AreEqual("3", result4.Days);
+            Assert.AreEqual("USPS Foo Bar", bestRates.Rates.Single(r => r.RateID == result2.RateID).Description);
+            Assert.AreEqual("USPS Baz Other", bestRates.Rates.Single(r => r.RateID == result4.RateID).Description);
+            Assert.AreEqual("4", bestRates.Rates.Single(r => r.RateID == result2.RateID).Days);
+            Assert.AreEqual("3", bestRates.Rates.Single(r => r.RateID == result4.RateID).Days);
         }
 
         [TestMethod]

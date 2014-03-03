@@ -52,7 +52,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         protected override RateGroup GetRates(ShipmentEntity shipment)
         {
             RateGroup rates = base.GetRates(shipment);
-            MergeDescriptionsWithNonSelectableRates(rates.Rates);
+            
+            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
             return rates;
         }
 
@@ -62,15 +63,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="rates">Collection of rates to update</param>
         /// <remarks>It is important that these rates are in the same order that they are returned from
         /// the shipment type's GetRates method or the merging could be incorrect</remarks>
-        private static void MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
+        private List<RateResult>  MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
         {
             Regex beginsWithSpaces = new Regex("^[ ]+");
             Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
 
             RateResult lastNonSelectable = null;
 
-            foreach (RateResult rate in rates)
+            List<RateResult> RatesToReturn = new List<RateResult>();
+
+            foreach (RateResult originalRate in rates)
             {
+                RateResult rate = originalRate.Copy();
+                RatesToReturn.Add(rate);
+
                 if (rate.Selectable)
                 {
                     if (beginsWithSpaces.IsMatch(rate.Description) && lastNonSelectable != null)
@@ -83,9 +89,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 {
                     lastNonSelectable = rate;
                 }
-
+                
                 rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
             }
+
+            return RatesToReturn;
         }
 
         /// <summary>
