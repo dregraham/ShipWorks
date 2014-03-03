@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
+using System.Drawing;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 {
@@ -109,7 +110,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             {
                 // Use the actual logo and shipment type description for non-postal providers
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
-                bestRateCarrierName.Text = string.Format("{0} {1}", EnumHelper.GetDescription(initialShipmentType.ShipmentTypeCode), initialRate.Description);
+                // "Unmask" the description of non-competitive rates to be consistent with the logo
+                NoncompetitiveRateResult noncompetitiveRate = initialRate as NoncompetitiveRateResult;
+                bestRateCarrierName.Text = noncompetitiveRate == null ? initialRate.Description : noncompetitiveRate.OriginalRate.Description;
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
@@ -150,7 +153,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 existingAccountRateAmount.Text = string.Format("{0:C2}", existingAccountRate.Amount);
 
                 decimal difference = existingAccountRate.Amount - initialRate.Amount;
-                existingAccountRateDifference.Text = string.Format("({0:C2} more)", difference);
+                existingAccountRateDifference.Text = string.Format("({0:C2} {1})", difference, difference > 0 ? "more" : "less");
+                existingAccountRateDifference.ForeColor = difference > 0 ? Color.Red : Color.Green;
                 existingAccountRateDifference.Left = existingAccountRateAmount.Right - 3;
 
                 Height = useExistingAccountPanel.Bottom + 185;
@@ -222,12 +226,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     break;
 
                 case ShipmentTypeCode.FedEx:
-                    description = "The best rate ShipWorks found for your shipment is FedEx. To continue, you’ll need an account with FedEx. " + 
+                    description = "To continue, you’ll need an account with FedEx. " + 
                                   "There is no monthly fee for the account.";
                     break;
 
                 case ShipmentTypeCode.UpsOnLineTools:
-                    description = "The best rate ShipWorks found for your shipment is UPS. To continue, you’ll need an account with UPS. " +
+                    description = "To continue, you’ll need an account with UPS. " +
                                   "There is no monthly fee for the account.";
                     break;
             }
