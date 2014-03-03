@@ -12,17 +12,8 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
     /// Condition base on the unit cost of an item
     /// </summary>
     [ConditionElement("Unit Cost", "OrderItem.UnitCost")]
-    public class UnitCostCondition : NumericCondition<decimal>
+    public class UnitCostCondition : MoneyCondition
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UnitCostCondition()
-        {
-            // Format as currency
-            format = "C";
-        }
-
         /// <summary>
         /// Generate the SQL for the element
         /// </summary>
