@@ -78,13 +78,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             string responseText = JsonConvert.SerializeObject(restResponse);
             logger.LogResponse(responseText, "txt");
 
-            if (restResponse == null)
-            {
-                // BigCommerce sometimes returns "null" in the response for some reason which was causing
-                // a NullReferenceException to bubble up and crash ShipWorks
-                throw new BigCommerceException("ShipWorks received an invalid response from BigCommerce. Please check that your store credentials are correct.");
-            }
-
             return restResponse;
         }
     }
