@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
                 decimal difference = existingAccountRate.Amount - initialRate.Amount;
                 existingAccountRateDifference.Text = string.Format("({0:C2} {1})", difference, difference > 0 ? "more" : "less");
-                existingAccountRateDifference.ForeColor = difference > 0 ? Color.Red : Color.Green;
+                existingAccountRateAmount.ForeColor = difference > 0 ? Color.Red : Color.Green;
                 existingAccountRateDifference.Left = existingAccountRateAmount.Right - 3;
 
                 Height = useExistingAccountPanel.Bottom + 185;
