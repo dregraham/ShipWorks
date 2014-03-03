@@ -647,7 +647,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void UpdateTransactionSKU(EbayOrderItemEntity orderItem, string sku)
         {
             // Don't overwrite it if it's already there.  One important scenario is if the user applies their own SKUs and doesn't want eBay's to overrwrite, such as SKUVault
-            if (!string.IsNullOrWhiteSpace(orderItem.SKU))
+            if (!string.IsNullOrWhiteSpace(orderItem.SKU) && !orderItem.IsNew)
             {
                 return;
             }
