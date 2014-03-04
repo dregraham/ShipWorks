@@ -2179,8 +2179,10 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
-                    //The select rate is not a counter rate, so we just set the shipment type
+                    //The selected rate is not a counter rate, so we just set the shipment type and rate based on the rate grid
                     counterRatesProcessingArgs.SelectedShipmentType = ShipmentTypeManager.GetType(selectedRate.ShipmentType);
+                    counterRatesProcessingArgs.SelectedRate = selectedRate;
+
                     setupWizardDialogResult = DialogResult.OK;
                 }
             });
@@ -2220,7 +2222,10 @@ namespace ShipWorks.Shipping
                 if (setupWizardDialogResult == DialogResult.OK)
                 {
                     showCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
+                    
                     counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
+                    counterRatesProcessingArgs.SelectedRate = rateProcessingSetupWizard.SelectedRate;
+
                     ShippingSettings.MarkAsConfigured(rateProcessingSetupWizard.SelectedShipmentType.ShipmentTypeCode);
                 }
             }

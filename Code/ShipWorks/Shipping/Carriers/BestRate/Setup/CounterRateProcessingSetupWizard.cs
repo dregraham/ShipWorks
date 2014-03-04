@@ -23,6 +23,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         private readonly ShipmentType initialShipmentType;
         private readonly RateResult initialRate;
 
+        private readonly RateResult existingAccountRate;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CounterRateProcessingSetupWizard" /> class.
         /// </summary>
@@ -42,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             // Make note of this otherwise we'd be running Rates.First() a number of times
             initialRate = selectedRate ?? FilteredRates.Rates.FirstOrDefault();
             initialShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(initialRate.ShipmentType);
+            
+            existingAccountRate = FilteredRates.Rates.FirstOrDefault(r => !r.IsCounterRate);
 
             // Swap out the "tokenized" provider text with that of the provider of the initial rate
             LoadInitialRateInfo();
@@ -76,6 +80,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         {
             get; 
             private set; 
+        }
+
+        /// <summary>
+        /// Gets the rate that was selected by the user.
+        /// </summary>
+        public RateResult SelectedRate
+        {
+            get; 
+            private set;
         }
 
         /// <summary>
@@ -126,8 +139,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             // We're always only going to show one of the "existing account" panels, so adjust
             // the location to be on top of each other
             useExistingAccountPanel.Top = addExistingAccountPanel.Top;
-
-            RateResult existingAccountRate = FilteredRates.Rates.FirstOrDefault(r => !r.IsCounterRate);
 
             if (existingAccountRate != null)
             {
@@ -254,6 +265,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             if (result == DialogResult.OK)
             {
                 SelectedShipmentType = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode);
+                SelectedRate = initialRate;
+
                 MarkSelectedShipmentTypeAsBeingUsed();
             }
             
@@ -295,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 
                 if (result == DialogResult.OK)
                 {   
-                    MarkSelectedShipmentTypeAsBeingUsed();
+                    MarkSelectedShipmentTypeAsBeingUsed();                    
 
                     DialogResult = result;
                     Close();
@@ -336,10 +349,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             // Choosing to ignore counter rates for the rest of the batch
             IgnoreAllCounterRates = true; 
             
-            // Grab the shipment type of the first non-counter rate
-            RateResult existingAccountRate = FilteredRates.Rates.First(r => !r.IsCounterRate);
+            // Setup the selected info based on the rate for the existing account
             SelectedShipmentType = ShipmentTypeManager.GetType(existingAccountRate.ShipmentType);
-            
+            SelectedRate = existingAccountRate;
+
             // Make sure to close the form with OK as the result
             DialogResult = DialogResult.OK;
             Close();
