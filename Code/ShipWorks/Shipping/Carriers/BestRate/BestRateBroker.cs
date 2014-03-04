@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public virtual bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            List<TAccount> accounts = AccountRepository.Accounts.ToList();
+            List<TAccount> accounts = AccountsForRates(shipment); 
             foreach (TAccount account in accounts)
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
@@ -116,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            List<TAccount> accounts = AccountRepository.Accounts.ToList();
+            List<TAccount> accounts = AccountsForRates(shipment);
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
@@ -167,6 +168,28 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             AddFootnoteCreators(accountRateGroups, bestRateGroup);
 
             return bestRateGroup;
+        }
+
+        /// <summary>
+        /// Returns a list of accounts from the account repository where the account country code
+        /// matches the shipment origin country code.
+        /// </summary>
+        private List<TAccount> AccountsForRates(ShipmentEntity shipment)
+        {
+            List<TAccount> accounts = AccountRepository.Accounts.ToList();
+
+            accounts = accounts.Where(account =>
+            {
+                if (account is NullEntity)
+                {
+                    return true;
+                }
+
+                PersonAdapter personAdapter = new PersonAdapter(account, "");
+                return personAdapter.CountryCode == shipment.OriginCountryCode;
+            }).ToList();
+
+            return accounts;
         }
 
         /// <summary>
