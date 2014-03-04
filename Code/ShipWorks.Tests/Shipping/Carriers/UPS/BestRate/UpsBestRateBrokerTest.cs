@@ -50,9 +50,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         [TestInitialize]
         public void Initialize()
         {
-            account1 = new UpsAccountEntity { UpsAccountID = 1 };
-            account2 = new UpsAccountEntity { UpsAccountID = 2 };
-            account3 = new UpsAccountEntity { UpsAccountID = 3 };
+            account1 = new UpsAccountEntity { UpsAccountID = 1, CountryCode = "US"};
+            account2 = new UpsAccountEntity { UpsAccountID = 2, CountryCode = "US" };
+            account3 = new UpsAccountEntity { UpsAccountID = 3, CountryCode = "US" };
 
             account1Rate1 = new RateResult("Account 1a", "4", 12, UpsServiceType.Ups2DayAir) { ServiceLevel = ServiceLevelType.TwoDays};
             account1Rate2 = new RateResult("Account 1b", "3", 4, UpsServiceType.UpsGround) { ServiceLevel = ServiceLevelType.FourToSevenDays };
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                 GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
             };
 
-            testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity()};
+            testShipment = new ShipmentEntity {ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity(), OriginCountryCode = "US"};
         }
 
         [TestMethod]

@@ -53,9 +53,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         [TestInitialize]
         public void Initialize()
         {
-            account1 = new EndiciaAccountEntity { EndiciaAccountID = 1 };
-            account2 = new EndiciaAccountEntity { EndiciaAccountID = 2 };
-            account3 = new EndiciaAccountEntity { EndiciaAccountID = 3 };
+            account1 = new EndiciaAccountEntity { EndiciaAccountID = 1, CountryCode = "US" };
+            account2 = new EndiciaAccountEntity { EndiciaAccountID = 2, CountryCode = "US" };
+            account3 = new EndiciaAccountEntity { EndiciaAccountID = 3, CountryCode = "US" };
 
             account1Rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.TwoDays };
             account1Rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
@@ -98,7 +98,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             };
 
 
-            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity() };
+            testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, 
+                ContentWeight = 12.1, 
+                BestRate = new BestRateShipmentEntity(),
+                OriginCountryCode = "US"};
 
             bestRateBrokerSettings = new Mock<IBestRateBrokerSettings>();
 
