@@ -425,7 +425,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // If the best rate is a counter rate, raise an event that will let the user sign up for the service
                 if (bestRate.IsCounterRate)
                 {
-                    ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, bestRate, counterRatesProcessing);
+                    ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, counterRatesProcessing);
                     if (ratesToApplyToReturnedShipments == null)
                     {
                         // This would mean the user canceled; stop processing
@@ -479,7 +479,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             if (selectedRate.IsCounterRate)
             {
-                ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, selectedRate, counterRatesProcessing);
+                ratesToApplyToReturnedShipments = HandleCounterRate(shipment, rateGroups.ToList(), filteredRates, counterRatesProcessing);
             }
             else
             {
@@ -503,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="counterRatesProcessing">The counter rates processing.</param>
         /// <returns></returns>
         /// <exception cref="ShippingException">ShipWorks could not find any rates.</exception>
-        private List<RateResult> HandleCounterRate(ShipmentEntity shipment, IEnumerable<RateGroup> originalRateGroups, RateGroup filteredRates, RateResult counterRate, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+        private List<RateResult> HandleCounterRate(ShipmentEntity shipment, IEnumerable<RateGroup> originalRateGroups, RateGroup filteredRates, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
         {
             List<RateResult> ratesToApplyToReturnedShipments = null;
 
@@ -549,7 +549,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 }
                 else
                 {
-                    // The event args indicate a rate was selected, so we'll just use it
+                    // The event args indicate a rate was selected, so we'll use it
                     // to find the corresponding rate in the new list of results
                     RateResult selectedRate = rateGroup.Rates.FirstOrDefault(r => r.OriginalTag.Equals(eventArgs.SelectedRate.OriginalTag));
                     ratesToApplyToReturnedShipments = new List<RateResult> { selectedRate };
