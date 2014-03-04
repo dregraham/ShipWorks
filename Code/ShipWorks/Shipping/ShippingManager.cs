@@ -911,7 +911,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Processes the shipment.
         /// </summary>
-        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+        public static void ProcessShipment(long shipmentID, Dictionary<long, Exception> licenseCheckCache, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
             log.InfoFormat("Shipment {0}  - Process Start", shipmentID);
 
@@ -922,28 +922,28 @@ namespace ShipWorks.Shipping
                 // Ensure's we are the only one who processes this shipment, if other ShipWorks are running
                 using (new SqlEntityLock(shipmentID, "Process Shipment"))
                 {
-                    ShipmentEntity bestRateShipment = GetShipment(shipmentID);
+                    ShipmentEntity shipment = GetShipment(shipmentID);
 
-                    if (bestRateShipment == null)
+                    if (shipment == null)
                     {
                         throw new ObjectDeletedException();
                     }
 
-                    if (bestRateShipment.Processed)
+                    if (shipment.Processed)
                     {
                         throw new ShipmentAlreadyProcessedException("The shipment has already been processed.");
                     }
                      
 
-                    StoreEntity storeEntity = StoreManager.GetStore(bestRateShipment.Order.StoreID);
+                    StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
                     if (storeEntity == null)
                     {
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
 
                     // Get the ShipmentType instance
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(bestRateShipment);
-                    List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(bestRateShipment, counterRatesProcessing);
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    List<ShipmentEntity> shipmentsToTryToProcess = shipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate);
 
                     // A null value returned from the pre-process method means the user has opted to not continue 
                     // processing after a counter rate was selected as the best rate, so the processing of the shipment should be aborted
@@ -954,6 +954,7 @@ namespace ShipWorks.Shipping
 
                     bool success = false;
                     ShippingException lastException = null;
+
                     foreach (ShipmentEntity shipmentToTry in shipmentsToTryToProcess)
                     {
                         try
@@ -962,6 +963,7 @@ namespace ShipWorks.Shipping
                             {
                                 adapter.SaveAndRefetch(shipmentToTry);
                                 ProcessShipmentHelper(shipmentToTry, storeEntity, licenseCheckCache);
+
                                 adapter.Commit();
                             }
 
@@ -981,12 +983,10 @@ namespace ShipWorks.Shipping
                         throw new ShippingException(lastException.Message,lastException);
                     }
                 }
-
             }
             catch (SqlAppResourceLockException ex)
             {
                 log.InfoFormat("Could not obtain lock for processing shipment {0}", shipmentID);
-
                 throw new ShippingException("The shipment was being processed on another computer.", ex);
             }
         }
@@ -995,7 +995,7 @@ namespace ShipWorks.Shipping
         /// Process the given shipment.  If the shipment is already processed, then no action is taken or error reported.  Licensing
         /// is validated, and processing results are logged to tango.
         /// </summary>
-        public static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, Dictionary<long, Exception> licenseCheckCache)
+        private static void ProcessShipmentHelper(ShipmentEntity shipment, StoreEntity storeEntity, Dictionary<long, Exception> licenseCheckCache)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 

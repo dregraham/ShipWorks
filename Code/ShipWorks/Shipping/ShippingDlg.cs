@@ -2080,6 +2080,8 @@ namespace ShipWorks.Shipping
                     return;
                 }
 
+                RateResult selectedRate = state as RateResult;
+
                 long shipmentID = shipment.ShipmentID;
                 string errorMessage = null;
 
@@ -2092,7 +2094,7 @@ namespace ShipWorks.Shipping
                     }
                     
                     // Process it                                        
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing);
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing, selectedRate);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2143,7 +2145,7 @@ namespace ShipWorks.Shipping
                 {
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
-            }, shipments); // Each shipment to execute the code for
+            }, shipments, rateControl.SelectedRate); // Each shipment to execute the code for
         }
 
         /// <summary>

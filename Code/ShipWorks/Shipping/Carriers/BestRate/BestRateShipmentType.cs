@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>
         /// <returns>This will return the shipping type of the best rate found.</returns>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
             AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
@@ -374,6 +374,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             try
             {
+                // Important to get rates here again because this will ensure that the rates 
+                // are current with the configuration of the shipment; this will come into
+                // play when comparing the selected rate with the rates in the rate groups
                 rateGroups = GetRates(shipment, new List<BrokerException>());
             }
             catch (AggregateException ex)
@@ -394,70 +397,98 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             RateGroup filteredRates = CompileBestRates(shipment, rateGroups);
-            RateResult bestRate = filteredRates.Rates.FirstOrDefault();
-
-            if (bestRate == null)
+            if (!filteredRates.Rates.Any())
             {
                 throw new ShippingException("ShipWorks could not find any rates.");
             }
 
-            List<RateResult> ratesToApplyToReturnedShipments;
+            List<RateResult> ratesToApplyToReturnedShipments = new List<RateResult>();
 
-            // If the best rate is a counter rate, raise an event that will let the user sign up for the service
-            if (bestRate.IsCounterRate)
+            if (selectedRate != null)
             {
-                // Get all rates that meet the specified service level ordered by amount
-                BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel);
-                RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
+                // We want to try to process with the selected rate that was provided. Build
+                // up our list of fail over candidates in case the processing the shipment with
+                // the first rate fails
+                ratesToApplyToReturnedShipments = rateGroups
+                    .ToList()
+                    .SelectMany(x => x.Rates)
+                    .Where(r => !r.IsCounterRate && r.Amount == selectedRate.Amount && r.OriginalTag == selectedRate.OriginalTag)
+                    .ToList();
 
-                // Determine what the actual shipment type should be for the selected best rate
-                // (i.e. use Endicia if a postal type was selected)
-                //ShipmentTypeCode shipmentTypeCode = bestRate.ShipmentType;
-
-                //ShipmentType setupShipmentType = DetermineCounterRateShipmentTypeForCounterRateSetupWizard(shipmentTypeCode);
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment);
-
-                if (counterRatesProcessing != null)
+                if (!ratesToApplyToReturnedShipments.Any())
                 {
-                    counterRatesProcessing(eventArgs);
-                    ShippingSettings.CheckForChangesNeeded();
+                    throw new ShippingException("The rate that was selected is out of date or could not be found. Please select another rate.");
                 }
+            }
 
-               if (eventArgs.SelectedShipmentType != null)
+            if (!ratesToApplyToReturnedShipments.Any())
+            {
+                // A rate was not selected in the grid, so we need to treat this as if the user selected
+                // the first rate in the list (the best rate); this case could occur if multiple shipments
+                // are being processed in a batch or if the rates have not been fetched and displayed in
+                // the grid yet.
+                RateResult bestRate = filteredRates.Rates.FirstOrDefault();
+
+                // If the best rate is a counter rate, raise an event that will let the user sign up for the service
+                if (bestRate.IsCounterRate)
                 {
-                    // Get the best rates for the newly created account
-                    IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
-                    RateGroup bestRateGroup = broker.GetBestRates(shipment, new List<BrokerException>());
+                    // Get all rates that meet the specified service level ordered by amount
+                    BestRateServiceLevelFilter filter = new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel);
+                    RateGroup allRates = filter.Filter(new RateGroup(rateGroups.SelectMany(x => x.Rates)));
 
-                    // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
-                    // and filtered by service level
-                    bestRate = CompileBestRates(shipment, new List<RateGroup> { bestRateGroup }).Rates.FirstOrDefault();
+                    CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(allRates, filteredRates, shipment);
 
-                    ratesToApplyToReturnedShipments = new List<RateResult> { bestRate };
+                    if (counterRatesProcessing != null)
+                    {
+                        // Invoke the callback for handling the case where a counter rate is the 
+                        // best rate available (e.g. sign up for an account with the best rate provider,
+                        // choose to use an existing account instead, etc.)
+                        counterRatesProcessing(eventArgs);
+                        ShippingSettings.CheckForChangesNeeded();
+                    }
+
+                    if (eventArgs.SelectedShipmentType != null)
+                    {
+                        // Get the best rates for the newly created account
+                        IBestRateShippingBroker broker = eventArgs.SelectedShipmentType.GetShippingBroker(shipment);
+                        RateGroup bestRateGroup = broker.GetBestRates(shipment, new List<BrokerException>());
+
+                        // Compiling the best rates will give us a list of rates from the broker that is sorted by rate
+                        // and filtered by service level
+                        bestRate = CompileBestRates(shipment, new List<RateGroup> { bestRateGroup }).Rates.FirstOrDefault();
+
+                        // We're going to process the shipment with the best rate
+                        ratesToApplyToReturnedShipments = new List<RateResult> { bestRate };
+                    }
+                    else
+                    {
+                        // This would mean the user canceled 
+                        return null;
+                    }
+
+                    // Ensure that the results of the dialog return an actual rate of some kind
+                    if (bestRate == null)
+                    {
+                        throw new ShippingException("ShipWorks could not find any rates.");
+                    }
                 }
                 else
                 {
-                    // This would mean the user canceled 
-                    return null;
+                    // The cheapest rate is not a counter rate, so compile a list of the possible
+                    // rates to apply to the shipment during processing. This is basically a fail
+                    // over mechanism in case the processing with the first rate fails
+                    ratesToApplyToReturnedShipments = rateGroups
+                        .SelectMany(x => x.Rates)
+                        .Where(r => !r.IsCounterRate && r.Amount == bestRate.Amount)
+                        .ToList();
                 }
-
-                // Ensure that the results of the dialog return an actual rate of some kind
-                if (bestRate == null)
-                {
-                    throw new ShippingException("ShipWorks could not find any rates.");
-                }
-            }
-            else
-            {
-                ratesToApplyToReturnedShipments = rateGroups
-                    .SelectMany(x => x.Rates)
-                    .Where(r => !r.IsCounterRate && r.Amount == bestRate.Amount)
-                    .ToList();
             }
 
             List<ShipmentEntity> shipmentsToReturn = new List<ShipmentEntity>();
             foreach (RateResult rateToApply in ratesToApplyToReturnedShipments)
             {
+                // Apply the selected rate to the shipment, so it's configured
+                // for processing
                 ApplySelectedShipmentRate(shipment, rateToApply);   
                 shipmentsToReturn.Add(shipment);
             }
