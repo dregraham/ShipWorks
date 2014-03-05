@@ -371,9 +371,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 case ShipmentTypeCode.UpsWorldShip:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
                     break;
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
+                    setupShipmentType = ShippingSettings.Fetch().BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) ? 
+                        ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps) : 
+                        ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    break;
+                case ShipmentTypeCode.Stamps:
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps);
+                    break;
+                case ShipmentTypeCode.Endicia:
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
                     break;
                 case ShipmentTypeCode.Express1Endicia:
