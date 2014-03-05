@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             accounts = accounts.Where(account =>
             {
-                if (account is NullEntity)
+                if (account is NullEntity || shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
                 {
                     return true;
                 }
