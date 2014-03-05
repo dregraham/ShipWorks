@@ -56,7 +56,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
                 {
                     Username = credentialStore.Express1StampsUsername,
                     Password = credentialStore.Express1StampsPassword,
-                    IsExpress1 = true
+                    IsExpress1 = true,
+                    CountryCode = "US"
                 };
 
                 counterRateAccounts.Add(account);

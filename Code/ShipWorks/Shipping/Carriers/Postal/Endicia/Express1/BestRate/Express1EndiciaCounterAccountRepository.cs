@@ -55,7 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
                 {
                     AccountNumber = credentialStore.Express1EndiciaAccountNumber,
                     ApiUserPassword = credentialStore.Express1EndiciaPassPhrase,
-                    EndiciaReseller = (int)EndiciaReseller.Express1
+                    EndiciaReseller = (int)EndiciaReseller.Express1,
+                    CountryCode = "US"
                 };
 
                 counterRatesAccounts.Add(account);
