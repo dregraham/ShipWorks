@@ -47,6 +47,14 @@ namespace :build do
 		msb.targets :Clean, :Build
 	end
 	
+	desc "Build ShipWorks in the Release configuration"
+	msbuild :analyze do |msb|
+		print "Building solution with the release config...\r\n\r\n"
+		
+		msb.properties :configuration => :Debug, :RunCodeAnalysis => true
+		msb.targets :Clean, :Build
+	end
+	
 	desc "Build ShipWorks.Native in a given configuration and platform"
 	msbuild :native, [:configuration, :platform] do |msb, args|
 		print "Building the Native project with the #{args[:configuration]}|#{args[:platform]} config...\r\n\r\n"
@@ -76,12 +84,17 @@ namespace :build do
 		print "Querying required schema version... "
 		print schemaID = `Build/echoerrorlevel.cmd "Artifacts\\Application\\ShipWorks.exe" /c=getdbschemaversion /type=required`
 
+		# Grab the revision number to use for this build
+		revisionFile = File.open(@revisionFilePath)
+		revisionNumber = revisionFile.readline
+		revisionFile.close
+		
 		print "Running INNO compiler... "
-		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
+		`"#{@innoPath}" Installer/ShipWorks.iss /O"Artifacts/Installer" /F"ShipWorksSetup.Debug" /DEditionType="Standard" /DVersion="0.0.0.0" /DAppArtifacts="../Artifacts/Application" /DRequiredSchemaID="#{schemaID}"`
 		FileUtils.rm_f "InnoSetup.iss"
 		print "done.\r\n"
 	end
-
+	
 	desc "Build ShipWorks and generate an MSI for internal testing. Usage: internal_installer[3.5.2] to label with a specific major/minor/patch number; otherwise 0.0.0 will be used"
 	msbuild :internal_installer, :versionLabel do |msb, args|
 		print "Building internal release installer...\r\n\r\n"
@@ -108,7 +121,10 @@ namespace :build do
 		print "Building with label " + labelForBuild + "\r\n\r\n"
 		
 		# Use the revisionNumber extracted from the file and pass the revision filename
-		# so the build will increment the version in preperation for the next run
+		# so the build will increment the version in preparation for the next run
+		
+		# NOTE: The ReleaseType=Internal parameter will cause the assemblies/installer to 
+		# be signed; this will fail without the correct certificate
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=False /p:ReleaseType=Internal /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
 	end
 	
