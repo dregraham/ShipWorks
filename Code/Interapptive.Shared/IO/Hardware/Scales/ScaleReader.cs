@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO.Ports;
-using System.Text.RegularExpressions;
-using System.IO;
-using log4net;
-using Interapptive.Shared.Usb;
 using System.Threading;
+using Interapptive.Shared.Usb;
 
 namespace Interapptive.Shared.IO.Hardware.Scales
 {
@@ -24,6 +17,56 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         static volatile ScaleReadResult lastResult = notFoundResult;
 
         static object threadLock = new object();
+        private static readonly DeviceListener DeviceListener = new DeviceListener();
+
+        /// <summary>
+        /// Static constructor
+        /// </summary>
+        static ScaleReader()
+        {
+            DeviceListener.DeviceChanged += OnDeviceListenerDeviceChanged;
+            SetUsbScale();
+        }
+
+        /// <summary>
+        /// Attempt to set up a usb scale after a device was attached or configuration was changed
+        /// </summary>
+        private static void OnDeviceListenerDeviceChanged(object sender, EventArgs e)
+        {
+            SetUsbScale();
+        }
+
+        /// <summary>
+        /// Attempt to get a reference to a usb scale
+        /// </summary>
+        private static void SetUsbScale()
+        {
+            // Don't bother setting up the scale if we already have one
+            if (usbReader != null)
+            {
+                return;
+            }
+            
+            lock (threadLock)
+            {
+                // If the scale was already set up, just bail
+                if (usbReader != null)
+                {
+                    return;
+                }
+
+                // Try and get a reading from the usb scale
+                usbReader = new ScaleUsbReader();
+                ScaleReadResult usbResult = usbReader.ReadScale();
+
+                // Success, return result now
+                if (usbResult.Status == ScaleReadStatus.NotFound)
+                {
+                    // Didn't work, clear it
+                    usbReader = null;
+                }
+            }
+        }
 
         /// <summary>
         /// Read from any attached scale that can be found
@@ -78,20 +121,20 @@ namespace Interapptive.Shared.IO.Hardware.Scales
             }
 
             // Try usb first
-            usbReader = new ScaleUsbReader();
-            ScaleReadResult usbResult = usbReader.ReadScale();
+            if (usbReader != null)
+            {
+                ScaleReadResult usbResult = usbReader.ReadScale();
 
-            // Success, return result now
-            if (usbResult.Status != ScaleReadStatus.NotFound)
-            {
-                return usbResult;
-            }
-            else
-            {
+                // Success, return result now
+                if (usbResult.Status != ScaleReadStatus.NotFound)
+                {
+                    return usbResult;
+                }
+                
                 // Didn't work, clear it
                 usbReader = null;
             }
-
+            
             // Read serial - but not as a background polling
             serialReader = new ScaleSerialPortReader();
             ScaleReadResult serialResult = (!isPolling) ? serialReader.ReadScale() : new ScaleReadResult(ScaleReadStatus.NotFound, "Serial scales are not read during polling.");

@@ -3525,3 +3525,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "WHEEL", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "DELTA", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Shared", Scope = "namespace", Target = "Interapptive.Shared.IO.Hardware.Usb")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Scope = "member", Target = "Interapptive.Shared.IO.Hardware.Scales.ScaleReader.#.cctor()")]
