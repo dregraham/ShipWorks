@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading;
 using ShipWorks.Data.Connection;
@@ -349,8 +351,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
             try
             {
-                // save the new order
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) =>
                 {
                     // Save the order, which will include all moved items, payments, and charges
                     adapter.SaveAndRefetch(newOrder);
@@ -362,12 +364,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                         OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                        DeletionService.DeleteOrder(order.OrderID, adapter);
+                        DeletionService.DeleteOrder(order.OrderID);
                     }
 
                     // commit the transaction
                     adapter.Commit();
-                }
+                });
             }
             catch (ORMQueryExecutionException ex)
             {

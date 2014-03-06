@@ -125,6 +125,7 @@
     <Compile Include="Actions\Tasks\TaskValidationErrorTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
+    <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
@@ -456,7 +457,6 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">
@@ -467,6 +467,9 @@
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
