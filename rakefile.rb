@@ -47,12 +47,14 @@ namespace :build do
 		msb.targets :Clean, :Build
 	end
 	
-	desc "Build ShipWorks in the Release configuration"
+	desc "Runs code analysis"
 	msbuild :analyze do |msb|
-		print "Building solution with the release config...\r\n\r\n"
+		print "Running code analysis...\r\n\r\n"
 		
+		msb.verbosity = "normal"
 		msb.properties :configuration => :Debug, :RunCodeAnalysis => true
-		msb.targets :Clean, :Build
+		msb.parameters = "/p:warn=0"
+		msb.targets :Build
 	end
 	
 	desc "Build ShipWorks.Native in a given configuration and platform"
