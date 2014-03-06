@@ -1002,7 +1002,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (confirmationOptions.Count > 0)
                         {
                             // Add the 'base' rate for the service type, without any confirmations\extras
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) { Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None) });
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) 
+                            { 
+                                Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
+                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                            });
 
                             if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
                             {
@@ -1017,7 +1021,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         else
                         {
                             // Add the single rate for this service
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days, price.Postage.TotalAmount, new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days, price.Postage.TotalAmount, new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                            {
+                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                            });
                         }
                     }
 
@@ -1049,7 +1056,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 RateResult withDelivery = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, PostalConfirmationType.Delivery);
                                 RateResult withSignature = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, PostalConfirmationType.Signature);
 
-                                rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect)));
+                                rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect))
+                                {
+                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                });
                                 rates.Add(withDelivery);
                                 rates.Add(withSignature);
                             }
@@ -1162,7 +1172,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                     result.Description,
                                     webToolRate.Days,
                                     result.Amount,
-                                    result.Tag));
+                                    result.Tag)
+                                    {
+                                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                    });
                             }
                             else
                             {

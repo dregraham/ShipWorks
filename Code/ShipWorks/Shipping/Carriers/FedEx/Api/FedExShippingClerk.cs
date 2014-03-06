@@ -688,7 +688,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 {
                     ExpectedDeliveryDate = deliveryDate,
                     ServiceLevel = GetServiceLevel(serviceType, transitDays),
-                    ShipmentType = ShipmentTypeCode.FedEx
+                    ShipmentType = ShipmentTypeCode.FedEx,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
                 });
             }
 

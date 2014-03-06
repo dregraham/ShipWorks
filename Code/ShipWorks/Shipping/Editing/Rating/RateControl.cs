@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 {
                     GridRow row = new GridRow(new[]
                     {
-                        new GridCell(rate.ProviderLogo ?? EnumHelper.GetImage(rate.ShipmentType)),
+                        new GridCell(rate.ProviderLogo),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)

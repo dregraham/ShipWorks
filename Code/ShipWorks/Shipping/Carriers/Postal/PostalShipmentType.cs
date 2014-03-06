@@ -401,7 +401,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
                 .ToList();
 
-            validExpress1Rates.ForEach(e => e.ShipmentType = baseShipmentType);
+            validExpress1Rates.ForEach(e => {
+                e.ShipmentType = baseShipmentType;
+                e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
+            });
 
             return new RateGroup(validExpress1Rates);
         }
