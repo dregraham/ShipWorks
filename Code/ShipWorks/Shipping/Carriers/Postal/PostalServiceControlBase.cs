@@ -335,7 +335,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
-            PostalServiceType serviceType = (PostalServiceType) service.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
             PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;            
@@ -348,7 +348,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateSectionDescription();
 
             UpdateAvailableShipmentOptions((PostalPackagingType?) packagingType.SelectedValue);
-            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
         }
 
         /// <summary>
