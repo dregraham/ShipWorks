@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Editing;
 using System;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -54,7 +55,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             RateGroup rates = base.GetRates(shipment);
             
             rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
+            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
+            rates.Rates.ForEach(f => UseProperUspsLogo(f));
+
             return rates;
+        }
+
+        /// <summary>
+        /// Masks the usps logo.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns></returns>
+        private static void UseProperUspsLogo(RateResult rate)
+        {
+            if (ShipmentTypeManager.IsPostal(rate.ShipmentType))
+            {
+                rate.ProviderLogo = rate.IsCounterRate ? ShippingIcons.usps : EnumHelper.GetImage(rate.ShipmentType);
+            }
         }
 
         /// <summary>

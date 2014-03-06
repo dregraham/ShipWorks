@@ -281,9 +281,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 compiledRateGroup = rateGroupFilter.Filter(compiledRateGroup);
             }
 
-            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
-            compiledRateGroup.Rates.ForEach(f => UseProperUspsLogo(f));
-
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
             // intermingled with rates from other carriers
@@ -291,19 +288,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
             return compiledRateGroup;
-        }
-
-        /// <summary>
-        /// Masks the usps logo.
-        /// </summary>
-        /// <param name="rate">The rate.</param>
-        /// <returns></returns>
-        private static void UseProperUspsLogo(RateResult rate)
-        {
-            if (ShipmentTypeManager.IsPostal(rate.ShipmentType))
-            {
-                rate.ProviderLogo = rate.IsCounterRate ? ShippingIcons.usps : EnumHelper.GetImage(rate.ShipmentType);
-            }
         }
 
         /// <summary>
