@@ -9,6 +9,8 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -272,8 +274,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
             using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
             {
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
+
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => { 
                     // Save the new order
                     SaveDownloadedOrder(order);
 
@@ -306,9 +309,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         // Delete the old order
                         DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
                     }
-
-                    adapter.Commit();
-                }
+                });
             }
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.UI;
 using System.Threading;
 using ShipWorks.Data;
@@ -86,7 +87,10 @@ namespace ShipWorks.Data
 
             try
             {
-                ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteStore(store, adapter); }, 3);
+                //ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteStore(store, adapter); }, 3);
+
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteStore for store {0}", store.StoreName));
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteStore(store, adapter));
             }
             finally
             {
@@ -103,7 +107,10 @@ namespace ShipWorks.Data
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                DeleteWithCascade(EntityType.OrderEntity, orderID);
+                //DeleteWithCascade(EntityType.OrderEntity, orderID);
+
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteWithCascade for OrderID {0}", orderID));
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.OrderEntity, orderID, adapter));
             }
 
             DataProvider.RemoveEntity(orderID);
@@ -116,7 +123,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
 
-            ExecuteWithDeadlockRetry((SqlAdapter a) => DeleteWithCascade(EntityType.OrderEntity, orderID, a), 5, adapter);
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            {
+                DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
+            }
 
             DataProvider.RemoveEntity(orderID);
         }
@@ -130,71 +140,13 @@ namespace ShipWorks.Data
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                DeleteWithCascade(EntityType.CustomerEntity, customerID);
+                //DeleteWithCascade(EntityType.CustomerEntity, customerID);
+
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteCustomer for CustomerID {0}", customerID));
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter));
             }
 
             DataProvider.RemoveEntity(customerID);
-        }
-
-        /// <summary>
-        /// Delete the specified EntityType, as found using the given starting predicate (that must be PK based), while
-        /// first deleting all child records.
-        /// </summary>
-        private static void DeleteWithCascade(EntityType entityType, long id)
-        {
-            ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteWithCascade(entityType, id, adapter); }, 5);
-        }
-
-        /// <summary>
-        /// Executes the given method with an adapter that is setup for deadlock connection and automatic retry.
-        /// </summary>
-        private static void ExecuteWithDeadlockRetry(MethodInvoker<SqlAdapter> method, int deadlockRetries)
-        {
-            using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-5))
-            {
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    adapter.CommandTimeOut = (int)TimeSpan.FromMinutes(10).TotalSeconds;
-
-                    ExecuteWithDeadlockRetry(method, deadlockRetries, adapter);
-
-                    adapter.Commit();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Executes the given method with an adapter that is setup for deadlock connection and automatic retry.
-        /// </summary>
-        private static void ExecuteWithDeadlockRetry(MethodInvoker<SqlAdapter> method, int deadlockRetries, SqlAdapter adapter)
-        {
-            Stopwatch sw = Stopwatch.StartNew();
-
-            try
-            {
-                // Execute our method - we don't commit the work performed by the adapter here since
-                // we didn't create the adapter.
-                method(adapter);
-            }
-            catch (SqlDeadlockException)
-            {
-                log.WarnFormat("Deadlock detected while trying to delete.  Retrying {0} more times.", deadlockRetries);
-
-                if (deadlockRetries > 0)
-                {
-                    // Wait before trying again, give the other guy some time to resolve itself
-                    Thread.Sleep(1000);
-
-                    // Try again
-                    ExecuteWithDeadlockRetry(method, deadlockRetries - 1, adapter);
-                }
-                else
-                {
-                    log.ErrorFormat("Could not delete due to deadlock retry failure.");
-                }
-            }
-
-            log.InfoFormat("Delete {0}", sw.Elapsed.TotalSeconds);
         }
 
         /// <summary>
