@@ -51,7 +51,7 @@ namespace :build do
 	msbuild :analyze do |msb|
 		print "Running code analysis...\r\n\r\n"
 		
-		msb.verbosity = "quiet"
+		msb.verbosity = "normal"
 		msb.properties :configuration => :Debug, :RunCodeAnalysis => true
 		msb.parameters = "/p:warn=0"
 		msb.targets :Build
