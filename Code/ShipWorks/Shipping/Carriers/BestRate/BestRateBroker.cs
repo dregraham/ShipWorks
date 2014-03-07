@@ -156,6 +156,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
                 rate.CarrierDescription = carrierDescription;
+
+                // Child rates (like USPS Priority with signature or delivery confirmation) won't have a provider logo set
+                rate.ProviderLogo = rate.ProviderLogo ?? EnumHelper.GetImage(ShipmentType.ShipmentTypeCode);
             }
 
             RateGroup bestRateGroup = new RateGroup(filteredRates.ToList());
