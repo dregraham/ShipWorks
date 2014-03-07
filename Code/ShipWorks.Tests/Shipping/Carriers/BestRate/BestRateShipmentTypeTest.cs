@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void GetRates_AddsRates_FromAllBrokers_Test()
+        public void GetRates_OnlyReturnsOneRateResult_FromAllBrokers_Test()
         {
             rates = new List<RateResult>
             {
@@ -114,8 +114,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
-            // Both brokers are setup to return two rate results, so we should have a total of four
-            Assert.AreEqual(4, rateGroup.Rates.Count());
+            // Even through both brokers are setup to return two rate results, so we should only have one
+            Assert.AreEqual(1, rateGroup.Rates.Count());
         }
 
         [TestMethod]
@@ -143,7 +143,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(4.23M, bestRates[0].Amount);
-            Assert.AreEqual(9.87M, bestRates[1].Amount);
         }
 
         [TestMethod]
@@ -162,7 +161,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual("12", bestRates[0].Days);
-            Assert.AreEqual("probably 7", bestRates[1].Days);
         }
 
         [TestMethod]
@@ -183,7 +181,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             BestRateResultTag bestRateResultTag = (BestRateResultTag)bestRates.First(rr => ((BestRateResultTag)rr.Tag).ResultKey == "SomeRateResult").Tag;
 
             Assert.AreEqual(rates[0].Tag, bestRateResultTag);
-            Assert.IsNotNull(bestRates[1].Tag as BestRateResultTag);
         }
 
         [TestMethod]
@@ -202,7 +199,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
             Assert.AreEqual(rates[0].Selectable, bestRates[0].Selectable);
-            Assert.AreEqual(rates[1].Selectable, bestRates[1].Selectable);
         }
         
         [TestMethod]
