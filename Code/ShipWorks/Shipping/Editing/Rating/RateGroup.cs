@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Get the rates
         /// </summary>
-        public virtual List<RateResult> Rates { get; set; }
+        public virtual List<RateResult> Rates { get; private set; }
 
         /// <summary>
         /// Indicates if the rates are out of date due to a change in shipment values
