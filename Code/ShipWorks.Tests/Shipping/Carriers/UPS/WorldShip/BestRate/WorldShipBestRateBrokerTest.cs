@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result1));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.IsTrue(rates.Rates.Contains(result2));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -206,8 +206,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result2));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -225,8 +225,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result1));
-            Assert.IsTrue(OriginalRates(rates.Rates).Contains(result2));
+            Assert.IsTrue(rates.Rates.Contains(result1));
+            Assert.IsTrue(rates.Rates.Contains(result2));
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
@@ -354,7 +354,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             foreach (var rate in rates.Rates)
             {
-                Assert.IsInstanceOfType(rate, typeof(NoncompetitiveRateResult));
+                Assert.IsInstanceOfType(rate, typeof(RateResult));
             }
         }
 
@@ -409,19 +409,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(OriginalRates(rates.Rates).Select(x => x.Description).Contains("UPS Ground"));
-            Assert.IsTrue(OriginalRates(rates.Rates).Select(x => x.Description).Contains("UPS Some Service"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("UPS Ground"));
+            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
             Assert.AreEqual(2, rates.Rates.Count);
         }
        
-        /// <summary>
-        /// Gets a list of original rates from a list of NonCompetitiveRateResults
-        /// </summary>
-        /// <param name="rates"></param>
-        /// <returns></returns>
-        private static IEnumerable<RateResult> OriginalRates(IEnumerable<RateResult> rates)
-        {
-            return rates.OfType<NoncompetitiveRateResult>().Select(x => x.OriginalRate);
-        }
     }
 }
