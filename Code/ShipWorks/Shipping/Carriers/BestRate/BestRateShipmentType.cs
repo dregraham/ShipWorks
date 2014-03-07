@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -20,9 +19,6 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.Data;
-using ShipWorks.Properties;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -209,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, 1);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -280,8 +276,23 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 compiledRateGroup = rateGroupFilter.Filter(compiledRateGroup);
             }
+            
+            // Allow each rate result the chance to mask its description if needed based on the 
+            // other rate results in the list. This is for UPS that does not want its named-rates
+            // intermingled with rates from other carriers
+            compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
+            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
 
-            compiledRateGroup = compiledRateGroup.CopyWithRates(compiledRateGroup.Rates.Take(1));
+            return compiledRateGroup;
+        }
+
+        /// <summary>
+        /// Create a single, filtered rate group from a collection of rate groups
+        /// </summary>
+        private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups, int count)
+        {
+            RateGroup compiledRateGroup = CompileBestRates(shipment, rateGroups);
+            compiledRateGroup = compiledRateGroup.CopyWithRates(compiledRateGroup.Rates.Take(count));
 
             // Allow each rate result the chance to mask its description if needed based on the 
             // other rate results in the list. This is for UPS that does not want its named-rates
@@ -383,6 +394,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 throw ex.InnerExceptions.First();
             }
 
+            // We want all the rates here, so we can pass them back to the coutner rate processing if needed
             RateGroup filteredRates = CompileBestRates(shipment, rateGroups);
             if (!filteredRates.Rates.Any())
             {
