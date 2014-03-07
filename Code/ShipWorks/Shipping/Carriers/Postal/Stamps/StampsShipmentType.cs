@@ -293,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 else
                 {
-                    return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Stamps);
+                    return new RateGroup(stampsRates);
                 }
             }
             else

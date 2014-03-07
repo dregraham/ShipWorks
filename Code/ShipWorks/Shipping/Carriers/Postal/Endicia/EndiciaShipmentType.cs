@@ -565,7 +565,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 else
                 {
-                    return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Endicia);
+                    return new RateGroup(endiciaRates);
                 }
 
             }
