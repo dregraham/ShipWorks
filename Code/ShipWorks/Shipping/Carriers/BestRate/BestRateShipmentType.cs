@@ -551,6 +551,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     // The event args indicate a rate was selected, so we'll use it
                     // to find the corresponding rate in the new list of results
                     RateResult selectedRate = rateGroup.Rates.FirstOrDefault(r => r.OriginalTag.Equals(eventArgs.SelectedRate.OriginalTag));
+
+                    if (selectedRate == null)
+                    {
+                        throw new ShippingException("The service identified as the best rate is not available with the account you just created. You'll have to configure this shipment manually by clicking on the \"Configure\" link in the rate grid.");
+                    }
+
                     ratesToApplyToReturnedShipments = new List<RateResult> { selectedRate };
                 }
             }
