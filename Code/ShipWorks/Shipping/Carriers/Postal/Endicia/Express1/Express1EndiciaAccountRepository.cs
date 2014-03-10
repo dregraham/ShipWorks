@@ -7,12 +7,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// Account repository for Express1 Endicia accounts
     /// </summary>
-    public class Express1EndiciaAccountRepository : ICarrierAccountRepository<EndiciaAccountEntity>
+    public class Express1EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity>
     {
         /// <summary>
         /// Gets all the Express1 Endicia accounts in the system
         /// </summary>
-        public IEnumerable<EndiciaAccountEntity> Accounts
+        public override IEnumerable<EndiciaAccountEntity> Accounts
         {
             get
             {
@@ -24,16 +24,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// Gets the Endicia account with the specified id
         /// </summary>
         /// <param name="accountID">Id of the account to retrieve</param>
-        public EndiciaAccountEntity GetAccount(long accountID)
+        public override EndiciaAccountEntity GetAccount(long accountID)
         {
             return EndiciaAccountManager.GetAccount(accountID);
         }
 
-        public EndiciaAccountEntity DefaultProfileAccount
+        /// <summary>
+        /// Gets the account associated withe the default profile. A null value is returned
+        /// if there is not an account associated with the default profile.
+        /// </summary>
+        /// <exception cref="ShippingException">An account that no longer exists is associated with the default Express1 profile.</exception>
+        public override EndiciaAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                long? accountID = new Express1EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                return GetProfileAccount(ShipmentTypeCode.Express1Endicia, accountID);
             }
         }
     }
