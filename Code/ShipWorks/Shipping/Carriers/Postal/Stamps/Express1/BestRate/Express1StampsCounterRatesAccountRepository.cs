@@ -43,11 +43,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
             return accounts.Value.First();
         }
 
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        /// <value>
+        /// The default profile account.
+        /// </value>
+        /// <exception cref="System.NotImplementedException"></exception>
         public StampsAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                return Accounts.First();
             }
         }
 
