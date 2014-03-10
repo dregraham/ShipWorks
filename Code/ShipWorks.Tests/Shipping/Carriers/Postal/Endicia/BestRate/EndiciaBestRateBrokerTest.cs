@@ -150,15 +150,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_DoesNotRetrieveAllAccounts_Test()
-        {
-            testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            // This was added since we changed the broker to cal DefaultProfileAccount instead of Accounts
-            genericRepositoryMock.Verify(x => x.Accounts, Times.Never());
-        }
-
-        [TestMethod]
         public void GetBestRates_CallsConfigureNewShipmentForOneAccount_Test()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());

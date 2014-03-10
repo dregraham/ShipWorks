@@ -135,8 +135,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
             catch (ShippingException ex)
             {
-                RateGroup exceptionGroup = new RateGroup(new List<RateResult>());
-                exceptionGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentType, ex.Message));
+                brokerExceptions.Add(new BrokerException(ex, BrokerExceptionSeverityLevel.Error, ShipmentType));
             }
 
             // Get rates for each account asynchronously
@@ -200,14 +199,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private List<TAccount> AccountsForRates(ShipmentEntity shipment)
         {
             // Only add the account to the account list if it's not null
-            TAccount defaultProfileAccount = AccountRepository.DefaultProfileAccount;
-            IEnumerable<TAccount> accounts = defaultProfileAccount == null ? new List<TAccount>() : new List<TAccount> { AccountRepository.DefaultProfileAccount };
+            TAccount accountForRating = AccountRepository.Accounts.Count() == 1 ? AccountRepository.Accounts.First() : AccountRepository.DefaultProfileAccount;
+            IEnumerable<TAccount> accounts = accountForRating == null ? new List<TAccount>() : new List<TAccount> { accountForRating };
 
             // Filter the list to be the default profile account, and that it's other properties are valid
             accounts = accounts.Where(account =>
             {
                 if (account is NullEntity ||
-                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, defaultProfileAccount)))
+                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, accountForRating)))
                 {
                     return true;
                 }
