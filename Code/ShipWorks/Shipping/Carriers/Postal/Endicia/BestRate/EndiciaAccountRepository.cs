@@ -8,12 +8,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
     /// <summary>
     /// Basic repository for retrieving Endicia accounts
     /// </summary>
-    public class EndiciaAccountRepository : ICarrierAccountRepository<EndiciaAccountEntity>
+    public class EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity>, ICarrierAccountRepository<EndiciaAccountEntity>
     {
         /// <summary>
         /// Returns a list of Endicia accounts.
         /// </summary>
-        public IEnumerable<EndiciaAccountEntity> Accounts
+        public override IEnumerable<EndiciaAccountEntity> Accounts
         {
             get
             {
@@ -26,16 +26,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account.</returns>
-        public EndiciaAccountEntity GetAccount(long accountID)
+        public override EndiciaAccountEntity GetAccount(long accountID)
         {
             return EndiciaAccountManager.GetAccount(accountID);
         }
 
-        public EndiciaAccountEntity DefaultProfileAccount
+        /// <summary>
+        /// Gets the account associated withe the default profile. A null value is returned
+        /// if there is not an account associated with the default profile.
+        /// </summary>
+        /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
+        public override EndiciaAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                long? accountID = new EndiciaShipmentType().GetPrimaryProfile().Postal.Endicia.EndiciaAccountID;
+                return GetProfileAccount(ShipmentTypeCode.Endicia, accountID);
             }
         }
     }
