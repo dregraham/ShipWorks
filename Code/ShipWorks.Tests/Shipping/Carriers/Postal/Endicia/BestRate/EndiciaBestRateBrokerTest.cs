@@ -346,21 +346,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         }
         
         [TestMethod]
-        public void GetBestRates_CallsHandler_WhenShippingExceptionIsThrown_Test()
-        {
-            genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
-                                   .Returns((ShipmentEntity s) => rateResults[s.Postal.Endicia.EndiciaAccountID])
-                                   .Callback((ShipmentEntity s) =>
-                                   {
-                                       if (s.Postal.Endicia.EndiciaAccountID == 2) throw new ShippingException();
-                                   });
-
-            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            Assert.AreEqual(5, rates.Rates.Count);
-        }
-
-        [TestMethod]
         public void GetBestRates_CallsHandlerWithInformationError_WhenCustomerEligibleForDhl()
         {
             rateGroup1.Rates.Clear();
