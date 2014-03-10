@@ -30,11 +30,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
             return new NullEntity();
         }
 
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
         public NullEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                return new NullEntity();
             }
         }
     }
