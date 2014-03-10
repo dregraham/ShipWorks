@@ -29,5 +29,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         {
             return OnTracAccountManager.GetAccount(accountID);
         }
+
+        public OnTracAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -28,6 +29,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         public StampsAccountEntity GetAccount(long accountID)
         {
             return StampsAccountManager.GetAccount(accountID);
+        }
+
+        public StampsAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

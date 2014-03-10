@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -26,6 +27,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public EndiciaAccountEntity GetAccount(long accountID)
         {
             return EndiciaAccountManager.GetAccount(accountID);
+        }
+
+        public EndiciaAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

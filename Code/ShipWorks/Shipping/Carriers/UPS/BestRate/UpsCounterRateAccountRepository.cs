@@ -46,6 +46,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             return Accounts.First();
         }
 
+        public UpsAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Gets the Ups account that should be used for counter rates.
         /// </summary>

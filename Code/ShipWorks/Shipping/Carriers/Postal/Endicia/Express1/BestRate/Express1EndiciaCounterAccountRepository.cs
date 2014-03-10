@@ -42,6 +42,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
             return accounts.Value.First();
         }
 
+        public EndiciaAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Create a list of accounts from the credential store
         /// </summary>

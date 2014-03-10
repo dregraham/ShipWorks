@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
@@ -24,6 +25,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         public FedExAccountEntity GetAccount(long accountID)
         {
             return FedExAccountManager.GetAccount(accountID);
+        }
+
+        public FedExAccountEntity DefaultProfileAccount 
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

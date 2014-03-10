@@ -28,6 +28,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             return UpsAccountManager.GetAccount(accountID);
         }
 
+        public UpsAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Saves the given UPS account entity to the underlying data source.
         /// </summary>

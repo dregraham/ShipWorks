@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -28,6 +29,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         public EndiciaAccountEntity GetAccount(long accountID)
         {
             return EndiciaAccountManager.GetAccount(accountID);
+        }
+
+        public EndiciaAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

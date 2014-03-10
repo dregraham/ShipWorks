@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
@@ -27,6 +28,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         public NullEntity GetAccount(long accountID)
         {
             return new NullEntity();
+        }
+
+        public NullEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

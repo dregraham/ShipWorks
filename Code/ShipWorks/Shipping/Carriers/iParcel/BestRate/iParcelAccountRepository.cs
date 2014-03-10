@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
@@ -24,6 +25,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         public IParcelAccountEntity GetAccount(long accountID)
         {
             return iParcelAccountManager.GetAccount(accountID);
+        }
+
+        public IParcelAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
