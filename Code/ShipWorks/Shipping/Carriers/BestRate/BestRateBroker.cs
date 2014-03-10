@@ -87,7 +87,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public virtual bool IsCustomsRequired(ShipmentEntity shipment)
         {
-            List<TAccount> accounts = AccountsForRates(shipment); 
+            List<TAccount> accounts = new List<TAccount>();
+
+            try
+            {
+                accounts = AccountsForRates(shipment); 
+            }
+            catch (ShippingException)
+            {
+                // We don't need to worry about customs if there are no accounts
+            }
+            
             foreach (TAccount account in accounts)
             {
                 // Create a clone so we don't have to worry about modifying the original shipment
