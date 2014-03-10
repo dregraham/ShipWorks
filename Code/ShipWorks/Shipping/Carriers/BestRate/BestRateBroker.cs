@@ -179,13 +179,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private List<TAccount> AccountsForRates(ShipmentEntity shipment)
         {
-            IEnumerable<TAccount> accounts = AccountRepository.Accounts.ToList();
+            // Only add the account to the account list if it's not null
+            TAccount defaultProfileAccount = AccountRepository.DefaultProfileAccount;
+            IEnumerable<TAccount> accounts = defaultProfileAccount == null ? new List<TAccount>() : new List<TAccount> { AccountRepository.DefaultProfileAccount };
 
             // Filter the list to be the default profile account, and that it's other properties are valid
             accounts = accounts.Where(account =>
             {
-                if (account is NullEntity || 
-                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, AccountRepository.DefaultProfileAccount)))
+                if (account is NullEntity ||
+                    (shipment.OriginOriginID == (int)ShipmentOriginSource.Account && Equals(account, defaultProfileAccount)))
                 {
                     return true;
                 }
