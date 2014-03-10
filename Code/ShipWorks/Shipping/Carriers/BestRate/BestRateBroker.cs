@@ -117,21 +117,31 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A list of RateResults composed of the single best rate for each account.</returns>
         public virtual RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            List<TAccount> accounts = AccountsForRates(shipment);
+            List<TAccount> accounts = new List<TAccount>();
+
+            try
+            {
+                accounts = AccountsForRates(shipment);
+            }
+            catch (ShippingException ex)
+            {
+                RateGroup exceptionGroup = new RateGroup(new List<RateResult>());
+                exceptionGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentType, ex.Message));
+            }
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
-                a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, brokerExceptions)));
+                                                                                            a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, brokerExceptions)));
 
             Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
             IDictionary<TAccount, RateGroup> accountRateGroups = accountRateTasks.Where(x => x.Value.Result != null)
-                                                                            .ToDictionary(x => x.Key, x => x.Value.Result);
+                                                                                 .ToDictionary(x => x.Key, x => x.Value.Result);
 
             // Filter the returned rates
             List<RateResult> filteredRates = accountRateGroups.SelectMany(x => x.Value.Rates)
-                                                         .Where(IsValidRate)
-                                                         .Where(r => !IsExcludedServiceType(r.OriginalTag))
-                                                         .ToList();
+                                                              .Where(IsValidRate)
+                                                              .Where(r => !IsExcludedServiceType(r.OriginalTag))
+                                                              .ToList();
 
             // Create a dictionary of rates with their associated accounts for lookup later
             IDictionary<RateResult, TAccount> accountLookup = accountRateGroups
@@ -153,7 +163,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     RateSelectionDelegate = CreateRateSelectionFunction(accountLookup[rate], originalTag),
                     AccountDescription = AccountDescription(accountLookup[rate])
                 };
-                
+
                 rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
                 rate.CarrierDescription = carrierDescription;
 

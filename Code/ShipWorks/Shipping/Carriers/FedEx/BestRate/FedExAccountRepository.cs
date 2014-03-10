@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
@@ -27,11 +28,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             return FedExAccountManager.GetAccount(accountID);
         }
 
+        /// <summary>
+        /// Gets the account associated withe the default profile. A null value is returned
+        /// if there is not an account associated with the default profile.
+        /// </summary>
+        /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
         public FedExAccountEntity DefaultProfileAccount 
         {
             get
             {
-                throw new NotImplementedException();
+                FedExAccountEntity account = null;
+                long? accountID = new FedExShipmentType().GetPrimaryProfile().FedEx.FedExAccountID;
+                
+                if (accountID.HasValue)
+                {
+                    account = GetAccount(accountID.Value);
+                    if (account == null)
+                    {
+                        throw new ShippingException("An account that no longer exists is associated with the default FedEx profile.");
+                    }
+                }
+
+                return account;
             }
         }
     }
