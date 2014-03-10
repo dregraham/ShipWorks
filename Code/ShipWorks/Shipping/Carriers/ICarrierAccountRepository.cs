@@ -3,7 +3,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Carriers
 {
-    public interface ICarrierAccountRepository<out T> where T : IEntity2
+    public interface ICarrierAccountRepository<T> where T : IEntity2
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.

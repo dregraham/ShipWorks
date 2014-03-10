@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
-    public class FedExAccountRepository : ICarrierAccountRepository<FedExAccountEntity>
+    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<FedExAccountEntity> Accounts
+        public override IEnumerable<FedExAccountEntity> Accounts
         {
             get
             {
@@ -23,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account as IEntity2.</returns>
-        public FedExAccountEntity GetAccount(long accountID)
+        public override FedExAccountEntity GetAccount(long accountID)
         {
             return FedExAccountManager.GetAccount(accountID);
         }
@@ -33,23 +31,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// if there is not an account associated with the default profile.
         /// </summary>
         /// <exception cref="ShippingException">An account that no longer exists is associated with the default FedEx profile.</exception>
-        public FedExAccountEntity DefaultProfileAccount 
+        public override FedExAccountEntity DefaultProfileAccount 
         {
             get
             {
-                FedExAccountEntity account = null;
                 long? accountID = new FedExShipmentType().GetPrimaryProfile().FedEx.FedExAccountID;
-                
-                if (accountID.HasValue)
-                {
-                    account = GetAccount(accountID.Value);
-                    if (account == null)
-                    {
-                        throw new ShippingException("An account that no longer exists is associated with the default FedEx profile.");
-                    }
-                }
-
-                return account;
+                return GetProfileAccount(ShipmentTypeCode.FedEx, accountID);
             }
         }
     }
