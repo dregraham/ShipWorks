@@ -8,12 +8,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
     /// <summary>
     /// Basic repository for retrieving Stamps accounts
     /// </summary>
-    public class StampsAccountRepository : ICarrierAccountRepository<StampsAccountEntity>
+    public class StampsAccountRepository : CarrierAccountRepositoryBase<StampsAccountEntity>, ICarrierAccountRepository<StampsAccountEntity>
     {
         /// <summary>
         /// Returns a list of Stamps accounts.
         /// </summary>
-        public IEnumerable<StampsAccountEntity> Accounts
+        public override IEnumerable<StampsAccountEntity> Accounts
         {
             get
             {
@@ -26,16 +26,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account.</returns>
-        public StampsAccountEntity GetAccount(long accountID)
+        public override StampsAccountEntity GetAccount(long accountID)
         {
             return StampsAccountManager.GetAccount(accountID);
         }
 
-        public StampsAccountEntity DefaultProfileAccount
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        /// <value>
+        /// The default profile account.
+        /// </value>
+        public override StampsAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                long? accountID = new StampsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
+
+                return GetProfileAccount(ShipmentTypeCode.Stamps, accountID);
             }
         }
     }
