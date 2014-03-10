@@ -75,11 +75,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             return Accounts.First();
         }
 
+        /// <summary>
+        /// Gets the default profile account. This will always return the same account that is 
+        /// used to get counter rates.
+        /// </summary>
         public FedExAccountEntity DefaultProfileAccount 
         {
             get
             {
-                throw new NotImplementedException();
+                return Accounts.First();
             }
         }
 
