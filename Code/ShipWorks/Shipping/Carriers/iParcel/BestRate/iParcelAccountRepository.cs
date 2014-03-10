@@ -4,12 +4,12 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 {
-    public class iParcelAccountRepository : ICarrierAccountRepository<IParcelAccountEntity>
+    public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity>, ICarrierAccountRepository<IParcelAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<IParcelAccountEntity> Accounts
+        public override IEnumerable<IParcelAccountEntity> Accounts
         {
             get
             {
@@ -22,16 +22,25 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account as IEntity2.</returns>
-        public IParcelAccountEntity GetAccount(long accountID)
+        public override IParcelAccountEntity GetAccount(long accountID)
         {
             return iParcelAccountManager.GetAccount(accountID);
         }
 
-        public IParcelAccountEntity DefaultProfileAccount
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        /// <value>
+        /// The default profile account.
+        /// </value>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override IParcelAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                long? accountID = new iParcelShipmentType().GetPrimaryProfile().IParcel.IParcelAccountID;
+
+                return GetProfileAccount(ShipmentTypeCode.iParcel, accountID);
             }
         }
     }
