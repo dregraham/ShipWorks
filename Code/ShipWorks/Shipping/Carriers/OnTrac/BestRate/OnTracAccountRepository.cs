@@ -7,12 +7,12 @@ using ShipWorks.Shipping.Carriers.FedEx;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 {
-    class OnTracAccountRepository : ICarrierAccountRepository<OnTracAccountEntity>
+    public class OnTracAccountRepository : CarrierAccountRepositoryBase<OnTracAccountEntity>, ICarrierAccountRepository<OnTracAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<OnTracAccountEntity> Accounts
+        public override IEnumerable<OnTracAccountEntity> Accounts
         {
             get
             {
@@ -25,16 +25,24 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account as IEntity2.</returns>
-        public OnTracAccountEntity GetAccount(long accountID)
+        public override OnTracAccountEntity GetAccount(long accountID)
         {
             return OnTracAccountManager.GetAccount(accountID);
         }
 
-        public OnTracAccountEntity DefaultProfileAccount
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        /// <value>
+        /// The default profile account.
+        /// </value>
+        public override OnTracAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                long? accountID = new OnTracShipmentType().GetPrimaryProfile().OnTrac.OnTracAccountID;
+
+                return GetProfileAccount(ShipmentTypeCode.OnTrac, accountID);
             }
         }
     }
