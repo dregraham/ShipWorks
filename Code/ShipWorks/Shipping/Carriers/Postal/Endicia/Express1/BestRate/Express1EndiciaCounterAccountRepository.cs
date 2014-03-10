@@ -42,11 +42,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
             return accounts.Value.First();
         }
 
+        /// <summary>
+        /// Gets the default profile account. This will always return the same account that is 
+        /// used to get counter rates.
+        /// </summary>
         public EndiciaAccountEntity DefaultProfileAccount
         {
             get
             {
-                throw new NotImplementedException();
+                return Accounts.First();
             }
         }
 

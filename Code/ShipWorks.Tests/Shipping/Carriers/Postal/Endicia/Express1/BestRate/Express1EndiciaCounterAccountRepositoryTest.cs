@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -13,8 +14,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         [TestMethod]
         public void GetAccount_GetsCredentialsFromStore()
         {
-            var store = new Mock<ICounterRatesCredentialStore>();
-            var testObject = new Express1EndiciaCounterAccountRepository(store.Object);
+            Mock<ICounterRatesCredentialStore> store = new Mock<ICounterRatesCredentialStore>();
+            Express1EndiciaCounterAccountRepository testObject = new Express1EndiciaCounterAccountRepository(store.Object);
 
             testObject.GetAccount(0);
 
@@ -25,17 +26,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         [TestMethod]
         public void GetAccount_ReturnsValidCounterAccount()
         {
-            var store = new Mock<ICounterRatesCredentialStore>();
+            Mock<ICounterRatesCredentialStore> store = new Mock<ICounterRatesCredentialStore>();
             store.Setup(x => x.Express1EndiciaAccountNumber).Returns("Foo");
             store.Setup(x => x.Express1EndiciaPassPhrase).Returns("Bar");
 
-            var testObject = new Express1EndiciaCounterAccountRepository(store.Object);
+            Express1EndiciaCounterAccountRepository testObject = new Express1EndiciaCounterAccountRepository(store.Object);
 
             EndiciaAccountEntity account = testObject.GetAccount(0);
 
             Assert.AreEqual("Foo", account.AccountNumber);
             Assert.AreEqual("Bar", account.ApiUserPassword);
             Assert.AreEqual((int)EndiciaReseller.Express1, account.EndiciaReseller);
+        }
+
+        [TestMethod]
+        public void DefaultProfileAccount_ReturnsFirstItemInAccountsCollection_Test()
+        {
+            Mock<ICounterRatesCredentialStore> store = new Mock<ICounterRatesCredentialStore>();
+            store.Setup(x => x.Express1EndiciaAccountNumber).Returns("Foo");
+            store.Setup(x => x.Express1EndiciaPassPhrase).Returns("Bar");
+
+            Express1EndiciaCounterAccountRepository testObject = new Express1EndiciaCounterAccountRepository(store.Object);
+
+            EndiciaAccountEntity account = testObject.DefaultProfileAccount;
+
+            Assert.AreEqual(testObject.Accounts.First(), account);
         }
     }
 }
