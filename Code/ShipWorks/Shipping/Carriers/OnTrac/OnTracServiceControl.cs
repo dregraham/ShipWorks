@@ -343,7 +343,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override void SyncSelectedRate()
         {
-            if (!service.MultiValued)
+            if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
                 OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
