@@ -1,4 +1,4 @@
-﻿using System.Web;
+﻿using System.Net;
 
 namespace Interapptive.Shared.Net
 {
@@ -12,6 +12,6 @@ namespace Interapptive.Shared.Net
         /// Inspects the certificate of the given request to determine the security
         /// level of the certificate.
         /// </summary>
-        CertificateSecurityLevel Inspect(HttpRequest request);
+        CertificateSecurityLevel Inspect(HttpWebRequest request);
     }
 }
