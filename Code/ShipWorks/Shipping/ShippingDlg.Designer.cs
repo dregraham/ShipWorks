@@ -565,7 +565,7 @@ namespace ShipWorks.Shipping
             this.rateControlArea.Controls.Add(this.rateControl);
             this.rateControlArea.Location = new System.Drawing.Point(0, 17);
             this.rateControlArea.Name = "rateControlArea";
-            this.rateControlArea.Size = new System.Drawing.Size(354, 116);
+            this.rateControlArea.Size = new System.Drawing.Size(354, 103);
             this.rateControlArea.TabIndex = 3;
             // 
             // rateControl
@@ -580,7 +580,7 @@ namespace ShipWorks.Shipping
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.rateControl.ShowAllRates = true;
             this.rateControl.ShowConfigureLink = false;
-            this.rateControl.Size = new System.Drawing.Size(352, 115);
+            this.rateControl.Size = new System.Drawing.Size(352, 102);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
