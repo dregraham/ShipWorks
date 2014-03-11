@@ -265,6 +265,7 @@
     <Compile Include="IO\Zip\ZipWriterProgressEventArgs.cs" />
     <Compile Include="IO\Zip\ZipWriterStringItem.cs" />
     <Compile Include="MyComputer.cs" />
+    <Compile Include="Net\CertificateSecurityLevel.cs" />
     <Compile Include="Net\ClientCertificate.cs" />
     <Compile Include="Net\HttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\HttpTextPostRequestSubmitter.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Net\HttpVariableCollection.cs" />
     <Compile Include="Net\HttpVariableRequestSubmitter.cs" />
     <Compile Include="Net\HttpVerb.cs" />
+    <Compile Include="Net\ICertificateInspector.cs" />
     <Compile Include="Net\IHttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\IHttpResponseReader.cs" />
     <Compile Include="Net\INetworkUtility.cs" />
