@@ -28,6 +28,11 @@ namespace ShipWorks.Shipping.Carriers
         string FedExPassword { get; }
 
         /// <summary>
+        /// Gets data to verify the SSL certificate from FedEx
+        /// </summary>
+        string FedExCertificateVerificationData { get; }
+
+        /// <summary>
         /// Gets the Ups user id used for obtaining counter rates
         /// </summary>
         string UpsUserId { get; }
@@ -43,6 +48,11 @@ namespace ShipWorks.Shipping.Carriers
         string UpsAccessKey { get; }
 
         /// <summary>
+        /// Gets data to verify the SSL certificate from Ups
+        /// </summary>
+        string UpsCertificateVerificationData { get; }
+
+        /// <summary>
         /// Gets the Express1 Endicia user name used for obtaining counter rates
         /// </summary>
         string Express1EndiciaAccountNumber { get; }
@@ -53,6 +63,11 @@ namespace ShipWorks.Shipping.Carriers
         string Express1EndiciaPassPhrase { get; }
 
         /// <summary>
+        /// Gets data to verify the SSL certificate from Express1Endicia
+        /// </summary>
+        string Express1EndiciaCertificateVerificationData { get; }
+
+        /// <summary>
         /// Gets the Express1 Stamps user name used for obtaining counter rates
         /// </summary>
         string Express1StampsUsername { get; }
@@ -61,5 +76,10 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets the Express1 Stamps password used for obtaining counter rates
         /// </summary>
         string Express1StampsPassword { get; }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from Express1Stamps
+        /// </summary>
+        string Express1StampsCertificateVerificationData { get; }
     }
 }
