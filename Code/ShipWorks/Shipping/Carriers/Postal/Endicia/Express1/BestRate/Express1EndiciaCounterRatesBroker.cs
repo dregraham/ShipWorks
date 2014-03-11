@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -68,6 +69,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
+
+                    // The counter rate shouldn't show the Express1 logo
+                    rateResult.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
                 }
             }
             catch (AggregateException ex)

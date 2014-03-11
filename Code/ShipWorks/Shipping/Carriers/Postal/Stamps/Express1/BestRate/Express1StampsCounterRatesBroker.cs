@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -54,11 +55,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
                 foreach (RateResult rateResult in bestRates.Rates)
                 {
-                    // We want WebTools account setup wizard to show when a rate is selected so the user 
-                    // can create their own WebTools account since these rates are just counter rates 
+                    // We want the account setup wizard to show when a rate is selected so the user 
+                    // can create their own Express1 account since these rates are just counter rates 
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
+
+                    // The counter rate shouldn't show the Express1 logo
+                    rateResult.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
                 }
             }
             catch (AggregateException ex)
