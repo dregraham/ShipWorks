@@ -754,9 +754,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             List<RateResult> rates = new List<RateResult>();
 
             // Get the transit times and services
-            List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository);
+            List<UpsTransitTime> transitTimes = UpsApiTransitTimeClient.GetTransitTimes(shipment, AccountRepository, SettingsRepository, CertificateInspector);
 
-            UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository);
+            UpsApiRateClient upsApiRateClient = new UpsApiRateClient(AccountRepository, SettingsRepository, CertificateInspector);
             List<UpsServiceRate> serviceRates = upsApiRateClient.GetRates(shipment);
 
             if (!serviceRates.Any())

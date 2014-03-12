@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
@@ -308,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 UpsApiCore.WritePackagesXml(ups, xmlWriter, true, new UpsPackageWeightElementWriter(xmlWriter), new UpsPackageServiceOptionsElementWriter(xmlWriter));
             }
 
-            return UpsWebClient.ProcessRequest(xmlWriter);
+            return UpsWebClient.ProcessRequest(xmlWriter, new TrustingCertificateInspector());
         }
         
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
@@ -29,32 +30,31 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private readonly ICarrierAccountRepository<UpsAccountEntity> accountRepository;
         private readonly ILog log;
         private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly ICertificateInspector certificateInspector;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
         public UpsApiRateClient()
-            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository())
+            : this(new UpsAccountRepository(), LogManager.GetLogger(typeof(UpsApiRateClient)), new UpsSettingsRepository(), new TrustingCertificateInspector())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient"/> class.
         /// </summary>
-        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
-            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository)
+        public UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+            : this(accountRepository, LogManager.GetLogger(typeof(UpsApiRateClient)), settingsRepository, certificateInspector)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsApiRateClient" /> class.
         /// </summary>
-        /// <param name="accountRepository">The account repository.</param>
-        /// <param name="log">The log.</param>
-        /// <param name="settingsRepository"></param>
-        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log, ICarrierSettingsRepository settingsRepository)
+        private UpsApiRateClient(ICarrierAccountRepository<UpsAccountEntity> accountRepository, ILog log, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.log = log;
             this.settingsRepository = settingsRepository;
+            this.certificateInspector = certificateInspector;
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // Process the request
-            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates);
+            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
 
             return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -38,6 +39,12 @@ namespace ShipWorks.Shipping
 	/// </summary>
 	public abstract class ShipmentType
 	{
+        /// <summary>
+        /// HTTPS certificate inspector to use.  Default to trusting so that calls will continue to work as expected.
+        /// Calls that require specific inspection should override the CertificateInspector property.
+        /// </summary>
+        private ICertificateInspector certificateInspector = new TrustingCertificateInspector();
+
 		/// <summary>
 		/// The ShipmentTypeCode represented by this ShipmentType
 		/// </summary>
@@ -768,5 +775,21 @@ namespace ShipWorks.Shipping
 
 			return requiresCustoms;
 		}
+
+        /// <summary>
+        /// HTTPS certificate inspector to use.  Default to trusting so that calls will continue to work as expected.
+        /// Calls that require specific inspection should override this property.
+        /// </summary>
+        public virtual ICertificateInspector CertificateInspector 
+        {
+            get
+            {
+                return certificateInspector;
+            }
+            set
+            {
+                certificateInspector = value;
+            }
+        }
 	}
 }

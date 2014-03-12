@@ -220,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </exception>
         public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter)
         {
-            return ProcessRequest(xmlWriter, LogActionType.Other);
+            return ProcessRequest(xmlWriter, LogActionType.Other, new TrustingCertificateInspector());
         }
 
         /// <summary>
@@ -230,7 +230,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
         /// or
         /// </exception>
-        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType)
+        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, ICertificateInspector certificateInspector)
+        {
+            return ProcessRequest(xmlWriter, LogActionType.Other, certificateInspector);
+        }
+
+        /// <summary>
+        /// Process the given request and return the response
+        /// </summary>
+        /// <exception cref="UpsApiException">
+        /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
+        /// or
+        /// </exception>
+        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
         {
             // Close out the XML
             xmlWriter.WriteEndDocument();
@@ -268,6 +280,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             HttpBinaryPostRequestSubmitter request = new HttpBinaryPostRequestSubmitter(stream.ToArray());
             request.Uri = new Uri(toolUrl);
+
+            CertificateRequest certificateRequest = new CertificateRequest(request.Uri, certificateInspector);
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+            if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
+            {
+                throw new ShippingException("ShipWorks is unable to make a secure connection to UPS.");
+            }
 
             try
             {

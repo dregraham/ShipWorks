@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
@@ -32,28 +33,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Get transit times for the given shipment
         /// </summary>
-        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+        public static List<UpsTransitTime> GetTransitTimes(ShipmentEntity shipment, ICarrierAccountRepository<UpsAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
         {
-            XmlTextWriter xmlWriter = PrepareTransitRequest(shipment, accountRepository, settingsRepository);
+            List<UpsTransitTime> upsTransitTimes = new List<UpsTransitTime>();
 
-            var upsTransitTimes = new List<UpsTransitTime>();
-            try
+            using (XmlTextWriter xmlWriter = PrepareTransitRequest(shipment, accountRepository, settingsRepository))
             {
-                XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates);
-
-                // Process the request
-                upsTransitTimes = ProcessApiResponse(xmlDocument, shipment);
-            }
-            catch (UpsApiException ex)
-            {
-                // This error might mean only Surepost is a valid shipping option for the address.
-                if (ex.ErrorCode == "270032")
+                try
                 {
-                    log.Warn("Invalid Address error for TimeInTransit call in UpsShipmentType", ex);
+                    XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
+
+                    // Process the request
+                    upsTransitTimes = ProcessApiResponse(xmlDocument, shipment);
                 }
-                else
+                catch (UpsApiException ex)
                 {
-                    throw;
+                    // This error might mean only Surepost is a valid shipping option for the address.
+                    if (ex.ErrorCode == "270032")
+                    {
+                        log.Warn("Invalid Address error for TimeInTransit call in UpsShipmentType", ex);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 

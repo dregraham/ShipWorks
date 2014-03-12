@@ -38,20 +38,20 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialFedExMeterNumber = "118601174";
         private const string TestCredentialFedExUsername = "51LPnQ5iP1uPARkC";
         private const string TestCredentialFedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
-        private const string TestCredentialFedExCertificateVerificationData = "<Subject><Value></Value><Value><Value></Subject>";
+        private const string TestCredentialFedExCertificateVerificationData = "<Subject><Value></Value><Value></Value></Subject>";
 
         private const string TestCredentialUpsUserId = "6863e0f62cdd4a1b";
         private const string TestCredentialUpsPassword = "cf9e7473";
         private const string TestCredentialUpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
-        private const string TestCredentialUpsCertificateVerificationData = "<Subject><Value></Value><Value><Value></Subject>";
+        private const string TestCredentialUpsCertificateVerificationData = "<Subject><Value>wwwcie.ups.com</Value><Value>united parcel service</Value></Subject>";
 
         private const string TestCredentialExpress1EndiciaAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
         private const string TestCredentialExpress1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
-        private const string TestCredentialExpress1EndiciaCertificateVerificationData = "<Subject><Value></Value><Value><Value></Subject>";
+        private const string TestCredentialExpress1EndiciaCertificateVerificationData = "<Subject><Value></Value><Value></Value></Subject>";
 
         private const string TestCredentialExpress1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
         private const string TestCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
-        private const string TestCredentialExpress1StampsCertificateVerificationData = "<Subject><Value></Value><Value><Value></Subject>";
+        private const string TestCredentialExpress1StampsCertificateVerificationData = "<Subject><Value></Value><Value></Value></Subject>";
        
         // Key names of credential values in the dictionary 
         private const string FedExAccountNumberKeyName = "FedExAccountNumber";
