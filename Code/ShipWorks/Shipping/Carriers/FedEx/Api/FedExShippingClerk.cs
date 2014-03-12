@@ -552,7 +552,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
                 {
                     log.Warn("The FedEx certificate did not pass inspection and could not be trusted.");
-                    throw new FedExException("ShipWorks could not establish a trusted connection with FedEx.");
+                    throw new FedExException("ShipWorks is unable to make a secure connection to FedEx.");
                 }
 
                 // Ensure that the version capture has been performed
