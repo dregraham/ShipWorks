@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
@@ -28,7 +29,7 @@ namespace Interapptive.Shared.Net
                 XDocument doc = XDocument.Parse(verificationData);
                 foreach (XElement element in doc.Element("Subject").Elements("Value"))
                 {
-                    expectedCertificateSubjectElements.Add(element.Value.ToLower());
+                    expectedCertificateSubjectElements.Add(element.Value.ToLower(CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -56,9 +57,9 @@ namespace Interapptive.Shared.Net
                 }
                 else
                 {
-                    string subject = certificate.Subject.ToLower();
                     // There is a certificate, so we need to check the subject to make sure
                     // it contains all of the data elements we're expecting
+                    string subject = certificate.Subject.ToLower(CultureInfo.InvariantCulture);
                     if (!expectedCertificateSubjectElements.All(e => subject.Contains(e)))
                     {
                         // The certificate did not match all the elements - consider it as spoofed
