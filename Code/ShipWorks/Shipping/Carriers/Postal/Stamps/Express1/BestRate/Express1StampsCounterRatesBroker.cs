@@ -97,23 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, StampsAccountEntity account)
         {
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
-
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValid(currentShipment)))
-            {
-                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
-                // so we'll try to use the store address
-                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-
-                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
-            }
-
-            if (!CounterRatesOriginAddressValidator.IsValid(currentShipment))
-            {
-                // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
-            }
+            CounterRatesOriginAddressValidator.EnsureValidAddress(currentShipment);
         }
 
         /// <summary>

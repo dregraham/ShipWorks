@@ -89,34 +89,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         }
 
         /// <summary>
-        /// Updates the shipment origin address for getting counter rates. In cases where a shipment is 
-        /// configured to use the Account address or there is an incomplete "Other" address, we want
-        /// to use the store address for getting counter rates.
-        /// </summary>
-        /// <param name="currentShipment">The current shipment.</param>
-        /// <param name="originalShipment">The original shipment.</param>
-        /// <param name="account">The account.</param>
-        protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, NullEntity account)
-        {
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValid(currentShipment)))
-            {
-                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
-                // so we'll try to use the store address
-                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-
-                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
-            }
-
-            if (!CounterRatesOriginAddressValidator.IsValid(currentShipment))
-            {
-                // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
-            }
-        }
-
-        /// <summary>
         /// Displays the WebTools setup wizard.
         /// </summary>
         private bool DisplaySetupWizard()
