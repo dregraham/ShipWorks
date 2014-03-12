@@ -937,7 +937,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     if (FedExAccountManager.Accounts.Any())
                     {
                         FedExAccountEntity account = FedExAccountManager.Accounts.First();
-                        shipments.ForEach(s => s.FedEx.FedExAccountID = account.FedExAccountID);
+                        shipments.ForEach(s =>
+                        {
+                            // Assign the account ID and save the shipment
+                            s.FedEx.FedExAccountID = account.FedExAccountID;
+                            using (SqlAdapter adapter = new SqlAdapter(true))
+                            {
+                                adapter.SaveAndRefetch(s);
+                                adapter.Commit();
+                            }
+                        });
                     }
                     else
                     {

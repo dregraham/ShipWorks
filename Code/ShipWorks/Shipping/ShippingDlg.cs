@@ -1983,16 +1983,12 @@ namespace ShipWorks.Shipping
             {
                 return;
             }
-
-            // Don't delay the progress dialog from showing if any of the shipments are a best rate
-            // shipment in case the counter rate wizard needs to be shown; otherwise the progress
-            // dialog will appear over the counter rate setup wizard if rates have been cached.
-            bool delayProgressDialog = !shipments.Any(s => s.ShipmentType == (int)ShipmentTypeCode.BestRate);
+            
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
                 "Processing Shipments",
                 "ShipWorks is processing the shipments.",
                 "Shipment {0} of {1}",
-                delayProgressDialog);
+                false);
 
             List<string> newErrors = new List<string>();
             Dictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
@@ -2067,7 +2063,7 @@ namespace ShipWorks.Shipping
                 {
                     WorldShipUtility.LaunchWorldShip(this);
                 }
-
+                
                 LoadSelectedShipments(true);
             };
 
@@ -2093,8 +2089,18 @@ namespace ShipWorks.Shipping
                         throw concurrencyEx;
                     }
                     
-                    // Process it                                        
-                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing, selectedRate);
+                    // Process it       
+                    if (shipment.ShipmentType == (int)ShipmentTypeCode.BestRate)
+                    {
+                        // Process the shipment with the counter rates processing method for best rate
+                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, BestRateCounterRatesProcessing, selectedRate);
+                    }
+                    else
+                    {
+                        // This is a shipment for a "real" shipping provider, so use the callback that will
+                        // launch the wizard for a specific shipment type.
+                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing, selectedRate);
+                    }
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2149,10 +2155,42 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Method used when processing a (non-best rate) shipment for a provider that does not have any
+        /// accounts setup, and we need to provide the user with a way to sign up for the carrier.
+        /// </summary>
+        /// <param name="counterRatesProcessingArgs">The counter rates processing arguments.</param>
+        /// <returns></returns>
+        private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        {
+            // This is for a specific shipment type, so we're always going to need to show the wizard 
+            // since the user explicitly chose to process with this provider
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(counterRatesProcessingArgs.Shipment);
+
+            DialogResult result = DialogResult.Cancel;
+            this.Invoke((MethodInvoker)delegate
+            {
+                using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
+                {
+                    result = setupWizard.ShowDialog(this);
+
+                    if (result == DialogResult.OK)
+                    {
+                        ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+                        
+                        ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
+                        ServiceControl.SaveToShipments();
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        /// <summary>
         /// Method used when processing a best rate shipment whose best rate is a counter rate, and we need
         /// to provide the user with a way to sign up for the counter carrier or chose to use the best available rate.
         /// </summary>
-        private DialogResult CounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
+        private DialogResult BestRateCounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
         {
             // If the user has opted to not see counter rate setup wizard for this batch, just return.
             if (!showCounterRateSetupWizard)
