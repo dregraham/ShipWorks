@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 using (SwsimV29 webService = CreateWebService("Authenticate", isExpress1))
                 {
-                    CheckCertificate(webService.Url);
+                    CheckCertificate(webService.Url, isExpress1);
 
                     string auth = webService.AuthenticateUser(new Credentials
                     {
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Makes a request to the specified url, and determines it's CertificateSecurityLevel
         /// </summary>
-        private void CheckCertificate(string url)
+        private void CheckCertificate(string url, bool isExpress1)
         {
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
 
@@ -178,7 +178,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
-                throw new ShippingException("ShipWorks was unable to create a secure connection.");
+                string description = EnumHelper.GetDescription(isExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps);
+                throw new ShippingException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
 
@@ -381,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1, LogActionType.GetRates))
             {
-                CheckCertificate(webService.Url);
+                CheckCertificate(webService.Url, shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps);
 
                 RateV11[] ratesArray;
 
