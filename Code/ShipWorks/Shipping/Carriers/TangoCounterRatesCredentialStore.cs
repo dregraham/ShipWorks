@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialFedExMeterNumber = "118601174";
         private const string TestCredentialFedExUsername = "51LPnQ5iP1uPARkC";
         private const string TestCredentialFedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
-        private const string TestCredentialFedExCertificateVerificationData = "<Subject><Value>wsbeta.fedex.com</Value></Subject>";
+        private const string TestCredentialFedExCertificateVerificationData = "<Subject><Value>wsbeta.fedex.com</Value><Value>OU=EIS-WSAS</Value></Subject>";
 
         private const string TestCredentialUpsUserId = "6863e0f62cdd4a1b";
         private const string TestCredentialUpsPassword = "cf9e7473";
