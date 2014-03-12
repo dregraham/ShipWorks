@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
             }
 
-            List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory).GetRates(shipment);
+            List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
 
             // For Stamps, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)

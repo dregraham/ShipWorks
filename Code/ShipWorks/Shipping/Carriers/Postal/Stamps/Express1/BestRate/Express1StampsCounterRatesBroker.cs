@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -45,6 +46,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <returns>A RateGroup containing the counter rates for an Express1Stamps account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
+            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData;
+            ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
+
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
             ((StampsShipmentType)ShipmentType).AccountRepository = AccountRepository;
