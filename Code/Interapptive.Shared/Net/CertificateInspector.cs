@@ -2,38 +2,30 @@
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
-using Interapptive.Shared.Net;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api
+namespace Interapptive.Shared.Net
 {
     /// <summary>
     /// An implementation of the ICertificateInspector interface for determining whether the certificate
     /// associated with an ICertificateRequest is a valid FedEx certificate.
     /// </summary>
-    public class FedExCertificateInspector : ICertificateInspector
+    public class CertificateInspector : ICertificateInspector
     {
         private readonly List<string> expectedCertificateSubjectElements;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExCertificateInspector"/> class.
+        /// Initializes a new instance of the <see cref="CertificateInspector"/> class.
         /// </summary>
-        public FedExCertificateInspector()
-            : this(TangoCounterRatesCredentialStore.Instance)
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExCertificateInspector"/> class.
-        /// </summary>
-        /// <param name="credentialStore">The credential store.</param>
-        public FedExCertificateInspector(ICounterRatesCredentialStore credentialStore)
+        /// <param name="verificationData">The data that should be used to verify the certifice.</param>
+        public CertificateInspector(string verificationData)
         {
             expectedCertificateSubjectElements = new List<string>();
 
-            if (!string.IsNullOrWhiteSpace(credentialStore.FedExCertificateVerificationData))
+            if (!string.IsNullOrWhiteSpace(verificationData))
             {
                 // Use the credential store to load up the data elements we'll be looking for in
                 // the subject of the certificate
-                XDocument doc = XDocument.Parse(credentialStore.FedExCertificateVerificationData);
+                XDocument doc = XDocument.Parse(verificationData);
                 foreach (XElement element in doc.Element("Subject").Elements("Value"))
                 {
                     expectedCertificateSubjectElements.Add(element.Value);

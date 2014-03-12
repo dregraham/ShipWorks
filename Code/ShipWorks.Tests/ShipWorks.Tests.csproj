@@ -160,7 +160,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExCertificateInspectorTest.cs" />
+    <Compile Include="Interapptive.Shared\Net\CertificateInspectorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequestTest.cs" />

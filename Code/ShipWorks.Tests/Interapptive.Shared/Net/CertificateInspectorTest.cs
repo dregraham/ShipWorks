@@ -1,22 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
+namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
     [TestClass]
-    public class FedExCertificateInspectorTest
+    public class CertificateInspectorTest
     {
-        private FedExCertificateInspector testObject;
-        
-        private Mock<ICounterRatesCredentialStore> credentialStore;
+        private CertificateInspector testObject;
+
+        private const string certificateVerificationData = "<Subject><Value>FedEx</Value></Subject>";
         private Mock<ICertificateRequest> request;
 
         private X509Certificate noMatchCertificate;
@@ -26,9 +23,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestInitialize]
         public void Initialize()
         {
-            credentialStore = new Mock<ICounterRatesCredentialStore>();
-            credentialStore.Setup(s => s.FedExCertificateVerificationData).Returns("<Subject><Value>FedEx</Value></Subject>");
-
             request = new Mock<ICertificateRequest>();
             request.Setup(r => r.Certificate).Returns(new X509Certificate());
             
@@ -57,8 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void Inspect_ReturnsTrusted_WhenFedExCertificateVerificationDataIsEmpty_Test()
         {
-            credentialStore.Setup(s => s.FedExCertificateVerificationData).Returns(string.Empty);
-            testObject = new FedExCertificateInspector(credentialStore.Object);
+            testObject = new CertificateInspector(string.Empty);
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
@@ -69,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Inspect_ReturnsNone_WhenCertificateIsNull_Test()
         {
             request.Setup(r => r.Certificate).Returns<X509Certificate>(null);
-            testObject = new FedExCertificateInspector(credentialStore.Object);
+            testObject = new CertificateInspector(certificateVerificationData);
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
@@ -79,9 +72,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void Inspect_ReturnsSpoofed_WhenCertificateSubjectDoesNotMatchExpectedValues_Test()
         {
-            credentialStore.Setup(s => s.FedExCertificateVerificationData).Returns("<Subject><Value>FedEx</Value></Subject>");
             request.Setup(r => r.Certificate).Returns(noMatchCertificate);
-            testObject = new FedExCertificateInspector(credentialStore.Object);
+            testObject = new CertificateInspector(certificateVerificationData);
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
@@ -91,10 +83,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithSingleExpectedValue_Test()
         {
-            credentialStore.Setup(s => s.FedExCertificateVerificationData).Returns("<Subject><Value>FedEx</Value></Subject>");
             request.Setup(r => r.Certificate).Returns(singleMatchCertificate);
 
-            testObject = new FedExCertificateInspector(credentialStore.Object);
+            testObject = new CertificateInspector(certificateVerificationData);
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
             Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
@@ -103,10 +94,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithMultipleExpectedValues_Test()
         {
-            credentialStore.Setup(s => s.FedExCertificateVerificationData).Returns("<Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject>");
             request.Setup(r => r.Certificate).Returns(multiMatchCertificate);
 
-            testObject = new FedExCertificateInspector(credentialStore.Object);
+            testObject = new CertificateInspector("<Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject>");
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
             Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
