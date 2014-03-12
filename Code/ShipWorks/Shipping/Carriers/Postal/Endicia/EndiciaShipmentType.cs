@@ -464,7 +464,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector);
 
             List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
                 endiciaApiClient.GetRatesSlow(shipment, this) : 
@@ -589,7 +589,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaAccountEntity express1Account = EndiciaAccountManager.GetAccount(ShippingSettings.Fetch().EndiciaAutomaticExpress1Account);
 
-            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory);
+            EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector);
 
             if (useExpress1)
             {

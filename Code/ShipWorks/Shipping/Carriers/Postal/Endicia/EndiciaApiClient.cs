@@ -45,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
         private readonly LogEntryFactory logEntryFactory;
+        private readonly ICertificateInspector certificateInspector;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
         private const string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory())
+        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         {
             
         }
@@ -63,10 +64,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
+            this.certificateInspector = certificateInspector;
         }
 
         /// <summary>
@@ -566,6 +568,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (EwsLabelService service = CreateWebService("Process", GetReseller(account, shipment)))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     LabelRequestResponse response = service.GetPostageLabel(request);
 
                     // Check for errors
@@ -912,6 +916,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     PostageRatesResponse response = service.CalculatePostageRates(request);
 
                     // Check for errors
@@ -1359,6 +1365,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     PostageRateResponse response = service.CalculatePostageRate(request);
 
                     // Check for errors
@@ -1661,6 +1669,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             Debug.Fail("Unknown mailClass value while getting rates: " + mailClass);
 
             return null;
+        }
+
+        /// <summary>
+        /// Ensures that the request is not being intercepted
+        /// </summary>
+        /// <param name="service">Service call that should be checked</param>
+        /// <param name="shipmentType">Type of shipment that will be used in the description of the exception, if one is thrown</param>
+        private void EnsureSecureRequest(EwsLabelService service, int shipmentType)
+        {
+            CertificateRequest certificateRequest = new CertificateRequest(new Uri(service.Url), certificateInspector);
+            if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
+            {
+                string description = EnumHelper.GetDescription((ShipmentTypeCode)shipmentType);
+                throw new EndiciaException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+            }
         }
     }
 }

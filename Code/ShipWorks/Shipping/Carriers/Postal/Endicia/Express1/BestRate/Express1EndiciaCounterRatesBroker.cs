@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
@@ -48,6 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
+            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData;
+            ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
             ((EndiciaShipmentType)ShipmentType).AccountRepository = AccountRepository;
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango

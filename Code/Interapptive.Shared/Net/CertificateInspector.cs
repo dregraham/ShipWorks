@@ -60,7 +60,7 @@ namespace Interapptive.Shared.Net
                     // There is a certificate, so we need to check the subject to make sure
                     // it contains all of the data elements we're expecting
                     string subject = certificate.Subject.ToUpper(CultureInfo.InvariantCulture);
-                    if (!expectedCertificateSubjectElements.All(e => subject.Contains(e)))
+                    if (!expectedCertificateSubjectElements.All(subject.Contains))
                     {
                         // The certificate did not match all the elements - consider it as spoofed
                         securityLevel = CertificateSecurityLevel.Spoofed;
