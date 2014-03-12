@@ -556,7 +556,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
                         {
-                            IExpress1SettingsFacade express1Settings = new EndiciaExpress1SettingsFacade(ShippingSettings.Fetch());
+                            IExpress1SettingsFacade express1Settings = new Express1EndiciaSettingsFacade(ShippingSettings.Fetch());
                             finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
                         }
                     }

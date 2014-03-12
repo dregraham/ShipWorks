@@ -628,6 +628,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaCertificateInspector.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
@@ -1213,11 +1214,10 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1ConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
