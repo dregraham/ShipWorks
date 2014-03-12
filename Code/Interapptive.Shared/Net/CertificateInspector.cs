@@ -29,7 +29,7 @@ namespace Interapptive.Shared.Net
                 XDocument doc = XDocument.Parse(verificationData);
                 foreach (XElement element in doc.Element("Subject").Elements("Value"))
                 {
-                    expectedCertificateSubjectElements.Add(element.Value.ToLower(CultureInfo.InvariantCulture));
+                    expectedCertificateSubjectElements.Add(element.Value.ToUpper(CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace Interapptive.Shared.Net
                 {
                     // There is a certificate, so we need to check the subject to make sure
                     // it contains all of the data elements we're expecting
-                    string subject = certificate.Subject.ToLower(CultureInfo.InvariantCulture);
+                    string subject = certificate.Subject.ToUpper(CultureInfo.InvariantCulture);
                     if (!expectedCertificateSubjectElements.All(e => subject.Contains(e)))
                     {
                         // The certificate did not match all the elements - consider it as spoofed
