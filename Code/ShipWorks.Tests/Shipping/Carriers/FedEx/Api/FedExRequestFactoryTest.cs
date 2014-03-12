@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -751,5 +752,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         #endregion CreateRateRequest Tests
+
+        #region CreateCertificateRequest Tests
+
+        [TestMethod]
+        public void CreateCertificateRequest_ReturnsCertficateReqeust_Test()
+        {
+            Mock<ICertificateInspector> inspector = new Mock<ICertificateInspector>();
+
+            ICertificateRequest request = testObject.CreateCertificateRequest(inspector.Object);
+
+            Assert.IsInstanceOfType(request, typeof(CertificateRequest));
+        }
+        #endregion
     }
 }

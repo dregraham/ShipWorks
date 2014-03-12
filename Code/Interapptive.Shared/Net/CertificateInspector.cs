@@ -16,7 +16,7 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="CertificateInspector"/> class.
         /// </summary>
-        /// <param name="verificationData">The data that should be used to verify the certifice.</param>
+        /// <param name="verificationData">The data that should be used to verify the certificate.</param>
         public CertificateInspector(string verificationData)
         {
             expectedCertificateSubjectElements = new List<string>();
@@ -32,7 +32,7 @@ namespace Interapptive.Shared.Net
                 }
             }
         }
-
+        
         /// <summary>
         /// Inspects the certificate looking for FedEx data in the given request to 
         /// determine the security level of the certificate. 

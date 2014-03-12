@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -333,7 +334,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx to retrive tracking data.</returns>
+        /// FedEx to retrieve tracking data.</returns>
         public CarrierRequest CreateTrackRequest(FedExAccountEntity accountEntity, ShipmentEntity shipmentEntity)
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
@@ -345,6 +346,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             return new FedExTrackRequest(manipulators, shipmentEntity, fedExService, new FedExResponseFactory(), accountEntity);
+        }
+
+        /// <summary>
+        /// Creates the certificate request.
+        /// </summary>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        /// <returns>An instance of an ICertificateRequest that can be used to check the security level
+        /// of a host's certificate.</returns>
+        public ICertificateRequest CreateCertificateRequest(ICertificateInspector certificateInspector)
+        {
+            Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
+            return new CertificateRequest(fedExEndpoint, certificateInspector);
         }
     }
 }

@@ -3,42 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
     public class FedExCounterRatesBroker : FedExBestRateBroker
     {
         private readonly ICarrierSettingsRepository settingsRepository;
-        
+        private readonly ICertificateInspector certificateInspector;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker"/> class using
         /// the <see cref="TangoCounterRatesCredentialStore"/> as the underlying credential store.
         /// </summary>
         public FedExCounterRatesBroker()
-            : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance), new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance))
+            : this(TangoCounterRatesCredentialStore.Instance, new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData))
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker" /> class.
         /// </summary>
-        /// <param name="shipmentType">Type of the shipment.</param>
-        /// <param name="accountRepository">The account repository.</param>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExCounterRatesBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository)
+        /// <param name="credentialStore">The credential store.</param>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        public FedExCounterRatesBroker(ICounterRatesCredentialStore credentialStore, ICertificateInspector certificateInspector)
+            : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(credentialStore), new FedExCounterRateAccountRepository(credentialStore), certificateInspector)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExCounterRatesBroker"/> class.
+        /// </summary>
+        public FedExCounterRatesBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity> accountRepository, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
             : base(shipmentType, accountRepository)
         {
             this.settingsRepository = settingsRepository;
+            this.certificateInspector = certificateInspector;
         }
 
         /// <summary>
@@ -53,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 
             // Use a settings repository to get counter rates
             ((FedExShipmentType)ShipmentType).SettingsRepository = settingsRepository;
+            ShipmentType.CertificateInspector = certificateInspector;
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango
             FedExAccountEntity account = AccountRepository.GetAccount(0);

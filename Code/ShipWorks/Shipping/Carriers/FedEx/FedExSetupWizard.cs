@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                IShippingClerk clerk = new FedExShippingClerk();
+                IShippingClerk clerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
                 clerk.RegisterAccount(account);
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);

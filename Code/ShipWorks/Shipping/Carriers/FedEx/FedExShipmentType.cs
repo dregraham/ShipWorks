@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -32,7 +31,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -42,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExShipmentType : ShipmentType
     {
         private ICarrierSettingsRepository settingsRepository;
-
+        
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -117,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 settingsRepository = value;
             }
         }
-
+        
         /// <summary>
         /// Create the setup wizard used for setting up the shipment type
         /// </summary>
@@ -881,7 +879,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            return new FedExShippingClerk(SettingsRepository).GetRates(shipment);
+            return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
         }
 
         /// <summary>
@@ -891,7 +889,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -919,7 +917,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Okay to "new up" the shipping clerk here, as this class is the root consumer 
                 // that drives the underlying FedEx API and outside of the current scope of unit testing,
                 // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -935,7 +933,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)

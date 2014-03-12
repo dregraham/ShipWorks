@@ -39,11 +39,17 @@ namespace ShipWorks.Shipping
 	/// </summary>
 	public abstract class ShipmentType
 	{
-        /// <summary>
-        /// HTTPS certificate inspector to use.  Default to trusting so that calls will continue to work as expected.
-        /// Calls that require specific inspection should override the CertificateInspector property.
-        /// </summary>
-        private ICertificateInspector certificateInspector = new TrustingCertificateInspector();
+	    /// <summary>
+	    /// HTTPS certificate inspector to use. 
+	    /// </summary>
+	    private ICertificateInspector certificateInspector;
+
+        protected ShipmentType()
+        {
+            // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
+	        // Calls that require specific inspection should override the CertificateInspector property.
+            certificateInspector = new TrustingCertificateInspector();
+        }
 
 		/// <summary>
 		/// The ShipmentTypeCode represented by this ShipmentType
@@ -118,6 +124,24 @@ namespace ShipWorks.Shipping
 		{
 			get { return false; }
 		}
+
+        /// <summary>
+        /// Gets or sets the certificate inspector that should be used when wanting to add additional security 
+        /// around API calls to shipping partners. This is defaulted to the trusting inspector so that calls 
+        /// will continue to work as expected. Calls that require specific inspection should assign this property
+        /// accordingly.
+        /// </summary>
+        public virtual ICertificateInspector CertificateInspector
+        {
+            get
+            {
+                return certificateInspector;
+            }
+            set
+            {
+                certificateInspector = value;
+            }
+        }
 
 		/// <summary>
 		/// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
@@ -775,21 +799,5 @@ namespace ShipWorks.Shipping
 
 			return requiresCustoms;
 		}
-
-        /// <summary>
-        /// HTTPS certificate inspector to use.  Default to trusting so that calls will continue to work as expected.
-        /// Calls that require specific inspection should override this property.
-        /// </summary>
-        public virtual ICertificateInspector CertificateInspector 
-        {
-            get
-            {
-                return certificateInspector;
-            }
-            set
-            {
-                certificateInspector = value;
-            }
-        }
 	}
 }
