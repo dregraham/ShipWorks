@@ -58,10 +58,18 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public CertificateSecurityLevel Submit()
         {
-            using (WebResponse response = webRequest.GetResponse())
+            try
             {
-                return inspector.Inspect(this);
+                using (WebResponse response = webRequest.GetResponse())
+                {}
             }
+            catch (WebException)
+            {
+                // Do nothing here, so a request to a vendor that results in an error code
+                // (e.g. 404, 500, etc.) can still be inspected
+            }
+
+            return inspector.Inspect(this);
         }
     }
 }
