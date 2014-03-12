@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Interapptive.Shared.Net
 {
@@ -10,7 +11,7 @@ namespace Interapptive.Shared.Net
     /// on the certificate of the host and on the rules of a given ICertificateInspector
     /// implementation.
     /// </summary>
-    public class CertificateRequest
+    public class CertificateRequest : ICertificateRequest
     {
         private readonly HttpWebRequest webRequest;
         private readonly ICertificateInspector inspector;
@@ -36,6 +37,22 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
+        /// Gets the certificate provided by the host the request was submitted to.
+        /// </summary>
+        public X509Certificate Certificate
+        {
+            get { return webRequest.ServicePoint.Certificate; }
+        }
+
+        /// <summary>
+        /// Gets the service point that the request was submitted to.
+        /// </summary>
+        public ServicePoint ServicePoint
+        {
+            get { return webRequest.ServicePoint; }
+        }
+
+        /// <summary>
         /// Submits the request to the endpoint defined in the constructor and 
         /// uses the inspector to determine the security level of the host.
         /// </summary>
@@ -43,7 +60,7 @@ namespace Interapptive.Shared.Net
         {
             using (WebResponse response = webRequest.GetResponse())
             {
-                return inspector.Inspect(webRequest);
+                return inspector.Inspect(this);
             }
         }
     }

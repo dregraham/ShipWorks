@@ -1,5 +1,4 @@
-﻿using System.Net;
-
+﻿
 namespace Interapptive.Shared.Net
 {
     /// <summary>
@@ -15,6 +14,6 @@ namespace Interapptive.Shared.Net
         /// <param name="request">The request containing the certificate being inspected.</param>
         /// <returns>A CertificateSecurityLevel value indicating the trust/security level 
         /// of the certificate based on what the inspector is looking for.</returns>
-        CertificateSecurityLevel Inspect(HttpWebRequest request);
+        CertificateSecurityLevel Inspect(ICertificateRequest request);
     }
 }

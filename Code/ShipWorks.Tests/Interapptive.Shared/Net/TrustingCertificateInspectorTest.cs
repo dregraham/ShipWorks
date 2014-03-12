@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         [TestMethod]
         public void Inspect_ReturnsTrusted_WhenRequestIsNotNull_Test()
         {
-            Mock<HttpWebRequest> request = new Mock<HttpWebRequest>();
+            Mock<ICertificateRequest> request = new Mock<ICertificateRequest>();
 
             Assert.AreEqual(CertificateSecurityLevel.Trusted, testObject.Inspect(request.Object));
         }

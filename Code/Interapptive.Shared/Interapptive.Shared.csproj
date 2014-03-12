@@ -281,6 +281,7 @@
     <Compile Include="Net\HttpVariableRequestSubmitter.cs" />
     <Compile Include="Net\HttpVerb.cs" />
     <Compile Include="Net\ICertificateInspector.cs" />
+    <Compile Include="Net\ICertificateRequest.cs" />
     <Compile Include="Net\IHttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\IHttpResponseReader.cs" />
     <Compile Include="Net\INetworkUtility.cs" />

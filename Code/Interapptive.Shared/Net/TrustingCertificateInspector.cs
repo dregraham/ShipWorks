@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         /// <param name="request">The request containing the certificate being inspected.</param>
         /// <returns>Always returns a CertificateSecurityLevel of Trusted.</returns>
-        public CertificateSecurityLevel Inspect(System.Net.HttpWebRequest request)
+        public CertificateSecurityLevel Inspect(ICertificateRequest request)
         {
             return CertificateSecurityLevel.Trusted;
         }
