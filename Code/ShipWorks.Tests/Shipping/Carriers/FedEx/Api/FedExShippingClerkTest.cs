@@ -18,7 +18,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using log4net;
@@ -1028,11 +1027,41 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #region GetRates Tests
 
         [TestMethod]
+        public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsNone_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
+            
+            try
+            {
+                testObject.GetRates(shipmentEntity);
+            }
+            catch (FedExException)
+            { }
+
+            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(FedExException))]
         public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsNone_Test()
         {
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
             testObject.GetRates(shipmentEntity);
+        }
+
+        [TestMethod]
+        public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsSpoofed_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
+
+            try
+            {
+                testObject.GetRates(shipmentEntity);
+            }
+            catch (FedExException)
+            { }
+
+            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
         }
 
         [TestMethod]
