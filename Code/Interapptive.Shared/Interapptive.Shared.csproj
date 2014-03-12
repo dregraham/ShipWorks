@@ -301,6 +301,7 @@
     <Compile Include="Net\QueryStringEncodingCasing.cs" />
     <Compile Include="Net\QueryStringUtility.cs" />
     <Compile Include="Net\HttpRequestSubmittingEvent.cs" />
+    <Compile Include="Net\TrustingCertificateInspector.cs" />
     <Compile Include="Net\WebServiceRawSoap.cs" />
     <Compile Include="Net\WebHelper.cs" />
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />

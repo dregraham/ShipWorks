@@ -7,7 +7,7 @@ namespace Interapptive.Shared.Net
 {
     /// <summary>
     /// A request that can be used for determining the security level of an endpoint based
-    /// on the certificate of the host based on the rules of a given ICertificateInspector
+    /// on the certificate of the host and on the rules of a given ICertificateInspector
     /// implementation.
     /// </summary>
     public class CertificateRequest

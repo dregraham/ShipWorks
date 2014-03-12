@@ -12,6 +12,9 @@ namespace Interapptive.Shared.Net
         /// Inspects the certificate of the given request to determine the security
         /// level of the certificate.
         /// </summary>
+        /// <param name="request">The request containing the certificate being inspected.</param>
+        /// <returns>A CertificateSecurityLevel value indicating the trust/security level 
+        /// of the certificate based on what the inspector is looking for.</returns>
         CertificateSecurityLevel Inspect(HttpWebRequest request);
     }
 }
