@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -8,6 +9,7 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -98,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Indicates if the shipment type supports accounts as the origin
         /// </summary>
         public override bool SupportsAccountAsOrigin
@@ -150,7 +160,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetCachedRates<StampsException>(shipment, GetRatesFromApi);
+            // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
+            // since it should be using a different cache key
+            return AccountRepository.Accounts.Any() ?
+                GetCachedRates<StampsException>(shipment, GetRatesFromApi) :
+                GetCounterRates(shipment);
+            //return GetCachedRates<StampsException>(shipment, GetRatesFromApi);
         }
 
         /// <summary>
@@ -301,6 +316,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Express1 rates - return rates filtered by what is available to the user
                 return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
             }
+        }
+
+        /// <summary>
+        /// Gets USPS counter rates for a shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        private static RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
+            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps));
+            return rates;
         }
 
         /// <summary>

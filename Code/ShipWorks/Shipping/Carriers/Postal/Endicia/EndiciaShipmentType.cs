@@ -53,14 +53,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Supports getting counter rates.
-        /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
-        }
-
-        /// <summary>
         /// Should Express1 rates be checked when getting Endicia rates?
         /// </summary>
         public bool ShouldRetrieveExpress1Rates { get; set; }
@@ -175,6 +167,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Endicia supports getting postal service rates
         /// </summary>
         public override bool SupportsGetRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
         {
             get { return true; }
         }
