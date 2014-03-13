@@ -590,17 +590,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Gets USPS counter rates for a shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        private static RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
-            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia));
-            return rates;
-        }
-
-        /// <summary>
         /// Process the label server shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)

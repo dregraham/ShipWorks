@@ -165,7 +165,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             return AccountRepository.Accounts.Any() ?
                 GetCachedRates<StampsException>(shipment, GetRatesFromApi) :
                 GetCounterRates(shipment);
-            //return GetCachedRates<StampsException>(shipment, GetRatesFromApi);
         }
 
         /// <summary>
@@ -316,17 +315,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Express1 rates - return rates filtered by what is available to the user
                 return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
             }
-        }
-
-        /// <summary>
-        /// Gets USPS counter rates for a shipment
-        /// </summary>
-        /// <param name="shipment">Shipment for which to retrieve rates</param>
-        private static RateGroup GetCounterRates(ShipmentEntity shipment)
-        {
-            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
-            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps));
-            return rates;
         }
 
         /// <summary>

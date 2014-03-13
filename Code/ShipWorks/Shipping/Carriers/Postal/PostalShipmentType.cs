@@ -47,14 +47,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Configure properties of a newly created shipment that are not taken care of by profile
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
-        }
-
-        /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
@@ -407,6 +399,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
             });
 
             return new RateGroup(validExpress1Rates);
+        }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
+            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType));
+            return rates;
         }
     }
 }
