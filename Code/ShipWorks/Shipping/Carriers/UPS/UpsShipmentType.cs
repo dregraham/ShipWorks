@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
@@ -743,7 +744,32 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetCachedRates<UpsException>(shipment, GetRatesFromApi);
+            ICarrierSettingsRepository originalSettings = SettingsRepository;
+            ICertificateInspector originalInspector = CertificateInspector;
+            ICarrierAccountRepository<UpsAccountEntity> originalAccountRepository = AccountRepository;
+
+            try
+            {
+                // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
+                // counter rates from the broker is not impacted
+                if (!SettingsRepository.GetAccounts().Any())
+                {
+                    // We need to swap out the SettingsRepository and certificate inspector 
+                    // to get UPS counter rates
+                    SettingsRepository = new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.UpsCertificateVerificationData);
+                    AccountRepository = new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                }
+
+                return GetCachedRates<UpsException>(shipment, GetRatesFromApi);
+            }
+            finally
+            {
+                // Switch the settings repository back to the original now that we have counter rates
+                SettingsRepository = originalSettings;
+                CertificateInspector = originalInspector;
+                AccountRepository = originalAccountRepository;
+            }
         }
 
         /// <summary>
@@ -857,7 +883,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Provide FedEx tracking results for the given shipment
+        /// Provide UPS tracking results for the given shipment
         /// </summary>
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
@@ -900,6 +926,57 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Do any steps needed prior to doing the actual processing of the shipment
+        /// </summary>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+            // Don't rely on the UPS settings to grab the accounts here since it may have been
+            // injected with a counter rate account
+            if (!UpsAccountManager.Accounts.Any())
+            {
+                // Null values are passed because the rates don't matter for UPS; we're only
+                // interested in grabbing the account that was just created
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+                // Invoke the counter rates callback
+                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+                {
+                    // The user canceled, so we need to stop processing
+                    shipments = null;
+                }
+                else
+                {
+                    // The user created an account, so try to grab the account and use it 
+                    // to process the shipment
+                    ShippingSettings.CheckForChangesNeeded();
+                    if (UpsAccountManager.Accounts.Any())
+                    {
+                        UpsAccountEntity account = UpsAccountManager.Accounts.First();
+                        shipments.ForEach(s =>
+                        {
+                            // Assign the account ID and save the shipment
+                            s.Ups.UpsAccountID = account.UpsAccountID;
+                            using (SqlAdapter adapter = new SqlAdapter(true))
+                            {
+                                adapter.SaveAndRefetch(s);
+                                adapter.Commit();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // There still aren't any accounts for some reason, so throw an exception
+                        throw new UpsException("A UPS account must be created to process this shipment.");
+                    }
+                }
+            }
+
+            return shipments;
         }
 
 

@@ -4,13 +4,14 @@ using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
     /// <summary>
     /// A repository for UPS counter rate accounts
     /// </summary>
-    public class UpsCounterRateAccountRepository : ICarrierAccountRepository<UpsAccountEntity>
+    public class UpsCounterRateAccountRepository : UpsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity>
     {
         private readonly ICounterRatesCredentialStore counterRatesCredentialStore;
         private readonly Lazy<List<UpsAccountEntity>> lazyAccounts;
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A UpsAccountEntity object.</returns>
-        public IEntity2 GetAccount(ShipmentEntity shipment)
+        public override IEntity2 GetAccount(ShipmentEntity shipment)
         {
             return Accounts.First();
         }

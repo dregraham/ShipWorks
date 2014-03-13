@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             originControl.Initialize(ShipmentTypeCode.UpsOnLineTools);
 
-            LoadUpsAccounts();
+            LoadAccounts();
 
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load the list of UPS accounts
         /// </summary>
-        private void LoadUpsAccounts()
+        public override void LoadAccounts()
         {
             upsAccount.DisplayMember = "Key";
             upsAccount.ValueMember = "Value";
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages

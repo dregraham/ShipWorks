@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.UpsEnvironment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A UpsOpenAccountAccountEntity object.</returns>
-        public IEntity2 GetAccount(ShipmentEntity shipment)
+        public virtual IEntity2 GetAccount(ShipmentEntity shipment)
         {
             if (shipment == null || shipment.Ups == null)
             {
