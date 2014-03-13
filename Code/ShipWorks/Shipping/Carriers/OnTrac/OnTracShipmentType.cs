@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // injected with a counter rate account
             if (!OnTracAccountManager.Accounts.Any())
             {
-                // Null values are passed because the rates don't matter for FedEx; we're only
+                // Null values are passed because the rates don't matter for OnTrac; we're only
                 // interested in grabbing the account that was just created
                 CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
 
