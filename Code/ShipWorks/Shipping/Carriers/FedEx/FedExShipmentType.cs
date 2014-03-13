@@ -15,6 +15,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -883,6 +884,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // counter rates from the broker is not impacted
                 if (!SettingsRepository.GetAccounts().Any())
                 {
+                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get FedEx counter rates
                     SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
@@ -890,6 +893,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
             }
             finally
             {

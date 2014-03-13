@@ -421,7 +421,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
-            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType));
+            rates.Rates.ForEach(x =>
+            {
+                if (x.ProviderLogo != null)
+                {
+                    // Only change existing logos; don't set logos for rates that don't have them
+                    x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
+                }
+            });
             return rates;
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Editing;
@@ -105,11 +107,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             try
             {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
                 AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
                 CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
 
                 // This call to GetRates won't be recursive since the counter rate account repository will return an account
                 return GetRates(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
             }
             finally
             {
