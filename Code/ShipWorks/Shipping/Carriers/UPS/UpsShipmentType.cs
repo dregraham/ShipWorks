@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
@@ -754,6 +755,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // counter rates from the broker is not impacted
                 if (!SettingsRepository.GetAccounts().Any())
                 {
+                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get UPS counter rates
                     SettingsRepository = new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
@@ -762,6 +765,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
 
                 return GetCachedRates<UpsException>(shipment, GetRatesFromApi);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
             }
             finally
             {
