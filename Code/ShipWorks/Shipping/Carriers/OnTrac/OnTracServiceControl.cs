@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Initialize the comboboxes
+        /// Initialize the combo boxes
         /// </summary>
         public override void Initialize()
         {
@@ -41,13 +41,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             EnumHelper.BindComboBox<OnTracCodType>(codPaymentType);
             EnumHelper.BindComboBox<OnTracPackagingType>(packagingType);
 
-            LoadOnTracAccounts();
+            LoadAccounts();
         }
 
         /// <summary>
         /// Load the list of OnTrac accounts
         /// </summary>
-        private void LoadOnTracAccounts()
+        public override void LoadAccounts()
         {
             onTracAccount.SelectedIndexChanged -= OnChangeAccount;
             onTracAccount.DisplayMember = "Key";
@@ -55,18 +55,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (OnTracAccountManager.Accounts.Count > 0)
             {
-                onTracAccount.DataSource =
-                    OnTracAccountManager.Accounts.Select(
-                        s => new KeyValuePair<string, long>(s.Description, s.OnTracAccountID))
-                                        .ToList();
+                onTracAccount.DataSource = OnTracAccountManager.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.OnTracAccountID)).ToList();
                 onTracAccount.Enabled = true;
             }
             else
             {
-                onTracAccount.DataSource = new List<KeyValuePair<string, long>>
-                                           {
-                                               new KeyValuePair<string, long>("(No accounts)", 0)
-                                           };
+                onTracAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
                 onTracAccount.Enabled = false;
             }
 
@@ -81,15 +75,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             SuspendRateCriteriaChangeEvent();
 
             base.RecipientDestinationChanged -= OnRecipientDestinationChanged;
-
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
-            
             base.RecipientDestinationChanged += OnRecipientDestinationChanged;
 
             LoadShipmentDetails();
-
             UpdateInsuranceDisplay();
-
             ResumeRateCriteriaChangeEvent();
         }
 
@@ -175,7 +165,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 else if (previousValue != null)
                 {
                     service.SelectedValue = previousValue;
-
                     if (service.SelectedIndex == -1)
                     {
                         service.SelectedIndex = 0;
@@ -205,9 +194,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
             else
             {
-                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0
-                    ? OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue)
-                    : null;
+                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ? 
+                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) : 
+                    null;
 
                 if (account != null)
                 {
@@ -220,7 +209,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
-
             RaiseRateCriteriaChanged();
         }
 
@@ -232,7 +220,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (onTracAccount.SelectedValue != null)
             {
                 long accountID = (long) onTracAccount.SelectedValue;
-
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     shipment.OnTrac.OnTracAccountID = accountID;
@@ -291,7 +278,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
-
             OnTracServiceType servicetype = (OnTracServiceType)e.Rate.OriginalTag;
 
             service.SelectedValue = servicetype;
@@ -307,14 +293,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void UpdateInsuranceDisplay()
         {
             insuranceControl.InsuranceOptionsChanged -= OnRateCriteriaChanged;
-            insuranceControl.LoadInsuranceChoices(
-                LoadedShipments.Select(
-                    shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+
             insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         private void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
@@ -347,7 +332,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 // Update the selected rate in the rate control to coincide with the service change
                 OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
-
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
                     if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
