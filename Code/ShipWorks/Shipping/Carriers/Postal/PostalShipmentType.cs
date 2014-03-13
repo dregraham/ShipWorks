@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
@@ -22,6 +23,7 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores;
 using ShipWorks.Data;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -407,6 +409,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
         {
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());    
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+
             RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
             rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType));
             return rates;
