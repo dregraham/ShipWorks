@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -61,6 +63,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             
             // Persist the account entity to the database
             StampsAccountManager.SaveAccount(stampsAccount);
+
+            // Mark the new account as configured
+            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Stamps);
+
+            // If this is the only account, update this shipment type profiles with this account
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(true, false);
+            if (accounts.Count == 1)
+            {
+                StampsAccountEntity accountEntity = accounts.First();
+
+                // Update any profiles to use this account if this is the only account
+                // in the system. This is to account for the situation where there a multiple
+                // profiles that may be associated with a previous account that has since
+                // been deleted. 
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Stamps))
+                {
+                    if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
+                    {
+                        shippingProfileEntity.Postal.Stamps.StampsAccountID = accountEntity.StampsAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                    }
+                }
+            }
 
             return stampsAccount.StampsAccountID;
         }
