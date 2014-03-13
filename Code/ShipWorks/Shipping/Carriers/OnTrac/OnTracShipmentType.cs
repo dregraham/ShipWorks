@@ -148,6 +148,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
         }
 
+        /// <summary>
+        /// Will call the counterRatesProcessing callback provided when trying to process 
+        /// a shipment without any OnTrac accounts in ShipWorks, otherwise the shipment 
+        /// is unchanged.
+        /// </summary>
+        /// <exception cref="OnTracException">An OnTrac account must be created to process this shipment.</exception>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
             List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);

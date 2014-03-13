@@ -959,7 +959,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// 
+        /// Will call the counterRatesProcessing callback provided when trying to process 
+        /// a shipment without any FedEx accounts in ShipWorks, otherwise the shipment 
+        /// is unchanged.
         /// </summary>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
