@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
 using System.Xml;
 using Interapptive.Shared.Net;
@@ -692,6 +694,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                 UpsAccountManager.SaveAccount(upsAccount);
+
+                // Mark the new account as configured
+                ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                // If this is the only account, update this UPS shipment type profiles with this account
+                if (UpsAccountManager.Accounts.Count == 1)
+                {
+                    UpsAccountEntity upsAccountEntity = UpsAccountManager.Accounts.First();
+
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentType.ShipmentTypeCode))
+                    {
+                        shippingProfileEntity.Ups.UpsAccountID = upsAccountEntity.UpsAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                    }
+                }
             }
         }
 
