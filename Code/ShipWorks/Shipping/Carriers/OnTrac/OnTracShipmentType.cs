@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -145,6 +146,54 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
                 new DimensionsAdapter(shipment.OnTrac));
 
+        }
+
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+            // Don't rely on the FedEx settings to grab the accounts here since it may have been
+            // injected with a counter rate account
+            if (!OnTracAccountManager.Accounts.Any())
+            {
+                // Null values are passed because the rates don't matter for FedEx; we're only
+                // interested in grabbing the account that was just created
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+                // Invoke the counter rates callback
+                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+                {
+                    // The user canceled, so we need to stop processing
+                    shipments = null;
+                }
+                else
+                {
+                    // The user created an account, so try to grab the account and use it 
+                    // to process the shipment
+                    ShippingSettings.CheckForChangesNeeded();
+                    if (OnTracAccountManager.Accounts.Any())
+                    {
+                        OnTracAccountEntity account = OnTracAccountManager.Accounts.First();
+                        shipments.ForEach(s =>
+                        {
+                            // Assign the account ID and save the shipment
+                            s.OnTrac.OnTracAccountID = account.OnTracAccountID;
+                            using (SqlAdapter adapter = new SqlAdapter(true))
+                            {
+                                adapter.SaveAndRefetch(s);
+                                adapter.Commit();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // There still aren't any accounts for some reason, so throw an exception
+                        throw new OnTracException("An OnTrac account must be created to process this shipment.");
+                    }
+                }
+            }
+
+            return shipments;
         }
 
         /// <summary>
