@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -99,11 +100,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
-            CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
 
-            // This call to GetRates won't be recursive since the counter rate account repository will return an account
-            return GetRates(shipment);
+            try
+            {
+                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+
+                // This call to GetRates won't be recursive since the counter rate account repository will return an account
+                return GetRates(shipment);
+            }
+            finally
+            {
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
+            }
         }
 
         /// <summary>
