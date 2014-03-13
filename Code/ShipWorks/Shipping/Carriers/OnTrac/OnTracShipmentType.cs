@@ -157,9 +157,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
             List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
-
-            // Don't rely on the FedEx settings to grab the accounts here since it may have been
-            // injected with a counter rate account
+            
             if (!OnTracAccountManager.Accounts.Any())
             {
                 // Null values are passed because the rates don't matter for OnTrac; we're only
