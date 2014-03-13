@@ -710,7 +710,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool IsShipmentTypeActivatedUI(ShipmentTypeCode shipmentTypeCode)
         {
-            return uiActivatedShipmentTypes.Contains(shipmentTypeCode);
+            return uiActivatedShipmentTypes.Contains(shipmentTypeCode) || ShipmentTypeManager.GetType(shipmentTypeCode).SupportsCounterRates;
         }
 
         /// <summary>
@@ -1450,7 +1450,7 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                if (IsShipmentTypeActivatedUI(shipment) && shipment.ShipmentType != (int) ShipmentTypeCode.None)
+                if (IsShipmentTypeActivatedUI(shipment) && shipment.ShipmentType != (int)ShipmentTypeCode.None)
                 {
                     if (!shipment.Processed && securityCreateEditProcess)
                     {
@@ -1747,7 +1747,7 @@ namespace ShipWorks.Shipping
 
             bool anyAttempted = false;
 
-            if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed || !IsShipmentTypeActivatedUI(clonedShipment))
+            if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed)
             {
                 return;
             }
