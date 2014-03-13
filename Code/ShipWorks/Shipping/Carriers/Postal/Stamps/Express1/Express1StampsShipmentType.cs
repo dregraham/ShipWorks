@@ -103,9 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
 
             // This call to GetRates won't be recursive since the counter rate account repository will return an account
-            RateGroup rates = GetRates(shipment);
-            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType));
-            return rates;
+            return GetRates(shipment);
         }
 
         /// <summary>

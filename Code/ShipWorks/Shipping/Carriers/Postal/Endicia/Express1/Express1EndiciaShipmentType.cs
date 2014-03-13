@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     [Obfuscation(Exclude = true, ApplyToMembers = false)]
     public class Express1EndiciaShipmentType : EndiciaShipmentType
     {
+        /// <summary>
+        /// Create an instance of the Express1 Endicia Shipment Type
+        /// </summary>
+        public Express1EndiciaShipmentType()
+        {
+            AccountRepository = new Express1EndiciaAccountRepository();
+        }
+
         /// <summary>
         /// Postal Shipment Type
         /// </summary>
@@ -77,6 +86,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
             return new Express1EndiciaServiceControl(rateControl);
+        }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
+            CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+
+            // This call to GetRates won't be recursive since the counter rate account repository will return an account
+            return GetRates(shipment);
         }
 
         /// <summary>
