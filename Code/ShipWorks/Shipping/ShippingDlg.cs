@@ -2179,6 +2179,7 @@ namespace ShipWorks.Shipping
                         
                         ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
                         ServiceControl.SaveToShipments();
+                        ServiceControl.LoadAccounts();
                     }
                 }
             });

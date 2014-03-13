@@ -133,6 +133,15 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
+        /// Loads the accounts. This should be overridden in derived classes to account for a sign-up via 
+        // processing a shipment with a provider that doesn't have any accounts
+        /// </summary>
+        public virtual void LoadAccounts()
+        {
+            
+        }
+
+        /// <summary>
         /// Load the data for the list of shipments into the control
         /// </summary>
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
