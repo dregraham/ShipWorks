@@ -32,6 +32,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Api;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -872,16 +873,65 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
+            ICarrierSettingsRepository originalSettings = SettingsRepository;
+            ICertificateInspector originalInspector = CertificateInspector;
+            string originalHubID = shipment.FedEx.SmartPostHubID;
+
+            try
+            {
+                // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
+                // counter rates from the broker is not impacted
+                if (!SettingsRepository.GetAccounts().Any())
+                {
+                    // We need to swap out the SettingsRepository and certificate inspector 
+                    // to get FedEx counter rates
+                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+                }
+
+                return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
+            }
+            finally
+            {
+                // Switch the settings repository back to the original now that we have counter rates
+                SettingsRepository = originalSettings;
+                CertificateInspector = originalInspector;
+                shipment.FedEx.SmartPostHubID = originalHubID;
+            }
         }
 
         /// <summary>
-        /// Get a list of rates for the FedEx shipment from the FedEx api
+        /// Get a list of rates for the FedEx shipment from the FedEx API
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
         }
+
+        ///// <summary>
+        ///// Gets the FedEx counter rates for a shipment
+        ///// </summary>
+        ///// <param name="shipment">The shipment for which to retrieve rates.</param>
+        ///// <returns>A RateGroup containing the counter rate results.</returns>
+        //private RateGroup GetCounterRates(ShipmentEntity shipment)
+        //{
+        //    // We need to swap out the SettingsRepository and certificate inspector 
+        //    // to get FedEx counter rates
+        //    ICarrierSettingsRepository originalSettings = SettingsRepository;
+        //    ICertificateInspector originalInspector = CertificateInspector;
+
+        //    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+        //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+
+        //    // Get the rates from the API as usual now that we've switched over to the counter rates configuration
+        //    RateGroup rateGroup = GetRatesFromApi(shipment);
+
+        //    // Switch the settings repository back to the original now that we have counter rates
+        //    SettingsRepository = originalSettings;
+        //    CertificateInspector = originalInspector;
+
+        //    return rateGroup;
+        //}
 
         /// <summary>
         /// Provide FedEx tracking results for the given shipment
