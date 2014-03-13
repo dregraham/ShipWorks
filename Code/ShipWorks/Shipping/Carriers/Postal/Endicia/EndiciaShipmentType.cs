@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -49,6 +50,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public virtual EndiciaReseller EndiciaReseller
         {
             get { return EndiciaReseller.None; }
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -416,7 +425,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            return GetCachedRates<EndiciaException>(shipment, GetRatesFromApi);
+            // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
+            // since it should be using a different cache key
+            return AccountRepository.Accounts.Any() ? 
+                GetCachedRates<EndiciaException>(shipment, GetRatesFromApi) : 
+                GetCounterRates(shipment);
         }
 
         /// <summary>
@@ -574,6 +587,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Express1 rates - return rates filtered by what is available to the user
                 return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
             }
+        }
+
+        /// <summary>
+        /// Gets USPS counter rates for a shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        private static RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
+            rates.Rates.ForEach(x => x.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia));
+            return rates;
         }
 
         /// <summary>
