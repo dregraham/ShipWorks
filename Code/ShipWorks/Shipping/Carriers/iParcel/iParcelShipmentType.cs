@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -14,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
@@ -498,6 +500,62 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 throw new NotFoundException("Primary package not found.");
             }
         }
+
+
+        /// <summary>
+        /// Will call the counterRatesProcessing callback provided when trying to process 
+        /// a shipment without any i-Parcel accounts in ShipWorks, otherwise the shipment 
+        /// is unchanged.
+        /// </summary>
+        /// <exception cref="OnTracException">An OnTrac account must be created to process this shipment.</exception>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+            // Don't rely on the FedEx settings to grab the accounts here since it may have been
+            // injected with a counter rate account
+            if (!iParcelAccountManager.Accounts.Any())
+            {
+                // Null values are passed because the rates don't matter for FedEx; we're only
+                // interested in grabbing the account that was just created
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+                // Invoke the counter rates callback
+                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+                {
+                    // The user canceled, so we need to stop processing
+                    shipments = null;
+                }
+                else
+                {
+                    // The user created an account, so try to grab the account and use it 
+                    // to process the shipment
+                    ShippingSettings.CheckForChangesNeeded();
+                    if (iParcelAccountManager.Accounts.Any())
+                    {
+                        IParcelAccountEntity account = iParcelAccountManager.Accounts.First();
+                        shipments.ForEach(s =>
+                        {
+                            // Assign the account ID and save the shipment
+                            s.IParcel.IParcelAccountID = account.IParcelAccountID;
+                            using (SqlAdapter adapter = new SqlAdapter(true))
+                            {
+                                adapter.SaveAndRefetch(s);
+                                adapter.Commit();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // There still aren't any accounts for some reason, so throw an exception
+                        throw new iParcelException("An i-Parcel account must be created to process this shipment.");
+                    }
+                }
+            }
+
+            return shipments;
+        }
+
 
         /// <summary>
         /// Process the shipment
