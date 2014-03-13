@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 {
@@ -65,6 +69,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 
             // Persist the account entity to the database
             EndiciaAccountManager.SaveAccount(endiciaAccount);
+
+            // Mark the new account as configured
+            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
+
+            // If this is the only account, update this shipment type profiles with this account
+            List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller)endiciaAccount.EndiciaReseller, false);
+            if (accounts.Count == 1)
+            {
+                EndiciaAccountEntity accountEntity = accounts.First();
+
+                // Update any profiles to use this account if this is the only account
+                // in the system. This is to account for the situation where there a multiple
+                // profiles that may be associated with a previous account that has since
+                // been deleted. 
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Endicia && p.Postal.Endicia.EndiciaAccountID != null))
+                {
+                    if (shippingProfileEntity.Postal.Endicia.EndiciaAccountID.HasValue)
+                    {
+                        shippingProfileEntity.Postal.Endicia.EndiciaAccountID = accountEntity.EndiciaAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity); 
+                    }
+                }
+            }
 
             return endiciaAccount.EndiciaAccountID;
         }
