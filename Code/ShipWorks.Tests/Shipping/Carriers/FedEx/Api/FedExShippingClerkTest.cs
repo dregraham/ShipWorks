@@ -190,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory = new Mock<IFedExRequestFactory>();
             requestFactory.Setup(f => f.CreatePackageMovementRequest(It.IsAny<ShipmentEntity>(), It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
             requestFactory.Setup(f => f.CreateShipRequest(It.IsAny<ShipmentEntity>())).Returns(shippingRequest.Object);
-            requestFactory.Setup(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>())).Returns(versionCaptureRequest.Object);
+            requestFactory.Setup(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>())).Returns(versionCaptureRequest.Object);
             requestFactory.Setup(f => f.CreateGroundCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(groundCloseRequest.Object);
             requestFactory.Setup(f => f.CreateSmartPostCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(smartPostCloseRequest.Object);
             requestFactory.Setup(f => f.CreateRegisterCspUserRequest(It.IsAny<FedExAccountEntity>())).Returns(registrationRequest.Object);
@@ -261,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
-            requestFactory.Verify(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>()), Times.Exactly(3));
+            requestFactory.Verify(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
         }
 
         [TestMethod]

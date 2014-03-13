@@ -32,9 +32,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="accountLocationId">The account location ID.</param>
+        /// <param name="account">The account.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to do the version capture.</returns>
-        CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId);
+        CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId, FedExAccountEntity account);
 
         /// <summary>
         /// Creates the ground close request.

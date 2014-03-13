@@ -467,7 +467,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                     // Process the movement response and use the location ID of the movement response to create the version capture request
                     packageMovementResponse.Process();
-                    CarrierRequest versionCaptureRequest = requestFactory.CreateVersionCaptureRequest(shipmentEntity, packageMovementResponse.LocationID);
+                    CarrierRequest versionCaptureRequest = requestFactory.CreateVersionCaptureRequest(shipmentEntity, packageMovementResponse.LocationID, account);
 
                     versionCaptureRequest.Submit();
                 }

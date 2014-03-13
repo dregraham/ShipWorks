@@ -134,10 +134,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountLocationId">The account location ID.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to do the version capture.</returns>
-        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId)
+        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId, FedExAccountEntity account)
         {
-            FedExAccountEntity accountEntity = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
-
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
@@ -146,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             // TODO: Look into injecting the response factory here like that used in the CreateShipResponse method
-            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, accountEntity);
+            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, account);
         }
 
         /// <summary>

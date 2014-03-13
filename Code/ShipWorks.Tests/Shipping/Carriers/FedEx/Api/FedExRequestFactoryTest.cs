@@ -341,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void CreateVersionCaptureRequest_PopulatesManipulators_Test()
         {
-            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty);
+            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty, new FedExAccountEntity());
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
@@ -351,7 +351,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void CreateVersionCaptureRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
         {
-            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty);
+            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty, new FedExAccountEntity());
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationWebAuthenticationDetailManipulator)) == 1);
         }
@@ -359,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void CreateVersionCaptureRequest_FedExRegistrationClientDetailManipulator_Test()
         {
-            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty);
+            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty, new FedExAccountEntity());
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationClientDetailManipulator)) == 1);
         }
@@ -367,7 +367,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void CreateVersionCaptureRequest_FedExRegistrationVersionManipulator_Test()
         {
-            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty);
+            CarrierRequest request = testObject.CreateVersionCaptureRequest(new ShipmentEntity(), string.Empty, new FedExAccountEntity());
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationVersionManipulator)) == 1);
         }
