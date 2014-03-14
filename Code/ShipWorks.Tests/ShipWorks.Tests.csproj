@@ -279,9 +279,11 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBrokerTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelSkuQuantityParserTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelTokenSuggestionFactoryTest.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Shipping\Carriers\iParcel\Net\Track\iParcelTrackingNumberElementTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Authentication\OnTracAuthenticationRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBrokerTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Rates\OnTracRateRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Shipment\OnTracShipmentRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Tracking\OnTracTrackingRequestTest.cs" />
@@ -304,7 +307,9 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationTest.cs" />
@@ -314,11 +319,13 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStoreTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
@@ -341,6 +348,7 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsResponseFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
