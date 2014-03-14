@@ -64,5 +64,51 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.Express1
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<EndiciaAccountEntity> accounts = new List<EndiciaAccountEntity>()
+            {
+                new EndiciaAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Postal = new PostalShipmentEntity()
+                {
+                    Endicia = new EndiciaShipmentEntity()
+                }
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.Postal.Endicia.EndiciaAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<EndiciaAccountEntity> accounts = new List<EndiciaAccountEntity>()
+            {
+                new EndiciaAccountEntity(123),
+                new EndiciaAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Postal = new PostalShipmentEntity()
+                {
+                    Endicia = new EndiciaShipmentEntity()
+                }
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.Postal.Endicia.EndiciaAccountID);
+        }
     }
 }

@@ -60,5 +60,45 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
+            {
+                new UpsAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Ups = new UpsShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.Ups.UpsAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
+            {
+                new UpsAccountEntity(123),
+                new UpsAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Ups = new UpsShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.Ups.UpsAccountID);
+        }
     }
 }

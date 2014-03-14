@@ -60,5 +60,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<IParcelAccountEntity> accounts = new List<IParcelAccountEntity>()
+            {
+                new IParcelAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                IParcel = new IParcelShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.IParcel.IParcelAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<IParcelAccountEntity> accounts = new List<IParcelAccountEntity>()
+            {
+                new IParcelAccountEntity(123),
+                new IParcelAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                IParcel = new IParcelShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.IParcel.IParcelAccountID);
+        }
+
     }
 }

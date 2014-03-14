@@ -60,5 +60,47 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<OnTracAccountEntity> accounts = new List<OnTracAccountEntity>()
+            {
+                new OnTracAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                OnTrac = new OnTracShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.OnTrac.OnTracAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<OnTracAccountEntity> accounts = new List<OnTracAccountEntity>()
+            {
+                new OnTracAccountEntity(123),
+                new OnTracAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                OnTrac = new OnTracShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.OnTrac.OnTracAccountID);
+        }
     }
 }

@@ -283,7 +283,7 @@
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelDatabaseRepositoryTest.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelSkuQuantityParserTest.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelTokenSuggestionFactoryTest.cs" />
@@ -309,7 +309,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepositoryTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationTest.cs" />

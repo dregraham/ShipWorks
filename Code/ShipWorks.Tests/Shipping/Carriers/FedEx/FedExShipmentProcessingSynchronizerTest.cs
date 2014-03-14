@@ -60,5 +60,46 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
+            {
+                new FedExAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(fedExAccounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                FedEx = new FedExShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
+            {
+                new FedExAccountEntity(123),
+                new FedExAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(fedExAccounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                FedEx = new FedExShipmentEntity()
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.FedEx.FedExAccountID);
+        }
     }
 }

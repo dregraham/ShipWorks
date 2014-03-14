@@ -63,5 +63,51 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
+        [TestMethod]
+        public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
+        {
+            List<StampsAccountEntity> accounts = new List<StampsAccountEntity>()
+            {
+                new StampsAccountEntity(123)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Postal = new PostalShipmentEntity()
+                {
+                    Stamps = new StampsShipmentEntity()
+                }
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(123, shipment.Postal.Stamps.StampsAccountID);
+        }
+
+        [TestMethod]
+        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        {
+            List<StampsAccountEntity> accounts = new List<StampsAccountEntity>()
+            {
+                new StampsAccountEntity(123),
+                new StampsAccountEntity(456)
+            };
+
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Postal = new PostalShipmentEntity()
+                {
+                    Stamps = new StampsShipmentEntity()
+                }
+            };
+
+            testObject.ReplaceInvalidAccount(shipment);
+
+            Assert.AreEqual(0, shipment.Postal.Stamps.StampsAccountID);
+        }
     }
 }
