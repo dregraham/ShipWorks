@@ -1489,4 +1489,16 @@
   <data name="box_closed2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\box_closed5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="splash_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\splash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sw_cubes_32x32_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aprilfools-32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sw_cubes_16_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aprilfools-16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sw_cubes_big_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aprilfools-48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
