@@ -590,6 +590,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new EndiciaShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Process the label server shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)

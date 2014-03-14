@@ -614,8 +614,12 @@
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
@@ -625,21 +629,27 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.Designer.cs">
       <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -659,6 +669,7 @@
     <Compile Include="Shipping\Editing\Rating\RatesPanel.Designer.cs">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1053,22 +1064,22 @@
     <Compile Include="Shipping\Carriers\BestRate\PackageBasedBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\ServiceLevelSpeedComparer.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevel.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalResellerBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />

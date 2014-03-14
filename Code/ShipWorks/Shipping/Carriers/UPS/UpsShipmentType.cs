@@ -936,58 +936,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ShippingException(ex.Message, ex);
             }
         }
-
+        
         /// <summary>
-        /// Do any steps needed prior to doing the actual processing of the shipment
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
-
-            // Don't rely on the UPS settings to grab the accounts here since it may have been
-            // injected with a counter rate account
-            if (!UpsAccountManager.Accounts.Any())
-            {
-                // Null values are passed because the rates don't matter for UPS; we're only
-                // interested in grabbing the account that was just created
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
-
-                // Invoke the counter rates callback
-                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
-                {
-                    // The user canceled, so we need to stop processing
-                    shipments = null;
-                }
-                else
-                {
-                    // The user created an account, so try to grab the account and use it 
-                    // to process the shipment
-                    ShippingSettings.CheckForChangesNeeded();
-                    if (UpsAccountManager.Accounts.Any())
-                    {
-                        UpsAccountEntity account = UpsAccountManager.Accounts.First();
-                        shipments.ForEach(s =>
-                        {
-                            // Assign the account ID and save the shipment
-                            s.Ups.UpsAccountID = account.UpsAccountID;
-                            using (SqlAdapter adapter = new SqlAdapter(true))
-                            {
-                                adapter.SaveAndRefetch(s);
-                                adapter.Commit();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        // There still aren't any accounts for some reason, so throw an exception
-                        throw new UpsException("A UPS account must be created to process this shipment.");
-                    }
-                }
-            }
-
-            return shipments;
+            return new UpsShipmentProcessingSynchronizer();
         }
-
 
         /// <summary>
         /// Process the shipment

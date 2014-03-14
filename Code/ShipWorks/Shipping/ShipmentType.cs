@@ -711,16 +711,63 @@ namespace ShipWorks.Shipping
 	    }
 
 		/// <summary>
-		/// Preferences the process.
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment 
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
 		/// </summary>
-		/// <returns> 
-		/// Most shipment types don't do any pre-processing and will return themselves.  
-		/// This will return a different shipping type for BestRate
-		/// </returns>
+		/// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
+		/// be returned to indicate that processing should be halted completely.</returns>
         public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
 		{
-		    return new List<ShipmentEntity> { shipment };
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>() { shipment };
+		    IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+
+            if (!synchronizer.HasAccounts)
+		    {
+		        // Null values are passed because the rates don't matter for the general case; we're only
+		        // interested in grabbing the account that was just created
+		        CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+		        // Invoke the counter rates callback
+		        if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+		        {
+		            // The user canceled, so we need to stop processing
+		            shipments = null;
+		        }
+		        else
+		        {
+		            // The user created an account, so try to grab the account and use it 
+		            // to process the shipment
+		            ShippingSettings.CheckForChangesNeeded();
+                    if (synchronizer.HasAccounts)
+		            {
+		                shipments.ForEach(s =>
+		                {
+		                    // Assign the account ID and save the shipment
+		                    synchronizer.SaveAccountToShipment(s);
+		                    using (SqlAdapter adapter = new SqlAdapter(true))
+		                    {
+		                        adapter.SaveAndRefetch(s);
+		                        adapter.Commit();
+		                    }
+		                });
+		            }
+		            else
+		            {
+		                // There still aren't any accounts for some reason, so throw an exception
+		                throw new ShippingException("An account must be created to process this shipment.");
+		            }
+		        }
+		    }
+
+		    return shipments;
 		}
+
+	    /// <summary>
+	    /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+	    /// </summary>
+	    protected abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
 
 		/// <summary>
 		/// Indicates if customs forms may be required to ship the shipment based on the

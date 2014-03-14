@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
+namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
     /// <summary>
     /// Basic repository for retrieving postal (w/o postage) accounts

@@ -358,7 +358,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             return new BestRateSettingsControl();
         }
-        
+
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            // The synchronizer isn't used in overridden PreProcess method for this shipment type
+            return null;
+        }
+
         /// <summary>
         /// Gets rates and converts shipment to the found best rate type.
         /// </summary>

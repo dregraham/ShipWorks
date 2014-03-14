@@ -97,6 +97,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new WebToolsShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)

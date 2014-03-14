@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
+namespace ShipWorks.Shipping.Carriers.FedEx
 {
     public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity>, ICarrierAccountRepository<FedExAccountEntity>
     {

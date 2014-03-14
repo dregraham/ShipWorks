@@ -968,56 +968,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Will call the counterRatesProcessing callback provided when trying to process 
-        /// a shipment without any FedEx accounts in ShipWorks, otherwise the shipment 
-        /// is unchanged.
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
-
-            // Don't rely on the FedEx settings to grab the accounts here since it may have been
-            // injected with a counter rate account
-            if (!FedExAccountManager.Accounts.Any())
-            {
-                // Null values are passed because the rates don't matter for FedEx; we're only
-                // interested in grabbing the account that was just created
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
-                
-                // Invoke the counter rates callback
-                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
-                {
-                    // The user canceled, so we need to stop processing
-                    shipments = null;
-                }
-                else
-                {
-                    // The user created an account, so try to grab the account and use it 
-                    // to process the shipment
-                    ShippingSettings.CheckForChangesNeeded();
-                    if (FedExAccountManager.Accounts.Any())
-                    {
-                        FedExAccountEntity account = FedExAccountManager.Accounts.First();
-                        shipments.ForEach(s =>
-                        {
-                            // Assign the account ID and save the shipment
-                            s.FedEx.FedExAccountID = account.FedExAccountID;
-                            using (SqlAdapter adapter = new SqlAdapter(true))
-                            {
-                                adapter.SaveAndRefetch(s);
-                                adapter.Commit();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        // There still aren't any accounts for some reason, so throw an exception
-                        throw new FedExException("A FedEx account must be created to process this shipment.");
-                    }
-                }
-            }
-
-            return shipments;
+            return new FedExShipmentProcessingSynchronizer();
         }
 
         /// <summary>

@@ -149,55 +149,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Will call the counterRatesProcessing callback provided when trying to process 
-        /// a shipment without any OnTrac accounts in ShipWorks, otherwise the shipment 
-        /// is unchanged.
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        /// <exception cref="OnTracException">An OnTrac account must be created to process this shipment.</exception>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
-            
-            if (!OnTracAccountManager.Accounts.Any())
-            {
-                // Null values are passed because the rates don't matter for OnTrac; we're only
-                // interested in grabbing the account that was just created
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
-
-                // Invoke the counter rates callback
-                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
-                {
-                    // The user canceled, so we need to stop processing
-                    shipments = null;
-                }
-                else
-                {
-                    // The user created an account, so try to grab the account and use it 
-                    // to process the shipment
-                    ShippingSettings.CheckForChangesNeeded();
-                    if (OnTracAccountManager.Accounts.Any())
-                    {
-                        OnTracAccountEntity account = OnTracAccountManager.Accounts.First();
-                        shipments.ForEach(s =>
-                        {
-                            // Assign the account ID and save the shipment
-                            s.OnTrac.OnTracAccountID = account.OnTracAccountID;
-                            using (SqlAdapter adapter = new SqlAdapter(true))
-                            {
-                                adapter.SaveAndRefetch(s);
-                                adapter.Commit();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        // There still aren't any accounts for some reason, so throw an exception
-                        throw new OnTracException("An OnTrac account must be created to process this shipment.");
-                    }
-                }
-            }
-
-            return shipments;
+            return new OnTracShipmentProcessingSynchronizer();
         }
 
         /// <summary>

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// Basic repository for retrieving Stamps accounts

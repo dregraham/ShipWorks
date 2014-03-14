@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
+namespace ShipWorks.Shipping.Carriers.iParcel
 {
     public class iParcelAccountRepository : CarrierAccountRepositoryBase<IParcelAccountEntity>, ICarrierAccountRepository<IParcelAccountEntity>
     {

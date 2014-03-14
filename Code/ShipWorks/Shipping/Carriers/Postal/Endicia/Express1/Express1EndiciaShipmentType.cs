@@ -80,6 +80,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new Express1EndiciaShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Create the Service Control
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -120,6 +128,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 CertificateInspector = originalCertificateInspector;
             }
         }
+
+        
 
         /// <summary>
         /// Process the label server shipment

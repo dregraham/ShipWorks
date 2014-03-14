@@ -129,6 +129,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new Express1StampsShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Processes a shipment.
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
