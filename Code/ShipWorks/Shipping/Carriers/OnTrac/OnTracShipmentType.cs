@@ -321,11 +321,30 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets rates from the OnTrac api
+        /// Gets rates from the OnTrac API
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            OnTracRates rateRequest = new OnTracRates(GetAccountForShipment(shipment));
+            OnTracAccountEntity account = null;
+
+            try
+            {
+                account = GetAccountForShipment(shipment);
+            }
+            catch (OnTracException ex)
+            {
+                if (ex.Message == "No OnTrac account is selected for the shipment.")
+                {
+                    // Provide a message with additional context
+                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            OnTracRates rateRequest = new OnTracRates(account);
             return rateRequest.GetRates(shipment);
         }
 
@@ -363,12 +382,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Generate the carrier specific template xml
+        /// Generate the carrier specific template XML
         /// </summary>
         public override void GenerateTemplateElements(
             ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
             // Add the labels content
             container.AddElement(
@@ -410,8 +429,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             try
             {
-                var shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
-
+                OnTracTrackedShipment shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
                 TrackingResult trackingResults = shipmentRequest.GetTrackingResults(shipment.TrackingNumber);
 
                 return trackingResults;

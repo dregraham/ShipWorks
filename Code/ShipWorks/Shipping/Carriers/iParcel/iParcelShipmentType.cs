@@ -684,12 +684,30 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
+            IParcelAccountEntity iParcelAccount = null;
+
+            try
+            {
+                iParcelAccount = repository.GetiParcelAccount(shipment);
+            }
+            catch (iParcelException ex)
+            {
+                if (ex.Message == "No i-parcel account is selected for the shipment.")
+                {
+                    // Provide a message with additional context
+                    throw new iParcelException("An i-parcel account is required to view rates.", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             // i-parcel requires that we upload item information, so fetch the order and order items
             repository.PopulateOrderDetails(shipment);
 
             List<RateResult> results = new List<RateResult>();
 
-            IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
             iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
             DataSet ratesResult = serviceGateway.GetRates(credentials, shipment);
 
