@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
                 AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
 
                 // This call to GetRates won't be recursive since the counter rate account repository will return an account
                 return GetRates(shipment);
