@@ -283,9 +283,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             CertificateRequest certificateRequest = new CertificateRequest(request.Uri, certificateInspector);
             CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
-                throw new ShippingException("ShipWorks is unable to make a secure connection to UPS.");
+                throw new UpsException("ShipWorks is unable to make a secure connection to UPS.");
             }
 
             try
