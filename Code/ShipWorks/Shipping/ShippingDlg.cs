@@ -2137,22 +2137,26 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = ShipmentTypeManager.GetType(counterRatesProcessingArgs.Shipment);
 
             DialogResult result = DialogResult.Cancel;
-            this.Invoke((MethodInvoker)delegate
-            {
-                using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
-                {
-                    result = setupWizard.ShowDialog(this);
 
-                    if (result == DialogResult.OK)
+            if (!cancelProcessing)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
                     {
-                        ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
-                        
-                        ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
-                        ServiceControl.SaveToShipments();
-                        ServiceControl.LoadAccounts();
+                        result = setupWizard.ShowDialog(this);
+
+                        if (result == DialogResult.OK)
+                        {
+                            ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                            ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
+                            ServiceControl.SaveToShipments();
+                            ServiceControl.LoadAccounts();
+                        }
                     }
-                }
-            });
+                });
+            }
 
             return result;
         }
