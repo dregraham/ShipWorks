@@ -1,8 +1,10 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
@@ -10,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -411,6 +414,61 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     throw new ShippingException(ex.Message, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Do any steps needed prior to doing the actual processing of the shipment
+        /// </summary>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+            bool isExpress1 = shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps;
+            List<StampsAccountEntity> stampsAccounts = StampsAccountManager.GetAccounts(isExpress1, false);
+
+            // Don't rely on the Stamps settings to grab the accounts here since it may have been
+            // injected with a counter rate account
+            if (!stampsAccounts.Any())
+            {
+                // Null values are passed because the rates don't matter for Stamps; we're only
+                // interested in grabbing the account that was just created
+                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+                // Invoke the counter rates callback
+                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+                {
+                    // The user canceled, so we need to stop processing
+                    shipments = null;
+                }
+                else
+                {
+                    // The user created an account, so try to grab the account and use it 
+                    // to process the shipment
+                    ShippingSettings.CheckForChangesNeeded();
+                    stampsAccounts = StampsAccountManager.GetAccounts(isExpress1, false);
+                    if (stampsAccounts.Any())
+                    {
+                        StampsAccountEntity account = stampsAccounts.First();
+                        shipments.ForEach(s =>
+                        {
+                            // Assign the account ID and save the shipment
+                            s.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+                            using (SqlAdapter adapter = new SqlAdapter(true))
+                            {
+                                adapter.SaveAndRefetch(s);
+                                adapter.Commit();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        // There still aren't any accounts for some reason, so throw an exception
+                        throw new StampsException("A Stamps account must be created to process this shipment.");
+                    }
+                }
+            }
+
+            return shipments;
         }
 
         /// <summary>

@@ -47,13 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             originControl.Initialize(ShipmentTypeCode);
 
             linkManageStampsAccounts.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
-            LoadStampsAccounts();
+            LoadAccounts();
         }
 
         /// <summary>
         /// Load the list of stamps.com accounts
         /// </summary>
-        private void LoadStampsAccounts()
+        public override void LoadAccounts()
         {
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             stampsAccount.SelectedValueChanged -= this.OnOriginChanged;
 
-            LoadStampsAccounts();
+            LoadAccounts();
 
             if (multiValue)
             {
