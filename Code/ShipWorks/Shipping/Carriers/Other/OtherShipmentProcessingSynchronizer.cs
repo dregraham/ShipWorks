@@ -37,5 +37,14 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             // Do nothing - there aren't any accounts for Other
         }
+
+        /// <summary>
+        /// If the account on the shipment is no longer valid, and there is only one account available,
+        /// this method will change the account to be that one account.
+        /// </summary>
+        public void ReplaceInvalidAccount(ShipmentEntity shipment)
+        {
+            // Do nothing - there aren't any accounts for Other
+        }
     }
 }

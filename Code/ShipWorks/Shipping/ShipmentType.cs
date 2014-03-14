@@ -723,7 +723,12 @@ namespace ShipWorks.Shipping
             List<ShipmentEntity> shipments = new List<ShipmentEntity>() { shipment };
 		    IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
 
-            if (!synchronizer.HasAccounts)
+		    if (synchronizer.HasAccounts)
+		    {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                synchronizer.ReplaceInvalidAccount(shipment);
+		    }
+            else
 		    {
 		        // Null values are passed because the rates don't matter for the general case; we're only
 		        // interested in grabbing the account that was just created

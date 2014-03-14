@@ -22,8 +22,13 @@ namespace ShipWorks.Shipping
         /// account was just created during the processing of a shipment, so we just want 
         /// to grab the first account (the one just created) and use it to process the shipment
         /// </summary>
-        /// <param name="accountID">The account identifier.</param>
         /// <param name="shipment">The shipment.</param>
         void SaveAccountToShipment(ShipmentEntity shipment);
+
+        /// <summary>
+        /// If the account on the shipment is no longer valid, and there is only one account available,
+        /// this method will change the account to be that one account.
+        /// </summary>
+        void ReplaceInvalidAccount(ShipmentEntity shipment);
     }
 }

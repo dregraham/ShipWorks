@@ -53,5 +53,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("A Stamps.com account must be created to process this shipment.");
             }
         }
+
+        /// <summary>
+        /// If the account on the shipment is no longer valid, and there is only one account available,
+        /// this method will change the account to be that one account.
+        /// </summary>
+        public void ReplaceInvalidAccount(ShipmentEntity shipment)
+        {
+            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID) == null)
+            {
+                SaveAccountToShipment(shipment);
+            }
+        }
     }
 }
