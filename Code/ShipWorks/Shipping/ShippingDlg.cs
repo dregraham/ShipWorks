@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping
         
         // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
         // counter rates during the current batch.  This variable will be for tracking that flag.
-        private bool showCounterRateSetupWizard = true;
+        private bool showBestRateCounterRateSetupWizard = true;
 
         private List<ShipmentEntity> loadedShipmentEntities;
         private bool cancelProcessing;
@@ -230,7 +230,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Sort the list of shipment types for display in the combobox
+        /// Sort the list of shipment types for display in the combo box
         /// </summary>
         private void SortShipmentTypes(List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes)
         {
@@ -257,7 +257,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnSplitterMoved(object sender, SplitterEventArgs e)
         {
-            // For some reason the tab control looks goofy and doesnt redraw after the splitter moves, so we force it
+            // For some reason the tab control looks goofy and doesn't redraw after the splitter moves, so we force it
             Refresh();
         }
 
@@ -526,7 +526,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// The second part of the load selected shipments routine, after we have assurred all carrier specific data has been loaded
+        /// The second part of the load selected shipments routine, after we have assured all carrier specific data has been loaded
         /// </summary>
         private void LoadSelectedShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<ShipmentEntity> e)
         {
@@ -549,7 +549,7 @@ namespace ShipWorks.Shipping
             // If they didn't cancel - but the selection is different from what's loaded - then the selection has changed since we started
             // this background loading, and we need to do it again.
             //
-            // If they had cancelled, then the selection will be bigger than what was loaded obviously - and the rest of this function
+            // If they had canceled, then the selection will be bigger than what was loaded obviously - and the rest of this function
             // will take care of unselecting it.
             if (!e.Canceled && HasSelectionChanged(loadedShipmentEntities))
             {
@@ -706,7 +706,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Indicates if the shipment type was considered "Activated" at the time the last ui selection was loaded.
+        /// Indicates if the shipment type was considered "Activated" at the time the last UI selection was loaded.
         /// </summary>
         private bool IsShipmentTypeActivatedUI(ShipmentTypeCode shipmentTypeCode)
         {
@@ -714,7 +714,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Indicates if the shipment type was considered "Activated" at the time the last ui selection was loaded.
+        /// Indicates if the shipment type was considered "Activated" at the time the last UI selection was loaded.
         /// </summary>
         private bool IsShipmentTypeActivatedUI(ShipmentEntity shipment)
         {
@@ -736,7 +736,7 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Apply the given shipment to the associated row in the grid.  This is used after cloned shipments were altered somehow in the background thread
-        /// and the changes need to be propagated ot the UI.
+        /// and the changes need to be propagated to the UI.
         /// </summary>
         private void ApplyShipmentToGridRow(ShipmentEntity shipment)
         {
@@ -956,7 +956,7 @@ namespace ShipWorks.Shipping
                 panelTrackingData.Visible = false;
                 panelTrackingMessage.Visible = true;
 
-                labelTrackingMessage.Text = "Multiple shipments are selected.  Select a single shipment to view tracking information.";
+                labelTrackingMessage.Text = "Multiple shipments are selected. Select a single shipment to view tracking information.";
             }
             else
             {
@@ -1920,9 +1920,7 @@ namespace ShipWorks.Shipping
                 {
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
-            },
-                                  // Each shipment to execute the code for
-                                  shipments);
+            }, shipments); // Each shipment to execute the code for
         }
 
         /// <summary>
@@ -2007,7 +2005,7 @@ namespace ShipWorks.Shipping
                 concurrencyErrors = SaveShipmentsToDatabase(shipments, true);
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
-                showCounterRateSetupWizard = true;
+                showBestRateCounterRateSetupWizard = true;
             };
 
             // Code to execute once background load is complete
@@ -2194,7 +2192,7 @@ namespace ShipWorks.Shipping
         private DialogResult BestRateCounterRatesProcessing(CounterRatesProcessingArgs counterRatesProcessingArgs)
         {
             // If the user has opted to not see counter rate setup wizard for this batch, just return.
-            if (!showCounterRateSetupWizard)
+            if (!showBestRateCounterRateSetupWizard)
             {
                 RateResult rateResult = counterRatesProcessingArgs.FilteredRates.Rates.FirstOrDefault(rr => !rr.IsCounterRate);
                 if (rateResult == null)
@@ -2214,7 +2212,7 @@ namespace ShipWorks.Shipping
 
                 if (selectedRate.IsCounterRate)
                 {
-                    setupWizardDialogResult = ShowCounterRateSetupWizard(counterRatesProcessingArgs, selectedRate);
+                    setupWizardDialogResult = ShowBestRateCounterRateSetupWizard(counterRatesProcessingArgs, selectedRate);
                 }
                 else
                 {
@@ -2229,7 +2227,7 @@ namespace ShipWorks.Shipping
             if (setupWizardDialogResult != DialogResult.OK)
             {
                 cancelProcessing = true;
-                showCounterRateSetupWizard = false;
+                showBestRateCounterRateSetupWizard = false;
 
                 this.Invoke((MethodInvoker)delegate
                 {
@@ -2249,7 +2247,7 @@ namespace ShipWorks.Shipping
         /// <remarks>The selected rate is passed into the method instead of checking the selected rate from the rate control
         /// because there is no selected rate when processing multiple shipments.  Also, it is simply for a user to deselect a rate,
         /// in which case, we should just use the cheapest.</remarks>
-        private DialogResult ShowCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs, RateResult selectedRate)
+        private DialogResult ShowBestRateCounterRateSetupWizard(CounterRatesProcessingArgs counterRatesProcessingArgs, RateResult selectedRate)
         {
             DialogResult setupWizardDialogResult;
 
@@ -2260,7 +2258,7 @@ namespace ShipWorks.Shipping
 
                 if (setupWizardDialogResult == DialogResult.OK)
                 {
-                    showCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
+                    showBestRateCounterRateSetupWizard = !rateProcessingSetupWizard.IgnoreAllCounterRates;
                     
                     counterRatesProcessingArgs.SelectedShipmentType = rateProcessingSetupWizard.SelectedShipmentType;
                     counterRatesProcessingArgs.SelectedRate = rateProcessingSetupWizard.SelectedRate;
