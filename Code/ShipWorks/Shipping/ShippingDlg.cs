@@ -400,17 +400,10 @@ namespace ShipWorks.Shipping
                 {
                     try
                     {
-                        // Only load the specific data if the shipment type is setup, b\c if its not, 
-                        // then we don't have proper defaults to load from.
-                        if (IsShipmentTypeActivatedUI((ShipmentTypeCode)shipment.ShipmentType))
-                        {
-                            ShippingManager.EnsureShipmentLoaded(shipment);
-                        }
-                            // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
-                        else
-                        {
-                            CustomsManager.LoadCustomsItems(shipment, false);
-                        }
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        
+                        // Even without the type being setup, we can still load the customs stuff.  Normally EnsureShipmentLoaded would do that for us.
+                        CustomsManager.LoadCustomsItems(shipment, false);
 
                         loaded.Add(shipment);
                     }
@@ -651,7 +644,7 @@ namespace ShipWorks.Shipping
             // and the store address has since changed, we want to update to reflect that.
             foreach (ShipmentEntity shipment in loadedShipmentEntities)
             {
-                if (!shipment.Processed && IsShipmentTypeActivatedUI(shipment))
+                if (!shipment.Processed)
                 {
                     ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
                 }
@@ -667,7 +660,7 @@ namespace ShipWorks.Shipping
             ClearPreviousSetupControl();
 
             // Show the setup control if setup is required.  Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
-            if (shipmentType != null && !IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
+            if (shipmentType != null)
             {
                 ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
                 setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
@@ -704,23 +697,7 @@ namespace ShipWorks.Shipping
                 GetRates();
             }
         }
-
-        /// <summary>
-        /// Indicates if the shipment type was considered "Activated" at the time the last UI selection was loaded.
-        /// </summary>
-        private bool IsShipmentTypeActivatedUI(ShipmentTypeCode shipmentTypeCode)
-        {
-            return uiActivatedShipmentTypes.Contains(shipmentTypeCode) || ShipmentTypeManager.GetType(shipmentTypeCode).SupportsCounterRates;
-        }
-
-        /// <summary>
-        /// Indicates if the shipment type was considered "Activated" at the time the last UI selection was loaded.
-        /// </summary>
-        private bool IsShipmentTypeActivatedUI(ShipmentEntity shipment)
-        {
-            return IsShipmentTypeActivatedUI((ShipmentTypeCode)shipment.ShipmentType);
-        }
-
+        
         /// <summary>
         /// Apply the given shipments to their associated rows in the grid.  This is used after cloned shipments were altered somehow in the background thread
         /// and the changes need to be propagated to the UI.
@@ -812,8 +789,7 @@ namespace ShipWorks.Shipping
                 {
                     newServiceControl = new MultiSelectServiceControl(rateControl);
                 }
-
-                else if (IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
+                else
                 {
                     newServiceControl = shipmentType.CreateServiceControl(rateControl);
                 }
@@ -1102,7 +1078,7 @@ namespace ShipWorks.Shipping
             if (shipments.Any())
             {
                 // If its null, its multi select
-                if (shipmentType == null || !IsShipmentTypeActivatedUI(shipmentType.ShipmentTypeCode))
+                if (shipmentType == null)
                 {
                     newCustomsControl = new CustomsControlBase();
                 }
@@ -1290,17 +1266,13 @@ namespace ShipWorks.Shipping
             {
                 if (!shipment.Processed)
                 {
-                    // Update the total shipment weight and any dynamic data changes
-                    if (IsShipmentTypeActivatedUI(shipment))
-                    {
-                        ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                        ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
-                    }
+                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
+                    ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
 
                     // If the there is a specific shipment type selected, set it
                     if (!comboShipmentType.MultiValued)
                     {
-                        shipment.ShipmentType = (int) (ShipmentTypeCode) comboShipmentType.SelectedValue;
+                        shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
                     }
                 }
             }
@@ -1423,7 +1395,7 @@ namespace ShipWorks.Shipping
             // Apply the profile to each ui displayed shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                if (!shipment.Processed && IsShipmentTypeActivatedUI(shipment))
+                if (!shipment.Processed)
                 {
                     ShippingProfileManager.ApplyProfile(shipment, profile);
                 }
@@ -1450,7 +1422,7 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                if (IsShipmentTypeActivatedUI(shipment) && shipment.ShipmentType != (int)ShipmentTypeCode.None)
+                if (shipment.ShipmentType != (int)ShipmentTypeCode.None)
                 {
                     if (!shipment.Processed && securityCreateEditProcess)
                     {
@@ -1965,7 +1937,7 @@ namespace ShipWorks.Shipping
             }
 
             // Filter out the ones we know to be already processed, or are not ready
-            shipments = shipments.Where(s => !s.Processed && IsShipmentTypeActivatedUI(s) && s.ShipmentType != (int) ShipmentTypeCode.None);
+            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
 
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
             shipments = EntityUtility.CloneEntityCollection(shipments);
