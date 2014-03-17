@@ -80,6 +80,7 @@
             this.sectionRates.Location = new System.Drawing.Point(3, 63);
             this.sectionRates.Size = new System.Drawing.Size(375, 93);
             this.sectionRates.TabIndex = 2;
+			this.sectionRates.Collapsed = true;
             // 
             // insuranceControl
             // 

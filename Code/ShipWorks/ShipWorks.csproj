@@ -567,9 +567,16 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.Designer.cs">
+      <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -6874,6 +6881,9 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaPassphraseChangeDlg.resx">
       <DependentUpon>EndiciaPassphraseChangeDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.resx">
+      <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
       <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10120,6 +10130,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10155,6 +10166,9 @@
     <None Include="Resources\calendar_7.png" />
     <None Include="Resources\box_closed4.png" />
     <None Include="Resources\box_closed5.png" />
+    <None Include="Resources\aprilfools-32x32.png" />
+    <None Include="Resources\aprilfools-48x48.png" />
+    <None Include="Resources\aprilfools-16x16.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10386,6 +10400,7 @@
     <None Include="Resources\social-facebook.png" />
     <None Include="Resources\social-twitter.png" />
     <None Include="Resources\smiley.png" />
+    <None Include="Resources\splash.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

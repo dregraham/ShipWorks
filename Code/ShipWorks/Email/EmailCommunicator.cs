@@ -598,11 +598,19 @@ namespace ShipWorks.Email
             // of the file they came from.  But since the files could come from different paths - and have the exact same filename - 
             // we have to make sure we don't create duplicates.
             Dictionary<long, string> contentIDs = new Dictionary<long, string>();
-            
+
+            // Load the html part, ensuring that it exists.  According to the resource manager, this should only fail if the resource was
+            // manually deleted, but even in that case, we can handle it more gracefully than a crash.
+            DataResourceReference htmlText = DataResourceManager.LoadResourceReference(outboxItem.HtmlPartResourceID.Value);
+            if (htmlText == null)
+            {
+                log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for HtmlPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.HtmlPartResourceID);
+                throw new EmailException("An error has occurred retrieving the body of the email.");
+            }
+
             // We have to convert all the local image references to cid's for inline html images
             string htmlContent = imageProcessor.Process(
-
-                DataResourceManager.LoadResourceReference(outboxItem.HtmlPartResourceID.Value).ReadAllText(), 
+                htmlText.ReadAllText(), 
 
                 (HtmlAttribute attribute, Uri srcUri, string imageName) =>
                 {

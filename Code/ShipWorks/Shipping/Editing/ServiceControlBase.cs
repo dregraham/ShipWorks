@@ -393,10 +393,12 @@ namespace ShipWorks.Shipping.Editing
                         else if (rateGroup.Rates.Count == 0)
                         {
                             rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
+                            ratesSection.Collapsed = false;
                         }
                         else
                         {
                             rateControl.LoadRates(rateGroup);
+                            ratesSection.Collapsed = false;
                         }
                     }
                 }
@@ -415,11 +417,6 @@ namespace ShipWorks.Shipping.Editing
                 height += rateControl.FootnoteHeight;
 
                 ratesSection.Height = height;
-
-                if (ratesSection.Collapsed)
-                {
-                    ratesSection.Collapsed = false;
-                }
             }
         }
 
