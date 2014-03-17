@@ -860,5 +860,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // that a new account has been added.
             RateCache.Instance.Clear();
         }
+
+        /// <summary>
+        /// The window is closing
+        /// </summary>
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (DialogResult != DialogResult.OK && account != null && !account.IsNew)
+            {
+                EndiciaAccountManager.DeleteAccount(account);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+            }
+        }
     }
 }

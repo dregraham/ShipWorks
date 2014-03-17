@@ -70,9 +70,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
             // Persist the account entity to the database
             EndiciaAccountManager.SaveAccount(endiciaAccount);
 
-            // Mark the new account as configured
-            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
-
             // If this is the only account, update this shipment type profiles with this account
             List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller)endiciaAccount.EndiciaReseller, false);
             if (accounts.Count == 1)

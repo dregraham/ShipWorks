@@ -64,9 +64,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             // Persist the account entity to the database
             StampsAccountManager.SaveAccount(stampsAccount);
 
-            // Mark the new account as configured
-            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Stamps);
-
             // If this is the only account, update this shipment type profiles with this account
             List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(true, false);
             if (accounts.Count == 1)
