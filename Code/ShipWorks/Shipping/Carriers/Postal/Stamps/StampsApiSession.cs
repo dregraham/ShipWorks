@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
                 string description = EnumHelper.GetDescription(isExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps);
-                throw new ShippingException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+                throw new StampsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
 
