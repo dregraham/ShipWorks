@@ -158,11 +158,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             // 
             this.gridColumnSelect.AllowEditing = false;
             this.gridColumnSelect.AllowReorder = false;
-            this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
             this.gridColumnSelect.Width = 75;
-            this.gridColumnSelect.MinimumWidth = 75;
+            this.gridColumnSelect.MinimumWidth = 50;
             // 
             // panelFootnote
             // 
