@@ -2154,6 +2154,12 @@ namespace ShipWorks.Shipping
                             ServiceControl.SaveToShipments();
                             ServiceControl.LoadAccounts();
                         }
+                        else
+                        {
+                            // User canceled out of the setup wizard for this batch, so don't show
+                            // any setup wizard for the rest of this batch
+                            cancelProcessing = true;
+                        }
                     }
                 });
             }
