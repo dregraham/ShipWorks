@@ -438,9 +438,9 @@ namespace ShipWorks.Stores.Management
             }
             else
             {
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && !isFreemiumMode)
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
                 {
-                    MessageHelper.ShowError(this, "The license you entered can only be used with the Endicia Free for eBay ShipWorks edition.");
+                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
 
                     e.NextPage = CurrentPage;
                     return;
