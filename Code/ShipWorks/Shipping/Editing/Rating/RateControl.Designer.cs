@@ -108,6 +108,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 175);
             this.sandGrid.TabIndex = 1;
+            this.sandGrid.ColumnResized += new Divelements.SandGrid.GridColumnEventHandler(this.OnColumnResized);
             this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnSelectedRateChanged);
             // 
             // gridColumnProvider
@@ -126,29 +127,26 @@ namespace ShipWorks.Shipping.Editing.Rating
             // 
             this.gridColumnService.AllowEditing = false;
             this.gridColumnService.AllowReorder = false;
-            this.gridColumnService.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";
-            this.gridColumnService.Width = 393;
+            this.gridColumnService.Width = 175;
             // 
             // gridColumnDays
             // 
             this.gridColumnDays.AllowEditing = false;
             this.gridColumnDays.AllowReorder = false;
-            this.gridColumnDays.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnDays.AutoSizeIncludeHeader = true;
             this.gridColumnDays.Clickable = false;
             this.gridColumnDays.HeaderText = "Days";
-            this.gridColumnDays.Width = 32;
+            this.gridColumnDays.Width = 75;
             // 
             // gridColumnRate
             // 
-            this.gridColumnRate.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnRate.AutoSizeIncludeHeader = true;
             this.gridColumnRate.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
             this.gridColumnRate.Clickable = false;
             this.gridColumnRate.HeaderText = "Rate";
-            this.gridColumnRate.Width = 31;
+            this.gridColumnRate.Width = 50;
             // 
             // gridColumnSelect
             // 
