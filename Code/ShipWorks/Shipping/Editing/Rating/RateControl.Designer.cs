@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Divelements.SandGrid;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -108,7 +109,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.sandGrid.ShadeAlternateRows = true;
             this.sandGrid.Size = new System.Drawing.Size(493, 175);
             this.sandGrid.TabIndex = 1;
-            this.sandGrid.ColumnResized += new Divelements.SandGrid.GridColumnEventHandler(this.OnColumnResized);
             this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnSelectedRateChanged);
             // 
             // gridColumnProvider
@@ -126,36 +126,43 @@ namespace ShipWorks.Shipping.Editing.Rating
             // gridColumnService
             // 
             this.gridColumnService.AllowEditing = false;
+            this.gridColumnService.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnService.AllowReorder = false;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";
             this.gridColumnService.Width = 175;
+            this.gridColumnRate.MinimumWidth = 175;
             // 
             // gridColumnDays
             // 
             this.gridColumnDays.AllowEditing = false;
+            this.gridColumnDays.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnDays.AllowReorder = false;
             this.gridColumnDays.AutoSizeIncludeHeader = true;
             this.gridColumnDays.Clickable = false;
             this.gridColumnDays.HeaderText = "Days";
             this.gridColumnDays.Width = 75;
+            this.gridColumnRate.MinimumWidth = 40;
             // 
             // gridColumnRate
             // 
             this.gridColumnRate.AutoSizeIncludeHeader = true;
+            this.gridColumnRate.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnRate.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
             this.gridColumnRate.Clickable = false;
             this.gridColumnRate.HeaderText = "Rate";
             this.gridColumnRate.Width = 50;
+            this.gridColumnRate.MinimumWidth = 50;
             // 
             // gridColumnSelect
             // 
             this.gridColumnSelect.AllowEditing = false;
             this.gridColumnSelect.AllowReorder = false;
-            this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
+            this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
-            this.gridColumnSelect.Width = 0;
+            this.gridColumnSelect.Width = 75;
+            this.gridColumnSelect.MinimumWidth = 75;
             // 
             // panelFootnote
             // 

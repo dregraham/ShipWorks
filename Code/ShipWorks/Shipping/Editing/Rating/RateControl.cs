@@ -51,7 +51,6 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
 
-            ResizedColumnsManually = false;
             ShowAllRates = true;
 
             sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
@@ -70,12 +69,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// into the control, a group without any rate results is returned.
         /// </summary>
         public RateGroup RateGroup { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the columns have been resized manually.
-        /// </summary>
-        public bool ResizedColumnsManually { get; set; }
-
+        
         /// <summary>
         /// Return the displayed height of the footnote section
         /// </summary>
@@ -213,63 +207,13 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                     sandGrid.Rows.Add(row);
                 }
-
-                AdjustColumnWidths();
                 
                 AddShowMoreRatesRow();
 
                 UpdateFootnotes(rateGroup);
             }
         }
-
-        /// <summary>
-        /// Adjusts the column widths to fit the contents of the grid if the columns have not 
-        /// been resized by the user.
-        /// </summary>
-        private void AdjustColumnWidths()
-        {
-            // If the user has resized the columns manually, we want to keep those widths
-            if (!ResizedColumnsManually && sandGrid.Rows.Count > 0)
-            {
-                // Adjust the columns to fit the content (up to a limit) as best as possible. 
-                // The intent here is to get around a limitation of the SandGrid that won't
-                // size the columns to fit the content when the AutoSize property is anything
-                // but "Contents". A minimum is set on each column to account for the header
-                // being longer than any text within that column
-                using (Graphics g = CreateGraphics())
-                {
-                    GridRow[] rows = new GridRow[sandGrid.Rows.Count];
-                    sandGrid.Rows.CopyTo(rows, 0);
-
-                    // Service/description column
-                    const int MaxServiceWidth = 275;
-                    string longestDescription = rows.Select(r => r.Cells[1]).OrderByDescending(c => c.Text.Length).First().Text;
-
-                    // Range for the the service/description column is between 150 and MaxServiceWidth
-                    int serviceColumnWidth = (int)Math.Min(MaxServiceWidth, (Math.Max(150, (decimal)g.MeasureString(longestDescription, sandGrid.Font).Width + 5)));
-                    gridColumnService.Width = serviceColumnWidth;
-
-
-                    // Days column
-                    const int MaxDaysWidth = 75;
-                    string longestDays = rows.Select(r => r.Cells[2]).OrderByDescending(c => c.Text.Length).First().Text;
-
-                    // Range for the the days column is between 35 and MaxDaysWidth
-                    int daysColumnWidth = (int)Math.Min(MaxDaysWidth, Math.Max(35, (decimal)g.MeasureString(longestDays, sandGrid.Font).Width + 5));
-                    gridColumnDays.Width = daysColumnWidth;
-
-
-                    // Rate column
-                    const int MaxRateWidth = 60;
-                    string longestRate = rows.Select(r => r.Cells[3]).OrderByDescending(c => c.Text.Length).First().Text;
-
-                    // Range for the the rate column is between 35 and MaxRateWidth
-                    int rateColumnWidth = (int)Math.Min(MaxRateWidth, Math.Max(35, (decimal)g.MeasureString(longestRate, sandGrid.Font).Width + 5));
-                    gridColumnRate.Width = rateColumnWidth;
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
@@ -457,16 +401,6 @@ namespace ShipWorks.Shipping.Editing.Rating
                 ClearSelection();
                 sandGrid.SelectionChanged += OnSelectedRateChanged;
             }
-        }
-
-        /// <summary>
-        /// Called when a [column is resized by the user].
-        /// </summary>
-        private void OnColumnResized(object sender, GridColumnEventArgs e)
-        {
-            // Note that the columns have been manually resized for this instance,
-            // so we don't resize the columns the next time rates are loaded
-            ResizedColumnsManually = true;
         }
     }
 }
