@@ -146,20 +146,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 throw new ShippingException("The shipment has not been processed in WorldShip.");
             }
 
-            // Mail Innovations shipments cannot be tracked in the traditional way
-            if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
-            {
-                // open the browser
-                WebHelper.OpenUrl(String.Format("http://www.ups-mi.net/packageID/PackageID.aspx?PID={0}", shipment.TrackingNumber), DisplayHelper.GetActiveForm());
-
-                // Let the user know we are showing the tracking details in the browser
-                TrackingResult track = new TrackingResult
-                    {
-                        Summary = "ShipWorks has opened the UPS Mail Innovations tracking website."
-                    };
-                return track;
-            }
-
             return base.TrackShipment(shipment);
         }
 

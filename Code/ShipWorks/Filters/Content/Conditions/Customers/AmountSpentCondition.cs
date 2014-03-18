@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 
@@ -13,7 +7,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
     /// Condition based on the how much a customer has spent
     /// </summary>
     [ConditionElement("Amount Spent", "Customer.AmountSpent")]
-    class AmountSpentCondition : NumericCondition<decimal>
+    class AmountSpentCondition : MoneyCondition
     {
         /// <summary>
         /// Constructor
@@ -22,9 +16,6 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
         {
             // Can't have a a count lower than zero
             minimumValue = 0;
-
-            // Format as currency
-            format = "C";
         }
 
         /// <summary>

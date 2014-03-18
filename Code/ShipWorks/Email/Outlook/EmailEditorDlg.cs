@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using log4net;
 using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
@@ -28,6 +29,7 @@ namespace ShipWorks.Email.Outlook
         long emailID;
         EmailOutboundEntity email;
         SqlEntityLock messageLock;
+        static readonly ILog log = LogManager.GetLogger(typeof(EmailEditorDlg));
 
         /// <summary>
         /// Constructor
@@ -119,17 +121,36 @@ namespace ShipWorks.Email.Outlook
                 DataResourceManager.LoadConsumerResourceReferences(emailID);
 
                 // We need to get our base href added for displaying images
-                TemplateHtmlDocument htmlDocument = new TemplateHtmlDocument(
-                    DataResourceManager.LoadResourceReference(email.HtmlPartResourceID.Value).ReadAllText(),
-                    TemplateResultUsage.ShipWorksDisplay);
+                DataResourceReference htmlResource = DataResourceManager.LoadResourceReference(email.HtmlPartResourceID.Value);
 
-                htmlEditor.Html = htmlDocument.CompleteHtml;
+                if (htmlResource != null)
+                {
+                    TemplateHtmlDocument htmlDocument = new TemplateHtmlDocument(htmlResource.ReadAllText(), TemplateResultUsage.ShipWorksDisplay);
+                    htmlEditor.Html = htmlDocument.CompleteHtml;   
+                }
+                else
+                {
+                    // According to the resource manager, this should only fail if the resource was
+                    // manually deleted, but even in that case, we can handle it more gracefully than a crash.
+                    log.ErrorFormat("An error has occurred loading EmailOutboundEntity with ID of {0}. Could not get Resource for HtmlPartResourceID {1}.", emailID, email.HtmlPartResourceID);
+                    MessageHelper.ShowError(this, "ShipWorks could not load the contents of this email.");
+                }
             }
             else
             {
-                htmlEditor.Html = TemplateResultFormatter.EncodeForHtml(
-                    DataResourceManager.LoadResourceReference(email.PlainPartResourceID).ReadAllText(),
-                    TemplateOutputFormat.Text);
+                DataResourceReference textResource = DataResourceManager.LoadResourceReference(email.PlainPartResourceID);
+
+                if (textResource != null)
+                {
+                    htmlEditor.Html = TemplateResultFormatter.EncodeForHtml(textResource.ReadAllText(), TemplateOutputFormat.Text);
+                }
+                else
+                {
+                    // According to the resource manager, this should only fail if the resource was
+                    // manually deleted, but even in that case, we can handle it more gracefully than a crash.
+                    log.ErrorFormat("An error has occurred loading EmailOutboundEntity with ID of {0}. Could not get Resource for PlainPartResourceID {1}.", emailID, email.PlainPartResourceID);
+                    MessageHelper.ShowError(this, "ShipWorks could not load the contents of this email.");
+                }
             }
         }
 

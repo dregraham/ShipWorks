@@ -3673,6 +3673,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap splash_april {
+            get {
+                object obj = ResourceManager.GetObject("splash_april", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap squares_blue {
             get {
                 object obj = ResourceManager.GetObject("squares_blue", resourceCulture);
@@ -3885,7 +3895,23 @@ namespace ShipWorks.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap sw_cubes_16 {
             get {
+
+                if (DateTime.Today == new DateTime(2014, 4, 1))
+                {
+                    return sw_cubes_16_april;
+                }
+
                 object obj = ResourceManager.GetObject("sw_cubes_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sw_cubes_16_april {
+            get {
+                object obj = ResourceManager.GetObject("sw_cubes_16_april", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3895,7 +3921,23 @@ namespace ShipWorks.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap sw_cubes_32x32 {
             get {
+
+                if (DateTime.Today == new DateTime(2014, 4, 1))
+                {
+                    return sw_cubes_32x32_april;
+                }
+
                 object obj = ResourceManager.GetObject("sw_cubes_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sw_cubes_32x32_april {
+            get {
+                object obj = ResourceManager.GetObject("sw_cubes_32x32_april", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3905,7 +3947,23 @@ namespace ShipWorks.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap sw_cubes_big {
             get {
+
+                if (DateTime.Today == new DateTime(2014, 4, 1))
+                {
+                    return sw_cubes_big_april;
+                }
+
                 object obj = ResourceManager.GetObject("sw_cubes_big", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sw_cubes_big_april {
+            get {
+                object obj = ResourceManager.GetObject("sw_cubes_big_april", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

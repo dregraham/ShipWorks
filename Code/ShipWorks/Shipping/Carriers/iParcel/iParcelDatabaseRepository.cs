@@ -21,8 +21,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private const string ThermalColumnName = "ParcelLabelEPL";
 
         private const string PackageInfoTableName = "PackageInfo";
+        private const string CostInfoTableName = "CostInfo";
         private const string TrackingNumberColumnName = "TrackingNumber";
         private const string ParcelNumberColumnName = "ParcelNumber";
+        private const string PackageTotalCurrencyColumnName = "PackageTotalCurrency";
 
         private readonly ILog log = LogManager.GetLogger(typeof(iParcelDatabaseRepository));
         
@@ -69,6 +71,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             try
             {
+                decimal shipmentCost = 0m;
+
                 for (int rowIndex = 0; rowIndex < iParcelResponse.Tables[PackageInfoTableName].Rows.Count; rowIndex++)
                 {
                     IParcelPackageEntity packageEntity = shipment.IParcel.Packages[rowIndex];
@@ -79,7 +83,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     {
                         shipment.TrackingNumber = packageEntity.TrackingNumber;
                     }
+
+                    decimal packageCost = 0;
+                    if (iParcelResponse.Tables[CostInfoTableName] != null &&
+                        rowIndex <= (iParcelResponse.Tables[CostInfoTableName].Rows.Count - 1) &&
+                        iParcelResponse.Tables[CostInfoTableName].Rows[rowIndex][PackageTotalCurrencyColumnName] != null)
+                    {
+                        decimal.TryParse(iParcelResponse.Tables[CostInfoTableName].Rows[rowIndex][PackageTotalCurrencyColumnName].ToString(), out packageCost);
+                    }
+                    shipmentCost += packageCost;
                 }
+
+                shipment.ShipmentCost = shipmentCost;
             }
             catch (Exception ex)
             {

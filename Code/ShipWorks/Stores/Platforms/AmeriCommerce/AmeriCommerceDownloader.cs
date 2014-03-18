@@ -301,8 +301,11 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 item.Quantity = orderItemTrans.quantity.GetValue(1);
                 item.UnitPrice = orderItemTrans.price.GetValue(0M);
                 item.UnitCost = orderItemTrans.cost.GetValue(0M);
-                item.Thumbnail = orderItemTrans.ItemThumb ?? "";
+
+                // URLs come down as relative, so we need to prefix them with the store URL
+                item.Thumbnail = orderItemTrans.ItemThumb == null ? string.Empty : ((AmeriCommerceStoreEntity)Store).StoreUrl + orderItemTrans.ItemThumb;
                 item.Image = item.Thumbnail;
+
                 item.Weight = client.GetWeightInPounds(orderItemTrans.Weight.GetValue(0M), orderItemTrans.WeightUnitID.GetValue(0));
 
                 LoadVariations(item, orderItemTrans);
