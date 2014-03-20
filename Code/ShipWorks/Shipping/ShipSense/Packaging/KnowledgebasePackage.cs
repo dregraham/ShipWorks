@@ -1,0 +1,54 @@
+﻿using System;
+using System.Reflection;
+using Interapptive.Shared.Enums;
+
+namespace ShipWorks.Shipping.ShipSense.Packaging
+{
+    /// <summary>
+    /// A DTO of package information that will be serialized in an entry to the ShipSense knowledge base.
+    /// </summary>
+    [Serializable]
+    [Obfuscation(Exclude = true)]
+    public class KnowledgebasePackage
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebasePackage"/> class.
+        /// </summary>
+        public KnowledgebasePackage()
+        {
+            WeightUnitOfMeasure = WeightUnitOfMeasure.Pounds;
+        }
+
+        /// <summary>
+        /// Gets or sets the length.
+        /// </summary>
+        public double Length { get; set; }
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public double Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        public double Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        public double Weight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the weight unit of measure.
+        /// </summary>
+        public WeightUnitOfMeasure WeightUnitOfMeasure { get; set; }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public double AdditionalWeight { get; set; }
+
+        
+    }
+}

@@ -5,13 +5,13 @@ using ShipWorks.Shipping.ShipSense.Hashing;
 namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 {
     [TestClass]
-    public class KnowledgeBaseHashTest
+    public class KnowledgebaseHashTest
     {
-        private readonly KnowledgeBaseHash testObject;
+        private readonly KnowledgebaseHash testObject;
 
-        public KnowledgeBaseHashTest()
+        public KnowledgebaseHashTest()
         {
-            testObject = new KnowledgeBaseHash();
+            testObject = new KnowledgebaseHash();
         }
 
         [TestMethod]

@@ -2,7 +2,7 @@
 
 namespace ShipWorks.Shipping.ShipSense.Hashing
 {
-    public interface IKnowledgeBaseHash
+    public interface IKnowledgebaseHash
     {
         /// <summary>
         /// Uses the data in the order to compute a hash to identify an entry in the 
