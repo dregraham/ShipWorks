@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsApiCore.WriteShipmentReference(ups.ReferenceNumber2, ups, xmlWriter, true);
 
             // International stuff
-            if (!ShipmentType.IsDomestic(shipment))
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment))
             {
                 string customsDescription = ups.CustomsDescription;
 
@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // International requires attention
-            if (attention.Length == 0 && (!ShipmentType.IsDomestic(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode)))
+            if (attention.Length == 0 && (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode)))
             {
                 attention = companyOrName;
             }
@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             WriteInternationalBilling(ups, account, xmlWriter);
 
             // Commercial invoice requires Sold To 
-            if (!ShipmentType.IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
             {
                 xmlWriter.WriteStartElement("SoldTo");
                 xmlWriter.WriteElementString("CompanyName", companyOrName);
@@ -315,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void WriteInternationalBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
-            if (!ShipmentType.IsDomestic(ups.Shipment))
+            if (!ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
             {
                 // Payment info (SurePost must be sender)
                 if (ups.PayorType == (int) UpsPayorType.Sender || UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service))
@@ -442,7 +442,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void WriteDomesticBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
-            if (ShipmentType.IsDomestic(ups.Shipment))
+            if (ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
             {
                 // Payment info (SurePost must be sender)
                 if (ups.PayorType == (int) UpsPayorType.Sender ||
@@ -537,7 +537,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             bool isMilitarySurePost = isSurePost && PostalUtility.IsMilitaryState(ups.Shipment.ShipStateProvCode);
 
             // Has to be internation or Military SurePost
-            if (ShipmentType.IsDomestic(ups.Shipment) && !isMilitarySurePost)
+            if (ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment) && !isMilitarySurePost)
             {
                 return;
             }
@@ -695,7 +695,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("PackageID", packageID);
 
                 // If an international shipment, write out the MILabelCN22Indicator so that the label will be the combined label with CN22 form
-                if (!ShipmentType.IsDomestic(ups.Shipment))
+                if (!ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
                 {
                     xmlWriter.WriteElementString("MILabelCN22Indicator", string.Empty);
                 }

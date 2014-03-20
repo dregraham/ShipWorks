@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
             UpsShipmentEntity ups = shipment.Ups;
-            bool isDomestic = ShipmentType.IsDomestic(shipment);
+            bool isDomestic = ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 
             // If the row exists already remove it before we start.
             adapter.DeleteEntity(new WorldShipShipmentEntity(shipment.ShipmentID));

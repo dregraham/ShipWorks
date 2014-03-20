@@ -301,6 +301,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return confirmationTypes;
-        }        
+        }
+
+        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        {
+            return base.IsDomestic(shipmentEntity) || IsPuertoRicoShipment(shipmentEntity);
+        }
     }
 }

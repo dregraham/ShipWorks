@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             xmlWriter.WriteElementString("TotalPackagesInShipment", ups.Packages.Count.ToString(CultureInfo.InvariantCulture));
 
-            if (!ShipmentType.IsDomestic(shipment))
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment))
             {
                 xmlWriter.WriteStartElement("InvoiceLineTotal");
 

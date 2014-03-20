@@ -529,14 +529,14 @@ namespace ShipWorks.Shipping
         /// Determines if a shipment will be domestic or international
         /// </summary>
         /// <param name="shipmentEntity"></param>
-        public static bool IsDomestic(ShipmentEntity shipmentEntity)
+        public virtual bool IsDomestic(ShipmentEntity shipmentEntity)
         {
             if (shipmentEntity == null)
             {
                 throw new ArgumentNullException("shipmentEntity");
             }
 
-            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant(); // || IsPuertoRicoShipment(shipmentEntity);
         }
 
         /// <summary>
@@ -600,7 +600,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            bool requiresCustoms = !ShipmentType.IsDomestic(shipment);
+            bool requiresCustoms = !IsDomestic(shipment);
 
             if (shipment.ShipCountryCode == "US")
             {
@@ -641,6 +641,18 @@ namespace ShipWorks.Shipping
             }
 
             return requiresCustoms;
+        }
+
+        public static bool IsPuertoRicoShipment(ShipmentEntity shipment)
+        {
+            return (shipment.OriginCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && IsPuertoRicoAddress(shipment, "Ship")) ||
+                   (IsPuertoRicoAddress(shipment, "Origin") && shipment.ShipCountryCode.Equals("UR", StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static bool IsPuertoRicoAddress(EntityBase2 entity, string fieldPrefix)
+        {
+            PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
+            return address.CountryCode == "PR" || (address.CountryCode == "US" && address.StateProvCode == "PR");
         }
     }
 }
