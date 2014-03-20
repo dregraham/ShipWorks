@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
@@ -13,11 +14,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
     [TestClass]
     public class KnowledgebaseEntryTest
     {
-        private readonly KnowledgebaseEntry testObject;
+        private KnowledgebaseEntry testObject;
 
         private List<IPackageAdapter> adapters;
-        private Mock<IPackageAdapter> adapter1;
-        private Mock<IPackageAdapter> adapter2;
+        private readonly Mock<IPackageAdapter> adapter1;
+        private readonly Mock<IPackageAdapter> adapter2;
 
         public KnowledgebaseEntryTest()
         {
@@ -71,6 +72,24 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     WeightUnitOfMeasure = WeightUnitOfMeasure.Grams
                 }
             };
+        }
+
+        [TestMethod]
+        public void Constructor_HydratingFromJson_Test()
+        {
+            KnowledgebaseEntry hydratedEntry = new KnowledgebaseEntry(testObject.ToJson());
+
+            Assert.AreEqual(testObject.Packages.Count(), hydratedEntry.Packages.Count());
+
+            for (int i = 0; i < hydratedEntry.Packages.Count(); i++)
+            {
+                Assert.AreEqual(testObject.Packages.ElementAt(i).AdditionalWeight, hydratedEntry.Packages.ElementAt(i).AdditionalWeight);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Height, hydratedEntry.Packages.ElementAt(i).Height);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Length, hydratedEntry.Packages.ElementAt(i).Length);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).WeightUnitOfMeasure, hydratedEntry.Packages.ElementAt(i).WeightUnitOfMeasure);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
+            }
         }
 
         [TestMethod]
@@ -260,6 +279,17 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
             }
         }
+
+        [TestMethod]
+        public void ToJson_Test()
+        {
+            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"WeightUnitOfMeasure\":1,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"WeightUnitOfMeasure\":3,\"AdditionalWeight\":2.5}]}";
+            
+            string actualJson = testObject.ToJson();
+            Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
+        }
+
+
     }
 }
 

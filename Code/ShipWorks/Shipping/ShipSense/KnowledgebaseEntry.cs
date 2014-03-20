@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.ShipSense
     /// A class representing the shipment/package information of an entry in
     /// the ShipSense knowledge base.
     /// </summary>
+    [Serializable]
     public class KnowledgebaseEntry
     {
         private List<KnowledgebasePackage> packages;
@@ -22,12 +24,32 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
+        /// </summary>
+        /// <param name="serializedJson">The JSON representation of a KnowledgebaseEntry that has been serialized.</param>
+        public KnowledgebaseEntry(string serializedJson)
+            : this()
+        {
+            KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
+            this.packages = deserializedEntry.Packages.ToList();
+        }
+
+        /// <summary>
         /// Gets or sets the packages associated with a knowledge base entry.
         /// </summary>
         public IEnumerable<KnowledgebasePackage> Packages
         {
             get { return packages; }
             set { packages = new List<KnowledgebasePackage>(value);}
+        }
+
+        /// <summary>
+        /// Serializes the an instance to a JSON formatted string.
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
         /// <summary>
