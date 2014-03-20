@@ -436,6 +436,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShippingSettingsEntity:
 					toReturn = this.ShippingSettings;
 					break;
+				case ShipWorks.Data.Model.EntityType.ShipSenseKnowledgeBaseEntity:
+					toReturn = this.ShipSenseKnowledgeBase;
+					break;
 				case ShipWorks.Data.Model.EntityType.ShopifyOrderEntity:
 					toReturn = this.ShopifyOrder;
 					break;
@@ -1299,6 +1302,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ShippingSettingsEntity> ShippingSettings
 		{
 			get { return new DataSource2<ShippingSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipSenseKnowledgeBaseEntity instances in the database.</summary>
+		public DataSource2<ShipSenseKnowledgeBaseEntity> ShipSenseKnowledgeBase
+		{
+			get { return new DataSource2<ShipSenseKnowledgeBaseEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShopifyOrderEntity instances in the database.</summary>

@@ -15824,6 +15824,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ShipSenseKnowledgeBaseEntity</summary>
+	public partial class ShipSenseKnowledgeBaseFields
+	{
+		/// <summary>Creates a new ShipSenseKnowledgeBaseEntity.Hash field instance</summary>
+		public static EntityField2 Hash
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgeBaseFieldIndex.Hash);}
+		}
+		/// <summary>Creates a new ShipSenseKnowledgeBaseEntity.Entry field instance</summary>
+		public static EntityField2 Entry
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgeBaseFieldIndex.Entry);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ShopifyOrderEntity</summary>
 	public partial class ShopifyOrderFields
 	{

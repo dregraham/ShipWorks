@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((161 + 0));
+			base.InitClass((162 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -181,6 +181,7 @@ namespace ShipWorks.Data.Adapter
 			InitShippingProfileEntityMappings();
 			InitShippingProviderRuleEntityMappings();
 			InitShippingSettingsEntityMappings();
+			InitShipSenseKnowledgeBaseEntityMappings();
 			InitShopifyOrderEntityMappings();
 			InitShopifyOrderItemEntityMappings();
 			InitShopifyStoreEntityMappings();
@@ -2344,6 +2345,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 57 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
+		}
+		/// <summary>Inits ShipSenseKnowledgeBaseEntity's mappings</summary>
+		private void InitShipSenseKnowledgeBaseEntityMappings()
+		{
+			base.AddElementMapping( "ShipSenseKnowledgeBaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgeBase", 2 );
+			base.AddElementFieldMapping( "ShipSenseKnowledgeBaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
+			base.AddElementFieldMapping( "ShipSenseKnowledgeBaseEntity", "Entry", "Entry", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
 		/// <summary>Inits ShopifyOrderEntity's mappings</summary>
 		private void InitShopifyOrderEntityMappings()

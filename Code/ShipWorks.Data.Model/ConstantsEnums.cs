@@ -7463,6 +7463,21 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipSenseKnowledgeBase.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ShipSenseKnowledgeBaseFieldIndex:int
+	{
+		///<summary>Hash. </summary>
+		Hash,
+		///<summary>Entry. </summary>
+		Entry,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrder.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9731,6 +9746,8 @@ namespace ShipWorks.Data.Model
 		ShippingProviderRuleEntity,
 		///<summary>ShippingSettings</summary>
 		ShippingSettingsEntity,
+		///<summary>ShipSenseKnowledgeBase</summary>
+		ShipSenseKnowledgeBaseEntity,
 		///<summary>ShopifyOrder</summary>
 		ShopifyOrderEntity,
 		///<summary>ShopifyOrderItem</summary>

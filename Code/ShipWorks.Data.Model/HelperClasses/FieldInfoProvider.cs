@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (161 + 0));
+			base.InitClass( (162 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -182,6 +182,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShippingProfileEntityInfos();
 			InitShippingProviderRuleEntityInfos();
 			InitShippingSettingsEntityInfos();
+			InitShipSenseKnowledgeBaseEntityInfos();
 			InitShopifyOrderEntityInfos();
 			InitShopifyOrderItemEntityInfos();
 			InitShopifyStoreEntityInfos();
@@ -2220,6 +2221,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 30, 0, 0);
+		}
+		/// <summary>Inits ShipSenseKnowledgeBaseEntity's FieldInfo objects</summary>
+		private void InitShipSenseKnowledgeBaseEntityInfos()
+		{
+			base.AddElementFieldInfo("ShipSenseKnowledgeBaseEntity", "Hash", typeof(System.String), true, false, false, false,  (int)ShipSenseKnowledgeBaseFieldIndex.Hash, 64, 0, 0);
+			base.AddElementFieldInfo("ShipSenseKnowledgeBaseEntity", "Entry", typeof(System.String), false, false, false, false,  (int)ShipSenseKnowledgeBaseFieldIndex.Entry, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()
