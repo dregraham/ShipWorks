@@ -890,6 +890,11 @@ namespace ShipWorks.Shipping
                 throw new ArgumentNullException("shipment");
             }
 
+            if (shipment.Order == null)
+            {
+                shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            }
+
             StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
             StoreType storeType = StoreTypeManager.GetType(storeEntity);
 
