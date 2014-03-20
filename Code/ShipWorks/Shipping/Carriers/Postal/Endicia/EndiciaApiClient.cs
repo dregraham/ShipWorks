@@ -392,9 +392,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
 
             // Dims
-            if (packagingType == PostalPackagingType.Package || packagingType == PostalPackagingType.Cubic)
+            if (packagingType == PostalPackagingType.Package)
             {
                 request.MailpieceDimensions = new Dimensions();
+
+                // Force at least 1x1x1 here so we at least get an answer back
+                request.MailpieceDimensions.Length = Math.Max(1, postal.DimsLength);
+                request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
+                request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
+            }
+            else if (packagingType == PostalPackagingType.Cubic)
+            {
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // round up to 1 like is done with the Package type
+                request.MailpieceDimensions = new Dimensions();
+
                 request.MailpieceDimensions.Length = postal.DimsLength;
                 request.MailpieceDimensions.Width = postal.DimsWidth;
                 request.MailpieceDimensions.Height = postal.DimsHeight;
