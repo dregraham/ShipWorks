@@ -130,5 +130,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         {
             package.IParcelPackageID = packageId;
         }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(IParcelAccountEntity account)
+        {
+            return account.Description;
+        }
     }
 }

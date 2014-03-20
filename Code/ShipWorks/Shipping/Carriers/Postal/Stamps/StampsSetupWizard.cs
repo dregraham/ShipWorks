@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings.WizardPages;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.Business;
-using System.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
     /// Setup wizard for processing shipments with Stamps.com
     /// </summary>
-    public partial class StampsSetupWizard : WizardForm
+    public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private StampsAccountEntity stampsAccount;
         private StampsRegistration stampsRegistration;
@@ -359,7 +355,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                StampsApiSession.AuthenticateUser(userID, password.Text, false);
+                new StampsApiSession().AuthenticateUser(userID, password.Text, false);
 
                 if (stampsAccount == null)
                 {
@@ -419,6 +415,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (DialogResult != DialogResult.OK && stampsAccount != null && !stampsAccount.IsNew)
             {
                 StampsAccountManager.DeleteAccount(stampsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+
+                // If this is the only account, update this shipment type profiles with this account
+                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(false);
+                if (accounts.Count == 1)
+                {
+                    StampsAccountEntity accountEntity = accounts.First();
+
+                    // Update any profiles to use this account if this is the only account
+                    // in the system. This is to account for the situation where there a multiple
+                    // profiles that may be associated with a previous account that has since
+                    // been deleted. 
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Stamps))
+                    {
+                        if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
+                        {
+                            shippingProfileEntity.Postal.Stamps.StampsAccountID = accountEntity.StampsAccountID;
+                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                        }
+                    }
+                }
             }
         }
 

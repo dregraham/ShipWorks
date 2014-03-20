@@ -145,6 +145,12 @@
   <data name="stamps" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Shipping\Icons\stamps.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="truck_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shipping\Icons\truck_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="truck_brown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shipping\Icons\truck_brown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ups" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Shipping\Icons\ups.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

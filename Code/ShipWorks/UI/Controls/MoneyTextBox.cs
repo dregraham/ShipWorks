@@ -24,8 +24,10 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public MoneyTextBox()
         {
-
+            IgnoreSet = false;
         }
+
+        public bool IgnoreSet { get; set; }
 
         /// <summary>
         /// Get \ set the amount
@@ -35,7 +37,7 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                ParseAmount(Text);
+                currentAmount = ParseAmount(Text);    
 
                 return currentAmount;
             }
@@ -43,9 +45,12 @@ namespace ShipWorks.UI.Controls
             {
                 MultiValued = false;
 
-                SetCurrentAmount(value);
+                if (!IgnoreSet)
+                {
+                    SetCurrentAmount(value);
 
-                this.SelectionStart = base.Text.Length;
+                    this.SelectionStart = base.Text.Length;
+                }
             }
         }
 
@@ -62,33 +67,36 @@ namespace ShipWorks.UI.Controls
             {
                 MultiValued = false;
 
-                ParseAmount(value);
+                SetCurrentAmount(ParseAmount(value));
+
+                this.SelectionStart = base.Text.Length;
             }
         }
-
+        
         /// <summary>
         /// Parse the value in the text box
         /// </summary>
-        private void ParseAmount(string value)
+        private decimal ParseAmount(string value)
         {
+            decimal parsedAmount;
             if (value.Length == 0)
             {
-                SetCurrentAmount(0);
+                parsedAmount = 0;
             }
             else
             {
                 decimal amount;
                 if (decimal.TryParse(value, NumberStyles.Currency, null, out amount))
                 {
-                    SetCurrentAmount(amount);
+                    parsedAmount = amount;
                 }
                 else
                 {
-                    FormatAmountText();
+                    parsedAmount = currentAmount;
                 }
             }
 
-            this.SelectionStart = base.Text.Length;
+            return parsedAmount;
         }
 
         /// <summary>
@@ -138,7 +146,7 @@ namespace ShipWorks.UI.Controls
         {
             if (keyData == Keys.Enter)
             {
-                ParseAmount(Text);
+                SetCurrentAmount(ParseAmount(Text));
 
                 return true;
             }
@@ -153,7 +161,7 @@ namespace ShipWorks.UI.Controls
         {
             base.OnLeave(e);
 
-            ParseAmount(Text);
+            SetCurrentAmount(ParseAmount(Text));
         }
     }
 }

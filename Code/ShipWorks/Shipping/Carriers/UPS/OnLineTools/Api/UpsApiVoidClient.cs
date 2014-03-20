@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -17,14 +18,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static void VoidShipment(ShipmentEntity shipment)
         {
-            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
+            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
             // Create the void request writer
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.ShipVoid, account);
 
             string trackingNumber = shipment.TrackingNumber;
 
-            // For test server use builtin number
+            // For test server use built-in number
             if (UpsWebClient.UseTestServer)
             {
                 trackingNumber = "1Z12345E0390817264";

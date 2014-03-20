@@ -57,7 +57,6 @@
             this.labelSortType = new System.Windows.Forms.Label();
             this.entryFacility = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.sortType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -74,13 +73,6 @@
             ((System.ComponentModel.ISupportInitialize) (this.sectionEntryFacility)).BeginInit();
             this.sectionEntryFacility.ContentPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sectionRates
-            // 
-            this.sectionRates.Location = new System.Drawing.Point(3, 63);
-            this.sectionRates.Size = new System.Drawing.Size(375, 93);
-            this.sectionRates.TabIndex = 2;
-			this.sectionRates.Collapsed = true;
             // 
             // insuranceControl
             // 
@@ -100,7 +92,7 @@
             // 
             // personControl
             // 
-            this.personControl.Size = new System.Drawing.Size(285, 330);
+            this.personControl.Size = new System.Drawing.Size(361, 330);
             // 
             // sectionReturns
             // 
@@ -458,10 +450,8 @@
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionRubberStamps, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRates, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRates)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();

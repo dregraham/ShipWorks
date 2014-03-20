@@ -123,6 +123,7 @@
             this.skuAndQuantity.Size = new System.Drawing.Size(222, 21);
             this.skuAndQuantity.TabIndex = 78;
             this.skuAndQuantity.TokenUsage = ShipWorks.Templates.Tokens.TokenUsage.ShippingReference;
+            this.skuAndQuantity.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // labelSkuAndQuantity
             // 
@@ -142,6 +143,7 @@
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(416, 46);
             this.insuranceControl.TabIndex = 8;
+            this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // weight
             // 

@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
         /// Initializes a new instance of the <see cref="EndiciaExpress1RegistrationGateway"/> class.
         /// </summary>
         public EndiciaExpress1RegistrationGateway()
-            : base(new EndiciaExpress1ConnectionDetails())
+            : base(new Express1EndiciaConnectionDetails())
         { }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
                     ApiUserPassword = registration.EncryptedPassword
                 };
 
-                EndiciaApiClient.GetAccountStatus(account);
+                (new EndiciaApiClient()).GetAccountStatus(account);
             }
             catch (EndiciaException ex)
             {

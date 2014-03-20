@@ -1,4 +1,5 @@
 using System;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
@@ -16,6 +17,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
         /// </summary>
         public FedExRegistrationWebAuthenticationDetailManipulator()
             : this(new FedExSettings(new FedExSettingsRepository()))
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExRegistrationWebAuthenticationDetailManipulator"/> class.
+        /// </summary>
+        /// <param name="settingsRepository">The settings repository.</param>
+        public FedExRegistrationWebAuthenticationDetailManipulator(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExSettings(settingsRepository))
         { }
 
         /// <summary>

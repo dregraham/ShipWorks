@@ -53,7 +53,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -495,6 +495,10 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\Logging\ILogEntryFactory.cs" />
+    <Compile Include="ApplicationCore\Logging\LogActionType.cs" />
+    <Compile Include="ApplicationCore\Logging\LogEntryFactory.cs" />
+    <Compile Include="ApplicationCore\Logging\NullApiLogEntry.cs" />
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -571,11 +575,104 @@
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
+      <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.Designer.cs">
+      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressException.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidator.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\CounterRatesProcessingArgs.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.Designer.cs">
+      <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IShippingBrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateFilterFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateExpress1PromotionFootnoteFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateNonExistentShipmentTypeFootnoteFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilterFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateResultTag.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerSettings.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparer.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
+    <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.Designer.cs">
       <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\FootnoteParameters.cs" />
+    <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
+    <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
+    <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
+    <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />
+    <Compile Include="Shipping\Editing\Rating\RatesPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\RatesPanel.Designer.cs">
+      <DependentUpon>RatesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
@@ -943,10 +1040,10 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateProfileControl.Designer.cs">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.cs">
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.Designer.cs">
+    <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.Designer.cs">
       <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.cs">
@@ -968,23 +1065,22 @@
     <Compile Include="Shipping\Carriers\BestRate\PackageBasedBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\ServiceLevelSpeedComparer.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevel.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\iParcel\BestRate\iParcelBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalResellerBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsBestRateBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsBestRateBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypes.cs" />
@@ -1128,11 +1224,10 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Response\FedExVoidResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaTestServer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1ConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Registration\EndiciaExpress1RegistrationRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\EndiciaExpress1SettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.cs">
       <SubType>UserControl</SubType>
@@ -1234,7 +1329,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\StampsExpress1RegistrationRepository.cs" />
-    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
@@ -1736,14 +1831,13 @@
     <Compile Include="Shipping\Carriers\UPS\UpsServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\IUpsOpenAccountRequestFactory.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceGateway.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\IUpsAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\IUpsOpenAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountCharacteristicsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountCharacteristicsControl.Designer.cs">
       <DependentUpon>UpsAccountCharacteristicsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsBillingContactInfoControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1806,11 +1900,11 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipOdbcManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProcessedGrouping.cs" />
     <Compile Include="Shipping\CoreExtensions\ShippingFilterConditionUtility.cs" />
-    <Compile Include="Shipping\Editing\NonCompetitiveRateResult.cs" />
-    <Compile Include="Shipping\Editing\RateFootnoteControl.cs">
+    <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResult.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Editing\RateFootnoteControl.Designer.cs">
+    <Compile Include="Shipping\Editing\Rating\RateFootnoteControl.Designer.cs">
       <DependentUpon>RateFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ReturnsControlBase.cs">
@@ -3884,7 +3978,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentType.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipStatusType.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipUtility.cs" />
-    <Compile Include="Shipping\Editing\RateGroup.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateGroup.cs" />
     <Compile Include="Shipping\Insurance\InsuranceAgreementDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4101,13 +4195,13 @@
     <Compile Include="Shipping\Editing\DimensionsControl.Designer.cs">
       <DependentUpon>DimensionsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Editing\RateControl.cs">
+    <Compile Include="Shipping\Editing\Rating\RateControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Editing\RateControl.Designer.cs">
+    <Compile Include="Shipping\Editing\Rating\RateControl.Designer.cs">
       <DependentUpon>RateControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Editing\RateSelectedEvent.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateSelectedEvent.cs" />
     <Compile Include="Shipping\Settings\Printing\PrintOutputGroupNameDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4280,7 +4374,7 @@
     <Compile Include="Shipping\Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManager.cs" />
     <Compile Include="Shipping\Settings\ShipmentBlankPhoneOption.cs" />
-    <Compile Include="Shipping\Editing\RateResult.cs" />
+    <Compile Include="Shipping\Editing\Rating\RateResult.cs" />
     <Compile Include="Shipping\Settings\ShippingSettings.cs" />
     <Compile Include="Shipping\Settings\ShippingSettingsDlg.cs">
       <SubType>Form</SubType>
@@ -6776,6 +6870,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
+      <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateProfileControl.resx">
       <DependentUpon>BestRateProfileControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -6785,8 +6883,14 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
       <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\BrokerExceptionsRateFootnoteControl.resx">
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.resx">
+      <DependentUpon>CounterRateProcessingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteControl.resx">
       <DependentUpon>BrokerExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.resx">
+      <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
       <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
@@ -6967,6 +7071,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsMailInnovationsOptionControl.resx">
       <DependentUpon>UpsMailInnovationsOptionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.resx">
+      <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
+      <DependentUpon>RatesPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
@@ -9019,7 +9129,7 @@
     <EmbeddedResource Include="Shipping\Editing\DimensionsControl.resx">
       <DependentUpon>DimensionsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Editing\RateControl.resx">
+    <EmbeddedResource Include="Shipping\Editing\Rating\RateControl.resx">
       <DependentUpon>RateControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ServiceControlBase.resx">
@@ -10131,6 +10241,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10166,6 +10277,7 @@
     <None Include="Resources\calendar_7.png" />
     <None Include="Resources\box_closed4.png" />
     <None Include="Resources\box_closed5.png" />
+    <None Include="Resources\blueTruck.bmp" />
     <None Include="Resources\aprilfools-32x32.png" />
     <None Include="Resources\aprilfools-48x48.png" />
     <None Include="Resources\aprilfools-16x16.png" />
@@ -10295,6 +10407,7 @@
     <None Include="Resources\refresh - Copy.png" />
     <None Include="Resources\printer21.png" />
     <None Include="Resources\server_from_client1.png" />
+    <None Include="Resources\Progress\squares_circle_green_transparent.gif" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -10310,6 +10423,8 @@
     <None Include="Resources\Shipping\Icons\usps.png" />
     <None Include="Resources\Shipping\Icons\dhl.png" />
     <None Include="Resources\Shipping\Icons\bestrate.png" />
+    <Content Include="Resources\Shipping\Icons\truck_blue.png" />
+    <None Include="Resources\Shipping\Icons\truck_brown.png" />
     <Content Include="Resources\shipworks.ico" />
     <EmbeddedResource Include="Templates\Distribution\History.xml" />
     <None Include="Resources\template_snippet16.png" />
@@ -10400,6 +10515,7 @@
     <None Include="Resources\social-facebook.png" />
     <None Include="Resources\social-twitter.png" />
     <None Include="Resources\smiley.png" />
+    <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />

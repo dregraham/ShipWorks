@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void GetBestRates_ReturnsEmptyList_Test()
         {
-            IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), ex => { }).Rates;
+            IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), new List<BrokerException>()).Rates;
 
             Assert.IsTrue(!rates.Any());
         }

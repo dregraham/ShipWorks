@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -21,14 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             this.originalRates = originalRates;
             this.discountedRates = discountedRates;
-        }
-
-        /// <summary>
-        /// Adds the carrier name text to the text of the control
-        /// </summary>
-        public override void SetCarrierName(string carrierName)
-        {
-            AddCarrierNameText(carrierName, label, linkControl);
         }
 
         /// <summary>

@@ -60,12 +60,12 @@ namespace <#= services[i] #>
     partial class <#= services[i + 1] #>
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        ApiLogEntry logEntry;
+        IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal <#= services[i + 1] #>(ApiLogEntry logEntry)
+        internal <#= services[i + 1] #>(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -82,7 +82,7 @@ namespace <#= services[i] #>
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public ApiLogEntry ApiLogEntry
+		public IApiLogEntry ApiLogEntry
         {
 			get { return logEntry; }
 		}

@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
     {
         static readonly ILog log = LogManager.GetLogger(typeof(OnTracRequest));
 
-        readonly IApiLogEntry apiLogger;
+        readonly IApiLogEntry logEntry;
 
         /// <summary>
         /// Constructor
@@ -34,25 +34,22 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
         /// <summary>
         /// Constructor
         /// </summary>
-        protected OnTracRequest(int onTracAccountNumber, string onTracPassword, string actionDescriptionToLog)
-            : this(onTracAccountNumber, onTracPassword, new ApiLogEntry(ApiLogSource.OnTrac, actionDescriptionToLog))
+        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, string actionDescriptionToLog)
+            : this(onTracAccountNumber, onTracPassword,new LogEntryFactory(), ApiLogSource.OnTrac, actionDescriptionToLog, LogActionType.Other)
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="onTracAccountNumber">The on trac account number.</param>
-        /// <param name="onTracPassword">The on trac password.</param>
-        /// <param name="apiLogger">IApiLogEntry - I see this primarily used for testing</param>
-        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, IApiLogEntry apiLogger)
+        protected OnTracRequest(long onTracAccountNumber, string onTracPassword, ILogEntryFactory logEntryFactory, ApiLogSource logSource, string actionDescriptionToLog, LogActionType logActionType)
         {
             //THIS CONSTRUCTOR MUST BE CALLED IN THE CONSTRUCTION CHAIN
 
-            this.apiLogger = apiLogger;
+            logEntry = logEntryFactory.GetLogEntry(logSource, actionDescriptionToLog, logActionType);
 
-            this.AccountNumber = onTracAccountNumber;
-            this.OnTracPassword = onTracPassword;
+            AccountNumber = onTracAccountNumber;
+            OnTracPassword = onTracPassword;
 
             BaseUrlUsedToCallOnTrac = UseTestServer
                           ? "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v1/"
@@ -113,13 +110,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
             }
             try
             {
-                apiLogger.LogRequest(request);
+                logEntry.LogRequest(request);
 
                 using (IHttpResponseReader onTracResponse = request.GetResponse())
                 {
                     string onTracResponseText = onTracResponse.ReadResult();
 
-                    apiLogger.LogResponse(onTracResponseText);
+                    logEntry.LogResponse(onTracResponseText);
 
                     CheckForErrors(onTracResponseText);
 

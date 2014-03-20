@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business;
+using ShipWorks.Shipping.Profiles;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
     /// <summary>
     /// The setup wizard used for adding a new i-parcel account to ShipWorks.
     /// </summary>
-    public partial class iParcelSetupWizard : WizardForm
+    public partial class iParcelSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly IParcelAccountEntity iParcelAccount;
         
@@ -132,6 +129,33 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (DialogResult != DialogResult.OK && iParcelAccount != null && !iParcelAccount.IsNew)
             {
                 iParcelAccountManager.DeleteAccount(iParcelAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+
+                if (iParcelAccountManager.Accounts.Count == 1)
+                {
+                    // Update any profiles to use this iparcel account if this is the only account
+                    // in the system. This is to account for the situation where there a multiple
+                    // profiles that may be associated with a previous iparcel account that has since
+                    // been deleted. 
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.iParcel))
+                    {
+                        if (shippingProfileEntity.IParcel.IParcelAccountID.HasValue)
+                        {
+                            shippingProfileEntity.IParcel.IParcelAccountID = iParcelAccount.IParcelAccountID;
+                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                        }
+                    }
+
+                    // Make sure the shipment is marked as configured and activated
+                    ShippingSettings.MarkAsActivated(ShipmentTypeCode.iParcel);
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.iParcel);
+                }
+
             }
         }
     }

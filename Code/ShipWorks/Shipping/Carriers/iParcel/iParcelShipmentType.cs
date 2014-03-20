@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -14,10 +15,12 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -25,6 +28,8 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.UI.Wizard;
 
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -430,7 +435,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// null if the shipment type does not require setup
         /// </summary>
         /// <returns>An iParcelSetupWizard object.</returns>
-        public override System.Windows.Forms.Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new iParcelSetupWizard();
         }
@@ -447,10 +452,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Creates the UserControl that is used to edit service options for the shipment type
         /// </summary>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <returns>An iParcelServiceControl object.</returns>
-        public override ServiceControlBase CreateServiceControl()
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new iParcelServiceControl();
+            return new iParcelServiceControl(rateControl);
         }
 
         /// <summary>
@@ -492,6 +499,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // This was changed to an exception instead of creating the package when the creation was moved to ConfigureNewShipment
                 throw new NotFoundException("Primary package not found.");
             }
+        }
+        
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new iParcelShipmentProcessingSynchronizer();
         }
 
         /// <summary>
@@ -661,57 +676,78 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            return GetCachedRates<iParcelException>(shipment, GetRatesFromApi);
+        }
+
+        /// <summary>
+        /// Get a list of rates for the FedEx shipment
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            IParcelAccountEntity iParcelAccount = null;
+
             try
             {
-                // i-parcel requires that we upload item information, so fetch the order and order items
-                repository.PopulateOrderDetails(shipment);
-
-                List<RateResult> results = new List<RateResult>();
-                
-                IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
-                iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
-                DataSet ratesResult = serviceGateway.GetRates(credentials, shipment);
-
-                if (ratesResult != null && ratesResult.Tables.Count != 0 && ratesResult.Tables[0].Rows.Count != 0)
+                iParcelAccount = repository.GetiParcelAccount(shipment);
+            }
+            catch (iParcelException ex)
+            {
+                if (ex.Message == "No i-parcel account is selected for the shipment.")
                 {
-                    if (ratesResult.Tables.Contains("CostInfo"))
-                    {
-                        // i-parcel will return a negative value if there was some sort of error or the shipment is not eligible for
-                        // this service type (e.g. initial testing indicates rates won't come back for any package over 66 pounds)
+                    // Provide a message with additional context
+                    throw new iParcelException("An i-parcel account is required to view rates.", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-                        DataTable costInfoTable = ratesResult.Tables["CostInfo"];
-                        
-                        // Find the service types where a valid rate (shipping cost > 0) was given for each of the packages in the shipment
-                        IEnumerable<iParcelServiceType> supportedServiceTypes = costInfoTable.AsEnumerable()
+            // i-parcel requires that we upload item information, so fetch the order and order items
+            repository.PopulateOrderDetails(shipment);
+
+            List<RateResult> results = new List<RateResult>();
+
+            iParcelCredentials credentials = new iParcelCredentials(iParcelAccount.Username, iParcelAccount.Password, true, serviceGateway);
+            DataSet ratesResult = serviceGateway.GetRates(credentials, shipment);
+
+            if (ratesResult != null && ratesResult.Tables.Count != 0 && ratesResult.Tables[0].Rows.Count != 0)
+            {
+                if (ratesResult.Tables.Contains("CostInfo"))
+                {
+                    // i-parcel will return a negative value if there was some sort of error or the shipment is not eligible for
+                    // this service type (e.g. initial testing indicates rates won't come back for any package over 66 pounds)
+
+                    DataTable costInfoTable = ratesResult.Tables["CostInfo"];
+
+                    // Find the service types where a valid rate (shipping cost > 0) was given for each of the packages in the shipment
+                    IEnumerable<iParcelServiceType> supportedServiceTypes = costInfoTable.AsEnumerable()
                                                                                             .Where(r => decimal.Parse(r.Field<string>("PackageShipping")) >= 0)
                                                                                             .GroupBy(r => r["Service"])
                                                                                             .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
                                                                                             .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
 
-                        foreach (iParcelServiceType serviceType in supportedServiceTypes)
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes)
+                    {
+                        // Calculate the total shipment cost for all the package rates for the service type
+                        decimal totalServiceCost = costInfoTable.AsEnumerable()
+                                                                .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
+                                                                .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
                         {
-                            // Calculate the total shipment cost for all the package rates for the service type
-                            decimal totalServiceCost = costInfoTable.AsEnumerable()
-                                                        .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
-                                                        .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                            ServiceLevel = ServiceLevelType.Anytime,
+                            ShipmentType = ShipmentTypeCode.iParcel,
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.iParcel)
+                        };
 
-                            RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
-                            {
-                                ServiceLevel = ServiceLevelType.Anytime
-                            };
-
-                            results.Add(serviceRate);
-                        }
-
+                        results.Add(serviceRate);
                     }
-                }
 
-                return new RateGroup(results);
+                }
             }
-            catch (iParcelException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
+
+            return new RateGroup(results);
         }
 
         /// <summary>
@@ -926,12 +962,26 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the iParcel shipment type.
+        /// Gets an instance to the best rate shipping broker for the iParcel shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an iParcelBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new iParcelBestRateBroker();
+            // There was a conscious decision made with input from Rich that for now we can assume the origin 
+            // country will always be US when the shipment is configured to ship from the account address
+            string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ? 
+                                        "US" : shipment.OriginCountryCode;
+
+            // We only want to check i-parcel for international shipments originating in the US
+            if (originCountryCode != shipment.ShipCountryCode && originCountryCode == "US")
+            {
+                return new iParcelBestRateBroker();
+            }
+
+            // This is either a domestic shipment or the shipment does not originate from the US,
+            // so we don't want to check i-parcel
+            return new NullShippingBroker();
         }
 
         /// <summary>
@@ -953,6 +1003,42 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return requiresCustoms;
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.IParcel.Fields[IParcelShipmentFields.IParcelAccountID.FieldIndex],
+                    shipment.IParcel.Fields[IParcelShipmentFields.IsDeliveryDutyPaid.FieldIndex],
+                    shipment.Order.Fields[OrderFields.OrderTotal.FieldIndex],
+                    shipment.Order.Fields[OrderFields.RollupItemCount.FieldIndex],
+                    shipment.IParcel.Fields[IParcelShipmentFields.TrackByEmail.FieldIndex],
+                    shipment.IParcel.Fields[IParcelShipmentFields.TrackBySMS.FieldIndex],
+                }
+            );
+
+            // Grab all the fields for all the package in this shipment
+            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
+            {
+                fields.Add(package.Fields[IParcelPackageFields.Weight.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.DimsWeight.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.DimsWidth.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.DimsHeight.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.DeclaredValue.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.InsuranceValue.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.Insurance.FieldIndex]);
+                fields.Add(package.Fields[IParcelPackageFields.InsurancePennyOne.FieldIndex]);
+            }
+
+            return fields;
         }
     }
 }

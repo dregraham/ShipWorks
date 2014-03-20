@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
@@ -19,10 +20,12 @@ namespace ShipWorks.Shipping.Carriers
     public partial class MultiSelectServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="MultiSelectServiceControl"/> class.
         /// </summary>
-        public MultiSelectServiceControl() : 
-            base(ShipmentTypeCode.None)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public MultiSelectServiceControl(RateControl rateControl) : 
+            base(ShipmentTypeCode.None, rateControl)
         {
             InitializeComponent();
         }

@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 try
                 {
-                    EndiciaAccountStatus accountInfo = EndiciaApiClient.GetAccountStatus(account);
+                    EndiciaAccountStatus accountInfo = (new EndiciaApiClient()).GetAccountStatus(account);
 
                     result = accountInfo.PostageBalance.ToString("c");
                 }

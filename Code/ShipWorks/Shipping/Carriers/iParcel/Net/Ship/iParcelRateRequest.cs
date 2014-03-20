@@ -13,14 +13,22 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
     /// </summary>
     public class iParcelRateRequest : iParcelRequest
     {
+        private readonly ILogEntryFactory logEntryFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelRateRequest" /> class.
         /// </summary>
-        /// <param name="credentials">The credentials.</param>
-        /// <param name="shipment">The shipment.</param>
         public iParcelRateRequest(iParcelCredentials credentials, ShipmentEntity shipment)
+            : this(credentials, shipment, new LogEntryFactory())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="iParcelRateRequest" /> class.
+        /// </summary>
+        public iParcelRateRequest(iParcelCredentials credentials, ShipmentEntity shipment, ILogEntryFactory logEntryFactory)
             : base(credentials, "iParcelRateRequest")
         {
+            this.logEntryFactory = logEntryFactory;
             bool isDomestic = shipment.OriginCountryCode.ToUpperInvariant() == shipment.ShipCountryCode.ToUpperInvariant();
 
             // Default the validation element to domestic for now
@@ -58,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
         {
             try
             {
-                using (XMLSOAP iParcelWebService = new XMLSOAP(new ApiLogEntry(ApiLogSource.iParcel, RequestTypeName)))
+                using (XMLSOAP iParcelWebService = new XMLSOAP(logEntryFactory.GetLogEntry(ApiLogSource.iParcel, RequestTypeName, LogActionType.GetRates)))
                 {
                     // Use the UploadXMLFileString method and load the XML into a DataSet. This response does
                     // not have all of the schema information like the UploadXMLFile method does, so the 

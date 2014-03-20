@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
+﻿using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
     /// <summary>
     /// Express1-specific Service Control.
@@ -6,10 +9,12 @@
     public partial class Express1EndiciaServiceControl : EndiciaServiceControl
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Express1EndiciaServiceControl"/> class.
         /// </summary>
-        public Express1EndiciaServiceControl()
-            : base (ShipmentTypeCode.Express1Endicia, EndiciaReseller.Express1)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public Express1EndiciaServiceControl(RateControl rateControl)
+            : base (ShipmentTypeCode.Express1Endicia, EndiciaReseller.Express1, rateControl)
         {
             InitializeComponent();
         }

@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         // the reseller type being worked with
         EndiciaReseller endiciaReseller = EndiciaReseller.None;
 
-        private EndiciaExpress1SettingsFacade express1Settings;
+        private Express1EndiciaSettingsFacade settings;
 
         /// <summary>
         /// Constructor
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void LoadExpress1Settings(ShippingSettingsEntity settings)
         {
-            express1Settings = new EndiciaExpress1SettingsFacade(settings);
+            this.settings = new Express1EndiciaSettingsFacade(settings);
 
             if (endiciaReseller == EndiciaReseller.Express1)
             {
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                express1PostageDiscountSettingsControl.LoadSettings(express1Settings);
+                express1PostageDiscountSettingsControl.LoadSettings(this.settings);
                 express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
 
                 panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (endiciaReseller == EndiciaReseller.None)
             {                
-                express1Settings.SaveSettings(settings);
+                this.settings.SaveSettings(settings);
                 settings.EndiciaInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             }
             else

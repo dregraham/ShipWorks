@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.EquaShip
+﻿using ShipWorks.Shipping.Editing.Rating;
+
+namespace ShipWorks.Shipping.Carriers.EquaShip
 {
     partial class EquaShipServiceControl
     {
@@ -35,7 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.equashipAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.sectionRates = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.rateControl = new ShipWorks.Shipping.Editing.RateControl();
+            this.rateControl = new RateControl();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.saturdayDelivery = new System.Windows.Forms.CheckBox();
             this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
@@ -207,8 +209,7 @@
             this.rateControl.Name = "rateControl";
             this.rateControl.Size = new System.Drawing.Size(492, 55);
             this.rateControl.TabIndex = 3;
-            this.rateControl.RateSelected += new ShipWorks.Shipping.Editing.RateSelectedEventHandler(this.OnRateSelected);
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
+            this.rateControl.RateSelected += new RateSelectedEventHandler(this.OnRateSelected);
             // 
             // service
             // 
@@ -506,7 +507,7 @@
         private System.Windows.Forms.Label labelWeight;
         private System.Windows.Forms.Label labelDimensions;
         private Editing.DimensionsControl dimensionsControl;
-        private Editing.RateControl rateControl;
+        private RateControl rateControl;
         private System.Windows.Forms.Label labelConfirmation;
         private UI.Controls.MultiValueComboBox confirmation;
         private System.Windows.Forms.CheckBox emailNotification;

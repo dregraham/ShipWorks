@@ -152,6 +152,20 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
+        /// Determines if the given Api call should be logged based on the Action Type
+        /// </summary>
+        public static bool IsApiLogActionTypeEnabled(LogActionType logActionType)
+        {
+            switch (logActionType)
+            {
+                case LogActionType.GetRates:
+                    return logOptions.LogRateCalls;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
         /// Apply the configured log options
         /// </summary>
         private static void ApplyLogOptions()

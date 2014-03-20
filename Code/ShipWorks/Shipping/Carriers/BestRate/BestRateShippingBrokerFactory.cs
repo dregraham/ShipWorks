@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -11,55 +14,68 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateShippingBrokerFactory : IBestRateShippingBrokerFactory
     {
+        private readonly IEnumerable<IShippingBrokerFilter> filters;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
+        /// </summary>
+        public BestRateShippingBrokerFactory()
+            : this(new List<IShippingBrokerFilter> { new UpsWorldShipBrokerFilter(), new Express1BrokerFilter(), new PostalCounterBrokerFilter() })
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
+        /// </summary>
+        /// <param name="filters">The filters.</param>
+        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
+        {
+            this.filters = filters;
+        }
+
         /// <summary>
         /// Creates all of the best rate shipping brokers available in the system for the shipping
         /// providers that are activated and configured.
         /// </summary>
-        /// <returns>The shipping broker for all activated and configured shipment types that have not 
-        /// been excluded.</returns>
-        public IEnumerable<IBestRateShippingBroker> CreateBrokers()
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="createCounterRateBrokers">Should counter rate brokers be created</param>
+        /// <returns>The shipping broker for all activated and configured shipment types that have not
+        /// been excluded from being used to find the best rate.</returns>
+        public IEnumerable<IBestRateShippingBroker> CreateBrokers(ShipmentEntity shipment, bool createCounterRateBrokers)
         {
-            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
             List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
+            
+            List<IBestRateShippingBroker> brokers = shipmentTypes.Where(st => !IsShipmentTypeExcluded(shippingSettings, st.ShipmentTypeCode))
+                .Select(st => st.GetShippingBroker(shipment))
+                .Where(broker => broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
+                .ToList();
 
-            // If both UPS OnlineTools AND WorldShip are selected, remove WorldShip so we don't get double rates returned
-            if (shipmentTypes.Any(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools && IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, st.ShipmentTypeCode)) &&
-                shipmentTypes.Any(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip && IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, st.ShipmentTypeCode)))
+            foreach (IShippingBrokerFilter filter in filters)
             {
-                shipmentTypes.Remove(shipmentTypes.First(st => st.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip));
+                brokers = filter.Filter(brokers).ToList();
             }
 
-            // Add a broker for every shipment type that has been activated, configured, and hasn't been excluded
-            foreach (ShipmentType shipmentType in shipmentTypes)
+            // We need to configure each of the brokers now that we have our final
+            // list that should be used
+            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers, EditionManager.ActiveRestrictions);
+            foreach (IBestRateShippingBroker broker in brokers)
             {
-                if (IsShipmentTypeActiveConfiguredAndNotExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
-                {
-                    // This shipment type is activated, configured, and hasn't been excluded, so add it to our list of brokers
-                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker();
-                    if (broker.HasAccounts)
-                    {
-                        // We only want to return brokers that have accounts setup
-                        brokers.Add(shipmentType.GetShippingBroker());
-                    }
-                }
+                broker.Configure(brokerSettings);
             }
 
             return brokers;
         }
 
         /// <summary>
-        /// Determines if a Shipment Type Code is active, configured, not a globally excluded shipment type, and not a shipment type
+        /// Determines if a Shipment Type Code is not a globally excluded shipment type and not a shipment type
         /// that has been excluded from being used with the best rate shipment type.
         /// </summary>
-        private static bool IsShipmentTypeActiveConfiguredAndNotExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
+        private static bool IsShipmentTypeExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
         {
-            int shipmentTypeCodeValue = (int) shipmentTypeCode;
+            int shipmentTypeCodeValue = (int)shipmentTypeCode;
 
-            return shippingSettings.ActivatedTypes.Contains(shipmentTypeCodeValue) &&
-                   shippingSettings.ConfiguredTypes.Contains(shipmentTypeCodeValue) && 
-                   !shippingSettings.ExcludedTypes.Contains(shipmentTypeCodeValue) &&
-                   !shippingSettings.BestRateExcludedTypes.Contains((int)shipmentTypeCode);
+            // Always include web tools, so we get USPS counter rates as needed
+            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCodeValue) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
         }
     }
 }

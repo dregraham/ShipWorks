@@ -23,5 +23,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         {
             // no-op
         }
+
+        /// <summary>
+        /// Writes the declared value to the request.  
+        /// </summary>
+        protected override void WriteDeclaredValue(UpsPackageEntity package, UpsServicePackageTypeSetting servicePackageSettings)
+        {
+            if (package.DeclaredValue > 0)
+            {
+                xmlWriter.WriteStartElement("InsuredValue");
+                xmlWriter.WriteElementString("MonetaryValue", package.DeclaredValue.ToString("0.00"));
+                xmlWriter.WriteEndElement();
+            }
+        }
     }
 }

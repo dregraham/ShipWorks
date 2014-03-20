@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -26,16 +27,25 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </value>
         bool HasAccounts { get; }
 
+
+        /// <summary>
+        /// Gets a value indicating whether [is counter rate].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is counter rate]; otherwise, <c>false</c>.
+        /// </value>
+        bool IsCounterRate { get; }
+
         /// <summary>
         /// Gets the rates for each of the accounts of a specific shipping provider based 
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
+        /// <param name="brokerExceptions"></param>
         /// <returns>A list of RateResults for each account of a specific shipping provider (i.e. if 
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).</returns>
-        RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler);
+        RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions);
 
         /// <summary>
         /// Gets the insurance provider for the carrier.
@@ -47,5 +57,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// A value of false will only be returned if all of the carrier accounts do not require customs forms.
         /// </summary>
         bool IsCustomsRequired(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Configures the broker using the given settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        void Configure(IBestRateBrokerSettings brokerSettings);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -63,10 +66,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             currentShipment.FedEx.Packages[0].DimsAddWeight = false;
             currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
             currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
-            currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
+            SetAccount(currentShipment, account);
 
             currentShipment.FedEx.Packages[0].InsuranceValue = currentShipment.BestRate.InsuranceValue;
             currentShipment.FedEx.Packages[0].Insurance = currentShipment.Insurance;
+        }
+
+        /// <summary>
+        /// Sets the FedEx Account.
+        /// </summary>
+        public virtual void SetAccount(ShipmentEntity currentShipment, FedExAccountEntity account)
+        {
+            currentShipment.FedEx.FedExAccountID = account.FedExAccountID;
         }
 
         /// <summary>
@@ -95,6 +106,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         protected override void SetServiceTypeFromTag(ShipmentEntity shipment, object tag)
         {
             shipment.FedEx.Service = GetServiceTypeFromTag(tag);
+        }
+
+        /// <summary>
+        /// Gets the result key for a given rate
+        /// </summary>
+        /// <param name="rate">Rate result for which to create a result key</param>
+        /// <returns>Concatenation of the carrier description and the original rate tag</returns>
+        protected override string GetResultKey(RateResult rate)
+        {
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // we need to pass the original tag that is a FedEx service type
+            object originalTag = rate.OriginalTag;
+            return "FedEx" + EnumHelper.GetDescription((FedExServiceType)GetServiceTypeFromTag(originalTag));
         }
 
         /// <summary>
@@ -137,6 +161,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         protected override void SetPackageId(FedExPackageEntity package, long packageId)
         {
             package.FedExPackageID = packageId;
+        }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(FedExAccountEntity account)
+        {
+            return account.Description;
         }
     }
 }

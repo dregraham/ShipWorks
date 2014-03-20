@@ -11,11 +11,13 @@ using Interapptive.Shared.Net;
 using System.Net;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
+using ShipWorks.Shipping.Api;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {
@@ -164,6 +166,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static XmlTextWriter CreateRequest(UpsOnLineToolType toolType, UpsAccountEntity account)
         {
+            return CreateRequest(toolType, account, new UpsSettingsRepository());
+        }
+
+        /// <summary>
+        /// Create a request instance for the specified tool type and shipper
+        /// </summary>
+        public static XmlTextWriter CreateRequest(UpsOnLineToolType toolType, UpsAccountEntity account, ICarrierSettingsRepository settingsRepository)
+        {
             StreamWriter writer = new StreamWriter(new MemoryStream(), StringUtility.Iso8859Encoding);
             XmlTextWriter xmlWriter = new XmlTextWriter(writer);
             xmlWriter.Formatting = Formatting.Indented;
@@ -174,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Insert the <AccessRequest> where required
             if (!IsSecurityElementTool(toolType))
             {
-                AppendAccessRequest(xmlWriter, account);
+                AppendAccessRequest(xmlWriter, account, settingsRepository);
             }
             
             // Open
@@ -210,6 +220,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </exception>
         public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter)
         {
+            return ProcessRequest(xmlWriter, LogActionType.Other, new TrustingCertificateInspector());
+        }
+
+        /// <summary>
+        /// Process the given request and return the response
+        /// </summary>
+        /// <exception cref="UpsApiException">
+        /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
+        /// or
+        /// </exception>
+        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, ICertificateInspector certificateInspector)
+        {
+            return ProcessRequest(xmlWriter, LogActionType.Other, certificateInspector);
+        }
+
+        /// <summary>
+        /// Process the given request and return the response
+        /// </summary>
+        /// <exception cref="UpsApiException">
+        /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
+        /// or
+        /// </exception>
+        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
+        {
             // Close out the XML
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
@@ -226,7 +260,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             OnLineToolInfo toolInfo = DetermineOnLineTool(requestXml);
 
             // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix);
+            IApiLogEntry logger = (new LogEntryFactory()).GetLogEntry(ApiLogSource.UPS, toolInfo.HttpUrlPostfix, logActionType);
+
             logger.LogRequest(requestXml);
 
             string toolUrl;
@@ -245,6 +280,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             HttpBinaryPostRequestSubmitter request = new HttpBinaryPostRequestSubmitter(stream.ToArray());
             request.Uri = new Uri(toolUrl);
+
+            CertificateRequest certificateRequest = new CertificateRequest(request.Uri, certificateInspector);
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+
+            if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
+            {
+                throw new UpsException("ShipWorks is unable to make a secure connection to UPS.");
+            }
 
             try
             {
@@ -357,12 +400,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Append the AccessRequest block to the XML
         /// </summary>
-        private static void AppendAccessRequest(XmlTextWriter xmlWriter, UpsAccountEntity shipper)
+        private static void AppendAccessRequest(XmlTextWriter xmlWriter, UpsAccountEntity shipper, ICarrierSettingsRepository upsSettingsRepository)
         {
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("AccessRequest");
 
-            xmlWriter.WriteElementString("AccessLicenseNumber", SecureText.Decrypt(ShippingSettings.Fetch().UpsAccessKey, "UPS"));
+            xmlWriter.WriteElementString("AccessLicenseNumber", SecureText.Decrypt(upsSettingsRepository.GetShippingSettings().UpsAccessKey, "UPS"));
             xmlWriter.WriteElementString("UserId", shipper.UserID);
             xmlWriter.WriteElementString("Password", shipper.Password);
 

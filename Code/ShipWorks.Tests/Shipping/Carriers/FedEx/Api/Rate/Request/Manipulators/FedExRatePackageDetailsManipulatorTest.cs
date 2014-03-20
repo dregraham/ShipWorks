@@ -155,6 +155,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [TestMethod]
+        public void Manipulate_SetsWeightValueToZeroPointOne_WhenValueIsZero_Test()
+        {
+            foreach (FedExPackageEntity package in shipmentEntity.FedEx.Packages)
+            {
+                package.Weight = 0;
+                package.DimsWeight = 0;
+            }
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            foreach (RequestedPackageLineItem lineItem in ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems)
+            {
+                Assert.AreEqual(0.1m, lineItem.Weight.Value);
+            }
+            
+        }
+
+        [TestMethod]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsKG_Test()
         {
             shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;

@@ -31,20 +31,19 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FedExSetupWizard));
             this.wizardPageInitial = new ShipWorks.UI.Wizard.WizardPage();
-            this.linkFedExWebsite = new System.Windows.Forms.Label();
-            this.labelInfo2 = new System.Windows.Forms.Label();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
-            this.labelAccount = new System.Windows.Forms.Label();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
-            this.accountNumber = new System.Windows.Forms.TextBox();
-            this.labelFedExAccount = new System.Windows.Forms.Label();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
             this.accountSettingsControl = new ShipWorks.Shipping.Carriers.FedEx.FedExAccountSettingsControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.FedEx.FedExOptionsControl();
             this.label1 = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.wizardPage1 = new ShipWorks.UI.Wizard.WizardPage();
+            this.accountNumber = new System.Windows.Forms.TextBox();
+            this.labelFedExAccount = new System.Windows.Forms.Label();
+            this.linkGetAccount = new System.Windows.Forms.Label();
+            this.labelGetAcount = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -68,7 +67,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageInitial);
+            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
             this.mainPanel.Size = new System.Drawing.Size(584, 474);
             // 
             // etchBottom
@@ -89,8 +88,10 @@
             // 
             // wizardPageInitial
             // 
-            this.wizardPageInitial.Controls.Add(this.linkFedExWebsite);
-            this.wizardPageInitial.Controls.Add(this.labelInfo2);
+            this.wizardPageInitial.Controls.Add(this.linkGetAccount);
+            this.wizardPageInitial.Controls.Add(this.labelGetAcount);
+            this.wizardPageInitial.Controls.Add(this.accountNumber);
+            this.wizardPageInitial.Controls.Add(this.labelFedExAccount);
             this.wizardPageInitial.Controls.Add(this.labelInfo1);
             this.wizardPageInitial.Description = "Setup ShipWorks to work with your FedEx account.";
             this.wizardPageInitial.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -100,28 +101,7 @@
             this.wizardPageInitial.Size = new System.Drawing.Size(584, 474);
             this.wizardPageInitial.TabIndex = 0;
             this.wizardPageInitial.Title = "Setup FedEx® Shipping";
-            // 
-            // linkFedExWebsite
-            // 
-            this.linkFedExWebsite.AutoSize = true;
-            this.linkFedExWebsite.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkFedExWebsite.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkFedExWebsite.ForeColor = System.Drawing.Color.Blue;
-            this.linkFedExWebsite.Location = new System.Drawing.Point(128, 79);
-            this.linkFedExWebsite.Name = "linkFedExWebsite";
-            this.linkFedExWebsite.Size = new System.Drawing.Size(62, 13);
-            this.linkFedExWebsite.TabIndex = 2;
-            this.linkFedExWebsite.Text = "fedex.com.";
-            this.linkFedExWebsite.Click += new System.EventHandler(this.OnClickLinkFedEx);
-            // 
-            // labelInfo2
-            // 
-            this.labelInfo2.Location = new System.Drawing.Point(21, 66);
-            this.labelInfo2.Name = "labelInfo2";
-            this.labelInfo2.Size = new System.Drawing.Size(410, 30);
-            this.labelInfo2.TabIndex = 1;
-            this.labelInfo2.Text = "You must have a FedEx shipping account before continuing. To get a FedEx account," +
-    " please go to";
+            this.wizardPageInitial.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInitialPage);
             // 
             // labelInfo1
             // 
@@ -135,10 +115,7 @@
             // 
             // wizardPageContactInfo
             // 
-            this.wizardPageContactInfo.Controls.Add(this.labelAccount);
             this.wizardPageContactInfo.Controls.Add(this.personControl);
-            this.wizardPageContactInfo.Controls.Add(this.accountNumber);
-            this.wizardPageContactInfo.Controls.Add(this.labelFedExAccount);
             this.wizardPageContactInfo.Description = "Enter your FedEx account information.";
             this.wizardPageContactInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageContactInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -148,15 +125,6 @@
             this.wizardPageContactInfo.TabIndex = 0;
             this.wizardPageContactInfo.Title = "FedEx Account";
             this.wizardPageContactInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountInfo);
-            // 
-            // labelAccount
-            // 
-            this.labelAccount.AutoSize = true;
-            this.labelAccount.Location = new System.Drawing.Point(50, 31);
-            this.labelAccount.Name = "labelAccount";
-            this.labelAccount.Size = new System.Drawing.Size(50, 13);
-            this.labelAccount.TabIndex = 1;
-            this.labelAccount.Text = "Account:";
             // 
             // personControl
             // 
@@ -171,29 +139,11 @@
             | ShipWorks.Data.Controls.PersonFields.Phone) 
             | ShipWorks.Data.Controls.PersonFields.Website)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.personControl.Location = new System.Drawing.Point(30, 51);
+            this.personControl.Location = new System.Drawing.Point(26, 10);
             this.personControl.MaxStreetLines = 2;
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 420);
             this.personControl.TabIndex = 3;
-            // 
-            // accountNumber
-            // 
-            this.accountNumber.Location = new System.Drawing.Point(107, 28);
-            this.fieldLengthProvider.SetMaxLengthSource(this.accountNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
-            this.accountNumber.Name = "accountNumber";
-            this.accountNumber.Size = new System.Drawing.Size(165, 21);
-            this.accountNumber.TabIndex = 2;
-            // 
-            // labelFedExAccount
-            // 
-            this.labelFedExAccount.AutoSize = true;
-            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFedExAccount.Location = new System.Drawing.Point(31, 10);
-            this.labelFedExAccount.Name = "labelFedExAccount";
-            this.labelFedExAccount.Size = new System.Drawing.Size(136, 13);
-            this.labelFedExAccount.TabIndex = 0;
-            this.labelFedExAccount.Text = "FedEx Account Number";
             // 
             // wizardPageSettings
             // 
@@ -248,6 +198,47 @@
             this.wizardPage1.TabIndex = 0;
             this.wizardPage1.Title = "Wizard page 4.";
             // 
+            // accountNumber
+            // 
+            this.accountNumber.Location = new System.Drawing.Point(23, 77);
+            this.fieldLengthProvider.SetMaxLengthSource(this.accountNumber, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
+            this.accountNumber.Name = "accountNumber";
+            this.accountNumber.Size = new System.Drawing.Size(217, 21);
+            this.accountNumber.TabIndex = 5;
+            // 
+            // labelFedExAccount
+            // 
+            this.labelFedExAccount.AutoSize = true;
+            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelFedExAccount.Location = new System.Drawing.Point(20, 61);
+            this.labelFedExAccount.Name = "labelFedExAccount";
+            this.labelFedExAccount.Size = new System.Drawing.Size(197, 13);
+            this.labelFedExAccount.TabIndex = 3;
+            this.labelFedExAccount.Text = "Enter your FedEx account number";
+            // 
+            // linkGetAccount
+            // 
+            this.linkGetAccount.AutoSize = true;
+            this.linkGetAccount.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkGetAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkGetAccount.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.linkGetAccount.Location = new System.Drawing.Point(345, 80);
+            this.linkGetAccount.Name = "linkGetAccount";
+            this.linkGetAccount.Size = new System.Drawing.Size(55, 13);
+            this.linkGetAccount.TabIndex = 12;
+            this.linkGetAccount.Text = "click here.";
+            this.linkGetAccount.Click += new System.EventHandler(this.OnClickLinkFedEx);
+            // 
+            // labelGetAcount
+            // 
+            this.labelGetAcount.AutoSize = true;
+            this.labelGetAcount.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelGetAcount.Location = new System.Drawing.Point(246, 80);
+            this.labelGetAcount.Name = "labelGetAcount";
+            this.labelGetAcount.Size = new System.Drawing.Size(108, 13);
+            this.labelGetAcount.TabIndex = 11;
+            this.labelGetAcount.Text = "To open an account  ";
+            // 
             // FedExSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,7 +270,6 @@
             this.wizardPageInitial.ResumeLayout(false);
             this.wizardPageInitial.PerformLayout();
             this.wizardPageContactInfo.ResumeLayout(false);
-            this.wizardPageContactInfo.PerformLayout();
             this.wizardPageSettings.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
@@ -290,12 +280,7 @@
 
         private ShipWorks.UI.Wizard.WizardPage wizardPageInitial;
         private System.Windows.Forms.Label labelInfo1;
-        private System.Windows.Forms.Label linkFedExWebsite;
-        private System.Windows.Forms.Label labelInfo2;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
-        private System.Windows.Forms.TextBox accountNumber;
-        private System.Windows.Forms.Label labelFedExAccount;
-        private System.Windows.Forms.Label labelAccount;
         private ShipWorks.Data.Controls.PersonControl personControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPageSettings;
         private FedExOptionsControl optionsControl;
@@ -303,5 +288,9 @@
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private FedExAccountSettingsControl accountSettingsControl;
         private UI.Wizard.WizardPage wizardPage1;
+        private System.Windows.Forms.TextBox accountNumber;
+        private System.Windows.Forms.Label labelFedExAccount;
+        private System.Windows.Forms.Label linkGetAccount;
+        private System.Windows.Forms.Label labelGetAcount;
     }
 }

@@ -293,7 +293,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 if (!MagicKeysDown)
                 {
 
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk();
+                    FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
 
                     shippingClerk.Ship(shipment);
 

@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    accountInfo = StampsApiSession.GetAccountInfo(account);
+                    accountInfo = new StampsApiSession().GetAccountInfo(account);
                     postage.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
                     purchase.Left = postage.Right;
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(StampsApiSession.GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(StampsApiSession.GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {

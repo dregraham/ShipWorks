@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracAuthentication(long accountId, string password, HttpRequestSubmitter requestSubmitter, IApiLogEntry apiLogEntry)
-            : base(accountId,password,apiLogEntry)
+        public OnTracAuthentication(long accountId, string password, HttpRequestSubmitter requestSubmitter, ILogEntryFactory logEntryFactory)
+            : base(accountId, password, logEntryFactory, ApiLogSource.OnTrac, "OnTracAuthenticationRequest", LogActionType.Other)
         {
             this.requestSubmitter = requestSubmitter;
         }

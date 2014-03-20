@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using log4net;
 
@@ -37,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly ICertificateInspector certificateInspector;
 
         private readonly ILog log;
 
@@ -44,8 +46,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class with default
         /// values for the "live" FedEx settings repository and FedEx request factory.
         /// </summary>
-        public FedExShippingClerk()
-            : this(new FedExSettingsRepository(), new FedExRequestFactory(), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        public FedExShippingClerk(ICertificateInspector certificateInspector)
+            : this(new FedExSettingsRepository(), certificateInspector)
         {
         }
 
@@ -53,13 +56,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
         /// <param name="settingsRepository">The settings repository.</param>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
+            : this(settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
+        /// </summary>
+        /// <param name="settingsRepository">The settings repository.</param>
+        /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="requestFactory">The request factory.</param>
         /// <param name="log">The log.</param>
         /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
         /// <param name="labelRepository">Label repository for clearing old shipment references.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository)
+        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository)
         {
             this.settingsRepository = settingsRepository;
+            this.certificateInspector = certificateInspector;
             this.forceVersionCapture = forceVersionCapture;
             this.requestFactory = requestFactory;
             this.log = log;
@@ -128,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Cleans a shipment for specified service type.  
         /// For example, if the user makes a copy of a shipment that contains alcohol, then switches
-        /// to SmartPost, the Alcohol checkbox will be hidden, but still checked and the shipment will
+        /// to SmartPost, the Alcohol check box will be hidden, but still checked and the shipment will
         /// be marked as containing Alcohol even though SmartPost does not allow this.
         /// This method removes invalid properties on the shipment for the service type.
         /// </summary>
@@ -452,7 +467,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                     // Process the movement response and use the location ID of the movement response to create the version capture request
                     packageMovementResponse.Process();
-                    CarrierRequest versionCaptureRequest = requestFactory.CreateVersionCaptureRequest(shipmentEntity, packageMovementResponse.LocationID);
+                    CarrierRequest versionCaptureRequest = requestFactory.CreateVersionCaptureRequest(shipmentEntity, packageMovementResponse.LocationID, account);
 
                     versionCaptureRequest.Submit();
                 }
@@ -469,7 +484,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory();
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
             FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
             FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
@@ -530,6 +545,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                  //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
+
+                // Make sure we have a trusted connection with FedEx before making any requests that would
+                // send credentials over the network
+                ICertificateRequest certificateRequest = requestFactory.CreateCertificateRequest(certificateInspector);
+                if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
+                {
+                    log.Warn("The FedEx certificate did not pass inspection and could not be trusted.");
+                    throw new FedExException("ShipWorks is unable to make a secure connection to FedEx.");
+                }
 
                 // Ensure that the version capture has been performed
                 PerformVersionCapture(shipment);
@@ -677,7 +701,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                                 new FedExRateSelection(serviceType))
                 {
                     ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays)
+                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                    ShipmentType = ShipmentTypeCode.FedEx,
+                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
                 });
             }
 

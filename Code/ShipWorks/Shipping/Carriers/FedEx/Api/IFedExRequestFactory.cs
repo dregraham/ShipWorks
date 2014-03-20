@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 
@@ -31,9 +32,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="accountLocationId">The account location ID.</param>
+        /// <param name="account">The account.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to do the version capture.</returns>
-        CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId);
+        CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId, FedExAccountEntity account);
 
         /// <summary>
         /// Creates the ground close request.
@@ -94,5 +96,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to retrive tracking data.</returns>
         CarrierRequest CreateTrackRequest(FedExAccountEntity accountEntity, ShipmentEntity shipmentEntity);
+
+        /// <summary>
+        /// Creates the certificate request.
+        /// </summary>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        /// <returns>An instance of an ICertificateRequest that can be used to check the security level
+        /// of a host's certificate.</returns>
+        ICertificateRequest CreateCertificateRequest(ICertificateInspector certificateInspector);
     }
 }

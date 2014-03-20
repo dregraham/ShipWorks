@@ -46,8 +46,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
             express1Settings.SaveSettings(settings);
 
             ShippingSettings.Save(settings);
-
-            DialogResult = settings.EndiciaAutomaticExpress1 ? DialogResult.OK : DialogResult.Cancel;
+            
+            DialogResult = express1Settings.UseExpress1 ? DialogResult.OK : DialogResult.Cancel;
         }
     }
 }

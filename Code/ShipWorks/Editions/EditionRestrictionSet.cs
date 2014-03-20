@@ -162,7 +162,7 @@ namespace ShipWorks.Editions
 
             if (allowedAccounts != null && !allowedAccounts.Contains(account.ToLower()))
             {
-                return new EditionRestrictionIssue(restrictions.Where(r => r.Feature == EditionFeature.UpsAccountNumbers).First(), account);
+                return new EditionRestrictionIssue(restrictions.First(r => r.Feature == EditionFeature.UpsAccountNumbers), account);
             }
 
             return EditionRestrictionIssue.None;

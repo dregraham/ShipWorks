@@ -8,14 +8,15 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
     /// <summary>
-    /// Defines a way of interacting with Express1/Endicia settings
+    /// An implementation of the IExpress1SettingsFacade that defines the way for interacting
+    /// with the Express1 for Endicia settings.
     /// </summary>
     public class Express1EndiciaSettingsFacade : IExpress1SettingsFacade
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Express1EndiciaSettingsFacade"/> class.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">The shipping settings being used as the data source for the facade.</param>
         public Express1EndiciaSettingsFacade(ShippingSettingsEntity settings)
         {
             if (settings == null)
@@ -23,17 +24,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 throw new ArgumentNullException("settings");
             }
 
-            UseExpress1 = settings.StampsAutomaticExpress1;
-            Express1Account = settings.StampsAutomaticExpress1Account;
+            UseExpress1 = settings.EndiciaAutomaticExpress1;
+            Express1Account = settings.EndiciaAutomaticExpress1Account;
         }
 
         /// <summary>
         /// Gets and sets whether Express1 should be used if possible
         /// </summary>
+        /// <exception cref="System.NotImplementedException">
+        /// </exception>
         public bool UseExpress1 { get; set; }
 
         /// <summary>
-        /// Gets and sets the id of the Express1 account to use
+        /// Gets and sets the ID of the Express1 account to use
         /// </summary>
         public long Express1Account { get; set; }
 
@@ -42,16 +45,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public ShipmentType ShipmentType
         {
-            get
-            {
-                return new Express1EndiciaShipmentType();
-            }
+            get { return new Express1EndiciaShipmentType(); }
         }
 
         /// <summary>
-        /// Gets a list of account descriptions and ids
+        /// Gets a list of account descriptions and IDs
         /// </summary>
-        /// <returns></returns>
         public ICollection<KeyValuePair<string, long>> Express1Accounts
         {
             get
@@ -63,9 +62,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Save the Express1/Endicia settings into the actual settings entity
+        /// Save the Express1 settings into the actual settings entity
         /// </summary>
         /// <param name="settings">Settings entity into which the settings should be saved</param>
+        /// <exception cref="System.ArgumentNullException">settings</exception>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
             if (settings == null)
@@ -84,12 +84,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             get
             {
-                if (EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Count == 1)
-                {
-                    return new PersonAdapter(EndiciaAccountManager.GetAccounts(EndiciaReseller.None)[0], "");
-                }
-
-                return null;
+                List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts(EndiciaReseller.None);
+                return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
             }
         }
     }

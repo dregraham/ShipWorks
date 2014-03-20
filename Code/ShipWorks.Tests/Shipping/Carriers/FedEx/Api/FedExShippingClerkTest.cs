@@ -18,11 +18,12 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using log4net;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -32,6 +33,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private FedExShippingClerk testObject;
 
         private Mock<ICarrierSettingsRepository> settingsRepository;
+        private Mock<ICertificateInspector> certificateInspector;
+        private Mock<ICertificateRequest> certificateRequest;
+
         private Mock<IFedExRequestFactory> requestFactory;
         private Mock<ILog> log;
 
@@ -83,6 +87,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             // Return a FedEx account that has been migrated
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() {MeterNumber =  "123"});
+
+            certificateInspector = new Mock<ICertificateInspector>();
+            certificateInspector.Setup(i => i.Inspect(It.IsAny<ICertificateRequest>())).Returns(CertificateSecurityLevel.Trusted);
+
+            certificateRequest = new Mock<ICertificateRequest>();
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
 
             reply = new PostalCodeInquiryReply()
             {
@@ -180,13 +190,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory = new Mock<IFedExRequestFactory>();
             requestFactory.Setup(f => f.CreatePackageMovementRequest(It.IsAny<ShipmentEntity>(), It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
             requestFactory.Setup(f => f.CreateShipRequest(It.IsAny<ShipmentEntity>())).Returns(shippingRequest.Object);
-            requestFactory.Setup(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>())).Returns(versionCaptureRequest.Object);
+            requestFactory.Setup(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>())).Returns(versionCaptureRequest.Object);
             requestFactory.Setup(f => f.CreateGroundCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(groundCloseRequest.Object);
             requestFactory.Setup(f => f.CreateSmartPostCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(smartPostCloseRequest.Object);
             requestFactory.Setup(f => f.CreateRegisterCspUserRequest(It.IsAny<FedExAccountEntity>())).Returns(registrationRequest.Object);
             requestFactory.Setup(f => f.CreateSubscriptionRequest(It.IsAny<FedExAccountEntity>())).Returns(subscriptionRequest.Object);
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Returns(rateRequest.Object);
+            requestFactory.Setup(f => f.CreateCertificateRequest(It.IsAny<ICertificateInspector>())).Returns(certificateRequest.Object);
 
             labelRepository = new Mock<ILabelRepository>();
             labelRepository.Setup(f => f.ClearReferences(It.IsAny<ShipmentEntity>()));
@@ -194,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
 
             // Force our test object to perform version capture when called.
-            testObject = new FedExShippingClerk(settingsRepository.Object, requestFactory.Object, log.Object, true, labelRepository.Object);
+            testObject = new FedExShippingClerk(settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, true, labelRepository.Object);
         }
         
         [TestMethod]
@@ -250,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
-            requestFactory.Verify(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>()), Times.Exactly(3));
+            requestFactory.Verify(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
         }
 
         [TestMethod]
@@ -1014,6 +1025,63 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         #endregion RegisterAccount Tests
 
         #region GetRates Tests
+
+        [TestMethod]
+        public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsNone_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
+            
+            try
+            {
+                testObject.GetRates(shipmentEntity);
+            }
+            catch (FedExException)
+            { }
+
+            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FedExException))]
+        public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsNone_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
+            testObject.GetRates(shipmentEntity);
+        }
+
+        [TestMethod]
+        public void GetRates_WritesWarningToLog_WhenCertificateRequestReturnsSpoofed_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
+
+            try
+            {
+                testObject.GetRates(shipmentEntity);
+            }
+            catch (FedExException)
+            { }
+
+            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FedExException))]
+        public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsSpoofed_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
+            testObject.GetRates(shipmentEntity);
+        }
+
+        [TestMethod]
+        public void GetRates_PerformsVersionCapture_WhenCertificateRequestReturnsTrusted_Test()
+        {
+            certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
+
+            testObject.GetRates(shipmentEntity);
+
+            Assert.IsTrue(testObject.HasDoneVersionCapture);
+        }
+
 
         [TestMethod]
         public void GetRates_PerformsVersionCapture_Test()

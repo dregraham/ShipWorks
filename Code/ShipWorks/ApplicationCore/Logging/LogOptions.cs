@@ -17,6 +17,7 @@ namespace ShipWorks.ApplicationCore.Logging
         // What to log
         bool logShipWorks = true;
         bool logServices = true;
+        bool logRateCalls = false;
 
         // How many days logs are left behind
         int maxLogAgeDays = 7;
@@ -41,6 +42,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
             logShipWorks = copyFrom.logShipWorks;
             logServices = copyFrom.logServices;
+            logRateCalls = copyFrom.logRateCalls;
 
             maxLogAgeDays = copyFrom.maxLogAgeDays;
         }
@@ -58,8 +60,9 @@ namespace ShipWorks.ApplicationCore.Logging
 
                 xmlWriter.WriteElementString("LogShipWorks", logShipWorks.ToString());
                 xmlWriter.WriteElementString("LogServices", logServices.ToString());
+                xmlWriter.WriteElementString("LogRateCalls", logRateCalls.ToString());
                 xmlWriter.WriteElementString("MaxLogAgeDays", maxLogAgeDays.ToString());
-
+                
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteEndDocument();
             }
@@ -76,7 +79,9 @@ namespace ShipWorks.ApplicationCore.Logging
             LogOptions logOptions = new LogOptions();
             logOptions.LogShipWorks = XPathUtility.Evaluate(xpath, "//LogShipWorks", logOptions.LogShipWorks);
             logOptions.LogServices = XPathUtility.Evaluate(xpath, "//LogServices", logOptions.LogServices);
+            logOptions.LogRateCalls = XPathUtility.Evaluate(xpath, "//LogRateCalls", logOptions.LogRateCalls);
             logOptions.MaxLogAgeDays = XPathUtility.Evaluate(xpath, "//MaxLogAgeDays", logOptions.MaxLogAgeDays);
+            
 
             return logOptions;
         }
@@ -97,6 +102,15 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             get { return logServices; }
             set { logServices = value; }
+        }
+
+        /// <summary>
+        /// Log API service calls to GetRates
+        /// </summary>
+        public bool LogRateCalls
+        {
+            get { return logRateCalls; }
+            set { logRateCalls = value; }
         }
 
         /// <summary>

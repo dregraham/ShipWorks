@@ -42,13 +42,13 @@
             this.menuPoundsOunces = new System.Windows.Forms.ToolStripMenuItem();
             this.liveWeight = new System.Windows.Forms.Label();
             this.weighToolbar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.errorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // weighToolbar
             // 
-            this.weighToolbar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.weighToolbar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.weighToolbar.BackColor = System.Drawing.Color.Transparent;
             this.weighToolbar.CanOverflow = false;
             this.weighToolbar.Dock = System.Windows.Forms.DockStyle.None;
@@ -79,13 +79,14 @@
             // 
             // textBox
             // 
-            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.ContextMenuStrip = this.contextMenu;
             this.textBox.Location = new System.Drawing.Point(0, 0);
             this.textBox.Name = "textBox";
             this.textBox.Size = new System.Drawing.Size(287, 21);
             this.textBox.TabIndex = 0;
+            this.textBox.TextChanged += new System.EventHandler(this.OnTextBoxChanged);
             // 
             // contextMenu
             // 
@@ -145,7 +146,7 @@
             // 
             // liveWeight
             // 
-            this.liveWeight.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.liveWeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.liveWeight.AutoSize = true;
             this.liveWeight.ForeColor = System.Drawing.SystemColors.GrayText;
             this.liveWeight.Location = new System.Drawing.Point(315, 3);
@@ -162,13 +163,13 @@
             this.Controls.Add(this.liveWeight);
             this.Controls.Add(this.weighToolbar);
             this.Controls.Add(this.textBox);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "WeightControl";
             this.Size = new System.Drawing.Size(410, 20);
             this.Load += new System.EventHandler(this.OnLoad);
             this.weighToolbar.ResumeLayout(false);
             this.weighToolbar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.errorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

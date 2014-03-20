@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Tracking;
@@ -15,6 +23,7 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores;
 using ShipWorks.Data;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -37,14 +46,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Postal", typeof(PostalShipmentEntity), refreshIfPresent);
-        }
-
-        /// <summary>
-        /// Configure properties of a newly created shipment that are not taken care of by profile
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
@@ -301,6 +302,134 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return confirmationTypes;
-        }        
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of a WebToolsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            // We want to return the null broker if there is already an Endicia or Stamps.com
+            // account setup, so postal rates for Web Tools aren't used as well (i.e. just use
+            // the provider that has an account instead of rates from web tools).
+            IBestRateShippingBroker broker = new NullShippingBroker();
+
+            bool stampsAccountsExist = StampsAccountManager.GetAccounts(false).Any();
+            bool endiciaAccountsExist = EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Any();
+
+            if (!stampsAccountsExist && !endiciaAccountsExist)
+            {
+                // There aren't any postal based accounts setup, so we want to see if we should 
+                // show counter rates (depending whether Endicia or Stamps.com have been excluded)
+
+                // We need to see which Postal provider to show when signing up for a postal account
+                // based on the global shipping settings and best rate settings with preference for Endicia
+                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+
+                if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
+                {
+                    // Endicia has not been excluded from Best Rate, and there aren't any 
+                    // Endicia accounts, so use the counter rates broker for Endicia
+                    broker = new EndiciaCounterRatesBroker(new EndiciaAccountRepository());
+                }
+                else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
+                {
+                    // Endicia is not being used in best rate (for whatever reason), and Stamps.com has
+                    // not been excluded from Best Rate, so use the counter rates broker for Stamps.com
+                    broker = new StampsCounterRatesBroker(new StampsAccountRepository());
+                }
+
+                // If neither of the above conditions were satisfied, Endicia and Stamps have both been excluded from Best Rate, so do nothing
+                // and just return the null broker
+            }
+
+            return broker;
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+                (
+                    new List<IEntityField2>()
+                    {
+                        shipment.Postal.Fields[PostalShipmentFields.PackagingType.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsHeight.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsLength.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsWidth.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsAddWeight.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.DimsWeight.FieldIndex],                        
+                        shipment.Postal.Fields[PostalShipmentFields.NonMachinable.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.NonRectangular.FieldIndex],
+                        shipment.Postal.Fields[PostalShipmentFields.InsuranceValue.FieldIndex]
+                    }
+                );
+
+            return fields;
+        }
+
+        /// <summary>
+        /// Builds a RateGroup from a list of express 1 rates
+        /// </summary>
+        /// <param name="rates">List of rates that should be filtered and added to the group</param>
+        /// <param name="express1ShipmentType">Express1 shipment type</param>
+        /// <param name="baseShipmentType">Base type of the shipment</param>
+        /// <returns></returns>
+        protected static RateGroup BuildExpress1RateGroup(IEnumerable<RateResult> rates, ShipmentTypeCode express1ShipmentType, ShipmentTypeCode baseShipmentType)
+        {
+            // Express1 rates - return rates filtered by what is available to the user
+            List<PostalServiceType> availabelServiceTypes =
+                PostalUtility.GetDomesticServices(express1ShipmentType)
+                    .Concat(PostalUtility.GetInternationalServices(express1ShipmentType))
+                    .ToList();
+
+            var validExpress1Rates = rates
+                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
+                .ToList();
+
+            validExpress1Rates.ForEach(e => {
+                e.ShipmentType = baseShipmentType;
+                e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
+            });
+
+            return new RateGroup(validExpress1Rates);
+        }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());    
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+
+            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
+            rates.Rates.ForEach(x =>
+            {
+                if (x.ProviderLogo != null)
+                {
+                    // Only change existing logos; don't set logos for rates that don't have them
+                    x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
+                }
+            });
+            return rates;
+        }
     }
 }

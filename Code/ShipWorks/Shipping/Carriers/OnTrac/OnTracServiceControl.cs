@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
@@ -16,16 +17,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="OnTracServiceControl"/> class.
         /// </summary>
-        public OnTracServiceControl()
-            : base(ShipmentTypeCode.OnTrac)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public OnTracServiceControl(RateControl rateControl)
+            : base(ShipmentTypeCode.OnTrac, rateControl)
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Initialie the comboboxes
+        /// Initialize the combo boxes
         /// </summary>
         public override void Initialize()
         {
@@ -38,13 +41,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             EnumHelper.BindComboBox<OnTracCodType>(codPaymentType);
             EnumHelper.BindComboBox<OnTracPackagingType>(packagingType);
 
-            LoadOnTracAccounts();
+            LoadAccounts();
         }
 
         /// <summary>
         /// Load the list of OnTrac accounts
         /// </summary>
-        private void LoadOnTracAccounts()
+        public override void LoadAccounts()
         {
             onTracAccount.SelectedIndexChanged -= OnChangeAccount;
             onTracAccount.DisplayMember = "Key";
@@ -52,18 +55,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (OnTracAccountManager.Accounts.Count > 0)
             {
-                onTracAccount.DataSource =
-                    OnTracAccountManager.Accounts.Select(
-                        s => new KeyValuePair<string, long>(s.Description, s.OnTracAccountID))
-                                        .ToList();
+                onTracAccount.DataSource = OnTracAccountManager.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.OnTracAccountID)).ToList();
                 onTracAccount.Enabled = true;
             }
             else
             {
-                onTracAccount.DataSource = new List<KeyValuePair<string, long>>
-                                           {
-                                               new KeyValuePair<string, long>("(No accounts)", 0)
-                                           };
+                onTracAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
                 onTracAccount.Enabled = false;
             }
 
@@ -78,15 +75,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             SuspendRateCriteriaChangeEvent();
 
             base.RecipientDestinationChanged -= OnRecipientDestinationChanged;
-
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
-            
             base.RecipientDestinationChanged += OnRecipientDestinationChanged;
 
             LoadShipmentDetails();
-
             UpdateInsuranceDisplay();
-
             ResumeRateCriteriaChangeEvent();
         }
 
@@ -105,6 +98,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             bool allInternational = LoadedShipments.Any(shipment => !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode));
 
             // Update the service types
+            service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(!allInternational);
 
             using (new MultiValueScope())
@@ -125,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     referenceNumber2.ApplyMultiText(shipment.OnTrac.Reference2);
                     instructions.ApplyMultiText(shipment.OnTrac.Instructions);
 
-                    // Sets service type only if it is avalable
+                    // Sets service type only if it is available
                     var onTracServiceType = (OnTracServiceType) shipment.OnTrac.Service;
                     if (((EnumList<OnTracServiceType>) service.DataSource).Any(x => x.Value == onTracServiceType))
                     {
@@ -139,7 +133,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     dimensions.Add(new DimensionsAdapter(shipment.OnTrac));
                 }
             }
-            
+
+
+            service.SelectedValueChanged += OnServiceChanged;
+
             //Load the dimensions
             dimensionsControl.LoadDimensions(dimensions);
         }
@@ -168,7 +165,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 else if (previousValue != null)
                 {
                     service.SelectedValue = previousValue;
-
                     if (service.SelectedIndex == -1)
                     {
                         service.SelectedIndex = 0;
@@ -198,9 +194,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
             else
             {
-                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0
-                    ? OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue)
-                    : null;
+                OnTracAccountEntity account = onTracAccount.SelectedIndex >= 0 ? 
+                    OnTracAccountManager.GetAccount((long) onTracAccount.SelectedValue) : 
+                    null;
 
                 if (account != null)
                 {
@@ -213,7 +209,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
-
             RaiseRateCriteriaChanged();
         }
 
@@ -225,7 +220,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             if (onTracAccount.SelectedValue != null)
             {
                 long accountID = (long) onTracAccount.SelectedValue;
-
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     shipment.OnTrac.OnTracAccountID = accountID;
@@ -281,11 +275,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// A rate has been selected.
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
-
-            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.Tag;
+            OnTracServiceType servicetype = (OnTracServiceType)e.Rate.OriginalTag;
 
             service.SelectedValue = servicetype;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -299,13 +292,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override void UpdateInsuranceDisplay()
         {
-            insuranceControl.LoadInsuranceChoices(
-                LoadedShipments.Select(
-                    shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+            insuranceControl.InsuranceOptionsChanged -= OnRateCriteriaChanged;
+            insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
+
+            insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         private void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
@@ -319,6 +313,41 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Called when the service type has changed.
+        /// </summary>
+        private void OnServiceChanged(object sender, EventArgs e)
+        {
+            SyncSelectedRate();
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                OnTracServiceType serviceType = (OnTracServiceType)service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.OnTrac)
+                    {
+                        return false;
+                    }
+
+                    return (OnTracServiceType)r.OriginalTag == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
     }
 }

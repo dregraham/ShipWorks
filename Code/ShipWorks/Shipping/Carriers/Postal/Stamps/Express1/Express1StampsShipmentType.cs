@@ -1,10 +1,16 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 
@@ -16,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     [Obfuscation(Exclude = true, ApplyToMembers = false)]    
     public class Express1StampsShipmentType : StampsShipmentType
     {
+        /// <summary>
+        /// Create an instance of the Express1 Stamps Shipment Type
+        /// </summary>
+        public Express1StampsShipmentType()
+        {
+            AccountRepository = new Express1StampsAccountRepository();
+        }
+
         /// <summary>
         /// Gets the shipment type code.
         /// </summary>
@@ -45,15 +59,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Creates the Express1/Stamps service control.
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new Express1StampsServiceControl();
+            return new Express1StampsServiceControl(rateControl);
         }
 
         /// <summary>
         /// Creates the Express1/Stamps setup wizard.
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
@@ -81,6 +97,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
+
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+
+                // This call to GetRates won't be recursive since the counter rate account repository will return an account
+                return GetRates(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+            finally
+            {
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
+            }
+        }
+
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new Express1StampsShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Processes a shipment.
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -92,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Stamps.HidePostage = true;
-                StampsApiSession.ProcessShipment(shipment);
+                new StampsApiSession().ProcessShipment(shipment);
             }
             catch(StampsException ex)
             {
@@ -101,12 +157,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Express1 for Stamps.com shipment type.
+        /// Gets an instance to the best rate shipping broker for the Express1 for Stamps.com shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new Express1StampsBestRateBroker();
+            if (StampsAccountManager.Express1Accounts.Any())
+            {
+                return new Express1StampsBestRateBroker();
+            }
+            
+            return new Express1StampsCounterRatesBroker();
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
         }
     }
 }
