@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.ShipSense
+namespace ShipWorks.Shipping.ShipSense.Hashing
 {
     public interface IKnowledgeBaseHash
     {

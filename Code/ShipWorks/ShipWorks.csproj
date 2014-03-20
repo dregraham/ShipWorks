@@ -1977,6 +1977,8 @@
     </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\IKnowledgeBaseHash.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgeBaseHash.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleParameters.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />

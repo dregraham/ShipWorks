@@ -359,6 +359,7 @@
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgeBaseHashTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
