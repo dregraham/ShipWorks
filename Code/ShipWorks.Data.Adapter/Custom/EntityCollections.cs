@@ -9183,12 +9183,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of ShipSenseKnowledgeBaseEntity
+	/// Strongly typed collection of ShipSenseKnowledgebaseEntity
 	/// </summary>
-	public class ShipSenseKnowledgeBaseCollection : EntityCollection<ShipSenseKnowledgeBaseEntity>
+	public class ShipSenseKnowledgebaseCollection : EntityCollection<ShipSenseKnowledgebaseEntity>
 	{
         /// <summary>
-        /// Gets the count of all ShipSenseKnowledgeBaseEntity rows
+        /// Gets the count of all ShipSenseKnowledgebaseEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -9196,7 +9196,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all ShipSenseKnowledgeBaseEntity rows filtered by the given predicate
+        /// Gets the count of all ShipSenseKnowledgebaseEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -9207,13 +9207,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new ShipSenseKnowledgeBaseEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new ShipSenseKnowledgebaseEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static ShipSenseKnowledgeBaseCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static ShipSenseKnowledgebaseCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -9221,9 +9221,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static ShipSenseKnowledgeBaseCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static ShipSenseKnowledgebaseCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            ShipSenseKnowledgeBaseCollection collection = new ShipSenseKnowledgeBaseCollection();
+            ShipSenseKnowledgebaseCollection collection = new ShipSenseKnowledgebaseCollection();
 
             RelationPredicateBucket bucket = null;
 

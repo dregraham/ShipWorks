@@ -15824,18 +15824,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity ShipSenseKnowledgeBaseEntity</summary>
-	public partial class ShipSenseKnowledgeBaseFields
+	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
+	public partial class ShipSenseKnowledgebaseFields
 	{
-		/// <summary>Creates a new ShipSenseKnowledgeBaseEntity.Hash field instance</summary>
+		/// <summary>Creates a new ShipSenseKnowledgebaseEntity.Hash field instance</summary>
 		public static EntityField2 Hash
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgeBaseFieldIndex.Hash);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgebaseFieldIndex.Hash);}
 		}
-		/// <summary>Creates a new ShipSenseKnowledgeBaseEntity.Entry field instance</summary>
+		/// <summary>Creates a new ShipSenseKnowledgebaseEntity.Entry field instance</summary>
 		public static EntityField2 Entry
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgeBaseFieldIndex.Entry);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShipSenseKnowledgebaseFieldIndex.Entry);}
 		}
 	}
 

@@ -181,7 +181,7 @@ namespace ShipWorks.Data.Adapter
 			InitShippingProfileEntityMappings();
 			InitShippingProviderRuleEntityMappings();
 			InitShippingSettingsEntityMappings();
-			InitShipSenseKnowledgeBaseEntityMappings();
+			InitShipSenseKnowledgebaseEntityMappings();
 			InitShopifyOrderEntityMappings();
 			InitShopifyOrderItemEntityMappings();
 			InitShopifyStoreEntityMappings();
@@ -2346,12 +2346,12 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
 		}
-		/// <summary>Inits ShipSenseKnowledgeBaseEntity's mappings</summary>
-		private void InitShipSenseKnowledgeBaseEntityMappings()
+		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
+		private void InitShipSenseKnowledgebaseEntityMappings()
 		{
-			base.AddElementMapping( "ShipSenseKnowledgeBaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgeBase", 2 );
-			base.AddElementFieldMapping( "ShipSenseKnowledgeBaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
-			base.AddElementFieldMapping( "ShipSenseKnowledgeBaseEntity", "Entry", "Entry", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgebase", 2 );
+			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
+			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Entry", "Entry", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
 		/// <summary>Inits ShopifyOrderEntity's mappings</summary>
 		private void InitShopifyOrderEntityMappings()

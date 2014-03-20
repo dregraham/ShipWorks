@@ -17,15 +17,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the static Relations variant for the entity: ShipSenseKnowledgeBase. </summary>
-	public partial class ShipSenseKnowledgeBaseRelations
+	/// <summary>Implements the static Relations variant for the entity: ShipSenseKnowledgebase. </summary>
+	public partial class ShipSenseKnowledgebaseRelations
 	{
 		/// <summary>CTor</summary>
-		public ShipSenseKnowledgeBaseRelations()
+		public ShipSenseKnowledgebaseRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the ShipSenseKnowledgeBaseEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the ShipSenseKnowledgebaseEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{

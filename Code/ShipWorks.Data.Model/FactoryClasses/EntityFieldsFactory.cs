@@ -407,8 +407,8 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShippingSettingsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShippingSettingsEntity");
 					break;
-				case ShipWorks.Data.Model.EntityType.ShipSenseKnowledgeBaseEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShipSenseKnowledgeBaseEntity");
+				case ShipWorks.Data.Model.EntityType.ShipSenseKnowledgebaseEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShipSenseKnowledgebaseEntity");
 					break;
 				case ShipWorks.Data.Model.EntityType.ShopifyOrderEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShopifyOrderEntity");

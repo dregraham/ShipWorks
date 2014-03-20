@@ -181,7 +181,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ShippingSettingsEntity": return EntityType.ShippingSettingsEntity;
 				case "BestRateShipmentEntity": return EntityType.BestRateShipmentEntity;
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
-				case "ShipSenseKnowledgeBaseEntity": return EntityType.ShipSenseKnowledgeBaseEntity;
+				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

@@ -26,17 +26,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 
 	/// <summary>
-	/// Entity class which represents the entity 'ShipSenseKnowledgeBase'.<br/><br/>
+	/// Entity class which represents the entity 'ShipSenseKnowledgebase'.<br/><br/>
 	/// 
 	/// </summary>
 	[Serializable]
-	public partial class ShipSenseKnowledgeBaseEntity : CommonEntityBase, ISerializable
+	public partial class ShipSenseKnowledgebaseEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
@@ -46,7 +44,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -64,13 +61,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static ShipSenseKnowledgeBaseEntity()
+		static ShipSenseKnowledgebaseEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 
 		/// <summary> CTor</summary>
-		public ShipSenseKnowledgeBaseEntity():base("ShipSenseKnowledgeBaseEntity")
+		public ShipSenseKnowledgebaseEntity():base("ShipSenseKnowledgebaseEntity")
 		{
 			InitClassEmpty(null, CreateFields());
 		}
@@ -78,33 +75,33 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public ShipSenseKnowledgeBaseEntity(IEntityFields2 fields):base("ShipSenseKnowledgeBaseEntity")
+		public ShipSenseKnowledgebaseEntity(IEntityFields2 fields):base("ShipSenseKnowledgebaseEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this ShipSenseKnowledgeBaseEntity</param>
-		public ShipSenseKnowledgeBaseEntity(IValidator validator):base("ShipSenseKnowledgeBaseEntity")
+		/// <param name="validator">The custom validator object for this ShipSenseKnowledgebaseEntity</param>
+		public ShipSenseKnowledgebaseEntity(IValidator validator):base("ShipSenseKnowledgebaseEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
 		}
 				
 
 		/// <summary> CTor</summary>
-		/// <param name="hash">PK value for ShipSenseKnowledgeBase which data should be fetched into this ShipSenseKnowledgeBase object</param>
+		/// <param name="hash">PK value for ShipSenseKnowledgebase which data should be fetched into this ShipSenseKnowledgebase object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ShipSenseKnowledgeBaseEntity(System.String hash):base("ShipSenseKnowledgeBaseEntity")
+		public ShipSenseKnowledgebaseEntity(System.String hash):base("ShipSenseKnowledgebaseEntity")
 		{
 			InitClassEmpty(null, CreateFields());
 			this.Hash = hash;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="hash">PK value for ShipSenseKnowledgeBase which data should be fetched into this ShipSenseKnowledgeBase object</param>
-		/// <param name="validator">The custom validator object for this ShipSenseKnowledgeBaseEntity</param>
+		/// <param name="hash">PK value for ShipSenseKnowledgebase which data should be fetched into this ShipSenseKnowledgebase object</param>
+		/// <param name="validator">The custom validator object for this ShipSenseKnowledgebaseEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ShipSenseKnowledgeBaseEntity(System.String hash, IValidator validator):base("ShipSenseKnowledgeBaseEntity")
+		public ShipSenseKnowledgebaseEntity(System.String hash, IValidator validator):base("ShipSenseKnowledgebaseEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
 			this.Hash = hash;
@@ -114,7 +111,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected ShipSenseKnowledgeBaseEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ShipSenseKnowledgebaseEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -127,7 +124,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -135,7 +131,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((ShipSenseKnowledgeBaseFieldIndex)fieldIndex)
+			switch((ShipSenseKnowledgebaseFieldIndex)fieldIndex)
 			{
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -173,7 +169,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
 		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return ShipSenseKnowledgeBaseEntity.GetRelationsForField(fieldName);
+			return ShipSenseKnowledgebaseEntity.GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
@@ -296,7 +292,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -304,7 +299,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
 		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(ShipSenseKnowledgeBaseFieldIndex fieldIndex)
+		public bool TestOriginalFieldValueForNull(ShipSenseKnowledgebaseFieldIndex fieldIndex)
 		{
 			return base.Fields[(int)fieldIndex].IsNull;
 		}
@@ -313,7 +308,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
 		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
 		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(ShipSenseKnowledgeBaseFieldIndex fieldIndex)
+		public bool TestCurrentFieldValueForNull(ShipSenseKnowledgebaseFieldIndex fieldIndex)
 		{
 			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
 		}
@@ -323,7 +318,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		public override List<IEntityRelation> GetAllRelations()
 		{
-			return new ShipSenseKnowledgeBaseRelations().GetAllRelations();
+			return new ShipSenseKnowledgebaseRelations().GetAllRelations();
 		}
 		
 
@@ -335,7 +330,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
 		protected virtual IEntityFields2 CreateFields()
 		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ShipSenseKnowledgeBaseEntity);
+			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ShipSenseKnowledgebaseEntity);
 		}
 
 		/// <summary>
@@ -350,7 +345,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(ShipSenseKnowledgeBaseEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(ShipSenseKnowledgebaseEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -425,7 +420,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -449,7 +443,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this ShipSenseKnowledgeBaseEntity</param>
+		/// <param name="validator">The validator object for this ShipSenseKnowledgebaseEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -462,16 +456,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static ShipSenseKnowledgeBaseRelations Relations
+		public  static ShipSenseKnowledgebaseRelations Relations
 		{
-			get	{ return new ShipSenseKnowledgeBaseRelations(); }
+			get	{ return new ShipSenseKnowledgebaseRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -490,7 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return ShipSenseKnowledgeBaseEntity.CustomProperties;}
+			get { return ShipSenseKnowledgebaseEntity.CustomProperties;}
 		}
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
@@ -506,29 +499,29 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return ShipSenseKnowledgeBaseEntity.FieldsCustomProperties;}
+			get { return ShipSenseKnowledgebaseEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The Hash property of the Entity ShipSenseKnowledgeBase<br/><br/>
+		/// <summary> The Hash property of the Entity ShipSenseKnowledgebase<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Hash"<br/>
+		/// <remarks>Mapped on  table field: "ShipSenseKnowledgebase"."Hash"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Hash
 		{
-			get { return (System.String)GetValue((int)ShipSenseKnowledgeBaseFieldIndex.Hash, true); }
-			set	{ SetValue((int)ShipSenseKnowledgeBaseFieldIndex.Hash, value); }
+			get { return (System.String)GetValue((int)ShipSenseKnowledgebaseFieldIndex.Hash, true); }
+			set	{ SetValue((int)ShipSenseKnowledgebaseFieldIndex.Hash, value); }
 		}
 
-		/// <summary> The Entry property of the Entity ShipSenseKnowledgeBase<br/><br/>
+		/// <summary> The Entry property of the Entity ShipSenseKnowledgebase<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Entry"<br/>
+		/// <remarks>Mapped on  table field: "ShipSenseKnowledgebase"."Entry"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String Entry
 		{
-			get { return (System.String)GetValue((int)ShipSenseKnowledgeBaseFieldIndex.Entry, true); }
-			set	{ SetValue((int)ShipSenseKnowledgeBaseFieldIndex.Entry, value); }
+			get { return (System.String)GetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, true); }
+			set	{ SetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, value); }
 		}
 
 
@@ -552,7 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.ShipSenseKnowledgeBaseEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.ShipSenseKnowledgebaseEntity; }
 		}
 		#endregion
 
@@ -561,7 +554,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

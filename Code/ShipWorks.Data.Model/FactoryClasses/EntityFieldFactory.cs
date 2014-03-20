@@ -1026,12 +1026,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ShippingSettingsEntity", (int)fieldIndex));
 		}
 
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ShipSenseKnowledgeBaseEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ShipSenseKnowledgebaseEntity. Which EntityField is created is specified by fieldIndex</summary>
 		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
 		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(ShipSenseKnowledgeBaseFieldIndex fieldIndex)
+		public static IEntityField2 Create(ShipSenseKnowledgebaseFieldIndex fieldIndex)
 		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ShipSenseKnowledgeBaseEntity", (int)fieldIndex));
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ShipSenseKnowledgebaseEntity", (int)fieldIndex));
 		}
 
 		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ShopifyOrderEntity. Which EntityField is created is specified by fieldIndex</summary>
