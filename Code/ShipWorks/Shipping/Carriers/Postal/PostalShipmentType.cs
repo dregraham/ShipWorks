@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         public override bool IsDomestic(ShipmentEntity shipmentEntity)
         {
-            return base.IsDomestic(shipmentEntity) || IsPuertoRicoShipment(shipmentEntity);
+            return base.IsDomestic(shipmentEntity) || IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
         }
     }
 }

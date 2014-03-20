@@ -940,7 +940,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override bool IsDomestic(ShipmentEntity shipmentEntity)
         {
-            return base.IsDomestic(shipmentEntity) && !IsPuertoRicoShipment(shipmentEntity);
+            return base.IsDomestic(shipmentEntity) && !IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
         }
 
         /// <summary>

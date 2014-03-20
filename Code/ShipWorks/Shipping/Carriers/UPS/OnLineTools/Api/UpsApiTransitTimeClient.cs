@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("AddressArtifactFormat");
             xmlWriter.WriteElementString("PoliticalDivision2", shipment.OriginCity);
             xmlWriter.WriteElementString("PoliticalDivision1", shipment.OriginStateProvCode);
-            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.OriginCountryCode));
+            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.OriginCountryCode, shipment.OriginStateProvCode));
             xmlWriter.WriteElementString("PostcodePrimaryLow", shipment.OriginPostalCode);
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("AddressArtifactFormat");
             xmlWriter.WriteElementString("PoliticalDivision2", shipment.ShipCity);
             xmlWriter.WriteElementString("PoliticalDivision1", shipment.ShipStateProvCode);
-            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.ShipCountryCode));
+            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.ShipCountryCode, shipment.ShipStateProvCode));
             xmlWriter.WriteElementString("PostcodePrimaryLow", shipment.ShipPostalCode);
 
             if (ResidentialDeterminationService.DetermineResidentialAddress(shipment))

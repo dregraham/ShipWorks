@@ -150,8 +150,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 //=================================================================
                 //To	US	 |  Not Allowed	Not Allowed	    Required	Not Allowed
                 //    CA/PR	 |  Not Allowed	Required	    Not Allowed	Not Allowed
-                if ((shipment.ReturnShipment && ((shipment.OriginCountryCode == "CA" || shipment.OriginCountryCode == "PR") && shipment.ShipCountryCode == "US")) ||
-                    (!shipment.ReturnShipment && (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "CA" || shipment.ShipCountryCode == "PR"))))
+                if ((shipment.ReturnShipment && ((shipment.OriginCountryCode == "CA" || ShipmentType.IsPuertoRicoAddress(shipment, "Origin")) && shipment.ShipCountryCode == "US")) ||
+                    (!shipment.ReturnShipment && (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "CA" || ShipmentType.IsPuertoRicoAddress(shipment, "Ship")))))
                 {
                     xmlWriter.WriteStartElement("InvoiceLineTotal");
                     xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));

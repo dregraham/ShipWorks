@@ -643,16 +643,34 @@ namespace ShipWorks.Shipping
             return requiresCustoms;
         }
 
-        public static bool IsPuertoRicoShipment(ShipmentEntity shipment)
+        /// <summary>
+        /// Gets whether the shipment is going from the US to PR or from PR to US
+        /// </summary>
+        /// <param name="shipment">Shipment that should be checked</param>
+        /// <returns></returns>
+        /// <remarks>This check handles the situation where a PR address has US as the country but PR as the state</remarks>
+        public static bool IsShipmentBetweenUnitedStatesAndPuertoRico(ShipmentEntity shipment)
         {
-            return (shipment.OriginCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && IsPuertoRicoAddress(shipment, "Ship")) ||
-                   (IsPuertoRicoAddress(shipment, "Origin") && shipment.ShipCountryCode.Equals("UR", StringComparison.OrdinalIgnoreCase));
+            return (shipment.OriginCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && 
+                    !IsPuertoRicoAddress(shipment, "Origin") && 
+                    IsPuertoRicoAddress(shipment, "Ship")) ||
+                   (IsPuertoRicoAddress(shipment, "Origin") && 
+                    shipment.ShipCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) &&
+                    !IsPuertoRicoAddress(shipment, "Ship"));
         }
 
+        /// <summary>
+        /// Gets whether the entity's specified address is in Puerto Rico
+        /// </summary>
+        /// <param name="entity">Entity whose address should be checked</param>
+        /// <param name="fieldPrefix">Prefix of the address that should be checked</param>
+        /// <returns>True if the address is a Puerto Rico address or false if not</returns>
+        /// <remarks>This check handles situations where the address has US as the country but PR as the state</remarks>
         public static bool IsPuertoRicoAddress(EntityBase2 entity, string fieldPrefix)
         {
             PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
-            return address.CountryCode == "PR" || (address.CountryCode == "US" && address.StateProvCode == "PR");
+            return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) || 
+                (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

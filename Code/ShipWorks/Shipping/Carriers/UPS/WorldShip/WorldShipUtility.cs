@@ -232,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.FromCity = from.City;
             worldship.FromStateProvCode = from.StateProvCode;
             worldship.FromPostalCode = from.PostalCode;
-            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode);
+            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode, from.StateProvCode);
             worldship.FromTelephone = from.Phone10Digits;
             worldship.FromEmail = GetWorldShipValidEmail(from.Email);
             worldship.FromAccountNumber = account.AccountNumber;
@@ -247,7 +247,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.ToCity = to.City;
             worldship.ToStateProvCode = to.StateProvCode;
             worldship.ToPostalCode = to.PostalCode;
-            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode);
+            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode, to.StateProvCode);
             worldship.ToTelephone = to.Phone10Digits;
             worldship.ToEmail = GetWorldShipValidEmail(to.Email);
             worldship.ToResidential = shipment.ResidentialResult ? "Y" : "N";
