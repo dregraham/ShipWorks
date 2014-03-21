@@ -578,6 +578,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override bool IsCustomsRequired(ShipmentEntity shipment)
         {
+            // Make sure the best rate shipment data is loaded (in the event that we're 
+            // coming from somewhere other than the shipping screen)
+            LoadShipmentData(shipment, false);
+
             IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }

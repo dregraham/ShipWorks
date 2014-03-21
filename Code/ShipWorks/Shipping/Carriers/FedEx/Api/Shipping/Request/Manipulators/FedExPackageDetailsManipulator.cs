@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -64,9 +65,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 packageRequest.Dimensions = new Dimensions
                 {
                     Units = GetApiLinearUnit(request.ShipmentEntity),
-                    Length = length.ToString(),
-                    Height = height.ToString(),
-                    Width = width.ToString()
+
+                    // Default the dims to 1 if none are provided
+                    Length = Math.Max(1, length).ToString(CultureInfo.InvariantCulture),
+                    Height = Math.Max(1, height).ToString(CultureInfo.InvariantCulture),
+                    Width = Math.Max(1, width).ToString(CultureInfo.InvariantCulture)
                 };
 
                 // todo: make this something other than test.
