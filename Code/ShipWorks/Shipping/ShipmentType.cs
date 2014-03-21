@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
@@ -215,6 +217,9 @@ namespace ShipWorks.Shipping
 			// First apply the base profile
 			ApplyProfile(shipment, GetPrimaryProfile());
 
+            // Now apply ShipSense
+		    ApplyShipSense(shipment);
+
 			// Go through each additional profile and apply it as well
 			foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
 			{
@@ -233,7 +238,32 @@ namespace ShipWorks.Shipping
 			}
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Attempts to apply ShipSense values to the given shipment.
+        /// </summary>
+	    protected void ApplyShipSense(ShipmentEntity shipment)
+	    {
+            // Grab the actual shipment type
+	        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+	        IPackageAdapter packageAdapter;
+
+            packageAdapter = shipmentType.GetPackageAdapter(shipment);
+
+            // Populate the order items so we can compute the hash
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+            }
+
+            // Get our knowledgebase entry for this shipment
+            Knowledgebase knowledgebase = new Knowledgebase();
+	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
+
+            // Apply each adapter to the shipment packages
+	        knowledgebaseEntry.ApplyTo(new List<IPackageAdapter> {packageAdapter});
+	    }
+
+	    /// <summary>
 		/// Ensures that the carrier specific data for the given profile exists and is loaded
 		/// </summary>
 		public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)

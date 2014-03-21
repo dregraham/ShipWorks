@@ -60,6 +60,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// <exception cref="System.InvalidOperationException">The number packages in the knowledge base entry must match the number of adapters.</exception>
         public void ApplyTo(IEnumerable<IPackageAdapter> adapters)
         {
+            if (!Packages.Any())
+            {
+                // We have no packages, so this must be a brand new KB Entry, just return.
+                return;
+            }
+
             IEnumerable<IPackageAdapter> packageAdapters = adapters as IList<IPackageAdapter> ?? adapters.ToList();
             
             if (Packages.Count() != packageAdapters.Count())

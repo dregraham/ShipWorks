@@ -1,4 +1,6 @@
-﻿using ShipWorks.Data.Connection;
+﻿using System.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -38,7 +40,16 @@ namespace ShipWorks.Shipping.ShipSense
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to 
             // reduce the number of database calls 
-            ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
+            string hash = hashingStrategy.ComputeHash(order);
+            ShipSenseKnowledgebaseEntity entity = FetchEntity(hash);
+
+            if (entity == null)
+            {
+                // Doesn't exist in the db, so create a new one and set the hash
+                entity = new ShipSenseKnowledgebaseEntity();
+                entity.Hash = hash;
+            }
+
             entity.Entry = entry.ToJson();
 
             using (SqlAdapter adapter = new SqlAdapter())
@@ -58,7 +69,7 @@ namespace ShipWorks.Shipping.ShipSense
         {
             ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
 
-            if (entity.Entry != null)
+            if (entity != null)
             {
                 // The entry data is JSON, so deserialize the JSON into 
                 // an instance of a KnowledgebaseEntry
@@ -75,14 +86,47 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
         /// </summary>
+        /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
         private ShipSenseKnowledgebaseEntity FetchEntity(OrderEntity order)
         {
-            ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity();
-            lookupEntity.Hash = hashingStrategy.ComputeHash(order);
+            ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
+                {
+                    Hash = hashingStrategy.ComputeHash(order)
+                };
 
+            return FetchEntity(lookupEntity);
+        }
+
+        /// <summary>
+        /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
+        /// </summary>
+        /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
+        private ShipSenseKnowledgebaseEntity FetchEntity(string hash)
+        {
+            ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
+            {
+                Hash = hash
+            };
+
+            return FetchEntity(lookupEntity);
+        }
+
+        /// <summary>
+        /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
+        /// </summary>
+        /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
+        private ShipSenseKnowledgebaseEntity FetchEntity(ShipSenseKnowledgebaseEntity lookupEntity)
+        {
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.FetchEntity(lookupEntity);
+            }
+
+            // If the kb entity doesn't exist, the state will not be fetched.
+            // Return null so callers don't have to know this.
+            if (lookupEntity.Fields.State != EntityState.Fetched)
+            {
+                lookupEntity = null;
             }
 
             return lookupEntity;
