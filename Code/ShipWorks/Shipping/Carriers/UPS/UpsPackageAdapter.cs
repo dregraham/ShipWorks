@@ -1,17 +1,21 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
-namespace ShipWorks.Shipping.Carriers.FedEx
+namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class FedExPackageAdapter : IPackageAdapter
+    public class UpsPackageAdapter : IPackageAdapter
     {
-        private readonly FedExPackageEntity packageEntity;
+        private readonly UpsPackageEntity packageEntity;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPackageAdapter"/> class.
+        /// Initializes a new instance of the <see cref="UpsPackageAdapter"/> class.
         /// </summary>
         /// <param name="packageEntity">The package entity.</param>
-        public FedExPackageAdapter(FedExPackageEntity packageEntity)
+        public UpsPackageAdapter(UpsPackageEntity packageEntity)
         {
             this.packageEntity = packageEntity;
         }

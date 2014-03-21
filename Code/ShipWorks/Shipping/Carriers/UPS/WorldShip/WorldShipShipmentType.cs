@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -174,7 +175,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            if (!shipment.Ups.Packages.Any())
+            {
+                throw new UpsException("There must be at least one package to create the UPS package adapter.");
+            }
+
+            // Current story is only for a single package shipment
+            return new UpsPackageAdapter(shipment.Ups.Packages[0]);
         }
     }
 }
