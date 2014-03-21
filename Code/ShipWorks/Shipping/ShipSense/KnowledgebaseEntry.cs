@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.ShipSense
             
             if (Packages.Count() != packageAdapters.Count())
             {
-                throw new InvalidOperationException("The number packages in the knowledge base entry must match the number of adapters.");
+                throw new InvalidOperationException("The number of packages in the knowledge base entry must match the number of adapters.");
             }
 
             for (int i = 0; i < Packages.Count(); i++)
@@ -81,21 +81,24 @@ namespace ShipWorks.Shipping.ShipSense
         /// Applies the package data from the adapters to the Package collection of the knowledge base entry.
         /// </summary>
         /// <param name="adapters">The adapters.</param>
-        /// <exception cref="System.InvalidOperationException">The number packages in the knowledge base entry must match the number of adapters.</exception>
         public void ApplyFrom(IEnumerable<IPackageAdapter> adapters)
         {
-            if (Packages.Count() != adapters.Count())
-            {
-                throw new InvalidOperationException("The number packages in the knowledge base entry must match the number of adapters.");
-            }
+            // The intent here is to duplicate the adapter data into our packages, so we'll
+            // clear out any existing package data and recreate it based on the adapters
+            packages.Clear();
 
-            for (int i = 0; i < Packages.Count(); i++)
+            foreach(IPackageAdapter adapter in adapters)
             {
-                packages[i].AdditionalWeight = adapters.ElementAt(i).AdditionalWeight;
-                packages[i].Height = adapters.ElementAt(i).Height;
-                packages[i].Length = adapters.ElementAt(i).Length;
-                packages[i].Weight = adapters.ElementAt(i).Weight;
-                packages[i].Width = adapters.ElementAt(i).Width;
+                KnowledgebasePackage package = new KnowledgebasePackage
+                {
+                    AdditionalWeight = adapter.AdditionalWeight,
+                    Height = adapter.Height,
+                    Length = adapter.Length,
+                    Weight = adapter.Weight,
+                    Width = adapter.Width
+                };
+
+                packages.Add(package);
             }
         }
     }

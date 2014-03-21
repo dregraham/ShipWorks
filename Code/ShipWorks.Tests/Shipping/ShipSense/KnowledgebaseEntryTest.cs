@@ -156,8 +156,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ApplyFrom_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_Test()
+        public void ApplyFrom_RegeneratesPackages_Test()
         {
             adapters = new List<IPackageAdapter>
             {
@@ -165,6 +164,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             };
 
             testObject.ApplyFrom(adapters);
+
+            // The number of packages on our test object should now be one instead of two
+            Assert.AreEqual(1, testObject.Packages.Count());
         }
 
         [TestMethod]
