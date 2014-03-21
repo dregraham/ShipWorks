@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new NullPackageAdapter();
         }
 
         /// <summary>

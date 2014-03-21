@@ -1,0 +1,67 @@
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipSense.Packaging;
+
+namespace ShipWorks.Shipping.Carriers.Other
+{
+    /// <summary>
+    /// The OtherShipmentType only supports the weight field of the package adapter.
+    /// </summary>
+    public class OtherPackageAdapter : IPackageAdapter
+    {
+        private readonly ShipmentEntity shipment;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OtherPackageAdapter"/> class.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public OtherPackageAdapter(ShipmentEntity shipment)
+        {
+            this.shipment = shipment;
+        }
+
+        /// <summary>
+        /// Gets or sets the length.
+        /// </summary>
+        public double Length
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public double Width
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        public double Height
+        {
+            get { return 0; }
+            set { }
+        }
+
+        /// <summary>
+        /// Gets or sets the weight.
+        /// </summary>
+        public double Weight
+        {
+            get { return shipment.ContentWeight; }
+            set { shipment.ContentWeight = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public double AdditionalWeight
+        {
+            get { return 0; }
+            set { }
+        }
+    }
+}

@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new OtherPackageAdapter(shipment);
         }
 
         /// <summary>
