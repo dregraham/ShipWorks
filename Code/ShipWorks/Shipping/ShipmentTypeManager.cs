@@ -52,12 +52,6 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
-                    // Ability to hide best-rate via registry until it's public
-                    if (typeCode == ShipmentTypeCode.BestRate && InterapptiveOnly.Registry.GetValue("HideBestRate", false))
-                    {
-                        continue;
-                    }
-
                     if (typeCode == ShipmentTypeCode.Express1Stamps)
                     {
                         // We have an Express1 for Stamps shipment type which should be excluded if Stamps has never been setup
