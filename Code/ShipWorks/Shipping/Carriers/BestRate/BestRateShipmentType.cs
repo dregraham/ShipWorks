@@ -31,8 +31,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
 
-        public event EventHandler SignUpForProviderAccountCompleted;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
         /// version of the constructor will use the "live" implementation of the 
@@ -609,32 +607,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
             
             BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
-            bool selectRate = true;
 
-            if (bestRateResultTag.SignUpAction != null)
-            {
-                // Capture the result of the sign up action to determine if the rate
-                // should be selected (i.e. the setup wizard completed)
-                bool signedUpForAccount = bestRateResultTag.SignUpAction();
-                selectRate = signedUpForAccount;
-                
-                if (signedUpForAccount && SignUpForProviderAccountCompleted != null)
-                {
-                    // They didn't cancel out of the wizard, so signal that the 
-                    // user signed up for an account
-                    SignUpForProviderAccountCompleted(this, EventArgs.Empty);
-                }
-            }
-            
-            if (selectRate)
-            {
-                // We only want to select the rate if the sign up action finished    
-                bestRateResultTag.RateSelectionDelegate(shipment);
+            bestRateResultTag.RateSelectionDelegate(shipment);
 
-                // Reset the event types after the the selected shipment has been applied to 
-                // avoid losing them during the transition to the targeted shipment type
-                shipment.BestRateEvents = (byte)originalEventTypes;
-            }
+            // Reset the event types after the the selected shipment has been applied to 
+            // avoid losing them during the transition to the targeted shipment type
+            shipment.BestRateEvents = (byte)originalEventTypes;
         }
 
         /// <summary>

@@ -24,7 +24,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             InitializeComponent();
             
             bestRateShipment = new BestRateShipmentType();
-            bestRateShipment.SignUpForProviderAccountCompleted += OnAccountSignUp;
 
             RateControl.ShowAllRates = false;
         }
@@ -181,15 +180,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             OnRateCriteriaChanged(sender, e);
         }
 
-        /// <summary>
-        /// Called when an account has been signed up via an entry in the rates grid.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnAccountSignUp(object sender, EventArgs e)
-        {
-            ClearRatesAction(string.Empty);
-        }
 
         /// <summary>
         /// Called when the configure rate is clicked

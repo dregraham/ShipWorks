@@ -493,35 +493,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsNull(calledShipment);
         }
 
-        [TestMethod]
-        public void ApplySelectedShipmentRate_RaisesSignUpForAccountCompleted_WhenSignUpActionReturnsTrue_Test()
-        {
-            ShipmentEntity calledShipment = null;
-            bool signUpEventFired = false;
-
-            testObject.SignUpForProviderAccountCompleted += (sender, args) => signUpEventFired = true;
-
-            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => true, RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
-
-            Assert.IsTrue(signUpEventFired);
-        }
-
-        [TestMethod]
-        public void ApplySelectedShipmentRate_DoesNotRaisSignUpForAccountCompleted_WhenSignUpActionReturnsFalse_Test()
-        {
-            ShipmentEntity calledShipment = null;
-            bool signUpEventFired = false;
-
-            testObject.SignUpForProviderAccountCompleted += (sender, args) => signUpEventFired = true;
-
-            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => false, RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
-
-            // This should not have been changed
-            Assert.IsFalse(signUpEventFired);
-        }
-
         private void InitializeFootnoteTests()
         {
             associatedWithAmountFooterFootnoteFactory = new Mock<IRateFootnoteFactory>();
