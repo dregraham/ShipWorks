@@ -34,13 +34,14 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="order">The order.</param>
         public void Save(KnowledgebaseEntry entry, OrderEntity order)
         {
-            ShipSenseKnowledgebaseEntity entity = new ShipSenseKnowledgebaseEntity
-            {
-                Hash = hashingStrategy.ComputeHash(order),
-                Entry = entry.ToJson()
-            };
+            // Fetch the entity because if it exists, we need the IsNew property to
+            // be set to false otherwise a PK violation will be thrown if it already exists
+            // Note: in a later story we should probably look into caching this data to 
+            // reduce the number of database calls 
+            ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
+            entity.Entry = entry.ToJson();
 
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveEntity(entity);
                 adapter.Commit();

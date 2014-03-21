@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
     [TestClass]
     public class KnowledgebaseEntryTest
     {
-        private KnowledgebaseEntry testObject;
+        private readonly KnowledgebaseEntry testObject;
 
         private List<IPackageAdapter> adapters;
         private readonly Mock<IPackageAdapter> adapter1;

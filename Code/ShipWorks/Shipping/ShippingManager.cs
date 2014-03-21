@@ -1128,8 +1128,9 @@ namespace ShipWorks.Shipping
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
 
+                // Log to the knowledge base after everything else has been successful, so an error logging
+                // to the knowledge base does not prevent the shipment from being actually processed.
                 LogToShipSenseKnowledgebase(shipmentType, shipment);
-
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -1147,8 +1148,7 @@ namespace ShipWorks.Shipping
         
         /// <summary>
         /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
-        /// and logged, so an exception writing to the knowledge base does not hold up the shipment
-        /// from being processed.
+        /// and logged and wrapped in a ShippingException.
         /// </summary>
         private static void LogToShipSenseKnowledgebase(ShipmentType shipmentType, ShipmentEntity shipment)
         {
@@ -1167,15 +1167,19 @@ namespace ShipWorks.Shipping
 
                 // Make sure we have all of the order information
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                }
 
                 Knowledgebase knowledgebase = new Knowledgebase();
                 knowledgebase.Save(entry, order);
             }
             catch (Exception ex)
             {
-                // Just log the exception - we don't want a failure to write to 
-                // the knowledge base to prevent a shipment from being processed
+                // We may want to eat this exception entirely, so the user isn't impacted 
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
+                throw new ShippingException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
             }
         }
 
