@@ -34,10 +34,10 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
-            rateControl.ShowConfigureLink = true;
+            rateControl.ActionLinkVisible = true;
             rateControl.ShowAllRates = false;
 
-            rateControl.ConfigureRateClicked += OnConfigureRateClicked;
+            rateControl.ActionLinkClicked += OnConfigureRateClicked;
 
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);

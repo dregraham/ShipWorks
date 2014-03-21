@@ -52,7 +52,7 @@
             this.rateControl.Location = new System.Drawing.Point(0, 19);
             this.rateControl.Name = "rateControl";
             this.rateControl.ShowAllRates = true;
-            this.rateControl.ShowConfigureLink = false;
+            this.rateControl.ActionLinkVisible = false;
             this.rateControl.Size = new System.Drawing.Size(476, 165);
             this.rateControl.TabIndex = 0;
             this.rateControl.SizeChanged += new System.EventHandler(this.OnRateControlSizeChanged);

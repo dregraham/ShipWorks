@@ -23,23 +23,11 @@ namespace ShipWorks.Shipping.Editing.Rating
     {
         // This is the maximum rates to display when the control is configured 
         // with ShowAllRates = false
-        private const short RestrictedRateCount = 5;
+        const short RestrictedRateCount = 5;
 
-        private FootnoteParameters footnoteParameters;
+        FootnoteParameters footnoteParameters;
 
-        private readonly object syncLock = new object();
-
-        /// <summary>
-        /// Raised when the user clicks "Select" to select a rate
-        /// </summary>
-        public event RateSelectedEventHandler RateSelected;
-
-        public event RateSelectedEventHandler ConfigureRateClicked;
-
-        /// <summary>
-        /// Raised when its necessary for the rates to be reloaded
-        /// </summary>
-        public event EventHandler ReloadRatesRequired;
+        readonly object syncLock = new object();
 
         // Indicates if the spinner for showing that rates are currently being checked is visible
         bool showSpinner = false;
@@ -50,6 +38,23 @@ namespace ShipWorks.Shipping.Editing.Rating
         // If autoHeight is true, controls the maximum height the control will resize itself to be
         int autoHeightMaximum = 250;
 
+        // The text to display for the action link, if its visible
+        string actionLinkText = "Select";
+
+        /// <summary>
+        /// Raised when the user selects a rate row
+        /// </summary>
+        public event RateSelectedEventHandler RateSelected;
+
+        /// <summary>
+        /// Raised when the action link has been clicked
+        /// </summary>
+        public event RateSelectedEventHandler ActionLinkClicked;
+
+        /// <summary>
+        /// Raised when its necessary for the rates to be reloaded
+        /// </summary>
+        public event EventHandler ReloadRatesRequired;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -90,10 +95,21 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Gets or sets a value indicating whether to [show the configure link].
         /// </summary>
-        public bool ShowConfigureLink 
+        public bool ActionLinkVisible 
         { 
             get; 
             set; 
+        }
+
+        
+        /// <summary>
+        /// The text to display for the action link
+        /// </summary>
+        [DefaultValue("Select")]
+        public string ActionLinkText
+        {
+            get { return actionLinkText; }
+            set { actionLinkText = value; }
         }
 
         /// <summary>
@@ -250,7 +266,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 RateGroup = rateGroup;
                 sandGrid.Rows.Clear();
 
-                gridColumnSelect.Visible = ShowConfigureLink;
+                gridColumnSelect.Visible = ActionLinkVisible;
 
                 List<RateResult> ratesToShow = ShowAllRates ? rateGroup.Rates : rateGroup.Rates.Take(RestrictedRateCount).ToList();
 
@@ -264,9 +280,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
                     }) { Tag = rate };
 
-                    if (ShowConfigureLink && rate.Selectable)
+                    if (ActionLinkVisible && rate.Selectable)
                     {
-                        row.Cells.Add(new GridHyperlinkCell("Edit"));
+                        row.Cells.Add(new GridHyperlinkCell(actionLinkText));
                     }
 
                     sandGrid.Rows.Add(row);
@@ -492,9 +508,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                 return;
             }
 
-            if (ConfigureRateClicked != null)
+            if (ActionLinkClicked != null)
             {
-                ConfigureRateClicked(this, new RateSelectedEventArgs(rate));
+                ActionLinkClicked(this, new RateSelectedEventArgs(rate));
             }
         }
 

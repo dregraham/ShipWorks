@@ -291,6 +291,12 @@ namespace ShipWorks.Shipping
             
             labelProcessing.Text = string.Format("Shipments ({0} selected)", selectedShipmentCount);
             menuProcessSelected.Text = string.Format("Create Label ({0} shipment{1})", selectedShipmentCount, selectedShipmentCount > 1 ? "s" : "");
+            
+            string plural = selectedShipmentCount > 1 ? "s" : "";
+
+            processDropDownButton.Text = "Create Label" + plural;
+            voidSelected.Text = "Void Label" + plural;
+            print.Text = "Reprint Label" + plural;
         }
 
         /// <summary>
@@ -846,7 +852,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked += newServiceControl.OnConfigureRateClick;
+                    rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -862,7 +868,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked -= oldServiceControl.OnConfigureRateClick;
+                    rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
 
                     oldServiceControl.Dispose();
                 }
@@ -1015,7 +1021,7 @@ namespace ShipWorks.Shipping
                 else
                 {
                     // Only show the configure link for the best rate shipment type
-                    rateControl.ShowConfigureLink = rateGroup.Carrier == ShipmentTypeCode.BestRate;
+                    rateControl.ActionLinkVisible = rateGroup.Carrier == ShipmentTypeCode.BestRate;
                     rateControl.LoadRates(rateGroup);
                     
                     ServiceControl.SyncSelectedRate();
