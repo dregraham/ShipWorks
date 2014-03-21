@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
@@ -58,7 +57,7 @@ namespace ShipWorks.Data.Administration.Retry
             {
                 using (new LoggedStopwatch(log, string.Format("SqlAdapterRetry.ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
                 {
-                    while (retryCounter > 0)
+                    while (retryCounter >= 0)
                     {
                         try
                         {
