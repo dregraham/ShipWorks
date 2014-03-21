@@ -583,6 +583,7 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRatePackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

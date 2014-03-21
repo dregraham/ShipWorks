@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new BestRatePackageAdapter(shipment);
         }
 
         /// <summary>
