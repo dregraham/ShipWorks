@@ -4,6 +4,9 @@ using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping.ShipSense
 {
+    /// <summary>
+    /// Acts as the data source for ShipSense: knowledge base entries can be saved and fetched.
+    /// </summary>
     public class Knowledgebase
     {
         private readonly IKnowledgebaseHash hashingStrategy;
@@ -24,9 +27,24 @@ namespace ShipWorks.Shipping.ShipSense
             this.hashingStrategy = hashingStrategy;
         }
 
+        /// <summary>
+        /// Saves the knowledge base entry to the knowledge base using the order data as the key.
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="order">The order.</param>
         public void Save(KnowledgebaseEntry entry, OrderEntity order)
         {
-            
+            ShipSenseKnowledgebaseEntity entity = new ShipSenseKnowledgebaseEntity
+            {
+                Hash = hashingStrategy.ComputeHash(order),
+                Entry = entry.ToJson()
+            };
+
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                adapter.SaveEntity(entity);
+                adapter.Commit();
+            }
         }
 
         /// <summary>
