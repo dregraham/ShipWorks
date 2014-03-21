@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Filters;
 using System.ComponentModel;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -73,6 +74,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void Initialize(FootnoteParameters parameters)
         {
             footnoteParameters = parameters;
+            ThemedBorderProvider.Apply(this);
         }
 
         /// <summary>
@@ -264,7 +266,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                     if (ShowConfigureLink && rate.Selectable)
                     {
-                        row.Cells.Add(new GridHyperlinkCell("Configure"));
+                        row.Cells.Add(new GridHyperlinkCell("Edit"));
                     }
 
                     sandGrid.Rows.Add(row);

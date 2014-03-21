@@ -120,8 +120,6 @@ namespace ShipWorks.Shipping
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
 
-            ThemedBorderProvider.Apply(rateControlArea);
-
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
 
@@ -274,13 +272,13 @@ namespace ShipWorks.Shipping
                 // Save all changes from the UI to the previous entity selection
                 SaveUIDisplayedShipments();
 
+                UpdateSelectedShipmentCount();
+
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
 
                 ClearRates(string.Empty);
                 GetRates();
-
-                UpdateSelectedShipmentCount();
             }
         }
 
@@ -290,9 +288,9 @@ namespace ShipWorks.Shipping
         private void UpdateSelectedShipmentCount()
         {
             int selectedShipmentCount = shipmentControl.SelectedShipments.Count();
-            const string labelProcessingMask = "Shipments Selected ({0})";
             
-            labelProcessing.Text = string.Format(labelProcessingMask, selectedShipmentCount);
+            labelProcessing.Text = string.Format("Shipments ({0} selected)", selectedShipmentCount);
+            menuProcessSelected.Text = string.Format("Create Label ({0} shipment{1})", selectedShipmentCount, selectedShipmentCount > 1 ? "s" : "");
         }
 
         /// <summary>
@@ -1012,7 +1010,7 @@ namespace ShipWorks.Shipping
                 }
                 else if (rateGroup.Rates.Count == 0)
                 {
-                    rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
+                    rateControl.ClearRates(rateGroup.FootnoteFactories.Count() == 0 ? "No rates are available for the shipment." : "", rateGroup);
                 }
                 else
                 {

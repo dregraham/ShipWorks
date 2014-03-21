@@ -121,7 +121,6 @@ namespace ShipWorks.Stores.Content.Panels
         {
             base.UpdateContent();
 
-            // Causing flashing - need to figure that out before enabling this
             ratesControl.ReloadRates();
         }
         /// <summary>
