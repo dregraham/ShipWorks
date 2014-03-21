@@ -348,6 +348,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
             // the order total needs to be redone
             newOrder.OrderTotal = OrderUtility.CalculateTotal(newOrder);
+            long orderNumberBeingDeleted = 0;
 
             try
             {
@@ -364,39 +365,34 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                         OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                        DeletionService.DeleteOrder(order.OrderID);
+                        orderNumberBeingDeleted = order.OrderNumber;
+                        DeletionService.DeleteOrder(order.OrderID, adapter);
                     }
 
-                    // commit the transaction
-                    adapter.Commit();
+                    // Don't commit because sqlDeadlockRetry will do the commit
                 });
             }
             catch (ORMQueryExecutionException ex)
             {
                 // An ORM query exception could occur if one of the mapped tables no longer exists or cannot be found
                 // in the database
-                
+
                 // Log the details of the original exception
                 log.Error(string.Format("An ORM exception occurred: {0}. {1}", ex.Message, ex.QueryExecuted));
 
                 // Now construct a more user-friendly error message in the form of an eBay exception
-                string orderParameterName = "@OrderID1";
                 string errorMessage = "An error occurred while saving a combined order. ";
+                errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderNumberBeingDeleted);
 
-                if (ex.Parameters.Count > 0)
-                {
-                    // Use the value in the order ID parameter to look up the order number being deleted so we can 
-                    // indicate which order the error occurred on
-                    System.Data.SqlClient.SqlParameter parameter = ex.Parameters[0] as System.Data.SqlClient.SqlParameter;
-                    if (parameter != null && parameter.ParameterName == orderParameterName)
-                    {
-                        OrderEntity orderBeingDeleted = DataProvider.GetEntity(long.Parse(parameter.Value.ToString())) as OrderEntity;
-                        if (orderBeingDeleted != null)
-                        {
-                            errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderBeingDeleted.OrderNumber);
-                        }
-                    }
-                }
+                throw new EbayException(errorMessage, ex);
+            }
+            catch (SqlDeadlockException ex)
+            {
+                // Log the details of the original exception
+                log.Error(string.Format("A SqlDeadlockException exception occurred: {0}", ex.Message));
+
+                string errorMessage = "An error occurred while saving a combined order. ";
+                errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderNumberBeingDeleted);
 
                 throw new EbayException(errorMessage, ex);
             }
