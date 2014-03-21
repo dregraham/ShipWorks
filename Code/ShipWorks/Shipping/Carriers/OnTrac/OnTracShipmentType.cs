@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new OnTracPackageAdapter(shipment);
         }
 
         /// <summary>
