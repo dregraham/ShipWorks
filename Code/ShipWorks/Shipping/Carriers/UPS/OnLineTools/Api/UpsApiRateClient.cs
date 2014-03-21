@@ -214,8 +214,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             return ProcessApiResponse(shipment, xmlDocument, (UpsRateType)account.RateType);
         }
 
-
-
         /// <summary>
         /// MI package types are not allowed to be used with non-MI services.  Checks to make
         /// sure the combination is valid for all packages.

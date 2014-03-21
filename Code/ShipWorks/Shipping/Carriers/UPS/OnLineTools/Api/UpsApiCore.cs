@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AddressLine2", person.Street2);
             xmlWriter.WriteElementString("AddressLine3", person.Street3);
             xmlWriter.WriteElementString("City", person.City);
-            xmlWriter.WriteElementString("StateProvinceCode", person.StateProvCode);
+            xmlWriter.WriteElementString("StateProvinceCode", AdjustUpsStateProvinceCode(person.CountryCode, person.StateProvCode));
             xmlWriter.WriteElementString("PostalCode", person.PostalCode);
             xmlWriter.WriteElementString("CountryCode", AdjustUpsCountryCode(person.CountryCode, person.StateProvCode));
 
@@ -159,6 +159,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Translate the state if necessary
+        /// </summary>
+        /// <param name="countryCode">Country associated with the address</param>
+        /// <param name="stateProvCode">State or province code associated with the address</param>
+        /// <returns></returns>
+        public static string AdjustUpsStateProvinceCode(string countryCode, string stateProvCode)
+        {
+            // If Puerto Rico is the country, we'll just use it as the state as well
+            return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : stateProvCode;
         }
 
         /// <summary>
