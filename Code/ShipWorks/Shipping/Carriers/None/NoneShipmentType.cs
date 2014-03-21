@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
@@ -33,6 +34,14 @@ namespace ShipWorks.Shipping.Carriers.None
         public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
             return new NoneServiceControl(rateControl);
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -13,6 +13,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System.Drawing.Imaging;
 using ShipWorks.Shipping.Insurance;
@@ -87,6 +88,14 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new EquaShipProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

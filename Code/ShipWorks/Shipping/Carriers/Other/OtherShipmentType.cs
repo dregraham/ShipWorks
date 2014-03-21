@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
@@ -60,6 +61,14 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new OtherProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

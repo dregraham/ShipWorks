@@ -31,6 +31,7 @@ using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping
 {
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping
 		}
 
 		/// <summary>
-		/// Indicates if the shiopment service type supports return shipments
+		/// Indicates if the shipment service type supports return shipments
 		/// </summary>
 		public virtual bool SupportsReturns
 		{
@@ -190,6 +191,11 @@ namespace ShipWorks.Shipping
 		{
 			return null;
 		}
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+	    public abstract IPackageAdapter GetPackageAdapter();
 
 		/// <summary>
 		/// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data

@@ -27,6 +27,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -159,6 +160,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new FedExProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

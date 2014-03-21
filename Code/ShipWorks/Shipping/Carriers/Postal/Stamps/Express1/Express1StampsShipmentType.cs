@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -94,6 +95,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new StampsProfileControl(ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

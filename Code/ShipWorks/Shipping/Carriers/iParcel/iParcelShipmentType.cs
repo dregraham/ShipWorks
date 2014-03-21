@@ -25,6 +25,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -125,6 +126,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new iParcelProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

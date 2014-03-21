@@ -12,6 +12,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -166,6 +167,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new WorldShipBestRateBroker();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for this shipment type.
+        /// </summary>
+        public override IPackageAdapter GetPackageAdapter()
+        {
+            throw new NotImplementedException();
         }
     }
 }
