@@ -448,7 +448,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.ToAddress2 = recipient.Street2;
             request.ToAddress3 = recipient.Street3;
             request.ToCity = PostalUtility.StripPunctuation(recipient.City);
-            request.ToState = recipient.StateProvCode;
+            request.ToState = PostalUtility.AdjustState(recipient.CountryCode, recipient.StateProvCode);
             request.ToPostalCode = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode5 : recipient.PostalCode;
             request.ToZIP4 = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode4 : "";
             request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
