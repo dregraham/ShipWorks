@@ -1024,7 +1024,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 rate.FromZIPCode = shipment.OriginPostalCode;
             }
 
-
             rate.ToZIPCode = shipment.ShipPostalCode;
             rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
