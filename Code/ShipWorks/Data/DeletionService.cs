@@ -105,10 +105,10 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
 
+            //DeleteWithCascade(EntityType.OrderEntity, orderID);
+
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                //DeleteWithCascade(EntityType.OrderEntity, orderID);
-
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteWithCascade for OrderID {0}", orderID));
                 sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.OrderEntity, orderID, adapter));
             }
@@ -123,10 +123,7 @@ namespace ShipWorks.Data
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
 
-            using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
-            {
-                DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
-            }
+            DeleteWithCascade(EntityType.OrderEntity, orderID, adapter);
 
             DataProvider.RemoveEntity(orderID);
         }
