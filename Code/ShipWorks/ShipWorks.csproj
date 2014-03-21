@@ -618,6 +618,7 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
