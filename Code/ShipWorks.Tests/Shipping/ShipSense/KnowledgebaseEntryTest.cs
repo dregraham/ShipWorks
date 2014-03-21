@@ -29,7 +29,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.Object.Height = 9.31;
             adapter1.Object.Length = 11;
             adapter1.Object.Weight = 34.2;
-            adapter1.Object.WeightUnitOfMeasure = WeightUnitOfMeasure.Kilograms;
             adapter1.Object.Width = 4;
             
             
@@ -41,7 +40,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter2.Object.Height = 4.2;
             adapter2.Object.Length = 1;
             adapter2.Object.Weight = 12.9;
-            adapter2.Object.WeightUnitOfMeasure = WeightUnitOfMeasure.Pounds;
             adapter2.Object.Width = 34;
 
             adapters = new List<IPackageAdapter>()
@@ -59,8 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     Height = 2,
                     Length = 4,
                     Weight = 4.5,
-                    Width = 6,
-                    WeightUnitOfMeasure = WeightUnitOfMeasure.Ounces
+                    Width = 6
                 },
                 new KnowledgebasePackage
                 {
@@ -68,8 +65,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     Height = 4,
                     Length = 5,
                     Weight = 6,
-                    Width = 7,
-                    WeightUnitOfMeasure = WeightUnitOfMeasure.Grams
+                    Width = 7
                 }
             };
         }
@@ -87,7 +83,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Height, hydratedEntry.Packages.ElementAt(i).Height);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Length, hydratedEntry.Packages.ElementAt(i).Length);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).WeightUnitOfMeasure, hydratedEntry.Packages.ElementAt(i).WeightUnitOfMeasure);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
             }
         }
@@ -147,18 +142,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.VerifySet(a => a.Weight = testObject.Packages.ElementAt(0).Weight, Times.Once());
             adapter2.VerifySet(a => a.Weight = testObject.Packages.ElementAt(1).Weight, Times.Once());
         }
-
-        [TestMethod]
-        public void ApplyTo_AssignsWeightUnitOfMeasureOfEachAdapter_Test()
-        {
-            testObject.ApplyTo(adapters);
-
-            // Don't iterate over each element because we want to verify that set 
-            // was called via Moq
-            adapter1.VerifySet(a => a.WeightUnitOfMeasure = testObject.Packages.ElementAt(0).WeightUnitOfMeasure, Times.Once());
-            adapter2.VerifySet(a => a.WeightUnitOfMeasure = testObject.Packages.ElementAt(1).WeightUnitOfMeasure, Times.Once());
-        }
-
+        
         [TestMethod]
         public void ApplyTo_AssignsWidthOfEachAdapter_Test()
         {
@@ -249,22 +233,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ApplyFrom_AssignsWeightUnitOfMeasureOfPackage_Test()
-        {
-            testObject.ApplyFrom(adapters);
-
-            // Check that the Get property was called to confirm that the values are not equal 
-            // because the adapter value was assigned to
-            adapter1.VerifyGet(a => a.WeightUnitOfMeasure, Times.Once());
-            adapter2.VerifyGet(a => a.WeightUnitOfMeasure, Times.Once());
-
-            for (int i = 0; i < testObject.Packages.Count(); i++)
-            {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).WeightUnitOfMeasure, adapters[i].WeightUnitOfMeasure);
-            }
-        }
-
-        [TestMethod]
         public void ApplyFrom_AssignsWidthOfPackage_Test()
         {
             testObject.ApplyFrom(adapters);
@@ -283,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void ToJson_Test()
         {
-            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"WeightUnitOfMeasure\":1,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"WeightUnitOfMeasure\":3,\"AdditionalWeight\":2.5}]}";
+            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"AdditionalWeight\":2.5}]}";
             
             string actualJson = testObject.ToJson();
             Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));

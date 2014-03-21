@@ -1,5 +1,4 @@
-﻿using Interapptive.Shared.Enums;
-
+﻿
 namespace ShipWorks.Shipping.ShipSense.Packaging
 {
     /// <summary>
@@ -27,12 +26,7 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         /// Gets or sets the weight.
         /// </summary>
         double Weight { get; set; }
-
-        /// <summary>
-        /// Gets or sets the weight unit of measure.
-        /// </summary>
-        WeightUnitOfMeasure WeightUnitOfMeasure { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>

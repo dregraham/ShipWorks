@@ -73,7 +73,6 @@ namespace ShipWorks.Shipping.ShipSense
                 packageAdapters.ElementAt(i).Height = packages[i].Height;
                 packageAdapters.ElementAt(i).Length = packages[i].Length;
                 packageAdapters.ElementAt(i).Weight = packages[i].Weight;
-                packageAdapters.ElementAt(i).WeightUnitOfMeasure = packages[i].WeightUnitOfMeasure;
                 packageAdapters.ElementAt(i).Width = packages[i].Width;
             }
         }
@@ -96,7 +95,6 @@ namespace ShipWorks.Shipping.ShipSense
                 packages[i].Height = adapters.ElementAt(i).Height;
                 packages[i].Length = adapters.ElementAt(i).Length;
                 packages[i].Weight = adapters.ElementAt(i).Weight;
-                packages[i].WeightUnitOfMeasure = adapters.ElementAt(i).WeightUnitOfMeasure;
                 packages[i].Width = adapters.ElementAt(i).Width;
             }
         }

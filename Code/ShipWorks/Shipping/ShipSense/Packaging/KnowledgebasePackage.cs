@@ -12,14 +12,6 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
     public class KnowledgebasePackage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="KnowledgebasePackage"/> class.
-        /// </summary>
-        public KnowledgebasePackage()
-        {
-            WeightUnitOfMeasure = WeightUnitOfMeasure.Pounds;
-        }
-
-        /// <summary>
         /// Gets or sets the length.
         /// </summary>
         public double Length { get; set; }
@@ -38,17 +30,10 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         /// Gets or sets the weight.
         /// </summary>
         public double Weight { get; set; }
-
-        /// <summary>
-        /// Gets or sets the weight unit of measure.
-        /// </summary>
-        public WeightUnitOfMeasure WeightUnitOfMeasure { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the additional weight.
         /// </summary>
         public double AdditionalWeight { get; set; }
-
-        
     }
 }
