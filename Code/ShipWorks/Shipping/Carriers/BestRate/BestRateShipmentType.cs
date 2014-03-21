@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -203,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, 1);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : 1);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -310,7 +311,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A task that will contain the results</returns>
         private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, brokerExceptions));
+            return Task<RateGroup>.Factory.StartNew(() =>
+                {
+                    return broker.GetBestRates(shipment, brokerExceptions);
+                });
         }
 
         /// <summary>
