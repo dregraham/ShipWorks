@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             if (!IsValid(shipment))
             {
                 // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(shipment, "The origin address of this shipment is invalid for getting counter rates.");
+                throw new CounterRatesOriginAddressException(shipment, "The origin address of this shipment is not valid for getting rates.");
             }
         }
 

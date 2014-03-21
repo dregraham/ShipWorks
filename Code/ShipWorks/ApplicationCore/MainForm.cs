@@ -1817,13 +1817,6 @@ namespace ShipWorks
                 {
                     ForceHeartbeat(HeartbeatOptions.None);
                 }));
-
-            if (RateCache.Instance.IsEmpty)
-            {
-                // The rates cache may have been cleared while the modal dialog is open (due to
-                // an account being created), so we need to force the content to be updated
-                ratesPanel.UpdateContent();
-            }
         }
 
         /// <summary>

@@ -28,16 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BestRateMissingRatesDialog));
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             Divelements.SandGrid.GridRow gridRow1 = new Divelements.SandGrid.GridRow();
             Divelements.SandGrid.GridRow gridRow2 = new Divelements.SandGrid.GridRow();
             this.closeButton = new System.Windows.Forms.Button();
-            this.descriptionMessage = new System.Windows.Forms.Label();
             this.errorGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnIcon = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
-            this.gridColumnErrorMessage = new Divelements.SandGrid.GridColumn();
+            this.gridColumnMessage = new Divelements.SandGrid.GridColumn();
             this.header = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -46,23 +44,13 @@
             this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.closeButton.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.closeButton.Location = new System.Drawing.Point(425, 318);
+            this.closeButton.Location = new System.Drawing.Point(539, 192);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(75, 23);
             this.closeButton.TabIndex = 4;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
             this.closeButton.Click += new System.EventHandler(this.OnClose);
-            // 
-            // descriptionMessage
-            // 
-            this.descriptionMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.descriptionMessage.Location = new System.Drawing.Point(11, 29);
-            this.descriptionMessage.Name = "descriptionMessage";
-            this.descriptionMessage.Size = new System.Drawing.Size(489, 49);
-            this.descriptionMessage.TabIndex = 5;
-            this.descriptionMessage.Text = resources.GetString("descriptionMessage.Text");
             // 
             // errorGrid
             // 
@@ -75,15 +63,15 @@
             this.errorGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnIcon,
             this.gridColumnProvider,
-            this.gridColumnErrorMessage});
+            this.gridColumnMessage});
             this.errorGrid.EmptyTextForeColor = System.Drawing.Color.DimGray;
             this.errorGrid.EnableSearching = false;
             this.errorGrid.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.errorGrid.ImageTextSeparation = 1;
-            this.errorGrid.Location = new System.Drawing.Point(11, 76);
+            this.errorGrid.Location = new System.Drawing.Point(11, 30);
             this.errorGrid.Name = "errorGrid";
             this.errorGrid.NullRepresentation = "";
-            this.errorGrid.PrimaryColumn = this.gridColumnErrorMessage;
+            this.errorGrid.PrimaryColumn = this.gridColumnMessage;
             this.errorGrid.Renderer = windowsXPRenderer1;
             this.errorGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
             this.errorGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.None;
@@ -104,7 +92,7 @@
             gridRow1,
             gridRow2});
             this.errorGrid.ShadeAlternateRows = true;
-            this.errorGrid.Size = new System.Drawing.Size(489, 236);
+            this.errorGrid.Size = new System.Drawing.Size(603, 154);
             this.errorGrid.StretchPrimaryGrid = false;
             this.errorGrid.TabIndex = 6;
             // 
@@ -132,27 +120,26 @@
             this.gridColumnProvider.MinimumWidth = 50;
             this.gridColumnProvider.Width = 50;
             // 
-            // gridColumnErrorMessage
+            // gridColumnMessage
             // 
-            this.gridColumnErrorMessage.AllowEditing = false;
-            this.gridColumnErrorMessage.AllowReorder = false;
-            this.gridColumnErrorMessage.AllowWrap = true;
-            this.gridColumnErrorMessage.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
-            this.gridColumnErrorMessage.Clickable = false;
-            this.gridColumnErrorMessage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gridColumnErrorMessage.HeaderText = "Error";
-            this.gridColumnErrorMessage.Width = 385;
+            this.gridColumnMessage.AllowEditing = false;
+            this.gridColumnMessage.AllowReorder = false;
+            this.gridColumnMessage.AllowWrap = true;
+            this.gridColumnMessage.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnMessage.Clickable = false;
+            this.gridColumnMessage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnMessage.HeaderText = "Message";
+            this.gridColumnMessage.Width = 385;
             // 
             // header
             // 
-            this.header.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.header.AutoSize = true;
             this.header.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.header.Location = new System.Drawing.Point(8, 9);
+            this.header.Location = new System.Drawing.Point(8, 10);
             this.header.Name = "header";
-            this.header.Size = new System.Drawing.Size(492, 20);
+            this.header.Size = new System.Drawing.Size(245, 13);
             this.header.TabIndex = 15;
-            this.header.Text = "ShipWorks could not get rates from all providers.";
+            this.header.Text = "ShipWorks could not get all possible rates:";
             // 
             // BestRateMissingRatesDialog
             // 
@@ -160,31 +147,31 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.closeButton;
-            this.ClientSize = new System.Drawing.Size(512, 353);
+            this.ClientSize = new System.Drawing.Size(626, 227);
             this.Controls.Add(this.header);
             this.Controls.Add(this.errorGrid);
-            this.Controls.Add(this.descriptionMessage);
             this.Controls.Add(this.closeButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(390, 235);
             this.Name = "BestRateMissingRatesDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Missing Rates";
+            this.Text = "Shipment Rates";
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.Label descriptionMessage;
         private Divelements.SandGrid.SandGrid errorGrid;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnIcon;
-        private Divelements.SandGrid.GridColumn gridColumnErrorMessage;
+        private Divelements.SandGrid.GridColumn gridColumnMessage;
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
         private System.Windows.Forms.Label header;
 

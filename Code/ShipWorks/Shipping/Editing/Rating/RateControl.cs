@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Filters;
+using System.ComponentModel;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -39,6 +40,15 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public event EventHandler ReloadRatesRequired;
 
+        // Indicates if the spinner for showing that rates are currently being checked is visible
+        bool showSpinner = false;
+
+        // Indicates if the control will automatically resize it's height to be just enough to fit
+        bool autoHeight = false;
+
+        // If autoHeight is true, controls the maximum height the control will resize itself to be
+        int autoHeightMaximum = 250;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -52,6 +62,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
 
             ShowAllRates = true;
+            ShowSpinner = false;
 
             sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
         }
@@ -68,20 +79,20 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// Gets the rate group loaded in the control. If a rate group has not been loaded
         /// into the control, a group without any rate results is returned.
         /// </summary>
-        public RateGroup RateGroup { get; private set; }
-        
-        /// <summary>
-        /// Return the displayed height of the footnote section
-        /// </summary>
-        public int FootnoteHeight
-        {
-            get { return panelFootnote.Visible ? panelFootnote.Height : 0; }
+        public RateGroup RateGroup 
+        { 
+            get; 
+            private set; 
         }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether to [show the configure link].
         /// </summary>
-        public bool ShowConfigureLink { get; set; }
+        public bool ShowConfigureLink 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether to [show all rates]. If false, then a subset
@@ -91,7 +102,43 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <value>
         ///   <c>true</c> if [show all rates]; otherwise, <c>false</c>.
         /// </value>
-        public bool ShowAllRates { get; set; }
+        public bool ShowAllRates 
+        { 
+            get; 
+            set; 
+        }
+
+        /// <summary>
+        /// Indicates if the control will automatically resize it's height to be just enough to fit
+        /// </summary>
+        [DefaultValue(false)]
+        public bool AutoHeight
+        {
+            get
+            {
+                return autoHeight;
+            }
+            set
+            {
+                autoHeight = value;
+            }
+        }
+
+        /// <summary>
+        /// If autoHeight is true, controls the maximum height the control will resize itself to be
+        /// </summary>
+        [DefaultValue(250)]
+        public int AutoHeightMaximum
+        {
+            get
+            {
+                return autoHeightMaximum;
+            }
+            set
+            {
+                autoHeightMaximum = value;
+            }
+        }
 
         /// <summary>
         /// Gets the rate that is selected in the grid. A null value is returned if there
@@ -148,6 +195,10 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 UpdateFootnotes(rateGroup);
             }
+
+            ShowSpinner = false;
+
+            UpdateHeight();
         }
 
         /// <summary>
@@ -161,19 +212,30 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Shows the spinner to indicate that rates are being retrieved.
         /// </summary>
-        public void ShowSpinner()
+        [DefaultValue(false)]
+        public bool ShowSpinner
         {
-            loadingImage.BringToFront();
-            loadingRatesLabel.BringToFront();
-        }
+            get
+            {
+                return showSpinner;
+            }
+            set
+            {
+                showSpinner = value;
 
-        /// <summary>
-        /// Hides the spinner.
-        /// </summary>
-        public void HideSpinner()
-        {
-            loadingImage.SendToBack();
-            loadingRatesLabel.SendToBack();
+                if (showSpinner)
+                {
+                    loadingImage.BringToFront();
+                    loadingRatesLabel.BringToFront();
+                }
+                else
+                {
+                    loadingImage.SendToBack();
+                    loadingRatesLabel.SendToBack();
+                }
+
+                UpdateHeight();
+            }
         }
 
         /// <summary>
@@ -211,7 +273,23 @@ namespace ShipWorks.Shipping.Editing.Rating
                 AddShowMoreRatesRow();
 
                 UpdateFootnotes(rateGroup);
+
+                if (ratesToShow.Count == 0)
+                {
+                    if (CurrentFootnotes.Count == 0)
+                    {
+                        sandGrid.EmptyText = "ShipWorks could not get rates for this shipment.";
+                    }
+                    else
+                    {
+                        sandGrid.EmptyText = "";
+                    }
+                }
             }
+
+            ShowSpinner = false;
+
+            UpdateHeight();
         }
         
         /// <summary>
@@ -253,6 +331,43 @@ namespace ShipWorks.Shipping.Editing.Rating
                 }) { Tag = showMoreRatesRateResult };
 
                 sandGrid.Rows.Add(row);
+            }
+        }
+
+        /// <summary>
+        /// Update the height of the control if necessary
+        /// </summary>
+        private void UpdateHeight()
+        {
+            if (autoHeight)
+            {
+                int height = 5;
+
+                if (sandGrid.Rows.Count == 0)
+                {
+                    height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+
+                    if (!string.IsNullOrEmpty(sandGrid.EmptyText))
+                    {
+                        height += 18;
+                    }
+                }
+                else
+                {
+                    // Make sure the grid has updated its row layout, and knows where they all are
+                    sandGrid.PerformElementLayout();
+
+                    height += sandGrid.Rows[sandGrid.Rows.Count - 1].Bounds.Bottom;
+                }
+
+                if (panelFootnote.Visible)
+                {
+                    height += panelFootnote.Height + 5;
+                }
+
+                int minimum = ShowSpinner ? 90 : 0;
+
+                this.Height = Math.Max(Math.Min(height, autoHeightMaximum), minimum);
             }
         }
 

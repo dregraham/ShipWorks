@@ -37,22 +37,22 @@
             // storeAddressLink
             // 
             this.storeAddressLink.AutoSize = true;
-            this.storeAddressLink.Location = new System.Drawing.Point(279, 4);
+            this.storeAddressLink.Location = new System.Drawing.Point(245, 5);
             this.storeAddressLink.Name = "storeAddressLink";
-            this.storeAddressLink.Size = new System.Drawing.Size(107, 13);
+            this.storeAddressLink.Size = new System.Drawing.Size(86, 13);
             this.storeAddressLink.TabIndex = 4;
             this.storeAddressLink.TabStop = true;
-            this.storeAddressLink.Text = "Enter store address...";
+            this.storeAddressLink.Text = "Enter address...";
             this.storeAddressLink.Click += new System.EventHandler(this.OnShowAddress);
             // 
             // errorMessage
             // 
             this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(29, 4);
+            this.errorMessage.Location = new System.Drawing.Point(25, 5);
             this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(244, 13);
+            this.errorMessage.Size = new System.Drawing.Size(219, 13);
             this.errorMessage.TabIndex = 3;
-            this.errorMessage.Text = "ShipWorks needs an address to get counter rates.";
+            this.errorMessage.Text = "ShipWorks needs your address to get rates.";
             // 
             // pictureBox
             // 
@@ -70,6 +70,7 @@
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.storeAddressLink);
             this.Controls.Add(this.errorMessage);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CounterRatesInvalidStoreAddressFootnoteControl";
             this.Size = new System.Drawing.Size(396, 20);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

@@ -15,15 +15,15 @@ using ShipWorks.Stores;
 namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
-    /// An implementation of IDockingPanelContent interface that will fetch and 
+    /// User control that will fetch and 
     /// show rates for an order that has been selected. If an order doesn't have 
     /// any shipments, a shipment will be created; for orders that have multiple 
     /// shipments, the first unprocessed shipment is used for rating. Rates are 
     /// not retrieved for orders that only have processed shipments.
     /// </summary>
-    public partial class RatesPanel : UserControl, IDockingPanelContent
+    public partial class RatesPanel : UserControl
     {
-        private long selectedOrderID;
+        private long? selectedShipmentID = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -31,8 +31,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RatesPanel()
         {
             InitializeComponent();
-
-            selectedOrderID = 0;
 
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
@@ -52,96 +50,47 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         private StoreEntity GetStoreForCurrentShipment()
         {
-            OrderEntity order = DataProvider.GetEntity(selectedOrderID) as OrderEntity;
-
-            if (order != null)
+            if (selectedShipmentID != null)
             {
-                return StoreManager.GetStore(order.StoreID);
+                ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
+
+                if (shipment != null)
+                {
+                    return StoreManager.GetStore(shipment.Order.StoreID);
+                }
             }
 
             return null;
         }
 
         /// <summary>
-        /// The supported filter targets that the panel can display for.
+        /// Change the content of the control to be the given shipment
         /// </summary>
-        public FilterTarget[] SupportedTargets
+        public void ChangeShipment(long? shipmentID)
         {
-            // Need to know when the selected order has been changed
-            get { return new FilterTarget[] { FilterTarget.Orders }; }
+            selectedShipmentID = shipmentID;
+
+            // Refresh the rates in the panel; using cached rates is fine here since nothing
+            // about the shipment has changed, so don't force a re-fetch
+            RefreshRates(false);
         }
 
-        /// <summary>
-        /// Indicates if the panel can handle multiple selected items at one time.
-        /// </summary>
-        public bool SupportsMultiSelect
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Load the state of the panel.
-        /// </summary>
-        public void LoadState()
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// Save the state of the panel.
-        /// </summary>
-        public void SaveState()
-        {
-            // Do nothing
-        }
-
-        /// <summary>
-        /// The EntityType displayed by the panel grid
-        /// </summary>
-        public EntityType EntityType
-        {
-            // The rates panel is interested in shipment entities - when an entity has
-            // been added, removed, or modified, the panel needs to be refreshed
-            get { return EntityType.ShipmentEntity; }
-        }
-
-        /// <summary>
-        /// Change the content of the panel based on the given keys.
-        /// </summary>
-        /// <param name="selection"></param>
-        public void ChangeContent(Data.Grid.IGridSelection selection)
-        {
-            if (selection.Count == 1)
-            {
-                // Make note of the selected order ID - we'll use this later to determine if the
-                // user has clicked off of the order. We don't want to load the rates grid for
-                // a shipment that is not for the currently selected order
-                selectedOrderID = selection.Keys.FirstOrDefault();
-
-                // Refresh the rates in the panel; using cached rates is fine here since nothing
-                // about the shipment has changed, so don't force a re-fetch
-                RefreshRates(false);
-            }
-        }
 
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public void ReloadContent()
+        public void ReloadRates()
         {
-            // A row has been added/removed, so force the rates to be refreshed to reflect the change
             RefreshRates(false);
         }
 
         /// <summary>
-        /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
-        /// the known existing rows and their known corresponding entities.
+        /// When the size of the rate control changes, we have to update our size to match. This is what makes the auto-scrolling in the containing panel work
         /// </summary>
-        public void UpdateContent()
+        private void OnRateControlSizeChanged(object sender, EventArgs e)
         {
-            // Something about the shipment has changed, so we need to refresh the rates            
-            RefreshRates(false);
+            Height = rateControl.Bottom;
         }
 
         /// <summary>
@@ -150,44 +99,38 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
         private void RefreshRates(bool ignoreCache)
         {
-            // This will be 0 when ShipWorks is first started and an order 
-            // has not been selected yet
-            if (selectedOrderID > 0)
+            ShipmentEntity shipment = null;
+
+            if (selectedShipmentID != null)
             {
-                OrderEntity order = DataProvider.GetEntity(selectedOrderID) as OrderEntity;
+                shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
+            }
 
-                if (order != null)
+            if (shipment != null)
+            {
+                if (!shipment.Processed)
                 {
-                    // Make note of the selected order ID - we'll use this later to determine if the
-                    // user has clicked off of the order. We don't want to load the rates grid for
-                    // a shipment that is not for the currently selected order
-                    selectedOrderID = order.OrderID;
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
-                    List<ShipmentEntity> shipments = ShippingManager.GetShipments(order.OrderID, true);
-                    if (shipments.Any(s => !s.Processed))
+                    if (!shipmentType.SupportsGetRates)
                     {
-                        // Grab the first unprocessed shipment
-                        ShipmentEntity shipmentForRating = shipments.FirstOrDefault(s => !s.Processed);
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentForRating);
-
-                        if (!shipmentType.SupportsGetRates)
-                        {
-                            rateControl.HideSpinner();
-                            rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
-                                                                 EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
-                        }
-                        else
-                        {
-                            // We need to fetch the rates from the provider
-                            FetchRates(shipmentForRating, ignoreCache);
-                        }
+                        rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
+                                                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
                     }
                     else
                     {
-                        rateControl.HideSpinner();
-                        rateControl.ClearRates("All shipments for this order have been processed.");
+                        // We need to fetch the rates from the provider
+                        FetchRates(shipment, ignoreCache);
                     }
                 }
+                else
+                {
+                    rateControl.ClearRates("The shipment has already been processed.");
+                }
+            }
+            else
+            {
+                rateControl.ClearRates("No shipments are selected.");
             }
         }
 
@@ -223,7 +166,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         // footer raises the event and we want to include Express1 rates in that case
                         if (ignoreCache)
                         {
-                            ShippingManager.RemoveShipmentFromCache(shipment);
+                            ShippingManager.RemoveShipmentFromRatesCache(shipment);
                         }
 
                         // Fetch the rates and add them to the cache
@@ -243,9 +186,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                             panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
                         }
 
-                        // Add the order ID to the exception data, so we can determine whether
+                        // Add the shipment ID to the exception data, so we can determine whether
                         // to update the rate control
-                        ex.Data.Add("orderID", shipment.OrderID);
+                        ex.Data.Add("shipmentID", shipment.ShipmentID);
                         args.Result = ex;
                     }
                 };
@@ -256,12 +199,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                     ShippingException exception = args.Result as ShippingException;
                     if (exception != null)
                     {
-                        if (exception.Data.Contains("orderID") && (long)exception.Data["orderID"] == selectedOrderID)
+                        if (exception.Data.Contains("shipmentID") && (long) exception.Data["shipmentID"] == selectedShipmentID)
                         {
-                            // Update the rate control if the selected order is the one that 
-                            // produced the error
-                            rateControl.HideSpinner();
-
                             if (panelRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any())
                             {
                                 rateControl.LoadRates(panelRateGroup);
@@ -275,7 +214,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     else
                     {
                         ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
-                        if (ratedShipment != null && ratedShipment.OrderID == selectedOrderID)
+                        if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
                         {
                             // Only update the rate control if the shipment is for the currently selected 
                             // order to avoid the appearance of lag when a user is quickly clicking around
@@ -286,17 +225,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                 };
 
                 // Execute the work to get the rates
-                rateControl.ShowSpinner();
+                rateControl.ShowSpinner = true;
                 ratesWorker.RunWorkerAsync();
             }
-        }
-
-        /// <summary>
-        /// Update the content to reflect changes to the loaded stores
-        /// </summary>
-        public void UpdateStoreDependentUI()
-        {
-            // Do nothing
         }
 
         /// <summary>
@@ -308,15 +239,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             // Only show the More link for the best rate shipment type
             rateControl.ShowAllRates = rateGroup.Carrier != ShipmentTypeCode.BestRate;
 
-            if (!rateGroup.Rates.Any())
-            {
-                RateResult emptyRate = new RateResult("No rates are available for this shipment.", string.Empty);
-                emptyRate.ShipmentType = rateGroup.Carrier;
-
-                rateGroup.Rates.Add(emptyRate);
-            }
-
-            rateControl.HideSpinner();
             rateControl.LoadRates(rateGroup);
         }
 

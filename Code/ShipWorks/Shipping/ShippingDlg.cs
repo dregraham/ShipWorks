@@ -886,7 +886,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void ClearRates(string reason)
         {
-            rateControl.HideSpinner();
             rateControl.ClearRates(reason);
         }
 
@@ -1013,7 +1012,6 @@ namespace ShipWorks.Shipping
                 }
                 else if (rateGroup.Rates.Count == 0)
                 {
-                    rateControl.HideSpinner();
                     rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
                 }
                 else
@@ -1051,7 +1049,7 @@ namespace ShipWorks.Shipping
             {
                 // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
                 // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-                ShippingManager.RemoveShipmentFromCache(uiDisplayedShipments.FirstOrDefault());
+                ShippingManager.RemoveShipmentFromRatesCache(uiDisplayedShipments.FirstOrDefault());
 
                 GetRates();
             }
@@ -1740,7 +1738,7 @@ namespace ShipWorks.Shipping
             {
                 if (anyAttempted && !getRatesTimer.Enabled)
                 {
-                    rateControl.HideSpinner();
+                    rateControl.ShowSpinner = false;
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates(_e.Result as RateGroup);
@@ -1771,8 +1769,8 @@ namespace ShipWorks.Shipping
                     log.Error("Shipping exception encountered while getting rates", ex);
                 }
             };
-            
-            rateControl.ShowSpinner();
+
+            rateControl.ShowSpinner = true;
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
         }
         

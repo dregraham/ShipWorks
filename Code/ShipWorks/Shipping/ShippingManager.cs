@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipment">Shipment that should be removed from cache</param>
         /// <returns></returns>
-        public static void RemoveShipmentFromCache(ShipmentEntity shipment)
+        public static void RemoveShipmentFromRatesCache(ShipmentEntity shipment)
         {
             if (shipment == null)
             {
