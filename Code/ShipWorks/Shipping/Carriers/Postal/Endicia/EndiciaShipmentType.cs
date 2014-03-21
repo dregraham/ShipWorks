@@ -144,15 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-
-        /// <summary>
-        /// Gets the package adapter for the shipment.
-        /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Create the settings control for stamps.com
         /// </summary>

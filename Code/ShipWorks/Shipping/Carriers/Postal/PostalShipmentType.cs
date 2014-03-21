@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new PostalPackageAdapter(shipment);
         }
 
         /// <summary>

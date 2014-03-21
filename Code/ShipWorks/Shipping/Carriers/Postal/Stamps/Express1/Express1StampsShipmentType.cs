@@ -96,15 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             return new StampsProfileControl(ShipmentTypeCode);
         }
-
-        /// <summary>
-        /// Gets the package adapter for the shipment.
-        /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
