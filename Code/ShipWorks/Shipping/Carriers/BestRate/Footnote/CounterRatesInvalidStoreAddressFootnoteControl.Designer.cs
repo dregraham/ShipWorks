@@ -37,7 +37,7 @@
             // storeAddressLink
             // 
             this.storeAddressLink.AutoSize = true;
-            this.storeAddressLink.Location = new System.Drawing.Point(245, 5);
+            this.storeAddressLink.Location = new System.Drawing.Point(245, 7);
             this.storeAddressLink.Name = "storeAddressLink";
             this.storeAddressLink.Size = new System.Drawing.Size(86, 13);
             this.storeAddressLink.TabIndex = 4;
@@ -48,7 +48,7 @@
             // errorMessage
             // 
             this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(25, 5);
+            this.errorMessage.Location = new System.Drawing.Point(25, 7);
             this.errorMessage.Name = "errorMessage";
             this.errorMessage.Size = new System.Drawing.Size(219, 13);
             this.errorMessage.TabIndex = 3;
@@ -57,7 +57,7 @@
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.flag_red;
-            this.pictureBox.Location = new System.Drawing.Point(4, 4);
+            this.pictureBox.Location = new System.Drawing.Point(4, 5);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.TabIndex = 5;
@@ -72,7 +72,7 @@
             this.Controls.Add(this.errorMessage);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CounterRatesInvalidStoreAddressFootnoteControl";
-            this.Size = new System.Drawing.Size(396, 20);
+            this.Size = new System.Drawing.Size(396, 28);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
