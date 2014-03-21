@@ -59,9 +59,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         }
 
         /// <summary>
-        /// Gets the package adapter.
+        /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter()
+        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }

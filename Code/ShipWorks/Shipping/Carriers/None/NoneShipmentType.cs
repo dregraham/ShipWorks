@@ -37,9 +37,9 @@ namespace ShipWorks.Shipping.Carriers.None
         }
 
         /// <summary>
-        /// Gets the package adapter for this shipment type.
+        /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter()
+        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }

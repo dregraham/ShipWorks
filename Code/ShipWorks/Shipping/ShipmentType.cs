@@ -192,10 +192,10 @@ namespace ShipWorks.Shipping
 			return null;
 		}
 
-        /// <summary>
-        /// Gets the package adapter for this shipment type.
-        /// </summary>
-	    public abstract IPackageAdapter GetPackageAdapter();
+	    /// <summary>
+	    /// Gets the package adapter for the shipment.
+	    /// </summary>
+	    public abstract IPackageAdapter GetPackageAdapter(ShipmentEntity shipment);
 
 		/// <summary>
 		/// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
