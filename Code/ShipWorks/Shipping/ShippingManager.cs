@@ -44,6 +44,8 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping
 {
@@ -1111,7 +1113,7 @@ namespace ShipWorks.Shipping
                         // Dispatch the shipment processed event
                         ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
                         log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                    }
+                    }                    
 
                     adapter.Commit();
                 }
@@ -1125,6 +1127,9 @@ namespace ShipWorks.Shipping
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
+
+                LogToShipSenseKnowledgebase(shipmentType, shipment);
+
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -1137,6 +1142,40 @@ namespace ShipWorks.Shipping
             catch (TemplateTokenException ex)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+        
+        /// <summary>
+        /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
+        /// and logged, so an exception writing to the knowledge base does not hold up the shipment
+        /// from being processed.
+        /// </summary>
+        private static void LogToShipSenseKnowledgebase(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            try
+            {
+                List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>
+                {
+                    // Only doing a single package shipment for the current story
+                    shipmentType.GetPackageAdapter(shipment)
+                };
+
+                // Apply the data from the package adapters to the knowledge base entry, so
+                // the shipment data will get saved to the knowledge base
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters);
+
+                // Make sure we have all of the order information
+                OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+
+                Knowledgebase knowledgebase = new Knowledgebase();
+                knowledgebase.Save(entry, order);
+            }
+            catch (Exception ex)
+            {
+                // Just log the exception - we don't want a failure to write to 
+                // the knowledge base to prevent a shipment from being processed
+                log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
             }
         }
 
