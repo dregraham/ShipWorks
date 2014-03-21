@@ -48,8 +48,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public double Weight
         {
-            get { return packageEntity.Weight; }
-            set { packageEntity.Weight = value; }
+            // i-parcel is different in that the content weight is calculated in 
+            // the service control based on the sum of the packages.
+
+            // This is working like you'd expect with single package shipments, but 
+            // will probably need to change once we do multiple packages.
+            get { return packageEntity.IParcelShipment.Shipment.ContentWeight; }
+            set { packageEntity.IParcelShipment.Shipment.ContentWeight = value; }
         }
 
         /// <summary>
