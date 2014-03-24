@@ -14,7 +14,10 @@ namespace ShipWorks.Shipping.ShipSense
     public class KnowledgebaseEntry
     {
         private List<KnowledgebasePackage> packages;
+        private List<KnowledgebaseCustomsItem> customsItems;
+
         private bool consolidateMultiplePackagesIntoSinglePackage;
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
@@ -23,6 +26,7 @@ namespace ShipWorks.Shipping.ShipSense
             : this(false)
         {
             packages = new List<KnowledgebasePackage>();
+            customsItems = new List<KnowledgebaseCustomsItem>();
         }
 
         /// <summary>
@@ -42,7 +46,9 @@ namespace ShipWorks.Shipping.ShipSense
             : this()
         {
             KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
+
             this.packages = deserializedEntry.Packages.ToList();
+            this.CustomsItems = deserializedEntry.CustomsItems.ToList();
         }
 
         /// <summary>
@@ -52,6 +58,15 @@ namespace ShipWorks.Shipping.ShipSense
         {
             get { return packages; }
             set { packages = new List<KnowledgebasePackage>(value);}
+        }
+
+        /// <summary>
+        /// Gets or sets the customs items.
+        /// </summary>
+        public IEnumerable<KnowledgebaseCustomsItem> CustomsItems
+        {
+            get { return customsItems; }
+            set { customsItems = new List<KnowledgebaseCustomsItem>(value); }
         }
 
         /// <summary>

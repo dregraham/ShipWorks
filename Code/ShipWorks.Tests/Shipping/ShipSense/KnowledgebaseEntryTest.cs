@@ -90,6 +90,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             }
 
             Assert.IsFalse(hydratedEntry.ConsolidateMultiplePackagesIntoSinglePackage);
+            Assert.AreEqual(0, hydratedEntry.CustomsItems.Count());
         }
 
         [TestMethod]
@@ -333,10 +334,44 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ToJson_Test()
+        public void ToJson_WithoutCustomsItems_Test()
         {
-            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}]}";
+			const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
             
+            string actualJson = testObject.ToJson();
+            Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
+        }
+
+        [TestMethod]
+        public void ToJson_WithCustomsItems_Test()
+        {
+            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>
+            {
+                new KnowledgebaseCustomsItem
+                {
+                    Description = "Test description",
+                    Quantity = 2.3,
+                    Weight = 1.1,
+                    UnitValue = 4.32M,
+                    CountryOfOrigin = "US",
+                    HarmonizedCode = "ABC123",
+                    NumberOfPieces = 4,
+                    UnitPriceAmount = 2.35M
+                },
+                new KnowledgebaseCustomsItem
+                {
+                    Description = "Another test description",
+                    Quantity = 2,
+                    Weight = 0.1,
+                    UnitValue = 6.22M,
+                    CountryOfOrigin = "CA",
+                    HarmonizedCode = "XYZ789",
+                    NumberOfPieces = 1,
+                    UnitPriceAmount = 9.31M
+                }
+            };
+
             string actualJson = testObject.ToJson();
             Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
         }
