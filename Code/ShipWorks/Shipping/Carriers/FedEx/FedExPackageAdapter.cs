@@ -48,10 +48,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public double Weight
         {
-            // This is working like you'd expect with single package shipments, but 
-            // will probably need to change once we do multiple packages.
-            get { return packageEntity.FedExShipment.Shipment.ContentWeight; }
-            set { packageEntity.FedExShipment.Shipment.ContentWeight = value; }
+            get { return packageEntity.Weight; }
+            set { packageEntity.Weight = value; }
         }
 
         /// <summary>
