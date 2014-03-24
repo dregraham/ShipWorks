@@ -254,10 +254,6 @@ namespace ShipWorks.Shipping
         /// </summary>
 	    protected void ApplyShipSense(ShipmentEntity shipment)
 	    {
-            // Grab the actual shipment type
-	        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-	        IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
-
             // Populate the order items so we can compute the hash
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -269,9 +265,26 @@ namespace ShipWorks.Shipping
 	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
             knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = SupportsMultiplePackages;
 
+            // Grab the actual shipment type
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            List<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment).ToList();
+
+            if (SupportsMultiplePackages)
+            {
+                // Make sure the number of adapters matches the knowledge base
+                while (packageAdapters.Count() < knowledgebaseEntry.Packages.Count())
+                {
+                    packageAdapters.AddRange(shipmentType.GetPackageAdapters(shipment));
+                }
+
+                // Ensure the counts are the same in case there was some weird case
+                // where the shipment type is returning more than one adapter
+                packageAdapters = packageAdapters.Take(knowledgebaseEntry.Packages.Count()).ToList();
+            }
+
             // Apply each adapter to the shipment packages
             knowledgebaseEntry.ApplyTo(packageAdapters);
-            shipment.ContentWeight = packageAdapters.ToList().Sum(a => a.Weight);
+            shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
 	    }
 
 	    /// <summary>
