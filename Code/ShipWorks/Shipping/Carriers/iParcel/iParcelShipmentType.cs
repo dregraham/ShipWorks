@@ -1061,5 +1061,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             return fields;
         }
+
+        /// <summary>
+        /// Gets a value indicating whether multiple packages are supported by this shipment type.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

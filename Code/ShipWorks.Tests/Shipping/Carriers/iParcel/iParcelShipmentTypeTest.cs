@@ -83,6 +83,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 			testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object);
 		}
 
+        [TestMethod]
+        public void SupportsMultiplePackages_ReturnsTrue_Test()
+        {
+            Assert.IsTrue(testObject.SupportsMultiplePackages);
+        }
+
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
