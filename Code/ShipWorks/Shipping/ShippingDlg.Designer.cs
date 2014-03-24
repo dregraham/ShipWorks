@@ -138,19 +138,19 @@ namespace ShipWorks.Shipping
             this.menuProcessSelected,
             this.menuProcessAll});
             this.contextMenuProcess.Name = "contextMenuProcess";
-            this.contextMenuProcess.Size = new System.Drawing.Size(162, 48);
+            this.contextMenuProcess.Size = new System.Drawing.Size(132, 48);
             // 
             // menuProcessSelected
             // 
             this.menuProcessSelected.Name = "menuProcessSelected";
-            this.menuProcessSelected.Size = new System.Drawing.Size(161, 22);
+            this.menuProcessSelected.Size = new System.Drawing.Size(131, 22);
             this.menuProcessSelected.Text = "Process";
             this.menuProcessSelected.Click += new System.EventHandler(this.OnProcessSelected);
             // 
             // menuProcessAll
             // 
             this.menuProcessAll.Name = "menuProcessAll";
-            this.menuProcessAll.Size = new System.Drawing.Size(161, 22);
+            this.menuProcessAll.Size = new System.Drawing.Size(131, 22);
             this.menuProcessAll.Text = "Process All";
             this.menuProcessAll.Click += new System.EventHandler(this.OnProcessAll);
             // 
@@ -565,7 +565,7 @@ namespace ShipWorks.Shipping
             this.rateControlArea.Controls.Add(this.rateControl);
             this.rateControlArea.Location = new System.Drawing.Point(0, 17);
             this.rateControlArea.Name = "rateControlArea";
-            this.rateControlArea.Size = new System.Drawing.Size(354, 136);
+            this.rateControlArea.Size = new System.Drawing.Size(354, 103);
             this.rateControlArea.TabIndex = 3;
             // 
             // rateControl
@@ -578,7 +578,9 @@ namespace ShipWorks.Shipping
             this.rateControl.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
-            this.rateControl.Size = new System.Drawing.Size(352, 117);
+            this.rateControl.ShowAllRates = true;
+            this.rateControl.ShowConfigureLink = false;
+            this.rateControl.Size = new System.Drawing.Size(352, 102);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 

@@ -52,6 +52,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Gets or sets the selected rate.
+        /// </summary>
+        public RateResult SelectedRate
+        {
+            get; 
+            set;
+        }
+
+        /// <summary>
         /// Gets the shipment that the rates are for.
         /// </summary>
         public ShipmentEntity Shipment

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -133,10 +134,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountLocationId">The account location ID.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to do the version capture.</returns>
-        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId)
+        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId, FedExAccountEntity account)
         {
-            FedExAccountEntity accountEntity = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
-
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
@@ -145,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             // TODO: Look into injecting the response factory here like that used in the CreateShipResponse method
-            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, accountEntity);
+            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, account);
         }
 
         /// <summary>
@@ -333,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx to retrive tracking data.</returns>
+        /// FedEx to retrieve tracking data.</returns>
         public CarrierRequest CreateTrackRequest(FedExAccountEntity accountEntity, ShipmentEntity shipmentEntity)
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
@@ -345,6 +344,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             return new FedExTrackRequest(manipulators, shipmentEntity, fedExService, new FedExResponseFactory(), accountEntity);
+        }
+
+        /// <summary>
+        /// Creates the certificate request.
+        /// </summary>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        /// <returns>An instance of an ICertificateRequest that can be used to check the security level
+        /// of a host's certificate.</returns>
+        public ICertificateRequest CreateCertificateRequest(ICertificateInspector certificateInspector)
+        {
+            Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
+            return new CertificateRequest(fedExEndpoint, certificateInspector);
         }
     }
 }

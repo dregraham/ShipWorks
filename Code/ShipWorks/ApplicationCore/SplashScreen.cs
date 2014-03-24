@@ -9,6 +9,7 @@ using System.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using System.Reflection;
+using ShipWorks.Properties;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -33,6 +34,13 @@ namespace ShipWorks.ApplicationCore
             InitializeComponent();
 
             Region = new Region(new Rectangle(1, 1, Width - 2, Height - 2));
+
+            if (DateTime.Today == new DateTime(2014, 4, 1))
+            {
+                BackgroundImage = Resources.splash_april;
+                labelReleaseInfo.ForeColor = Color.White;
+                status.ForeColor = Color.White;
+            }
         }
 
         /// <summary>

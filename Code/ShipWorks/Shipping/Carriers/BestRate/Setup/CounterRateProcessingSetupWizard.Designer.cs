@@ -172,9 +172,9 @@
             this.rateFoundDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateFoundDescription.Location = new System.Drawing.Point(37, 32);
             this.rateFoundDescription.Name = "rateFoundDescription";
-            this.rateFoundDescription.Size = new System.Drawing.Size(258, 13);
+            this.rateFoundDescription.Size = new System.Drawing.Size(126, 13);
             this.rateFoundDescription.TabIndex = 9;
-            this.rateFoundDescription.Text = "The best rate ShipWorks found for your shipment is:";
+            this.rateFoundDescription.Text = "The rate you selected is:";
             // 
             // createAccountHeading
             // 

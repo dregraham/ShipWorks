@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-using ShipWorks.Filters.Content.Editors;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 
@@ -12,17 +7,8 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// Condition base on the total of an Order
     /// </summary>
     [ConditionElement("Order Total", "Order.Total")]
-    public class OrderTotalCondition : NumericCondition<decimal>
+    public class OrderTotalCondition : MoneyCondition
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderTotalCondition()
-        {
-            // Format as currency
-            format = "C";
-        }
-
         /// <summary>
         /// Generate the SQL for the element
         /// </summary>

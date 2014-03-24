@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -420,6 +421,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
                 // that a new account has been added.
                 RateCache.Instance.Clear();
+
+                // If this is the only account, update this shipment type profiles with this account
+                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(false);
+                if (accounts.Count == 1)
+                {
+                    StampsAccountEntity accountEntity = accounts.First();
+
+                    // Update any profiles to use this account if this is the only account
+                    // in the system. This is to account for the situation where there a multiple
+                    // profiles that may be associated with a previous account that has since
+                    // been deleted. 
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Stamps))
+                    {
+                        if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
+                        {
+                            shippingProfileEntity.Postal.Stamps.StampsAccountID = accountEntity.StampsAccountID;
+                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                        }
+                    }
+                }
             }
         }
 

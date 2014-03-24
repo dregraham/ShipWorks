@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
@@ -12,31 +11,25 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     class NetworkSolutionsStatusGraph
     {
         /// <summary>
-        /// Comparer for sorting the arraylist of arrays by length
+        /// Comparer for sorting the list of lists by length
         /// </summary>
-        class LengthComparer : IComparer
+        class LengthComparer : IComparer<List<long>>
         {
-            #region IComparer Members
-
-            public int Compare(object x, object y)
+            public int Compare(List<long> x, List<long> y)
             {
-                Array arrX = x as Array;
-                Array arrY = y as Array;
-
-                int compareValue = arrX.Length.CompareTo(arrY.Length);
+                int compareValue = x.Count.CompareTo(y.Count);
 
                 if (compareValue == 0)
                 {
                     // they are the same length, so sort them based on Ids
-                    for (int i = 0; i < arrX.Length; i++)
+                    for (int i = 0; i < x.Count; i++)
                     {
-                        int itemCompare = ((int)arrX.GetValue(i)).CompareTo((int)arrY.GetValue(i));
+                        int itemCompare = (x[i]).CompareTo(y[i]);
 
-                        if (itemCompare == 0)
-                            continue; // go to the next element
-                        else
+                        if (itemCompare != 0)
+                        {
                             return itemCompare;
-
+                        }
                     }
 
                     // identical arrays
@@ -46,10 +39,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 {
                     return compareValue;
                 }
-
             }
-
-            #endregion
         }
 
         /// <summary>
@@ -79,12 +69,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
 
             // collection of neighbors
-            ArrayList neighbors = new ArrayList();
+            List<Vertex> neighbors = new List<Vertex>();
             public Vertex[] Neighbors
             {
                 get
                 {
-                    return (Vertex[])neighbors.ToArray(typeof(Vertex));
+                    return neighbors.ToArray();
                 }
             }
 
@@ -184,8 +174,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             Vertex startVertex = FindVertex(startKey);
             if (startVertex == null) throw new InvalidOperationException(String.Format("Unable to locate key {0}", startKey));
 
-            Stack currentPath = new Stack();
-            ArrayList paths = new ArrayList();
+            Stack<long> currentPath = new Stack<long>();
+            List<List<long>> paths = new List<List<long>>();
 
             // first mark all nodes as being not visited
             foreach (Vertex vertex in vertices)
@@ -206,24 +196,22 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             paths.Sort(new LengthComparer());
 
             // reverse the shortest one, these are the ids in order they need to be requested
-            Array.Reverse((Array)paths[0]);
+            paths[0].Reverse();
 
-            long[] finalArray = new long[((Array)paths[0]).Length];
-            Array.Copy((Array)paths[0], finalArray, finalArray.Length);
-            return finalArray;
+            return paths[0].ToArray();
         }
 
         /// <summary>
         /// Find paths from the current vertex to the target key
         /// </summary>
-        private void FindPath(Vertex currentVertex, long target, ArrayList foundPaths, Stack currentPath)
+        private void FindPath(Vertex currentVertex, long target, ICollection<List<long>> foundPaths, Stack<long> currentPath)
         {
             currentPath.Push(currentVertex.Key);
 
             if (currentVertex.Key == target)
             {
                 // found the target, record this path
-                foundPaths.Add(currentPath.ToArray());
+                foundPaths.Add(currentPath.ToList());
             }
             else
             {

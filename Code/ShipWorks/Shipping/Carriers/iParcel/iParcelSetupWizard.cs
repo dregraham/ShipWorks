@@ -9,6 +9,8 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business;
+using ShipWorks.Shipping.Profiles;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -133,6 +135,27 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
                 // that a new account has been added.
                 RateCache.Instance.Clear();
+
+                if (iParcelAccountManager.Accounts.Count == 1)
+                {
+                    // Update any profiles to use this iparcel account if this is the only account
+                    // in the system. This is to account for the situation where there a multiple
+                    // profiles that may be associated with a previous iparcel account that has since
+                    // been deleted. 
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.iParcel))
+                    {
+                        if (shippingProfileEntity.IParcel.IParcelAccountID.HasValue)
+                        {
+                            shippingProfileEntity.IParcel.IParcelAccountID = iParcelAccount.IParcelAccountID;
+                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                        }
+                    }
+
+                    // Make sure the shipment is marked as configured and activated
+                    ShippingSettings.MarkAsActivated(ShipmentTypeCode.iParcel);
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.iParcel);
+                }
+
             }
         }
     }

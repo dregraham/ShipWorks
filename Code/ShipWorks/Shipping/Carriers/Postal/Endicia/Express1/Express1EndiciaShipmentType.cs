@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
@@ -21,6 +23,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     [Obfuscation(Exclude = true, ApplyToMembers = false)]
     public class Express1EndiciaShipmentType : EndiciaShipmentType
     {
+        /// <summary>
+        /// Create an instance of the Express1 Endicia Shipment Type
+        /// </summary>
+        public Express1EndiciaShipmentType()
+        {
+            AccountRepository = new Express1EndiciaAccountRepository();
+        }
+
         /// <summary>
         /// Postal Shipment Type
         /// </summary>
@@ -70,6 +80,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new Express1EndiciaShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Create the Service Control
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -78,6 +96,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         {
             return new Express1EndiciaServiceControl(rateControl);
         }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            ICarrierAccountRepository<EndiciaAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
+
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
+
+                // This call to GetRates won't be recursive since the counter rate account repository will return an account
+                return GetRates(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+            finally
+            {
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
+            }
+        }
+
+        
 
         /// <summary>
         /// Process the label server shipment

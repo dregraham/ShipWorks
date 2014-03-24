@@ -42,7 +42,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -265,7 +265,10 @@
     <Compile Include="IO\Zip\ZipWriterProgressEventArgs.cs" />
     <Compile Include="IO\Zip\ZipWriterStringItem.cs" />
     <Compile Include="MyComputer.cs" />
+    <Compile Include="Net\CertificateRequest.cs" />
+    <Compile Include="Net\CertificateSecurityLevel.cs" />
     <Compile Include="Net\ClientCertificate.cs" />
+    <Compile Include="Net\CertificateInspector.cs" />
     <Compile Include="Net\HttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\HttpTextPostRequestSubmitter.cs" />
     <Compile Include="Net\HttpBinaryPostRequestSubmitter.cs" />
@@ -278,6 +281,8 @@
     <Compile Include="Net\HttpVariableCollection.cs" />
     <Compile Include="Net\HttpVariableRequestSubmitter.cs" />
     <Compile Include="Net\HttpVerb.cs" />
+    <Compile Include="Net\ICertificateInspector.cs" />
+    <Compile Include="Net\ICertificateRequest.cs" />
     <Compile Include="Net\IHttpRequestSubmitterFactory.cs" />
     <Compile Include="Net\IHttpResponseReader.cs" />
     <Compile Include="Net\INetworkUtility.cs" />
@@ -298,6 +303,7 @@
     <Compile Include="Net\QueryStringEncodingCasing.cs" />
     <Compile Include="Net\QueryStringUtility.cs" />
     <Compile Include="Net\HttpRequestSubmittingEvent.cs" />
+    <Compile Include="Net\TrustingCertificateInspector.cs" />
     <Compile Include="Net\WebServiceRawSoap.cs" />
     <Compile Include="Net\WebHelper.cs" />
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />

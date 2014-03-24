@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     /// <summary>
     /// The conenction details for the Express1 for Endicia integration
     /// </summary>
-    public class EndiciaExpress1ConnectionDetails : IExpress1ConnectionDetails
+    public class Express1EndiciaConnectionDetails : IExpress1ConnectionDetails
     {
         /// <summary>
         /// Gets the franchise ID (company code)

@@ -1098,6 +1098,7 @@
             this.wizardPageFinish});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Endicia Setup Wizard";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();

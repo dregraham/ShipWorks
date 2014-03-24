@@ -59,23 +59,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
         // Express1 API service connection info 
         static Express1StampsConnectionDetails express1StampsConnectionDetails = new Express1StampsConnectionDetails();
+
+        private readonly ICertificateInspector certificateInspector;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsApiSession"/> class.
         /// </summary>
         public StampsApiSession()
-            : this(new StampsAccountRepository(), new LogEntryFactory())
+            : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsApiSession" /> class.
         /// </summary>
-        /// <param name="accountRepository">The account repository.</param>
-        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
+        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
             this.log = LogManager.GetLogger(typeof(StampsApiSession));
+            this.certificateInspector = certificateInspector;
         }
 
         /// <summary>
@@ -135,6 +137,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 using (SwsimV29 webService = CreateWebService("Authenticate", isExpress1))
                 {
+                    CheckCertificate(webService.Url, isExpress1);
+
                     string auth = webService.AuthenticateUser(new Credentials
                     {
                         IntegrationID = isExpress1 ? new Guid(express1StampsConnectionDetails.ApiKey) : integrationID,
@@ -152,6 +156,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             catch (Exception ex)
             {
                 throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+            }
+        }
+
+        /// <summary>
+        /// Makes a request to the specified url, and determines it's CertificateSecurityLevel
+        /// </summary>
+        private void CheckCertificate(string url, bool isExpress1)
+        {
+            CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
+
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+
+            // If we are using the test server, it's not https, so none will be returned.
+            // Also, our test server credentials should not be using "real money", so not such a terrible thing if someone
+            // hi-jacked them.
+            if (Express1StampsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
+            {
+                return;
+            }
+
+            if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
+            {
+                string description = EnumHelper.GetDescription(isExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps);
+                throw new StampsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
 
@@ -267,7 +295,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
                             stampsRate.DeliverDays.Replace("Days", ""))
                         {
-                            Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None)
+                            Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
                         };
                     }
                     else
@@ -276,7 +305,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
                             stampsRate.DeliverDays.Replace("Days", ""),
                             stampsRate.Amount,
-                            new PostalRateSelection(serviceType, PostalConfirmationType.None));
+                            new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                            {
+
+                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
+                            };
                     }
 
                     PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
@@ -349,6 +382,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1, LogActionType.GetRates))
             {
+                CheckCertificate(webService.Url, shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps);
+
                 RateV11[] ratesArray;
 
                 string auth = webService.GetRates(GetAuthenticator(account), rate, out ratesArray);

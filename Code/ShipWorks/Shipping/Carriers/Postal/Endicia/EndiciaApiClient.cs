@@ -45,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity> accountRepository;
         private readonly LogEntryFactory logEntryFactory;
+        private readonly ICertificateInspector certificateInspector;
         readonly ILog log = LogManager.GetLogger(typeof(EndiciaApiClient));
 
         private const string productionUrl = "https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx";
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory())
+        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         {
             
         }
@@ -63,10 +64,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory)
+        public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
+            this.certificateInspector = certificateInspector;
         }
 
         /// <summary>
@@ -390,9 +392,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
 
             // Dims
-            if (packagingType == PostalPackagingType.Package || packagingType == PostalPackagingType.Cubic)
+            if (packagingType == PostalPackagingType.Package)
             {
                 request.MailpieceDimensions = new Dimensions();
+
+                // Force at least 1x1x1 here so we at least get an answer back
+                request.MailpieceDimensions.Length = Math.Max(1, postal.DimsLength);
+                request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
+                request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
+            }
+            else if (packagingType == PostalPackagingType.Cubic)
+            {
+                // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't 
+                // round up to 1 like is done with the Package type
+                request.MailpieceDimensions = new Dimensions();
+
                 request.MailpieceDimensions.Length = postal.DimsLength;
                 request.MailpieceDimensions.Width = postal.DimsWidth;
                 request.MailpieceDimensions.Height = postal.DimsHeight;
@@ -566,6 +580,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (EwsLabelService service = CreateWebService("Process", GetReseller(account, shipment)))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     LabelRequestResponse response = service.GetPostageLabel(request);
 
                     // Check for errors
@@ -912,6 +928,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     PostageRatesResponse response = service.CalculatePostageRates(request);
 
                     // Check for errors
@@ -1002,7 +1020,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         if (confirmationOptions.Count > 0)
                         {
                             // Add the 'base' rate for the service type, without any confirmations\extras
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) { Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None) });
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) 
+                            { 
+                                Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
+                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                            });
 
                             if (confirmationOptions.Contains(PostalConfirmationType.Delivery))
                             {
@@ -1017,14 +1039,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         else
                         {
                             // Add the single rate for this service
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days, price.Postage.TotalAmount, new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days, price.Postage.TotalAmount, new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                            {
+                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                            });
                         }
                     }
 
                     if (isDomestic && (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope))
                     {
                         // Special case - endicia not returning a rate for first class envelopes
-                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.FirstClass))
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.FirstClass))
                         {
                             try
                             {
@@ -1041,7 +1066,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning Standard Post instead.  If we can't find Parcel Select, try
                         // to get those rates manually.  In the future if Endicia updates\fixes it we may be able to remove this.
-                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.Tag).ServiceType == PostalServiceType.ParcelSelect))
+                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
                         {
                             try
                             {
@@ -1049,7 +1074,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                 RateResult withDelivery = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, PostalConfirmationType.Delivery);
                                 RateResult withSignature = GetRate(shipment, endiciaShipmentType, PostalServiceType.ParcelSelect, PostalConfirmationType.Signature);
 
-                                rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect)));
+                                rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(PostalServiceType.ParcelSelect), PostalUtility.GetServiceTransitDays(PostalServiceType.ParcelSelect))
+                                {
+                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                });
                                 rates.Add(withDelivery);
                                 rates.Add(withSignature);
                             }
@@ -1155,14 +1183,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         foreach (RateResult result in results)
                         {
-                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.Tag).ServiceType == ((PostalRateSelection) result.Tag).ServiceType);
+                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.OriginalTag).ServiceType == ((PostalRateSelection) result.OriginalTag).ServiceType);
                             if (webToolRate != null)
                             {
                                 resultsWithDays.Add(new RateResult(
                                     result.Description,
                                     webToolRate.Days,
                                     result.Amount,
-                                    result.Tag));
+                                    result.Tag)
+                                    {
+                                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
+                                    });
                             }
                             else
                             {
@@ -1346,6 +1377,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
                 {
+                    EnsureSecureRequest(service, shipment.ShipmentType);
+
                     PostageRateResponse response = service.CalculatePostageRate(request);
 
                     // Check for errors
@@ -1648,6 +1681,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             Debug.Fail("Unknown mailClass value while getting rates: " + mailClass);
 
             return null;
+        }
+
+        /// <summary>
+        /// Ensures that the request is not being intercepted
+        /// </summary>
+        /// <param name="service">Service call that should be checked</param>
+        /// <param name="shipmentType">Type of shipment that will be used in the description of the exception, if one is thrown</param>
+        private void EnsureSecureRequest(EwsLabelService service, int shipmentType)
+        {
+            CertificateRequest certificateRequest = new CertificateRequest(new Uri(service.Url), certificateInspector);
+            if (certificateRequest.Submit() != CertificateSecurityLevel.Trusted)
+            {
+                string description = EnumHelper.GetDescription((ShipmentTypeCode)shipmentType);
+                throw new EndiciaException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+            }
         }
     }
 }

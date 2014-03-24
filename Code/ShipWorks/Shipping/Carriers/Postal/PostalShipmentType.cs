@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
@@ -22,6 +23,7 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores;
 using ShipWorks.Data;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -44,14 +46,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Postal", typeof(PostalShipmentEntity), refreshIfPresent);
-        }
-
-        /// <summary>
-        /// Configure properties of a newly created shipment that are not taken care of by profile
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
@@ -398,12 +392,44 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     .ToList();
 
             var validExpress1Rates = rates
-                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.Tag).ServiceType))
+                .Where(e => availabelServiceTypes.Contains(((PostalRateSelection)e.OriginalTag).ServiceType))
                 .ToList();
 
-            validExpress1Rates.ForEach(e => e.ShipmentType = baseShipmentType);
+            validExpress1Rates.ForEach(e => {
+                e.ShipmentType = baseShipmentType;
+                e.ProviderLogo = e.ProviderLogo != null ? EnumHelper.GetImage(express1ShipmentType) : null;
+            });
 
             return new RateGroup(validExpress1Rates);
+        }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected virtual RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());    
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+
+            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
+            rates.Rates.ForEach(x =>
+            {
+                if (x.ProviderLogo != null)
+                {
+                    // Only change existing logos; don't set logos for rates that don't have them
+                    x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
+                }
+            });
+            return rates;
         }
     }
 }

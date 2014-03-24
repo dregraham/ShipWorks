@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
@@ -49,6 +46,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <returns>A RateGroup containing the counter rates for a generic UPS account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
+            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.UpsCertificateVerificationData;
+            ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
+
             RateGroup rates = new RateGroup(new List<RateResult>());
             ((UpsShipmentType)ShipmentType).SettingsRepository = SettingsRepository;
             ((UpsShipmentType)ShipmentType).AccountRepository = AccountRepository;
@@ -112,23 +112,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, UpsAccountEntity account)
         {
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
-
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
-            {
-                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
-                // so we'll try to use the store address
-                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-
-                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
-            }
-
-            if (!CounterRatesOriginAddressValidator.IsValidate(currentShipment))
-            {
-                // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
-            }
+            CounterRatesOriginAddressValidator.EnsureValidAddress(currentShipment);
         }
 
         /// <summary>

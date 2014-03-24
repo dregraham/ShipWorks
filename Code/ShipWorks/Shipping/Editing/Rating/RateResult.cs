@@ -25,13 +25,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         protected RateResult()
         {
-            
+            RateID = Guid.NewGuid();
         }
 
         /// <summary>
         /// Constructor, for when an entry is not a selectable rate, but used more as a heading
         /// </summary>
-        public RateResult(string description, string days)
+        public RateResult(string description, string days) : this()
         {
             this.Description = description;
             this.days = days;
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Constructor
         /// </summary>
-        public RateResult(string description, string days, decimal amount, object tag)
+        public RateResult(string description, string days, decimal amount, object tag) : this()
         {
             this.Description = description;
             this.days = days;
@@ -55,6 +55,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// Value to uniquely identify the rate.
+        /// </summary>
+        public Guid RateID { get; set; }
+
+        /// <summary>
         /// Gets or sets the service level.
         /// </summary>
         public ServiceLevelType ServiceLevel { get; set; }
@@ -63,6 +68,19 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// A description of the rate service class, like "USPS Priority"
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// A helper property to get the original tag of a rate to handle cases where the
+        /// rate is a cached rate best rate result.
+        /// </summary>
+        public object OriginalTag
+        {
+            get
+            {
+                // Account for the rate being a previously cached rate where the tag is already a best rate tag
+                return Tag is BestRateResultTag ? ((BestRateResultTag)Tag).OriginalTag : Tag;
+            }
+        }
 
         /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever
@@ -113,6 +131,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public bool Selectable
         {
             get { return selectable; }
+            set { selectable = value; }
         }
 
         /// <summary>
@@ -143,32 +162,41 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Returns the test to display for the rate selection link, i.e. "Select" or "Sign up!"
-        /// </summary>
-        public string SelectionText
-        {
-            get
-            {
-                if (Tag is BestRateResultTag && ((BestRateResultTag)Tag).SignUpAction != null)
-                {
-                    return "Sign Up!";
-                }
-
-                if (Selectable)
-                {
-                    return "Select";
-                }
-
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this [is a counter rate].
         /// </summary>
         /// <value>
         ///   <c>true</c> if this [is a counter rate]; otherwise, <c>false</c>.
         /// </value>
         public bool IsCounterRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the provider logo.
+        /// </summary>
+        /// <value>
+        /// The provider logo.
+        /// </value>
+        public Image ProviderLogo { get; set; }
+
+        /// <summary>
+        /// Copies this instance.
+        /// </summary>
+        public RateResult Copy()
+        {
+            //Description,days,amount, tag
+            RateResult coppiedRate = new RateResult(Description, days, amount, tag)
+            {
+                AmountFootnote = amountFootnote,
+                CarrierDescription = carrierDescription,
+                ExpectedDeliveryDate = ExpectedDeliveryDate,
+                IsCounterRate = IsCounterRate,
+                Selectable = selectable,
+                RateID = RateID,
+                ServiceLevel = ServiceLevel,
+                ShipmentType = ShipmentType,
+                ProviderLogo = ProviderLogo
+            };
+
+            return coppiedRate;
+        }
     }
 }

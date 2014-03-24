@@ -59,13 +59,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             EnumHelper.BindComboBox<PostalSortType>(sortType);
             EnumHelper.BindComboBox<PostalEntryFacility>(entryFacility);
 
-            LoadEndiciaAccounts();
+            LoadAccounts();
         }
 
         /// <summary>
         /// Load the list of endicia accounts
         /// </summary>
-        private void LoadEndiciaAccounts()
+        public override void LoadAccounts()
         {
             endiciaAccount.DisplayMember = "Key";
             endiciaAccount.ValueMember = "Value";

@@ -48,17 +48,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 packages.Where(x => !x.IsNew).ToList().ForEach(x => adapter.DeleteEntity(x));
+
+                packages.Clear();
+
+                // Apply the default profile for the shipment
+                ShipmentType.ConfigureNewShipment(shipment);
+
+                packages = Packages(shipment);
+
+                // Update the first package PackgeID to be that of the original persisted package.  If this isn't 
+                // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
+                SetPackageId(packages[0], originalPackageId);
+                
+                packages.ToList().ForEach(x => adapter.SaveEntity(x, true, false));
             }
-            packages.Clear();
-
-            // Apply the default profile for the shipment
-            ShipmentType.ConfigureNewShipment(shipment);
-
-            packages = Packages(shipment);
-
-            // Update the first package PackgeID to be that of the original persisted package.  If this isn't 
-            // done, we get an ORM exception.  There's probably a better way, so need to check with Brian.
-            SetPackageId(packages[0], originalPackageId);
         }
 
         /// <summary>

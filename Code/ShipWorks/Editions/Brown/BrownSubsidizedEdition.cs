@@ -30,6 +30,12 @@ namespace ShipWorks.Editions.Brown
                     continue;
                 }
 
+                // Explicitly allow other for the subsidized version.  It's not allowed for Discounted
+                if (shipmentType == ShipmentTypeCode.Other)
+                {
+                    continue;
+                }
+
                 AddRestriction(EditionFeature.ShipmentType, shipmentType, EditionRestrictionLevel.Hidden);
             }
 

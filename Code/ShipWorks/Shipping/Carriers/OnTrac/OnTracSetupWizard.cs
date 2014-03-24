@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -6,8 +8,8 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
@@ -15,7 +17,7 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     /// <summary>
-    /// Setup wizard for processing shipments with Stamps.com
+    /// Setup wizard for processing shipments with OnTrac
     /// </summary>
     public partial class OnTracSetupWizard : ShipmentTypeSetupWizardForm
     {
@@ -126,6 +128,29 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShippingSettings.Save(settings);
 
             OnTracAccountManager.SaveAccount(account);
+
+            // Mark the new account as configured
+            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.OnTrac);
+
+            // If this is the only account, update this shipment type profiles with this account
+            List<OnTracAccountEntity> accounts = OnTracAccountManager.Accounts;
+            if (accounts.Count == 1)
+            {
+                OnTracAccountEntity accountEntity = accounts.First();
+
+                // Update any profiles to use this account if this is the only account
+                // in the system. This is to account for the situation where there a multiple
+                // profiles that may be associated with a previous account that has since
+                // been deleted. 
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.OnTrac))
+                {
+                    if (shippingProfileEntity.OnTrac.OnTracAccountID.HasValue)
+                    {
+                        shippingProfileEntity.OnTrac.OnTracAccountID = accountEntity.OnTracAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                    }
+                }
+            }
         }
 
         /// <summary>

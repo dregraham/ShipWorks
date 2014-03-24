@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// Initialize the comboboxes
+        /// Initialize the combo boxes
         /// </summary>
         public override void Initialize()
         {
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 			
             originControl.Initialize(ShipmentTypeCode.iParcel);
 
-            LoadIParcelAccounts();
+            LoadAccounts();
 			
             EnumHelper.BindComboBox<iParcelServiceType>(service);
             
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Load the list of IParcel accounts
         /// </summary>
-        private void LoadIParcelAccounts()
+        public override void LoadAccounts()
         {
             iParcelAccount.DisplayMember = "Key";
             iParcelAccount.ValueMember = "Value";
@@ -137,7 +137,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (iParcelAccount.SelectedValue != null)
             {
                 long accountID = (long) iParcelAccount.SelectedValue;
-
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     shipment.IParcel.IParcelAccountID = accountID;
@@ -155,7 +154,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             SuspendRateCriteriaChangeEvent();
 
             base.SaveToShipments();
-
             originControl.SaveToEntities();
 
             // Save the packages
@@ -164,7 +162,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 shipment.ContentWeight = shipment.IParcel.Packages.Sum(p => p.Weight);
-
                 iParcelAccount.ReadMultiValue(v => shipment.IParcel.IParcelAccountID = (long) v);
                 
                 service.ReadMultiValue(v =>
@@ -176,9 +173,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 });
 
                 referenceCustomer.ReadMultiText(t => shipment.IParcel.Reference = t);
-
                 emailTrack.ReadMultiCheck(c => shipment.IParcel.TrackByEmail = c);
-
                 isDeliveryDutyPaid.ReadMultiCheck(c => shipment.IParcel.IsDeliveryDutyPaid = c);
             }
 
@@ -192,7 +187,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             // We need to save the package stuff so we know what weights we are dealing with
             packageControl.SaveToEntities();
-
             bool changes = false;
 
             // Go through each shipment
@@ -233,7 +227,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
-
             OnRateCriteriaChanged(sender, e);
         }
 
@@ -251,8 +244,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
-
-            iParcelRateSelection rate = e.Rate.Tag as iParcelRateSelection;
+            iParcelRateSelection rate = e.Rate.OriginalTag as iParcelRateSelection;
 
             service.SelectedValue = rate.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -296,7 +288,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         return false;
                     }
 
-                    return ((iParcelRateSelection)r.Tag).ServiceType == serviceType;
+                    return ((iParcelRateSelection)r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);

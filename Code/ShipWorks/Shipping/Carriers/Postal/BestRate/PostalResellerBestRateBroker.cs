@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Editing;
 using System;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -52,8 +53,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         protected override RateGroup GetRates(ShipmentEntity shipment)
         {
             RateGroup rates = base.GetRates(shipment);
-            MergeDescriptionsWithNonSelectableRates(rates.Rates);
+            
+            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
+            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
+            rates.Rates.ForEach(f => UseProperUspsLogo(f));
+
             return rates;
+        }
+
+        /// <summary>
+        /// Masks the usps logo.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns></returns>
+        private static void UseProperUspsLogo(RateResult rate)
+        {
+            if (ShipmentTypeManager.IsPostal(rate.ShipmentType))
+            {
+                rate.ProviderLogo = rate.IsCounterRate ? ShippingIcons.usps : EnumHelper.GetImage(rate.ShipmentType);
+            }
         }
 
         /// <summary>
@@ -62,15 +80,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="rates">Collection of rates to update</param>
         /// <remarks>It is important that these rates are in the same order that they are returned from
         /// the shipment type's GetRates method or the merging could be incorrect</remarks>
-        private static void MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
+        private List<RateResult>  MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
         {
             Regex beginsWithSpaces = new Regex("^[ ]+");
             Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
 
             RateResult lastNonSelectable = null;
 
-            foreach (RateResult rate in rates)
+            List<RateResult> RatesToReturn = new List<RateResult>();
+
+            foreach (RateResult originalRate in rates)
             {
+                RateResult rate = originalRate.Copy();
+                RatesToReturn.Add(rate);
+
                 if (rate.Selectable)
                 {
                     if (beginsWithSpaces.IsMatch(rate.Description) && lastNonSelectable != null)
@@ -83,9 +106,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 {
                     lastNonSelectable = rate;
                 }
-
+                
                 rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
             }
+
+            return RatesToReturn;
         }
 
         /// <summary>
@@ -164,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
             // we need to pass the original tag that is a postal service type
-            object originalTag = GetOriginalTag(rate);
+            object originalTag = rate.OriginalTag;
             return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(originalTag));
         }
 

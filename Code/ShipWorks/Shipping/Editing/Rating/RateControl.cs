@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// into the control, a group without any rate results is returned.
         /// </summary>
         public RateGroup RateGroup { get; private set; }
-
+        
         /// <summary>
         /// Return the displayed height of the footnote section
         /// </summary>
@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 {
                     GridRow row = new GridRow(new[]
                     {
-                        new GridCell(GetProviderLogo(rate)),
+                        new GridCell(rate.ProviderLogo),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 UpdateFootnotes(rateGroup);
             }
         }
-
+        
         /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
@@ -294,31 +294,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             sandGrid.SelectedElements.Clear();
         }
 
-        /// <summary>
-        /// Gets the provider logo.
-        /// </summary>
-        /// <param name="rate">The rate.</param>
-        /// <returns>The provider logo image.</returns>
-        private static Image GetProviderLogo(RateResult rate)
-        {
-            Image providerLogo = EnumHelper.GetImage(rate.ShipmentType);
-
-            // If a postal provider, show USPS logo:
-            if (ShipmentTypeManager.IsPostal(rate.ShipmentType) && rate.IsCounterRate)
-            {
-                providerLogo = ShippingIcons.usps;
-            }
-
-            // If non-competitive, show the brown truck.
-            NoncompetitiveRateResult noncompetitiveRateResult = rate as NoncompetitiveRateResult;
-            if (noncompetitiveRateResult != null)
-            {
-                providerLogo = ShippingIcons.truck_brown;
-            }
-
-            // If null, return the 'other' icon
-            return providerLogo ?? ShippingIcons.other;
-        }
         
         /// <summary>
         /// Resets the footnotes with what are contained in the specified rate group
@@ -403,17 +378,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             if (ConfigureRateClicked != null)
             {
                 ConfigureRateClicked(this, new RateSelectedEventArgs(rate));
-            }
-        }
-
-        /// <summary>
-        /// Event raised indicating that a full reload of the rates is required
-        /// </summary>
-        protected void OnReloadRatesRequired(object sender, EventArgs e)
-        {
-            if (ReloadRatesRequired != null)
-            {
-                ReloadRatesRequired(this, EventArgs.Empty);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Divelements.SandGrid;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -125,30 +126,33 @@ namespace ShipWorks.Shipping.Editing.Rating
             // gridColumnService
             // 
             this.gridColumnService.AllowEditing = false;
+            this.gridColumnService.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnService.AllowReorder = false;
-            this.gridColumnService.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";
-            this.gridColumnService.Width = 393;
+            this.gridColumnService.Width = 175;
+            this.gridColumnRate.MinimumWidth = 175;
             // 
             // gridColumnDays
             // 
             this.gridColumnDays.AllowEditing = false;
+            this.gridColumnDays.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnDays.AllowReorder = false;
-            this.gridColumnDays.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnDays.AutoSizeIncludeHeader = true;
             this.gridColumnDays.Clickable = false;
             this.gridColumnDays.HeaderText = "Days";
-            this.gridColumnDays.Width = 32;
+            this.gridColumnDays.Width = 75;
+            this.gridColumnRate.MinimumWidth = 40;
             // 
             // gridColumnRate
             // 
-            this.gridColumnRate.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnRate.AutoSizeIncludeHeader = true;
+            this.gridColumnRate.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnRate.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
             this.gridColumnRate.Clickable = false;
             this.gridColumnRate.HeaderText = "Rate";
-            this.gridColumnRate.Width = 31;
+            this.gridColumnRate.Width = 50;
+            this.gridColumnRate.MinimumWidth = 50;
             // 
             // gridColumnSelect
             // 
@@ -157,7 +161,8 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
-            this.gridColumnSelect.Width = 0;
+            this.gridColumnSelect.Width = 75;
+            this.gridColumnSelect.MinimumWidth = 50;
             // 
             // panelFootnote
             // 

@@ -43,6 +43,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         }
 
         /// <summary>
+        /// Gets the default profile account. This will always return the same account that is 
+        /// used to get counter rates.
+        /// </summary>
+        public EndiciaAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                return Accounts.First();
+            }
+        }
+
+        /// <summary>
         /// Create a list of accounts from the credential store
         /// </summary>
         private List<EndiciaAccountEntity> ConvertCredentialsToEndiciaAccountEntities()
@@ -55,7 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
                 {
                     AccountNumber = credentialStore.Express1EndiciaAccountNumber,
                     ApiUserPassword = credentialStore.Express1EndiciaPassPhrase,
-                    EndiciaReseller = (int)EndiciaReseller.Express1
+                    EndiciaReseller = (int)EndiciaReseller.Express1,
+                    CountryCode = "US"
                 };
 
                 counterRatesAccounts.Add(account);

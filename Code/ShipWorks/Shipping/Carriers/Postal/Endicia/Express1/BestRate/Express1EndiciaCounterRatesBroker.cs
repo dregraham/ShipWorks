@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -47,6 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
+            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData;
+            ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
             ((EndiciaShipmentType)ShipmentType).AccountRepository = AccountRepository;
 
             // The dummy account wouldn't have an account number if we couldn't get one from Tango
@@ -68,6 +72,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
+
+                    // The counter rate shouldn't show the Express1 logo
+                    rateResult.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
                 }
             }
             catch (AggregateException ex)
@@ -99,23 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, EndiciaAccountEntity account)
         {
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
-
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
-            {
-                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
-                // so we'll try to use the store address
-                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-
-                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
-            }
-
-            if (!CounterRatesOriginAddressValidator.IsValidate(currentShipment))
-            {
-                // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
-            }
+            CounterRatesOriginAddressValidator.EnsureValidAddress(currentShipment);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -145,6 +146,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
                 new DimensionsAdapter(shipment.OnTrac));
 
+        }
+
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new OnTracShipmentProcessingSynchronizer();
         }
 
         /// <summary>
@@ -308,34 +317,35 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            RateGroup rateGroup = null;
-            string rateHash = GetRatingHash(shipment);
+            return GetCachedRates<OnTracException>(shipment, GetRatesFromApi);  
+        }
 
-            if (RateCache.Instance.Contains(rateHash))
+        /// <summary>
+        /// Gets rates from the OnTrac API
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            OnTracAccountEntity account = null;
+
+            try
             {
-                rateGroup = RateCache.Instance.GetRateGroup(rateHash);
+                account = GetAccountForShipment(shipment);
             }
-            else
+            catch (OnTracException ex)
             {
-                try
+                if (ex.Message == "No OnTrac account is selected for the shipment.")
                 {
-                    OnTracRates rateRequest = new OnTracRates(GetAccountForShipment(shipment));
-                    rateGroup = rateRequest.GetRates(shipment);
-
-                    RateCache.Instance.Save(rateHash, rateGroup);
+                    // Provide a message with additional context
+                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
                 }
-                catch (OnTracException ex)
+                else
                 {
-                    // This is a bad configuration on some level, so cache an empty rate group
-                    // before throwing throwing the exceptions
-                    ShippingException shippingException = new ShippingException(ex.Message, ex);
-                    CacheInvalidRateGroup(shipment, shippingException);
-
-                    throw shippingException;
+                    throw;
                 }
             }
 
-            return rateGroup;
+            OnTracRates rateRequest = new OnTracRates(account);
+            return rateRequest.GetRates(shipment);
         }
 
         /// <summary>
@@ -372,12 +382,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Generate the carrier specific template xml
+        /// Generate the carrier specific template XML
         /// </summary>
         public override void GenerateTemplateElements(
             ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
             // Add the labels content
             container.AddElement(
@@ -419,8 +429,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             try
             {
-                var shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
-
+                OnTracTrackedShipment shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
                 TrackingResult trackingResults = shipmentRequest.GetTrackingResults(shipment.TrackingNumber);
 
                 return trackingResults;

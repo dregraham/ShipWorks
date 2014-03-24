@@ -240,10 +240,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 if (serviceType == PostalServiceType.ExpressMail)
                 {
                     rates.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType), 
+                        EnumHelper.GetDescription(serviceType),
                         PostalUtility.GetServiceTransitDays(serviceType),
                         amount,
-                        new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                        new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                        {
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                        });
                 }
                 else
                 {
@@ -251,7 +254,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                         EnumHelper.GetDescription(serviceType),
                         PostalUtility.GetServiceTransitDays(serviceType))
                     {
-                        Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery)
+                        Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery),
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
                     });
 
                     decimal deliveryAmount = (serviceType == PostalServiceType.PriorityMail || serviceType == PostalServiceType.FirstClass) ? 0m : .19m;
@@ -431,7 +435,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     days, 
                     amount, 
                     new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                    {ShipmentType = ShipmentTypeCode.PostalWebTools});
+                    {
+                        ShipmentType = ShipmentTypeCode.PostalWebTools,
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                    });
             }
 
             return rates;

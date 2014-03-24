@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
-    public class UpsAccountRepository : ICarrierAccountRepository<UpsAccountEntity>, IUpsOpenAccountRepository
+    public class UpsAccountRepository : CarrierAccountRepositoryBase<UpsAccountEntity>, IUpsOpenAccountRepository
     {
         /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
-        public IEnumerable<UpsAccountEntity> Accounts
+        public override IEnumerable<UpsAccountEntity> Accounts
         {
             get
             {
@@ -23,9 +24,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account as IEntity2.</returns>
-        public UpsAccountEntity GetAccount(long accountID)
+        public override UpsAccountEntity GetAccount(long accountID)
         {
             return UpsAccountManager.GetAccount(accountID);
+        }
+
+        /// <summary>
+        ///  Returns the default account as defined by the primary profile
+        ///  </summary>
+        public override UpsAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                long? accountID = new UpsOltShipmentType().GetPrimaryProfile().Ups.UpsAccountID;
+                return GetProfileAccount(ShipmentTypeCode.UpsOnLineTools, accountID);
+            }
         }
 
         /// <summary>

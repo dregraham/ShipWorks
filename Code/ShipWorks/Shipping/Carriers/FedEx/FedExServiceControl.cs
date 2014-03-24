@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             originControl.Initialize(ShipmentTypeCode.FedEx);
             codOrigin.Initialize(ShipmentTypeCode.FedEx);
 
-            LoadFedExAccounts();
+            LoadAccounts();
 
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
@@ -79,9 +79,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Load the list of fedex accounts
+        /// Loads the list of FedEx accounts into the account drop down list.
         /// </summary>
-        private void LoadFedExAccounts()
+        public override void LoadAccounts()
         {
             fedexAccount.DisplayMember = "Key";
             fedexAccount.ValueMember = "Value";
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages
@@ -669,7 +669,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         return false;
                     }
 
-                    return ((FedExRateSelection)r.Tag).ServiceType == serviceType;
+                    return ((FedExRateSelection)r.OriginalTag).ServiceType == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -869,7 +869,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             int oldIndex = service.SelectedIndex;
 
-            FedExRateSelection rate = e.Rate.Tag as FedExRateSelection;
+            FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
 
             service.SelectedValue = rate.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)

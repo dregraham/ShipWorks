@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -44,6 +46,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <returns>A RateGroup containing the counter rates for an Express1Stamps account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
+            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData;
+            ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
+
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
             ((StampsShipmentType)ShipmentType).AccountRepository = AccountRepository;
@@ -54,11 +59,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
                 foreach (RateResult rateResult in bestRates.Rates)
                 {
-                    // We want WebTools account setup wizard to show when a rate is selected so the user 
-                    // can create their own WebTools account since these rates are just counter rates 
+                    // We want the account setup wizard to show when a rate is selected so the user 
+                    // can create their own Express1 account since these rates are just counter rates 
                     // using a ShipWorks account.
                     BestRateResultTag bestRateResultTag = (BestRateResultTag)rateResult.Tag;
                     bestRateResultTag.SignUpAction = DisplaySetupWizard;
+
+                    // The counter rate shouldn't show the Express1 logo
+                    rateResult.ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
                 }
             }
             catch (AggregateException ex)
@@ -89,23 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         protected override void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, StampsAccountEntity account)
         {
             base.UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
-
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account
-                || (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Other && !CounterRatesOriginAddressValidator.IsValidate(currentShipment)))
-            {
-                // We don't have an account for counter rates or "Other" is selected and is incomplete, 
-                // so we'll try to use the store address
-                OrderEntity order = DataProvider.GetEntity(currentShipment.OrderID) as OrderEntity;
-                StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-
-                PersonAdapter.Copy(store, string.Empty, currentShipment, "Origin");
-            }
-
-            if (!CounterRatesOriginAddressValidator.IsValidate(currentShipment))
-            {
-                // The store address is incomplete, too, so the origin address is still incomplete
-                throw new CounterRatesOriginAddressException(currentShipment, "The origin address of this shipment is invalid for getting counter rates.");
-            }
+            CounterRatesOriginAddressValidator.EnsureValidAddress(currentShipment);
         }
 
         /// <summary>

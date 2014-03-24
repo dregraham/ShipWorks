@@ -133,11 +133,11 @@ namespace ShipWorks.Data.Administration
 
                 }
 
+                // Create a temporary working directory
+                string tempPath = DataPath.CreateUniqueTempPath();
+
                 try
                 {
-                    // Create a temporary working directory
-                    string tempPath = DataPath.CreateUniqueTempPath();
-
                     // We need to make sure SQL Server can write to it
                     ApplyFolderPermissions(tempPath);
 
@@ -210,6 +210,17 @@ namespace ShipWorks.Data.Administration
                     CleanupFile(filename);
 
                     throw;
+                }
+                finally
+                {
+                    try
+                    {
+                        Directory.Delete(tempPath, true);
+                    }
+                    catch (IOException ex)
+                    {
+                        log.Warn("Failed to clean up temporary backup location.", ex);
+                    }
                 }
             }
         }

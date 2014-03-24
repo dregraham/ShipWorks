@@ -351,7 +351,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
         {
-            PostalServiceType serviceType = (PostalServiceType) service.SelectedValue;
+            PostalServiceType serviceType = service.SelectedValue == null ? PostalServiceType.PriorityMail : (PostalServiceType)service.SelectedValue;
 
             // Update the available confirmation types based on the shipping provider
             PostalShipmentType postalShipmentType = ShipmentTypeManager.GetType(this.ShipmentTypeCode) as PostalShipmentType;            
@@ -380,7 +380,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 // Update the selected rate in the rate control to coincide with the service change
                 PostalRateSelection rateSelection = new PostalRateSelection(serviceType, confirmationType);
-                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                RateResult matchingRate = RateControl.RateGroup.Rates.Where(x => x.Selectable).FirstOrDefault(r =>
                 {
                     if (r.Tag == null)
                     {
@@ -388,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         return false;
                     }
 
-                    PostalRateSelection current = r.Tag as PostalRateSelection;
+                    PostalRateSelection current = r.OriginalTag as PostalRateSelection;
                     if (current == null)
                     {
                         // This isn't an actual rate - just a row in the grid for the section header
@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
-            PostalRateSelection rate = e.Rate.Tag as PostalRateSelection;
+            PostalRateSelection rate = e.Rate.OriginalTag as PostalRateSelection;
 
             service.SelectedValue = rate.ServiceType;
 

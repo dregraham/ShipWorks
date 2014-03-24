@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel;
-using ShipWorks.Filters.Content.Editors;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 
@@ -12,17 +7,8 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
     /// Condition base on the cost of an shipment
     /// </summary>
     [ConditionElement("Cost", "Shipment.Cost")]
-    public class CostCondition : NumericCondition<decimal>
+    public class CostCondition : MoneyCondition
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public CostCondition()
-        {
-            // Format as currency
-            format = "C";
-        }
-
         /// <summary>
         /// Generate the SQL for the element
         /// </summary>

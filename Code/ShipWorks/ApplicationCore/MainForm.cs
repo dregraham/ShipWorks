@@ -3291,7 +3291,7 @@ namespace ShipWorks
                 Cursor.Current = Cursors.WaitCursor;
 
                 bool anyClosed = false;
-                FedExShippingClerk shippingClerk = new FedExShippingClerk();
+                FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
 
                 // Process all accounts with configured hub ids
                 foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))

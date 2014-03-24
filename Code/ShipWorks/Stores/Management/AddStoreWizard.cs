@@ -382,29 +382,39 @@ namespace ShipWorks.Stores.Management
 
             try
             {
-                // Create a license for the given store
-                trialDetail = TangoWebClient.GetTrial(store);
-
-                // Save the license
-                store.License = trialDetail.License.Key;
-                store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
-
-                // If it's not converted, then we can skip this page
-                if (!trialDetail.IsConverted)
+                // If w are in freemium mode, and we already have a valid freemium edition store, then don't try to get a trial - it would fail anyway saying they aren't eligible
+                if (isFreemiumMode && (EditionSerializer.Restore(store) is FreemiumFreeEdition) && new ShipWorksLicense(store.License).IsValid)
                 {
-                    // Can't attach to a freemium trial if not freemium mode
-                    if (trialDetail.Edition is FreemiumFreeEdition && !isFreemiumMode)
-                    {
-                        MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay version.", StoreTypeManager.GetType(store).LicenseIdentifier));
-
-                        // Go back to the previous page
-                        e.Skip = true;
-                        e.SkipToPage = Pages[CurrentIndex - 1];
-                    }
-
-                    // No license, just skip
+                    // We already have their license
                     e.Skip = true;
                     e.RaiseStepEventWhenSkipping = false;
+                }
+                else
+                {
+                    // Create a license for the given store
+                    trialDetail = TangoWebClient.GetTrial(store);
+
+                    // Save the license
+                    store.License = trialDetail.License.Key;
+                    store.Edition = EditionSerializer.Serialize(trialDetail.Edition);
+
+                    // If it's not converted, then we can skip this page
+                    if (!trialDetail.IsConverted)
+                    {
+                        // Can't attach to a freemium trial if not freemium mode
+                        if (trialDetail.Edition is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
+                        {
+                            MessageHelper.ShowError(this, string.Format("You are already using ShipWorks with eBay ID '{0}' with the Endicia Free for eBay edition. That edition only supports a single store, and you already have some stores in ShipWorks.", StoreTypeManager.GetType(store).LicenseIdentifier));
+
+                            // Go back to the previous page
+                            e.Skip = true;
+                            e.SkipToPage = Pages[CurrentIndex - 1];
+                        }
+
+                        // No license, just skip
+                        e.Skip = true;
+                        e.RaiseStepEventWhenSkipping = false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -438,9 +448,9 @@ namespace ShipWorks.Stores.Management
             }
             else
             {
-                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && !isFreemiumMode)
+                if (EditionSerializer.Restore(store) is FreemiumFreeEdition && StoreManager.GetDatabaseStoreCount() > 0)
                 {
-                    MessageHelper.ShowError(this, "The license you entered can only be used with the Endicia Free for eBay ShipWorks edition.");
+                    MessageHelper.ShowError(this, "The license you entered is for the Endicia Free for eBay ShipWorks edition.  That edition only supports a single store, and you already have some stores in ShipWorks.");
 
                     e.NextPage = CurrentPage;
                     return;

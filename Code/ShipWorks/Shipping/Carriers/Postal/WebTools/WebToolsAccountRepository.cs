@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
+namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
     /// <summary>
     /// Basic repository for retrieving postal (w/o postage) accounts
@@ -27,6 +27,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         public NullEntity GetAccount(long accountID)
         {
             return new NullEntity();
+        }
+
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        public NullEntity DefaultProfileAccount
+        {
+            get
+            {
+                return new NullEntity();
+            }
         }
     }
 }

@@ -10,17 +10,8 @@ namespace ShipWorks.Filters.Content.Conditions.OrderCharges
     /// Condition that compares against the Amount of an OrderCharge
     /// </summary>
     [ConditionElement("Charge Amount", "OrderCharge.Amount")]
-    public class OrderChargeAmountCondition : NumericCondition<decimal>
+    public class OrderChargeAmountCondition : MoneyCondition
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OrderChargeAmountCondition()
-        {
-            // Format as currency
-            format = "C";
-        }
-
         /// <summary>
         /// Generate the sql
         /// </summary>

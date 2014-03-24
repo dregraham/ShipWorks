@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Data.Connection;
@@ -832,10 +833,49 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Make sure any pending changes have been saved
             EndiciaAccountManager.SaveAccount(account);
 
+            // Mark the new account as configured
+            ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Endicia);
+            
+            // If this is the only account, update this shipment type profiles with this account
+            List<EndiciaAccountEntity> accounts = EndiciaAccountManager.GetAccounts((EndiciaReseller)account.EndiciaReseller, false);
+            if (accounts.Count == 1)
+            {
+                EndiciaAccountEntity accountEntity = accounts.First();
+
+                // Update any profiles to use this account if this is the only account
+                // in the system. This is to account for the situation where there a multiple
+                // profiles that may be associated with a previous account that has since
+                // been deleted. 
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType  == (int)ShipmentTypeCode.Endicia))
+                {
+                    if (shippingProfileEntity.Postal.Endicia.EndiciaAccountID.HasValue)
+                    {
+                        shippingProfileEntity.Postal.Endicia.EndiciaAccountID = accountEntity.EndiciaAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity); 
+                    }
+                }
+            }
+
             // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
             // that a new account has been added.
             RateCache.Instance.Clear();
+        }
 
+        /// <summary>
+        /// The window is closing
+        /// </summary>
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (DialogResult != DialogResult.OK && account != null && !account.IsNew)
+            {
+                EndiciaAccountManager.DeleteAccount(account);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+            }
         }
     }
 }

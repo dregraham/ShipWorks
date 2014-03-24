@@ -44,6 +44,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         }
 
         /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        /// <value>
+        /// The default profile account.
+        /// </value>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public StampsAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                return Accounts.First();
+            }
+        }
+
+        /// <summary>
         /// Create a list of accounts from the credential store
         /// </summary>
         private List<StampsAccountEntity> ConvertCredentialsToStampsAccountEntities()
@@ -56,7 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
                 {
                     Username = credentialStore.Express1StampsUsername,
                     Password = credentialStore.Express1StampsPassword,
-                    IsExpress1 = true
+                    IsExpress1 = true,
+                    CountryCode = "US"
                 };
 
                 counterRateAccounts.Add(account);

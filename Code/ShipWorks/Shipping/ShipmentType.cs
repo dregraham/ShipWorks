@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -29,6 +30,7 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
+using System.Security.Cryptography;
 
 namespace ShipWorks.Shipping
 {
@@ -37,6 +39,18 @@ namespace ShipWorks.Shipping
 	/// </summary>
 	public abstract class ShipmentType
 	{
+	    /// <summary>
+	    /// HTTPS certificate inspector to use. 
+	    /// </summary>
+	    private ICertificateInspector certificateInspector;
+
+        protected ShipmentType()
+        {
+            // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
+	        // Calls that require specific inspection should override the CertificateInspector property.
+            certificateInspector = new TrustingCertificateInspector();
+        }
+
 		/// <summary>
 		/// The ShipmentTypeCode represented by this ShipmentType
 		/// </summary>
@@ -110,6 +124,24 @@ namespace ShipWorks.Shipping
 		{
 			get { return false; }
 		}
+
+        /// <summary>
+        /// Gets or sets the certificate inspector that should be used when wanting to add additional security 
+        /// around API calls to shipping partners. This is defaulted to the trusting inspector so that calls 
+        /// will continue to work as expected. Calls that require specific inspection should assign this property
+        /// accordingly.
+        /// </summary>
+        public virtual ICertificateInspector CertificateInspector
+        {
+            get
+            {
+                return certificateInspector;
+            }
+            set
+            {
+                certificateInspector = value;
+            }
+        }
 
 		/// <summary>
 		/// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
@@ -620,44 +652,127 @@ namespace ShipWorks.Shipping
             {
                 valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
             }
-            
-	        return valueToBeHashed.ToString();
-	    }
 
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        /// <param name="shipment">The shipment that generated the given exception.</param>
-        /// <param name="exception">The exception.</param>
-        protected void CacheInvalidRateGroup(ShipmentEntity shipment, ShippingException exception)
-        {
-            RateGroup rateGroup = new RateGroup(new List<RateResult>());
-            rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, exception.Message));
-
-            if (!rateGroup.Rates.Any())
+            using (SHA256Managed sha256 = new SHA256Managed())
             {
-                RateResult infoResult = new RateResult("No rates are available for this shipment.", string.Empty);
-                infoResult.ShipmentType = ShipmentTypeCode;
-
-                rateGroup.Rates.Add(infoResult);
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
+                return Convert.ToBase64String(bytes);
             }
-
-            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
         }
 
+	    /// <summary>
+	    /// This is intended to be used when there is (most likely) a bad configuration
+	    /// with the shipment on some level, so an empty rate group with a exception footer
+	    /// is cached.
+	    /// </summary>
+	    /// <param name="shipment">The shipment that generated the given exception.</param>
+        /// <param name="exception">The exception</param>
+	    protected RateGroup CacheInvalidRateGroup(ShipmentEntity shipment, Exception exception)
+        {
+            RateGroup rateGroup = new InvalidRateGroup(this, exception);
+
+            RateCache.Instance.Save(GetRatingHash(shipment), rateGroup);
+
+	        return rateGroup;
+        }
+
+        /// <summary>
+        /// Gets rates, retrieving them from the cache if possible
+        /// </summary>
+        /// <typeparam name="T">Type of exception that the carrier will throw on an error</typeparam>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        /// <param name="getRatesFunction">Function to retrieve the rates from the carrier if not in the cache</param>
+        /// <returns></returns>
+	    protected RateGroup GetCachedRates<T>(ShipmentEntity shipment, Func<ShipmentEntity, RateGroup> getRatesFunction) where T : Exception
+	    {
+            string rateHash = GetRatingHash(shipment);
+
+            if (RateCache.Instance.Contains(rateHash))
+            {
+                return RateCache.Instance.GetRateGroup(rateHash);
+            }
+
+            try
+            {
+                RateGroup rateGroup = getRatesFunction(shipment);
+                RateCache.Instance.Save(rateHash, rateGroup);
+
+                return rateGroup;
+            }
+            catch (T ex)
+            {
+                // This is a bad configuration on some level, so cache an empty rate group
+                // before throwing throwing the exceptions
+                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, ex);
+                InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
+
+                throw shippingException;
+            }
+	    }
+
 		/// <summary>
-		/// Preferences the process.
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment 
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
 		/// </summary>
-		/// <returns> 
-		/// Most shipment types don't do any pre-processing and will return themselves.  
-		/// This will return a different shipping type for BestRate
-		/// </returns>
-        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing)
+		/// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
+		/// be returned to indicate that processing should be halted completely.</returns>
+        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
 		{
-		    return new List<ShipmentEntity> { shipment };
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>() { shipment };
+		    IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+
+		    if (synchronizer.HasAccounts)
+		    {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                synchronizer.ReplaceInvalidAccount(shipment);
+		    }
+            else
+		    {
+		        // Null values are passed because the rates don't matter for the general case; we're only
+		        // interested in grabbing the account that was just created
+		        CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
+
+		        // Invoke the counter rates callback
+		        if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
+		        {
+		            // The user canceled, so we need to stop processing
+		            shipments = null;
+		        }
+		        else
+		        {
+		            // The user created an account, so try to grab the account and use it 
+		            // to process the shipment
+		            ShippingSettings.CheckForChangesNeeded();
+                    if (synchronizer.HasAccounts)
+		            {
+		                shipments.ForEach(s =>
+		                {
+		                    // Assign the account ID and save the shipment
+		                    synchronizer.SaveAccountToShipment(s);
+		                    using (SqlAdapter adapter = new SqlAdapter(true))
+		                    {
+		                        adapter.SaveAndRefetch(s);
+		                        adapter.Commit();
+		                    }
+		                });
+		            }
+		            else
+		            {
+		                // There still aren't any accounts for some reason, so throw an exception
+		                throw new ShippingException("An account must be created to process this shipment.");
+		            }
+		        }
+		    }
+
+		    return shipments;
 		}
+
+	    /// <summary>
+	    /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+	    /// </summary>
+	    protected abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
 
 		/// <summary>
 		/// Indicates if customs forms may be required to ship the shipment based on the
