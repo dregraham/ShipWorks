@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
 
             mapEditor.LoadMap(map);
         }

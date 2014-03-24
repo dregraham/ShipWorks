@@ -40,7 +40,7 @@ namespace ShipWorks.Actions
         {
             InitializeComponent();
 
-            WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
         }
 
         /// <summary>

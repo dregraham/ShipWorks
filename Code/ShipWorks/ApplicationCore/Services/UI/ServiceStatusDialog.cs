@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore.Services.UI
         {
             InitializeComponent();
 
-            WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
         }
 
         /// <summary>

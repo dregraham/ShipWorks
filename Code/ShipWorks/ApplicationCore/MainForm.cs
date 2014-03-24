@@ -152,7 +152,7 @@ namespace ShipWorks
             heartBeat = new UIHeartbeat(this);
 
             // Persist size\position of the window
-            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState, "MainForm");
+            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.FullState | WindowStateSaverOptions.InitialMaximize, "MainForm");
         }
 
         #region Initialization \ Shutdown
