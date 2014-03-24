@@ -50,8 +50,23 @@ namespace ShipWorks.Shipping.ShipSense
                 entity.Hash = hash;
             }
 
-            entity.Entry = entry.ToJson();
+            if (!string.IsNullOrWhiteSpace(entity.Entry))
+            {
+                // We don't want to overwrite any customs information that may already be on the
+                // entry returned from the database if the current entry doesn't have any customs info
+                KnowledgebaseEntry previousEntry = new KnowledgebaseEntry(entity.Entry);
 
+                if (previousEntry.CustomsItems.Any() && !entry.CustomsItems.Any())
+                {
+                    // Make sure this entry also reflects the previous entry's customs items,
+                    // so the customs info gets carried forward
+                    entry.CustomsItems = previousEntry.CustomsItems;
+                }
+            }
+
+            // Update the JSON of the entity to reflect the latest KB entry
+            entity.Entry = entry.ToJson();
+            
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 adapter.SaveEntity(entity);
