@@ -375,6 +375,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+
+            while (shipment.FedEx.Packages.Count < knowledgebaseEntry.Packages.Count())
+            {
+                FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
+                shipment.FedEx.Packages.Add(package);
+            }
+        }
+
+        /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
@@ -948,31 +966,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
         }
-
-        ///// <summary>
-        ///// Gets the FedEx counter rates for a shipment
-        ///// </summary>
-        ///// <param name="shipment">The shipment for which to retrieve rates.</param>
-        ///// <returns>A RateGroup containing the counter rate results.</returns>
-        //private RateGroup GetCounterRates(ShipmentEntity shipment)
-        //{
-        //    // We need to swap out the SettingsRepository and certificate inspector 
-        //    // to get FedEx counter rates
-        //    ICarrierSettingsRepository originalSettings = SettingsRepository;
-        //    ICertificateInspector originalInspector = CertificateInspector;
-
-        //    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-        //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
-
-        //    // Get the rates from the API as usual now that we've switched over to the counter rates configuration
-        //    RateGroup rateGroup = GetRatesFromApi(shipment);
-
-        //    // Switch the settings repository back to the original now that we have counter rates
-        //    SettingsRepository = originalSettings;
-        //    CertificateInspector = originalInspector;
-
-        //    return rateGroup;
-        //}
 
         /// <summary>
         /// Provide FedEx tracking results for the given shipment

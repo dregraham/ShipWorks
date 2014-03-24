@@ -229,6 +229,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.ConfigureNewShipment(shipment);
         }
 
+
+        /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+
+            while (shipment.Ups.Packages.Count < knowledgebaseEntry.Packages.Count())
+            {
+                UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
+                shipment.Ups.Packages.Add(package);
+            }
+        }
+
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
