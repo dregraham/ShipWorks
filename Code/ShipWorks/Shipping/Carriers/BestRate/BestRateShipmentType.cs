@@ -151,9 +151,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            return new BestRatePackageAdapter(shipment);
+            return new List<IPackageAdapter>()
+            {
+                new BestRatePackageAdapter(shipment)
+            };
         }
 
         /// <summary>

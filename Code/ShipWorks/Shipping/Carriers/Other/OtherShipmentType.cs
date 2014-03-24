@@ -66,9 +66,12 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            return new OtherPackageAdapter(shipment);
+            return new List<IPackageAdapter>()
+            {
+                new OtherPackageAdapter(shipment)
+            };
         }
 
         /// <summary>

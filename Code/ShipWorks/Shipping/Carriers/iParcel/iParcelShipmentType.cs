@@ -131,15 +131,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
             if (!shipment.IParcel.Packages.Any())
             {
                 throw new iParcelException("There must be at least one package to create the i-parcel package adapter.");
             }
 
-            // Current story is only for a single package shipment
-            return new iParcelPackageAdapter(shipment.IParcel.Packages[0]);
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (IParcelPackageEntity packageEntity in shipment.IParcel.Packages)
+            {
+                adapters.Add(new iParcelPackageAdapter(packageEntity));
+            }
+
+            return adapters;
         }
 
         /// <summary>

@@ -1154,11 +1154,7 @@ namespace ShipWorks.Shipping
         {
             try
             {
-                List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>
-                {
-                    // Only doing a single package shipment for the current story
-                    shipmentType.GetPackageAdapter(shipment)
-                };
+                IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
                 // Apply the data from the package adapters to the knowledge base entry, so
                 // the shipment data will get saved to the knowledge base

@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping
 	    /// <summary>
 	    /// Gets the package adapter for the shipment.
 	    /// </summary>
-	    public abstract IPackageAdapter GetPackageAdapter(ShipmentEntity shipment);
+	    public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment);
 
 		/// <summary>
 		/// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
@@ -245,9 +245,7 @@ namespace ShipWorks.Shipping
 	    {
             // Grab the actual shipment type
 	        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-	        IPackageAdapter packageAdapter;
-
-            packageAdapter = shipmentType.GetPackageAdapter(shipment);
+	        IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
             // Populate the order items so we can compute the hash
             using (SqlAdapter adapter = new SqlAdapter())
@@ -260,7 +258,7 @@ namespace ShipWorks.Shipping
 	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
 
             // Apply each adapter to the shipment packages
-	        knowledgebaseEntry.ApplyTo(new List<IPackageAdapter> {packageAdapter});
+	        knowledgebaseEntry.ApplyTo(packageAdapters);
 	    }
 
 	    /// <summary>

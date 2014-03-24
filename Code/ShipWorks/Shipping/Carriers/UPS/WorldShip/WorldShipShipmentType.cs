@@ -173,15 +173,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
             if (!shipment.Ups.Packages.Any())
             {
                 throw new UpsException("There must be at least one package to create the UPS package adapter.");
             }
 
-            // Current story is only for a single package shipment
-            return new UpsPackageAdapter(shipment.Ups.Packages[0]);
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (UpsPackageEntity packageEntity in shipment.Ups.Packages)
+            {
+                adapters.Add(new UpsPackageAdapter(packageEntity));
+            }
+
+            return adapters;
         }
     }
 }

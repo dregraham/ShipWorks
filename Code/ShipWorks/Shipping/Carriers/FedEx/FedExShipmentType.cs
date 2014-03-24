@@ -165,15 +165,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
             if (!shipment.FedEx.Packages.Any())
             {
                 throw new FedExException("There must be at least one package to create the FedEx package adapter.");
             }
 
-            // Current story is only for a single package shipment
-            return new FedExPackageAdapter(shipment.FedEx.Packages[0]);
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (FedExPackageEntity packageEntity in shipment.FedEx.Packages)
+            {
+                adapters.Add(new FedExPackageAdapter(packageEntity));
+            }
+
+            return adapters;
         }
 
         /// <summary>

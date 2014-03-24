@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
@@ -90,9 +91,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IPackageAdapter GetPackageAdapter(ShipmentEntity shipment)
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            return new OnTracPackageAdapter(shipment);
+            return new List<IPackageAdapter>()
+            {
+                new OnTracPackageAdapter(shipment)
+            };
         }
 
         /// <summary>
