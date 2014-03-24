@@ -32,7 +32,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.Object.Width = 4;
             
             
-            
             adapter2 = new Mock<IPackageAdapter>();
             adapter2.SetupAllProperties();
 
@@ -73,10 +72,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void Constructor_HydratingFromJson_Test()
         {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
             KnowledgebaseEntry hydratedEntry = new KnowledgebaseEntry(testObject.ToJson());
 
             Assert.AreEqual(testObject.Packages.Count(), hydratedEntry.Packages.Count());
-
             for (int i = 0; i < hydratedEntry.Packages.Count(); i++)
             {
                 Assert.AreEqual(testObject.Packages.ElementAt(i).AdditionalWeight, hydratedEntry.Packages.ElementAt(i).AdditionalWeight);
@@ -85,11 +85,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
             }
+
+            Assert.IsFalse(hydratedEntry.ConsolidateMultiplePackagesIntoSinglePackage);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void ApplyTo_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_Test()
+        public void ApplyTo_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_AndConsolidateIsFalse_Test()
         {
             adapters = new List<IPackageAdapter>
             {
@@ -100,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ApplyTo_AssignsAdditionalWeightOfEachAdapter_Test()
+        public void ApplyTo_AssignsAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
             
@@ -111,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ApplyTo_AssignsHeightOfEachAdapter_Test()
+        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
 
@@ -122,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ApplyTo_AssignsLengthOfEachAdapter_Test()
+        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
 
@@ -133,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void ApplyTo_AssignsWeightOfEachAdapter_Test()
+        public void ApplyTo_AssignsWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
 
@@ -144,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
         
         [TestMethod]
-        public void ApplyTo_AssignsWidthOfEachAdapter_Test()
+        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
 
@@ -153,8 +155,57 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.VerifySet(a => a.Width = testObject.Packages.ElementAt(0).Width, Times.Once());
             adapter2.VerifySet(a => a.Width = testObject.Packages.ElementAt(1).Width, Times.Once());
         }
+        
+        [TestMethod]
+        public void ApplyTo_AssignsSummedAdditionalWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
+            testObject.ApplyTo(adapters.Take(1));
 
+            Assert.AreEqual(testObject.Packages.Sum(p => p.AdditionalWeight), adapter1.Object.AdditionalWeight);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AssignsHeightOfEachAdapter_WhenConsolidateIsTrue_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            testObject.ApplyTo(adapters.Take(1));
+
+            Assert.AreEqual(testObject.Packages.ElementAt(0).Height, adapter1.Object.Height);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AssignsLengthOfEachAdapter_WhenConsolidateIsTrue_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            testObject.ApplyTo(adapters.Take(1));
+
+            Assert.AreEqual(testObject.Packages.ElementAt(0).Length, adapter1.Object.Length);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AssignsSummedWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            testObject.ApplyTo(adapters.Take(1));
+
+            Assert.AreEqual(testObject.Packages.Sum(p => p.Weight), adapter1.Object.Weight);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsTrue_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            testObject.ApplyTo(adapters.Take(1));
+
+            Assert.AreEqual(testObject.Packages.ElementAt(0).Width, adapter1.Object.Width);
+        }
+        
         [TestMethod]
         public void ApplyFrom_RegeneratesPackages_Test()
         {

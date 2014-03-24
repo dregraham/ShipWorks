@@ -110,6 +110,17 @@ namespace ShipWorks.Shipping
             get { return false; }
 	    }
 
+        /// <summary>
+        /// Gets a value indicating whether the shipment type [supports multiple packages].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+	    public virtual bool SupportsMultiplePackages
+	    {
+            get { return false; }
+	    }
+
 		/// <summary>
 		/// Indicates if the ShipmentType needs the ResidentialResult field determined for the given shipment.
 		/// </summary>
@@ -253,18 +264,15 @@ namespace ShipWorks.Shipping
                 adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
             }
 
-            // Get our knowledgebase entry for this shipment
+            // Get our knowledge base entry for this shipment
             Knowledgebase knowledgebase = new Knowledgebase();
 	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
-            
-            // Apply each adapter to the shipment packages
-<<<<<<< HEAD
-	        knowledgebaseEntry.ApplyTo(packageAdapters);
-=======
-	        knowledgebaseEntry.ApplyTo(new List<IPackageAdapter> {packageAdapter});
+            knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = SupportsMultiplePackages;
 
-            shipment.ContentWeight = packageAdapter.Weight;
->>>>>>> Set the content weight in ApplyShipSense method by summing the package weights
+            // Apply each adapter to the shipment packages
+
+            knowledgebaseEntry.ApplyTo(packageAdapters);
+            shipment.ContentWeight = packageAdapters.ToList().Sum(a => a.Weight);
 	    }
 
 	    /// <summary>

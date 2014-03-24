@@ -14,13 +14,24 @@ namespace ShipWorks.Shipping.ShipSense
     public class KnowledgebaseEntry
     {
         private List<KnowledgebasePackage> packages;
+        private bool consolidateMultiplePackagesIntoSinglePackage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
         public KnowledgebaseEntry()
+            : this(false)
         {
             packages = new List<KnowledgebasePackage>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
+        /// </summary>
+        /// <param name="consolidateMultiplePackagesIntoSinglePackage">if set to <c>true</c> [consolidate multiple packages into single package].</param>
+        public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage)
+        {
+            ConsolidateMultiplePackagesIntoSinglePackage = consolidateMultiplePackagesIntoSinglePackage;
         }
 
         /// <summary>
@@ -41,6 +52,20 @@ namespace ShipWorks.Shipping.ShipSense
         {
             get { return packages; }
             set { packages = new List<KnowledgebasePackage>(value);}
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether [consolidate multiple packages into single package]. This 
+        /// does not get serialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [consolidate multiple packages into single package]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonIgnore]
+        public bool ConsolidateMultiplePackagesIntoSinglePackage
+        {
+            get { return consolidateMultiplePackagesIntoSinglePackage; }
+            set { consolidateMultiplePackagesIntoSinglePackage = value; }
         }
 
         /// <summary>
@@ -67,19 +92,34 @@ namespace ShipWorks.Shipping.ShipSense
             }
 
             IEnumerable<IPackageAdapter> packageAdapters = adapters as IList<IPackageAdapter> ?? adapters.ToList();
-            
-            if (Packages.Count() != packageAdapters.Count())
+            if (ConsolidateMultiplePackagesIntoSinglePackage && packageAdapters.Count() == 1)
             {
-                throw new InvalidOperationException("The number of packages in the knowledge base entry must match the number of adapters.");
-            }
+                // We need to consolidate all of the packages of this entry into a single package
+                packageAdapters.ElementAt(0).Height = packages[0].Height;
+                packageAdapters.ElementAt(0).Length = packages[0].Length;
+                packageAdapters.ElementAt(0).Width = packages[0].Width;
 
-            for (int i = 0; i < Packages.Count(); i++)
+                // Sum the package weights 
+                packageAdapters.ElementAt(0).Weight = packages.Sum(p => p.Weight);
+                packageAdapters.ElementAt(0).AdditionalWeight = packages.Sum(p => p.AdditionalWeight);
+            }
+            else
             {
-                packageAdapters.ElementAt(i).AdditionalWeight = packages[i].AdditionalWeight;
-                packageAdapters.ElementAt(i).Height = packages[i].Height;
-                packageAdapters.ElementAt(i).Length = packages[i].Length;
-                packageAdapters.ElementAt(i).Weight = packages[i].Weight;
-                packageAdapters.ElementAt(i).Width = packages[i].Width;
+                // The entry is not configured to consolidate the packages, so we should
+                // have an adapter for each package
+                if (Packages.Count() != packageAdapters.Count())
+                {
+                    throw new InvalidOperationException("The number of packages in the knowledge base entry must match the number of adapters.");
+                }
+
+                for (int i = 0; i < Packages.Count(); i++)
+                {
+                    packageAdapters.ElementAt(i).AdditionalWeight = packages[i].AdditionalWeight;
+                    packageAdapters.ElementAt(i).Height = packages[i].Height;
+                    packageAdapters.ElementAt(i).Length = packages[i].Length;
+                    packageAdapters.ElementAt(i).Weight = packages[i].Weight;
+                    packageAdapters.ElementAt(i).Width = packages[i].Width;
+                }
             }
         }
 
