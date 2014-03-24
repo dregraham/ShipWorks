@@ -20,6 +20,7 @@ namespace ShipWorks.Data.Model.Custom.EntityClasses
         {
             // Make up a hash code so this will work in dictionaries
             hashCode = new Random().Next(Int32.MaxValue);
+            base.Fields = new EntityFields2(0);
         }
 
         /// <summary>
