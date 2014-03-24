@@ -256,9 +256,15 @@ namespace ShipWorks.Shipping
             // Get our knowledgebase entry for this shipment
             Knowledgebase knowledgebase = new Knowledgebase();
 	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
-
+            
             // Apply each adapter to the shipment packages
+<<<<<<< HEAD
 	        knowledgebaseEntry.ApplyTo(packageAdapters);
+=======
+	        knowledgebaseEntry.ApplyTo(new List<IPackageAdapter> {packageAdapter});
+
+            shipment.ContentWeight = packageAdapter.Weight;
+>>>>>>> Set the content weight in ApplyShipSense method by summing the package weights
 	    }
 
 	    /// <summary>
