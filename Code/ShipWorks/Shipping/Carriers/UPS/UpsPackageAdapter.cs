@@ -52,10 +52,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public double Weight
         {
-            // This is working like you'd expect with single package shipments, but 
-            // will probably need to change once we do multiple packages.
-            get { return packageEntity.UpsShipment.Shipment.ContentWeight; }
-            set { packageEntity.UpsShipment.Shipment.ContentWeight = value; }
+            get { return packageEntity.Weight; }
+            set { packageEntity.Weight = value; }
         }
 
         /// <summary>
