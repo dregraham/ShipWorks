@@ -98,6 +98,7 @@ namespace ShipWorks.Shipping.ShipSense
                 packageAdapters.ElementAt(0).Height = packages[0].Height;
                 packageAdapters.ElementAt(0).Length = packages[0].Length;
                 packageAdapters.ElementAt(0).Width = packages[0].Width;
+                packageAdapters.ElementAt(0).ApplyAdditionalWeight = packages[0].ApplyAdditionalWeight;
 
                 // Sum the package weights 
                 packageAdapters.ElementAt(0).Weight = packages.Sum(p => p.Weight);
@@ -119,6 +120,7 @@ namespace ShipWorks.Shipping.ShipSense
                     packageAdapters.ElementAt(i).Length = packages[i].Length;
                     packageAdapters.ElementAt(i).Weight = packages[i].Weight;
                     packageAdapters.ElementAt(i).Width = packages[i].Width;
+                    packageAdapters.ElementAt(i).ApplyAdditionalWeight = packages[i].ApplyAdditionalWeight;
                 }
             }
         }
@@ -141,7 +143,8 @@ namespace ShipWorks.Shipping.ShipSense
                     Height = adapter.Height,
                     Length = adapter.Length,
                     Weight = adapter.Weight,
-                    Width = adapter.Width
+                    Width = adapter.Width,
+                    ApplyAdditionalWeight = adapter.ApplyAdditionalWeight
                 };
 
                 packages.Add(package);

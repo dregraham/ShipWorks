@@ -60,5 +60,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
             get { return shipment.Postal.DimsWeight; }
             set { shipment.Postal.DimsWeight = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public bool ApplyAdditionalWeight
+        {
+            get { return shipment.Postal.DimsAddWeight; }
+            set { shipment.Postal.DimsAddWeight = value; }
+        }
     }
 }

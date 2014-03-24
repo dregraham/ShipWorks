@@ -60,5 +60,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             get { return shipment.BestRate.DimsWeight; }
             set { shipment.BestRate.DimsWeight = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public bool ApplyAdditionalWeight
+        {
+            get { return shipment.BestRate.DimsAddWeight; }
+            set { shipment.BestRate.DimsAddWeight = value; }
+        }
     }
 }

@@ -31,5 +31,10 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         /// Gets or sets the additional weight.
         /// </summary>
         double AdditionalWeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the whether the additional weight should be applied.
+        /// </summary>
+        bool ApplyAdditionalWeight { get; set; }
     }
 }

@@ -60,5 +60,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get { return shipment.OnTrac.DimsWeight; }
             set { shipment.OnTrac.DimsWeight = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public bool ApplyAdditionalWeight
+        {
+            get { return shipment.OnTrac.DimsAddWeight; }
+            set { shipment.OnTrac.DimsAddWeight = value; }
+        }
     }
 }

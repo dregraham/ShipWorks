@@ -61,11 +61,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 packageRequest.GroupPackageCount = "1";
 
                 // Package weight and value (default the weight to .1 if none is given, so we can still get rates)
+                decimal packageTotalWeight = FedExUtility.GetPackageTotalWeight(fedExPackage);
+                packageTotalWeight = packageTotalWeight > 0 ? packageTotalWeight : .1m;
+
                 packageRequest.Weight = new Weight
                 {
                     Units = GetApiWeightUnit(request.ShipmentEntity),
                     UnitsSpecified = true,
-                    Value = FedExUtility.GetPackageTotalWeight(fedExPackage) > 0 ? FedExUtility.GetPackageTotalWeight(fedExPackage) : .1m,
+                    Value = packageTotalWeight,
                     ValueSpecified = true
                 };
 

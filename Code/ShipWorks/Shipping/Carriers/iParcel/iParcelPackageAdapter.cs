@@ -60,5 +60,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get { return packageEntity.DimsWeight; }
             set { packageEntity.DimsWeight = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the additional weight.
+        /// </summary>
+        public bool ApplyAdditionalWeight
+        {
+            get { return packageEntity.DimsAddWeight; }
+            set { packageEntity.DimsAddWeight = value; }
+        }
     }
 }
