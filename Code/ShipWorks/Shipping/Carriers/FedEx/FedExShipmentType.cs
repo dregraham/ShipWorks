@@ -98,6 +98,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets a value indicating whether the shipment type [supports multiple packages].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
         /// to obtain FedEx related settings and account information. This provides
         /// the ability to use different FedEx settings depending on how the shipment

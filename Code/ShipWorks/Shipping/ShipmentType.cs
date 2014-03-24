@@ -270,7 +270,6 @@ namespace ShipWorks.Shipping
             knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = SupportsMultiplePackages;
 
             // Apply each adapter to the shipment packages
-
             knowledgebaseEntry.ApplyTo(packageAdapters);
             shipment.ContentWeight = packageAdapters.ToList().Sum(a => a.Weight);
 	    }
