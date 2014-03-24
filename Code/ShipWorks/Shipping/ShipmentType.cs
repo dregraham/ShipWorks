@@ -263,7 +263,7 @@ namespace ShipWorks.Shipping
             // Get our knowledge base entry for this shipment
             Knowledgebase knowledgebase = new Knowledgebase();
 	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
-            knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = SupportsMultiplePackages;
+            knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = !SupportsMultiplePackages;
 
             // Do any shipment type specific to get the shipment in sync with the knowledge base
             // entry (e.g. setting up the shipment to have the same number of packages as the 
