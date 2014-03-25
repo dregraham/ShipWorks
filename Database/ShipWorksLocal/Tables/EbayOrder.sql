@@ -4,6 +4,7 @@
     [EbayBuyerID]                    NVARCHAR (50)  NOT NULL,
     [CombinedLocally]                BIT            NOT NULL,
     [SelectedShippingMethod]         INT            CONSTRAINT [DF__EbayOrder__Selec__2B203F5D] DEFAULT ((0)) NOT NULL,
+    [SellingManagerRecord]           INT            NULL,
     [GspEligible]                    BIT            NOT NULL,
     [GspFirstName]                   NVARCHAR (128) NOT NULL,
     [GspLastName]                    NVARCHAR (128) NOT NULL,
@@ -22,7 +23,6 @@
     [RollupFeedbackReceivedType]     INT            NULL,
     [RollupFeedbackReceivedComments] VARCHAR (80)   NULL,
     [RollupPayPalAddressStatus]      INT            NULL,
-    [RollupSellingManagerRecord]     INT            NULL,
     CONSTRAINT [PK_EbayOrder] PRIMARY KEY CLUSTERED ([OrderID] ASC),
     CONSTRAINT [FK_EbayOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 );
@@ -55,6 +55,10 @@ EXECUTE sp_addextendedproperty @name = N'AuditName', @value = N'Shipping Method'
 
 
 GO
+EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'1', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'EbayOrder', @level2type = N'COLUMN', @level2name = N'SellingManagerRecord';
+
+
+GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'1', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'EbayOrder', @level2type = N'COLUMN', @level2name = N'RollupEbayItemCount';
 
 
@@ -84,8 +88,4 @@ EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'1', @level0typ
 
 GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'1', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'EbayOrder', @level2type = N'COLUMN', @level2name = N'RollupPayPalAddressStatus';
-
-
-GO
-EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'1', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'EbayOrder', @level2type = N'COLUMN', @level2name = N'RollupSellingManagerRecord';
 

@@ -1,8 +1,9 @@
 ﻿CREATE TABLE [dbo].[ShopifyStore] (
-    [StoreID]                BIGINT         NOT NULL,
-    [ShopifyShopUrlName]     NVARCHAR (100) NOT NULL,
-    [ShopifyShopDisplayName] NVARCHAR (100) NOT NULL,
-    [ShopifyAccessToken]     NVARCHAR (255) NOT NULL,
+    [StoreID]                        BIGINT         NOT NULL,
+    [ShopifyShopUrlName]             NVARCHAR (100) NOT NULL,
+    [ShopifyShopDisplayName]         NVARCHAR (100) NOT NULL,
+    [ShopifyAccessToken]             NVARCHAR (255) NOT NULL,
+    [ShopifyRequestedShippingOption] INT            NOT NULL,
     CONSTRAINT [PK_ShopifyStore] PRIMARY KEY CLUSTERED ([StoreID] ASC),
     CONSTRAINT [FK_ShopifyStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 );

@@ -11,6 +11,7 @@
     [TransactionID]            INT            NULL,
     [RefundFormID]             INT            NULL,
     [ScanFormBatchID]          BIGINT         NULL,
+    [ScanBasedReturn]          BIT            NOT NULL,
     CONSTRAINT [PK_EndiciaShipment] PRIMARY KEY CLUSTERED ([ShipmentID] ASC),
     CONSTRAINT [FK_EndiciaShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE,
     CONSTRAINT [FK_EndiciaShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
