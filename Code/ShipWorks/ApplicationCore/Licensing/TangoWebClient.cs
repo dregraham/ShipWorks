@@ -9,6 +9,7 @@ using System.Xml;
 using System.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Stores;
 using ShipWorks.Data;
@@ -91,10 +92,10 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Create our http variable request submitter
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            
+
             // Both methods use action
             postRequest.Variables.Add("action", action);
-            
+
             // Trial shipment logging
             if (license.IsTrial)
             {
@@ -105,7 +106,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 postRequest.Variables.Add("license", license.Key);
             }
-            
+
             // Get the credentials from Tango
             XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
 
@@ -117,12 +118,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results, "FedEx");
-            
+
             // UPS fields - access key needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
             AddCounterRateDictionaryEntry(responseXmlDocument, "UpsPassword", "/CounterRateCredentials/UPS/Password", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results, "UPS");
-            
+
             // Express1 for Endicia fields - passphrase needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
@@ -132,6 +133,73 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
             return results;
+        }
+
+        /// <summary>
+        /// Get the status of the specified license
+        /// </summary>
+        public static Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string action = "getcertificateverificationdata";
+
+            // Get the license from the store so we know how to log
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            // Get the store type
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // Create our http variable request submitter
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            // Both methods use action
+            postRequest.Variables.Add("action", action);
+
+            // Trial shipment logging
+            if (license.IsTrial)
+            {
+                postRequest.Variables.Add("storecode", storeType.TangoCode);
+                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            else
+            {
+                postRequest.Variables.Add("license", license.Key);
+            }
+
+            // Get the certificate verification data from Tango
+            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCarrierCertificateVerificationData");
+
+            // Pull certificate verification data from the response; none of the fields are encrypted in the response
+            // so we can easily/quickly update them in Tango if they ever need to change
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+
+            return results;
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response.
+        /// </summary>
+        private static void AddCarrierCertificateVerificationDataDictionaryEntries(XmlDocument responseXmlDocument, string serviceName, string keyName, Dictionary<string, string> dictionary)
+        {
+            string subjectXPath = string.Format("/CertificateVerificationData/Service[@name='{0}'][@enabled='true']", serviceName);
+            XmlNode subjectNode = responseXmlDocument.SelectSingleNode(subjectXPath);
+
+            if (subjectNode != null)
+            {
+                dictionary.Add(keyName, subjectNode.OuterXml);
+            }
+            else
+            {
+                dictionary.Add(keyName, string.Empty);
+            }
         }
 
         /// <summary>

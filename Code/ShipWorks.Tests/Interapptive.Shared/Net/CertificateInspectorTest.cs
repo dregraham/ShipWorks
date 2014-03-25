@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
     {
         private CertificateInspector testObject;
 
-        private const string certificateVerificationData = "<Subject><Value>FedEx</Value></Subject>";
+        private const string certificateVerificationData = "<Service><Subject><Value>FedEx</Value></Subject></Service>";
         private Mock<ICertificateRequest> request;
 
         private X509Certificate noMatchCertificate;
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         {
             request.Setup(r => r.Certificate).Returns(multiMatchCertificate);
 
-            testObject = new CertificateInspector("<Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject>");
+            testObject = new CertificateInspector("<Service><Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject></Service>");
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
             Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
