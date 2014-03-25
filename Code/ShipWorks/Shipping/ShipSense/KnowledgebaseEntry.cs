@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -141,6 +142,15 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Applies the data in the CustomsItems collection of the knowledge base entry to the entities provided.
+        /// </summary>
+        /// <param name="customsItemEntities">The customs item entities.</param>
+        public void ApplyTo(IEnumerable<ShipmentCustomsItemEntity> customsItemEntities)
+        {
+            // TODO: Implement
+        }
+
+        /// <summary>
         /// Applies the package data from the adapters to the Package collection of the knowledge base entry.
         /// </summary>
         /// <param name="adapters">The adapters.</param>
@@ -164,6 +174,15 @@ namespace ShipWorks.Shipping.ShipSense
 
                 packages.Add(package);
             }
+        }
+
+        /// <summary>
+        /// Applies the customs data from the entities to the CustomsItems collection of the knowledge base entry.
+        /// </summary>
+        /// <param name="customsItemEntities">The customs item entities.</param>
+        public void ApplyFrom(IEnumerable<ShipmentCustomsItemEntity> customsItemEntities)
+        {
+            // TODO: Implement
         }
     }
 }
