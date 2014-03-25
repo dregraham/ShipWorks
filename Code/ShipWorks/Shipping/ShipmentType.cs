@@ -272,13 +272,9 @@ namespace ShipWorks.Shipping
             SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
             List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
 
-            // Apply each adapter to the shipment packages
-            if (IsDomestic(shipment))
+            if (IsCustomsRequired(shipment))
             {
-                knowledgebaseEntry.ApplyTo(packageAdapters);
-            }
-            else
-            {
+                // Apply the knowledge base entry data to the shipment/packages and customs info
                 knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
 
                 if (shipment.CustomsItems.Any())
@@ -291,10 +287,14 @@ namespace ShipWorks.Shipping
                     // Consider them loaded.  This is an in-memory field
                     shipment.CustomsItemsLoaded = true;
 
-                    decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal) ci.Quantity*ci.UnitValue);
+                    decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity * ci.UnitValue);
                     shipment.CustomsValue = customsValue;
                 }
-
+            }
+            else
+            {
+                // We don't need to do anything with customs and only need to apply the package adapters
+                knowledgebaseEntry.ApplyTo(packageAdapters);
             }
             
             shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
