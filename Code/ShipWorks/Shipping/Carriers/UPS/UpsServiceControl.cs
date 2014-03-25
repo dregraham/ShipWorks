@@ -163,7 +163,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsServiceType thisService = (UpsServiceType)overriddenShipment.Ups.Service;
                 serviceTypes.Add(thisService);
 
-
                 if (!UpsUtility.IsCodAvailable((UpsServiceType)overriddenShipment.Ups.Service, overriddenShipment.ShipCountryCode))
                 {
                     allCodAvailable = false;
@@ -266,7 +265,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateBillingSectionDisplay();
             UpdateSectionDescription();
         }
-
 
         /// <summary>
         /// Gets the loaded service types.
@@ -382,12 +380,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         void OnChangeService(object sender, EventArgs e)
         {
+            SaveToShipments();
+
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
             UpdateMiAndSurePostSpecificVisibility(GetLoadedServiceTypes());
 
-            SaveToShipments();
             RaiseShipmentServiceChanged();
 
             if (!service.MultiValued && service.SelectedValue != null)
@@ -402,14 +401,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="serviceType">Type of the service.</param>
         private void UpdateMiAndSurePostSpecificVisibility(List<UpsServiceType> serviceType)
         {            
-			bool isSurePost=false;
+			bool isSurePost = false;
             bool isMi = false;
             bool showEndorsement = false;
 
             if (serviceType.Any())
             {
-                isSurePost = serviceType.Any(a => UpsUtility.IsUpsSurePostService(a));
-                isMi = serviceType.Any(a => UpsUtility.IsUpsMiService(a));
+                isSurePost = serviceType.Any(UpsUtility.IsUpsSurePostService);
+                isMi = serviceType.Any(UpsUtility.IsUpsMiService);
                 showEndorsement = isSurePost || isMi;
 
                 // Because endorsements are not utilized on international packages, use value 5 for international packages.
@@ -418,6 +417,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     showEndorsement = false;
                 }
             }
+
             endorsementPanel.Visible = showEndorsement; 
 
             confirmationPanel.Visible = !isSurePost;
@@ -696,7 +696,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 panelPayorDuties.Visible = false;
             }
 
-
             int bottom = panelTransportAccount.Visible ? panelTransportAccount.Bottom : panelPayorTransport.Bottom + 4;
             bottom = panelPayorDuties.Visible ? panelPayorDuties.Bottom : bottom + 4;
 
@@ -886,7 +885,5 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpdateBillingSectionDisplay();
         }
-    
-    
     }
 }
