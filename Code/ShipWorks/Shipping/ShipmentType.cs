@@ -281,8 +281,11 @@ namespace ShipWorks.Shipping
                 {
                     shipment.CustomsGenerated = true;
 
-                    // Set the removed tracker for tracking deletions in the UI until saved
-                    shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                    if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+                    {
+                        // Set the removed tracker for tracking deletions in the UI until saved
+                        shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                    }
 
                     // Consider them loaded.  This is an in-memory field
                     shipment.CustomsItemsLoaded = true;

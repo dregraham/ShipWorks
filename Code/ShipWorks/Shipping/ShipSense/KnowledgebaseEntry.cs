@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.ShipSense
 
         /// <summary>
         /// Applies the data in the Package collection of the knowledge base entry to each of the adapters
-        /// provided, then applies the data in the Customs Items collection of the knowledgebase entry to the
+        /// provided, then applies the data in the Customs Items collection of the knowledge base entry to the
         /// ShipmentCustomsItemEntities.
         /// 
         /// ***NOTE***
@@ -165,8 +165,13 @@ namespace ShipWorks.Shipping.ShipSense
                 return;
             }
 
-            // Clear out any existing ShipmentCustomsItemEntities
-            shipmentCustomsItems.Clear();
+            // Explicitly remove the entity, so it gets tracked by LLBLGen
+            for (int index = 0; index < shipmentCustomsItems.Count; index++)
+            {
+                // Always remove the first item in the collection regardless of the index
+                // since the list is shrinking with each removal
+                shipmentCustomsItems.RemoveAt(0);
+            }
 
             // Add the kb custom items
             foreach (KnowledgebaseCustomsItem knowledgebaseCustomsItem in CustomsItems)
