@@ -1159,7 +1159,15 @@ namespace ShipWorks.Shipping
                 // Apply the data from the package adapters to the knowledge base entry, so
                 // the shipment data will get saved to the knowledge base
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();
-                entry.ApplyFrom(packageAdapters);
+
+                if (ShipmentType.IsDomestic(shipment))
+                {
+                    entry.ApplyFrom(packageAdapters);
+                }
+                else
+                {
+                    entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+                }
 
                 // Make sure we have all of the order information
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);

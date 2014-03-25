@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -142,12 +145,45 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Applies the data in the CustomsItems collection of the knowledge base entry to the entities provided.
+        /// Applies the data in the Package collection of the knowledge base entry to each of the adapters
+        /// provided, then applies the data in the Customs Items collection of the knowledgebase entry to the
+        /// ShipmentCustomsItemEntities.
+        /// 
+        /// ***NOTE***
+        /// The caller of this method must update the shipment values of any customs additions; 
+        /// i.e. shipment.CustomsValue, shipment.CustomsGenerated, etc...
         /// </summary>
-        /// <param name="customsItemEntities">The customs item entities.</param>
-        public void ApplyTo(IEnumerable<ShipmentCustomsItemEntity> customsItemEntities)
+        /// <param name="adapters">The adapters.</param>
+        /// <param name="shipmentCustomsItems">List of ShipmentCustomsItemEntitys to apply KnowledgebaseCustomsItems</param>
+        /// <exception cref="System.InvalidOperationException">The number packages in the knowledge base entry must match the number of adapters.</exception>
+        public void ApplyTo(IEnumerable<IPackageAdapter> adapters, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
-            // TODO: Implement
+            ApplyTo(adapters);
+
+            if (!CustomsItems.Any())
+            {
+                return;
+            }
+
+            // Clear out any existing ShipmentCustomsItemEntities
+            shipmentCustomsItems.Clear();
+
+            // Add the kb custom items
+            foreach (KnowledgebaseCustomsItem knowledgebaseCustomsItem in CustomsItems)
+            {
+                shipmentCustomsItems.Add(
+                    new ShipmentCustomsItemEntity()
+                    {
+                        Description = knowledgebaseCustomsItem.Description,
+                        Quantity = knowledgebaseCustomsItem.Quantity,
+                        Weight = knowledgebaseCustomsItem.Weight,
+                        UnitValue = knowledgebaseCustomsItem.UnitValue,
+                        CountryOfOrigin = knowledgebaseCustomsItem.CountryOfOrigin,
+                        HarmonizedCode = knowledgebaseCustomsItem.HarmonizedCode,
+                        NumberOfPieces = knowledgebaseCustomsItem.NumberOfPieces,
+                        UnitPriceAmount = knowledgebaseCustomsItem.UnitPriceAmount
+                    });
+            }
         }
 
         /// <summary>
@@ -177,12 +213,33 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Applies the customs data from the entities to the CustomsItems collection of the knowledge base entry.
+        /// Applies the package data from the adapters to the Package collection of the knowledge base entry,
+        /// then applies the ShipmentCustomsItemEntity data to the Customs Items collection of the knowledge base entry
         /// </summary>
-        /// <param name="customsItemEntities">The customs item entities.</param>
-        public void ApplyFrom(IEnumerable<ShipmentCustomsItemEntity> customsItemEntities)
+        /// <param name="adapters">The adapters.</param>
+        /// <param name="shipmentCustomsItems">List of ShipmentCustomsItemEntitys to apply KnowledgebaseCustomsItems</param>
+        public void ApplyFrom(IEnumerable<IPackageAdapter> adapters, IEnumerable<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
-            // TODO: Implement
+            ApplyFrom(adapters);
+
+            customsItems.Clear();
+
+            // Add the kb custom items
+            foreach (ShipmentCustomsItemEntity shipmentCustomsItemEntity in shipmentCustomsItems)
+            {
+                customsItems.Add(
+                    new KnowledgebaseCustomsItem()
+                    {
+                        Description = shipmentCustomsItemEntity.Description,
+                        Quantity = shipmentCustomsItemEntity.Quantity,
+                        Weight = shipmentCustomsItemEntity.Weight,
+                        UnitValue = shipmentCustomsItemEntity.UnitValue,
+                        CountryOfOrigin = shipmentCustomsItemEntity.CountryOfOrigin,
+                        HarmonizedCode = shipmentCustomsItemEntity.HarmonizedCode,
+                        NumberOfPieces = shipmentCustomsItemEntity.NumberOfPieces,
+                        UnitPriceAmount = shipmentCustomsItemEntity.UnitPriceAmount
+                    });
+            }
         }
     }
 }

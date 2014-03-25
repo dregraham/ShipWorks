@@ -6,8 +6,10 @@ using Interapptive.Shared.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.ShipSense
 {
@@ -374,6 +376,54 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             string actualJson = testObject.ToJson();
             Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
+        }
+
+        [TestMethod]
+        public void ApplyFrom_AddsKbCustomsInfo_Test()
+        {
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            List<ShipmentCustomsItemEntity> shipmentCustomsItems = new List<ShipmentCustomsItemEntity>()
+            {
+                new ShipmentCustomsItemEntity()
+                {
+                    Description = "Another test description",
+                    Quantity = 2,
+                    Weight = 0.1,
+                    UnitValue = 6.22M,
+                    CountryOfOrigin = "CA",
+                    HarmonizedCode = "XYZ789",
+                    NumberOfPieces = 1,
+                    UnitPriceAmount = 9.31M
+                },
+                new ShipmentCustomsItemEntity
+                {
+                    Description = "Another test description",
+                    Quantity = 2,
+                    Weight = 0.1,
+                    UnitValue = 6.22M,
+                    CountryOfOrigin = "CA",
+                    HarmonizedCode = "XYZ789",
+                    NumberOfPieces = 1,
+                    UnitPriceAmount = 9.31M
+                }
+            };
+
+            testObject.ApplyFrom(adapters, shipmentCustomsItems);
+
+            // Quick check some of the adapter stuff
+            // Check that the Get property was called to confirm that the values are not equal 
+            // because the adapter value was assigned to
+            adapter1.VerifyGet(a => a.Width, Times.Once());
+            adapter2.VerifyGet(a => a.Width, Times.Once());
+
+            for (int i = 0; i < testObject.Packages.Count(); i++)
+            {
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
+            }
+
+            // Now check the customs stuff
+            Assert.AreEqual(2, testObject.CustomsItems.Count());
         }
     }
 }

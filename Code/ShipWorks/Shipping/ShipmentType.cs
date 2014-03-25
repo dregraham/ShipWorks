@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -272,7 +273,30 @@ namespace ShipWorks.Shipping
             List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
 
             // Apply each adapter to the shipment packages
-            knowledgebaseEntry.ApplyTo(packageAdapters);
+            if (IsDomestic(shipment))
+            {
+                knowledgebaseEntry.ApplyTo(packageAdapters);
+            }
+            else
+            {
+                knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
+
+                if (shipment.CustomsItems.Any())
+                {
+                    shipment.CustomsGenerated = true;
+
+                    // Set the removed tracker for tracking deletions in the UI until saved
+                    shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+
+                    // Consider them loaded.  This is an in-memory field
+                    shipment.CustomsItemsLoaded = true;
+
+                    decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal) ci.Quantity*ci.UnitValue);
+                    shipment.CustomsValue = customsValue;
+                }
+
+            }
+            
             shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
 	    }
 
