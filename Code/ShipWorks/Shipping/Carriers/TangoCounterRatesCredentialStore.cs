@@ -350,7 +350,6 @@ namespace ShipWorks.Shipping.Carriers
             }
         }
 
-
         /// <summary>
         /// Uses the key name provided to get the corresponding value from the dictionary.
         /// </summary>
@@ -358,7 +357,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <returns>The value for the given key.</returns>
         private string GetCertificateVerificationDataValue(string key)
         {
-            if (!productionCredentials.Any())
+            if (!productionCertVerificationData.Any())
             {
                 // The certificate verification data haven't been populated yet, so we need to get them
                 // from Tango
@@ -421,6 +420,5 @@ namespace ShipWorks.Shipping.Carriers
                 }
             }
         }
-
     }
 }
