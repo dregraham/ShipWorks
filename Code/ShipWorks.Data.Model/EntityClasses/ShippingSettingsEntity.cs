@@ -611,6 +611,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("InternalBestRateExcludedShipmentTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -1334,6 +1337,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, value); }
+		}
+
+		/// <summary> The ShipSenseEnabled property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ShipSenseEnabled
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEnabled, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseEnabled, value); }
 		}
 
 

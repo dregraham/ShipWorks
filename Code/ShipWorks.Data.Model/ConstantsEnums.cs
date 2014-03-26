@@ -7457,6 +7457,8 @@ namespace ShipWorks.Data.Model
 		WorldShipMailInnovationsEnabled,
 		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
 		InternalBestRateExcludedShipmentTypes,
+		///<summary>ShipSenseEnabled. </summary>
+		ShipSenseEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
