@@ -206,6 +206,7 @@ namespace ShipWorks.Shipping.Settings
             settings.WorldShipMailInnovationsEnabled = false;
 
             settings.BestRateExcludedTypes = new int[0];
+            settings.ShipSenseEnabled = true;
 
             adapter.SaveAndRefetch(settings);
         }
