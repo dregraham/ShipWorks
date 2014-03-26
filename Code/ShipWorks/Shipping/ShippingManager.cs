@@ -1085,6 +1085,12 @@ namespace ShipWorks.Shipping
                 StoreType storeType = StoreTypeManager.GetType(storeEntity);
                 List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(shipment);
 
+                Knowledgebase knowledgebase = new Knowledgebase();
+                if (knowledgebase.IsOverwritten(shipment))
+                {
+                    shipment.ShipSenseStatus = (int)ShipSenseStatus.Overwritten;
+                }
+
                 // Transacted
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

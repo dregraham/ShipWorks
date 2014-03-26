@@ -6,7 +6,11 @@ using Interapptive.Shared.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
@@ -439,6 +443,149 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.ToJson();
         }
 
+        [TestMethod]
+        public void Matches_ReturnsTrue_Test()
+        {
+            ShipmentEntity shipment = CreateMatchingShipment();
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            Assert.IsTrue(testObject.Matches(shipment));
+        }
+
+        [TestMethod]
+        public void Matches_ReturnsFalse_WhenStoreIDDoesNotMatch_Test()
+        {
+            // Change the store ID of the matching shipment
+            ShipmentEntity shipment = CreateMatchingShipment();
+            shipment.Order.StoreID += 1000;
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            // Use the adapters from the FedEx shipment type, so the HashCode gets applied
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            Assert.IsFalse(testObject.Matches(shipment));
+        }
+
+        [TestMethod]
+        public void Matches_ReturnsFalse_WhenPackageCountsDoNotMatch_Test()
+        {
+            // Change the store ID of the matching shipment
+            ShipmentEntity shipment = CreateMatchingShipment();
+
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            // Use the adapters from the FedEx shipment type, so the HashCode gets applied
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            // Add another package to the shipment, but not the test object
+            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+
+            Assert.IsFalse(testObject.Matches(shipment));
+        }
+
+        [TestMethod]
+        public void Matches_ReturnsFalse_WhenPackageDataDoesNotMatch_Test()
+        {
+            // Change the store ID of the matching shipment
+            ShipmentEntity shipment = CreateMatchingShipment();
+
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            // Use the adapters from the FedEx shipment type, so the HashCode gets applied
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            // Change one of the packages, so the hash no longer are in sync with the test object
+            shipment.FedEx.Packages[0].Weight = 1000;
+
+            Assert.IsFalse(testObject.Matches(shipment));
+        }
+
+        [TestMethod]
+        public void Matches_ReturnsFalse_WhenCustomItemsCountsDoNotMatch_Test()
+        {
+            // Change the store ID of the matching shipment
+            ShipmentEntity shipment = CreateMatchingShipment();
+
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            // Use the adapters from the FedEx shipment type, so the HashCode gets applied
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            // Add another package to the shipment, but not the test object
+            shipment.CustomsItems.Add(new ShipmentCustomsItemEntity());
+
+            Assert.IsFalse(testObject.Matches(shipment));
+        }
+
+        [TestMethod]
+        public void Matches_ReturnsFalse_WhenCustomsDataDoesNotMatch_Test()
+        {
+            // Change the store ID of the matching shipment
+            ShipmentEntity shipment = CreateMatchingShipment();
+
+            ShipmentCustomsItemEntity customsEntity = new ShipmentCustomsItemEntity
+            {
+                Description = "test",
+                Quantity = 1.0,
+                Weight = 2.4,
+                UnitValue = 1.54M,
+                CountryOfOrigin = "US",
+                HarmonizedCode = "123",
+                NumberOfPieces = 1,
+                UnitPriceAmount = 3.21M
+            };
+
+            shipment.CustomsItems.Add(customsEntity);
+
+            // Make the values on the entry match the adapters and the customs items of the shipment
+            // Use the adapters from the FedEx shipment type, so the HashCode gets applied
+            testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
+            testObject.CustomsItems = new List<KnowledgebaseCustomsItem> { new KnowledgebaseCustomsItem(EntityUtility.CloneEntity(customsEntity)) };
+
+            // Change the weight of the customs item on the shipment, so the hash is no longer 
+            // in sync with the test object
+            shipment.CustomsItems[0].Weight = 400;
+
+            Assert.IsFalse(testObject.Matches(shipment));
+        }
+
+        private ShipmentEntity CreateMatchingShipment()
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Order = new OrderEntity
+                {
+                    StoreID = testStoreID
+                },
+                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                FedEx = new FedExShipmentEntity()
+            };
+
+            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+            shipment.FedEx.Packages[0].Weight = adapter1.Object.Weight;
+            shipment.FedEx.Packages[0].DimsHeight = adapter1.Object.Height;
+            shipment.FedEx.Packages[0].DimsWidth = adapter1.Object.Width;
+            shipment.FedEx.Packages[0].DimsLength = adapter1.Object.Length;
+            shipment.FedEx.Packages[0].DimsWeight = adapter1.Object.AdditionalWeight;
+            shipment.FedEx.Packages[0].DimsAddWeight = adapter1.Object.ApplyAdditionalWeight;
+
+            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+            shipment.FedEx.Packages[1].Weight = adapter2.Object.Weight;
+            shipment.FedEx.Packages[1].DimsHeight = adapter2.Object.Height;
+            shipment.FedEx.Packages[1].DimsWidth = adapter2.Object.Width;
+            shipment.FedEx.Packages[1].DimsLength = adapter2.Object.Length;
+            shipment.FedEx.Packages[1].DimsWeight = adapter2.Object.AdditionalWeight;
+            shipment.FedEx.Packages[1].DimsAddWeight = adapter2.Object.ApplyAdditionalWeight;
+
+            return shipment;
+        }
     }
 }
 

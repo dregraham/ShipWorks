@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -96,6 +98,31 @@ namespace ShipWorks.Shipping.ShipSense
                 // so we'll just return a new, empty entry
                 return new KnowledgebaseEntry(order.StoreID);
             }
+        }
+
+        /// <summary>
+        /// Determines whether the specified shipment is overwritten. This method
+        /// assumes that the shipment's order has been populated.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>A Boolean value indicating if the shipment has overwritten data provided by ShipSense.</returns>
+        public bool IsOverwritten(ShipmentEntity shipment)
+        {
+            bool isOverwritten = false;
+            
+            // A null entity means there is not an ShipSense entry for the order, so 
+            // there was nothing to overwrite
+            ShipSenseKnowledgebaseEntity entity = FetchEntity(shipment.Order);
+
+            if (entity != null)
+            {
+                // Rehydrate the knowledge base entry and consider the shipment to have overwritten
+                // the entry if the two do not match
+                KnowledgebaseEntry entry = new KnowledgebaseEntry(entity.Entry);
+                isOverwritten = !entry.Matches(shipment);
+            }
+
+            return isOverwritten;
         }
 
         /// <summary>

@@ -261,5 +261,82 @@ namespace ShipWorks.Shipping.ShipSense
                 customsItems.Add(new KnowledgebaseCustomsItem(shipmentCustomsItemEntity));
             }
         }
+
+        /// <summary>
+        /// Determines if the specified shipment matches up with the data in this
+        /// knowledge base entry.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>Returns true if the data is the same, otherwise false.</returns>
+        public bool Matches(ShipmentEntity shipment)
+        {
+            // We're going to look at the hash of the package adapters to see if they match 
+            // the package data in the knowledge base entry
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            List<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment).ToList();
+
+            // The Store ID, packages, and customs must all coincide for the 
+            // shipment to match the entry
+            return shipment.Order.StoreID == StoreID && PackagesMatch(packageAdapters) && CustomsMatch(shipment);
+        }
+
+        /// <summary>
+        /// Determines if the data in the customs items matches up with the data in this
+        /// knowledge base entry.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>Returns true if the data is the same, otherwise false.</returns>
+        private bool CustomsMatch(ShipmentEntity shipment)
+        {
+            if (CustomsItems.Count() != shipment.CustomsItems.Count)
+            {
+                // Customs items were either added or removed
+                return false;
+            }
+
+            // Create a new list of knowledge base customs item from the shipment to compare
+            // with the customs items on the entry that was fetched
+            List<KnowledgebaseCustomsItem> shipmentCustomsItems = shipment.CustomsItems.Select(customsEntity => new KnowledgebaseCustomsItem(customsEntity)).ToList();
+            
+            foreach (KnowledgebaseCustomsItem entryCustomsItem in CustomsItems)
+            {
+                // All items should have a count of 1 based on the hash otherwise the customs items are different
+                if (shipmentCustomsItems.Count(c => c.Hash == entryCustomsItem.Hash) != 1)
+                {
+                    // Something has changed
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Determines if the data in the package adapters matches up with the data in this
+        /// knowledge base entry.
+        /// </summary>
+        /// <param name="packageAdapters">The package adapters.</param>
+        /// <returns>Returns true if the data is the same, otherwise false.</returns>
+        private bool PackagesMatch(List<IPackageAdapter> packageAdapters)
+        {
+            // Check that the package counts are equal and the hash of the package adapters 
+            // matches those of the entry
+            if (Packages.Count() != packageAdapters.Count())
+            {
+                return false;
+            }
+
+            foreach (KnowledgebasePackage package in Packages)
+            {
+                // All packages should have a count of 1 based on the hash otherwise the packages are different
+                if (packageAdapters.Count(p => p.HashCode() == package.Hash) != 1)
+                {
+                    // Something has changed
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
