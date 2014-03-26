@@ -225,6 +225,7 @@ namespace ShipWorks.Shipping
 		public virtual void ConfigureNewShipment(ShipmentEntity shipment)
 		{
 			shipment.ThermalType = null;
+		    shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
 			// First apply the base profile
 			ApplyProfile(shipment, GetPrimaryProfile());
@@ -305,6 +306,12 @@ namespace ShipWorks.Shipping
                 }
 
                 shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
+
+                if (shipment.ShipSenseStatus != (int)ShipSenseStatus.Overwritten)
+                {
+                    // Retain the previous status if the shipment has overwritten ShipSense data
+                    shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                }
             }
         }
 
