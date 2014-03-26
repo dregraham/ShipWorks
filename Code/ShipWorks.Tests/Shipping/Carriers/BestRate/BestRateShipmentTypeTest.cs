@@ -351,27 +351,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsInstanceOfType(rateGroup.FootnoteFactories.First(), typeof(ExceptionsRateFootnoteFactory));
         }
 
-
-        [TestMethod]
-        public void GetRates_RateGroupHasOneRateResult_WhenFactoryCreatesZeroBrokers_Test()
-        {
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-
-            Assert.AreEqual(1, rateGroup.Rates.Count);
-        }
-
-        [TestMethod]
-        public void GetRates_RateResultShipmentTypeIsBestRate_WhenFactoryCreatesZeroBrokers_Test()
-        {
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-
-            Assert.AreEqual(ShipmentTypeCode.BestRate, rateGroup.Rates[0].ShipmentType);
-        }
-
         [TestMethod]
         public void SupportsGetRates_ReturnsTrue_Test()
         {
@@ -458,18 +437,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void ApplySelectedShipmentRate_CallsSignUpActionOnTag_WhenSignUpActionIsNotNull_Test()
-        {
-            ShipmentEntity calledShipment = null;
-            bool? signUpActionResult = null;
-
-            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => {signUpActionResult = true; return true;}, RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
-
-            Assert.IsTrue(signUpActionResult.Value);
-        }
-
-        [TestMethod]
         public void ApplySelectedShipmentRate_DoesNotCallSignUpActionOnTag_WhenSignUpActionIsNull_Test()
         {
             ShipmentEntity calledShipment = null;
@@ -479,18 +446,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             testObject.ApplySelectedShipmentRate(shipment, rate);
 
             Assert.IsFalse(signUpActionResult.HasValue);
-        }
-
-        [TestMethod]
-        public void ApplySelectedShipmentRate_DoesNotCallSelectActionOnTag_WhenSignUpActionReturnsFalse_Test()
-        {
-            ShipmentEntity calledShipment = null;
-            
-            RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { SignUpAction = () => false, RateSelectionDelegate = entity => calledShipment = entity } };
-            testObject.ApplySelectedShipmentRate(shipment, rate);
-
-            // The called shipment should still be null since the sign up action returned false
-            Assert.IsNull(calledShipment);
         }
 
         private void InitializeFootnoteTests()
