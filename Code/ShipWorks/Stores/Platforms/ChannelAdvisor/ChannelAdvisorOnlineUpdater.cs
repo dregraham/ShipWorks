@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     ChannelAdvisorClient client = new ChannelAdvisorClient(store);
 
-                    client.UploadShipmentDetails((int)order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber);
+                    client.UploadShipmentDetails((int)order.OrderNumber, shipment.ProcessedDate.Value, carrierCode, serviceClass, trackingNumber, shipment.ShipmentCost);
                 }
                 catch (ChannelAdvisorException ex)
                 {

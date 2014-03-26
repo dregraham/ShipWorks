@@ -40,12 +40,20 @@ namespace ShipWorks.Stores.Platforms.Newegg.WizardPages
             store.SecretKey = storeSettingsControl.SecretKey;
 
             // Let's bounce the store's connection settings off the Newegg API to confirm that they are correct
-            NeweggWebClient webClient = new NeweggWebClient(store);
-            if (!webClient.AreCredentialsValid())
+            try
             {
-                MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
+                NeweggWebClient webClient = new NeweggWebClient(store);
+                if (!webClient.AreCredentialsValid())
+                {
+                    MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
+                    e.NextPage = this;
+                    return;
+                }
+            }
+            catch (NeweggException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = this;
-                return;
             }
         }
 
