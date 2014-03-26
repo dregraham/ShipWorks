@@ -54,6 +54,8 @@ namespace ShipWorks.Shipping.Settings
             radioBlankPhoneUseSpecified.Checked = !radioBlankPhoneUseShipper.Checked;
             blankPhone.Text = settings.BlankPhoneNumber;
 
+            enableShipSense.Checked = settings.ShipSenseEnabled;
+
             originControl.Initialize();
 
             LoadShipmentTypePages();
@@ -268,6 +270,8 @@ namespace ShipWorks.Shipping.Settings
                          ? ShipmentBlankPhoneOption.ShipperPhone
                          : ShipmentBlankPhoneOption.SpecifiedPhone);
                 settings.BlankPhoneNumber = blankPhone.Text;
+
+                settings.ShipSenseEnabled = enableShipSense.Checked;
 
                 providerRulesControl.SaveSettings(settings);
 

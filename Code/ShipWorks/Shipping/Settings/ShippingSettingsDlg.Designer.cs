@@ -22,7 +22,7 @@
             this.tabPageProviders = new System.Windows.Forms.TabPage();
             this.panelActiveProviders = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panelProviders = new ShippingTypeCheckBoxesControl();
+            this.panelProviders = new ShipWorks.Shipping.Settings.ShippingTypeCheckBoxesControl();
             this.labelProvidersInfo = new System.Windows.Forms.Label();
             this.panelDefaultProvider = new System.Windows.Forms.Panel();
             this.providerRulesControl = new ShipWorks.Shipping.Settings.ShippingProviderControl();
@@ -36,6 +36,9 @@
             this.radioBlankPhoneUseSpecified = new System.Windows.Forms.RadioButton();
             this.radioBlankPhoneUseShipper = new System.Windows.Forms.RadioButton();
             this.labelBlankPhoneInfo = new System.Windows.Forms.Label();
+            this.labelShipSense = new System.Windows.Forms.Label();
+            this.enableShipSense = new System.Windows.Forms.CheckBox();
+            this.labelShipSenseInfo = new System.Windows.Forms.Label();
             this.optionControl.SuspendLayout();
             this.optionPageGeneral.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -190,6 +193,9 @@
             // 
             // tabPageSettings
             // 
+            this.tabPageSettings.Controls.Add(this.labelShipSenseInfo);
+            this.tabPageSettings.Controls.Add(this.enableShipSense);
+            this.tabPageSettings.Controls.Add(this.labelShipSense);
             this.tabPageSettings.Controls.Add(this.originControl);
             this.tabPageSettings.Controls.Add(this.label1);
             this.tabPageSettings.Controls.Add(this.blankPhone);
@@ -200,7 +206,7 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(558, 490);
+            this.tabPageSettings.Size = new System.Drawing.Size(548, 490);
             this.tabPageSettings.TabIndex = 1;
             this.tabPageSettings.Text = "Global Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -210,16 +216,16 @@
             this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.originControl.Location = new System.Drawing.Point(30, 158);
+            this.originControl.Location = new System.Drawing.Point(30, 232);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(429, 116);
+            this.originControl.Size = new System.Drawing.Size(419, 116);
             this.originControl.TabIndex = 6;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 137);
+            this.label1.Location = new System.Drawing.Point(10, 211);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(102, 13);
             this.label1.TabIndex = 5;
@@ -274,6 +280,36 @@
             this.labelBlankPhoneInfo.TabIndex = 1;
             this.labelBlankPhoneInfo.Text = "Some carriers require a recipient phone number for certain services.  When none i" +
     "s provided:";
+            // 
+            // labelShipSense
+            // 
+            this.labelShipSense.AutoSize = true;
+            this.labelShipSense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelShipSense.Location = new System.Drawing.Point(10, 136);
+            this.labelShipSense.Name = "labelShipSense";
+            this.labelShipSense.Size = new System.Drawing.Size(65, 13);
+            this.labelShipSense.TabIndex = 7;
+            this.labelShipSense.Text = "ShipSense";
+            // 
+            // enableShipSense
+            // 
+            this.enableShipSense.AutoSize = true;
+            this.enableShipSense.Location = new System.Drawing.Point(52, 187);
+            this.enableShipSense.Name = "enableShipSense";
+            this.enableShipSense.Size = new System.Drawing.Size(281, 17);
+            this.enableShipSense.TabIndex = 8;
+            this.enableShipSense.Text = "Populate shipment info based on my shipment history";
+            this.enableShipSense.UseVisualStyleBackColor = true;
+            // 
+            // labelShipSenseInfo
+            // 
+            this.labelShipSenseInfo.AutoSize = true;
+            this.labelShipSenseInfo.Location = new System.Drawing.Point(30, 153);
+            this.labelShipSenseInfo.Name = "labelShipSenseInfo";
+            this.labelShipSenseInfo.Size = new System.Drawing.Size(407, 26);
+            this.labelShipSenseInfo.TabIndex = 9;
+            this.labelShipSenseInfo.Text = "ShipWorks can inspect your shipment history and use this data to automatically se" +
+    "t \r\nthe weights, dimensions, and customs information of future shipments.";
             // 
             // ShippingSettingsDlg
             // 
@@ -332,5 +368,8 @@
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelActiveProviders;
+        private System.Windows.Forms.Label labelShipSense;
+        private System.Windows.Forms.CheckBox enableShipSense;
+        private System.Windows.Forms.Label labelShipSenseInfo;
     }
 }
