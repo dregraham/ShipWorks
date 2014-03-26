@@ -66,9 +66,17 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 // The store settings have been changed, so let's bounce them off the 
                 // Newegg API to confirm that they are correct
                 NeweggWebClient webClient = new NeweggWebClient(neweggStore);
-                if (!webClient.AreCredentialsValid())
+                try
                 {
-                    MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
+                    if (!webClient.AreCredentialsValid())
+                    {
+                        MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
+                        return false;
+                    }
+                }
+                catch (NeweggException ex)
+                {
+                    MessageHelper.ShowError(this, ex.Message);
                     return false;
                 }
             }

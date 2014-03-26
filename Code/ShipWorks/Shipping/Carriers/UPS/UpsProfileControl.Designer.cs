@@ -29,12 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.surePostGroup = new System.Windows.Forms.GroupBox();
+            this.packageId = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.packageIdState = new System.Windows.Forms.CheckBox();
+            this.labelPackageId = new System.Windows.Forms.Label();
             this.irregularIndicatorState = new System.Windows.Forms.CheckBox();
             this.irregularIndicator = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelIrregularIndicator = new System.Windows.Forms.Label();
@@ -175,9 +178,6 @@
             this.packagesState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.packageId = new ShipWorks.UI.Controls.MultiValueTextBox();
-            this.packageIdState = new System.Windows.Forms.CheckBox();
-            this.labelPackageId = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.surePostGroup.SuspendLayout();
@@ -248,6 +248,32 @@
             this.surePostGroup.TabStop = false;
             this.surePostGroup.Text = "SurePost / Mail Innovations";
             this.surePostGroup.Visible = false;
+            // 
+            // packageId
+            // 
+            this.packageId.Location = new System.Drawing.Point(178, 69);
+            this.packageId.Name = "packageId";
+            this.packageId.Size = new System.Drawing.Size(200, 21);
+            this.packageId.TabIndex = 108;
+            // 
+            // packageIdState
+            // 
+            this.packageIdState.AutoSize = true;
+            this.packageIdState.Location = new System.Drawing.Point(9, 72);
+            this.packageIdState.Name = "packageIdState";
+            this.packageIdState.Size = new System.Drawing.Size(15, 14);
+            this.packageIdState.TabIndex = 110;
+            this.packageIdState.UseVisualStyleBackColor = true;
+            // 
+            // labelPackageId
+            // 
+            this.labelPackageId.AutoSize = true;
+            this.labelPackageId.BackColor = System.Drawing.Color.Transparent;
+            this.labelPackageId.Location = new System.Drawing.Point(106, 72);
+            this.labelPackageId.Name = "labelPackageId";
+            this.labelPackageId.Size = new System.Drawing.Size(65, 13);
+            this.labelPackageId.TabIndex = 109;
+            this.labelPackageId.Text = "Package ID:";
             // 
             // irregularIndicatorState
             // 
@@ -322,7 +348,6 @@
             this.kryptonBorderEdge9.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge9.Name = "kryptonBorderEdge9";
             this.kryptonBorderEdge9.Size = new System.Drawing.Size(1, 96);
-            this.kryptonBorderEdge9.TabIndex = 99;
             this.kryptonBorderEdge9.Text = "kryptonBorderEdge1";
             // 
             // surePostClassification
@@ -347,14 +372,12 @@
             // 
             // groupInsurance
             // 
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 222);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(303, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(405, 82);
             this.groupInsurance.TabIndex = 10;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -385,7 +408,6 @@
             this.kryptonBorderEdge10.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
             this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 52);
-            this.kryptonBorderEdge10.TabIndex = 96;
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
             // 
             // returnGroup
@@ -435,7 +457,7 @@
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(200, 21);
             this.returnContents.TabIndex = 86;
-            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // returnService
             // 
@@ -526,7 +548,6 @@
             this.kryptonBorderEdge8.Location = new System.Drawing.Point(29, 21);
             this.kryptonBorderEdge8.Name = "kryptonBorderEdge8";
             this.kryptonBorderEdge8.Size = new System.Drawing.Size(1, 100);
-            this.kryptonBorderEdge8.TabIndex = 73;
             this.kryptonBorderEdge8.Text = "kryptonBorderEdge1";
             // 
             // groupEmail
@@ -664,7 +685,6 @@
             this.kryptonBorderEdge5.Location = new System.Drawing.Point(29, 21);
             this.kryptonBorderEdge5.Name = "kryptonBorderEdge5";
             this.kryptonBorderEdge5.Size = new System.Drawing.Size(1, 266);
-            this.kryptonBorderEdge5.TabIndex = 49;
             this.kryptonBorderEdge5.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyRecipientState
@@ -721,7 +741,6 @@
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 150);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
             this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(340, 1);
-            this.kryptonBorderEdgeEmail2.TabIndex = 44;
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
@@ -801,7 +820,6 @@
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
             this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(340, 1);
-            this.kryptonBorderEdgeEmail.TabIndex = 36;
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
@@ -1116,7 +1134,6 @@
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 21);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
             this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 221);
-            this.kryptonBorderEdge3.TabIndex = 8;
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             // 
             // payorAccountState
@@ -1165,8 +1182,6 @@
             // 
             // groupOptions
             // 
-            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupOptions.Controls.Add(this.usePaperlessInvoice);
             this.groupOptions.Controls.Add(this.usePaperlessInvoiceLabel);
             this.groupOptions.Controls.Add(this.usePaperlessInvoiceState);
@@ -1194,7 +1209,7 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 313);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(324, 230);
+            this.groupOptions.Size = new System.Drawing.Size(405, 230);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -1358,7 +1373,7 @@
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber2.TabIndex = 76;
-            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
+            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelReference2
             // 
@@ -1389,7 +1404,6 @@
             this.kryptonBorderEdge4.Location = new System.Drawing.Point(29, 19);
             this.kryptonBorderEdge4.Name = "kryptonBorderEdge4";
             this.kryptonBorderEdge4.Size = new System.Drawing.Size(1, 199);
-            this.kryptonBorderEdge4.TabIndex = 74;
             this.kryptonBorderEdge4.Text = "kryptonBorderEdge1";
             // 
             // labelUspsEndorsement
@@ -1453,7 +1467,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber.TabIndex = 3;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelReference
             // 
@@ -1467,15 +1481,13 @@
             // 
             // groupTo
             // 
-            this.groupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupTo.Controls.Add(this.kryptonBorderEdge6);
             this.groupTo.Controls.Add(this.labelResidential);
             this.groupTo.Controls.Add(this.residentialDetermination);
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 85);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(303, 52);
+            this.groupTo.Size = new System.Drawing.Size(405, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1489,7 +1501,6 @@
             this.kryptonBorderEdge6.Location = new System.Drawing.Point(30, 14);
             this.kryptonBorderEdge6.Name = "kryptonBorderEdge6";
             this.kryptonBorderEdge6.Size = new System.Drawing.Size(1, 29);
-            this.kryptonBorderEdge6.TabIndex = 16;
             this.kryptonBorderEdge6.Text = "kryptonBorderEdge6";
             // 
             // labelResidential
@@ -1524,8 +1535,6 @@
             // 
             // groupShipment
             // 
-            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupShipment.Controls.Add(this.saturdayDelivery);
             this.groupShipment.Controls.Add(this.labelSaturday);
             this.groupShipment.Controls.Add(this.saturdayState);
@@ -1535,7 +1544,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 142);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(303, 73);
+            this.groupShipment.Size = new System.Drawing.Size(405, 73);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -1581,7 +1590,6 @@
             this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 45);
-            this.kryptonBorderEdge.TabIndex = 5;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // labelService
@@ -1618,8 +1626,6 @@
             // 
             // groupBoxFrom
             // 
-            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.upsAccount);
             this.groupBoxFrom.Controls.Add(this.accountState);
@@ -1629,7 +1635,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(303, 77);
+            this.groupBoxFrom.Size = new System.Drawing.Size(405, 77);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -1674,7 +1680,6 @@
             this.kryptonBorderEdge1.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(1, 49);
-            this.kryptonBorderEdge1.TabIndex = 13;
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
             // 
             // labelSender
@@ -1754,7 +1759,6 @@
             this.kryptonBorderEdge2.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
             this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 24);
-            this.kryptonBorderEdge2.TabIndex = 1;
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge2";
             // 
             // packagesCount
@@ -1809,34 +1813,7 @@
             this.kryptonBorderEdge7.Location = new System.Drawing.Point(29, 16);
             this.kryptonBorderEdge7.Name = "kryptonBorderEdge7";
             this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
-            this.kryptonBorderEdge7.TabIndex = 18;
             this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
-            // 
-            // packageId
-            // 
-            this.packageId.Location = new System.Drawing.Point(178, 69);
-            this.packageId.Name = "packageId";
-            this.packageId.Size = new System.Drawing.Size(200, 21);
-            this.packageId.TabIndex = 108;
-            // 
-            // packageIdState
-            // 
-            this.packageIdState.AutoSize = true;
-            this.packageIdState.Location = new System.Drawing.Point(9, 72);
-            this.packageIdState.Name = "packageIdState";
-            this.packageIdState.Size = new System.Drawing.Size(15, 14);
-            this.packageIdState.TabIndex = 110;
-            this.packageIdState.UseVisualStyleBackColor = true;
-            // 
-            // labelPackageId
-            // 
-            this.labelPackageId.AutoSize = true;
-            this.labelPackageId.BackColor = System.Drawing.Color.Transparent;
-            this.labelPackageId.Location = new System.Drawing.Point(106, 72);
-            this.labelPackageId.Name = "labelPackageId";
-            this.labelPackageId.Size = new System.Drawing.Size(65, 13);
-            this.labelPackageId.TabIndex = 109;
-            this.labelPackageId.Text = "Package ID:";
             // 
             // UpsProfileControl
             // 
@@ -1890,7 +1867,6 @@
         private System.Windows.Forms.CheckBox senderState;
         private System.Windows.Forms.Panel panelPackageControls;
         protected System.Windows.Forms.GroupBox groupBoxPackages;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private ShipWorks.UI.Controls.MultiValueComboBox packagesCount;
         private System.Windows.Forms.Label labelPackages;
         protected System.Windows.Forms.CheckBox packagesState;
@@ -1979,7 +1955,6 @@
         private System.Windows.Forms.Label labelReference2;
         private System.Windows.Forms.GroupBox groupInsurance;
         private System.Windows.Forms.CheckBox insuranceState;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
         private System.Windows.Forms.CheckBox returnShipment;
         private System.Windows.Forms.CheckBox returnState;
         private Insurance.InsuranceProfileControl insuranceControl;
@@ -2022,5 +1997,7 @@
         private UI.Controls.MultiValueTextBox packageId;
         private System.Windows.Forms.CheckBox packageIdState;
         private System.Windows.Forms.Label labelPackageId;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
+        private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
     }
 }
