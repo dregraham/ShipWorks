@@ -414,5 +414,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // return a file name in the format of {output directory}\[uniqueId_]action_postfix.extension; unique ID 
             return string.Format(@"{0}{1}{2}_{3}.{4}", outputFolder, isForDebugging ? uniqueId + "_" : string.Empty, action, postfix, extension);
         }
+
+        /// <summary>
+        /// Determines whether Smart Post is enabled.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
+        public static bool IsSmartPostEnabled(ShipmentEntity shipment)
+        {
+            bool isEnabled = false;
+
+            if (shipment != null && shipment.FedEx != null)
+            {
+                isEnabled = !String.IsNullOrEmpty(shipment.FedEx.SmartPostHubID);
+            }
+
+            return isEnabled;
+        }
     }
 }
