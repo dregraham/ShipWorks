@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 // There wasn't an entry in the data source for the items in this order,
                 // so we'll just return a new, empty entry
-                return new KnowledgebaseEntry();
+                return new KnowledgebaseEntry(order.StoreID);
             }
         }
 

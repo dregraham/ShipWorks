@@ -1156,18 +1156,18 @@ namespace ShipWorks.Shipping
             {
                 IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
-                // Apply the data from the package adapters and the customs items to the knowledge base 
-                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
-                // is smart enough to know when to save the customs items associated with an entry.
-                KnowledgebaseEntry entry = new KnowledgebaseEntry();
-                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
-
                 // Make sure we have all of the order information
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
                 }
+
+                // Apply the data from the package adapters and the customs items to the knowledge base 
+                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                // is smart enough to know when to save the customs items associated with an entry.
+                KnowledgebaseEntry entry = new KnowledgebaseEntry(order.StoreID);
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
 
                 Knowledgebase knowledgebase = new Knowledgebase();
                 knowledgebase.Save(entry, order);

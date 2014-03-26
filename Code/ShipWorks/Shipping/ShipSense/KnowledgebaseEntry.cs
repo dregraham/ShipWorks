@@ -17,11 +17,10 @@ namespace ShipWorks.Shipping.ShipSense
     [Serializable]
     public class KnowledgebaseEntry
     {
+        private long storeID = -1;
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
-
         private bool consolidateMultiplePackagesIntoSinglePackage;
-        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
@@ -31,6 +30,16 @@ namespace ShipWorks.Shipping.ShipSense
         {
             packages = new List<KnowledgebasePackage>();
             customsItems = new List<KnowledgebaseCustomsItem>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
+        /// </summary>
+        /// <param name="storeID">The store id to which this kb entry belongs.</param>
+        public KnowledgebaseEntry(long storeID)
+            : this()
+        {
+            this.storeID = storeID;
         }
 
         /// <summary>
@@ -51,8 +60,18 @@ namespace ShipWorks.Shipping.ShipSense
         {
             KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
 
-            this.packages = deserializedEntry.Packages.ToList();
-            this.CustomsItems = deserializedEntry.CustomsItems.ToList();
+            StoreID = deserializedEntry.StoreID;
+            packages = deserializedEntry.Packages.ToList();
+            CustomsItems = deserializedEntry.CustomsItems.ToList();
+        }
+
+        /// <summary>
+        /// Gets or sets the store ID for this kb entry.
+        /// </summary>
+        public long StoreID
+        {
+            get { return storeID; }
+            set { storeID = value; }
         }
 
         /// <summary>
@@ -91,8 +110,14 @@ namespace ShipWorks.Shipping.ShipSense
         /// Serializes the an instance to a JSON formatted string.
         /// </summary>
         /// <returns></returns>
+        /// /// <exception cref="System.InvalidOperationException">StoreID is required for Knowledge Base Entries, but one was not provided.</exception>
         public string ToJson()
         {
+            if (storeID == -1)
+            {
+                throw new InvalidOperationException("StoreID is required for Knowledge Base Entries, but one was not provided.");
+            }
+
             return JsonConvert.SerializeObject(this);
         }
 

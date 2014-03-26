@@ -22,6 +22,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         private readonly Mock<IPackageAdapter> adapter1;
         private readonly Mock<IPackageAdapter> adapter2;
 
+        private const long testStoreID = 2005;
+
         public KnowledgebaseEntryTest()
         {
             adapter1 = new Mock<IPackageAdapter>();
@@ -49,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 adapter2.Object
             };
 
-            testObject = new KnowledgebaseEntry();
+            testObject = new KnowledgebaseEntry(testStoreID);
             testObject.Packages = new List<KnowledgebasePackage>()
             {
                 new KnowledgebasePackage
@@ -338,7 +340,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void ToJson_WithoutCustomsItems_Test()
         {
-			const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
+			const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
             
             string actualJson = testObject.ToJson();
             Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
@@ -347,7 +349,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void ToJson_WithCustomsItems_Test()
         {
-            const string ExpectedJson = "{\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
+            const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>
             {
                 new KnowledgebaseCustomsItem
@@ -425,6 +427,15 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Now check the customs stuff
             Assert.AreEqual(2, testObject.CustomsItems.Count());
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ToJson_ThrowsInvalidOperation_WhenStoreIDisNotSet()
+        {
+            testObject.StoreID = -1;
+            testObject.ToJson();
+        }
+
     }
 }
 
