@@ -125,6 +125,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// If the knowledgebase entry was not found in the database, this will return true.
         /// If one was found, false is returned.
         /// </summary>
+        [JsonIgnore]
         public bool IsNew
         {
             get { return !Packages.Any(); }
