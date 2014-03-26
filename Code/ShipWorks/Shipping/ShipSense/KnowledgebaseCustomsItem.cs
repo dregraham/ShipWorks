@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -46,13 +47,10 @@ namespace ShipWorks.Shipping.ShipSense
                                                        Description, Quantity, Weight, UnitValue, CountryOfOrigin, HarmonizedCode,
                                                        NumberOfPieces, UnitPriceAmount);
 
-                // Since Description is being used in the hash value, use SHA256 value to reduce the 
-                // length of the hash value
-                using (SHA256Managed sha256 = new SHA256Managed())
-                {
-                    Byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueForHashing));
-                    return Convert.ToBase64String(hashBytes);
-                }
+                // Since Description is being used in the hash value, 
+                // use SHA256 value to reduce the length of the hash value
+                StringHash hashingAlgorithm = new StringHash();
+                return hashingAlgorithm.Hash(valueForHashing, string.Empty);
             }
         }
 
