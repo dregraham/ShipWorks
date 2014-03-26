@@ -254,54 +254,59 @@ namespace ShipWorks.Shipping
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
 	    protected void ApplyShipSense(ShipmentEntity shipment)
-	    {
-            // Populate the order items so we can compute the hash
-            using (SqlAdapter adapter = new SqlAdapter())
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            if (settings.ShipSenseEnabled)
             {
-                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
-            }
-
-            // Get our knowledge base entry for this shipment
-            Knowledgebase knowledgebase = new Knowledgebase();
-	        KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
-            knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = !SupportsMultiplePackages;
-
-            // Do any shipment type specific to get the shipment in sync with the knowledge base
-            // entry (e.g. setting up the shipment to have the same number of packages as the 
-            // KB entry for carriers that support multiple package shipments)
-            SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
-            List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
-
-            if (IsCustomsRequired(shipment))
-            {
-                // Apply the knowledge base entry data to the shipment/packages and customs info
-                knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
-
-                if (shipment.CustomsItems.Any())
+                // Populate the order items so we can compute the hash
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    shipment.CustomsGenerated = true;
-
-                    if (shipment.CustomsItems.RemovedEntitiesTracker == null)
-                    {
-                        // Set the removed tracker for tracking deletions in the UI until saved
-                        shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
-                    }
-
-                    // Consider them loaded.  This is an in-memory field
-                    shipment.CustomsItemsLoaded = true;
-
-                    decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity * ci.UnitValue);
-                    shipment.CustomsValue = customsValue;
+                    adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
                 }
+
+                // Get our knowledge base entry for this shipment
+                Knowledgebase knowledgebase = new Knowledgebase();
+                KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
+                knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = !SupportsMultiplePackages;
+
+                // Do any shipment type specific to get the shipment in sync with the knowledge base
+                // entry (e.g. setting up the shipment to have the same number of packages as the 
+                // KB entry for carriers that support multiple package shipments)
+                SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+                List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
+
+                if (IsCustomsRequired(shipment))
+                {
+                    // Apply the knowledge base entry data to the shipment/packages and customs info
+                    knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
+
+                    if (shipment.CustomsItems.Any())
+                    {
+                        shipment.CustomsGenerated = true;
+
+                        if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+                        {
+                            // Set the removed tracker for tracking deletions in the UI until saved
+                            shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                        }
+
+                        // Consider them loaded.  This is an in-memory field
+                        shipment.CustomsItemsLoaded = true;
+
+                        decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity*ci.UnitValue);
+                        shipment.CustomsValue = customsValue;
+                    }
+                }
+                else
+                {
+                    // We don't need to do anything with customs and only need to apply the package adapters
+                    knowledgebaseEntry.ApplyTo(packageAdapters);
+                }
+
+                shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
             }
-            else
-            {
-                // We don't need to do anything with customs and only need to apply the package adapters
-                knowledgebaseEntry.ApplyTo(packageAdapters);
-            }
-            
-            shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
-	    }
+        }
 
         /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
