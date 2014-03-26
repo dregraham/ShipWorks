@@ -122,6 +122,15 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// If the knowledgebase entry was not found in the database, this will return true.
+        /// If one was found, false is returned.
+        /// </summary>
+        public bool IsNew
+        {
+            get { return !Packages.Any(); }
+        }
+
+        /// <summary>
         /// Applies the data in the Package collection of the knowledge base entry to each of the adapters
         /// provided.
         /// </summary>
@@ -129,9 +138,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// <exception cref="System.InvalidOperationException">The number packages in the knowledge base entry must match the number of adapters.</exception>
         public void ApplyTo(IEnumerable<IPackageAdapter> adapters)
         {
-            if (!Packages.Any())
+            // If this is a new entry, then there's nothing to do, just return.
+            if (IsNew)
             {
-                // We have no packages, so this must be a brand new KB Entry, just return.
                 return;
             }
 

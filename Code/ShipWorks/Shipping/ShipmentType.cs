@@ -307,7 +307,7 @@ namespace ShipWorks.Shipping
 
                 shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
 
-                if (shipment.ShipSenseStatus != (int)ShipSenseStatus.Overwritten)
+                if (!knowledgebaseEntry.IsNew)
                 {
                     // Retain the previous status if the shipment has overwritten ShipSense data
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
