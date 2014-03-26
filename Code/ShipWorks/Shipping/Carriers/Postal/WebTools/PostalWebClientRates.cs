@@ -15,6 +15,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -46,8 +47,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XmlTextWriter xmlWriter = new XmlTextWriter(writer);
                 xmlWriter.Formatting = Formatting.Indented;
 
-                // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
-                double ratedWeight = shipment.TotalWeight > 0 ? shipment.TotalWeight : .1;
+                // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
+                // is the category that most of our users will be in.
+                double ratedWeight = shipment.TotalWeight > 0 ? shipment.TotalWeight : BestRateScope.IsActive ? 0.88 : .1;
 
                 // Domestic
                 if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))

@@ -20,11 +20,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             this.exception = exception;
 
-            base.Rates.Add(new RateResult("No rates are available for this shipment.", string.Empty)
-            {
-                ShipmentType = shipmentType.ShipmentTypeCode
-            });
-
             base.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, exception.Message));
         }
 

@@ -33,6 +33,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -1096,8 +1097,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             rate.ToZIPCode = shipment.ShipPostalCode;
             rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
-            const double pointOneOzAsLbs = 0.00625;
-            WeightValue weightValue = new WeightValue(shipment.TotalWeight > 0 ? shipment.TotalWeight : pointOneOzAsLbs);
+            // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
+            // is the category that most of our users will be in.
+            double defaultPounds = BestRateScope.IsActive ? 0.88 : .1;
+            WeightValue weightValue = new WeightValue(shipment.TotalWeight > 0 ? shipment.TotalWeight : defaultPounds);
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 

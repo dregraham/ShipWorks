@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipment">Shipment that should be removed from cache</param>
         /// <returns></returns>
-        public static void RemoveShipmentFromCache(ShipmentEntity shipment)
+        public static void RemoveShipmentFromRatesCache(ShipmentEntity shipment)
         {
             if (shipment == null)
             {
@@ -888,6 +888,11 @@ namespace ShipWorks.Shipping
             if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
+            }
+
+            if (shipment.Order == null)
+            {
+                shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
             }
 
             StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);

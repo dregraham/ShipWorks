@@ -93,7 +93,7 @@ namespace ShipWorks.UI.Controls
 
             if (UserSession.IsLoggedOn)
             {
-                DisplayFormat = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
+                displayFormat = (WeightDisplayFormat) UserSession.User.Settings.ShippingWeightFormat;
             }
 
             liveWeight.Visible = false;

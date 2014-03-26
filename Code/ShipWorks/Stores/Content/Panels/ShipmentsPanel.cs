@@ -27,6 +27,8 @@ using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
 using System.Runtime.InteropServices;
 using log4net;
+using System.Threading.Tasks;
+using Divelements.SandGrid;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -36,6 +38,9 @@ namespace ShipWorks.Stores.Content.Panels
     public partial class ShipmentsPanel : SingleSelectPanelBase
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsPanel));
+
+        // So we don't race condition on fast selection changes to auto-create more than one shipment for an order
+        static HashSet<long> autoCreatingShipments = new HashSet<long>();
 
         /// <summary>
         /// Constructor
@@ -93,9 +98,96 @@ namespace ShipWorks.Stores.Content.Panels
             // Can't add shipments directly to a customer
             addLink.Visible = 
                 (type == EntityType.OrderEntity) &&
-                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);
+                UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, entityID);            
             
             return gateway;
+        }
+
+        /// <summary>
+        /// Layout is updating
+        /// </summary>
+        protected override void UpdateLayout()
+        {
+            base.UpdateLayout();
+
+            // Update the top of the rates panel to be just under the add link
+            ratesControl.Top = addLink.Bottom + 5;
+        }
+
+        /// <summary>
+        /// When the content is called to be updated, we need to make sure our rates are up to date as well
+        /// </summary>
+        public override void UpdateContent()
+        {
+            base.UpdateContent();
+
+            ratesControl.ReloadRates();
+        }
+        /// <summary>
+        /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
+        /// </summary>
+        private void OnShipmentGridLoaded(object sender, EventArgs e)
+        {
+            if (EntityID == null)
+            {
+                ratesControl.ChangeShipment(null);
+            }
+
+            if (entityGrid.Rows.Count == 0)
+            {
+                ratesControl.ChangeShipment(null);
+
+                // Don't auto create for a customer, only for an order
+                if (EntityUtility.GetEntityType(EntityID.Value) == EntityType.OrderEntity)
+                {                    
+                    long orderID = EntityID.Value;
+
+                    // Don't do it if we are already in the middle of doing it
+                    if (!autoCreatingShipments.Contains(orderID))
+                    {
+                        autoCreatingShipments.Add(orderID);
+
+                        // Do it in the background so creating the shipment doesn't make the UI feel sluggish
+                        Task.Factory.StartNew(() =>
+                            {
+                                return ShippingManager.CreateShipment(orderID);
+                            })
+                            .ContinueWith(
+                                ant =>
+                                {
+                                    autoCreatingShipments.Remove(orderID);
+
+                                    if (orderID == EntityID)
+                                    {
+                                        entityGrid.ReloadGridRows();
+                                    }
+                                }, TaskScheduler.FromCurrentSynchronizationContext());
+                    }
+                }
+            }
+            else if (entityGrid.Rows.Count > 1)
+            {
+                ratesControl.ChangeShipment(null);
+            }
+            else
+            {
+                ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
+            }
+        }
+
+        /// <summary>
+        /// The current shipment grid selection has changed
+        /// </summary>
+        private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (entityGrid.Selection.Count == 1)
+            {
+                ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
+            }
+            else
+            {
+                ratesControl.ChangeShipment(null);
+            }
         }
 
         /// <summary>

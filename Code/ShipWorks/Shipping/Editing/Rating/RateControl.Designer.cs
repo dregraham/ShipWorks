@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnSelect});
             this.sandGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sandGrid.EmptyTextForeColor = System.Drawing.Color.DimGray;
+            this.sandGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
             this.sandGrid.ImageTextSeparation = 1;
             this.sandGrid.Location = new System.Drawing.Point(0, 0);
             this.sandGrid.Name = "sandGrid";
@@ -107,7 +108,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
             this.sandGrid.ShadeAlternateRows = true;
-            this.sandGrid.Size = new System.Drawing.Size(493, 175);
+            this.sandGrid.Size = new System.Drawing.Size(493, 94);
             this.sandGrid.TabIndex = 1;
             this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnSelectedRateChanged);
             // 
@@ -126,33 +127,31 @@ namespace ShipWorks.Shipping.Editing.Rating
             // gridColumnService
             // 
             this.gridColumnService.AllowEditing = false;
-            this.gridColumnService.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnService.AllowReorder = false;
+            this.gridColumnService.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnService.Clickable = false;
             this.gridColumnService.HeaderText = "Service";
             this.gridColumnService.Width = 175;
-            this.gridColumnRate.MinimumWidth = 175;
             // 
             // gridColumnDays
             // 
             this.gridColumnDays.AllowEditing = false;
-            this.gridColumnDays.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnDays.AllowReorder = false;
+            this.gridColumnDays.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnDays.AutoSizeIncludeHeader = true;
             this.gridColumnDays.Clickable = false;
             this.gridColumnDays.HeaderText = "Days";
             this.gridColumnDays.Width = 75;
-            this.gridColumnRate.MinimumWidth = 40;
             // 
             // gridColumnRate
             // 
+            this.gridColumnRate.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnRate.AutoSizeIncludeHeader = true;
-            this.gridColumnRate.AutoSize = ColumnAutoSizeMode.Spring;
             this.gridColumnRate.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
             this.gridColumnRate.Clickable = false;
             this.gridColumnRate.HeaderText = "Rate";
-            this.gridColumnRate.Width = 50;
             this.gridColumnRate.MinimumWidth = 50;
+            this.gridColumnRate.Width = 50;
             // 
             // gridColumnSelect
             // 
@@ -161,16 +160,16 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnSelect.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
             this.gridColumnSelect.AutoSizeIncludeHeader = true;
             this.gridColumnSelect.Clickable = false;
-            this.gridColumnSelect.Width = 75;
             this.gridColumnSelect.MinimumWidth = 50;
+            this.gridColumnSelect.Width = 75;
             // 
             // panelFootnote
             // 
-            this.panelFootnote.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelFootnote.BackColor = System.Drawing.Color.White;
             this.panelFootnote.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFootnote.Location = new System.Drawing.Point(0, 175);
+            this.panelFootnote.Location = new System.Drawing.Point(0, 94);
             this.panelFootnote.Name = "panelFootnote";
-            this.panelFootnote.Size = new System.Drawing.Size(493, 30);
+            this.panelFootnote.Size = new System.Drawing.Size(493, 34);
             this.panelFootnote.TabIndex = 8;
             // 
             // loadingRatesLabel
@@ -178,11 +177,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.loadingRatesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.loadingRatesLabel.AutoSize = true;
             this.loadingRatesLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.loadingRatesLabel.Location = new System.Drawing.Point(202, 116);
+            this.loadingRatesLabel.Location = new System.Drawing.Point(202, 78);
             this.loadingRatesLabel.Name = "loadingRatesLabel";
-            this.loadingRatesLabel.Size = new System.Drawing.Size(88, 13);
+            this.loadingRatesLabel.Size = new System.Drawing.Size(90, 13);
             this.loadingRatesLabel.TabIndex = 12;
-            this.loadingRatesLabel.Text = "Fetching rates...";
+            this.loadingRatesLabel.Text = "Checking rates...";
             this.loadingRatesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // loadingImage
@@ -190,7 +189,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.loadingImage.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.loadingImage.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.loadingImage.Image = ((System.Drawing.Image)(resources.GetObject("loadingImage.Image")));
-            this.loadingImage.Location = new System.Drawing.Point(227, 75);
+            this.loadingImage.Location = new System.Drawing.Point(227, 37);
             this.loadingImage.Name = "loadingImage";
             this.loadingImage.Size = new System.Drawing.Size(39, 40);
             this.loadingImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -207,7 +206,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.Controls.Add(this.panelFootnote);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RateControl";
-            this.Size = new System.Drawing.Size(493, 205);
+            this.Size = new System.Drawing.Size(493, 128);
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

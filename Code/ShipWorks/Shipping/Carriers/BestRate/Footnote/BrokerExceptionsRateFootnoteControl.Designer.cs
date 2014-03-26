@@ -37,16 +37,16 @@
             // errorMessage
             // 
             this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(29, 6);
+            this.errorMessage.Location = new System.Drawing.Point(25, 7);
             this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(241, 13);
+            this.errorMessage.Size = new System.Drawing.Size(209, 13);
             this.errorMessage.TabIndex = 0;
-            this.errorMessage.Text = "ShipWorks could not get rates from all providers.";
+            this.errorMessage.Text = "ShipWorks could not get all possible rates.";
             // 
             // moreInfoLink
             // 
             this.moreInfoLink.AutoSize = true;
-            this.moreInfoLink.Location = new System.Drawing.Point(267, 6);
+            this.moreInfoLink.Location = new System.Drawing.Point(235, 7);
             this.moreInfoLink.Name = "moreInfoLink";
             this.moreInfoLink.Size = new System.Drawing.Size(64, 13);
             this.moreInfoLink.TabIndex = 1;
@@ -57,7 +57,7 @@
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.flag_red;
-            this.pictureBox.Location = new System.Drawing.Point(4, 6);
+            this.pictureBox.Location = new System.Drawing.Point(4, 5);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.TabIndex = 2;
@@ -72,7 +72,7 @@
             this.Controls.Add(this.errorMessage);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "BrokerExceptionsRateFootnoteControl";
-            this.Size = new System.Drawing.Size(362, 26);
+            this.Size = new System.Drawing.Size(307, 28);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -113,14 +113,12 @@ namespace ShipWorks.Shipping
             }
             
             // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
+            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
             windowSaver.ManageSplitter(splitContainer, "Splitter");
             windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
 
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
-
-            ThemedBorderProvider.Apply(rateControlArea);
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
@@ -274,13 +272,13 @@ namespace ShipWorks.Shipping
                 // Save all changes from the UI to the previous entity selection
                 SaveUIDisplayedShipments();
 
+                UpdateSelectedShipmentCount();
+
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
 
                 ClearRates(string.Empty);
                 GetRates();
-
-                UpdateSelectedShipmentCount();
             }
         }
 
@@ -290,9 +288,15 @@ namespace ShipWorks.Shipping
         private void UpdateSelectedShipmentCount()
         {
             int selectedShipmentCount = shipmentControl.SelectedShipments.Count();
-            const string labelProcessingMask = "Shipments Selected ({0})";
             
-            labelProcessing.Text = string.Format(labelProcessingMask, selectedShipmentCount);
+            labelProcessing.Text = string.Format("Shipments ({0} selected)", selectedShipmentCount);
+            menuProcessSelected.Text = string.Format("Create Label ({0} shipment{1})", selectedShipmentCount, selectedShipmentCount > 1 ? "s" : "");
+            
+            string plural = selectedShipmentCount > 1 ? "s" : "";
+
+            processDropDownButton.Text = "Create Label" + plural;
+            voidSelected.Text = "Void Label" + plural;
+            print.Text = "Reprint Label" + plural;
         }
 
         /// <summary>
@@ -848,7 +852,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
                     rateControl.RateSelected += newServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked += newServiceControl.OnConfigureRateClick;
+                    rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
 
                     newServiceControl.Dock = DockStyle.Fill;
                     serviceControlArea.Controls.Add(newServiceControl);
@@ -864,7 +868,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
                     rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                    rateControl.ConfigureRateClicked -= oldServiceControl.OnConfigureRateClick;
+                    rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
 
                     oldServiceControl.Dispose();
                 }
@@ -886,7 +890,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void ClearRates(string reason)
         {
-            rateControl.HideSpinner();
             rateControl.ClearRates(reason);
         }
 
@@ -1013,13 +1016,12 @@ namespace ShipWorks.Shipping
                 }
                 else if (rateGroup.Rates.Count == 0)
                 {
-                    rateControl.HideSpinner();
-                    rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
+                    rateControl.ClearRates(rateGroup.FootnoteFactories.Count() == 0 ? "No rates are available for the shipment." : "", rateGroup);
                 }
                 else
                 {
                     // Only show the configure link for the best rate shipment type
-                    rateControl.ShowConfigureLink = rateGroup.Carrier == ShipmentTypeCode.BestRate;
+                    rateControl.ActionLinkVisible = rateGroup.Carrier == ShipmentTypeCode.BestRate;
                     rateControl.LoadRates(rateGroup);
                     
                     ServiceControl.SyncSelectedRate();
@@ -1051,7 +1053,7 @@ namespace ShipWorks.Shipping
             {
                 // Because this is coming from the rate control, and the only thing that causes rate changes from the rate control
                 // is the Express1 promo footer, we need to remove the shipment from the cache before we get rates
-                ShippingManager.RemoveShipmentFromCache(uiDisplayedShipments.FirstOrDefault());
+                ShippingManager.RemoveShipmentFromRatesCache(uiDisplayedShipments.FirstOrDefault());
 
                 GetRates();
             }
@@ -1740,7 +1742,7 @@ namespace ShipWorks.Shipping
             {
                 if (anyAttempted && !getRatesTimer.Enabled)
                 {
-                    rateControl.HideSpinner();
+                    rateControl.ShowSpinner = false;
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates(_e.Result as RateGroup);
@@ -1771,8 +1773,8 @@ namespace ShipWorks.Shipping
                     log.Error("Shipping exception encountered while getting rates", ex);
                 }
             };
-            
-            rateControl.ShowSpinner();
+
+            rateControl.ShowSpinner = true;
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
         }
         

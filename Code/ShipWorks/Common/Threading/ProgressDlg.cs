@@ -102,7 +102,7 @@ namespace ShipWorks.Common.Threading
             }
 
             // Save window size
-            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.SizeOnly, "Progress - " + Title);
+            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.Size, "Progress - " + Title);
 
             // Load the rows
             LoadProgressItems();
