@@ -555,5 +555,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             return fields;
         }
+
+        /// <summary>
+        /// Customs is never required for OnTrac.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            return false;
+        }
     }
 }
