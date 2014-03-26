@@ -257,18 +257,7 @@ namespace ShipWorks.Shipping.ShipSense
             // Add the kb custom items
             foreach (ShipmentCustomsItemEntity shipmentCustomsItemEntity in shipmentCustomsItems)
             {
-                customsItems.Add(
-                    new KnowledgebaseCustomsItem()
-                    {
-                        Description = shipmentCustomsItemEntity.Description,
-                        Quantity = shipmentCustomsItemEntity.Quantity,
-                        Weight = shipmentCustomsItemEntity.Weight,
-                        UnitValue = shipmentCustomsItemEntity.UnitValue,
-                        CountryOfOrigin = shipmentCustomsItemEntity.CountryOfOrigin,
-                        HarmonizedCode = shipmentCustomsItemEntity.HarmonizedCode,
-                        NumberOfPieces = shipmentCustomsItemEntity.NumberOfPieces,
-                        UnitPriceAmount = shipmentCustomsItemEntity.UnitPriceAmount
-                    });
+                customsItems.Add(new KnowledgebaseCustomsItem(shipmentCustomsItemEntity));
             }
         }
     }

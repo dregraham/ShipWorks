@@ -12,6 +12,11 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
     public class KnowledgebasePackage
     {
         /// <summary>
+        /// Gets or sets the hash value that identifies this package configuration.
+        /// </summary>
+        public string Hash { get; set; }
+
+        /// <summary>
         /// Gets or sets the length.
         /// </summary>
         public double Length { get; set; }
