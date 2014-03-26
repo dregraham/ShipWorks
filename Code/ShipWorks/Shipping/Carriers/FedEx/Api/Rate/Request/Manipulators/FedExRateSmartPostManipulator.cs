@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
             
-            if (IsSmartPostEnabled(request.ShipmentEntity))
+            if (FedExUtility.IsSmartPostEnabled(request.ShipmentEntity))
             {
                 // We can safely cast this since we've passed initialization
                 RateRequest nativeRequest = request.NativeRequest as RateRequest;
@@ -89,23 +89,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 // We need to create a new package line item
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] = new RequestedPackageLineItem();
             }
-        }
-
-        /// <summary>
-        /// Determines whether Smart Post is enabled.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
-        private static bool IsSmartPostEnabled(ShipmentEntity shipment)
-        {
-            bool isEnabled = false;
-
-            if (shipment != null && shipment.FedEx != null)
-            {
-                isEnabled = !string.IsNullOrEmpty(shipment.FedEx.SmartPostHubID);
-            }
-            
-            return isEnabled;
         }
 
         /// <summary>
