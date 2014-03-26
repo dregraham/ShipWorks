@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,7 +11,7 @@ using ShipWorks.Data.Model.HelperClasses;
 namespace ShipWorks.Shipping.ShipSense.Hashing
 {
     /// <summary>
-    /// An implementation of the IKnowledgeBaseHash interface that calculates a Base64 encoded 
+    /// An implementation of the IKnowledgeBaseHash interface that calculates a Base64 encoded
     /// SHA256 hash value based on the order items' SKU and quantity of each items per SKU.
     /// </summary>
     public class KnowledgebaseHash : IKnowledgebaseHash
@@ -41,22 +42,23 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             // Create a single string representing the SKU/Quantity pairs that will be 
             // used to compute the hash
             string valueToHash = string.Join("|", skuQuantityPair);
-            return Hash(valueToHash);
+
+            // Use the store ID as the salt value to avoid SKU/quantity collisions across
+            // different stores
+            return Hash(valueToHash, order.StoreID.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>
         /// Hashes the raw value into Base64 string.
         /// </summary>
         /// <param name="rawValue">The raw value.</param>
+        /// <param name="salt">The salt.</param>
         /// <returns>A Base64 string of the hashed raw value.</returns>
-        private string Hash(string rawValue)
+        private static string Hash(string rawValue, string salt)
         {
             using (SHA256Managed sha256 = new SHA256Managed())
-            {
-                // Note: we could use an attribute of the store (e.g. license, store name, etc.) that is 
-                // globally unique (outside of just ShipWOrks) as the salt to guarantee uniqueness across 
-                // stores in the event of SKU/quantity collisions.
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawValue));
+            {            
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(salt + rawValue));
                 return Convert.ToBase64String(hashedBytes);
             }
         }
