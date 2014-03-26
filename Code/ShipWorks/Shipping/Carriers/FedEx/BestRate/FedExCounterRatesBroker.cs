@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             FedExAccountEntity account = AccountRepository.GetAccount(0);
             if (account == null || string.IsNullOrEmpty(account.AccountNumber))
             {
-                brokerExceptions.Add(new BrokerException(new ShippingException("Could not get counter rates for FedEx"), BrokerExceptionSeverityLevel.Information, ShipmentType));
+                brokerExceptions.Add(new BrokerException(new ShippingException("ShipWorks could not get rates for FedEx."), BrokerExceptionSeverityLevel.Information, ShipmentType));
                 return bestRates;
             }
 

@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Content
         {
             InitializeComponent();
 
-            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver wss = new WindowStateSaver(this, WindowStateSaverOptions.Size);
             wss.ManageSplitter(splitContainerDetails, "Details");
             wss.ManageSplitter(splitContainerHistoryTop, "HistoryTop");
             wss.ManageSplitter(splitContainerHistoryBottom, "HistoryBottom");

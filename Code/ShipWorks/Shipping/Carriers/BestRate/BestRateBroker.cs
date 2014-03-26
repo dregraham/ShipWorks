@@ -140,7 +140,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // Get rates for each account asynchronously
             IDictionary<TAccount, Task<RateGroup>> accountRateTasks = accounts.ToDictionary(a => a,
-                                                                                            a => Task<RateGroup>.Factory.StartNew(() => GetRatesForAccount(shipment, a, brokerExceptions)));
+                                                                                            a => Task<RateGroup>.Factory.StartNew(() =>
+                                                                                                {
+                                                                                                    using (BestRateScope context = new BestRateScope())
+                                                                                                    {
+                                                                                                        return GetRatesForAccount(shipment, a, brokerExceptions);
+                                                                                                    }
+
+                                                                                                })
+                                                                                            );
 
             Task.WaitAll(accountRateTasks.Values.ToArray<Task>());
             IDictionary<TAccount, RateGroup> accountRateGroups = accountRateTasks.Where(x => x.Value.Result != null)

@@ -55,7 +55,7 @@ namespace ShipWorks.Actions
         {
             InitializeComponent();
 
-            WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
 
             ThemedBorderProvider themeBorder = new ThemedBorderProvider(panelGridArea);
             panelTools.StateNormal.Draw = ThemeInformation.VisualStylesEnabled ? InheritBool.True : InheritBool.False;

@@ -27,7 +27,7 @@ namespace Interapptive.Shared.Net
                 // Use the credential store to load up the data elements we'll be looking for in
                 // the subject of the certificate
                 XDocument doc = XDocument.Parse(verificationData);
-                foreach (XElement element in doc.Element("Subject").Elements("Value"))
+                foreach (XElement element in doc.Element("Service").Element("Subject").Elements("Value"))
                 {
                     expectedCertificateSubjectElements.Add(element.Value.ToUpper(CultureInfo.InvariantCulture));
                 }

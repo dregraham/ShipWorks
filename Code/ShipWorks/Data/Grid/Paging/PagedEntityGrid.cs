@@ -115,6 +115,11 @@ namespace ShipWorks.Data.Grid.Paging
         // sucked performance wise.
         GridRow[] gridRowPool = new GridRow[0];
 
+        /// <summary>
+        /// Raised when the rows from a gateway have completed loading into the grid.  This is only after the headers have been loaded - all of the invidual row content may not be loaded yet.
+        /// </summary>
+        public event EventHandler RowLoadingComplete;
+
         #region class PopulateState
 
         /// <summary>
@@ -617,6 +622,11 @@ namespace ShipWorks.Data.Grid.Paging
             if (!wasCleared)
             {
                 CheckVirtualSelectionForRemoved();
+            }
+
+            if (RowLoadingComplete != null)
+            {
+                RowLoadingComplete(this, EventArgs.Empty);
             }
         }
 

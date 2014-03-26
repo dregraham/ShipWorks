@@ -117,15 +117,36 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // Some service types already contain USPS in the service description, so only add it if
                 // the service description does not already start with USPS
                 bestRateCarrierName.Text = string.Format("{0}{1}", initialRate.Description.StartsWith("USPS ", StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", initialRate.Description);
-            
+
+                panelVia.Visible = true;
+                panelVia.Left = bestRateCarrierName.Right;
+                viaCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
+
+                switch (initialShipmentType.ShipmentTypeCode)
+                {
+                    case ShipmentTypeCode.Endicia: viaCarrierName.Text = "Endicia"; break;
+                    case ShipmentTypeCode.Stamps: viaCarrierName.Text = "Stamps.com"; break;
+                    case ShipmentTypeCode.Express1Endicia:
+                    case ShipmentTypeCode.Express1Stamps:
+                        viaCarrierName.Text = "Express1";
+                        break;
+                    default:
+                        viaCarrierName.Text = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode).ShipmentTypeName;
+                        break;
+                }
+
+                viaParenClose.Left = viaCarrierName.Right;
             }
             else
             {
                 // Use the actual logo and shipment type description for non-postal providers
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
+
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
                 NoncompetitiveRateResult noncompetitiveRate = initialRate as NoncompetitiveRateResult;
                 bestRateCarrierName.Text = noncompetitiveRate == null ? initialRate.Description : noncompetitiveRate.OriginalRate.Description;
+
+                panelVia.Visible = false;
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);

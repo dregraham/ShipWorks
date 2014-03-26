@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Management
         {
             InitializeComponent();
 
-            WindowStateSaver.Manage(this, WindowStateSaverOptions.SizeOnly);
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
 
             this.store = store;
             this.storeType = StoreTypeManager.GetType(store);

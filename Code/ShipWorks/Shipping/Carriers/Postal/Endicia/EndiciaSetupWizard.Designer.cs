@@ -147,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePlan);
+            this.mainPanel.Controls.Add(this.wizardPageAccountType);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -158,8 +158,8 @@
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.EndiciaLogo;
-            this.pictureBox.Location = new System.Drawing.Point(392, 5);
-            this.pictureBox.Size = new System.Drawing.Size(164, 46);
+            this.pictureBox.Location = new System.Drawing.Point(386, 7);
+            this.pictureBox.Size = new System.Drawing.Size(164, 42);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             // 
             // topPanel

@@ -35,6 +35,7 @@ using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -844,8 +845,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
-            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
+            // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
+            // is the category that most of our users will be in.
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : BestRateScope.IsActive ? 14 : .1;
 
             bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
 
@@ -1294,8 +1296,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
-            // Default the weight to .1 if it is 0, so we can get a rate without needing the user to provide a value
-            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : .1;
+            // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
+            // is the category that most of our users will be in.
+            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : BestRateScope.IsActive ? 14 : .1;
 
             // Service and packaging
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
@@ -1697,5 +1700,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
+
+        public double BestRateScope14 { get; set; }
     }
 }

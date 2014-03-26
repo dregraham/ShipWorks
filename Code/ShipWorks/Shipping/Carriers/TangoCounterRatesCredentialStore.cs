@@ -33,6 +33,9 @@ namespace ShipWorks.Shipping.Carriers
         // A dictionary used for storing the account credentials for providers' production accounts
         private static volatile Dictionary<string, string> productionCredentials;
 
+        // A dictionary used for storing the certificate verification data for providers' production accounts
+        private static volatile Dictionary<string, string> productionCertVerificationData;
+
         // Credentials to use when ShipWorks is using a provider's test environment
         private const string TestCredentialFedExAccountNumber = "603103343";
         private const string TestCredentialFedExMeterNumber = "118601174";
@@ -59,20 +62,20 @@ namespace ShipWorks.Shipping.Carriers
         private const string FedExMeterNumberKeyName = "FedExMeterNumber";
         private const string FedExUserNameKeyName = "FedExUsername";
         private const string FedExPasswordKeyName = "FedExPassword";
-        private const string FedExCertificateVerificationDataKeyName = "FedExCertificateVerificationData";
+        public const string FedExCertificateVerificationDataKeyName = "FedExCertificateVerificationData";
 
         private const string UpsUserIdKeyName = "UpsUserId";
         private const string UpsPasswordKeyName = "UpsPassword";
         private const string UpsAccessKeyKeyName = "UpsAccessKey";
-        private const string UpsCertificateVerificationDataKeyName = "UpsCertificateVerificationData";
+        public const string UpsCertificateVerificationDataKeyName = "UpsCertificateVerificationData";
 
         private const string Express1EndiciaAccountNumberKeyName = "Express1EndiciaAccountNumber";
         private const string Express1EndiciaPassPhraseKeyName = "Express1EndiciaPassPhrase";
-        private const string Express1EndiciaCertificateVerificationDataKeyName = "Express1EndiciaCertificateVerificationData";
+        public const string Express1EndiciaCertificateVerificationDataKeyName = "Express1EndiciaCertificateVerificationData";
 
         private const string Express1StampsUsernameKeyName = "Express1StampsUsername";
         private const string Express1StampsPasswordKeyName = "Express1StampsPassword";
-        private const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
+        public const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
         
         
         /// <summary>
@@ -82,6 +85,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             lastFailure = DateTime.MinValue;
             productionCredentials = new Dictionary<string, string>();
+            productionCertVerificationData = new Dictionary<string, string>();
         }
         
         /// <summary>
@@ -151,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return fedExSettingsRepo.UseTestServer ?
-                    TestCredentialFedExCertificateVerificationData : GetCredentialValue(FedExCertificateVerificationDataKeyName);
+                    TestCredentialFedExCertificateVerificationData : GetCertificateVerificationDataValue(FedExCertificateVerificationDataKeyName);
             }
         }
 
@@ -199,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return UpsWebClient.UseTestServer ?
-                    TestCredentialUpsCertificateVerificationData : GetCredentialValue(UpsCertificateVerificationDataKeyName);
+                    TestCredentialUpsCertificateVerificationData : GetCertificateVerificationDataValue(UpsCertificateVerificationDataKeyName);
             }
         }
 
@@ -235,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return Express1EndiciaUtility.UseTestServer ?
-                    TestCredentialExpress1EndiciaCertificateVerificationData : GetCredentialValue(Express1EndiciaCertificateVerificationDataKeyName);
+                    TestCredentialExpress1EndiciaCertificateVerificationData : GetCertificateVerificationDataValue(Express1EndiciaCertificateVerificationDataKeyName);
             }
         }
 
@@ -271,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return Express1StampsConnectionDetails.UseTestServer ?
-                    TestCredentialExpress1StampsCertificateVerificationData : GetCredentialValue(Express1StampsCertificateVerificationDataKeyName);
+                    TestCredentialExpress1StampsCertificateVerificationData : GetCertificateVerificationDataValue(Express1StampsCertificateVerificationDataKeyName);
             }
         }
 
@@ -336,6 +340,77 @@ namespace ShipWorks.Shipping.Carriers
 
                         // Check the result...make sure it's not null, has more than 0 entries, and at least has the FedExAccountNumber
                         if (!productionCredentials.Any() || !productionCredentials.ContainsKey(FedExAccountNumberKeyName))
+                        {
+                            // We still don't have any credentials
+                            lastFailure = DateTime.UtcNow;
+                            throw new MissingCounterRatesCredentialException("Unable to get counter rates.");
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Uses the key name provided to get the corresponding value from the dictionary.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>The value for the given key.</returns>
+        private string GetCertificateVerificationDataValue(string key)
+        {
+            if (!productionCertVerificationData.Any())
+            {
+                // The certificate verification data haven't been populated yet, so we need to get them
+                // from Tango
+                LoadTangoCertificateVerificationData();
+            }
+
+            // Each counter rates broker will check for empty certificate verification data to avoid hitting
+            // web services with no credentials
+            return productionCertVerificationData.ContainsKey(key) ? productionCertVerificationData[key] : string.Empty;
+        }
+
+        /// <summary>
+        /// Makes a request to Tango to obtain the certificate verification data that should be
+        /// used for requesting counter rates in a provider's production environment.
+        /// </summary>
+        private void LoadTangoCertificateVerificationData()
+        {
+            if (!productionCertVerificationData.Any())
+            {
+                if (DateTime.UtcNow.Subtract(lastFailure).TotalSeconds < 30)
+                {
+                    // The 30 second delay from the last failed request hasn't elapsed , so just throw the
+                    // shipping exception here.
+                    throw new MissingCounterRatesCredentialException("Unable to get counter rates.");
+                }
+
+                lock (lockObject)
+                {
+                    if (!productionCertVerificationData.Any())
+                    {
+                        try
+                        {
+                            StoreEntity firstStore = StoreManager.GetAllStores().OrderByDescending(s => s.Enabled).FirstOrDefault();
+                            if (firstStore == null)
+                            {
+                                return;
+                            }
+
+                            // Try to get the counter rates certificate verification data from Tango
+                            productionCertVerificationData = TangoWebClient.GetCarrierCertificateVerificationData(firstStore);
+                        }
+                        catch (TangoException ex)
+                        {
+                            log.Error(ex);
+
+                            // Note the time of the failure, so we can throttle any subsequent 
+                            // calls to Tango before throwing the exception;
+                            lastFailure = DateTime.UtcNow;
+                            throw new MissingCounterRatesCredentialException("Unable to get counter rates.", ex);
+                        }
+
+                        // Check the result...make sure it's not null, has more than 0 entries, and at least has the FedExAccountNumber
+                        if (!productionCertVerificationData.Any() || !productionCertVerificationData.ContainsKey(FedExCertificateVerificationDataKeyName))
                         {
                             // We still don't have any credentials
                             lastFailure = DateTime.UtcNow;

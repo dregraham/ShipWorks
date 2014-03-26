@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -31,8 +32,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
-
-        public event EventHandler SignUpForProviderAccountCompleted;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -217,7 +216,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, 1);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : 1);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -324,7 +323,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <returns>A task that will contain the results</returns>
         private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            return Task<RateGroup>.Factory.StartNew(() => broker.GetBestRates(shipment, brokerExceptions));
+            return Task<RateGroup>.Factory.StartNew(() =>
+                {
+                    return broker.GetBestRates(shipment, brokerExceptions);
+                });
         }
 
         /// <summary>
@@ -592,6 +594,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override bool IsCustomsRequired(ShipmentEntity shipment)
         {
+            // Make sure the best rate shipment data is loaded (in the event that we're 
+            // coming from somewhere other than the shipping screen)
+            LoadShipmentData(shipment, false);
+
             IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
@@ -621,32 +627,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             BestRateEventTypes originalEventTypes = (BestRateEventTypes)shipment.BestRateEvents;
             
             BestRateResultTag bestRateResultTag = ((BestRateResultTag)bestRate.Tag);
-            bool selectRate = true;
 
-            if (bestRateResultTag.SignUpAction != null)
-            {
-                // Capture the result of the sign up action to determine if the rate
-                // should be selected (i.e. the setup wizard completed)
-                bool signedUpForAccount = bestRateResultTag.SignUpAction();
-                selectRate = signedUpForAccount;
-                
-                if (signedUpForAccount && SignUpForProviderAccountCompleted != null)
-                {
-                    // They didn't cancel out of the wizard, so signal that the 
-                    // user signed up for an account
-                    SignUpForProviderAccountCompleted(this, EventArgs.Empty);
-                }
-            }
-            
-            if (selectRate)
-            {
-                // We only want to select the rate if the sign up action finished    
-                bestRateResultTag.RateSelectionDelegate(shipment);
+            bestRateResultTag.RateSelectionDelegate(shipment);
 
-                // Reset the event types after the the selected shipment has been applied to 
-                // avoid losing them during the transition to the targeted shipment type
-                shipment.BestRateEvents = (byte)originalEventTypes;
-            }
+            // Reset the event types after the the selected shipment has been applied to 
+            // avoid losing them during the transition to the targeted shipment type
+            shipment.BestRateEvents = (byte)originalEventTypes;
         }
 
         /// <summary>

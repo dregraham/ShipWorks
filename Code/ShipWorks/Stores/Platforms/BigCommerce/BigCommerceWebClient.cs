@@ -256,6 +256,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 throw WebHelper.TranslateWebException(ex, typeof(BigCommerceException));
             }
 
+            // If we deserialize a response to null, make sure we don't crash since the error isn't fatal
+            if (restResponse == null)
+            {
+                throw new BigCommerceException("ShipWorks received an invalid response from BigCommerce. Please try again later.");
+            }
+
             return restResponse.count;
         }
 
@@ -284,17 +290,26 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 CheckRestResponseForError(restResponse);
 
                 // Deserialize the result
-                requestResult = JsonConvert.DeserializeObject<TRestResponse>(restResponse.Content, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto, NullValueHandling = NullValueHandling.Ignore });
+                requestResult = JsonConvert.DeserializeObject<TRestResponse>(restResponse.Content,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
 
                 if (request.Method == Method.PUT || request.Method == Method.POST)
                 {
-                    requestResult = (TRestResponse)restResponse;
+                    requestResult = (TRestResponse) restResponse;
                 }
-
             }
             catch (NotSupportedException ex)
             {
                 log.Error("A NotSupportedException occurred during MakeRequest.", ex);
+                throw new BigCommerceException(ex.Message, ex);
+            }
+            catch (JsonReaderException ex)
+            {
+                log.Error("A JsonReaderException occurred during MakeRequest.", ex);
                 throw new BigCommerceException(ex.Message, ex);
             }
 

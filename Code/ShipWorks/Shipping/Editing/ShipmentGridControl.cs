@@ -459,8 +459,7 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentEntity shipment = ShippingManager.CreateShipment(selectedShipment);
                 ShipmentGridRow row = AddShipment(shipment, selectedRow.SortIndex);
 
-                entityGrid.SelectedElements.Clear();
-                row.Selected = true;
+                SelectShipments(new List<ShipmentEntity>() { shipment });
 
                 Resort();
 

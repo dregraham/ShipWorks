@@ -37,41 +37,42 @@
             // exceptionsLink
             // 
             this.exceptionsLink.AutoSize = true;
-            this.exceptionsLink.Location = new System.Drawing.Point(237, 2);
+            this.exceptionsLink.Location = new System.Drawing.Point(237, 7);
             this.exceptionsLink.Name = "exceptionsLink";
-            this.exceptionsLink.Size = new System.Drawing.Size(94, 13);
+            this.exceptionsLink.Size = new System.Drawing.Size(64, 13);
             this.exceptionsLink.TabIndex = 7;
             this.exceptionsLink.TabStop = true;
-            this.exceptionsLink.Text = "More information...";
+            this.exceptionsLink.Text = "More info...";
             this.exceptionsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickExceptionsLink);
             // 
             // errorMessage
             // 
             this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(32, 2);
+            this.errorMessage.Location = new System.Drawing.Point(25, 7);
             this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(199, 13);
+            this.errorMessage.Size = new System.Drawing.Size(206, 13);
             this.errorMessage.TabIndex = 6;
             this.errorMessage.Text = "Some errors occurred while getting rates.";
             // 
             // pictureBox
             // 
-            this.pictureBox.Image = global::ShipWorks.Properties.Resources.flag_red;
-            this.pictureBox.Location = new System.Drawing.Point(7, 2);
+            this.pictureBox.Image = global::ShipWorks.Properties.Resources.error16;
+            this.pictureBox.Location = new System.Drawing.Point(4, 5);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.TabIndex = 8;
             this.pictureBox.TabStop = false;
             // 
-            // ExceptionsRateFootNoteControl
+            // ExceptionsRateFootnoteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.exceptionsLink);
             this.Controls.Add(this.errorMessage);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ExceptionsRateFootnoteControl";
-            this.Size = new System.Drawing.Size(396, 20);
+            this.Size = new System.Drawing.Size(396, 28);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
