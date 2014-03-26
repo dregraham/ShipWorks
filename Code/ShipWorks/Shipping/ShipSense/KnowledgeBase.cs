@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
@@ -101,8 +103,7 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Determines whether the specified shipment is overwritten. This method
-        /// assumes that the shipment's order has been populated.
+        /// Determines whether the specified shipment is overwritten.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A Boolean value indicating if the shipment has overwritten data provided by ShipSense.</returns>
@@ -110,9 +111,16 @@ namespace ShipWorks.Shipping.ShipSense
         {
             bool isOverwritten = false;
             
+            // Make sure we have all of the order information
+            OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
             // A null entity means there is not an ShipSense entry for the order, so 
             // there was nothing to overwrite
-            ShipSenseKnowledgebaseEntity entity = FetchEntity(shipment.Order);
+            ShipSenseKnowledgebaseEntity entity = FetchEntity(order);
 
             if (entity != null)
             {
