@@ -182,6 +182,7 @@ namespace ShipWorks.Shipping
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
