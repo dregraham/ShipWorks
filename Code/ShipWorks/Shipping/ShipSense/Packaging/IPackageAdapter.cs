@@ -36,5 +36,10 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         /// Gets or sets the whether the additional weight should be applied.
         /// </summary>
         bool ApplyAdditionalWeight { get; set; }
+
+        /// <summary>
+        /// Gets the hash code based on this package adapter's properties.
+        /// </summary>
+        string HashCode();
     }
 }

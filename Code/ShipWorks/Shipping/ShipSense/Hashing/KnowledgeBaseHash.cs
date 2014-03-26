@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
     /// An implementation of the IKnowledgeBaseHash interface that calculates a Base64 encoded
     /// SHA256 hash value based on the order items' SKU and quantity of each items per SKU.
     /// </summary>
-    public class KnowledgebaseHash : IKnowledgebaseHash
+    public class KnowledgebaseHash : StringHash, IKnowledgebaseHash
     {
         /// <summary>
         /// Uses the data in the order to compute a hash to identify an entry in the
@@ -46,21 +46,6 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             // Use the store ID as the salt value to avoid SKU/quantity collisions across
             // different stores
             return Hash(valueToHash, order.StoreID.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>
-        /// Hashes the raw value into Base64 string.
-        /// </summary>
-        /// <param name="rawValue">The raw value.</param>
-        /// <param name="salt">The salt.</param>
-        /// <returns>A Base64 string of the hashed raw value.</returns>
-        private static string Hash(string rawValue, string salt)
-        {
-            using (SHA256Managed sha256 = new SHA256Managed())
-            {            
-                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(salt + rawValue));
-                return Convert.ToBase64String(hashedBytes);
-            }
         }
     }
 }

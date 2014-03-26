@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExPackageAdapter : IPackageAdapter
     {
         private readonly FedExPackageEntity packageEntity;
+        private string hashSalt = "FedExPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageAdapter"/> class.
@@ -68,6 +70,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             get { return packageEntity.DimsAddWeight; }
             set { packageEntity.DimsAddWeight = value; }
+        }
+
+        /// <summary>
+        /// Gets the hash code based on this package adapter's properties.
+        /// </summary>
+        public string HashCode()
+        {
+            StringHash stringHash = new StringHash();
+            
+            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
+
+            return stringHash.Hash(rawValue, hashSalt);
         }
     }
 }

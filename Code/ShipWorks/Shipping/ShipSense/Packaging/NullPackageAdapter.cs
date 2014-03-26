@@ -1,4 +1,6 @@
 ﻿
+using ShipWorks.Shipping.ShipSense.Hashing;
+
 namespace ShipWorks.Shipping.ShipSense.Packaging
 {
     /// <summary>
@@ -8,6 +10,8 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
     /// </summary>
     public class NullPackageAdapter : IPackageAdapter
     {
+        private string hashSalt = "NullPackageAdapter";
+
         /// <summary>
         /// Gets or sets the length.
         /// </summary>
@@ -60,6 +64,18 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         {
             get { return true; }
             set { }
+        }
+
+        /// <summary>
+        /// Gets the hash code based on this package adapter's properties.
+        /// </summary>
+        public string HashCode()
+        {
+            StringHash stringHash = new StringHash();
+
+            string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
+
+            return stringHash.Hash(rawValue, hashSalt);
         }
     }
 }
