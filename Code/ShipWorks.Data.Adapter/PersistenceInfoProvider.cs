@@ -2128,7 +2128,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 59 );
+			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 60 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShipmentEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -2188,6 +2188,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "OriginNameParseStatus", "OriginNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 56 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OriginUnparsedName", "OriginUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 57 );
 			base.AddElementFieldMapping( "ShipmentEntity", "BestRateEvents", "BestRateEvents", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 58 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseStatus", "ShipSenseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 59 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()

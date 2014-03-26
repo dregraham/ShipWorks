@@ -825,6 +825,7 @@ PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
 GO
 ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
+
 PRINT N'Creating [dbo].[Shipment]'
 GO
 CREATE TABLE [dbo].[Shipment]
@@ -887,7 +888,8 @@ CREATE TABLE [dbo].[Shipment]
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginNameParseStatus] [int] NOT NULL,
 [OriginUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[BestRateEvents] [tinyint] NOT NULL
+[BestRateEvents] [tinyint] NOT NULL,
+[ShipSenseStatus] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'

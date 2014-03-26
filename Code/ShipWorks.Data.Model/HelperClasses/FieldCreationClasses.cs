@@ -15197,6 +15197,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BestRateEvents);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ShipSenseStatus field instance</summary>
+		public static EntityField2 ShipSenseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

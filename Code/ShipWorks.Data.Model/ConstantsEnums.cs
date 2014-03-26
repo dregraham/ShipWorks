@@ -7135,6 +7135,8 @@ namespace ShipWorks.Data.Model
 		OriginUnparsedName,
 		///<summary>BestRateEvents. </summary>
 		BestRateEvents,
+		///<summary>ShipSenseStatus. </summary>
+		ShipSenseStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
