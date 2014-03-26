@@ -235,7 +235,8 @@ namespace ShipWorks.Shipping.ShipSense
                     Length = adapter.Length,
                     Weight = adapter.Weight,
                     Width = adapter.Width,
-                    ApplyAdditionalWeight = adapter.ApplyAdditionalWeight
+                    ApplyAdditionalWeight = adapter.ApplyAdditionalWeight,
+                    Hash = adapter.HashCode()
                 };
 
                 packages.Add(package);

@@ -61,7 +61,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     Length = 4,
                     Weight = 4.5,
                     Width = 6,
-                    ApplyAdditionalWeight = true
+                    ApplyAdditionalWeight = true,
+                    Hash = "kbpackage1"
                 },
                 new KnowledgebasePackage
                 {
@@ -70,7 +71,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     Length = 5,
                     Weight = 6,
                     Width = 7,
-                    ApplyAdditionalWeight = true
+                    ApplyAdditionalWeight = true,
+                    Hash = "kbpackage2"
                 }
             };
         }
@@ -91,6 +93,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
                 Assert.AreEqual(testObject.Packages.ElementAt(i).ApplyAdditionalWeight, hydratedEntry.Packages.ElementAt(i).ApplyAdditionalWeight);
+                Assert.AreEqual(testObject.Packages.ElementAt(i).Hash, hydratedEntry.Packages.ElementAt(i).Hash);
             }
 
             Assert.IsFalse(hydratedEntry.ConsolidateMultiplePackagesIntoSinglePackage);
@@ -340,7 +343,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void ToJson_WithoutCustomsItems_Test()
         {
-            const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Hash\":null,\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":null,\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
+            const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Hash\":\"kbpackage1\",\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":\"kbpackage2\",\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
             
             string actualJson = testObject.ToJson();
             Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
@@ -349,7 +352,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void ToJson_WithCustomsItems_Test()
         {
-            const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Hash\":null,\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":null,\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Hash\":\"KZHcRlI3eB+7sWn+kA+oHhelYnS0hA9G6mgr8u9c5Rk=\",\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Hash\":\"2apI6Az7OYvxln1DLCS59AVHDRdewe5gcWoSqYj4TVQ=\",\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
+            const string ExpectedJson = "{\"StoreID\":2005,\"Packages\":[{\"Hash\":\"kbpackage1\",\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":\"kbpackage2\",\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[{\"Hash\":\"KZHcRlI3eB+7sWn+kA+oHhelYnS0hA9G6mgr8u9c5Rk=\",\"Description\":\"Test description\",\"Quantity\":2.3,\"Weight\":1.1,\"UnitValue\":4.32,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"ABC123\",\"NumberOfPieces\":4,\"UnitPriceAmount\":2.35},{\"Hash\":\"2apI6Az7OYvxln1DLCS59AVHDRdewe5gcWoSqYj4TVQ=\",\"Description\":\"Another test description\",\"Quantity\":2.0,\"Weight\":0.1,\"UnitValue\":6.22,\"CountryOfOrigin\":\"CA\",\"HarmonizedCode\":\"XYZ789\",\"NumberOfPieces\":1,\"UnitPriceAmount\":9.31}]}";
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>
             {
                 new KnowledgebaseCustomsItem
