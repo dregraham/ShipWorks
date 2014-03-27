@@ -446,12 +446,7 @@ namespace Interapptive.Shared.Business
             }
 
             // Since Puerto Rico is not included in the list of states, we need to handle it separately
-            if (code.Equals("PR", StringComparison.OrdinalIgnoreCase))
-            {
-                return "Puerto Rico";
-            }
-
-            return code;
+            return code.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "Puerto Rico" : code;
         }
 
         #region Loading
