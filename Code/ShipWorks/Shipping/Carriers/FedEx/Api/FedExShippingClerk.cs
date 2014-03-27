@@ -528,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                 //Make sure the addresses only have two lines
+                //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
                 // Ensure that the version capture has been performed

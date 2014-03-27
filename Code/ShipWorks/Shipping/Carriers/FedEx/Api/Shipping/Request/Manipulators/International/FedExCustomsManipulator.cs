@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shipmentCurrencyType = GetShipmentCurrencyType(request.ShipmentEntity);
 
-            if (!ShipmentType.IsDomestic(request.ShipmentEntity))
+            if (!new FedExShipmentType().IsDomestic(request.ShipmentEntity))
             {
                 // Obtain a handle to the customs detail
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
@@ -73,7 +73,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 // Make sure the customs data is assigned back to the request (in the event that a new customs object was
                 // created in the GetCustomsDetail method)
                 nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
-                
                 
                 ConfigureTaxPayerIdentification(shipment, nativeRequest);
             }

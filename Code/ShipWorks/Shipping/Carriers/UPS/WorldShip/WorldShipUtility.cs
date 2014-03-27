@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
             UpsShipmentEntity ups = shipment.Ups;
-            bool isDomestic = ShipmentType.IsDomestic(shipment);
+            bool isDomestic = ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 
             // If the row exists already remove it before we start.
             adapter.DeleteEntity(new WorldShipShipmentEntity(shipment.ShipmentID));
@@ -230,9 +230,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.FromAddress2 = from.Street2;
             worldship.FromAddress3 = from.Street3;
             worldship.FromCity = from.City;
-            worldship.FromStateProvCode = from.StateProvCode;
+            worldship.FromStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(from.CountryCode, from.StateProvCode);
             worldship.FromPostalCode = from.PostalCode;
-            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode);
+            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode, from.StateProvCode);
             worldship.FromTelephone = from.Phone10Digits;
             worldship.FromEmail = GetWorldShipValidEmail(from.Email);
             worldship.FromAccountNumber = account.AccountNumber;
@@ -245,9 +245,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.ToAddress2 = to.Street2;
             worldship.ToAddress3 = to.Street3;
             worldship.ToCity = to.City;
-            worldship.ToStateProvCode = to.StateProvCode;
+            worldship.ToStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(to.CountryCode, to.StateProvCode);
             worldship.ToPostalCode = to.PostalCode;
-            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode);
+            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode, to.StateProvCode);
             worldship.ToTelephone = to.Phone10Digits;
             worldship.ToEmail = GetWorldShipValidEmail(to.Email);
             worldship.ToResidential = shipment.ResidentialResult ? "Y" : "N";

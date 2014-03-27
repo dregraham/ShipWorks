@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
                 location += trackEvent.Address.StateOrProvinceCode;
             }
 
-            if (!ShipmentType.IsDomestic(shipment))
+            if (!new FedExShipmentType().IsDomestic(shipment))
             {
                 if (location.Length > 0)
                 {

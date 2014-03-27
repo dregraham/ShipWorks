@@ -332,6 +332,7 @@
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
+    <Compile Include="Shipping\ShipmentTypeTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
@@ -456,7 +457,6 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">
@@ -467,6 +467,9 @@
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithUnicodeCharacter.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
