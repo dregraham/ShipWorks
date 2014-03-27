@@ -134,6 +134,15 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Resets/truncates the underlying knowledge base data causing the knowledge base
+        /// to be reset as if it were new.
+        /// </summary>
+        public void Reset()
+        {
+            // TODO: Call stored procedure to truncate knowledge base table
+        }
+
+        /// <summary>
         /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
         /// </summary>
         /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>

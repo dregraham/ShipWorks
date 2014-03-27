@@ -29,6 +29,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.labelDefaultProvider = new System.Windows.Forms.Label();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.resetKnowledgebase = new System.Windows.Forms.Button();
+            this.labelShipSenseInfo = new System.Windows.Forms.Label();
+            this.enableShipSense = new System.Windows.Forms.CheckBox();
+            this.labelShipSense = new System.Windows.Forms.Label();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
             this.label1 = new System.Windows.Forms.Label();
             this.blankPhone = new System.Windows.Forms.TextBox();
@@ -36,9 +40,6 @@
             this.radioBlankPhoneUseSpecified = new System.Windows.Forms.RadioButton();
             this.radioBlankPhoneUseShipper = new System.Windows.Forms.RadioButton();
             this.labelBlankPhoneInfo = new System.Windows.Forms.Label();
-            this.labelShipSense = new System.Windows.Forms.Label();
-            this.enableShipSense = new System.Windows.Forms.CheckBox();
-            this.labelShipSenseInfo = new System.Windows.Forms.Label();
             this.optionControl.SuspendLayout();
             this.optionPageGeneral.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -193,7 +194,7 @@
             // 
             // tabPageSettings
             // 
-            this.tabPageSettings.Controls.Add(this.labelShipSenseInfo);
+            this.tabPageSettings.Controls.Add(this.resetKnowledgebase);
             this.tabPageSettings.Controls.Add(this.enableShipSense);
             this.tabPageSettings.Controls.Add(this.labelShipSense);
             this.tabPageSettings.Controls.Add(this.originControl);
@@ -203,6 +204,7 @@
             this.tabPageSettings.Controls.Add(this.radioBlankPhoneUseSpecified);
             this.tabPageSettings.Controls.Add(this.radioBlankPhoneUseShipper);
             this.tabPageSettings.Controls.Add(this.labelBlankPhoneInfo);
+            this.tabPageSettings.Controls.Add(this.labelShipSenseInfo);
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -210,22 +212,64 @@
             this.tabPageSettings.TabIndex = 1;
             this.tabPageSettings.Text = "Global Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
+            this.tabPageSettings.Click += new System.EventHandler(this.OnResetKnowledgebase);
+            // 
+            // resetKnowledgebase
+            // 
+            this.resetKnowledgebase.Image = global::ShipWorks.Properties.Resources.delete16;
+            this.resetKnowledgebase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.resetKnowledgebase.Location = new System.Drawing.Point(389, 153);
+            this.resetKnowledgebase.Name = "resetKnowledgebase";
+            this.resetKnowledgebase.Size = new System.Drawing.Size(92, 23);
+            this.resetKnowledgebase.TabIndex = 10;
+            this.resetKnowledgebase.Text = "Reset";
+            this.resetKnowledgebase.UseVisualStyleBackColor = true;
+            this.resetKnowledgebase.Click += new System.EventHandler(this.OnResetKnowledgebase);
+            // 
+            // labelShipSenseInfo
+            // 
+            this.labelShipSenseInfo.Location = new System.Drawing.Point(30, 153);
+            this.labelShipSenseInfo.Name = "labelShipSenseInfo";
+            this.labelShipSenseInfo.Size = new System.Drawing.Size(352, 40);
+            this.labelShipSenseInfo.TabIndex = 9;
+            this.labelShipSenseInfo.Text = "ShipWorks can inspect your shipment history and use this data to automatically se" +
+    "t the weights, dimensions, and customs information of future shipments.";
+            // 
+            // enableShipSense
+            // 
+            this.enableShipSense.AutoSize = true;
+            this.enableShipSense.Location = new System.Drawing.Point(52, 199);
+            this.enableShipSense.Name = "enableShipSense";
+            this.enableShipSense.Size = new System.Drawing.Size(281, 17);
+            this.enableShipSense.TabIndex = 8;
+            this.enableShipSense.Text = "Populate shipment info based on my shipment history";
+            this.enableShipSense.UseVisualStyleBackColor = true;
+            // 
+            // labelShipSense
+            // 
+            this.labelShipSense.AutoSize = true;
+            this.labelShipSense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelShipSense.Location = new System.Drawing.Point(10, 136);
+            this.labelShipSense.Name = "labelShipSense";
+            this.labelShipSense.Size = new System.Drawing.Size(65, 13);
+            this.labelShipSense.TabIndex = 7;
+            this.labelShipSense.Text = "ShipSense";
             // 
             // originControl
             // 
             this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.originControl.Location = new System.Drawing.Point(30, 232);
+            this.originControl.Location = new System.Drawing.Point(30, 245);
             this.originControl.Name = "originControl";
-            this.originControl.Size = new System.Drawing.Size(419, 116);
+            this.originControl.Size = new System.Drawing.Size(451, 116);
             this.originControl.TabIndex = 6;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 211);
+            this.label1.Location = new System.Drawing.Point(10, 224);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(102, 13);
             this.label1.TabIndex = 5;
@@ -280,36 +324,6 @@
             this.labelBlankPhoneInfo.TabIndex = 1;
             this.labelBlankPhoneInfo.Text = "Some carriers require a recipient phone number for certain services.  When none i" +
     "s provided:";
-            // 
-            // labelShipSense
-            // 
-            this.labelShipSense.AutoSize = true;
-            this.labelShipSense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipSense.Location = new System.Drawing.Point(10, 136);
-            this.labelShipSense.Name = "labelShipSense";
-            this.labelShipSense.Size = new System.Drawing.Size(65, 13);
-            this.labelShipSense.TabIndex = 7;
-            this.labelShipSense.Text = "ShipSense";
-            // 
-            // enableShipSense
-            // 
-            this.enableShipSense.AutoSize = true;
-            this.enableShipSense.Location = new System.Drawing.Point(52, 187);
-            this.enableShipSense.Name = "enableShipSense";
-            this.enableShipSense.Size = new System.Drawing.Size(281, 17);
-            this.enableShipSense.TabIndex = 8;
-            this.enableShipSense.Text = "Populate shipment info based on my shipment history";
-            this.enableShipSense.UseVisualStyleBackColor = true;
-            // 
-            // labelShipSenseInfo
-            // 
-            this.labelShipSenseInfo.AutoSize = true;
-            this.labelShipSenseInfo.Location = new System.Drawing.Point(30, 153);
-            this.labelShipSenseInfo.Name = "labelShipSenseInfo";
-            this.labelShipSenseInfo.Size = new System.Drawing.Size(407, 26);
-            this.labelShipSenseInfo.TabIndex = 9;
-            this.labelShipSenseInfo.Text = "ShipWorks can inspect your shipment history and use this data to automatically se" +
-    "t \r\nthe weights, dimensions, and customs information of future shipments.";
             // 
             // ShippingSettingsDlg
             // 
@@ -371,5 +385,6 @@
         private System.Windows.Forms.Label labelShipSense;
         private System.Windows.Forms.CheckBox enableShipSense;
         private System.Windows.Forms.Label labelShipSenseInfo;
+        private System.Windows.Forms.Button resetKnowledgebase;
     }
 }
