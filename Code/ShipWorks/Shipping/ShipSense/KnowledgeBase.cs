@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -15,22 +19,25 @@ namespace ShipWorks.Shipping.ShipSense
     /// </summary>
     public class Knowledgebase
     {
+        private readonly ILog log;
         private readonly IKnowledgebaseHash hashingStrategy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
         public Knowledgebase()
-            : this(new KnowledgebaseHash())
+            : this(new KnowledgebaseHash(), LogManager.GetLogger(typeof(Knowledgebase)))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
+        /// Initializes a new instance of the <see cref="Knowledgebase" /> class.
         /// </summary>
         /// <param name="hashingStrategy">The hashing strategy that will be used to identify knowledge base entries.</param>
-        public Knowledgebase(IKnowledgebaseHash hashingStrategy)
+        /// <param name="log">The log.</param>
+        public Knowledgebase(IKnowledgebaseHash hashingStrategy, ILog log)
         {
             this.hashingStrategy = hashingStrategy;
+            this.log = log;
         }
 
         /// <summary>
@@ -139,7 +146,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         public void Reset()
         {
-            // TODO: Call stored procedure to truncate knowledge base table
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                ActionProcedures.ResetShipSense(adapter);
+            }
+
+            log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", UserSession.User.Username);
         }
 
         /// <summary>

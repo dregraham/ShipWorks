@@ -246,6 +246,79 @@ namespace ShipWorks.Data.Adapter
 	
 
 		/// <summary>
+		/// Delegate definition for stored procedure 'ResetShipSense' to be used in combination of a UnitOfWork2 object. 
+		/// </summary>
+		public delegate int ResetShipSenseCallBack(DataAccessAdapter adapter);
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense()
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ResetShipSense( adapter);
+			}
+		}
+
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(DataAccessAdapter adapter)
+		{
+			SqlParameter[] parameters = new SqlParameter[0];
+
+
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
+
+			return toReturn;
+		}
+		
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(ref System.Int32 returnValue)
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ResetShipSense(ref returnValue, adapter);
+			}
+		}
+
+		
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(ref System.Int32 returnValue, DataAccessAdapter adapter)
+		{
+			// create parameters. Add 1 to make room for the return value parameter.
+			SqlParameter[] parameters = new SqlParameter[0 + 1];
+
+
+			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
+
+			
+			returnValue = (int)parameters[0].Value;
+			return toReturn;
+		}
+	
+
+		/// <summary>
 		/// Delegate definition for stored procedure 'ValidateFilterLayouts' to be used in combination of a UnitOfWork2 object. 
 		/// </summary>
 		public delegate int ValidateFilterLayoutsCallBack(DataAccessAdapter adapter);
