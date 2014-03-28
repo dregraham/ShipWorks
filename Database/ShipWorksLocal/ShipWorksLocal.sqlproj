@@ -98,8 +98,13 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Snapshots" />
     <Folder Include="Tables\" />
     <Folder Include="Assemblies\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Snapshots\InitialDatabase.dacpac" />
+    <None Include="Assemblies\ShipWorks.SqlServer.dll" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Resource.sql">
@@ -828,9 +833,6 @@
     </Build>
     <Build Include="Tables\ValidatedAddress.sql" />
     <Build Include="Tables\Address.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assemblies\ShipWorks.SqlServer.dll" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ShipWorks.SqlServer">
