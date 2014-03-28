@@ -90,6 +90,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// that was passed into the entry ApplyTo method, so we can track what was
         /// ShipSense was applied to.
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<KnowledgebasePackage> OriginalPackages
         {
             get { return origianlPackages; }
@@ -119,6 +120,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// that was passed into the entry ApplyTo method, so we can track what was
         /// ShipSense was applied to.
         /// </summary>
+        [JsonIgnore]
         public IEnumerable<KnowledgebaseCustomsItem> OriginalCustomsItems
         {
             get { return originalCustomsItems; }
