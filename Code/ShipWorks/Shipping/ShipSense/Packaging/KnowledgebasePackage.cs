@@ -12,6 +12,26 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
     public class KnowledgebasePackage
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebasePackage"/> class.
+        /// </summary>
+        public KnowledgebasePackage()
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgebasePackage"/> class.
+        /// </summary>
+        /// <param name="packageAdapter">The package adapter.</param>
+        public KnowledgebasePackage(IPackageAdapter packageAdapter)
+        {
+            Length = packageAdapter.Length;
+            Width = packageAdapter.Width;
+            Height = packageAdapter.Height;
+            Weight = packageAdapter.Weight;
+            ApplyAdditionalWeight = packageAdapter.ApplyAdditionalWeight;
+            AdditionalWeight = packageAdapter.AdditionalWeight;
+        }
+
+        /// <summary>
         /// Gets or sets the hash value that identifies this package configuration.
         /// </summary>
         public string Hash { get; set; }

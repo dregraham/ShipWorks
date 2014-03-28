@@ -21,8 +21,13 @@ namespace ShipWorks.Shipping.ShipSense
     public class KnowledgebaseEntry
     {
         private long storeID = -1;
+
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
+
+        private List<KnowledgebasePackage> origianlPackages;
+        private List<KnowledgebaseCustomsItem> originalCustomsItems;
+
         private bool consolidateMultiplePackagesIntoSinglePackage;
 
         /// <summary>
@@ -33,6 +38,9 @@ namespace ShipWorks.Shipping.ShipSense
         {
             packages = new List<KnowledgebasePackage>();
             customsItems = new List<KnowledgebaseCustomsItem>();
+
+            origianlPackages = new List<KnowledgebasePackage>();
+            originalCustomsItems = new List<KnowledgebaseCustomsItem>();
         }
 
         /// <summary>
@@ -78,6 +86,17 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Gets or sets the original packages. This is used to track the the data
+        /// that was passed into the entry ApplyTo method, so we can track what was
+        /// ShipSense was applied to.
+        /// </summary>
+        public IEnumerable<KnowledgebasePackage> OriginalPackages
+        {
+            get { return origianlPackages; }
+            set { origianlPackages = new List<KnowledgebasePackage>(value); }
+        }
+
+        /// <summary>
         /// Gets or sets the packages associated with a knowledge base entry.
         /// </summary>
         public IEnumerable<KnowledgebasePackage> Packages
@@ -94,6 +113,18 @@ namespace ShipWorks.Shipping.ShipSense
             get { return customsItems; }
             set { customsItems = new List<KnowledgebaseCustomsItem>(value); }
         }
+
+        /// <summary>
+        /// Gets or sets the original customs items. This is used to track the the data
+        /// that was passed into the entry ApplyTo method, so we can track what was
+        /// ShipSense was applied to.
+        /// </summary>
+        public IEnumerable<KnowledgebaseCustomsItem> OriginalCustomsItems
+        {
+            get { return originalCustomsItems; }
+            set { originalCustomsItems = new List<KnowledgebaseCustomsItem>(value); }
+        }
+
 
         /// <summary>
         /// Gets a value indicating whether [consolidate multiple packages into single package]. This 
@@ -125,7 +156,7 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// If the knowledgebase entry was not found in the database, this will return true.
+        /// If the knowledge base entry was not found in the database, this will return true.
         /// If one was found, false is returned.
         /// </summary>
         [JsonIgnore]
@@ -147,8 +178,15 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 return;
             }
-
+            
             IEnumerable<IPackageAdapter> packageAdapters = adapters as IList<IPackageAdapter> ?? adapters.ToList();
+
+            foreach (IPackageAdapter adapter in packageAdapters)
+            {
+                // Record the original package data that was provided
+                origianlPackages.Add(new KnowledgebasePackage(adapter));
+            }
+
             if (ConsolidateMultiplePackagesIntoSinglePackage && packageAdapters.Count() == 1)
             {
                 // We need to consolidate all of the packages of this entry into a single package
@@ -202,10 +240,13 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 return;
             }
-
+            
             // Explicitly remove the entity, so it gets tracked by LLBLGen
             for (int index = 0; index < shipmentCustomsItems.Count; index++)
             {
+                // Record the original customs data that was provided
+                originalCustomsItems.Add(new KnowledgebaseCustomsItem(shipmentCustomsItems[index]));
+
                 // Always remove the first item in the collection regardless of the index
                 // since the list is shrinking with each removal
                 shipmentCustomsItems.RemoveAt(0);
