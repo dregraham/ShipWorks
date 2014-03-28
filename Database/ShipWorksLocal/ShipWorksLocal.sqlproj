@@ -98,8 +98,12 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Snapshots" />
     <Folder Include="Tables\" />
     <Folder Include="Assemblies\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Snapshots\InitialDatabase.dacpac" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Resource.sql">
