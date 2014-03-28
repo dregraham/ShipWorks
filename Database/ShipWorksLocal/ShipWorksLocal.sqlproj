@@ -826,6 +826,8 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <Build Include="Tables\ValidatedAddress.sql" />
+    <Build Include="Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assemblies\ShipWorks.SqlServer.dll" />
@@ -839,5 +841,8 @@
       <SqlOwnerName>dbo</SqlOwnerName>
       <SqlPermissionSet>SAFE</SqlPermissionSet>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ShipWorksLocal.refactorlog" />
   </ItemGroup>
 </Project>
