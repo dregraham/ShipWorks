@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 

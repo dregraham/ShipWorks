@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 

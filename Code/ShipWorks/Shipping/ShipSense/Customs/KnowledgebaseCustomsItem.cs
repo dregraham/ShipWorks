@@ -4,7 +4,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
-namespace ShipWorks.Shipping.ShipSense
+namespace ShipWorks.Shipping.ShipSense.Customs
 {
     /// <summary>
     /// A DTO of customs information that will be serialized in an entry to the ShipSense knowledge base.
