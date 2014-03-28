@@ -366,6 +366,7 @@
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHashTest.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntryTest.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
