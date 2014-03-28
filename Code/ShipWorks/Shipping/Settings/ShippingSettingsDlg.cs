@@ -16,6 +16,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -327,7 +328,7 @@ namespace ShipWorks.Shipping.Settings
 
             if (result == DialogResult.Yes)
             {
-                new Knowledgebase().Reset();
+                new Knowledgebase().Reset(UserSession.User);
             }
         }
     }

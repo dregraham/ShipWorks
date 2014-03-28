@@ -144,14 +144,14 @@ namespace ShipWorks.Shipping.ShipSense
         /// Resets/truncates the underlying knowledge base data causing the knowledge base
         /// to be reset as if it were new.
         /// </summary>
-        public void Reset()
+        public void Reset(UserEntity initiatedBy)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 ActionProcedures.ResetShipSense(adapter);
             }
 
-            log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", UserSession.User.Username);
+            log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", initiatedBy.Username);
         }
 
         /// <summary>
