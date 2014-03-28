@@ -7137,6 +7137,8 @@ namespace ShipWorks.Data.Model
 		BestRateEvents,
 		///<summary>ShipSenseStatus. </summary>
 		ShipSenseStatus,
+		///<summary>ShipSenseChangeSets. </summary>
+		ShipSenseChangeSets,
 		/// <summary></summary>
 		AmountOfFields
 	}

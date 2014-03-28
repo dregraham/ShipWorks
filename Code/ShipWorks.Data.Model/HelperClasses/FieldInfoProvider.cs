@@ -2073,6 +2073,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "OriginUnparsedName", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.OriginUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "BestRateEvents", typeof(System.Byte), false, false, false, false,  (int)ShipmentFieldIndex.BestRateEvents, 0, 0, 3);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
+			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseChangeSets", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseChangeSets, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

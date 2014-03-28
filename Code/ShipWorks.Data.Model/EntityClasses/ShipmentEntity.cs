@@ -1090,6 +1090,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseChangeSets", fieldHashtable);
 		}
 		#endregion
 
@@ -2233,6 +2236,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipSenseStatus, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseStatus, value); }
+		}
+
+		/// <summary> The ShipSenseChangeSets property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipSenseChangeSets"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipSenseChangeSets
+		{
+			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipSenseChangeSets, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseChangeSets, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.

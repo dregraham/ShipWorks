@@ -15202,6 +15202,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseStatus);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ShipSenseChangeSets field instance</summary>
+		public static EntityField2 ShipSenseChangeSets
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseChangeSets);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>
