@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,6 +16,7 @@ namespace ShipWorks.Shipping.ShipSense
     /// the ShipSense knowledge base.
     /// </summary>
     [Serializable]
+    [Obfuscation(ApplyToMembers = false, Exclude = true, StripAfterObfuscation = false)]
     public class KnowledgebaseEntry
     {
         private long storeID = -1;
