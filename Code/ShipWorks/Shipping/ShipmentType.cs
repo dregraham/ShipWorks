@@ -309,7 +309,6 @@ namespace ShipWorks.Shipping
 
                 if (!knowledgebaseEntry.IsNew)
                 {
-                    // Retain the previous status if the shipment has overwritten ShipSense data
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
                 }
             }
