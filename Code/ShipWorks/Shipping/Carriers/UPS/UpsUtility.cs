@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 xmlWriter.WriteStartElement("PrimaryContact");
                 xmlWriter.WriteElementString("Name", new PersonName(new PersonAdapter(upsAccount, "")).FullName);
                 xmlWriter.WriteElementString("Title", "N\\A");
-                xmlWriter.WriteElementString("EMailAddress", upsAccount.Email);
+                xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(upsAccount.Email));
                 xmlWriter.WriteElementString("PhoneNumber", new PersonAdapter(upsAccount, "").Phone10Digits);
                 xmlWriter.WriteEndElement();
 
@@ -401,6 +401,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public static bool IsUpsMiOrSurePostService(UpsServiceType upsServiceType)
         {
             return IsUpsMiService(upsServiceType) || IsUpsSurePostService(upsServiceType);
+        }
+
+        /// <summary>
+        /// UPS only allows email addresses less than or equal to 50 characters.  
+        /// </summary>
+        /// <returns>
+        /// If the email address length is 50 or less, emailAddress is returned.
+        /// Otherwise, string.Empty is returned.
+        /// </returns>
+        public static string GetCorrectedEmailAddress(string emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress))
+            {
+                return string.Empty;
+            }
+
+            return emailAddress.Length <= 50 ? emailAddress : string.Empty;
         }
     }
 }

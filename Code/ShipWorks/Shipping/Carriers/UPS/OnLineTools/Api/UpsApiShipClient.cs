@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
+using ShipWorks.Email;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
@@ -169,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AttentionName", new PersonName(origin).FullName);
             xmlWriter.WriteElementString("ShipperNumber", account.AccountNumber);
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", ""));
-            xmlWriter.WriteElementString("EMailAddress", origin.Email);
+            xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(origin.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
 
@@ -216,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("CompanyName", StringUtility.Truncate(companyOrName, 35));
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attention, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
-            xmlWriter.WriteElementString("EMailAddress", recipient.Email);
+            xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, recipient, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddress" : (string) null );
             xmlWriter.WriteEndElement();
 
@@ -505,15 +506,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // start email
                 xmlWriter.WriteStartElement("EMailMessage");
 
-                xmlWriter.WriteElementString("EMailAddress", ups.Shipment.ShipEmail);
+                xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.Shipment.ShipEmail));
 
                 // it is coming from the UPS email address
-                xmlWriter.WriteElementString("FromEMailAddress", account.Email);
+                xmlWriter.WriteElementString("FromEMailAddress", UpsUtility.GetCorrectedEmailAddress(account.Email));
 
                 // use undeliverable address if supplied.  UPS will default this to the FromEmailAddress
                 if (ups.ReturnUndeliverableEmail.Length > 0)
                 {
-                    xmlWriter.WriteElementString("UndeliverableEMailAddress", ups.ReturnUndeliverableEmail);
+                    xmlWriter.WriteElementString("UndeliverableEMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.ReturnUndeliverableEmail));
                 }
 
                 // Reference number to appear in the subject
@@ -907,6 +908,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void AddEmailToNotificationLists(int notifyTypes, string email, List<string> shipRecipients, List<string> exceptRecipients, List<string> deliverRecipients)
         {
+            email = UpsUtility.GetCorrectedEmailAddress(email);
+
             if ((notifyTypes & (int) UpsEmailNotificationType.Ship) != 0)
             {
                 shipRecipients.Add(email);
@@ -944,13 +947,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Add in each recipient
             foreach (string recipient in recipients)
             {
-                xmlWriter.WriteElementString("EMailAddress", recipient);
+                xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient));
             }
 
             if (!headerWritten)
             {
-                xmlWriter.WriteElementString("UndeliverableEMailAddress", ups.Shipment.OriginEmail);
-                xmlWriter.WriteElementString("FromName", ups.EmailNotifyFrom);
+                xmlWriter.WriteElementString("UndeliverableEMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.Shipment.OriginEmail));
+                xmlWriter.WriteElementString("FromName", UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyFrom));
                 xmlWriter.WriteElementString("Memo", ups.EmailNotifyMessage);
                 xmlWriter.WriteElementString("SubjectCode", (ups.EmailNotifySubject == (int) UpsEmailNotificationSubject.ReferenceNumber) ? "01" : "");
 
