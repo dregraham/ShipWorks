@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -150,6 +151,8 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 ActionProcedures.ResetShipSense(adapter);
             }
+
+            AuditUtility.Audit(AuditActionType.ResetShipSense);
 
             log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", initiatedBy.Username);
         }
