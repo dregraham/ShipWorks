@@ -4,7 +4,7 @@ using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
-    [ConditionElement("ShipSense Status", "Shipment.ShipSenseStatus")]
+    [ConditionElement("ShipSense", "Shipment.ShipSenseStatus")]
     public class ShipSenseStatusCondition : EnumCondition<ShipSenseStatus>
     {
         /// <summary>
