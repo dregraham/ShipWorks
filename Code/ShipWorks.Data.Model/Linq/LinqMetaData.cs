@@ -79,6 +79,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ActionTaskEntity:
 					toReturn = this.ActionTask;
 					break;
+				case ShipWorks.Data.Model.EntityType.AddressEntity:
+					toReturn = this.Address;
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonASINEntity:
 					toReturn = this.AmazonASIN;
 					break;
@@ -514,6 +517,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					toReturn = this.UserSettings;
 					break;
+				case ShipWorks.Data.Model.EntityType.ValidatedAddressEntity:
+					toReturn = this.ValidatedAddress;
+					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					toReturn = this.VersionSignoff;
 					break;
@@ -585,6 +591,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ActionTaskEntity> ActionTask
 		{
 			get { return new DataSource2<ActionTaskEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AddressEntity instances in the database.</summary>
+		public DataSource2<AddressEntity> Address
+		{
+			get { return new DataSource2<AddressEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AmazonASINEntity instances in the database.</summary>
@@ -1455,6 +1467,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UserSettingsEntity> UserSettings
 		{
 			get { return new DataSource2<UserSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ValidatedAddressEntity instances in the database.</summary>
+		public DataSource2<ValidatedAddressEntity> ValidatedAddress
+		{
+			get { return new DataSource2<ValidatedAddressEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting VersionSignoffEntity instances in the database.</summary>

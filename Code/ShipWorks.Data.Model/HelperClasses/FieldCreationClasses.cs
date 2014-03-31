@@ -364,6 +364,51 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AddressEntity</summary>
+	public partial class AddressFields
+	{
+		/// <summary>Creates a new AddressEntity.AddressID field instance</summary>
+		public static EntityField2 AddressID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.AddressID);}
+		}
+		/// <summary>Creates a new AddressEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new AddressEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new AddressEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new AddressEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.City);}
+		}
+		/// <summary>Creates a new AddressEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new AddressEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new AddressEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.CountryCode);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AmazonASINEntity</summary>
 	public partial class AmazonASINFields
 	{
@@ -18596,6 +18641,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 TemplateLastSelected
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.TemplateLastSelected);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ValidatedAddressEntity</summary>
+	public partial class ValidatedAddressFields
+	{
+		/// <summary>Creates a new ValidatedAddressEntity.ValidatedAddressID field instance</summary>
+		public static EntityField2 ValidatedAddressID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.ValidatedAddressID);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.ConsumerID field instance</summary>
+		public static EntityField2 ConsumerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.ConsumerID);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.AddressID field instance</summary>
+		public static EntityField2 AddressID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.AddressID);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.IsOriginal field instance</summary>
+		public static EntityField2 IsOriginal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.IsOriginal);}
 		}
 	}
 

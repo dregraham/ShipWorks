@@ -56,13 +56,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (161 + 0));
+			base.InitClass( (163 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
 			InitActionQueueSelectionEntityInfos();
 			InitActionQueueStepEntityInfos();
 			InitActionTaskEntityInfos();
+			InitAddressEntityInfos();
 			InitAmazonASINEntityInfos();
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
@@ -208,6 +209,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitUserEntityInfos();
 			InitUserColumnSettingsEntityInfos();
 			InitUserSettingsEntityInfos();
+			InitValidatedAddressEntityInfos();
 			InitVersionSignoffEntityInfos();
 			InitVolusionStoreEntityInfos();
 			InitWorldShipGoodsEntityInfos();
@@ -309,6 +311,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowSuccess", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowSuccess, 0, 0, 10);
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowSkipped", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowSkipped, 0, 0, 10);
 			base.AddElementFieldInfo("ActionTaskEntity", "FlowError", typeof(System.Int32), false, false, false, false,  (int)ActionTaskFieldIndex.FlowError, 0, 0, 10);
+		}
+		/// <summary>Inits AddressEntity's FieldInfo objects</summary>
+		private void InitAddressEntityInfos()
+		{
+			base.AddElementFieldInfo("AddressEntity", "AddressID", typeof(System.Int64), true, false, true, false,  (int)AddressFieldIndex.AddressID, 0, 0, 19);
+			base.AddElementFieldInfo("AddressEntity", "Street1", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.Street1, 60, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "Street2", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.Street2, 60, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "Street3", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.Street3, 60, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "City", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.City, 50, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.StateProvCode, 50, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.PostalCode, 20, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.CountryCode, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonASINEntity's FieldInfo objects</summary>
 		private void InitAmazonASINEntityInfos()
@@ -2658,6 +2672,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "ShippingWeightFormat", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.ShippingWeightFormat, 0, 0, 10);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.TemplateExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
+		}
+		/// <summary>Inits ValidatedAddressEntity's FieldInfo objects</summary>
+		private void InitValidatedAddressEntityInfos()
+		{
+			base.AddElementFieldInfo("ValidatedAddressEntity", "ValidatedAddressID", typeof(System.Int64), true, false, true, false,  (int)ValidatedAddressFieldIndex.ValidatedAddressID, 0, 0, 19);
+			base.AddElementFieldInfo("ValidatedAddressEntity", "ConsumerID", typeof(System.Int64), false, false, false, false,  (int)ValidatedAddressFieldIndex.ConsumerID, 0, 0, 19);
+			base.AddElementFieldInfo("ValidatedAddressEntity", "AddressID", typeof(System.Int64), false, true, false, false,  (int)ValidatedAddressFieldIndex.AddressID, 0, 0, 19);
+			base.AddElementFieldInfo("ValidatedAddressEntity", "IsOriginal", typeof(System.Boolean), false, false, false, false,  (int)ValidatedAddressFieldIndex.IsOriginal, 0, 0, 0);
 		}
 		/// <summary>Inits VersionSignoffEntity's FieldInfo objects</summary>
 		private void InitVersionSignoffEntityInfos()

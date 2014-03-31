@@ -50,6 +50,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ActionTaskEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ActionTaskEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.AddressEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AddressEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonASINEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonASINEntity");
 					break;
@@ -484,6 +487,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UserSettingsEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.ValidatedAddressEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ValidatedAddressEntity");
 					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "VersionSignoffEntity");

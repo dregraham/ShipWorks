@@ -208,6 +208,33 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Address.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AddressFieldIndex:int
+	{
+		///<summary>AddressID. </summary>
+		AddressID,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -8807,6 +8834,25 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ValidatedAddress.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ValidatedAddressFieldIndex:int
+	{
+		///<summary>ValidatedAddressID. </summary>
+		ValidatedAddressID,
+		///<summary>ConsumerID. </summary>
+		ConsumerID,
+		///<summary>AddressID. </summary>
+		AddressID,
+		///<summary>IsOriginal. </summary>
+		IsOriginal,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VersionSignoff.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9527,6 +9573,8 @@ namespace ShipWorks.Data.Model
 		ActionQueueStepEntity,
 		///<summary>ActionTask</summary>
 		ActionTaskEntity,
+		///<summary>Address</summary>
+		AddressEntity,
 		///<summary>AmazonASIN</summary>
 		AmazonASINEntity,
 		///<summary>AmazonOrder</summary>
@@ -9817,6 +9865,8 @@ namespace ShipWorks.Data.Model
 		UserColumnSettingsEntity,
 		///<summary>UserSettings</summary>
 		UserSettingsEntity,
+		///<summary>ValidatedAddress</summary>
+		ValidatedAddressEntity,
 		///<summary>VersionSignoff</summary>
 		VersionSignoffEntity,
 		///<summary>VolusionStore</summary>

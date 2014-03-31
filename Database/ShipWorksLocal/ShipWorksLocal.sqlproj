@@ -831,7 +831,9 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="Tables\ValidatedAddress.sql" />
+    <Build Include="Tables\ValidatedAddress.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
     <Build Include="Tables\Address.sql" />
   </ItemGroup>
   <ItemGroup>
