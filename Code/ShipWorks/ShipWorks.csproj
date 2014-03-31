@@ -1986,6 +1986,7 @@
     </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
+    <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IKnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />

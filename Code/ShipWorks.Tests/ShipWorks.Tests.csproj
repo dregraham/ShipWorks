@@ -363,6 +363,7 @@
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
+    <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHashTest.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntryTest.cs" />
