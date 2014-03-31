@@ -24,7 +24,7 @@ namespace Interapptive.Shared.Business
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public PersonAdapter(EntityBase2 entity, string fieldPrefix) 
+        public PersonAdapter(IEntity2 entity, string fieldPrefix) 
             : base(entity, fieldPrefix)
         {
 
@@ -33,7 +33,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Apply the default values to the fields of the entity
         /// </summary>
-        public static void ApplyDefaults(EntityBase2 entity, string fieldPrefix)
+        public static void ApplyDefaults(IEntity2 entity, string fieldPrefix)
         {
             PersonAdapter adapter = new PersonAdapter(entity, fieldPrefix);
 
@@ -61,13 +61,13 @@ namespace Interapptive.Shared.Business
             adapter.Email = "";
             adapter.Website = "";
 
-            adapter.ValidationStatus = 0;
+            adapter.AddressValidationStatus = 0;
         }
 
         /// <summary>
         /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, EntityBase2 toEntity, string fieldPrefix)
+        public static void Copy(IEntity2 fromEntity, IEntity2 toEntity, string fieldPrefix)
         {
             Copy(fromEntity, fieldPrefix, toEntity, fieldPrefix);
         }
@@ -75,7 +75,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Copy the person\address values from the fromEntity to the given PersonAdapter
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, string fromPrefix, PersonAdapter toAdapter)
+        public static void Copy(IEntity2 fromEntity, string fromPrefix, PersonAdapter toAdapter)
         {
             PersonAdapter fromAdapter = new PersonAdapter(fromEntity, fromPrefix);
 
@@ -85,7 +85,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, string fromPrefix, EntityBase2 toEntity, string toPrefix)
+        public static void Copy(IEntity2 fromEntity, string fromPrefix, IEntity2 toEntity, string toPrefix)
         {
             PersonAdapter fromAdapter = new PersonAdapter(fromEntity, fromPrefix);
             PersonAdapter toAdapter = new PersonAdapter(toEntity, toPrefix);
@@ -123,7 +123,15 @@ namespace Interapptive.Shared.Business
             toAdapter.Email = fromAdapter.Email;
             toAdapter.Website = fromAdapter.Website;
 
-            toAdapter.ValidationStatus = fromAdapter.ValidationStatus;
+            toAdapter.AddressValidationStatus = fromAdapter.AddressValidationStatus;
+        }
+
+        /// <summary>
+        /// Copy the person\address values from this adapter to another entity
+        /// </summary>
+        public void CopyTo(IEntity2 entity, string prefix)
+        {
+            Copy(this, new PersonAdapter(entity, prefix));
         }
 
         /// <summary>
@@ -154,7 +162,7 @@ namespace Interapptive.Shared.Business
                 Fax == other.Fax &&
                 Email == other.Email &&
                 Website == other.Website &&
-                ValidationStatus == other.ValidationStatus;
+                AddressValidationStatus == other.AddressValidationStatus;
         }
 
         /// <summary>
@@ -192,7 +200,7 @@ namespace Interapptive.Shared.Business
         public override int GetHashCode()
         {
             return (OriginID + FirstName + MiddleName + LastName + Company + Street1 + Street2 + Street3 + City + StateProvCode + PostalCode + CountryCode +
-                Phone + Fax + Email + Website + ValidationStatus).GetHashCode();
+                Phone + Fax + Email + Website + AddressValidationStatus).GetHashCode();
         }
 
         /// <summary>
@@ -468,10 +476,10 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// ValidationStatus - relates to enum ValidationStatusType defined in ShipWorks project.
         /// </summary>
-        public int ValidationStatus
+        public int AddressValidationStatus
         {
-            get { return GetField<int>("ValidationStatus"); }
-            set { SetField("ValidationStatus", value); }
+            get { return GetField<int>("AddressValidationStatus"); }
+            set { SetField("AddressValidationStatus", value); }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Interapptive.Shared.Data
         Dictionary<string, object> localValues = null;
 
         // If there is an entity loaded which we represent, then this holds that data
-        EntityBase2 entity;
+        IEntity2 entity;
         string fieldPrefix;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Interapptive.Shared.Data
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public EntityAdapter(EntityBase2 entity, string fieldPrefix)
+        public EntityAdapter(IEntity2 entity, string fieldPrefix)
         {
             if (entity == null)
             {
