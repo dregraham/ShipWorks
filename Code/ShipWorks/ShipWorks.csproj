@@ -483,6 +483,7 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\AddressValidationResult.cs" />
     <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
