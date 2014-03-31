@@ -40,4 +40,4 @@
         /// </summary>
         public string CountryCode { get; set; }
     }
-}
+}     
