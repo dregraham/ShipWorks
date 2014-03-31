@@ -60,6 +60,8 @@ namespace Interapptive.Shared.Business
             adapter.Fax = "";
             adapter.Email = "";
             adapter.Website = "";
+
+            adapter.ValidationStatus = 0;
         }
 
         /// <summary>
@@ -120,6 +122,8 @@ namespace Interapptive.Shared.Business
             toAdapter.Fax = fromAdapter.Fax;
             toAdapter.Email = fromAdapter.Email;
             toAdapter.Website = fromAdapter.Website;
+
+            toAdapter.ValidationStatus = fromAdapter.ValidationStatus;
         }
 
         /// <summary>
@@ -134,22 +138,23 @@ namespace Interapptive.Shared.Business
             }
 
             return
-                this.OriginID == other.OriginID &&
-                this.FirstName == other.FirstName &&
-                this.MiddleName == other.MiddleName &&
-                this.LastName == other.LastName &&
-                this.Company == other.Company &&
-                this.Street1 == other.Street1 &&
-                this.Street2 == other.Street2 &&
-                this.Street3 == other.Street3 &&
-                this.City == other.City &&
-                this.StateProvCode == other.StateProvCode &&
-                this.PostalCode == other.PostalCode &&
-                this.CountryCode == other.CountryCode &&
-                this.Phone == other.Phone &&
-                this.Fax == other.Fax &&
-                this.Email == other.Email &&
-                this.Website == other.Website;
+                OriginID == other.OriginID &&
+                FirstName == other.FirstName &&
+                MiddleName == other.MiddleName &&
+                LastName == other.LastName &&
+                Company == other.Company &&
+                Street1 == other.Street1 &&
+                Street2 == other.Street2 &&
+                Street3 == other.Street3 &&
+                City == other.City &&
+                StateProvCode == other.StateProvCode &&
+                PostalCode == other.PostalCode &&
+                CountryCode == other.CountryCode &&
+                Phone == other.Phone &&
+                Fax == other.Fax &&
+                Email == other.Email &&
+                Website == other.Website &&
+                ValidationStatus == other.ValidationStatus;
         }
 
         /// <summary>
@@ -186,8 +191,8 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public override int GetHashCode()
         {
-            return (OriginID.ToString() + FirstName + MiddleName + LastName + Company + Street1 + Street2 + Street3 + City + StateProvCode + PostalCode + CountryCode +
-                Phone + Fax + Email + Website).GetHashCode();
+            return (OriginID + FirstName + MiddleName + LastName + Company + Street1 + Street2 + Street3 + City + StateProvCode + PostalCode + CountryCode +
+                Phone + Fax + Email + Website + ValidationStatus).GetHashCode();
         }
 
         /// <summary>
@@ -458,6 +463,15 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<string>("Website"); }
             set { SetField("Website", value); }
+        }
+
+        /// <summary>
+        /// ValidationStatus - relates to enum ValidationStatusType defined in ShipWorks project.
+        /// </summary>
+        public int ValidationStatus
+        {
+            get { return GetField<int>("ValidationStatus"); }
+            set { SetField("ValidationStatus", value); }
         }
     }
 }
