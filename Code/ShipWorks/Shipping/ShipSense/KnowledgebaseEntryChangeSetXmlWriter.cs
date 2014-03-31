@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Xml.Linq;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -39,32 +36,32 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// This method appends the XML representation of the ChangeSet to the given XElement 
+        /// Writes the XML representation of a knowledge base entry change set to the given XElement 
         /// in the format of <ChangeSet><Packages></Packages><CustomsItems></CustomsItems></ChangeSet>. 
-        /// The change set for the knowledge base entry to the "<ChangeSets/>" node of the XElement 
-        /// provided; if this node does not exist, one is created.
+        /// The change set for the knowledge base entry is written to the "<ChangeSets/>" node of the 
+        /// XElement provided; if this node does not exist, one is created.
         /// </summary>
-        /// <param name="changeSetXElement">The XElement being written to.</param>
-        public void Write(XElement changeSetXElement)
+        /// <param name="element">The XElement being written to.</param>
+        public void WriteTo(XElement element)
         {
-            if (changeSetXElement == null)
+            if (element == null)
             {
                 throw new ShipSenseException("Cannot write change set to a null value.");
             }
 
-            if (!changeSetXElement.Descendants("ChangeSets").Any())
+            if (!element.Descendants("ChangeSets").Any())
             {
-                changeSetXElement.Add(new XElement("ChangeSets"));
+                element.Add(new XElement("ChangeSets"));
             }
 
             // Write the package and customs data to a new ChangeSet node and append it to the
             // group of change sets
             XElement changeSet = new XElement("ChangeSet");
 
-            packageXmlWriter.Write(changeSet);
-            customsXmlWriter.Write(changeSet);
+            packageXmlWriter.WriteTo(changeSet);
+            customsXmlWriter.WriteTo(changeSet);
 
-            changeSetXElement.Add(changeSet);
+            element.Add(changeSet);
         }
     }
 }

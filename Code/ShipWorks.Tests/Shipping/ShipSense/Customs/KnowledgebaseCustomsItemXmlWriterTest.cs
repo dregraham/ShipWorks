@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         public void Write_AddsCustomsItemsNodeToChangeSet_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
-            testObject.Write(changeSetElement);
+            testObject.WriteTo(changeSetElement);
 
             Assert.AreEqual(1, changeSetElement.Descendants("CustomsItems").Count());
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         public void Write_AddsBeforeAfterNodesToCustomsItems_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
-            testObject.Write(changeSetElement);
+            testObject.WriteTo(changeSetElement);
 
             Assert.AreEqual(1, changeSetElement.Descendants("Before").Count());
             Assert.AreEqual(1, changeSetElement.Descendants("After").Count());
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         public void Write_BeforeItemsMatchXml_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
-            testObject.Write(changeSetElement);
+            testObject.WriteTo(changeSetElement);
 
             for (int i = 0; i < beforeCustomsItems.Count; i++)
             {
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         public void Write_AfterItemsMatchXml_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
-            testObject.Write(changeSetElement);
+            testObject.WriteTo(changeSetElement);
 
             for (int i = 0; i < afterCustomsItems.Count; i++)
             {
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         public void Write_DoesNotWriteAnyHash_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
-            testObject.Write(changeSetElement);
+            testObject.WriteTo(changeSetElement);
 
             Assert.AreEqual(0, changeSetElement.Descendants("CustomsItems").Descendants("Hash").Count());
         }

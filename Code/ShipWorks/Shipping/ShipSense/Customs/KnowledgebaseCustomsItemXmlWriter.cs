@@ -11,14 +11,14 @@ namespace ShipWorks.Shipping.ShipSense.Customs
     /// </summary>
     public class KnowledgebaseCustomsItemXmlWriter : IChangeSetXmlWriter
     {
-        private IEnumerable<KnowledgebaseCustomsItem> before;
-        private IEnumerable<KnowledgebaseCustomsItem> after;
+        private readonly IEnumerable<KnowledgebaseCustomsItem> before;
+        private readonly IEnumerable<KnowledgebaseCustomsItem> after;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="before">List of kb customs items before any changes.</param>
-        /// <param name="after">List of kb customs items after changes applied.</param>
+        /// <param name="before">List of KB customs items before any changes.</param>
+        /// <param name="after">List of KB customs items after changes applied.</param>
         public KnowledgebaseCustomsItemXmlWriter(IEnumerable<KnowledgebaseCustomsItem> before, IEnumerable<KnowledgebaseCustomsItem> after)
         {
             this.before = before;
@@ -26,9 +26,10 @@ namespace ShipWorks.Shipping.ShipSense.Customs
         }
 
         /// <summary>
-        /// This method appends the XML representation of the ChangeSet to the given XElement.
+        /// Writes the XML representation of the customs items' change set to the given XElement.
         /// </summary>
-        public void Write(XElement changeSetXElement)
+        /// <param name="element">The XElement being written to.</param>
+        public void WriteTo(XElement element)
         {
             // Create the before customs items
             XElement beforeCustomsElements = new XElement("Before",
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.ShipSense.Customs
             // Create the before CustomsItems element with the before and after customs
             XElement customsItems = new XElement("CustomsItems", beforeCustomsElements, afterCustomsElements);
 
-            changeSetXElement.Add(customsItems);
+            element.Add(customsItems);
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [ExpectedException(typeof(ShipSenseException))]
         public void AppendChangeSet_ThrowsShipSenseException_WhenArgumentIsNull_Test()
         {
-            testObject.Write(null);
+            testObject.WriteTo(null);
         }
 
         [TestMethod]
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             XElement changeSets = new XElement("Something");
 
-            testObject.Write(changeSets);
+            testObject.WriteTo(changeSets);
 
             Assert.AreEqual(1, changeSets.Descendants("ChangeSets").Count());
         }
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             XElement changeSets = new XElement("ChangeSets");
 
-            testObject.Write(changeSets);
+            testObject.WriteTo(changeSets);
 
             Assert.AreEqual(1, changeSets.Descendants("ChangeSets").Count());
         }
@@ -58,9 +58,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             XElement changeSets = new XElement("ChangeSets");
 
-            testObject.Write(changeSets);
+            testObject.WriteTo(changeSets);
 
-            packageXmlWriter.Verify(w => w.Write(It.IsAny<XElement>()), Times.Once());
+            packageXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Once());
         }
 
         [TestMethod]
@@ -68,9 +68,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             XElement changeSets = new XElement("ChangeSets");
 
-            testObject.Write(changeSets);
+            testObject.WriteTo(changeSets);
 
-            customsXmlWriter.Verify(w => w.Write(It.IsAny<XElement>()), Times.Once());
+            customsXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Once());
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             XElement changeSets = new XElement("ChangeSets");
 
-            testObject.Write(changeSets);
+            testObject.WriteTo(changeSets);
 
             Assert.AreEqual(1, changeSets.Descendants("ChangeSet").Count());
         }
