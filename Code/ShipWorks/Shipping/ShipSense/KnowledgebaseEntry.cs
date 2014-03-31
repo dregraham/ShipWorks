@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +24,8 @@ namespace ShipWorks.Shipping.ShipSense
     {
         private long storeID = -1;
 
+        private IChangeSetXmlWriter changeSetXmlWriter;
+
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
 
@@ -34,7 +38,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
         public KnowledgebaseEntry()
-            : this(false)
+            : this(false, new KnowledgebaseEntryChangeSetXmlWriter())
         {
             packages = new List<KnowledgebasePackage>();
             customsItems = new List<KnowledgebaseCustomsItem>();
@@ -54,12 +58,14 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
+        /// Initializes a new instance of the <see cref="KnowledgebaseEntry" /> class.
         /// </summary>
         /// <param name="consolidateMultiplePackagesIntoSinglePackage">if set to <c>true</c> [consolidate multiple packages into single package].</param>
-        public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage)
+        /// <param name="changeSetXmlWriter">The change set XML writer.</param>
+        public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage, IChangeSetXmlWriter changeSetXmlWriter)
         {
             ConsolidateMultiplePackagesIntoSinglePackage = consolidateMultiplePackagesIntoSinglePackage;
+            this.changeSetXmlWriter = changeSetXmlWriter;
         }
 
         /// <summary>
@@ -393,6 +399,28 @@ namespace ShipWorks.Shipping.ShipSense
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Appends the change set of this knowledge base entry to the "<ChangeSets/>" node of 
+        /// the XElement provided; if this node does not exist, one is created.
+        /// </summary>
+        /// <param name="changeSets">The change sets.</param>
+        public void AppendChangeSet(XElement changeSets)
+        {
+            if (changeSets == null)
+            {
+                throw new ShipSenseException("Cannot write change set to a null value.");
+            }
+
+            if (!changeSets.Descendants("ChangeSets").Any())
+            {
+                changeSets.Add(new XElement("ChangeSets"));
+            }
+
+            // We have our ChangeSets node, so we can pass this along to the 
+            // writer to actually write our state.
+            changeSetXmlWriter.Write(changeSets);
         }
     }
 }

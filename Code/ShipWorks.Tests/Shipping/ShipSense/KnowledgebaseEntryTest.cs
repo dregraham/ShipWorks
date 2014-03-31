@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data;
@@ -16,12 +17,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
     [TestClass]
     public class KnowledgebaseEntryTest
     {
-        private readonly KnowledgebaseEntry testObject;
+        private KnowledgebaseEntry testObject;
 
         private List<IPackageAdapter> adapters;
         private readonly Mock<IPackageAdapter> adapter1;
         private readonly Mock<IPackageAdapter> adapter2;
-
+        
         private const long testStoreID = 2005;
 
         public KnowledgebaseEntryTest()
@@ -52,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 adapter1.Object,
                 adapter2.Object
             };
-
+            
             testObject = new KnowledgebaseEntry(testStoreID);
             testObject.Packages = new List<KnowledgebasePackage>()
             {
@@ -793,6 +794,41 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipment.CustomsItems.Add(customsEntity);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ShipSenseException))]
+        public void AppendChangeSet_CreatesXElement_WhenArgumentIsNull_Test()
+        {
+            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
+
+            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
+            testObject.AppendChangeSet(null);
+        }
+
+        [TestMethod]
+        public void AppendChangeSet_CreatesChangeSetsNode_WhenItDoesNotExist_Test()
+        {
+            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
+            XElement changeSet = new XElement("Something");
+
+            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
+            testObject.AppendChangeSet(changeSet);
+
+            Assert.AreEqual(1, changeSet.Descendants("ChangeSets").Count());
+        }
+
+        [TestMethod]
+        public void AppendChangeSet_DelegatesToChangeSetWriter_Test()
+        {
+            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
+            XElement changeSet = new XElement("Something");
+
+            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
+            testObject.AppendChangeSet(changeSet);
+
+            changeSetWriter.Verify(w => w.Write(changeSet));
+        }
+
     }
 }
 
