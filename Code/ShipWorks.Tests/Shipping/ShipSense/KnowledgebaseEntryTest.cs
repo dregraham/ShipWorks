@@ -794,41 +794,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipment.CustomsItems.Add(customsEntity);
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(ShipSenseException))]
-        public void AppendChangeSet_CreatesXElement_WhenArgumentIsNull_Test()
-        {
-            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
-
-            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
-            testObject.AppendChangeSet(null);
-        }
-
-        [TestMethod]
-        public void AppendChangeSet_CreatesChangeSetsNode_WhenItDoesNotExist_Test()
-        {
-            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
-            XElement changeSet = new XElement("Something");
-
-            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
-            testObject.AppendChangeSet(changeSet);
-
-            Assert.AreEqual(1, changeSet.Descendants("ChangeSets").Count());
-        }
-
-        [TestMethod]
-        public void AppendChangeSet_DelegatesToChangeSetWriter_Test()
-        {
-            Mock<IChangeSetXmlWriter> changeSetWriter = new Mock<IChangeSetXmlWriter>();
-            XElement changeSet = new XElement("Something");
-
-            testObject = new KnowledgebaseEntry(false, changeSetWriter.Object);
-            testObject.AppendChangeSet(changeSet);
-
-            changeSetWriter.Verify(w => w.Write(changeSet));
-        }
-
     }
 }
 

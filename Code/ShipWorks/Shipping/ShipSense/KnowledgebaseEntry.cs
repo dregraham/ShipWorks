@@ -23,9 +23,7 @@ namespace ShipWorks.Shipping.ShipSense
     public class KnowledgebaseEntry
     {
         private long storeID = -1;
-
-        private IChangeSetXmlWriter changeSetXmlWriter;
-
+        
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
 
@@ -38,7 +36,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
         public KnowledgebaseEntry()
-            : this(false, new KnowledgebaseEntryChangeSetXmlWriter())
+            : this(false)
         {
             packages = new List<KnowledgebasePackage>();
             customsItems = new List<KnowledgebaseCustomsItem>();
@@ -50,7 +48,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
-        /// <param name="storeID">The store id to which this kb entry belongs.</param>
+        /// <param name="storeID">The store id to which this KB entry belongs.</param>
         public KnowledgebaseEntry(long storeID)
             : this()
         {
@@ -62,10 +60,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         /// <param name="consolidateMultiplePackagesIntoSinglePackage">if set to <c>true</c> [consolidate multiple packages into single package].</param>
         /// <param name="changeSetXmlWriter">The change set XML writer.</param>
-        public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage, IChangeSetXmlWriter changeSetXmlWriter)
+        public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage)
         {
             ConsolidateMultiplePackagesIntoSinglePackage = consolidateMultiplePackagesIntoSinglePackage;
-            this.changeSetXmlWriter = changeSetXmlWriter;
         }
 
         /// <summary>
@@ -83,7 +80,7 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Gets or sets the store ID for this kb entry.
+        /// Gets or sets the store ID for this KB entry.
         /// </summary>
         public long StoreID
         {
@@ -401,26 +398,5 @@ namespace ShipWorks.Shipping.ShipSense
             return true;
         }
 
-        /// <summary>
-        /// Appends the change set of this knowledge base entry to the "<ChangeSets/>" node of 
-        /// the XElement provided; if this node does not exist, one is created.
-        /// </summary>
-        /// <param name="changeSets">The change sets.</param>
-        public void AppendChangeSet(XElement changeSets)
-        {
-            if (changeSets == null)
-            {
-                throw new ShipSenseException("Cannot write change set to a null value.");
-            }
-
-            if (!changeSets.Descendants("ChangeSets").Any())
-            {
-                changeSets.Add(new XElement("ChangeSets"));
-            }
-
-            // We have our ChangeSets node, so we can pass this along to the 
-            // writer to actually write our state.
-            changeSetXmlWriter.Write(changeSets);
-        }
     }
 }

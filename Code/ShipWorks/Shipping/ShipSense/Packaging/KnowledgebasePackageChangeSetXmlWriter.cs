@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.ShipSense.Packaging
         }
 
         /// <summary>
-        /// This method appends the XML representation of the ChangeSet to the given XElement.
+        /// This method appends the XML representation of the ChangeSet to the given XElement
         /// in the format of <Packages><Before><Package>....</Package></Before><After><Package>....</Package></After></Packages>
         /// </summary>
         /// <param name="changeSetXElement"></param>
