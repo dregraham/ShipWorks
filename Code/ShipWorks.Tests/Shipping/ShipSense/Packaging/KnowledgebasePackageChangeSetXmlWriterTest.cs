@@ -152,11 +152,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_DoesNotWritePackageHash_OfEachBeforePackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> beforePackageElements = changeSetElement.Descendants("Packages").Descendants("Before").Descendants("Package").ToList();
-            for (int i = 0; i < afterPackages.Count; i++)
+            for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
                 Assert.AreEqual(0, packageElement.Descendants("Hash").Count());
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageWeight_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -198,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageHeight_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -212,7 +212,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageWidth_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -226,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageLength_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -240,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageAdditionalWeight_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -254,7 +254,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_WritesPackageApplyAdditionalWeight_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
@@ -268,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         [TestMethod]
         public void Write_DoesNotWritePackageHash_OfEachAfterPackage_Test()
         {
-            testObject = new KnowledgebasePackageChangeSetXmlWriter(afterPackages, afterPackages);
+            testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.Write(changeSetElement);
 
             List<XElement> afterPackageElements = changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").ToList();
