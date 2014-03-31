@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.ShipSense
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
 
-        private List<KnowledgebasePackage> origianlPackages;
+        private List<KnowledgebasePackage> originalPackages;
         private List<KnowledgebaseCustomsItem> originalCustomsItems;
 
         private bool consolidateMultiplePackagesIntoSinglePackage;
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.ShipSense
             packages = new List<KnowledgebasePackage>();
             customsItems = new List<KnowledgebaseCustomsItem>();
 
-            origianlPackages = new List<KnowledgebasePackage>();
+            originalPackages = new List<KnowledgebasePackage>();
             originalCustomsItems = new List<KnowledgebaseCustomsItem>();
         }
 
@@ -99,8 +99,8 @@ namespace ShipWorks.Shipping.ShipSense
         [JsonIgnore]
         public IEnumerable<KnowledgebasePackage> OriginalPackages
         {
-            get { return origianlPackages; }
-            set { origianlPackages = new List<KnowledgebasePackage>(value); }
+            get { return originalPackages; }
+            set { originalPackages = new List<KnowledgebasePackage>(value); }
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.ShipSense
             foreach (IPackageAdapter adapter in packageAdapters)
             {
                 // Record the original package data that was provided
-                origianlPackages.Add(new KnowledgebasePackage(adapter));
+                originalPackages.Add(new KnowledgebasePackage(adapter));
             }
 
             if (ConsolidateMultiplePackagesIntoSinglePackage && packageAdapters.Count() == 1)
