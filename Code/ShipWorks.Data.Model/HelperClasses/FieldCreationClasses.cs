@@ -612,6 +612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -2292,6 +2297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -2937,6 +2947,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -3236,6 +3251,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -3951,6 +3971,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -5631,6 +5656,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -8997,6 +9027,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -9556,6 +9591,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -10382,6 +10422,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -10856,6 +10901,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -11862,6 +11912,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new OrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new OrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -12321,6 +12376,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -12871,6 +12931,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new PayPalOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -13712,6 +13777,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ProStoresOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipAddressValidationStatus);}
+		}
 		/// <summary>Creates a new ProStoresOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
 		{
@@ -14346,6 +14416,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -16051,6 +16126,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new ShopifyOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount
@@ -19676,6 +19756,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipAddressValidationStatus);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.RollupItemCount field instance</summary>
 		public static EntityField2 RollupItemCount

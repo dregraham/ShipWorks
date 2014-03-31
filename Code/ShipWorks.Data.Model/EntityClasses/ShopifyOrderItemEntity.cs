@@ -552,7 +552,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ShopifyOrderItemID property of the Entity ShopifyOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyOrderItemID"<br/>
+		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyOrderItemId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 ShopifyOrderItemID
@@ -563,7 +563,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ShopifyProductID property of the Entity ShopifyOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyProductID"<br/>
+		/// <remarks>Mapped on  table field: "ShopifyOrderItem"."ShopifyProductId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 ShopifyProductID

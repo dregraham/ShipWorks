@@ -320,6 +320,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1109,6 +1111,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1394,6 +1398,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1523,6 +1529,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1872,6 +1880,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -2661,6 +2671,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4268,6 +4280,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4510,6 +4524,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4876,6 +4892,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5084,6 +5102,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5567,6 +5587,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5787,6 +5809,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6052,6 +6076,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6442,6 +6468,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6741,6 +6769,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -7558,6 +7588,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -9296,6 +9328,8 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
