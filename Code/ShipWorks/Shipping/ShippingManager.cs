@@ -46,6 +46,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -183,6 +184,7 @@ namespace ShipWorks.Shipping
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -191,7 +193,7 @@ namespace ShipWorks.Shipping
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
-            // Content items arent generated until they are needed
+            // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;
 
@@ -200,7 +202,7 @@ namespace ShipWorks.Shipping
 
             shipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 
-            // The from address will be dependant on the specific service type, but we'll default it to that of the store
+            // The from address will be dependent on the specific service type, but we'll default it to that of the store
             StoreEntity store = StoreManager.GetStore(order.StoreID);
             PersonAdapter.Copy(store, "", shipment, "Origin");
             shipment.OriginFirstName = store.StoreName;

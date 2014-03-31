@@ -37,9 +37,7 @@ namespace ShipWorks.Shipping.ShipSense
 
         /// <summary>
         /// Writes the XML representation of a knowledge base entry change set to the given XElement 
-        /// in the format of <ChangeSet><Packages></Packages><CustomsItems></CustomsItems></ChangeSet>. 
-        /// The change set for the knowledge base entry is written to the "<ChangeSets/>" node of the 
-        /// XElement provided; if this node does not exist, one is created.
+        /// in the format of <ChangeSet><Packages></Packages><CustomsItems></CustomsItems></ChangeSet>.
         /// </summary>
         /// <param name="element">The XElement being written to.</param>
         public void WriteTo(XElement element)
@@ -48,12 +46,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 throw new ShipSenseException("Cannot write change set to a null value.");
             }
-
-            if (!element.Descendants("ChangeSets").Any())
-            {
-                element.Add(new XElement("ChangeSets"));
-            }
-
+            
             // Write the package and customs data to a new ChangeSet node and append it to the
             // group of change sets
             XElement changeSet = new XElement("ChangeSet");

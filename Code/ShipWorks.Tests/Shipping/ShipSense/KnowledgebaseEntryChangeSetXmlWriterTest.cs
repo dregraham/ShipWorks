@@ -34,26 +34,6 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void AppendChangeSet_CreatesChangeSetsNode_WhenItDoesNotExist_Test()
-        {
-            XElement changeSets = new XElement("Something");
-
-            testObject.WriteTo(changeSets);
-
-            Assert.AreEqual(1, changeSets.Descendants("ChangeSets").Count());
-        }
-
-        [TestMethod]
-        public void AppendChangeSet_DoesNotCreateChangeSetsNode_WhenItExists_Test()
-        {
-            XElement changeSets = new XElement("ChangeSets");
-
-            testObject.WriteTo(changeSets);
-
-            Assert.AreEqual(1, changeSets.Descendants("ChangeSets").Count());
-        }
-
-        [TestMethod]
         public void AppendChangeSet_DelegatesToPackageXmlWriter_Test()
         {
             XElement changeSets = new XElement("ChangeSets");

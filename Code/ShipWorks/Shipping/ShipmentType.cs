@@ -35,6 +35,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -295,7 +296,7 @@ namespace ShipWorks.Shipping
                         // Consider them loaded.  This is an in-memory field
                         shipment.CustomsItemsLoaded = true;
 
-                        decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity*ci.UnitValue);
+                        decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity * ci.UnitValue);
                         shipment.CustomsValue = customsValue;
                     }
                 }
@@ -310,9 +311,18 @@ namespace ShipWorks.Shipping
                 if (!knowledgebaseEntry.IsNew)
                 {
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+                    // Record the changes that were applied to the shipment's packages
+                    XElement changeSets = XElement.Parse(shipment.ShipSenseChangeSets);
+
+                    KnowledgebaseEntryChangeSetXmlWriter changeSetWriter = new KnowledgebaseEntryChangeSetXmlWriter(knowledgebaseEntry);
+                    changeSetWriter.WriteTo(changeSets);
+
+                    shipment.ShipSenseChangeSets = changeSets.ToString();
                 }
             }
         }
+
 
         /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
