@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.ShipSense
             }
             
             // Explicitly remove the entity, so it gets tracked by LLBLGen
-            for (int index = 0; index < shipmentCustomsItems.Count; index++)
+            while(shipmentCustomsItems.Count > 0)
             {
                 // Always remove the first item in the collection regardless of the index
                 // since the list is shrinking with each removal
