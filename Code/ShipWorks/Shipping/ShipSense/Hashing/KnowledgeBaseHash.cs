@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
 
             // Use the store ID as the salt value to avoid SKU/quantity collisions across
             // different stores
-            return Hash(valueToHash, order.StoreID.ToString(CultureInfo.InvariantCulture));
+            return Hash(valueToHash, "BananaHammock7458");
         }
     }
 }
