@@ -61,8 +61,9 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
             AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
-            AddElement("ShipSenseStatus", () => GetShipSenseStatusDescription(Shipment));
-            
+
+            // Add the ShipSense outline with package and customs info
+            AddElement("ShipSense", new ShipSenseOutline(context), () => Shipment);
 
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
