@@ -489,7 +489,7 @@
     <Compile Include="AddressValidation\AddressValidationException.cs" />
     <Compile Include="AddressValidation\AddressValidationResult.cs" />
     <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\DummyAddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\AddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\AddressValidator.cs" />
     <Compile Include="AddressValidation\OrderGridAddressSelector.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
@@ -302,6 +303,7 @@ namespace ShipWorks.Stores.Communication
                 order.LocalStatus = "";
                 PersonAdapter.ApplyDefaults(order, "Bill");
                 PersonAdapter.ApplyDefaults(order, "Ship");
+                order.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
 
                 // Rollup defaults
                 order.RollupNoteCount = 0;
