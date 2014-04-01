@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.ShipSense
     /// </summary>
     public class KnowledgebaseEntryChangeSetXmlWriter : IChangeSetXmlWriter
     {
+        private readonly KnowledgebaseEntry entry;
         private readonly IChangeSetXmlWriter packageXmlWriter;
         private readonly IChangeSetXmlWriter customsXmlWriter;
 
@@ -21,16 +22,18 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         /// <param name="entry">The knowledge base entry containing the package and customs data to record a change set for.</param>
         public KnowledgebaseEntryChangeSetXmlWriter(KnowledgebaseEntry entry)
-            : this(new KnowledgebasePackageChangeSetXmlWriter(entry.OriginalPackages, entry.Packages), new KnowledgebaseCustomsItemXmlWriter(entry.OriginalCustomsItems, entry.CustomsItems))
+            : this(entry, new KnowledgebasePackageChangeSetXmlWriter(entry.OriginalPackages, entry.Packages), new KnowledgebaseCustomsItemXmlWriter(entry.OriginalCustomsItems, entry.CustomsItems))
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KnowledgebaseEntryChangeSetXmlWriter"/> class.
+        /// Initializes a new instance of the <see cref="KnowledgebaseEntryChangeSetXmlWriter" /> class.
         /// </summary>
+        /// <param name="entry">The entry.</param>
         /// <param name="packageXmlWriter">The package XML writer.</param>
         /// <param name="customsXmlWriter">The customs XML writer.</param>
-        public KnowledgebaseEntryChangeSetXmlWriter(IChangeSetXmlWriter packageXmlWriter, IChangeSetXmlWriter customsXmlWriter)
+        public KnowledgebaseEntryChangeSetXmlWriter(KnowledgebaseEntry entry, IChangeSetXmlWriter packageXmlWriter, IChangeSetXmlWriter customsXmlWriter)
         {
+            this.entry = entry;
             this.packageXmlWriter = packageXmlWriter;
             this.customsXmlWriter = customsXmlWriter;
         }
@@ -52,7 +55,11 @@ namespace ShipWorks.Shipping.ShipSense
             XElement changeSet = new XElement("ChangeSet");
 
             packageXmlWriter.WriteTo(changeSet);
-            customsXmlWriter.WriteTo(changeSet);
+
+            if (entry.AppliedCustoms)
+            {
+                customsXmlWriter.WriteTo(changeSet);
+            }
 
             element.Add(changeSet);
         }

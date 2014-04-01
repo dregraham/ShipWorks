@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.ShipSense;
@@ -227,6 +228,39 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.ApplyTo(adapters.Take(1));
 
             Assert.AreEqual(testObject.Packages.ElementAt(0).Width, adapter1.Object.Width);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AppliedCustomsIsFalse_WhenCustomsItemsAreNotProvided_Test()
+        {
+            testObject.ApplyTo(adapters);
+
+            Assert.IsFalse(testObject.AppliedCustoms);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AppliedCustomsIsTrue_WhenCustomsItemsAreProvided_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            EntityCollection<ShipmentCustomsItemEntity> customsCollection = new EntityCollection<ShipmentCustomsItemEntity>();
+            customsCollection.Add(new ShipmentCustomsItemEntity());
+            
+            testObject.ApplyTo(adapters, customsCollection);
+
+            Assert.IsTrue(testObject.AppliedCustoms);
+        }
+
+        [TestMethod]
+        public void ApplyTo_AppliedCustomsIsFalse_WhenEmptyCollectionOfCustomsItemsIsProvided_Test()
+        {
+            testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
+
+            EntityCollection<ShipmentCustomsItemEntity> customsCollection = new EntityCollection<ShipmentCustomsItemEntity>();
+
+            testObject.ApplyTo(adapters, customsCollection);
+
+            Assert.IsTrue(testObject.AppliedCustoms);
         }
         
         [TestMethod]

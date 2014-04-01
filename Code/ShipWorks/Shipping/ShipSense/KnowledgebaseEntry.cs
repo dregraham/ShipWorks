@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.ShipSense
 
         private List<KnowledgebasePackage> originalPackages;
         private List<KnowledgebaseCustomsItem> originalCustomsItems;
-
+        
         private bool consolidateMultiplePackagesIntoSinglePackage;
 
         /// <summary>
@@ -37,6 +37,8 @@ namespace ShipWorks.Shipping.ShipSense
 
             originalPackages = new List<KnowledgebasePackage>();
             originalCustomsItems = new List<KnowledgebaseCustomsItem>();
+
+            AppliedCustoms = false;
         }
 
         /// <summary>
@@ -104,6 +106,15 @@ namespace ShipWorks.Shipping.ShipSense
             set { originalCustomsItems = new List<KnowledgebaseCustomsItem>(value); }
         }
 
+
+        /// <summary>
+        /// Gets a value indicating whether the knowledge base entry [applied customs] information.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [applied customs]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonIgnore]
+        public bool AppliedCustoms { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether [consolidate multiple packages into single package]. This 
@@ -209,9 +220,22 @@ namespace ShipWorks.Shipping.ShipSense
         public void ApplyTo(IEnumerable<IPackageAdapter> adapters, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
             ApplyTo(adapters);
+            
+            // Make a note that customs were applied that can be inspected when 
+            // writing out change sets.
+            AppliedCustoms = true;
 
             if (!CustomsItems.Any())
             {
+                // We don't have any customs items for this entry, but we do want the change set to 
+                // reflect that the before/after are identical, so copy the customs items provided
+                // the the current items for this entry. These change are in memory only and only 
+                // apply until it is disposed of.
+                foreach (ShipmentCustomsItemEntity entity in shipmentCustomsItems)
+                {
+                    customsItems.Add(new KnowledgebaseCustomsItem(entity));
+                }
+
                 return;
             }
             

@@ -16,14 +16,18 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         
         private Mock<IChangeSetXmlWriter> packageXmlWriter;
         private Mock<IChangeSetXmlWriter> customsXmlWriter;
+        private KnowledgebaseEntry entry;
 
         [TestInitialize]
         public void Initialize()
         {
+            entry = new KnowledgebaseEntry();
+            entry.AppliedCustoms = true;
+
             packageXmlWriter = new Mock<IChangeSetXmlWriter>();
             customsXmlWriter = new Mock<IChangeSetXmlWriter>();
 
-            testObject = new KnowledgebaseEntryChangeSetXmlWriter(packageXmlWriter.Object, customsXmlWriter.Object);
+            testObject = new KnowledgebaseEntryChangeSetXmlWriter(entry, packageXmlWriter.Object, customsXmlWriter.Object);
         }
 
         [TestMethod]
@@ -44,13 +48,25 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void AppendChangeSet_DelegatesToCustomsXmlWriter_Test()
+        public void AppendChangeSet_DelegatesToCustomsXmlWriter_WhenAppliedCustomsIsTrue_Test()
         {
+            entry.AppliedCustoms = true;
             XElement changeSets = new XElement("ChangeSets");
 
             testObject.WriteTo(changeSets);
 
             customsXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Once());
+        }
+
+        [TestMethod]
+        public void AppendChangeSet_DoesNotDelegateToCustomsXmlWriter_WhenAppliedCustomsIsFalse_Test()
+        {
+            entry.AppliedCustoms = false;
+            XElement changeSets = new XElement("ChangeSets");
+
+            testObject.WriteTo(changeSets);
+
+            customsXmlWriter.Verify(w => w.WriteTo(It.IsAny<XElement>()), Times.Never());
         }
 
         [TestMethod]
