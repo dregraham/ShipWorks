@@ -1183,7 +1183,7 @@ namespace ShipWorks.Shipping
                 // Apply the data from the package adapters and the customs items to the knowledge base 
                 // entry, so the shipment data will get saved to the knowledge base; the knowledge base
                 // is smart enough to know when to save the customs items associated with an entry.
-                KnowledgebaseEntry entry = new KnowledgebaseEntry(order.StoreID);
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
                 entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
 
                 Knowledgebase knowledgebase = new Knowledgebase();

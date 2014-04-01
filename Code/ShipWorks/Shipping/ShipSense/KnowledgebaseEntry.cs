@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Linq;
 using Newtonsoft.Json;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -22,8 +18,6 @@ namespace ShipWorks.Shipping.ShipSense
     [Obfuscation(ApplyToMembers = false, Exclude = true, StripAfterObfuscation = false)]
     public class KnowledgebaseEntry
     {
-        private long storeID = -1;
-        
         private List<KnowledgebasePackage> packages;
         private List<KnowledgebaseCustomsItem> customsItems;
 
@@ -46,16 +40,6 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
-        /// </summary>
-        /// <param name="storeID">The store id to which this KB entry belongs.</param>
-        public KnowledgebaseEntry(long storeID)
-            : this()
-        {
-            this.storeID = storeID;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry" /> class.
         /// </summary>
         /// <param name="consolidateMultiplePackagesIntoSinglePackage">if set to <c>true</c> [consolidate multiple packages into single package].</param>
@@ -73,19 +57,9 @@ namespace ShipWorks.Shipping.ShipSense
             : this()
         {
             KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
-
-            StoreID = deserializedEntry.StoreID;
+            
             packages = deserializedEntry.Packages.ToList();
             CustomsItems = deserializedEntry.CustomsItems.ToList();
-        }
-
-        /// <summary>
-        /// Gets or sets the store ID for this KB entry.
-        /// </summary>
-        public long StoreID
-        {
-            get { return storeID; }
-            set { storeID = value; }
         }
 
         /// <summary>
@@ -152,11 +126,6 @@ namespace ShipWorks.Shipping.ShipSense
         /// /// <exception cref="System.InvalidOperationException">StoreID is required for Knowledge Base Entries, but one was not provided.</exception>
         public string ToJson()
         {
-            if (storeID == -1)
-            {
-                throw new InvalidOperationException("StoreID is required for Knowledge Base Entries, but one was not provided.");
-            }
-
             return JsonConvert.SerializeObject(this);
         }
 
@@ -336,7 +305,7 @@ namespace ShipWorks.Shipping.ShipSense
 
             // The Store ID, packages, and customs must all coincide for the 
             // shipment to match the entry
-            return shipment.Order.StoreID == StoreID && PackagesMatch(packageAdapters) && CustomsMatch(shipment);
+            return PackagesMatch(packageAdapters) && CustomsMatch(shipment);
         }
 
         /// <summary>
