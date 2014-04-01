@@ -224,6 +224,9 @@ namespace ShipWorks.Shipping.ShipSense
             // Make a note that customs were applied that can be inspected when 
             // writing out change sets.
             AppliedCustoms = true;
+            
+            // Record the original customs data that was provided
+            shipmentCustomsItems.ToList().ForEach(i => originalCustomsItems.Add(new KnowledgebaseCustomsItem(i)));
 
             if (!CustomsItems.Any())
             {
@@ -242,9 +245,6 @@ namespace ShipWorks.Shipping.ShipSense
             // Explicitly remove the entity, so it gets tracked by LLBLGen
             for (int index = 0; index < shipmentCustomsItems.Count; index++)
             {
-                // Record the original customs data that was provided
-                originalCustomsItems.Add(new KnowledgebaseCustomsItem(shipmentCustomsItems[index]));
-
                 // Always remove the first item in the collection regardless of the index
                 // since the list is shrinking with each removal
                 shipmentCustomsItems.RemoveAt(0);
