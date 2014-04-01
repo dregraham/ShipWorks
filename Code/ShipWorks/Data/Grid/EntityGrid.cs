@@ -282,11 +282,11 @@ namespace ShipWorks.Data.Grid
         /// the grid that some action specific to the column has been performed in a cell.  This allows for centralized
         /// handling of cell actions through the grid.
         /// </summary>
-        internal void OnGridCellLinkClicked(EntityGridRow row, EntityGridColumn column)
+        internal void OnGridCellLinkClicked(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             if (GridCellLinkClicked != null)
             {
-                GridCellLinkClicked(this, new GridHyperlinkClickEventArgs(row, column));
+                GridCellLinkClicked(this, new GridHyperlinkClickEventArgs(row, column, mouseArgs));
             }
         }
 

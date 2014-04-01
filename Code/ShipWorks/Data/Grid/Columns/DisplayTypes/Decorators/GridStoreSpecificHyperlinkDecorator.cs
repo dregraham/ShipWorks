@@ -139,7 +139,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// <summary>
         /// A hyperlink has been clicked
         /// </summary>
-        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column)
+        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             GridColumnFormattedValue formattedValue = row.GetFormattedValue(column);
 

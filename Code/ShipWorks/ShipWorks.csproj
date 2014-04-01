@@ -492,6 +492,7 @@
     <Compile Include="AddressValidation\DummyAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\AddressValidator.cs" />
+    <Compile Include="AddressValidation\OrderGridAddressSelector.cs" />
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />

@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
@@ -12,6 +14,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.PayPal;
@@ -532,9 +535,50 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
                         new GridMoneyDisplayType(), "Total", 1024.18m,
                         OrderFields.OrderTotal), 
+
+                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}", true,
+                        new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Value),
+                        "Validation Status", string.Empty,
+                        OrderFields.ShipAddressValidationStatus) 
+                        { DefaultWidth = 100 },
+
+                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
+                        new GridActionDisplayType(DisplayValidationSuggestionLabel, (Action<object, GridHyperlinkClickEventArgs>)(new OrderGridAddressSelector()).ShowAddressOptionMenu), 
+                        "Validation Suggestions", "2 Suggestions",
+                        new GridColumnFunctionValueProvider(x => x),
+                        new GridColumnSortProvider(DisplayValidationSuggestionLabel))
+                        { DefaultWidth = 120 }
                 };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Displays the validation suggestion link text
+        /// </summary>
+        private static string DisplayValidationSuggestionLabel(object arg)
+        {
+            var order = arg as OrderEntity;
+            if (order == null)
+            {
+                return string.Empty;
+            }
+
+            switch ((AddressValidationStatusType) order.ShipAddressValidationStatus)
+            {
+                case AddressValidationStatusType.Valid:
+                case AddressValidationStatusType.NotChecked:
+                case AddressValidationStatusType.Pending:
+                    return string.Empty;
+                case AddressValidationStatusType.Adjusted:
+                case AddressValidationStatusType.NeedsAttention:
+                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.SuggestedSelected:
+                    return "Suggestions";
+                default:
+                    return string.Empty;
+            }
         }
 
         /// <summary>

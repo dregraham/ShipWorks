@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using ShipWorks.Data.Grid.Columns;
 
 namespace ShipWorks.Data.Grid
 {
     /// <summary>
-    /// Delegate for event handler fo rthe grid hyplink click event
+    /// Delegate for event handler fo rthe grid hyperlink click event
     /// </summary>
     public delegate void GridHyperlinkClickEventHandler(object sender, GridHyperlinkClickEventArgs e);
 
@@ -18,16 +19,18 @@ namespace ShipWorks.Data.Grid
     {
         EntityGridRow row;
         EntityGridColumn column;
+        readonly MouseEventArgs mouseArgs;
 
         bool handled = true;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GridHyperlinkClickEventArgs(EntityGridRow row, EntityGridColumn column)
+        public GridHyperlinkClickEventArgs(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             this.row = row;
             this.column = column;
+            this.mouseArgs = mouseArgs;
         }
 
         /// <summary>
@@ -44,6 +47,14 @@ namespace ShipWorks.Data.Grid
         public EntityGridRow Row
         {
             get { return row; }
+        }
+
+        /// <summary>
+        /// The mouse arguments from the click event
+        /// </summary>
+        public MouseEventArgs MouseArgs
+        {
+            get { return mouseArgs; }
         }
 
         /// <summary>
