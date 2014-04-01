@@ -8,6 +8,22 @@ namespace ShipWorks.AddressValidation
     public class AddressValidationResult
     {
         /// <summary>
+        /// Creates a new AddressValidationResult
+        /// </summary>
+        public AddressValidationResult()
+        {
+            // Default all the fields to empty strings instead of nulls to
+            // reduce the amount of null checks before copying
+            Street1 = string.Empty;
+            Street2 = string.Empty;
+            Street3 = string.Empty;
+            City = string.Empty;
+            StateProvCode = string.Empty;
+            PostalCode = string.Empty;
+            CountryCode = string.Empty;
+        }
+
+        /// <summary>
         /// Street 1 of the address
         /// </summary>
         public string Street1 { get; set; }

@@ -211,6 +211,32 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
+        public void Validate_DoesNotChangeOriginalAddress_WhenOneValidAddressIsReturned()
+        {
+            results.Remove(result2);
+            result1.IsValid = true;
+            result1.Street1 = "Foo 1";
+            result1.Street2 = "Foo 2";
+            result1.Street3 = "Foo 3";
+            result1.City = "Foo City";
+            result1.StateProvCode = "FO";
+            result1.CountryCode = "BA";
+            result1.PostalCode = "12345";
+
+            AddressEntity originalAddress = null;
+
+            testObject.Validate(sampleOrder, "Ship", (x, y) => { originalAddress = x; });
+
+            Assert.AreEqual("Street 1", originalAddress.Street1);
+            Assert.AreEqual("Street 2", originalAddress.Street2);
+            Assert.AreEqual("Street 3", originalAddress.Street3);
+            Assert.AreEqual("City", originalAddress.City);
+            Assert.AreEqual("MO", originalAddress.StateProvCode);
+            Assert.AreEqual("63102", originalAddress.PostalCode);
+            Assert.AreEqual("US", originalAddress.CountryCode);
+        }
+
+        [TestMethod]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenOneInvalidAddressIsReturned()
         {
             results.Remove(result2);

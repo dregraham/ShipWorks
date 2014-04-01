@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
-using SD.LLBLGen.Pro.LinqSupportClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -15,6 +14,18 @@ namespace ShipWorks.AddressValidation
     {
         private readonly IAddressValidationWebClient webClient;
 
+        /// <summary>
+        /// Creates a new instance of the AddressValidator with the default web client
+        /// </summary>
+        public AddressValidator() :
+            this(new DummyAddressValidationWebClient())
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates a new instance of the AddressValidator using the specified web client
+        /// </summary>
         public AddressValidator(IAddressValidationWebClient webClient)
         {
             this.webClient = webClient;
@@ -47,13 +58,13 @@ namespace ShipWorks.AddressValidation
             {
                 return;
             }
-            
-            SetValidationStatus(suggestedAddresses, adapter);
-            UpdateAddressIfAdjusted(adapter, suggestedAddresses);
 
             // Store the original address so that the user can revert later if they want
             AddressEntity originalAddress = new AddressEntity();
             adapter.CopyTo(originalAddress, string.Empty);
+
+            SetValidationStatus(suggestedAddresses, adapter);
+            UpdateAddressIfAdjusted(adapter, suggestedAddresses);
 
             saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
         }
