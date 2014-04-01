@@ -240,6 +240,11 @@ namespace ShipWorks.Shipping
                 adapter.Commit();
             }
 
+            // Explicitly save the shipment here to delete any entities in the Removed buckets of the 
+            // entity collections; after applying ShipSense (where customs items are first loaded in 
+            // this path), and entities were removed, they were still being persisted to the database.
+            SaveShipment(shipment);
+
             lock (siblingData)
             {
                 List<long> shipmentList = siblingData[(long)shipment.Fields[(int)ShipmentFieldIndex.OrderID].CurrentValue];

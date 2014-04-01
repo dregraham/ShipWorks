@@ -280,7 +280,10 @@ namespace ShipWorks.Shipping
 
                 if (IsCustomsRequired(shipment))
                 {
-                    // Apply the knowledge base entry data to the shipment/packages and customs info
+                    // Make sure the customs items are loaded before applying the knowledge base entry
+                    // data to the shipment/packages and customs info otherwise the customs data of 
+                    // the "before" data will be empty in the first change set
+                    CustomsManager.LoadCustomsItems(shipment, false);
                     knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
 
                     if (shipment.CustomsItems.Any())
