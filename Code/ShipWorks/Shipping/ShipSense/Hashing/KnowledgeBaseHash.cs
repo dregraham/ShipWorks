@@ -28,23 +28,23 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             order.OrderItems.Sort(OrderItemFields.SKU.FieldIndex, ListSortDirection.Ascending);
             List<OrderItemEntity> sortedItems = order.OrderItems.ToList();
 
-            // We're going to group the items by SKU, so we can sum the quantities
-            List<IGrouping<string, OrderItemEntity>> groupedItemsBySku = sortedItems.GroupBy(i => i.SKU).ToList();
+            // We're going to group the items by item code and SKU, so we can sum the quantities
+            List<IGrouping<string, OrderItemEntity>> groupedItemsBySku = sortedItems.GroupBy(i => string.Format("{0}-{1}", i.Code, i.SKU)).ToList();
 
             // Build up the string data for each item now that we have the items sorted and grouped by SKU
             List<string> skuQuantityPair = new List<string>();
             foreach (IGrouping<string, OrderItemEntity> itemGroup in groupedItemsBySku)
             {
-                // Each entry will be in the format of SKU-TotalQty
-                skuQuantityPair.Add(string.Format("{0}-{1}", itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
+                // Since the key already incorporates the item's code and key, each entry 
+                // will be in the format of Code-SKU-TotalQty
+                skuQuantityPair.Add(string.Format("{0}-{1}",itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
             }
             
             // Create a single string representing the SKU/Quantity pairs that will be 
             // used to compute the hash
             string valueToHash = string.Join("|", skuQuantityPair);
 
-            // Use the store ID as the salt value to avoid SKU/quantity collisions across
-            // different stores
+            // Salt the hash, so it's a little more difficult to crack
             return Hash(valueToHash, "BananaHammock7458");
         }
     }

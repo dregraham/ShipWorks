@@ -22,52 +22,51 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void ComputeHash_WithSingleItem_Test()
         {
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
 
             string hash = testObject.ComputeHash(order);
 
-            Assert.AreEqual("8i+RruvmToi1PBp0bq21EQIK7XLi1EJqr6OMjqF3bnE=", hash);
+            Assert.AreEqual("+OaVh83n59aFH0JaS7TZLS3Qf2/Cd+s4qa6eCZ9z/5Q=", hash);
         }
 
         [TestMethod]
-        public void ComputeHash_WithItemsHavingDuplicateSkuValues_Test()
+        public void ComputeHash_WithItemsHavingDuplicateItemCodeSkuValues_Test()
         {
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3});
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 4 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 5 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 6 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 4 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 5 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 6 });
 
             string hash = testObject.ComputeHash(order);
 
-            Assert.AreEqual("NPYGn6XkJwEJwUb+rsNSD9+MTcMa2QNLg/+zs2LzylI=", hash);
+            Assert.AreEqual("J0XVHDoL/FTcQTHZgATYyME+obHWlTuTPpM5eErG4Ts=", hash);
         }
 
         [TestMethod]
-        public void ComputeHash_WithItemsHavingMixtureOfUniqueAndDuplicateSkuValues_Test()
+        public void ComputeHash_WithItemsHavingMixtureOfUniqueAndDuplicateItemCodeSkuValues_Test()
         {
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 6 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 4 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-1", Quantity = 37 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-2", Quantity = 1 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 2 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 9 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 13 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 6 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 4 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Unique One", SKU = "UniqueItem-1", Quantity = 37 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Unique Two", SKU = "UniqueItem-2", Quantity = 1 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 2 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 9 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 13 });
 
             string hash = testObject.ComputeHash(order);
 
-            Assert.AreEqual("sRNevMwnLmwXP4Rq87EouT0s20c7Y5LToCd/ZRqkamM=", hash);
+            Assert.AreEqual("oP1MPXqDMND8WO6362GBaH6tB1zXTcRpA4tTzFa/9sU=", hash);
         }
 
         [TestMethod]
-        public void ComputeHash_CreatesSameHash_WhenSingleItemOrdersHaveSameSkuQuantityValues_ForDifferentStores_Test()
+        public void ComputeHash_CreatesSameHash_WhenSingleItemOrdersHaveSameItemCodeSkuQuantityValues_ForDifferentStores_Test()
         {
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
 
             OrderEntity secondOrder = new OrderEntity();
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
             secondOrder.StoreID = 2006;
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
-            
             
             string firstOrderHash = testObject.ComputeHash(order);
             string secondOrderHash = testObject.ComputeHash(secondOrder);
@@ -76,33 +75,69 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [TestMethod]
-        public void ComputeHash_CreatesSameHash_WhenMultipleItemOrdersHaveSameSkuQuantityValues_ForDifferentStores_Test()
+        public void ComputeHash_CreatesSameHash_WhenMultipleItemOrdersHaveSameItemCodeSkuQuantityValues_ForDifferentStores_Test()
         {
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 6 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 4 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-1", Quantity = 37 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-2", Quantity = 1 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 2 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 9 });
-            order.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 13 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 6 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 4 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Unique One", SKU = "UniqueItem-1", Quantity = 37 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Unique Two", SKU = "UniqueItem-2", Quantity = 1 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 2 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 9 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 13 });
 
             OrderEntity secondOrder = new OrderEntity();
-            secondOrder.StoreID = 2006;
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 3 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 6 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 4 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-1", Quantity = 37 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "UniqueItem-2", Quantity = 1 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 2 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "XYZ789", Quantity = 9 });
-            secondOrder.OrderItems.Add(new OrderItemEntity { SKU = "ABC123", Quantity = 13 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 6 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 4 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Unique One", SKU = "UniqueItem-1", Quantity = 37 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Unique Two", SKU = "UniqueItem-2", Quantity = 1 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 2 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 9 });
+            secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 13 });
 
+            secondOrder.StoreID = 2006;
 
             string firstOrderHash = testObject.ComputeHash(order);
             string secondOrderHash = testObject.ComputeHash(secondOrder);
 
             Assert.AreEqual(firstOrderHash, secondOrderHash);
+        }
+
+        [TestMethod]
+        public void ComputeHash_CreatesDifferentHash_WhenItemCodeDiffers_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            string firstHash = testObject.ComputeHash(order);
+
+            order.OrderItems[0].Code = "Code-2";
+            string secondHash = testObject.ComputeHash(order);
+
+            Assert.AreNotEqual(firstHash, secondHash);
+        }
+
+        [TestMethod]
+        public void ComputeHash_CreatesDifferentHash_WhenItemSKUDiffers_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            string firstHash = testObject.ComputeHash(order);
+
+            order.OrderItems[0].SKU = "ABC789";
+            string secondHash = testObject.ComputeHash(order);
+
+            Assert.AreNotEqual(firstHash, secondHash);
+        }
+
+        [TestMethod]
+        public void ComputeHash_CreatesDifferentHash_WhenItemQuantitiesDiffers_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
+            string firstHash = testObject.ComputeHash(order);
+
+            order.OrderItems[0].Quantity = 1;
+            string secondHash = testObject.ComputeHash(order);
+
+            Assert.AreNotEqual(firstHash, secondHash);
         }
     }
 }
