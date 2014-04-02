@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -45,7 +46,6 @@ namespace ShipWorks.Shipping.ShipSense
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry" /> class.
         /// </summary>
         /// <param name="consolidateMultiplePackagesIntoSinglePackage">if set to <c>true</c> [consolidate multiple packages into single package].</param>
-        /// <param name="changeSetXmlWriter">The change set XML writer.</param>
         public KnowledgebaseEntry(bool consolidateMultiplePackagesIntoSinglePackage)
         {
             ConsolidateMultiplePackagesIntoSinglePackage = consolidateMultiplePackagesIntoSinglePackage;
@@ -54,10 +54,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
-        /// <param name="serializedJson">The JSON representation of a KnowledgebaseEntry that has been serialized.</param>
-        public KnowledgebaseEntry(string serializedJson)
+        /// <param name="compressedJson">The compressed JSON representation of a KnowledgebaseEntry that has been serialized.</param>
+        public KnowledgebaseEntry(byte[] compressedJson)
             : this()
         {
+            // TODO: Decrypt the serializedJson
+            string serializedJson = Encoding.UTF8.GetString(compressedJson);
             KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
             
             packages = deserializedEntry.Packages.ToList();

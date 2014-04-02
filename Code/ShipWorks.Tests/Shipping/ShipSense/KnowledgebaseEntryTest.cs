@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -84,7 +85,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ConsolidateMultiplePackagesIntoSinglePackage = true;
 
-            KnowledgebaseEntry hydratedEntry = new KnowledgebaseEntry(testObject.ToJson());
+            // TODO: Decompress the JSON
+            KnowledgebaseEntry hydratedEntry = new KnowledgebaseEntry(Encoding.UTF8.GetBytes(testObject.ToJson()));
 
             Assert.AreEqual(testObject.Packages.Count(), hydratedEntry.Packages.Count());
             for (int i = 0; i < hydratedEntry.Packages.Count(); i++)

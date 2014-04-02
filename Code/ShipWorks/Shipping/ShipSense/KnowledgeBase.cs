@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.ShipSense
                 entity.Hash = hash;
             }
 
-            if (!string.IsNullOrWhiteSpace(entity.Entry))
+            if (entity.Entry != null && entity.Entry.Any())
             {
                 // We don't want to overwrite any customs information that may already be on the
                 // entry returned from the database if the current entry doesn't have any customs info
@@ -77,7 +78,8 @@ namespace ShipWorks.Shipping.ShipSense
             }
 
             // Update the JSON of the entity to reflect the latest KB entry
-            entity.Entry = entry.ToJson();
+            // TODO: Compress the JSON
+            entity.Entry = Encoding.UTF8.GetBytes(entry.ToJson());
             
             using (SqlAdapter adapter = new SqlAdapter())
             {
