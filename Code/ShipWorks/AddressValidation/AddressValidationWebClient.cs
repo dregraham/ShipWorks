@@ -4,7 +4,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
+using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.AddressValidation
@@ -81,9 +83,9 @@ namespace ShipWorks.AddressValidation
                                 Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
                                 Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
                                 City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
-                                StateProvCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty),
+                                StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty)),
                                 PostalCode = validatedZip,
-                                CountryCode = "US",
+                                CountryCode = Geography.GetCountryCode("US"),
                                 IsValid = true
                             }
                         };
@@ -133,24 +135,24 @@ namespace ShipWorks.AddressValidation
             {
                 XPathNavigator address = addressIterator.Current;
 
-                string pLow = XPathUtility.Evaluate(address, "/PLow", string.Empty);
-                string pHigh = XPathUtility.Evaluate(address, "/PHigh", string.Empty);
-                string sLow = XPathUtility.Evaluate(address, "/SLow", string.Empty);
-                string sHigh = XPathUtility.Evaluate(address, "/SHigh", string.Empty);
-                string preDir = XPathUtility.Evaluate(address, "/PreDir", string.Empty);
-                string street = XPathUtility.Evaluate(address, "/Street", string.Empty);
-                string suff = XPathUtility.Evaluate(address, "/Suff", string.Empty);
-                string postDir = XPathUtility.Evaluate(address, "/PostDir", string.Empty);
-                string unit = XPathUtility.Evaluate(address, "/Unit", string.Empty);
-                string validatedCity = XPathUtility.Evaluate(address, "/City", string.Empty);
-                string validatedState = XPathUtility.Evaluate(address, "/State", string.Empty);
-                string zip5 = XPathUtility.Evaluate(address, "/ZIP5", string.Empty);
-                string lPlus4 = XPathUtility.Evaluate(address, "/LPLUS4", string.Empty);
-                string hPlus4 = XPathUtility.Evaluate(address, "/HPLUS4", string.Empty);
+                string pLow = XPathUtility.Evaluate(address, "PLow", string.Empty).TrimStart('0');
+                string pHigh = XPathUtility.Evaluate(address, "PHigh", string.Empty).TrimStart('0');
+                string sLow = XPathUtility.Evaluate(address, "SLow", string.Empty).TrimStart('0');
+                string sHigh = XPathUtility.Evaluate(address, "SHigh", string.Empty).TrimStart('0');
+                string preDir = XPathUtility.Evaluate(address, "PreDir", string.Empty);
+                string street = XPathUtility.Evaluate(address, "Street", string.Empty);
+                string suff = XPathUtility.Evaluate(address, "Suff", string.Empty);
+                string postDir = XPathUtility.Evaluate(address, "PostDir", string.Empty);
+                string unit = XPathUtility.Evaluate(address, "Unit", string.Empty);
+                string validatedCity = XPathUtility.Evaluate(address, "City", string.Empty);
+                string validatedState = XPathUtility.Evaluate(address, "State", string.Empty);
+                string zip5 = XPathUtility.Evaluate(address, "ZIP5", string.Empty);
+                string lPlus4 = XPathUtility.Evaluate(address, "LPLUS4", string.Empty);
+                string hPlus4 = XPathUtility.Evaluate(address, "HPLUS4", string.Empty);
 
                 // odd or even
-                string pCode = XPathUtility.Evaluate(address, "/PCode", string.Empty);
-                string sCode = XPathUtility.Evaluate(address, "/SCode", string.Empty);
+                string pCode = XPathUtility.Evaluate(address, "PCode", string.Empty);
+                string sCode = XPathUtility.Evaluate(address, "SCode", string.Empty);
 
                 StringBuilder validatedStreet1 = new StringBuilder();
 
@@ -172,7 +174,7 @@ namespace ShipWorks.AddressValidation
                 StringBuilder validatedStreet2 = new StringBuilder();
                 validatedStreet2.Append(addSpaceIfNotEmpty(unit));
 
-                if (!string.IsNullOrEmpty(sHigh) || sHigh == sLow)
+                if (string.IsNullOrEmpty(sHigh) || sHigh == sLow)
                 {
                     validatedStreet2.Append(addSpaceIfNotEmpty(sLow));
                 }
@@ -186,9 +188,9 @@ namespace ShipWorks.AddressValidation
                     Street1 = validatedStreet1.ToString(),
                     Street2 = validatedStreet2.ToString(),
                     City = validatedCity,
-                    StateProvCode = validatedState,
+                    StateProvCode = Geography.GetStateProvCode(validatedState),
                     PostalCode = GetMultiZipPlus4(zip5, lPlus4, hPlus4),
-                    CountryCode = "USA"
+                    CountryCode = Geography.GetCountryCode("US")
                 };
 
                 validationResults.Add(addressValidationResult);
@@ -271,7 +273,7 @@ namespace ShipWorks.AddressValidation
                     "<ADDRESS1>{3}</ADDRESS1>" +
                     "<ADDRESS2>{4}</ADDRESS2>" +
                     "<ADDRESS3>{5}, {6} {7}</ADDRESS3>" +
-                    "</VERIFYADDRESS>", command, "512251", "endicia7458", street1, street2, city, state, zip);
+                    "</VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
 
                 string url =
                     string.Format(
