@@ -614,6 +614,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseEnabled", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseUniquenessXml", fieldHashtable);
 		}
 		#endregion
 
@@ -1348,6 +1351,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEnabled, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseEnabled, value); }
+		}
+
+		/// <summary> The ShipSenseUniquenessXml property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseUniquenessXml"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipSenseUniquenessXml
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, value); }
 		}
 
 
