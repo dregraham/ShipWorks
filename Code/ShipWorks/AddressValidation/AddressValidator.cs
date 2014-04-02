@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.AddressValidation
 {
@@ -47,26 +48,25 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            List<AddressValidationResult> suggestedAddresses;
-
             try
             {
-                suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode) ??
+                List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode) ??
                     new List<AddressValidationResult>();
+
+                // Store the original address so that the user can revert later if they want
+                AddressEntity originalAddress = new AddressEntity();
+                adapter.CopyTo(originalAddress, string.Empty);
+
+                SetValidationStatus(suggestedAddresses, adapter);
+                UpdateAddressIfAdjusted(adapter, suggestedAddresses);
+
+                saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
             }
             catch (AddressValidationException)
             {
-                return;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NotValid;
+                saveAction(null, new List<AddressEntity>());
             }
-
-            // Store the original address so that the user can revert later if they want
-            AddressEntity originalAddress = new AddressEntity();
-            adapter.CopyTo(originalAddress, string.Empty);
-
-            SetValidationStatus(suggestedAddresses, adapter);
-            UpdateAddressIfAdjusted(adapter, suggestedAddresses);
-
-            saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
         }
 
         /// <summary>
