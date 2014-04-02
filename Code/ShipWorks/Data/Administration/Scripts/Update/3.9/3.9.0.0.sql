@@ -37,7 +37,7 @@ GO
 CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
 (
 [Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Entry] [varbinary] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Entry] [varbinary] (max) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnowledgeBase]'
