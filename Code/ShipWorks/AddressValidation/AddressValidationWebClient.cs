@@ -11,6 +11,26 @@ namespace ShipWorks.AddressValidation
 {
     public class AddressValidationWebClient : IAddressValidationWebClient
     {
+        /// <summary>
+        /// Validates the address.
+        /// </summary>
+        /// <exception cref="AddressValidationException">
+        /// Address Validation failed to return Return Code
+        /// or
+        /// Address could not be found because enither a valid City, State, nor valid 5-digit Zip Code was present.
+        /// or
+        /// The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.
+        /// or
+        /// The City in the address submitted is invalid. Remember, city names cannot begin with numbers.
+        /// or
+        /// The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.
+        /// or
+        /// City, State and ZIP Code are valid, but street address is not a match.
+        /// or
+        /// Address does not exist.
+        /// or
+        /// Unknown error validating address.
+        /// </exception>
         public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip)
         {
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
@@ -25,7 +45,7 @@ namespace ShipWorks.AddressValidation
                 }
                 case 11:
                 {
-                    throw new AddressValidationException("Address could not be found because enither a valid City, State, nor valid 5-digit Zip Code was present.");
+                    throw new AddressValidationException("Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present.");
                 }
                 case 12:
                 {
@@ -63,7 +83,8 @@ namespace ShipWorks.AddressValidation
                                 City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
                                 StateProvCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty),
                                 PostalCode = validatedZip,
-                                CountryCode = "USA"
+                                CountryCode = "USA",
+                                IsValid = true
                             }
                         };
                     }
@@ -81,7 +102,6 @@ namespace ShipWorks.AddressValidation
                     throw new AddressValidationException("Unknown error validating address.");
                 }
             }
-
         }
 
         /// <summary>
@@ -144,7 +164,6 @@ namespace ShipWorks.AddressValidation
                     validatedStreet1.AppendFormat(GetRangeText(pCode, pLow, pHigh));
                 }
 
-
                 validatedStreet1.Append(addSpaceIfNotEmpty(preDir));
                 validatedStreet1.Append(addSpaceIfNotEmpty(street));
                 validatedStreet1.Append(addSpaceIfNotEmpty(suff));
@@ -168,7 +187,7 @@ namespace ShipWorks.AddressValidation
                     Street2 = validatedStreet2.ToString(),
                     City = validatedCity,
                     StateProvCode = validatedState,
-                    PostalCode = zip5,
+                    PostalCode = GetMultiZipPlus4(zip5, lPlus4, hPlus4),
                     CountryCode = "USA"
                 };
 
@@ -178,8 +197,34 @@ namespace ShipWorks.AddressValidation
             return validationResults;
         }
 
+        /// <summary>
+        /// Gets the zip plus4. Supports ranges
+        /// </summary>
+        private static string GetMultiZipPlus4(string zip5, string lPlus4, string hPlus4)
+        {
+            if (string.IsNullOrEmpty(lPlus4) && string.IsNullOrEmpty(hPlus4))
+            {
+                return zip5;
+            }
 
-        private string addSpaceIfNotEmpty(string myString)
+            if (string.IsNullOrEmpty(lPlus4))
+            {
+                return string.Format("{0}-{1}", zip5, hPlus4);
+            }
+
+            // We know lPlus4 has a value:
+            if (string.IsNullOrEmpty(hPlus4) || lPlus4 == hPlus4)
+            {
+                return string.Format("{0}-{1}", zip5, lPlus4);
+            }
+
+            return string.Format("(Range {0} - {1}) ", lPlus4, hPlus4);
+        }
+
+        /// <summary>
+        /// Adds the space if not empty.
+        /// </summary>
+        private static string addSpaceIfNotEmpty(string myString)
         {
             if (!string.IsNullOrEmpty(myString))
             {
@@ -191,7 +236,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets the range text
         /// </summary>
-        private string GetRangeText(string code, string low, string high)
+        private static string GetRangeText(string code, string low, string high)
         {
             string addressPart;
             if (string.IsNullOrEmpty(code))
@@ -201,8 +246,8 @@ namespace ShipWorks.AddressValidation
             else
             {
                 addressPart = string.Format("({0} Range {1} - {2}) ",
-                    code.Equals("o",StringComparison.OrdinalIgnoreCase)?"Odd":"Even",
-                    low, 
+                    code.Equals("o", StringComparison.OrdinalIgnoreCase) ? "Odd" : "Even",
+                    low,
                     high);
             }
 
@@ -212,7 +257,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Queries Endicia. Command can be Zip1 or ZipM
         /// </summary>
-        private XPathNavigator QueryDialAZip(string command, string street1, string street2, string city, string state, String zip)
+        private static XPathNavigator QueryDialAZip(string command, string street1, string street2, string city, string state, String zip)
         {
             try
             {
