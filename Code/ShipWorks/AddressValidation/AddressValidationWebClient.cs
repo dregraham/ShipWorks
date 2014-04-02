@@ -121,7 +121,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates the address and returns multiple.
         /// </summary>
-        private List<AddressValidationResult> ValidateAddressMultiple(string street1, string street2, string city, string state, string zip)
+        private static List<AddressValidationResult> ValidateAddressMultiple(string street1, string street2, string city, string state, string zip)
         {
             XPathNavigator zipMResults = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
 
