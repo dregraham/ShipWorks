@@ -46,7 +46,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Build the context menu
         /// </summary>
-        private ContextMenu BuildMenu(OrderEntity order, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
+        private static ContextMenu BuildMenu(OrderEntity order, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
@@ -71,7 +71,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create a menu item from a validated address
         /// </summary>
-        private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, OrderEntity order)
+        private static MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, OrderEntity order)
         {
             string title = FormatAddress(validatedAddress.Address) + 
                 (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
