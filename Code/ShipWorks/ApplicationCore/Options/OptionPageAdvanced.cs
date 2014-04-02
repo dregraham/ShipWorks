@@ -18,6 +18,7 @@ using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Users;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users.Logon;
+using ShipWorks.Shipping.ShipSense.Settings;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -103,6 +104,19 @@ namespace ShipWorks.ApplicationCore.Options
             if (result == DialogResult.Yes)
             {
                 new Knowledgebase().Reset(UserSession.User);
+            }
+        }
+
+        /// <summary>
+        /// Called when the button to edit ShipSense settings is clicked.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnEditShipSenseClick(object sender, EventArgs e)
+        {
+            using (ShipSenseUniquenessSettingsDlg dialog = new ShipSenseUniquenessSettingsDlg())
+            {
+                dialog.ShowDialog(this);
             }
         }
     }
