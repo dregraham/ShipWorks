@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.LinqSupportClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -10,6 +11,7 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.AddressValidation
 {
@@ -80,19 +82,13 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static List<ValidatedAddressEntity> GetOrderAddresses(OrderEntity order)
         {
-            IRelationPredicateBucket bucket = new RelationPredicateBucket(ValidatedAddressFields.ConsumerID == order.OrderID);
-            bucket.Relations.Add(AddressEntity.Relations.ValidatedAddressEntityUsingAddressID);
-            IPrefetchPath2 prefetchPath = new PrefetchPath2(EntityType.ValidatedAddressEntity);
-            prefetchPath.Add(ValidatedAddressEntity.PrefetchPathAddress);
-
-            IEntityCollection2 validatedAddresses = new ValidatedAddressCollection();
-
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                adapter.FetchEntityCollection(validatedAddresses, bucket, prefetchPath);
+                LinqMetaData metaData = new LinqMetaData(adapter);
+                return metaData.ValidatedAddress.Where(x => x.ConsumerID == order.OrderID)
+                    .WithPath(x => x.Prefetch(y => y.Address))
+                    .ToList();
             }
-
-            return validatedAddresses.OfType<ValidatedAddressEntity>().ToList();
         }
 
         /// <summary>

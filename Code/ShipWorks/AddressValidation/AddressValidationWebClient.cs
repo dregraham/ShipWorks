@@ -83,7 +83,7 @@ namespace ShipWorks.AddressValidation
                                 City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
                                 StateProvCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty),
                                 PostalCode = validatedZip,
-                                CountryCode = "USA",
+                                CountryCode = "US",
                                 IsValid = true
                             }
                         };
@@ -109,7 +109,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static string GetZipPlus4(XPathNavigator zip1Result)
         {
-            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Zip5", String.Empty);
+            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/ZIP5", String.Empty);
             string plus4 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Plus4", String.Empty);
             if (!string.IsNullOrEmpty(plus4))
             {

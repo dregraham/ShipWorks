@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Web.Services3.Addressing;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
+using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -62,7 +58,6 @@ namespace ShipWorks.Actions.Tasks.Common
                 validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
                 {
                     DeleteExistingAddresses(context, order);
-
                     SaveAddress(context, order, originalAddress, true);
 
                     foreach (AddressEntity address in suggestedAddresses)
@@ -80,27 +75,21 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         private static void DeleteExistingAddresses(ActionStepContext context, OrderEntity order)
         {
-            // Get a list of validated addresses that need to be deleted
-            IRelationPredicateBucket bucket = new RelationPredicateBucket();
-            bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ValidatedAddressFields.ConsumerID, null, ComparisonOperator.Equal, order.OrderID));
-
-            IEntityCollection2 validatedAddresses = new ValidatedAddressCollection();
+            List<ValidatedAddressEntity> addressesToDelete;
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                adapter.FetchEntityCollection(validatedAddresses, bucket);
+                // Retrieve the addresses 
+                LinqMetaData metaData = new LinqMetaData(adapter);
+                addressesToDelete = metaData.ValidatedAddress.Where(x => x.ConsumerID == order.OrderID).ToList();
             }
 
-            context.CommitWork.AddCollectionForDelete(validatedAddresses);
-
-            // Delete the list of addresses associated with the validated addresses
-            IEntityCollection2 addresses = new AddressCollection();
-            validatedAddresses.OfType<ValidatedAddressEntity>()
-                .Select(x => new AddressEntity {AddressID = x.AddressID, IsNew = false})
-                .ToList()
-                .ForEach(x => addresses.Add(x));
-
-            context.CommitWork.AddCollectionForDelete(addresses);
+            // Mark each address for deletion
+            addressesToDelete.ForEach(x =>
+            {
+                context.CommitWork.AddForDelete(x);
+                context.CommitWork.AddForDelete(new AddressEntity { AddressID = x.AddressID, IsNew = false });
+            });
         }
 
         /// <summary>
