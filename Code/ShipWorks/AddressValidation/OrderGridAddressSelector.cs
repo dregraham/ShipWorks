@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Divelements.SandGrid;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.LinqSupportClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.AddressValidation
@@ -37,7 +36,11 @@ namespace ShipWorks.AddressValidation
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
             var menu = BuildMenu(order, originalValidatedAddress, suggestedAddresses);
-            menu.Show((Control)sender, e.MouseArgs.Location);
+
+            SandGrid grid = sender as SandGrid;
+            Debug.Assert(grid != null);
+
+            menu.Show(grid, new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset));
         }
 
         /// <summary>
@@ -62,8 +65,7 @@ namespace ShipWorks.AddressValidation
                 menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, order)));
             }
 
-            ContextMenu menu = new ContextMenu(menuItems.ToArray());
-            return menu;
+            return new ContextMenu(menuItems.ToArray());
         }
 
         /// <summary>

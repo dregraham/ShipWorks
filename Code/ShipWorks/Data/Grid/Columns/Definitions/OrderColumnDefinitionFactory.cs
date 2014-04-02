@@ -546,7 +546,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridActionDisplayType(DisplayValidationSuggestionLabel, (Action<object, GridHyperlinkClickEventArgs>)(new OrderGridAddressSelector()).ShowAddressOptionMenu), 
                         "Validation Suggestions", "2 Suggestions",
                         new GridColumnFunctionValueProvider(x => x),
-                        new GridColumnSortProvider(DisplayValidationSuggestionLabel))
+                        new GridColumnSortProvider(OrderFields.ShipAddressValidationStatus))
                         { DefaultWidth = 120 }
                 };
 
