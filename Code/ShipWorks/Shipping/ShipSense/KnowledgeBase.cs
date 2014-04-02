@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using Interapptive.Shared.IO.Zip;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -10,8 +9,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -67,7 +64,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 // We don't want to overwrite any customs information that may already be on the
                 // entry returned from the database if the current entry doesn't have any customs info
-                KnowledgebaseEntry previousEntry = new KnowledgebaseEntry(entity.Entry);
+                KnowledgebaseEntry previousEntry = CreateKnowledgebaseEntry(entity.Entry);
 
                 if (previousEntry.CustomsItems.Any() && !entry.CustomsItems.Any())
                 {
@@ -77,9 +74,8 @@ namespace ShipWorks.Shipping.ShipSense
                 }
             }
 
-            // Update the JSON of the entity to reflect the latest KB entry
-            // TODO: Compress the JSON
-            entity.Entry = Encoding.UTF8.GetBytes(entry.ToJson());
+            // Update the compressed JSON of the entity to reflect the latest KB entry            
+            entity.Entry = GZipUtility.Compress(Encoding.UTF8.GetBytes(entry.ToJson()));
             
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -102,7 +98,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 // The entry data is JSON, so deserialize the JSON into 
                 // an instance of a KnowledgebaseEntry
-                return new KnowledgebaseEntry(entity.Entry);
+                return CreateKnowledgebaseEntry(entity.Entry);
             }
             else
             {
@@ -136,7 +132,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 // Rehydrate the knowledge base entry and consider the shipment to have overwritten
                 // the entry if the two do not match
-                KnowledgebaseEntry entry = new KnowledgebaseEntry(entity.Entry);
+                KnowledgebaseEntry entry = CreateKnowledgebaseEntry(entity.Entry);
                 isOverwritten = !entry.Matches(shipment);
             }
 
@@ -206,6 +202,18 @@ namespace ShipWorks.Shipping.ShipSense
             }
 
             return lookupEntity;
+        }
+
+        /// <summary>
+        /// Creates a knowledge base entry from JSON string that has been compressed.
+        /// </summary>
+        /// <param name="compressedJson">The compressed json.</param>
+        /// <returns>The de-serialized KnowledgebaseEntry.</returns>
+        private static KnowledgebaseEntry CreateKnowledgebaseEntry(byte[] compressedJson)
+        {
+            // Deserialize the compressed JSON into an instance of KnowledgebaseEntry
+            string serializedJson = Encoding.UTF8.GetString(GZipUtility.Decompress(compressedJson));
+            return new KnowledgebaseEntry(serializedJson);
         }
     }
 }

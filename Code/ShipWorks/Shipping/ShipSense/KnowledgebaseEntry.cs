@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -24,7 +23,7 @@ namespace ShipWorks.Shipping.ShipSense
 
         private List<KnowledgebasePackage> originalPackages;
         private List<KnowledgebaseCustomsItem> originalCustomsItems;
-        
+
         private bool consolidateMultiplePackagesIntoSinglePackage;
 
         /// <summary>
@@ -54,14 +53,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseEntry"/> class.
         /// </summary>
-        /// <param name="compressedJson">The compressed JSON representation of a KnowledgebaseEntry that has been serialized.</param>
-        public KnowledgebaseEntry(byte[] compressedJson)
+        /// <param name="serializedJson">The JSON representation of a KnowledgebaseEntry that has been serialized.</param>
+        public KnowledgebaseEntry(string serializedJson)
             : this()
         {
-            // TODO: Decrypt the serializedJson
-            string serializedJson = Encoding.UTF8.GetString(compressedJson);
             KnowledgebaseEntry deserializedEntry = JsonConvert.DeserializeObject<KnowledgebaseEntry>(serializedJson);
-            
+
             packages = deserializedEntry.Packages.ToList();
             CustomsItems = deserializedEntry.CustomsItems.ToList();
         }
@@ -84,7 +81,7 @@ namespace ShipWorks.Shipping.ShipSense
         public IEnumerable<KnowledgebasePackage> Packages
         {
             get { return packages; }
-            set { packages = new List<KnowledgebasePackage>(value);}
+            set { packages = new List<KnowledgebasePackage>(value); }
         }
 
         /// <summary>
@@ -165,7 +162,7 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 return;
             }
-            
+
             IEnumerable<IPackageAdapter> packageAdapters = adapters as IList<IPackageAdapter> ?? adapters.ToList();
 
             foreach (IPackageAdapter adapter in packageAdapters)
@@ -222,11 +219,11 @@ namespace ShipWorks.Shipping.ShipSense
         public void ApplyTo(IEnumerable<IPackageAdapter> adapters, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
             ApplyTo(adapters);
-            
+
             // Make a note that customs were applied that can be inspected when 
             // writing out change sets.
             AppliedCustoms = true;
-            
+
             // Record the original customs data that was provided
             shipmentCustomsItems.ToList().ForEach(i => originalCustomsItems.Add(new KnowledgebaseCustomsItem(i)));
 
@@ -243,9 +240,9 @@ namespace ShipWorks.Shipping.ShipSense
 
                 return;
             }
-            
+
             // Explicitly remove the entity, so it gets tracked by LLBLGen
-            while(shipmentCustomsItems.Count > 0)
+            while (shipmentCustomsItems.Count > 0)
             {
                 // Always remove the first item in the collection regardless of the index
                 // since the list is shrinking with each removal
@@ -280,7 +277,7 @@ namespace ShipWorks.Shipping.ShipSense
             // clear out any existing package data and recreate it based on the adapters
             packages.Clear();
 
-            foreach(IPackageAdapter adapter in adapters)
+            foreach (IPackageAdapter adapter in adapters)
             {
                 KnowledgebasePackage package = new KnowledgebasePackage
                 {
@@ -351,7 +348,7 @@ namespace ShipWorks.Shipping.ShipSense
             // Create a new list of knowledge base customs item from the shipment to compare
             // with the customs items on the entry that was fetched
             List<KnowledgebaseCustomsItem> shipmentCustomsItems = shipment.CustomsItems.Select(customsEntity => new KnowledgebaseCustomsItem(customsEntity)).ToList();
-            
+
             foreach (KnowledgebaseCustomsItem entryCustomsItem in CustomsItems)
             {
                 // All items should have a count of 1 based on the hash otherwise the customs items are different
