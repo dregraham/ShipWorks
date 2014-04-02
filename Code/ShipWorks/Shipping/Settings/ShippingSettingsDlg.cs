@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
-using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Users;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -55,10 +47,7 @@ namespace ShipWorks.Shipping.Settings
             radioBlankPhoneUseShipper.Checked = (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.ShipperPhone);
             radioBlankPhoneUseSpecified.Checked = !radioBlankPhoneUseShipper.Checked;
             blankPhone.Text = settings.BlankPhoneNumber;
-
-            enableShipSense.Checked = settings.ShipSenseEnabled;
-            resetKnowledgebase.Visible = Users.UserSession.User.IsAdmin;
-
+            
             originControl.Initialize();
 
             LoadShipmentTypePages();
@@ -274,8 +263,6 @@ namespace ShipWorks.Shipping.Settings
                          : ShipmentBlankPhoneOption.SpecifiedPhone);
                 settings.BlankPhoneNumber = blankPhone.Text;
 
-                settings.ShipSenseEnabled = enableShipSense.Checked;
-
                 providerRulesControl.SaveSettings(settings);
 
                 // Save all the settings
@@ -311,25 +298,6 @@ namespace ShipWorks.Shipping.Settings
             }
 
             base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Called when the button to reset the knowledge base is clicked.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnResetKnowledgebase(object sender, EventArgs e)
-        {
-            const string ConfirmationText = @"Resetting the knowledge base will delete all of the information that ShipWorks " +
-                "uses to create shipments based on your shipment history.\n\n" + 
-                "Do you wish to continue?";
-
-            DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Question, MessageBoxButtons.YesNo, ConfirmationText);
-
-            if (result == DialogResult.Yes)
-            {
-                new Knowledgebase().Reset(UserSession.User);
-            }
         }
     }
 }

@@ -9,9 +9,12 @@ using System.Reflection;
 using System.Diagnostics;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Users;
 using ShipWorks.Data.Connection;
 using ShipWorks.Users.Logon;
@@ -54,6 +57,10 @@ namespace ShipWorks.ApplicationCore.Options
 
             auditNewOrders.Checked = config.AuditNewOrders;
             auditDeletedOrders.Checked = config.AuditDeletedOrders;
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            enableShipSense.Checked = settings.ShipSenseEnabled;
+            resetKnowledgebase.Visible = Users.UserSession.User.IsAdmin;
         }
 
         /// <summary>
@@ -73,7 +80,30 @@ namespace ShipWorks.ApplicationCore.Options
             config.AuditNewOrders = auditNewOrders.Checked;
             config.AuditDeletedOrders = auditDeletedOrders.Checked;
 
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            settings.ShipSenseEnabled = enableShipSense.Checked;
+            ShippingSettings.Save(settings);
+
             ConfigurationData.Save(config);
+        }
+
+        /// <summary>
+        /// Called when the button to reset the knowledge base is clicked.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnResetKnowledgebase(object sender, EventArgs e)
+        {
+            const string ConfirmationText = @"Resetting the knowledge base will delete all of the information that ShipWorks " +
+                "uses to create shipments based on your shipment history.\n\n" +
+                "Do you wish to continue?";
+
+            DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Question, MessageBoxButtons.YesNo, ConfirmationText);
+
+            if (result == DialogResult.Yes)
+            {
+                new Knowledgebase().Reset(UserSession.User);
+            }
         }
     }
 }
