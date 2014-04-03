@@ -41,7 +41,7 @@
             // 
             // labelDescription
             // 
-            this.labelDescription.Location = new System.Drawing.Point(3, 9);
+            this.labelDescription.Location = new System.Drawing.Point(3, 0);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(460, 31);
             this.labelDescription.TabIndex = 0;
@@ -55,15 +55,15 @@
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(493, 50);
+            this.panelHeader.Size = new System.Drawing.Size(493, 33);
             this.panelHeader.TabIndex = 1;
             // 
             // panelMain
             // 
-            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 50);
+            this.panelMain.BackColor = System.Drawing.SystemColors.Control;
+            this.panelMain.Location = new System.Drawing.Point(0, 34);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(493, 80);
+            this.panelMain.Size = new System.Drawing.Size(493, 36);
             this.panelMain.TabIndex = 2;
             // 
             // toolStripAddRule
@@ -75,7 +75,7 @@
             this.toolStripAddRule.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripAddRule.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addItemAttributeLine});
-            this.toolStripAddRule.Location = new System.Drawing.Point(10, 10);
+            this.toolStripAddRule.Location = new System.Drawing.Point(0, 0);
             this.toolStripAddRule.Name = "toolStripAddRule";
             this.toolStripAddRule.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripAddRule.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -94,10 +94,9 @@
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.toolStripAddRule);
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 80);
+            this.panelBottom.Location = new System.Drawing.Point(0, 73);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(493, 50);
+            this.panelBottom.Size = new System.Drawing.Size(493, 37);
             this.panelBottom.TabIndex = 3;
             // 
             // ShipSenseHashConfigurationControl
@@ -109,7 +108,7 @@
             this.Controls.Add(this.panelHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "ShipSenseHashConfigurationControl";
-            this.Size = new System.Drawing.Size(493, 130);
+            this.Size = new System.Drawing.Size(493, 116);
             this.panelHeader.ResumeLayout(false);
             this.toolStripAddRule.ResumeLayout(false);
             this.toolStripAddRule.PerformLayout();

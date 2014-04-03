@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseHashConfigurationControl"/> class.
         /// </summary>
-        /// <param name="attributeNames">The attribute names.</param>
         public ShipSenseHashConfigurationControl()
         {
             InitializeComponent();
@@ -63,8 +62,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// </summary>
         private void AddAttributeControl(string attributeName)
         {
-            // TODO: Add an attribute control to this control and the list of attribute controls and adjust the UI layout accordingly
-            // Add an attribute control to the UI and the list of attribute controls
+            // Add a new attribute control to the UI
             ShipSenseItemAttributeControl attributeControl = new ShipSenseItemAttributeControl(attributeName);
             attributeControl.Width = panelMain.Width;
             attributeControl.Dock = DockStyle.Top;
@@ -72,6 +70,8 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             
             panelMain.Controls.Add(attributeControl);
             panelMain.Controls.SetChildIndex(attributeControl, 0);
+
+            UpdateLayout();
         }
 
         /// <summary>
@@ -89,12 +89,17 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Updates the layout according to the number of attribute controls in the main panel.
+        /// </summary>
         private void UpdateLayout()
         {
-            foreach (ShipSenseItemAttributeControl attributeControl in panelMain.Controls.OfType<ShipSenseItemAttributeControl>())
-            {
-                
-            }
+            // Slide the panels up/down based on the content of the main panel
+            panelMain.Height = panelMain.Controls.Count == 0 ? 0 : panelMain.Controls.OfType<Control>().Max(c => c.Bottom);
+            panelBottom.Top = panelMain.Bottom;
+
+            // Adjust the height of the overall control according to the bottom panel
+            Height = panelBottom.Bottom;
         }
     }
 }
