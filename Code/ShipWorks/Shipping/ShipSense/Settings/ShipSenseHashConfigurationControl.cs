@@ -16,8 +16,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
     /// </summary>
     public partial class ShipSenseHashConfigurationControl : UserControl
     {
-        private readonly List<ShipSenseItemAttributeControl> attributeControls;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseHashConfigurationControl"/> class.
         /// </summary>
@@ -26,7 +24,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             InitializeComponent();
 
-            attributeControls = new List<ShipSenseItemAttributeControl>();
         }
 
         /// <summary>
@@ -36,7 +33,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             get
             {
-                return attributeControls.Select(c => c.AttributeName);
+                return panelMain.Controls.OfType<ShipSenseItemAttributeControl>().Select(c => c.AttributeName);
             }
         }
 
@@ -46,8 +43,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// <param name="attributeNames">The attribute names.</param>
         public void LoadAttributeControls(IEnumerable<string> attributeNames)
         {
-            attributeControls.Clear();
-
             foreach (string name in attributeNames)
             {
                 AddAttributeControl(name);
@@ -75,8 +70,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             attributeControl.Dock = DockStyle.Top;
             attributeControl.DeleteAttributeClick += OnDeleteAttribute;
             
-            attributeControls.Add(attributeControl);
-
             panelMain.Controls.Add(attributeControl);
             panelMain.Controls.SetChildIndex(attributeControl, 0);
         }
