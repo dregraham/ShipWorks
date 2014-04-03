@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Xml.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -9,12 +10,21 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
     {
         private KnowledgebaseHash testObject;
         private OrderEntity order;
+        private string shipSenseUniquenessSettings;
         
         [TestInitialize]
         public void Initialize()
         {
             order = new OrderEntity();
             order.StoreID = 1006;
+            shipSenseUniquenessSettings = @"
+                <ShipSenseUniqueness>
+                    <ItemAttributeNames>
+                        <Name>
+                        </Name>
+                    </ItemAttributeNames>
+                </ShipSenseUniqueness>
+                ";
 
             testObject = new KnowledgebaseHash();
         }
@@ -24,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         {
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
 
-            string hash = testObject.ComputeHash(order);
+            string hash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreEqual("+OaVh83n59aFH0JaS7TZLS3Qf2/Cd+s4qa6eCZ9z/5Q=", hash);
         }
@@ -37,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 5 });
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 6 });
 
-            string hash = testObject.ComputeHash(order);
+            string hash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreEqual("J0XVHDoL/FTcQTHZgATYyME+obHWlTuTPpM5eErG4Ts=", hash);
         }
@@ -54,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-9", SKU = "XYZ789", Quantity = 9 });
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 13 });
 
-            string hash = testObject.ComputeHash(order);
+            string hash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreEqual("oP1MPXqDMND8WO6362GBaH6tB1zXTcRpA4tTzFa/9sU=", hash);
         }
@@ -67,9 +77,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             OrderEntity secondOrder = new OrderEntity();
             secondOrder.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
             secondOrder.StoreID = 2006;
-            
-            string firstOrderHash = testObject.ComputeHash(order);
-            string secondOrderHash = testObject.ComputeHash(secondOrder);
+
+            string firstOrderHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+            string secondOrderHash = testObject.ComputeHash(secondOrder, shipSenseUniquenessSettings);
 
             Assert.AreEqual(firstOrderHash, secondOrderHash);
         }
@@ -98,8 +108,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             secondOrder.StoreID = 2006;
 
-            string firstOrderHash = testObject.ComputeHash(order);
-            string secondOrderHash = testObject.ComputeHash(secondOrder);
+            string firstOrderHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+            string secondOrderHash = testObject.ComputeHash(secondOrder, shipSenseUniquenessSettings);
 
             Assert.AreEqual(firstOrderHash, secondOrderHash);
         }
@@ -108,10 +118,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         public void ComputeHash_CreatesDifferentHash_WhenItemCodeDiffers_Test()
         {
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
-            string firstHash = testObject.ComputeHash(order);
+            string firstHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             order.OrderItems[0].Code = "Code-2";
-            string secondHash = testObject.ComputeHash(order);
+            string secondHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreNotEqual(firstHash, secondHash);
         }
@@ -120,10 +130,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         public void ComputeHash_CreatesDifferentHash_WhenItemSKUDiffers_Test()
         {
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
-            string firstHash = testObject.ComputeHash(order);
+            string firstHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             order.OrderItems[0].SKU = "ABC789";
-            string secondHash = testObject.ComputeHash(order);
+            string secondHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreNotEqual(firstHash, secondHash);
         }
@@ -132,10 +142,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         public void ComputeHash_CreatesDifferentHash_WhenItemQuantitiesDiffers_Test()
         {
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });
-            string firstHash = testObject.ComputeHash(order);
+            string firstHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             order.OrderItems[0].Quantity = 1;
-            string secondHash = testObject.ComputeHash(order);
+            string secondHash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
 
             Assert.AreNotEqual(firstHash, secondHash);
         }

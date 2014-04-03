@@ -8,6 +8,7 @@ using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Users;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.ShipSense
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to 
             // reduce the number of database calls 
-            string hash = hashingStrategy.ComputeHash(order);
+            string hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml);
             ShipSenseKnowledgebaseEntity entity = FetchEntity(hash);
 
             if (entity == null)
@@ -165,7 +166,7 @@ namespace ShipWorks.Shipping.ShipSense
         {
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
                 {
-                    Hash = hashingStrategy.ComputeHash(order)
+                    Hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml)
                 };
 
             return FetchEntity(lookupEntity);

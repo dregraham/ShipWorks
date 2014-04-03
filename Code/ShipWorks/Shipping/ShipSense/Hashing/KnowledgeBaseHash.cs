@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 
@@ -21,9 +22,12 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// ShipSense knowledge base.
         /// </summary>
         /// <param name="order">The order.</param>
+        /// <param name="shipSenseUniquenessXml">XML containing info/fields used for creating the unique hash key</param>
         /// <returns>A string value of the computed hash.</returns>
-        public string ComputeHash(OrderEntity order)
+        public string ComputeHash(OrderEntity order, string shipSenseUniquenessXml)
         {
+            List<string> itemAttributeNamesToInclude = XElement.Parse(shipSenseUniquenessXml).Descendants("Name").Select(n => n.Value).ToList();
+
             // We want to sort the items by SKU, so they are always in the same order
             order.OrderItems.Sort(OrderItemFields.SKU.FieldIndex, ListSortDirection.Ascending);
             List<OrderItemEntity> sortedItems = order.OrderItems.ToList();
