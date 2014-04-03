@@ -265,6 +265,11 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+
+                    foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
+                    {
+                        adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                    }
                 }
 
                 // Get our knowledge base entry for this shipment

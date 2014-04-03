@@ -6,6 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
@@ -49,6 +50,15 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="order">The order.</param>
         public void Save(KnowledgebaseEntry entry, OrderEntity order)
         {
+            // Populate the order item attributes so we can compute the hash
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                foreach (OrderItemEntity orderItemEntity in order.OrderItems)
+                {
+                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                }
+            }
+
             // Fetch the entity because if it exists, we need the IsNew property to
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to 
