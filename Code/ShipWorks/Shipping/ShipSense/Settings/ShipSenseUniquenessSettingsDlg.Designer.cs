@@ -33,8 +33,8 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.panelMain = new System.Windows.Forms.Panel();
             this.panelConfiguration = new System.Windows.Forms.Panel();
-            this.configurationControl = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseHashConfigurationControl();
             this.labelTitle = new System.Windows.Forms.Label();
+            this.configurationControl = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseHashConfigurationControl();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.panelConfiguration.SuspendLayout();
@@ -82,21 +82,13 @@
             // 
             // panelConfiguration
             // 
+            this.panelConfiguration.AutoScroll = true;
             this.panelConfiguration.Controls.Add(this.labelTitle);
             this.panelConfiguration.Controls.Add(this.configurationControl);
             this.panelConfiguration.Location = new System.Drawing.Point(13, 12);
             this.panelConfiguration.Name = "panelConfiguration";
-            this.panelConfiguration.Size = new System.Drawing.Size(567, 448);
+            this.panelConfiguration.Size = new System.Drawing.Size(567, 481);
             this.panelConfiguration.TabIndex = 1;
-            // 
-            // configurationControl
-            // 
-            this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.configurationControl.Location = new System.Drawing.Point(3, 20);
-            this.configurationControl.Name = "configurationControl";
-            this.configurationControl.Size = new System.Drawing.Size(533, 128);
-            this.configurationControl.TabIndex = 0;
-            this.configurationControl.SizeChanged += new System.EventHandler(this.OnConfigurationControlSizeChanged);
             // 
             // labelTitle
             // 
@@ -107,6 +99,15 @@
             this.labelTitle.Size = new System.Drawing.Size(175, 13);
             this.labelTitle.TabIndex = 1;
             this.labelTitle.Text = "Teach ShipSense how to learn";
+            // 
+            // configurationControl
+            // 
+            this.configurationControl.AutoScroll = true;
+            this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.configurationControl.Location = new System.Drawing.Point(3, 20);
+            this.configurationControl.Name = "configurationControl";
+            this.configurationControl.Size = new System.Drawing.Size(533, 446);
+            this.configurationControl.TabIndex = 0;
             // 
             // ShipSenseUniquenessSettingsDlg
             // 

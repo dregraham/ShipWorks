@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.ShipSense.Settings
@@ -47,15 +43,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                 AddAttributeControl(name);
             }
         }
-
-        /// <summary>
-        /// Adds/displays a new attribute control to this control.
-        /// </summary>
-        public void AddAttribute()
-        {
-            AddAttributeControl(string.Empty);
-        }
-
+        
         /// <summary>
         /// Adds/displays a new attribute control to the customization panel populated with the 
         /// attribute name provided.
@@ -75,6 +63,29 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         }
 
         /// <summary>
+        /// Updates the layout according to the number of attribute controls in the main panel.
+        /// </summary>
+        private void UpdateLayout()
+        {
+            // Slide the panels up/down based on the content of the main panel
+            panelMain.Height = panelMain.Controls.Count == 0 ? 0 : panelMain.Controls.OfType<Control>().Max(c => c.Bottom);
+            panelBottom.Top = panelMain.Bottom;
+
+            // Adjust the height of the overall control according to the bottom panel
+            Height = panelBottom.Bottom;
+        }
+
+        /// <summary>
+        /// Called when Add Attribute is clicked.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnAddAttribute(object sender, EventArgs e)
+        {
+            AddAttributeControl(string.Empty);
+        }
+
+        /// <summary>
         /// Deletes the attribute control from the customization panel that generated the RemoveAttribute event.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -87,19 +98,6 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             panelMain.Controls.Remove(attributeControl);
             
             UpdateLayout();
-        }
-
-        /// <summary>
-        /// Updates the layout according to the number of attribute controls in the main panel.
-        /// </summary>
-        private void UpdateLayout()
-        {
-            // Slide the panels up/down based on the content of the main panel
-            panelMain.Height = panelMain.Controls.Count == 0 ? 0 : panelMain.Controls.OfType<Control>().Max(c => c.Bottom);
-            panelBottom.Top = panelMain.Bottom;
-
-            // Adjust the height of the overall control according to the bottom panel
-            Height = panelBottom.Bottom;
         }
     }
 }

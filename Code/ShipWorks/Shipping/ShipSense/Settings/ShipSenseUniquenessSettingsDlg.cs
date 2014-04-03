@@ -41,15 +41,5 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             Close();
         }
-
-        /// <summary>
-        /// Called when the configuration control is resized.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnConfigurationControlSizeChanged(object sender, EventArgs e)
-        {
-            panelConfiguration.Height = configurationControl.Bottom + 2;
-        }        
     }
 }
