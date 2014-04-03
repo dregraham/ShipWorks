@@ -30,12 +30,13 @@
         {
             this.labelDescription = new System.Windows.Forms.Label();
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.panelCustomization = new System.Windows.Forms.Panel();
+            this.panelMain = new System.Windows.Forms.Panel();
             this.toolStripAddRule = new System.Windows.Forms.ToolStrip();
             this.addItemAttributeLine = new System.Windows.Forms.ToolStripButton();
+            this.panelBottom = new System.Windows.Forms.Panel();
             this.panelHeader.SuspendLayout();
-            this.panelCustomization.SuspendLayout();
             this.toolStripAddRule.SuspendLayout();
+            this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelDescription
@@ -57,14 +58,13 @@
             this.panelHeader.Size = new System.Drawing.Size(493, 50);
             this.panelHeader.TabIndex = 1;
             // 
-            // panelCustomization
+            // panelMain
             // 
-            this.panelCustomization.Controls.Add(this.toolStripAddRule);
-            this.panelCustomization.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCustomization.Location = new System.Drawing.Point(0, 50);
-            this.panelCustomization.Name = "panelCustomization";
-            this.panelCustomization.Size = new System.Drawing.Size(493, 283);
-            this.panelCustomization.TabIndex = 2;
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 50);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(493, 80);
+            this.panelMain.TabIndex = 2;
             // 
             // toolStripAddRule
             // 
@@ -75,11 +75,11 @@
             this.toolStripAddRule.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripAddRule.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addItemAttributeLine});
-            this.toolStripAddRule.Location = new System.Drawing.Point(6, 33);
+            this.toolStripAddRule.Location = new System.Drawing.Point(10, 10);
             this.toolStripAddRule.Name = "toolStripAddRule";
             this.toolStripAddRule.Padding = new System.Windows.Forms.Padding(0);
             this.toolStripAddRule.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStripAddRule.Size = new System.Drawing.Size(82, 25);
+            this.toolStripAddRule.Size = new System.Drawing.Size(101, 25);
             this.toolStripAddRule.Stretch = true;
             this.toolStripAddRule.TabIndex = 38;
             // 
@@ -88,23 +88,33 @@
             this.addItemAttributeLine.Image = global::ShipWorks.Properties.Resources.add16;
             this.addItemAttributeLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.addItemAttributeLine.Name = "addItemAttributeLine";
-            this.addItemAttributeLine.Size = new System.Drawing.Size(49, 22);
-            this.addItemAttributeLine.Text = "Add";
+            this.addItemAttributeLine.Size = new System.Drawing.Size(99, 22);
+            this.addItemAttributeLine.Text = "Add Attribute";
+            // 
+            // panelBottom
+            // 
+            this.panelBottom.Controls.Add(this.toolStripAddRule);
+            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelBottom.Location = new System.Drawing.Point(0, 80);
+            this.panelBottom.Name = "panelBottom";
+            this.panelBottom.Size = new System.Drawing.Size(493, 50);
+            this.panelBottom.TabIndex = 3;
             // 
             // ShipSenseHashConfigurationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelCustomization);
+            this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "ShipSenseHashConfigurationControl";
-            this.Size = new System.Drawing.Size(493, 333);
+            this.Size = new System.Drawing.Size(493, 130);
             this.panelHeader.ResumeLayout(false);
-            this.panelCustomization.ResumeLayout(false);
-            this.panelCustomization.PerformLayout();
             this.toolStripAddRule.ResumeLayout(false);
             this.toolStripAddRule.PerformLayout();
+            this.panelBottom.ResumeLayout(false);
+            this.panelBottom.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -113,8 +123,9 @@
 
         private System.Windows.Forms.Label labelDescription;
         private System.Windows.Forms.Panel panelHeader;
-        private System.Windows.Forms.Panel panelCustomization;
+        private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.ToolStrip toolStripAddRule;
         private System.Windows.Forms.ToolStripButton addItemAttributeLine;
+        private System.Windows.Forms.Panel panelBottom;
     }
 }

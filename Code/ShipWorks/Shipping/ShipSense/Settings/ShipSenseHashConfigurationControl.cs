@@ -63,11 +63,45 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         }
 
         /// <summary>
-        /// Adds/displays a new attribute control to this control.
+        /// Adds/displays a new attribute control to the customization panel populated with the 
+        /// attribute name provided.
         /// </summary>
         private void AddAttributeControl(string attributeName)
         {
-            // TODO: Add an attribute control to this form and the list of attribute controls and adjust the UI layout accordingly
+            // TODO: Add an attribute control to this control and the list of attribute controls and adjust the UI layout accordingly
+            // Add an attribute control to the UI and the list of attribute controls
+            ShipSenseItemAttributeControl attributeControl = new ShipSenseItemAttributeControl(attributeName);
+            attributeControl.Width = panelMain.Width;
+            attributeControl.Dock = DockStyle.Top;
+            attributeControl.DeleteAttributeClick += OnDeleteAttribute;
+            
+            attributeControls.Add(attributeControl);
+
+            panelMain.Controls.Add(attributeControl);
+            panelMain.Controls.SetChildIndex(attributeControl, 0);
+        }
+
+        /// <summary>
+        /// Deletes the attribute control from the customization panel that generated the RemoveAttribute event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnDeleteAttribute(object sender, EventArgs e)
+        {
+            ShipSenseItemAttributeControl attributeControl = (ShipSenseItemAttributeControl)sender;
+            
+            attributeControl.DeleteAttributeClick -= OnDeleteAttribute;
+            panelMain.Controls.Remove(attributeControl);
+            
+            UpdateLayout();
+        }
+
+        private void UpdateLayout()
+        {
+            foreach (ShipSenseItemAttributeControl attributeControl in panelMain.Controls.OfType<ShipSenseItemAttributeControl>())
+            {
+                
+            }
         }
     }
 }

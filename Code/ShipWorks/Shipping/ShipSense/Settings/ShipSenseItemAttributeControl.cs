@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// <summary>
         /// Occurs when the delete/remove button is clicked to notify interested listeners.
         /// </summary>
-        public event EventHandler RemoveAttribute;
+        public event EventHandler DeleteAttributeClick;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseItemAttributeControl"/> class.
@@ -45,9 +45,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public void OnDelete(object sender, EventArgs e)
         {
-            if (RemoveAttribute != null)
+            if (DeleteAttributeClick != null)
             {
-                RemoveAttribute(sender, EventArgs.Empty);
+                DeleteAttributeClick(this, EventArgs.Empty);
             }
         }
     }
