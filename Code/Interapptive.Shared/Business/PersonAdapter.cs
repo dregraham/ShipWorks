@@ -481,5 +481,14 @@ namespace Interapptive.Shared.Business
             get { return GetField<int>("AddressValidationStatus"); }
             set { SetField("AddressValidationStatus", value); }
         }
+
+        /// <summary>
+        /// AddressValidationSuggestionCount - keeps a count of how many suggestions an address has so that it doesn't have to be looked up each time.
+        /// </summary>
+        public int AddressValidationSuggestionCount
+        {
+            get { return GetField<int>("AddressValidationSuggestionCount"); }
+            set { SetField("AddressValidationSuggestionCount", value); }
+        }
     }
 }

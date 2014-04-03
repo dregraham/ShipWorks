@@ -575,7 +575,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
-                    return "Suggestions";
+                    return string.Format("{0} Suggestion{1}", order.ShipAddressValidationSuggestionCount, order.ShipAddressValidationSuggestionCount != 1 ? "s" : string.Empty);
                 default:
                     return string.Empty;
             }

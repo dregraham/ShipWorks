@@ -44,6 +44,7 @@
     [ShipFax]               NVARCHAR (35)  NOT NULL,
     [ShipEmail]             NVARCHAR (100) NOT NULL,
     [ShipWebsite]           NVARCHAR (50)  NOT NULL,
+	[ShipAddressValidationSuggestionCount] INT NOT NULL,
 	[ShipAddressValidationStatus] INT NOT NULL,
     [RollupItemCount]       INT            NOT NULL,
     [RollupItemName]        NVARCHAR (300) NULL,

@@ -65,6 +65,7 @@ namespace ShipWorks.Actions.Tasks.Common
                         SaveAddress(context, order, address, false);
                     }
 
+                    order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
                     context.CommitWork.AddForSave(order);
                 });
             }

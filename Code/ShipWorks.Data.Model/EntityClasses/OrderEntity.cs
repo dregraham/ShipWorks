@@ -896,6 +896,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipWebsite", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ShipAddressValidationSuggestionCount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ShipAddressValidationStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1627,6 +1630,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipWebsite, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipWebsite, value); }
+		}
+
+		/// <summary> The ShipAddressValidationSuggestionCount property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipAddressValidationSuggestionCount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipAddressValidationSuggestionCount
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressValidationSuggestionCount, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipAddressValidationSuggestionCount, value); }
 		}
 
 		/// <summary> The ShipAddressValidationStatus property of the Entity Order<br/><br/>

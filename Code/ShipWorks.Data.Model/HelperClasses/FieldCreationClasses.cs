@@ -657,6 +657,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -2342,6 +2347,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -2992,6 +3002,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -3296,6 +3311,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -4016,6 +4036,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -5701,6 +5726,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -9072,6 +9102,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -9636,6 +9671,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -10467,6 +10507,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -10946,6 +10991,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -11957,6 +12007,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new OrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new OrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -12421,6 +12476,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -12976,6 +13036,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new PayPalOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -13822,6 +13887,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipWebsite);}
 		}
+		/// <summary>Creates a new ProStoresOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
 		/// <summary>Creates a new ProStoresOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
 		{
@@ -14461,6 +14531,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -16171,6 +16246,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new ShopifyOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus
@@ -19826,6 +19906,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipWebsite
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipAddressValidationSuggestionCount);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.ShipAddressValidationStatus field instance</summary>
 		public static EntityField2 ShipAddressValidationStatus

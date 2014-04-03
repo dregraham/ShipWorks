@@ -84,6 +84,7 @@ namespace ShipWorks.Stores.Content
             PersonAdapter currentShippingAddress = new PersonAdapter(entity, "Ship");
             if (!previousShippingAddress.Equals(currentShippingAddress))
             {
+                currentShippingAddress.AddressValidationSuggestionCount = 0;
                 currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
             }
