@@ -300,7 +300,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NotChecked, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -309,9 +309,17 @@ namespace ShipWorks.Tests.AddressValidation
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<AddressValidationException>();
 
-            bool called = false;
-            testObject.Validate(sampleOrder, "Ship", (x, y) => { called = true; });
-            Assert.IsFalse(called);
+            AddressEntity savedAddressEntity = null;
+            IEnumerable<AddressEntity> savedAddressList = null;
+
+            testObject.Validate(sampleOrder, "Ship", (addressEntity, addressList) =>
+            {
+                savedAddressEntity = addressEntity;
+                savedAddressList = addressList;
+            });
+
+            Assert.IsNull(savedAddressEntity);
+            Assert.AreEqual(0, savedAddressList.Count());
         }
     }
 }
