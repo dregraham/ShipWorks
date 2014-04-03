@@ -5,12 +5,16 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Web.Configuration;
 using System.Windows.Forms;
+using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using log4net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -46,13 +50,18 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            // Save the current address so we can check if it's changed later
+            PersonAdapter previousShippingAddress = new PersonAdapter();
+            PersonAdapter.Copy(entity, "Ship", previousShippingAddress);
+
             shipBillControl.SavePendingChanges();
 
             try
             {
-                using (SqlAdapter adpater = new SqlAdapter())
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adpater.SaveAndRefetch(entity);
+                    ResetAddressValidationIfNecessary(previousShippingAddress, adapter);
+                    adapter.SaveAndRefetch(entity);
                 }
             }
             catch (ORMConcurrencyException ex)
@@ -65,6 +74,19 @@ namespace ShipWorks.Stores.Content
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// If the shipping address has changed, reset the validation status and delete existing suggestions
+        /// </summary>
+        private void ResetAddressValidationIfNecessary(PersonAdapter previousShippingAddress, SqlAdapter adapter)
+        {
+            PersonAdapter currentShippingAddress = new PersonAdapter(entity, "Ship");
+            if (!previousShippingAddress.Equals(currentShippingAddress))
+            {
+                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
+            }
         }
     }
 }

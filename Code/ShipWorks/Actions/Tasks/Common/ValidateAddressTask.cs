@@ -57,7 +57,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
                 {
-                    DeleteExistingAddresses(context, order);
+                    ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
                     SaveAddress(context, order, originalAddress, true);
 
                     foreach (AddressEntity address in suggestedAddresses)
@@ -68,28 +68,6 @@ namespace ShipWorks.Actions.Tasks.Common
                     context.CommitWork.AddForSave(order);
                 });
             }
-        }
-
-        /// <summary>
-        /// Deletes existing validated addresses
-        /// </summary>
-        private static void DeleteExistingAddresses(ActionStepContext context, OrderEntity order)
-        {
-            List<ValidatedAddressEntity> addressesToDelete;
-
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                // Retrieve the addresses 
-                LinqMetaData metaData = new LinqMetaData(adapter);
-                addressesToDelete = metaData.ValidatedAddress.Where(x => x.ConsumerID == order.OrderID).ToList();
-            }
-
-            // Mark each address for deletion
-            addressesToDelete.ForEach(x =>
-            {
-                context.CommitWork.AddForDelete(x);
-                context.CommitWork.AddForDelete(new AddressEntity { AddressID = x.AddressID, IsNew = false });
-            });
         }
 
         /// <summary>
