@@ -441,14 +441,6 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void FormatWeightText()
         {
-            FormatWeightText(currentWeight);
-        }
-
-        /// <summary>
-        /// Format the weight value
-        /// </summary>
-        private void FormatWeightText(double weight)
-        {
             if (MultiValued || cleared)
             {
                 currentWeight = 0;
@@ -456,7 +448,7 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            string result = FormatWeight(weight, displayFormat);
+            string result = FormatWeight(currentWeight, displayFormat);
 
             lastDisplay = result;
 
@@ -500,13 +492,14 @@ namespace ShipWorks.UI.Controls
 
                 if (ValidateRange(newWeight))
                 {
-                    FormatWeightText(newWeight);
                     SetCurrentWeight(newWeight);
                     ClearError();
 
                     MultiValued = false;
                     cleared = false;
                 }
+
+                FormatWeightText();
             }
             else
             {
