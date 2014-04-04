@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.Linq;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
 using log4net;
@@ -587,7 +588,7 @@ namespace ShipWorks.Stores.Communication
                                 PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
                                 if (originalShippingAddress == shipmentAddress)
                                 {
-                                    newShippingAddress.CopyTo(shipmentAddress);
+                                    PersonAdapter.Copy(newShippingAddress, shipmentAddress);
                                 }
 
                                 adapter.SaveEntity(shipment);
