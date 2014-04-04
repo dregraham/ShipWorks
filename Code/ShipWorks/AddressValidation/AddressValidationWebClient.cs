@@ -41,67 +41,45 @@ namespace ShipWorks.AddressValidation
 
             switch (returnCode)
             {
-                case 0:
-                {
-                    throw new AddressValidationException("Address Validation failed to return Return Code");
-                }
-                case 11:
-                {
-                    throw new AddressValidationException("Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present.");
-                }
-                case 12:
-                {
-                    throw new AddressValidationException("The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.");
-                }
-                case 13:
-                {
-                    throw new AddressValidationException("The City in the address submitted is invalid. Remember, city names cannot begin with numbers.");
-                }
-                case 21:
-                {
-                    throw new AddressValidationException("The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.");
-                }
-                case 22:
-                {
-                    return ValidateAddressMultiple(street1, street2, city, state, zip);
-                }
-                case 25:
-                {
-                    throw new AddressValidationException("City, State and ZIP Code are valid, but street address is not a match.");
-                }
-                case 31:
-                {
-                    bool addressExists = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
-                    if (addressExists)
-                    {
-                        string validatedZip = GetZipPlus4(zip1Result);
+                case 11: // "Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present."
+                case 12: // "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid."
+                case 13: // "The City in the address submitted is invalid. Remember, city names cannot begin with numbers."
+                case 21: // "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."
+                case 25: // "City, State and ZIP Code are valid, but street address is not a match."
+                    return null;
+                
 
-                        return new List<AddressValidationResult>()
-                        {
-                            new AddressValidationResult()
-                            {
-                                Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
-                                Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
-                                City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
-                                StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty)),
-                                PostalCode = validatedZip,
-                                CountryCode = Geography.GetCountryCode("US"),
-                                IsValid = true
-                            }
-                        };
-                    }
-                    else
-                    {
-                        throw new AddressValidationException("Address does not exist.");
-                    }
-                }
+                // Multiple options
+                case 22:
                 case 32:
-                {
                     return ValidateAddressMultiple(street1, street2, city, state, zip);
-                }
+                
+                case 31:
+                    bool addressExists = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
+                    if (!addressExists)
+                    {
+                        return null;  // "Address is not a deliverable address, might be a parking lot or vacant lot"
+                    }
+
+                    string validatedZip = GetZipPlus4(zip1Result);
+
+                    return new List<AddressValidationResult>()
+                    {
+                        new AddressValidationResult()
+                        {
+                            Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
+                            Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
+                            City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
+                            StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty)),
+                            PostalCode = validatedZip,
+                            CountryCode = Geography.GetCountryCode("US"),
+                            IsValid = true
+                        }
+                    };
+
                 default:
                 {
-                    throw new AddressValidationException("Unknown error validating address.");
+                    throw new AddressValidationException("Address Validation failed to return a known Return Code");
                 }
             }
         }

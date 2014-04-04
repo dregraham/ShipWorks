@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
@@ -55,19 +56,26 @@ namespace ShipWorks.Actions.Tasks.Common
                     continue;
                 }
 
-                validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
+                try
                 {
-                    ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
-                    SaveAddress(context, order, originalAddress, true);
-
-                    foreach (AddressEntity address in suggestedAddresses)
+                    validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
                     {
-                        SaveAddress(context, order, address, false);
-                    }
+                        ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
+                        SaveAddress(context, order, originalAddress, true);
 
-                    order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
-                    context.CommitWork.AddForSave(order);
-                });
+                        foreach (AddressEntity address in suggestedAddresses)
+                        {
+                            SaveAddress(context, order, address, false);
+                        }
+
+                        order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
+                        context.CommitWork.AddForSave(order);
+                    });
+                }
+                catch (AddressValidationException ex)
+                {
+                    throw new ActionTaskRunException("Error validating address", ex);
+                }
             }
         }
 
