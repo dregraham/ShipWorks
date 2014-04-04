@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -35,9 +36,11 @@ namespace ShipWorks.AddressValidation
         /// </exception>
         public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip)
         {
-            XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
+            XPathNavigator zipMResult = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
 
-            int returnCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/ReturnCode", 0);
+            int returnCode = XPathUtility.Evaluate(zipMResult, "//DAZMultipleMatch//ReturnCode", 0);
+
+            List<AddressValidationResult> validationResults;
 
             switch (returnCode)
             {
@@ -46,65 +49,75 @@ namespace ShipWorks.AddressValidation
                 case 13: // "The City in the address submitted is invalid. Remember, city names cannot begin with numbers."
                 case 21: // "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."
                 case 25: // "City, State and ZIP Code are valid, but street address is not a match."
-                    return null;
-                
+                    validationResults = null;
+                    break;
 
                 // Multiple options
                 case 22:
                 case 32:
-                    return ValidateAddressMultiple(street1, street2, city, state, zip);
-                
+                    validationResults = ParseZipM(zipMResult);
+                    break;
+
                 case 31:
-                    bool addressExists = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
-                    if (!addressExists)
+                    
+                    if (!DoesAddressExist(street1, street2, city, state, zip))
                     {
-                        return null;  // "Address is not a deliverable address, might be a parking lot or vacant lot"
+                        validationResults = null; // "Address is not a deliverable address, might be a parking lot or vacant lot"
                     }
-
-                    string validatedZip = GetZipPlus4(zip1Result);
-
-                    return new List<AddressValidationResult>()
+                    else
                     {
-                        new AddressValidationResult()
+                        validationResults = ParseZipM(zipMResult);
+                        if (validationResults.Count == 1)
                         {
-                            Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
-                            Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
-                            City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
-                            StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty)),
-                            PostalCode = validatedZip,
-                            CountryCode = Geography.GetCountryCode("US"),
-                            IsValid = true
+                            validationResults.First().IsValid = true;
                         }
-                    };
+                    }
+                    break;
 
                 default:
-                {
                     throw new AddressValidationException("Address Validation failed to return a known Return Code");
-                }
             }
+
+
+            ApplyAddressCasing(validationResults);
+
+            return validationResults;
         }
 
         /// <summary>
-        /// Zips the specified zip1 result.
+        /// Does the address exist.
         /// </summary>
-        private static string GetZipPlus4(XPathNavigator zip1Result)
+        private static bool DoesAddressExist(string street1, string street2, string city, string state, string zip)
         {
-            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/ZIP5", String.Empty);
-            string plus4 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Plus4", String.Empty);
-            if (!string.IsNullOrEmpty(plus4))
+            XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
+            
+            return XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
+        }
+
+        /// <summary>
+        /// Applies Address Casing
+        /// </summary>
+        private static void ApplyAddressCasing(IEnumerable<AddressValidationResult> validationResults)
+        {
+            if (validationResults == null)
             {
-                zip = string.Format("{0}-{1}", zip, plus4);
+                return;
             }
-            return zip;
+
+            foreach (var validationResult in validationResults)
+            {
+                validationResult.Street1 = AddressCasing.Apply(validationResult.Street1);
+                validationResult.Street2 = AddressCasing.Apply(validationResult.Street2);
+                validationResult.Street3 = AddressCasing.Apply(validationResult.Street3);
+                validationResult.City = AddressCasing.Apply(validationResult.City);
+            }
         }
 
         /// <summary>
         /// Validates the address and returns multiple.
         /// </summary>
-        private static List<AddressValidationResult> ValidateAddressMultiple(string street1, string street2, string city, string state, string zip)
+        private static List<AddressValidationResult> ParseZipM(XPathNavigator zipMResults)
         {
-            XPathNavigator zipMResults = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
-
             XPathNodeIterator addressIterator = zipMResults.Select("//DAZMultipleMatch/AddressList/Address");
 
             List<AddressValidationResult> validationResults = new List<AddressValidationResult>();
