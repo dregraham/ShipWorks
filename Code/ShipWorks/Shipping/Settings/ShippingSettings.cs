@@ -207,6 +207,7 @@ namespace ShipWorks.Shipping.Settings
 
             settings.BestRateExcludedTypes = new int[0];
             settings.ShipSenseEnabled = true;
+            settings.ShipSenseUniquenessXml = "<ShipSenseUniqueness/>";
 
             adapter.SaveAndRefetch(settings);
         }
