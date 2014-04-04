@@ -41,6 +41,7 @@ namespace ShipWorks.Stores.Communication
 
         int quantitySaved = 0;
         int quantityNew = 0;
+        private PersonAdapter originalShippingAddress;
 
         /// <summary>
         /// Constructor
@@ -211,10 +212,6 @@ namespace ShipWorks.Stores.Communication
         /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>
-        /// <param name="decrementInitialDownloadOrderValue">
-        ///     Typically, we decrement the InitialDownloadOrder value because we increment the result of this function as
-        ///     we want to start with the next order number.
-        /// </param>
         /// <returns></returns>
         protected long GetOrderNumberStartingPoint()
         {
@@ -280,6 +277,9 @@ namespace ShipWorks.Stores.Communication
             if (order != null)
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
+
+                originalShippingAddress = new PersonAdapter();
+                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
 
                 return order;
             }
@@ -568,6 +568,29 @@ namespace ShipWorks.Stores.Communication
                             {
                                 item.LocalStatus = TemplateTokenProcessor.ProcessTokens(itemStatusText, item.OrderItemID);
                                 adapter.SaveAndRefetch(item);
+                            }
+                        }
+                    }
+
+                    // Update unprocessed shipment addresses if the order address has changed
+                    if (!order.IsNew)
+                    {
+                        PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
+
+                        if (originalShippingAddress != newShippingAddress)
+                        {
+                            LinqMetaData metaData = new LinqMetaData(adapter);
+                            List<ShipmentEntity> shipments = metaData.Shipment.Where(x => x.OrderID == order.OrderID && !x.Processed).ToList();
+
+                            foreach (ShipmentEntity shipment in shipments)
+                            {
+                                PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
+                                if (originalShippingAddress == shipmentAddress)
+                                {
+                                    newShippingAddress.CopyTo(shipmentAddress);
+                                }
+
+                                adapter.SaveEntity(shipment);
                             }
                         }
                     }
