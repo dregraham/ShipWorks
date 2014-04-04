@@ -28,7 +28,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             get
             {
-                return panelMain.Controls.OfType<ShipSenseItemAttributeControl>().Select(c => c.AttributeName);
+                // Reverse the order, so the values appear in the same order as they are on screen
+                // since the update layout adjusts sets the index of controls that get added to zero
+                return panelMain.Controls.OfType<ShipSenseItemAttributeControl>().Select(c => c.AttributeName).Reverse();
             }
         }
 
@@ -56,6 +58,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             attributeControl.Dock = DockStyle.Top;
             attributeControl.DeleteAttributeClick += OnDeleteAttribute;
             
+            // Set the child index to zero, so the control gets added to the bottom of the list
             panelMain.Controls.Add(attributeControl);
             panelMain.Controls.SetChildIndex(attributeControl, 0);
 

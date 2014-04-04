@@ -104,7 +104,7 @@
             // 
             this.configurationControl.AutoScroll = true;
             this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.configurationControl.Location = new System.Drawing.Point(3, 20);
+            this.configurationControl.Location = new System.Drawing.Point(3, 26);
             this.configurationControl.Name = "configurationControl";
             this.configurationControl.Size = new System.Drawing.Size(533, 446);
             this.configurationControl.TabIndex = 0;
