@@ -87,5 +87,69 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
 
             Assert.AreEqual(0, additionalHandlings.Count);
         }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesArePuertoRico()
+        {
+            var shipment = new ShipmentEntity {OriginCountryCode = "PR", ShipCountryCode = "PR"};
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUS()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "US" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUSAndBothStatesArePuertoRico()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR", ShipCountryCode = "US", ShipStateProvCode = "PR" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUSAndBothStatesAreContinental()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "MO", ShipCountryCode = "US", ShipStateProvCode = "IL" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenGoingFromPuertoRicoToUS()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "PR", ShipCountryCode = "US" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenGoingFromUSToPuertoRico()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "PR" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenBothCountriesAreUSButOriginStateIsPuertoRico()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR", ShipCountryCode = "US" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenBothCountriesAreUSButDestinationStateIsPuertoRico()
+        {
+            var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "US", ShipStateProvCode = "PR" };
+            var result = UpsApiCore.IsDomesticUnitedStatesOrPuertoRico(shipment);
+            Assert.IsFalse(result);
+        }
     }
 }

@@ -591,13 +591,25 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             decimal totalTax = Convert(order.total_tax, 0m);
             LoadCharge(orderEntity, "Tax", "Total Tax", totalTax);
             
-            //Find the shipping cost
-            decimal shippingAmount = Convert(order.shipping_cost_ex_tax, 0m);
-            if (shippingAmount > 0.0m)
+            CreateChargeIfNecessary(orderEntity, order.shipping_cost_ex_tax, "Shipping", orderEntity.RequestedShipping);
+            CreateChargeIfNecessary(orderEntity, order.handling_cost_ex_tax, "Handling", string.Empty);
+            CreateChargeIfNecessary(orderEntity, order.wrapping_cost_ex_tax, "Wrapping", string.Empty);
+        }
+
+        /// <summary>
+        /// Creates an extra charge if the charge is set and greater than zero
+        /// </summary>
+        /// <param name="orderEntity">Order into which the charge will be saved</param>
+        /// <param name="charge">Value of the charge</param>
+        /// <param name="type">Type of charge</param>
+        /// <param name="name">Name of the charge</param>
+        private void CreateChargeIfNecessary(OrderEntity orderEntity, string charge, string type, string name)
+        {
+            // Save the charge cost if it was included
+            decimal chargeAmount = Convert(charge, 0m);
+            if (chargeAmount > 0.0m)
             {
-                string shippingMethod = orderEntity.RequestedShipping;
-                //LoadCharge for shipping line
-                LoadCharge(orderEntity, "Shipping", shippingMethod, shippingAmount);
+                LoadCharge(orderEntity, type, name, chargeAmount);
             }
         }
 

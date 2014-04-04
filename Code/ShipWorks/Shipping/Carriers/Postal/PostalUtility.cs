@@ -452,5 +452,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 baseRate.ExpectedDeliveryDate = deliveryDate;
             }
         }
+
+        /// <summary>
+        /// Gets a state adjusted for what the post office wants
+        /// </summary>
+        /// <param name="countryCode">Country code for the address</param>
+        /// <param name="state">State for the address</param>
+        /// <returns>State code that should be used for a postal address</returns>
+        public static string AdjustState(string countryCode, string state)
+        {
+            // If the country is Puerto Rico, return PR regardless of what was entered
+            return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : state;
+        }
     }
 }

@@ -223,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="shipment">The shipment.</param>
         private void MaskAccountData(ShippingSettingsEntity shippingSettings, LabelSpecification labelSpecification, ShipmentEntity shipment)
         {
-            bool isInternational = !ShipmentType.IsDomestic(shipment);
+            bool isInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 
             if (shippingSettings.FedExMaskAccount)
             {

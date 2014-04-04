@@ -27,12 +27,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.DTO
         //public string shipping_cost_tax { get; set; }
         //public long shipping_cost_tax_class_id { get; set; }
         //public string base_handling_cost { get; set; }
-        //public string handling_cost_ex_tax { get; set; }
+        public string handling_cost_ex_tax { get; set; }
         //public string handling_cost_inc_tax { get; set; }
         //public string handling_cost_tax { get; set; }
         //public long handling_cost_tax_class_id { get; set; }
         //public string base_wrapping_cost { get; set; }
-        //public string wrapping_cost_ex_tax { get; set; }
+        public string wrapping_cost_ex_tax { get; set; }
         //public string wrapping_cost_inc_tax { get; set; }
         //public string wrapping_cost_tax { get; set; }
         //public long wrapping_cost_tax_class_id { get; set; }

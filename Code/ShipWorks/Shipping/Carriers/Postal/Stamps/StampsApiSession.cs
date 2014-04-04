@@ -982,7 +982,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if (PostalUtility.IsDomesticCountry(person.CountryCode))
             {
-                address.State = person.StateProvCode;
+                address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
                 address.ZIPCode = person.PostalCode5;
                 address.ZIPCodeAddOn = person.PostalCode4;
             }
@@ -1024,7 +1024,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 rate.FromZIPCode = shipment.OriginPostalCode;
             }
 
-
             rate.ToZIPCode = shipment.ShipPostalCode;
             rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
@@ -1054,6 +1053,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (code == "UK")
             {
                 code = "GB";
+            }
+
+            // Puerto Rico is treated as the United States by Stamps
+            if (code == "PR")
+            {
+                return "US";
             }
 
             return code;

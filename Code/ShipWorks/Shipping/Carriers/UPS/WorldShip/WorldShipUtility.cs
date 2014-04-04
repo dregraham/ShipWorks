@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
             UpsShipmentEntity ups = shipment.Ups;
-            bool isDomestic = ShipmentType.IsDomestic(shipment);
+            bool isDomestic = ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 
             // If the row exists already remove it before we start.
             adapter.DeleteEntity(new WorldShipShipmentEntity(shipment.ShipmentID));
@@ -230,11 +230,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.FromAddress2 = from.Street2;
             worldship.FromAddress3 = from.Street3;
             worldship.FromCity = from.City;
-            worldship.FromStateProvCode = from.StateProvCode;
+            worldship.FromStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(from.CountryCode, from.StateProvCode);
             worldship.FromPostalCode = from.PostalCode;
-            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode);
+            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode, from.StateProvCode);
             worldship.FromTelephone = from.Phone10Digits;
-            worldship.FromEmail = GetWorldShipValidEmail(from.Email);
+            worldship.FromEmail = UpsUtility.GetCorrectedEmailAddress(from.Email);
             worldship.FromAccountNumber = account.AccountNumber;
 
             // To
@@ -245,11 +245,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.ToAddress2 = to.Street2;
             worldship.ToAddress3 = to.Street3;
             worldship.ToCity = to.City;
-            worldship.ToStateProvCode = to.StateProvCode;
+            worldship.ToStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(to.CountryCode, to.StateProvCode);
             worldship.ToPostalCode = to.PostalCode;
-            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode);
+            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode, to.StateProvCode);
             worldship.ToTelephone = to.Phone10Digits;
-            worldship.ToEmail = GetWorldShipValidEmail(to.Email);
+            worldship.ToEmail = UpsUtility.GetCorrectedEmailAddress(to.Email);
             worldship.ToResidential = shipment.ResidentialResult ? "Y" : "N";
             worldship.ToAccountNumber = payorType == UpsPayorType.Sender ? "" : ups.PayorAccount;
 
@@ -449,7 +449,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             // SurePost and regular support shipment level QVN, set as needed
             if (ups.EmailNotifySender + ups.EmailNotifyRecipient + ups.EmailNotifyOther > 0)
             {
-                worldship.QvnFrom = GetWorldShipValidEmail(ups.EmailNotifyFrom);
+                worldship.QvnFrom = UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyFrom);
                 worldship.QvnMemo = ups.EmailNotifyMessage;
                 worldship.QvnSubjectLine = (ups.EmailNotifySubject == (int)UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
                 worldship.QvnOption = "Y";
@@ -462,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     // Only write this info out if notify sender was selected.  Otherwise, WorldShip fails on hands off.
                     worldship.Qvn1ContactName = new PersonName(from).FullName;
-                    worldship.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                    worldship.Qvn1Email = UpsUtility.GetCorrectedEmailAddress(from.Email);
                 }
 
                 // Recipient QVN
@@ -473,7 +473,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     // Only write this info out if notify recipient was selected.  Otherwise, WorldShip fails on hands off.
                     worldship.Qvn2ContactName = new PersonName(to).FullName;
-                    worldship.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                    worldship.Qvn2Email = UpsUtility.GetCorrectedEmailAddress(to.Email);
                 }
 
                 // Other QVN
@@ -483,8 +483,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 if (ups.EmailNotifyOther > 0)
                 {
                     // Only write this info out if notify other was selected.  Otherwise, WorldShip fails on hands off.
-                    worldship.Qvn3ContactName = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
-                    worldship.Qvn3Email = GetWorldShipValidEmail(ups.EmailNotifyOtherAddress);
+                    worldship.Qvn3ContactName = UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyOtherAddress);
+                    worldship.Qvn3Email = UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyOtherAddress);
                 }
             }
         }
@@ -526,7 +526,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 return;
             }
 
-            worldshipPackage.QvnFrom = GetWorldShipValidEmail(upsShipment.EmailNotifyFrom);
+            worldshipPackage.QvnFrom = UpsUtility.GetCorrectedEmailAddress(upsShipment.EmailNotifyFrom);
             worldshipPackage.QvnMemo = upsShipment.EmailNotifyMessage;
             worldshipPackage.QvnSubjectLine = (upsShipment.EmailNotifySubject == (int)UpsEmailNotificationSubject.ReferenceNumber) ? "Reference Number 1" : "Tracking Number";
             worldshipPackage.QvnOption = "Y";
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 worldshipPackage.Qvn1ShipNotify = "Y";
                 worldshipPackage.Qvn1ContactName = new PersonName(from).FullName;
-                worldshipPackage.Qvn1Email = GetWorldShipValidEmail(from.Email);
+                worldshipPackage.Qvn1Email = UpsUtility.GetCorrectedEmailAddress(from.Email);
             }
 
             // Receipient QVN
@@ -544,33 +544,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 worldshipPackage.Qvn2ShipNotify = "Y";
                 worldshipPackage.Qvn2ContactName = new PersonName(to).FullName;
-                worldshipPackage.Qvn2Email = GetWorldShipValidEmail(to.Email);
+                worldshipPackage.Qvn2Email = UpsUtility.GetCorrectedEmailAddress(to.Email);
             }
 
             // Other QVN
             if ((upsShipment.EmailNotifyOther & (int) UpsEmailNotificationType.Ship) != 0)
             {
                 worldshipPackage.Qvn3ShipNotify = "Y";
-                worldshipPackage.Qvn3ContactName = GetWorldShipValidEmail(upsShipment.EmailNotifyOtherAddress);
-                worldshipPackage.Qvn3Email = GetWorldShipValidEmail(upsShipment.EmailNotifyOtherAddress);
+                worldshipPackage.Qvn3ContactName = UpsUtility.GetCorrectedEmailAddress(upsShipment.EmailNotifyOtherAddress);
+                worldshipPackage.Qvn3Email = UpsUtility.GetCorrectedEmailAddress(upsShipment.EmailNotifyOtherAddress);
             }
         }
-
-        /// <summary>
-        /// Gets a correct email for WorldShip
-        /// </summary>
-        private static string GetWorldShipValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                return string.Empty;
-            }
-
-            // WorldShip has a max length of 50, and it verifies the format of the email.  So 
-            // if the length is greater than 50, don't send an email.
-            return email.Length > 50 ? string.Empty : email;
-        }
-
+        
         /// <summary>
         /// Save the given UPS package to the WorldShip export table
         /// </summary>

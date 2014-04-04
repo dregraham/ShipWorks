@@ -488,6 +488,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("RubberStamp3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ScanBasedReturn", fieldHashtable);
 		}
 		#endregion
 
@@ -682,6 +685,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.RubberStamp3, true); }
 			set	{ SetValue((int)EndiciaProfileFieldIndex.RubberStamp3, value); }
+		}
+
+		/// <summary> The ScanBasedReturn property of the Entity EndiciaProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EndiciaProfile"."ScanBasedReturn"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ScanBasedReturn
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)EndiciaProfileFieldIndex.ScanBasedReturn, false); }
+			set	{ SetValue((int)EndiciaProfileFieldIndex.ScanBasedReturn, value); }
 		}
 
 

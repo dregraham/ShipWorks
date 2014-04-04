@@ -119,6 +119,12 @@ namespace ShipWorks.Editions
         /// Endicia consolidator
         /// </summary>
         [Description("Your ShipWorks account does not support using consolidators through Endicia.")]
-        EndiciaConsolidator
+        EndiciaConsolidator,
+
+        /// <summary>
+        /// Endicia Scan Based Returns can be Restricted
+        /// </summary>
+        [Description("You must contact Interapptive to use Endicia Scan Based Returns.")]
+        EndiciaScanBasedReturns
     }
 }

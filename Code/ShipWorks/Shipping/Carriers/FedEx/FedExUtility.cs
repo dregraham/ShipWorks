@@ -38,14 +38,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>A List of FedExServiceType objects.</returns>
         public static List<FedExServiceType> GetValidServiceTypes(List<ShipmentEntity> shipments)
         {
+            FedExShipmentType shipmentType = new FedExShipmentType();
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>();
 
-            if (shipments.All(s => ShipmentType.IsDomestic(s)))
+            if (shipments.All(shipmentType.IsDomestic))
             {
                 // All shipments are domestic
                 serviceTypes = GetDomesticServiceTypes(shipments);
             }
-            else if (shipments.All(s => !ShipmentType.IsDomestic(s)))
+            else if (shipments.All(s => !shipmentType.IsDomestic(s)))
             {
                 // All the shipments are international shipments
                 serviceTypes = GetInternationalServiceTypes(shipments);

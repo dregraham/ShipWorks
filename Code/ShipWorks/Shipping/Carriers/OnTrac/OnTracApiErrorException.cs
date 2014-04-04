@@ -9,12 +9,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// </summary>
     public class OnTracApiErrorException : OnTracException
     {
+        private const string onTracDeliveryAreaMessage = "OnTrac services all zip codes in CA.\n\nIn AZ,CO, ID, NV, OR, UT and WA, OnTrac services all major metro areas, but not all zip codes.";
+        
         static private readonly List<DetailsReplacement> ErrorReplacements = new List<DetailsReplacement>
             {
                 new DetailsReplacement("Invalid Username", "The specified account number and password are not correct.", false),
-                new DetailsReplacement("Delivery Zip Not Serviced", "OnTrac does not service delivery addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.  Please verify that the \"Ship To\" zip code is correct and try again.", true),
-                new DetailsReplacement("Invalid Shipper State", "OnTrac does not service delivery addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.  Please verify that the \"Ship To\" state is correct and try again.", true),
-                new DetailsReplacement("Pickup Zip Not Serviced", "OnTrac does not service pickup addresses outside of AZ, CA,CO, ID, NV, OR, UT, WA.", true)
+                new DetailsReplacement("Delivery Zip Not Serviced", "The \"Ship To\" zip code entered is invalid or not serviced by OnTrac.  Please verify that the \"Ship To\" zip code is correct and try again.\n\n" + onTracDeliveryAreaMessage, true),
+                new DetailsReplacement("Invalid Shipper State",     "The \"Ship From\" state entered is invalid or not serviced by OnTrac.  Please verify that the \"Ship From\" state is correct and try again.\n\n" + onTracDeliveryAreaMessage, true),
+                new DetailsReplacement("Pickup Zip Not Serviced",   "The \"Ship From\" zip code entered is invalid or not serviced by OnTrac.\n\n" + onTracDeliveryAreaMessage, true)
             };
 
         /// <summary>

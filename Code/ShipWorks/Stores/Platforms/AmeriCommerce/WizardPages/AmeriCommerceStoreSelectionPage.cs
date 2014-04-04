@@ -71,15 +71,26 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
                 }
                 else
                 {
-                    List<string> names = foundStores.Select(s => string.IsNullOrWhiteSpace(s.storeName) ? s.domainName : s.storeName).ToList();
-                    names.Sort();
+                    var stores = from s in foundStores
+                    select new 
+                         {
+                             DisplayName = string.IsNullOrWhiteSpace(s.storeName) ? s.domainName : s.storeName, 
+                             StoreCode = s.ID.GetValue(-1)
+                         };
+
+                    stores = stores.OrderBy(s => s.DisplayName);
 
                     // load the UI
-                    storeComboBox.Items.Clear();
-                    storeComboBox.Items.AddRange(names.ToArray());
+                    storeComboBox.DisplayMember = "DisplayName";
+                    storeComboBox.ValueMember = "StoreCode";
+                    storeComboBox.DataSource = stores.ToList();
 
+                    storeComboBox.SelectedIndex = 0;
                     // select the first store, or reselect
-                    storeComboBox.SelectedIndex = Math.Max(0, foundStores.FindIndex(s => s.ID.GetValue(-1) == Store.StoreCode));
+                    if (Store.StoreCode > 0)
+                    {
+                        storeComboBox.SelectedValue = stores.First(s => s.StoreCode == Store.StoreCode).DisplayName;
+                    }
 
                     // If there's just 1, move next on the user's behalf
                     if (foundStores.Count == 1)
@@ -134,13 +145,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            int selectedIndex = storeComboBox.SelectedIndex;
-            if (selectedIndex >= foundStores.Count)
-            {
-                throw new InvalidOperationException();
-            }
+            int storeCode = int.Parse(storeComboBox.SelectedValue.ToString());
 
-            Store.StoreCode = foundStores[selectedIndex].ID.GetValue(-1);
+            Store.StoreCode = storeCode;
 
             Cursor.Current = Cursors.WaitCursor;
 

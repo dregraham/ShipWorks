@@ -393,10 +393,12 @@ namespace ShipWorks.Shipping.Editing
                         else if (rateGroup.Rates.Count == 0)
                         {
                             rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
+                            ratesSection.Collapsed = false;
                         }
                         else
                         {
                             rateControl.LoadRates(rateGroup);
+                            ratesSection.Collapsed = false;
                         }
                     }
                 }
@@ -415,11 +417,6 @@ namespace ShipWorks.Shipping.Editing
                 height += rateControl.FootnoteHeight;
 
                 ratesSection.Height = height;
-
-                if (ratesSection.Collapsed)
-                {
-                    ratesSection.Collapsed = false;
-                }
             }
         }
 
@@ -541,7 +538,7 @@ namespace ShipWorks.Shipping.Editing
             string country = "Domestic\\International";
             if (personControl.CountryCode != null)
             {
-                country = ShipmentType.IsDomestic(loadedShipments[0]) ? "Domestic" : "International";
+                country = ShipmentTypeManager.GetType(loadedShipments[0]).IsDomestic(loadedShipments[0]) ? "Domestic" : "International";
             }
 
             sectionRecipient.ExtraText = string.Format("{0}, {1}", name, country);

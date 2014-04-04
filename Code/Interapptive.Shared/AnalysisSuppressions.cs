@@ -3525,3 +3525,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "WHEEL", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "DELTA", Scope = "member", Target = "Interapptive.Shared.Win32.NativeMethods.#WHEEL_DELTA")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "Interapptive.Shared.Business.Geography.#GetStateProvName(System.String,System.String)")]
