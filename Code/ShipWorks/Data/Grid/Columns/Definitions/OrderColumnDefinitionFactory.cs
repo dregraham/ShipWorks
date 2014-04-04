@@ -537,7 +537,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.OrderTotal), 
 
                     new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}", true,
-                        new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Value),
+                        new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
                         "Validation Status", string.Empty,
                         OrderFields.ShipAddressValidationStatus) 
                         { DefaultWidth = 100 },
