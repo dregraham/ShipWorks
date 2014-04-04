@@ -516,11 +516,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The Entry property of the Entity ShipSenseKnowledgebase<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShipSenseKnowledgebase"."Entry"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Entry
+		public virtual System.Byte[] Entry
 		{
-			get { return (System.String)GetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, true); }
+			get { return (System.Byte[])GetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, true); }
 			set	{ SetValue((int)ShipSenseKnowledgebaseFieldIndex.Entry, value); }
 		}
 

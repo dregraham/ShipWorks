@@ -2230,7 +2230,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitShipSenseKnowledgebaseEntityInfos()
 		{
 			base.AddElementFieldInfo("ShipSenseKnowledgebaseEntity", "Hash", typeof(System.String), true, false, false, false,  (int)ShipSenseKnowledgebaseFieldIndex.Hash, 64, 0, 0);
-			base.AddElementFieldInfo("ShipSenseKnowledgebaseEntity", "Entry", typeof(System.String), false, false, false, false,  (int)ShipSenseKnowledgebaseFieldIndex.Entry, 2147483647, 0, 0);
+			base.AddElementFieldInfo("ShipSenseKnowledgebaseEntity", "Entry", typeof(System.Byte[]), false, false, false, false,  (int)ShipSenseKnowledgebaseFieldIndex.Entry, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ShopifyOrderEntity's FieldInfo objects</summary>
 		private void InitShopifyOrderEntityInfos()
