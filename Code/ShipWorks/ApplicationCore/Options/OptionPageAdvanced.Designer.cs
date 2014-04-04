@@ -52,6 +52,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.resetKnowledgebase = new System.Windows.Forms.Button();
             this.enableShipSense = new System.Windows.Forms.CheckBox();
             this.labelShipSenseInfo = new System.Windows.Forms.Label();
+            this.editShipSenseSettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -291,12 +292,25 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelShipSenseInfo.Text = "ShipWorks can inspect your shipment history and use this data to automatically se" +
     "t the weights, dimensions, and customs information of future shipments.";
             // 
+            // editShipSenseSettings
+            // 
+            this.editShipSenseSettings.Image = global::ShipWorks.Properties.Resources.edit16;
+            this.editShipSenseSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.editShipSenseSettings.Location = new System.Drawing.Point(376, 632);
+            this.editShipSenseSettings.Name = "editShipSenseSettings";
+            this.editShipSenseSettings.Size = new System.Drawing.Size(92, 23);
+            this.editShipSenseSettings.TabIndex = 38;
+            this.editShipSenseSettings.Text = "Edit...";
+            this.editShipSenseSettings.UseVisualStyleBackColor = true;
+            this.editShipSenseSettings.Click += new System.EventHandler(this.OnEditShipSenseClick);
+            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.editShipSenseSettings);
             this.Controls.Add(this.resetKnowledgebase);
             this.Controls.Add(this.enableShipSense);
             this.Controls.Add(this.labelShipSenseInfo);
@@ -356,6 +370,7 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Button resetKnowledgebase;
         private System.Windows.Forms.CheckBox enableShipSense;
         private System.Windows.Forms.Label labelShipSenseInfo;
+        private System.Windows.Forms.Button editShipSenseSettings;
 
     }
 }

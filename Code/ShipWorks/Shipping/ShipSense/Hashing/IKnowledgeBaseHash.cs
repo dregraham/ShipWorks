@@ -9,7 +9,8 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// ShipSense knowledge base.
         /// </summary>
         /// <param name="order">The order.</param>
-        /// <returns>A string value of the computed hash.</returns>
-        string ComputeHash(OrderEntity order);
+        /// <param name="shipSenseUniquenessXml">XML containing info/fields used for creating the unique hash key</param>
+        /// <returns>A KnowledgebaseHashResult instance containing the value of the computed hash and whether it is valid.</returns>
+        KnowledgebaseHashResult ComputeHash(OrderEntity order, string shipSenseUniquenessXml);
     }
 }

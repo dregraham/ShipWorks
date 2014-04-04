@@ -6,9 +6,13 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Shipping.ShipSense.Packaging;
+using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -46,41 +50,58 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="order">The order.</param>
         public void Save(KnowledgebaseEntry entry, OrderEntity order)
         {
+            // Populate the order item attributes so we can compute the hash
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                foreach (OrderItemEntity orderItemEntity in order.OrderItems)
+                {
+                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                }
+            }
+
             // Fetch the entity because if it exists, we need the IsNew property to
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to 
             // reduce the number of database calls 
-            string hash = hashingStrategy.ComputeHash(order);
-            ShipSenseKnowledgebaseEntity entity = FetchEntity(hash);
-
-            if (entity == null)
+            KnowledgebaseHashResult hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml);
+            if (hash.IsValid)
             {
-                // Doesn't exist in the db, so create a new one and set the hash
-                entity = new ShipSenseKnowledgebaseEntity();
-                entity.Hash = hash;
-            }
+                ShipSenseKnowledgebaseEntity entity = FetchEntity(hash.HashValue);
 
-            if (entity.Entry != null && entity.Entry.Any())
-            {
-                // We don't want to overwrite any customs information that may already be on the
-                // entry returned from the database if the current entry doesn't have any customs info
-                KnowledgebaseEntry previousEntry = CreateKnowledgebaseEntry(entity.Entry);
-
-                if (previousEntry.CustomsItems.Any() && !entry.CustomsItems.Any())
+                if (entity == null)
                 {
-                    // Make sure this entry also reflects the previous entry's customs items,
-                    // so the customs info gets carried forward
-                    entry.CustomsItems = previousEntry.CustomsItems;
+                    // Doesn't exist in the db, so create a new one and set the hash
+                    entity = new ShipSenseKnowledgebaseEntity();
+                    entity.Hash = hash.HashValue;
+                }
+
+                if (entity.Entry != null && entity.Entry.Any())
+                {
+                    // We don't want to overwrite any customs information that may already be on the
+                    // entry returned from the database if the current entry doesn't have any customs info
+                    KnowledgebaseEntry previousEntry = CreateKnowledgebaseEntry(entity.Entry);
+
+                    if (previousEntry.CustomsItems.Any() && !entry.CustomsItems.Any())
+                    {
+                        // Make sure this entry also reflects the previous entry's customs items,
+                        // so the customs info gets carried forward
+                        entry.CustomsItems = previousEntry.CustomsItems;
+                    }
+                }
+
+                // Update the compressed JSON of the entity to reflect the latest KB entry            
+            entity.Entry = GZipUtility.Compress(Encoding.UTF8.GetBytes(entry.ToJson()));
+
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveEntity(entity);
+                    adapter.Commit();
                 }
             }
-
-            // Update the compressed JSON of the entity to reflect the latest KB entry            
-            entity.Entry = GZipUtility.Compress(Encoding.UTF8.GetBytes(entry.ToJson()));
-            
-            using (SqlAdapter adapter = new SqlAdapter())
+            else
             {
-                adapter.SaveEntity(entity);
-                adapter.Commit();
+                log.WarnFormat("A knowledge base entry was not created for order {0}. A unique value could not be determined based " +
+                               "on the ShipSense uniqueness settings.", order.OrderID);
             }
         }
 
@@ -163,7 +184,7 @@ namespace ShipWorks.Shipping.ShipSense
         {
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
                 {
-                    Hash = hashingStrategy.ComputeHash(order)
+                    Hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml).HashValue
                 };
 
             return FetchEntity(lookupEntity);

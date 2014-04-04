@@ -7463,6 +7463,8 @@ namespace ShipWorks.Data.Model
 		InternalBestRateExcludedShipmentTypes,
 		///<summary>ShipSenseEnabled. </summary>
 		ShipSenseEnabled,
+		///<summary>ShipSenseUniquenessXml. </summary>
+		ShipSenseUniquenessXml,
 		/// <summary></summary>
 		AmountOfFields
 	}

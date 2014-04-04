@@ -27,7 +27,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public ShipSenseOutline(TemplateTranslationContext context)
             : base(context)
         {
-            AddElement("Status", () => EnumHelper.GetDescription((ShipSenseStatus)shipment.ShipSenseStatus));
+            AddElement("Status", () => ((ShipSenseStatus)shipment.ShipSenseStatus).ToString());
 
             AddElement("ChangeSets", new ShipSenseChangeSetOutline(context), () =>
             {
@@ -115,6 +115,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public ShipSensePackagesAndCustomsItemsOutline(TemplateTranslationContext context)
             : base(context)
         {
+            AddAttribute("Timestamp", () => element.Attribute("Timestamp").Value);
             AddElement("Packages", new ShipSensePackagesBeforeAndAfterOutline(context), () => GetElements("Packages"));
             AddElement("CustomsItems", new ShipSenseCustomsItemsBeforeAndAfterOutline(context), () => GetElements("CustomsItems"));
         }

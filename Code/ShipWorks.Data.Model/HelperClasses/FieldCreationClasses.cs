@@ -15837,6 +15837,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipSenseEnabled);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipSenseUniquenessXml field instance</summary>
+		public static EntityField2 ShipSenseUniquenessXml
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipSenseUniquenessXml);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

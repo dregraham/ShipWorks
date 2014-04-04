@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Xml.Linq;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -52,7 +54,7 @@ namespace ShipWorks.Shipping.ShipSense
             
             // Write the package and customs data to a new ChangeSet node and append it to the
             // group of change sets
-            XElement changeSet = new XElement("ChangeSet");
+            XElement changeSet = new XElement("ChangeSet", new XAttribute("Timestamp", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)));
 
             packageXmlWriter.WriteTo(changeSet);
 

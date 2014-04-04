@@ -1987,6 +1987,7 @@
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IKnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />
@@ -1999,6 +2000,24 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackage.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\NullPackageAdapter.cs" />
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
+      <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
+      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.Designer.cs">
+      <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ShipSense\ShipSenseException.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseStatus.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
@@ -7129,6 +7148,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
       <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
+      <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
+      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.resx">
+      <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>

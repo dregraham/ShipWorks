@@ -22,15 +22,23 @@ GO
 PRINT N'Altering [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD
-[ShipSenseEnabled] [bit] NULL
+[ShipSenseEnabled] [bit] NULL,
+[ShipSenseUniquenessXml] [xml] NULL
 GO
 
-update [ShippingSettings] set [ShipSenseEnabled] = 1
+UPDATE [ShippingSettings] 
+SET 
+	[ShipSenseEnabled] = 1,
+	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness/>'
 GO
 
-ALTER TABLE [dbo].[ShippingSettings] ALTER COLUMN [ShipSenseEnabled] [bit] NOT NULL
+ALTER TABLE [dbo].[ShippingSettings] 
+	ALTER COLUMN [ShipSenseEnabled] [bit] NOT NULL
 GO
 
+ALTER TABLE [dbo].[ShippingSettings] 
+	ALTER COLUMN [ShipSenseUniquenessXml] [xml] NOT NULL
+GO
 
 PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
 GO
