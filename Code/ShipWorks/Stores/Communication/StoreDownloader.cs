@@ -581,23 +581,7 @@ namespace ShipWorks.Stores.Communication
                     if (!order.IsNew)
                     {
                         PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
-
-                        if (originalShippingAddress != newShippingAddress)
-                        {
-                            LinqMetaData metaData = new LinqMetaData(adapter);
-                            List<ShipmentEntity> shipments = metaData.Shipment.Where(x => x.OrderID == order.OrderID && !x.Processed).ToList();
-
-                            foreach (ShipmentEntity shipment in shipments)
-                            {
-                                PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
-                                if (originalShippingAddress == shipmentAddress)
-                                {
-                                    newShippingAddress.CopyTo(shipmentAddress);
-                                }
-
-                                adapter.SaveEntity(shipment);
-                            }
-                        }
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
                     }
 
                     log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");

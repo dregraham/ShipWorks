@@ -62,6 +62,7 @@ namespace Interapptive.Shared.Business
             adapter.Website = "";
 
             adapter.AddressValidationStatus = 0;
+            adapter.AddressValidationSuggestionCount = 0;
         }
 
         /// <summary>
@@ -132,6 +133,15 @@ namespace Interapptive.Shared.Business
         public void CopyTo(IEntity2 entity, string prefix)
         {
             Copy(this, new PersonAdapter(entity, prefix));
+        }
+
+        /// <summary>
+        /// Copy the person\address values from this adapter to another
+        /// </summary>
+        /// <param name="destinationAddress"></param>
+        public void CopyTo(PersonAdapter destinationAddress)
+        {
+            Copy(this, destinationAddress);
         }
 
         /// <summary>
