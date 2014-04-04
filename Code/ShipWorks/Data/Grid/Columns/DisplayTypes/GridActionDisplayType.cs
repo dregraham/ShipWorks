@@ -24,7 +24,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// Constructor
         /// </summary>
         public GridActionDisplayType(string actionText, object actionData)
-            : this(actionData)
+            : this(actionData, null)
         {
             this.actionText = actionText;
         }
@@ -33,7 +33,16 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// Constructor
         /// </summary>
         public GridActionDisplayType(Func<object, string> actionTextProvider, object actionData)
-            : this(actionData)
+            : this(actionData, null)
+        {
+            this.actionTextProvider = actionTextProvider;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GridActionDisplayType(Func<object, string> actionTextProvider, Action<object, GridHyperlinkClickEventArgs> clickAction, Func<object, bool> linkEnabledProvider)
+            : this(clickAction, linkEnabledProvider)
         {
             this.actionTextProvider = actionTextProvider;
         }
@@ -41,13 +50,19 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Common constructor
         /// </summary>
-        private GridActionDisplayType(object actionData)
+        private GridActionDisplayType(object actionData, Func<object, bool> linkEnabledProvider)
         {
             this.actionData = actionData;
 
             PreviewInputType = GridColumnPreviewInputType.LiteralString;
 
-            Decorate(new GridHyperlinkDecorator());
+            GridHyperlinkDecorator linkDecorator = new GridHyperlinkDecorator();
+            if (linkEnabledProvider != null)
+            {
+                linkDecorator.QueryEnabled += (sender, args) => args.Enabled = linkEnabledProvider(args.Value);
+            }
+
+            Decorate(linkDecorator);
         }
 
         /// <summary>

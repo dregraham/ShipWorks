@@ -543,14 +543,38 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         { DefaultWidth = 100 },
 
                     new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
-                        new GridActionDisplayType(DisplayValidationSuggestionLabel, (Action<object, GridHyperlinkClickEventArgs>)(new OrderGridAddressSelector()).ShowAddressOptionMenu), 
+                        new GridActionDisplayType(DisplayValidationSuggestionLabel, (new OrderGridAddressSelector()).ShowAddressOptionMenu, IsValidationSuggestionLinkEnabled), 
                         "Validation Suggestions", "2 Suggestions",
                         new GridColumnFunctionValueProvider(x => x),
-                        new GridColumnSortProvider(OrderFields.ShipAddressValidationStatus))
+                        new GridColumnSortProvider(OrderFields.ShipAddressValidationSuggestionCount))
                         { DefaultWidth = 120 }
                 };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Checks whether the validation suggestion hyperlink should be enabled
+        /// </summary>
+        private static bool IsValidationSuggestionLinkEnabled(object arg)
+        {
+            var order = arg as OrderEntity;
+            if (order == null)
+            {
+                return false;
+            }
+
+            switch ((AddressValidationStatusType)order.ShipAddressValidationStatus)
+            {
+                case AddressValidationStatusType.Adjusted:
+                case AddressValidationStatusType.NeedsAttention:
+                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.SuggestedSelected:
+                    return order.ShipAddressValidationSuggestionCount > 0;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
