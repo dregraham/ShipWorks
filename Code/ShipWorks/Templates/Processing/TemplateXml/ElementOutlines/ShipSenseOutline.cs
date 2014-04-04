@@ -115,6 +115,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public ShipSensePackagesAndCustomsItemsOutline(TemplateTranslationContext context)
             : base(context)
         {
+            AddAttribute("Timestamp", () => element.Attribute("Timestamp").Value);
             AddElement("Packages", new ShipSensePackagesBeforeAndAfterOutline(context), () => GetElements("Packages"));
             AddElement("CustomsItems", new ShipSenseCustomsItemsBeforeAndAfterOutline(context), () => GetElements("CustomsItems"));
         }

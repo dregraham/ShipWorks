@@ -38,6 +38,29 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
+        public void ChangeSet_HasTimestamp_Test()
+        {
+            XElement changeSets = new XElement("ChangeSets");
+
+            testObject.WriteTo(changeSets);
+
+            Assert.IsNotNull(changeSets.Descendants("ChangeSet").First().Attribute("Timestamp"));
+        }
+
+        [TestMethod]
+        public void ChangeSets_HaveTimestamps_Test()
+        {
+            XElement changeSets = new XElement("ChangeSets");
+
+            testObject.WriteTo(changeSets);
+            testObject.WriteTo(changeSets);
+
+            IEnumerable<string> timestamps = changeSets.Descendants("ChangeSet").Select(cs => cs.Attribute("Timestamp").Value);
+
+            Assert.AreEqual(2, timestamps.Count());
+        }
+
+        [TestMethod]
         public void AppendChangeSet_DelegatesToPackageXmlWriter_Test()
         {
             XElement changeSets = new XElement("ChangeSets");
