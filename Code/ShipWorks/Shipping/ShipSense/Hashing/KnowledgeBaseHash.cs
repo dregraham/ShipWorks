@@ -26,38 +26,54 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// </summary>
         /// <param name="order">The order.</param>
         /// <param name="shipSenseUniquenessXml">XML containing info/fields used for creating the unique hash key</param>
-        /// <returns>A string value of the computed hash.</returns>
-        public string ComputeHash(OrderEntity order, string shipSenseUniquenessXml)
+        /// <returns>A KnowledgebaseHashResult instance containing the value of the computed hash and whether it is valid.</returns>
+        public KnowledgebaseHashResult ComputeHash(OrderEntity order, string shipSenseUniquenessXml)
         {
             List<string> itemAttributeNamesToInclude = ItemAttributeNames(shipSenseUniquenessXml);
-
+            
             // We want to sort the items by SKU then code, so they are always in the same order
             List<OrderItemEntity> sortedItems = order.OrderItems.ToList();
             sortedItems = sortedItems.OrderBy(oi => oi.SKU).ThenBy(oi => oi.Code).ToList();
 
-            // We're going to group the items by item code and SKU, so we can sum the quantities
-            List<IGrouping<string, OrderItemEntity>> groupedItemsBySku = sortedItems.GroupBy(i => AddUniquenessParams(i, itemAttributeNamesToInclude)).ToList();
+            // We're going to group the items by uniqueness (based on the uniqueness XML provided)
+            List<IGrouping<string, OrderItemEntity>> groupedUniqueItems = sortedItems.GroupBy(i => AddUniquenessParams(i, itemAttributeNamesToInclude)).ToList();
 
-            // Build up the string data for each item now that we have the items sorted and grouped by SKU
-            List<string> skuQuantityPair = new List<string>();
-            foreach (IGrouping<string, OrderItemEntity> itemGroup in groupedItemsBySku)
+            if (groupedUniqueItems.Any(i => string.IsNullOrWhiteSpace(i.Key)))
             {
-                // If the item key is not something, then we don't want to add it because it would just be the
-                // quantity field and that isn't helpful
-                if (!string.IsNullOrWhiteSpace(itemGroup.Key))
-                {
-                    // Since the key already incorporates the item's code and key, each entry 
-                    // will be in the format of Code-SKU-TotalQty
-                    skuQuantityPair.Add(string.Format("{0}{1}", itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
-                }
+                // Return an invalid result here because the item key is empty, meaning we don't 
+                // have a sufficient uniqueness key. Just having the quantity field isn't helpful.
+                return new KnowledgebaseHashResult(false, string.Empty);
             }
-            
+
+            // We have an order with items that match the uniqueness settings/constraints,
+            // we can use those to create a valid hash result.
+            return CreateValidHashResult(groupedUniqueItems);
+        }
+
+        /// <summary>
+        /// Uses the unique items provided to create a valid hash result.
+        /// </summary>
+        /// <param name="groupedUniqueItems">The grouped unique items.</param>
+        /// <returns>A KnowledgebaseHashResult instance containing the value of the computed hash and whether it is valid.</returns>
+        private KnowledgebaseHashResult CreateValidHashResult(IEnumerable<IGrouping<string, OrderItemEntity>> groupedUniqueItems)
+        {
+            // Build up the string data for each item now that we have the items sorted and grouped by uniqueness
+            List<string> uniqueItemQuantityPair = new List<string>();
+            foreach (IGrouping<string, OrderItemEntity> itemGroup in groupedUniqueItems)
+            {
+                // Since the key already incorporates the item's code and key, each entry 
+                // will be in the format of [UniquenessKey]-TotalQty
+                uniqueItemQuantityPair.Add(string.Format("{0}{1}", itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
+            }
+
             // Create a single string representing the SKU/Quantity pairs that will be 
             // used to compute the hash
-            string valueToHash = string.Join("|", skuQuantityPair);
+            string valueToHash = string.Join("|", uniqueItemQuantityPair);
 
             // Salt the hash, so it's a little more difficult to crack
-            return Hash(valueToHash, "BananaHammock7458");
+            string hash = Hash(valueToHash, "BananaHammock7458");
+
+            return new KnowledgebaseHashResult(true, hash);
         }
 
         /// <summary>
