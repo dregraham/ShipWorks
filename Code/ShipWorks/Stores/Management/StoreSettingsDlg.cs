@@ -212,6 +212,7 @@ namespace ShipWorks.Stores.Management
 
         /// <summary>
         /// Load the content of the settings tab
+        /// </summary>
         private void LoadSettingsTab()
         {
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();

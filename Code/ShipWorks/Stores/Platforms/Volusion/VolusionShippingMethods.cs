@@ -127,11 +127,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                                 swFormat = false;
                             }
 
-                            int counter = 0;
                             while (csvReader.ReadNextRecord())
                             {
-                                counter++;
-
                                 string shippingMethodID = "";
                                 string shippingMethodName = "";
                                 if (swFormat)

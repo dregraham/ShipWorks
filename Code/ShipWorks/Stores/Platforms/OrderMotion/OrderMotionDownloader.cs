@@ -546,9 +546,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             adapter.Email = XPathUtility.Evaluate(xpath, "Email", "");
             adapter.Phone = CleanPhone(XPathUtility.Evaluate(xpath, "FullPhone", ""));
 
-            ///
-            /// Depending on if its pulling address information from the customer or shipping section, phone and country may take more work.
-            ///
+            //
+            // Depending on if its pulling address information from the customer or shipping section, phone and country may take more work.
+            //
             {
                 if (string.IsNullOrWhiteSpace(adapter.Phone))
                 {

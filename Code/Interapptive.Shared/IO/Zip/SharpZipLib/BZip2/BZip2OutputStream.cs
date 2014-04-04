@@ -579,7 +579,7 @@ namespace ICSharpCode.SharpZipLib.BZip2
 				len[i] = new char[BZip2Constants.MaximumAlphaSize];
 			}
 			
-			int gs, ge, totc, bt, bc, iter;
+			int gs, ge, bt, bc, iter;
 			int nSelectors = 0, alphaSize, minLen, maxLen, selCtr;
 			int nGroups;
 			
@@ -660,7 +660,6 @@ namespace ICSharpCode.SharpZipLib.BZip2
 				}
 				
 				nSelectors = 0;
-				totc = 0;
 				gs   = 0;
 				while (true) {
 					/*--- Set group start & end marks. --*/
@@ -719,7 +718,6 @@ namespace ICSharpCode.SharpZipLib.BZip2
 							bt = t;
 						}
 					}
-					totc += bc;
 					fave[bt]++;
 					selector[nSelectors] = (char)bt;
 					nSelectors++;
@@ -1110,7 +1108,6 @@ namespace ICSharpCode.SharpZipLib.BZip2
 			int[] copy = new int[256];
 			bool[] bigDone = new bool[256];
 			int c1, c2;
-			int numQSorted;
 			
 			/*--
 			In the various block-sized structures, live data runs
@@ -1140,7 +1137,6 @@ namespace ICSharpCode.SharpZipLib.BZip2
 				workDone = workLimit = 0;
 				SimpleSort(0, last, 0);
 			} else {
-				numQSorted = 0;
 				for (i = 0; i <= 255; i++) {
 					bigDone[i] = false;
 				}
@@ -1227,7 +1223,6 @@ namespace ICSharpCode.SharpZipLib.BZip2
 							int hi = (ftab[sb+1] & CLEARMASK) - 1;
 							if (hi > lo) {
 								QSort3(lo, hi, 2);
-								numQSorted += (hi - lo + 1);
 								if (workDone > workLimit && firstAttempt) {
 									return;
 								}

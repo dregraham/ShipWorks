@@ -272,6 +272,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Express1 parameters are named 'request', so when we see the node being written that is Endicia's parameter name then
         /// we need to rewrite it as 'request'
+        /// </summary>
         public override void WriteQualifiedName(string localName, string ns)
         {
             if (String.Compare(localName, GetWebMethodParameterName(), StringComparison.OrdinalIgnoreCase) == 0)

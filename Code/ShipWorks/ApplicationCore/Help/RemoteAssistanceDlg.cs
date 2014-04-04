@@ -133,7 +133,10 @@ namespace ShipWorks.ApplicationCore.Help
         }
 
         /// <summary>
-        /// Luanch the support client
+        /// Launches the client.
+        /// </summary>
+        /// <param name="clientExe">The client executable.</param>
+        /// <exception cref="System.InvalidOperationException">ShipWorks was unable to initiate the support session.\n\nPlease check that you entered the correct 6-digit PIN code.</exception>
         private void LaunchClient(string clientExe)
         {
             FileInfo fileInfo = new FileInfo(clientExe);

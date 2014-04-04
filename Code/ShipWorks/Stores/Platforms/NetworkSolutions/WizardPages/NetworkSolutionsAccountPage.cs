@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WizardPages
             }
         }
 
-        /// <summary
+        /// <summary>
         /// Moving to the next wizard page
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)

@@ -133,13 +133,13 @@ namespace ShipWorks.UI.Controls.Html.Core
             {
 				htmlDocumentClass = (IOleObject) new HtmlApi.HTMLDocument();
 
-                int retVal = OleApi.OleRun(htmlDocumentClass);
+                OleApi.OleRun(htmlDocumentClass);
 
                 // Set the client site
 				htmlDocumentClass.SetClientSite(this);
 		
 				// Lock the object in memory
-                retVal = OleApi.OleLockRunning(htmlDocumentClass, true, false);
+                OleApi.OleLockRunning(htmlDocumentClass, true, false);
 		
 				htmlDocumentClass.SetHostNames("HtmlControl", "HtmlControl");
 				htmlDocumentClass.Advise(this, out adviseCookie);

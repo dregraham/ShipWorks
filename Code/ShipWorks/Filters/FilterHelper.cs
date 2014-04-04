@@ -116,7 +116,7 @@ namespace ShipWorks.Filters
 
             return false;
         }
-
+        /// <summary>
         /// Indicates if the given filter is a uneditable "My Filters"
         /// </summary>
         public static bool IsMyFiltersRoot(FilterNodeEntity node)

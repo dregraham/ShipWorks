@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
     /// </summary>
     public class DownloadResponseSerializer : INeweggSerializer
     {
+        /// <summary>
         /// Deserializes the specified XML. If an object is unable to be
         /// serialized from the XML, a null value is returned.
         /// </summary>

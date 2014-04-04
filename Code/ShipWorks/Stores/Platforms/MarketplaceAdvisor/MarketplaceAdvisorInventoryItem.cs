@@ -30,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
         /// <summary>
         /// Constructor
+        /// </summary>
         public MarketplaceAdvisorInventoryItem(XPathNavigator item)
         {
             imageUrl = XPathUtility.Evaluate(item, "ImageUrl1", "");
