@@ -32,6 +32,61 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
         [TestMethod]
+        public void ComputeHash_WithNoSkuAndNoCode_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "", SKU = "", Quantity = 3 });
+
+            string hash = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            Assert.AreEqual("e5rl3xFV80hCNly1jxrEnN5UfYgP0twPJQ00jWHINyU=", hash);
+        }
+
+        [TestMethod]
+        public void ComputeHash_IsTheSame_WhenCodeAndSkuInDifferentOrder_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "b", SKU = "2", Quantity = 3 });
+            string hash1 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            order.OrderItems.Clear();
+            order.OrderItems.Add(new OrderItemEntity { Code = "b", SKU = "2", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            string hash2 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            Assert.AreEqual(hash1, hash2);
+        }
+
+        [TestMethod]
+        public void ComputeHash_IsTheSame_WhenCodeSameAndSkuInDifferentOrder_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "2", Quantity = 3 });
+            string hash1 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            order.OrderItems.Clear();
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "2", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            string hash2 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            Assert.AreEqual(hash1, hash2);
+        }
+
+        [TestMethod]
+        public void ComputeHash_IsTheSame_WhenSkuSameAndCodeInDifferentOrder_Test()
+        {
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "b", SKU = "1", Quantity = 3 });
+            string hash1 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            order.OrderItems.Clear();
+            order.OrderItems.Add(new OrderItemEntity { Code = "b", SKU = "1", Quantity = 3 });
+            order.OrderItems.Add(new OrderItemEntity { Code = "a", SKU = "1", Quantity = 3 });
+            string hash2 = testObject.ComputeHash(order, shipSenseUniquenessSettings);
+
+            Assert.AreEqual(hash1, hash2);
+        }
+
+        [TestMethod]
         public void ComputeHash_WithSingleItem_Test()
         {
             order.OrderItems.Add(new OrderItemEntity { Code = "Code-1", SKU = "ABC123", Quantity = 3 });

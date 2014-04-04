@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.OrderItems;
@@ -30,9 +31,9 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         {
             List<string> itemAttributeNamesToInclude = ItemAttributeNames(shipSenseUniquenessXml);
 
-            // We want to sort the items by SKU, so they are always in the same order
-            order.OrderItems.Sort(OrderItemFields.SKU.FieldIndex, ListSortDirection.Ascending);
+            // We want to sort the items by SKU then code, so they are always in the same order
             List<OrderItemEntity> sortedItems = order.OrderItems.ToList();
+            sortedItems = sortedItems.OrderBy(oi => oi.SKU).ThenBy(oi => oi.Code).ToList();
 
             // We're going to group the items by item code and SKU, so we can sum the quantities
             List<IGrouping<string, OrderItemEntity>> groupedItemsBySku = sortedItems.GroupBy(i => AddUniquenessParams(i, itemAttributeNamesToInclude)).ToList();
@@ -41,9 +42,14 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             List<string> skuQuantityPair = new List<string>();
             foreach (IGrouping<string, OrderItemEntity> itemGroup in groupedItemsBySku)
             {
-                // Since the key already incorporates the item's code and key, each entry 
-                // will be in the format of Code-SKU-TotalQty
-                skuQuantityPair.Add(string.Format("{0}{1}",itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
+                // If the item key is not something, then we don't want to add it because it would just be the
+                // quantity field and that isn't helpful
+                if (!string.IsNullOrWhiteSpace(itemGroup.Key))
+                {
+                    // Since the key already incorporates the item's code and key, each entry 
+                    // will be in the format of Code-SKU-TotalQty
+                    skuQuantityPair.Add(string.Format("{0}{1}", itemGroup.Key, itemGroup.Sum(g => g.Quantity)));
+                }
             }
             
             // Create a single string representing the SKU/Quantity pairs that will be 
@@ -63,13 +69,26 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// <param name="itemAttributeNamesToInclude">The list of attribute names to include in the string.</param>
         private string AddUniquenessParams(OrderItemEntity orderItemEntity, List<string> itemAttributeNamesToInclude)
         {
-            string uniqueness = AddUniquenessParam("", orderItemEntity.Code, "");
-            uniqueness += AddUniquenessParam("", orderItemEntity.SKU, "-");
-
+            string uniqueness = string.Empty;
+            
+            // Find the item attributes that match the list of configured attribute names.
             List<OrderItemAttributeEntity> matchingOrderItemAttributes = (from oia in orderItemEntity.OrderItemAttributes
                                                                           join name in itemAttributeNamesToInclude on oia.Name.ToUpperInvariant() equals name.ToUpperInvariant()
                                                                           select oia).ToList();
-            
+
+            // If there are no code, sku, and no matching item attributes, just return
+            if (string.IsNullOrWhiteSpace(orderItemEntity.Code) &&
+                string.IsNullOrWhiteSpace(orderItemEntity.SKU) &&
+                !matchingOrderItemAttributes.Any())
+            {
+                return string.Empty;
+            }
+
+            // Add code and sku
+            uniqueness = AddUniquenessParam("", orderItemEntity.Code, "");
+            uniqueness += AddUniquenessParam("", orderItemEntity.SKU, "-");
+
+            // Add each attribute name and description
             foreach (OrderItemAttributeEntity orderItemAttributeEntity in matchingOrderItemAttributes.OrderBy(oia => oia.Name))
             {
                 uniqueness += AddUniquenessParam(orderItemAttributeEntity.Name.ToUpperInvariant(), orderItemAttributeEntity.Description.ToUpperInvariant(), "-");
