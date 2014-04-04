@@ -293,33 +293,15 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
-        public void Validate_DoesNotChangeValidationStatus_WhenWebClientThrowsAddressValidationException()
+        [ExpectedException(typeof(AddressValidationException))]
+        public void Validate_ThrowsAddressValidationException_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<AddressValidationException>();
-
-            testObject.Validate(sampleOrder, "Ship", (x, y) => { });
-
-            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
-        }
-
-        [TestMethod]
-        public void Validate_DoesNotCallSaveAction_WhenWebClientThrowsAddressValidationException()
-        {
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Throws<AddressValidationException>();
-
-            AddressEntity savedAddressEntity = null;
-            IEnumerable<AddressEntity> savedAddressList = null;
 
             testObject.Validate(sampleOrder, "Ship", (addressEntity, addressList) =>
             {
-                savedAddressEntity = addressEntity;
-                savedAddressList = addressList;
             });
-
-            Assert.IsNull(savedAddressEntity);
-            Assert.AreEqual(0, savedAddressList.Count());
         }
     }
 }
