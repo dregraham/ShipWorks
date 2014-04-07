@@ -19,12 +19,12 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
          {
              IEnumerable<ShipSenseOrderItemKey> shipSenseKeys = keys as IList<ShipSenseOrderItemKey> ?? keys.ToList();
 
-             if (!shipSenseKeys.ToList().All(k => k.IsValid()))
+             if (!shipSenseKeys.All(k => k.IsValid()))
              {
                  return new KnowledgebaseHashResult(false, string.Empty);
              }
 
-             return CreateValidHashResult(shipSenseKeys.ToList());
+             return CreateValidHashResult(shipSenseKeys);
          }
 
          /// <summary>
