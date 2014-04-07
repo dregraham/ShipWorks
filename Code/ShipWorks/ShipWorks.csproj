@@ -2015,6 +2015,12 @@
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
       <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.Designer.cs">
+      <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7157,6 +7163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
       <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
+      <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.resx">
       <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
