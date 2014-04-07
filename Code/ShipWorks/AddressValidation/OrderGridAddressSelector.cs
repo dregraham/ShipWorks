@@ -62,7 +62,7 @@ namespace ShipWorks.AddressValidation
                     menuItems.Add(new MenuItem("-"));
                 }
 
-                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, order)));
+                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, order)).OrderBy(x => x.Text));
             }
 
             return new ContextMenu(menuItems.ToArray());

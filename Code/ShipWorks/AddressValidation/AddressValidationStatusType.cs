@@ -15,7 +15,7 @@ namespace ShipWorks.AddressValidation
         NotChecked = 0,
 
         [Description("Pending")]
-        [ImageResource("cancel16")]
+        [ImageResource("nav_redo_yellow")]
         Pending = 1,
 
         [Description("Not Valid")]
