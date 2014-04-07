@@ -81,5 +81,45 @@ namespace ShipWorks.AddressValidation
                 deleteAction(addressToDelete);
             });
         }
+
+        /// <summary>
+        /// Deletes existing validated addresses
+        /// </summary>
+        public static void SaveOrderAddress(ActionStepContext context, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                SaveOrderAddress(order, address, isOriginalAddress, entity2 => context.CommitWork.AddForSave(entity2));
+            }
+        }
+
+        /// <summary>
+        /// Deletes existing validated addresses
+        /// </summary>
+        public static void SaveOrderAddress(DataAccessAdapter adapter, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        {
+            SaveOrderAddress(order, address, isOriginalAddress, entity2 => adapter.SaveEntity(entity2));
+        }
+
+        /// <summary>
+        /// Save a validated address
+        /// </summary>
+        private static void SaveOrderAddress(OrderEntity order, AddressEntity address, bool isOriginalAddress, Action<IEntity2> saveAction)
+        {
+            // If the address is null, we obviously don't need to save it
+            if (address == null)
+            {
+                return;
+            }
+
+            ValidatedAddressEntity validatedAddressEntity = new ValidatedAddressEntity
+            {
+                ConsumerID = order.OrderID,
+                Address = address,
+                IsOriginal = isOriginalAddress
+            };
+
+            saveAction(validatedAddressEntity);
+        }
     }
 }

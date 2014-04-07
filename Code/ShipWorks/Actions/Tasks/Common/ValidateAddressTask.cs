@@ -61,11 +61,11 @@ namespace ShipWorks.Actions.Tasks.Common
                     validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
                     {
                         ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
-                        SaveAddress(context, order, originalAddress, true);
+                        ValidatedAddressManager.SaveOrderAddress(context, order, originalAddress, true);
 
                         foreach (AddressEntity address in suggestedAddresses)
                         {
-                            SaveAddress(context, order, address, false);
+                            ValidatedAddressManager.SaveOrderAddress(context, order, address, false);
                         }
 
                         order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
@@ -77,27 +77,6 @@ namespace ShipWorks.Actions.Tasks.Common
                     throw new ActionTaskRunException("Error validating address", ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Save a validated address
-        /// </summary>
-        private static void SaveAddress(ActionStepContext context, OrderEntity order, AddressEntity address, bool isOriginalAddress)
-        {
-            // If the address is null, we obviously don't need to save it
-            if (address == null)
-            {
-                return;
-            }
-
-            ValidatedAddressEntity validatedAddressEntity = new ValidatedAddressEntity
-            {
-                ConsumerID = order.OrderID,
-                Address = address,
-                IsOriginal = isOriginalAddress
-            };
-
-            context.CommitWork.AddForSave(validatedAddressEntity);
         }
     }
 }
