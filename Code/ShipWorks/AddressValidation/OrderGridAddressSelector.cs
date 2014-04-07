@@ -117,6 +117,8 @@ namespace ShipWorks.AddressValidation
             {
                 adapter.SaveAndRefetch(order);
             }
+
+            Program.MainForm.ForceHeartbeat();
         }
 
         /// <summary>

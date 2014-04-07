@@ -34,7 +34,7 @@ namespace ShipWorks.AddressValidation
         [ImageResource("check16")]
         Overridden = 5,
 
-        [Description("Needs Attentions")]
+        [Description("Needs Attention")]
         [ImageResource("error16")]
         NeedsAttention = 6,
 

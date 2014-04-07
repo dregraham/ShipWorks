@@ -1767,7 +1767,7 @@ namespace ShipWorks
         /// this method will increase the heart rate until changes are found, or until the forced heart rate
         /// time period expires.  This is allowed to be called from any thread.
         /// </summary>
-        private void ForceHeartbeat()
+        internal void ForceHeartbeat()
         {
             ForceHeartbeat(HeartbeatOptions.None);
         }
