@@ -1987,10 +1987,12 @@
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\IShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IKnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHash.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKey.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />
     <Compile Include="Shipping\ShipSense\IChangeSetXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Knowledgebase.cs" />

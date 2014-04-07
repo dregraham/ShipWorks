@@ -365,6 +365,7 @@
     <Compile Include="Shipping\ShippingManagerTest.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactoryTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHashTest.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntryChangeSetXmlWriterTest.cs" />
