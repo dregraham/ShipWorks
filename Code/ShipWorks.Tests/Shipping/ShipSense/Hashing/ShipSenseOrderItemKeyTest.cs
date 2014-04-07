@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenAllEntriesAreBlank_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", string.Empty);
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenDuplicateKeyIsAdded_AndAllEntriesAreBlank_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", string.Empty);
             testObject.Add("Code", string.Empty);
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenNoEntriesHaveBeenAdded_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
 
             Assert.IsFalse(testObject.IsValid());
         }
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void IsValid_ReturnsTrue_WhenOneEntryValueIsNotBlank_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", "123");
 
@@ -54,11 +54,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void KeyValue_ContainsAllIdentifierValues_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", "ABC");
             testObject.Add("Code", "123");
 
-            string key = testObject.Value;
+            string key = testObject.KeyValue;
 
             Assert.IsTrue(key.Contains("[SKU,ABC]|[Code,123]"));
         }
@@ -66,25 +66,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         [TestMethod]
         public void KeyValue_ContainsAllIdentifierValues_WhenOneKeyHasBlankValue_Test()
         {
-            testObject = new ShipSenseOrderItemKey(1);
+            testObject = new ShipSenseOrderItemKey { Quantity = 1 };
             testObject.Add("SKU", "");
             testObject.Add("Code", "123");
 
-            string key = testObject.Value;
+            string key = testObject.KeyValue;
 
             Assert.IsTrue(key.Contains("[SKU,]|[Code,123]"));
-        }
-
-        [TestMethod]
-        public void KeyValue_EndsWithQuantity_Test()
-        {
-            testObject = new ShipSenseOrderItemKey(2.5);
-            testObject.Add("SKU", "ABC");
-            testObject.Add("Code", "123");
-
-            string key = testObject.Value;
-
-            Assert.IsTrue(key.EndsWith("|2.5"));
         }
 
         [TestMethod]
@@ -96,19 +84,19 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             // missing code but a SKU of 123. This should result in two different the keys will accurately 
             // reflect the items: [SKU,123]|[Code,] for item 1 and [SKU,]|[Code,123] for item 2
 
-            testObject = new ShipSenseOrderItemKey(2.5);
+            testObject = new ShipSenseOrderItemKey { Quantity = 2.5 };
             testObject.Add("SKU", "123");
             testObject.Add("Code", "");
             testObject.Add("Location", "XYZ");
 
-            string firstKey = testObject.Value;
+            string firstKey = testObject.KeyValue;
 
-            testObject = new ShipSenseOrderItemKey(2.5);
+            testObject = new ShipSenseOrderItemKey { Quantity = 2.5 };
             testObject.Add("SKU", "");
             testObject.Add("Code", "123");
             testObject.Add("Location", "XYZ");
 
-            string secondKey = testObject.Value;
+            string secondKey = testObject.KeyValue;
 
             Assert.AreNotEqual(firstKey, secondKey);
         }

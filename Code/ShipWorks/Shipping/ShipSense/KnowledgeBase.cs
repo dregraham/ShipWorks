@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Interapptive.Shared.IO.Zip;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -24,22 +27,25 @@ namespace ShipWorks.Shipping.ShipSense
     {
         private readonly ILog log;
         private readonly IKnowledgebaseHash hashingStrategy;
+        private readonly IShipSenseOrderItemKeyFactory keyFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
         public Knowledgebase()
-            : this(new KnowledgebaseHash(), LogManager.GetLogger(typeof(Knowledgebase)))
+            : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(), LogManager.GetLogger(typeof(Knowledgebase)))
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase" /> class.
         /// </summary>
         /// <param name="hashingStrategy">The hashing strategy that will be used to identify knowledge base entries.</param>
+        /// <param name="keyFactory">The key factory used to generate the ShipsenseOrderItemKey objects.</param>
         /// <param name="log">The log.</param>
-        public Knowledgebase(IKnowledgebaseHash hashingStrategy, ILog log)
+        public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory, ILog log)
         {
             this.hashingStrategy = hashingStrategy;
+            this.keyFactory = keyFactory;
             this.log = log;
         }
 
@@ -63,7 +69,10 @@ namespace ShipWorks.Shipping.ShipSense
             // be set to false otherwise a PK violation will be thrown if it already exists
             // Note: in a later story we should probably look into caching this data to 
             // reduce the number of database calls 
-            KnowledgebaseHashResult hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml);
+            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
+            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, GetItemProperties(shipSenseXml), GetItemAttributes(shipSenseXml));
+
+            KnowledgebaseHashResult hash = hashingStrategy.ComputeHash(keys);
             if (hash.IsValid)
             {
                 ShipSenseKnowledgebaseEntity entity = FetchEntity(hash.HashValue);
@@ -182,18 +191,77 @@ namespace ShipWorks.Shipping.ShipSense
         /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
         private ShipSenseKnowledgebaseEntity FetchEntity(OrderEntity order)
         {
+            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
+            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, GetItemProperties(shipSenseXml), GetItemAttributes(shipSenseXml));
+
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
                 {
-                    Hash = hashingStrategy.ComputeHash(order, ShippingSettings.Fetch().ShipSenseUniquenessXml).HashValue
+                    Hash = hashingStrategy.ComputeHash(keys).HashValue
                 };
 
             return FetchEntity(lookupEntity);
         }
 
         /// <summary>
+        /// Returns a list of item property/field names used to determine the uniqueness string.  Only the 
+        /// names in this list are used when creating the uniqueness string.
+        /// </summary>
+        /// <param name="shipSenseUniquenessXml">The ShipSense uniqueness settings XML as a string.</param>
+        private List<string> GetItemProperties(string shipSenseUniquenessXml)
+        {
+            List<string> propertiesToInclude = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(shipSenseUniquenessXml))
+            {
+                try
+                {
+                    XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
+                    propertiesToInclude = shipSenseUniquenessXElement
+                                                    .Descendants("Property")
+                                                    .Select(n => n.Value.ToUpperInvariant())
+                                                    .OrderBy(n => n).ToList();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new ShipSenseException("ShipSense was unable to determine its property settings.", ex);
+                }
+            }
+
+            return propertiesToInclude;
+        }
+
+        /// <summary>
+        /// Returns a list of names used to determine uniqueness string.  Only the names in this list are used when
+        /// creating the uniqueness string.
+        /// </summary>
+        /// <param name="shipSenseUniquenessXml">The ShipSense uniqueness settings XML as a string.</param>
+        private List<string> GetItemAttributes(string shipSenseUniquenessXml)
+        {
+            List<string> attributeNamesToInclude = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(shipSenseUniquenessXml))
+            {
+                try
+                {
+                    XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
+                    attributeNamesToInclude = shipSenseUniquenessXElement
+                                                    .Descendants("Name")
+                                                    .Select(n => n.Value.ToUpperInvariant())
+                                                    .OrderBy(n => n).ToList();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new ShipSenseException("ShipSense was unable to determine its attribute settings.", ex);
+                }
+            }
+
+            return attributeNamesToInclude;
+        }
+
+        /// <summary>
         /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
         /// </summary>
-        /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
+        /// <returns>Null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
         private ShipSenseKnowledgebaseEntity FetchEntity(string hash)
         {
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity

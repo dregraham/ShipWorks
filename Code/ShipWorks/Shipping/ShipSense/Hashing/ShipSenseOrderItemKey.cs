@@ -11,29 +11,48 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
     public class ShipSenseOrderItemKey
     {
         private readonly Dictionary<string, string> itemPropertyAttributeKeys;
-        private readonly double quantity;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseOrderItemKey" /> class.
         /// </summary>
         /// <param name="quantity">The quantity of a particular order item.</param>
-        public ShipSenseOrderItemKey(double quantity)
+        public ShipSenseOrderItemKey()
         {
             itemPropertyAttributeKeys = new Dictionary<string, string>();
-            this.quantity = quantity;
         }
-        
+
+        /// <summary>
+        /// A copy constructor to initialize a new instance of the <see cref="ShipSenseOrderItemKey"/> class
+        /// based on an existing instance.
+        /// </summary>
+        /// <param name="orderItemKey">The order item key.</param>
+        public ShipSenseOrderItemKey(ShipSenseOrderItemKey orderItemKey)
+            : this()
+        {
+            // Copy over the data from the given key into this
+            foreach (KeyValuePair<string, string> pair in orderItemKey.itemPropertyAttributeKeys)
+            {
+                itemPropertyAttributeKeys[pair.Key] = pair.Value;
+            }
+
+            Quantity = orderItemKey.Quantity;
+        }
+
+        /// <summary>
+        /// Gets or sets the quantity.
+        /// </summary>
+        public double Quantity { get; set; }
+
         /// <summary>
         /// Gets a value that uniquely represents this instance of an order item based on the
         /// identifier values and the quantity.
         /// </summary>
-        public string Value
+        public string KeyValue
         {
             get
             {
-                // Build a pipe delimited string from the identifier values and the quantity
-                string identiferSection = string.Join("|", itemPropertyAttributeKeys.Select(pair => string.Format("[{0},{1}]", pair.Key, pair.Value)));
-                return string.Join("|", identiferSection, quantity.ToString(CultureInfo.InvariantCulture));
+                // Build a pipe delimited string from the identifier values
+                return string.Join("|", itemPropertyAttributeKeys.Select(pair => string.Format("[{0},{1}]", pair.Key, pair.Value)));
             }
         }
 

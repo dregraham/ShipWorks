@@ -1,16 +1,15 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.ShipSense.Hashing
 {
     public interface IKnowledgebaseHash
     {
         /// <summary>
-        /// Uses the data in the order to compute a hash to identify an entry in the 
+        /// Uses the data in the order to compute a hash to identify an entry in the
         /// ShipSense knowledge base.
         /// </summary>
-        /// <param name="order">The order.</param>
-        /// <param name="shipSenseUniquenessXml">XML containing info/fields used for creating the unique hash key</param>
+        /// <param name="keys">ShipSenseOrderItemKey values containing info the info used for creating the unique hash key</param>
         /// <returns>A KnowledgebaseHashResult instance containing the value of the computed hash and whether it is valid.</returns>
-        KnowledgebaseHashResult ComputeHash(OrderEntity order, string shipSenseUniquenessXml);
+        KnowledgebaseHashResult ComputeHash(IEnumerable<ShipSenseOrderItemKey> keys);
     }
 }
