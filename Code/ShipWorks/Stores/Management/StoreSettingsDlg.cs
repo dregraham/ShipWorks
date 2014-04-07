@@ -239,6 +239,9 @@ namespace ShipWorks.Stores.Management
                 panelStoreStatus.Top = manualOrderSettingsControl.Bottom + 8;
             }
 
+            panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
+            autoAddressValidation.Checked = store.AutoAddressValidation;
+
             // Download on\off
             comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
 
@@ -274,6 +277,8 @@ namespace ShipWorks.Stores.Management
             {
                 result = storeSettingsControl.SaveToEntity(store);
             }
+
+            store.AutoAddressValidation = autoAddressValidation.Checked;
 
             return result;
         }
