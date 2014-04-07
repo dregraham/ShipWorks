@@ -2476,7 +2476,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			base.AddElementMapping( "StoreEntity", "ShipWorksLocal", @"dbo", "Store", 29 );
+			base.AddElementMapping( "StoreEntity", "ShipWorksLocal", @"dbo", "Store", 30 );
 			base.AddElementFieldMapping( "StoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StoreEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "StoreEntity", "License", "License", false, (int)SqlDbType.NVarChar, 150, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2500,12 +2500,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "StoreEntity", "AutoDownload", "AutoDownload", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 20 );
 			base.AddElementFieldMapping( "StoreEntity", "AutoDownloadMinutes", "AutoDownloadMinutes", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
 			base.AddElementFieldMapping( "StoreEntity", "AutoDownloadOnlyAway", "AutoDownloadOnlyAway", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 22 );
-			base.AddElementFieldMapping( "StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 23 );
-			base.AddElementFieldMapping( "StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 24 );
-			base.AddElementFieldMapping( "StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 25 );
-			base.AddElementFieldMapping( "StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 26 );
-			base.AddElementFieldMapping( "StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 27 );
-			base.AddElementFieldMapping( "StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 28 );
+			base.AddElementFieldMapping( "StoreEntity", "AutoAddressValidation", "AutoAddressValidation", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
+			base.AddElementFieldMapping( "StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 24 );
+			base.AddElementFieldMapping( "StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 25 );
+			base.AddElementFieldMapping( "StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 26 );
+			base.AddElementFieldMapping( "StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 27 );
+			base.AddElementFieldMapping( "StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 28 );
+			base.AddElementFieldMapping( "StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 29 );
 		}
 		/// <summary>Inits SystemDataEntity's mappings</summary>
 		private void InitSystemDataEntityMappings()

@@ -495,6 +495,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -596,6 +598,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -877,6 +881,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -1021,6 +1027,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -1308,6 +1316,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -2131,6 +2141,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -2799,6 +2811,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3656,6 +3670,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3765,6 +3781,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3994,6 +4012,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4408,6 +4428,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4660,6 +4682,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4772,6 +4796,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5024,6 +5050,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5301,6 +5329,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5951,6 +5981,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6222,6 +6254,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6614,6 +6648,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6980,6 +7016,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -7791,6 +7829,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -7870,6 +7910,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8102,6 +8144,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8394,6 +8438,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8955,6 +9001,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -9563,6 +9611,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AutoAddressValidation. </summary>
+		AutoAddressValidation,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>

@@ -595,6 +595,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AutoDownloadOnlyAway", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("AutoAddressValidation", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ComputerDownloadPolicy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -929,6 +932,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)StoreFieldIndex.AutoDownloadOnlyAway, true); }
 			set	{ SetValue((int)StoreFieldIndex.AutoDownloadOnlyAway, value); }
+		}
+
+		/// <summary> The AutoAddressValidation property of the Entity Store<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Store"."AutoAddressValidation"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AutoAddressValidation
+		{
+			get { return (System.Boolean)GetValue((int)StoreFieldIndex.AutoAddressValidation, true); }
+			set	{ SetValue((int)StoreFieldIndex.AutoAddressValidation, value); }
 		}
 
 		/// <summary> The ComputerDownloadPolicy property of the Entity Store<br/><br/>

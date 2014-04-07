@@ -22,6 +22,7 @@
     [AutoDownload]           BIT            NOT NULL,
     [AutoDownloadMinutes]    INT            NOT NULL,
     [AutoDownloadOnlyAway]   BIT            NOT NULL,
+	[AutoAddressValidation]  BIT			NOT NULL,
     [ComputerDownloadPolicy] NVARCHAR (MAX) NOT NULL,
     [DefaultEmailAccountID]  BIGINT         NOT NULL,
     [ManualOrderPrefix]      NVARCHAR (10)  NOT NULL,
