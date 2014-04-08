@@ -43,7 +43,7 @@
             // itemSku
             // 
             this.itemSku.AutoSize = true;
-            this.itemSku.Location = new System.Drawing.Point(3, 3);
+            this.itemSku.Location = new System.Drawing.Point(3, 49);
             this.itemSku.Name = "itemSku";
             this.itemSku.Size = new System.Drawing.Size(48, 17);
             this.itemSku.TabIndex = 0;
@@ -55,9 +55,9 @@
             this.itemUnitCost.AutoSize = true;
             this.itemUnitCost.Location = new System.Drawing.Point(3, 187);
             this.itemUnitCost.Name = "itemUnitCost";
-            this.itemUnitCost.Size = new System.Drawing.Size(69, 17);
+            this.itemUnitCost.Size = new System.Drawing.Size(47, 17);
             this.itemUnitCost.TabIndex = 1;
-            this.itemUnitCost.Text = "Unit Cost";
+            this.itemUnitCost.Text = "Cost";
             this.itemUnitCost.UseVisualStyleBackColor = true;
             // 
             // itemUnitPrice
@@ -65,9 +65,9 @@
             this.itemUnitPrice.AutoSize = true;
             this.itemUnitPrice.Location = new System.Drawing.Point(3, 164);
             this.itemUnitPrice.Name = "itemUnitPrice";
-            this.itemUnitPrice.Size = new System.Drawing.Size(72, 17);
+            this.itemUnitPrice.Size = new System.Drawing.Size(50, 17);
             this.itemUnitPrice.TabIndex = 2;
-            this.itemUnitPrice.Text = "Unit Price";
+            this.itemUnitPrice.Text = "Price";
             this.itemUnitPrice.UseVisualStyleBackColor = true;
             // 
             // itemLocation
@@ -83,7 +83,7 @@
             // itemISBN
             // 
             this.itemISBN.AutoSize = true;
-            this.itemISBN.Location = new System.Drawing.Point(3, 118);
+            this.itemISBN.Location = new System.Drawing.Point(3, 95);
             this.itemISBN.Name = "itemISBN";
             this.itemISBN.Size = new System.Drawing.Size(51, 17);
             this.itemISBN.TabIndex = 4;
@@ -93,7 +93,7 @@
             // itemDescription
             // 
             this.itemDescription.AutoSize = true;
-            this.itemDescription.Location = new System.Drawing.Point(3, 72);
+            this.itemDescription.Location = new System.Drawing.Point(3, 118);
             this.itemDescription.Name = "itemDescription";
             this.itemDescription.Size = new System.Drawing.Size(79, 17);
             this.itemDescription.TabIndex = 5;
@@ -103,7 +103,7 @@
             // itemUPC
             // 
             this.itemUPC.AutoSize = true;
-            this.itemUPC.Location = new System.Drawing.Point(3, 95);
+            this.itemUPC.Location = new System.Drawing.Point(3, 72);
             this.itemUPC.Name = "itemUPC";
             this.itemUPC.Size = new System.Drawing.Size(48, 17);
             this.itemUPC.TabIndex = 6;
@@ -113,7 +113,7 @@
             // itemName
             // 
             this.itemName.AutoSize = true;
-            this.itemName.Location = new System.Drawing.Point(3, 49);
+            this.itemName.Location = new System.Drawing.Point(3, 26);
             this.itemName.Name = "itemName";
             this.itemName.Size = new System.Drawing.Size(54, 17);
             this.itemName.TabIndex = 7;
@@ -123,7 +123,7 @@
             // itemCode
             // 
             this.itemCode.AutoSize = true;
-            this.itemCode.Location = new System.Drawing.Point(3, 26);
+            this.itemCode.Location = new System.Drawing.Point(3, 3);
             this.itemCode.Name = "itemCode";
             this.itemCode.Size = new System.Drawing.Size(51, 17);
             this.itemCode.TabIndex = 8;
@@ -135,9 +135,9 @@
             this.itemLocalStatus.AutoSize = true;
             this.itemLocalStatus.Location = new System.Drawing.Point(3, 210);
             this.itemLocalStatus.Name = "itemLocalStatus";
-            this.itemLocalStatus.Size = new System.Drawing.Size(85, 17);
+            this.itemLocalStatus.Size = new System.Drawing.Size(56, 17);
             this.itemLocalStatus.TabIndex = 9;
-            this.itemLocalStatus.Text = "Local Status";
+            this.itemLocalStatus.Text = "Status";
             this.itemLocalStatus.UseVisualStyleBackColor = true;
             // 
             // ShipSenseItemPropertyControl
