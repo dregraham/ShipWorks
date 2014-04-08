@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -51,9 +49,17 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (long orderID in inputKeys)
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
-                if (order == null)
+                
+                PersonAdapter originalShippingAddress = new PersonAdapter();
+                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                
+
+                // If the address has already been validated, don't bother validating it again
+                if (order == null ||
+                    (order.ShipAddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
+                     order.ShipAddressValidationStatus != (int)AddressValidationStatusType.Pending))
                 {
-                    continue;
+                    return;
                 }
 
                 try
@@ -61,15 +67,17 @@ namespace ShipWorks.Actions.Tasks.Common
                     validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
                     {
                         ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
-                        SaveAddress(context, order, originalAddress, true);
+                        ValidatedAddressManager.SaveOrderAddress(context, order, originalAddress, true);
 
                         foreach (AddressEntity address in suggestedAddresses)
                         {
-                            SaveAddress(context, order, address, false);
+                            ValidatedAddressManager.SaveOrderAddress(context, order, address, false);
                         }
 
                         order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
                         context.CommitWork.AddForSave(order);
+
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"), context);
                     });
                 }
                 catch (AddressValidationException ex)
@@ -77,27 +85,6 @@ namespace ShipWorks.Actions.Tasks.Common
                     throw new ActionTaskRunException("Error validating address", ex);
                 }
             }
-        }
-
-        /// <summary>
-        /// Save a validated address
-        /// </summary>
-        private static void SaveAddress(ActionStepContext context, OrderEntity order, AddressEntity address, bool isOriginalAddress)
-        {
-            // If the address is null, we obviously don't need to save it
-            if (address == null)
-            {
-                return;
-            }
-
-            ValidatedAddressEntity validatedAddressEntity = new ValidatedAddressEntity
-            {
-                ConsumerID = order.OrderID,
-                Address = address,
-                IsOriginal = isOriginalAddress
-            };
-
-            context.CommitWork.AddForSave(validatedAddressEntity);
         }
     }
 }

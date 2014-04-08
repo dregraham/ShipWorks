@@ -16,10 +16,28 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public static class ValidatedAddressManager
     {
+
+        /// <summary>
+        /// Propagates the address changes to shipments.
+        /// </summary>
+        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        {
+            PropagateAddressChangesToShipments(adapter, orderID, originalShippingAddress, newShippingAddress, (shipment) => adapter.SaveEntity(shipment));
+        }
+
+        /// <summary>
+        /// Propagates the address changes to shipments.
+        /// </summary>
+        public static void PropagateAddressChangesToShipments(long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, ActionStepContext context)
+        {
+            PropagateAddressChangesToShipments(new SqlAdapter(), orderID, originalShippingAddress, newShippingAddress, (shipment) => context.CommitWork.AddForSave(shipment));
+        }
+
+
         /// <summary>
         /// Propagate order address changes to unprocessed shipments if necessary
         /// </summary>
-        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        private static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, Action<IEntity2> saveAction)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
             if (originalShippingAddress == newShippingAddress)
@@ -40,7 +58,7 @@ namespace ShipWorks.AddressValidation
                     newShippingAddress.CopyTo(shipmentAddress);
                 }
 
-                adapter.SaveEntity(shipment);
+                saveAction(shipment);
             }
         }
 
@@ -80,6 +98,46 @@ namespace ShipWorks.AddressValidation
                 deleteAction(x);
                 deleteAction(addressToDelete);
             });
+        }
+
+        /// <summary>
+        /// Deletes existing validated addresses
+        /// </summary>
+        public static void SaveOrderAddress(ActionStepContext context, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                SaveOrderAddress(order, address, isOriginalAddress, entity2 => context.CommitWork.AddForSave(entity2));
+            }
+        }
+
+        /// <summary>
+        /// Deletes existing validated addresses
+        /// </summary>
+        public static void SaveOrderAddress(DataAccessAdapter adapter, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        {
+            SaveOrderAddress(order, address, isOriginalAddress, entity2 => adapter.SaveEntity(entity2));
+        }
+
+        /// <summary>
+        /// Save a validated address
+        /// </summary>
+        private static void SaveOrderAddress(OrderEntity order, AddressEntity address, bool isOriginalAddress, Action<IEntity2> saveAction)
+        {
+            // If the address is null, we obviously don't need to save it
+            if (address == null)
+            {
+                return;
+            }
+
+            ValidatedAddressEntity validatedAddressEntity = new ValidatedAddressEntity
+            {
+                ConsumerID = order.OrderID,
+                Address = address,
+                IsOriginal = isOriginalAddress
+            };
+
+            saveAction(validatedAddressEntity);
         }
     }
 }
