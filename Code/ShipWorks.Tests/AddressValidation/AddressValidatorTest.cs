@@ -74,23 +74,6 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
-        public void Validate_DoesNotCallSaveAction_WhenValidationIsNotNeeded()
-        {
-            bool called = false;
-            sampleOrder.ShipAddressValidationStatus = (int) AddressValidationStatusType.NotValid;
-            testObject.Validate(sampleOrder, "Ship", (x, y) => { called = true; });
-            Assert.IsFalse(called);
-        }
-        
-        [TestMethod]
-        public void Validate_DoesNotCallWebClient_WhenValidationIsNotNeeded()
-        {
-            sampleOrder.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotValid;
-            testObject.Validate(sampleOrder, "Ship", (x, y) => { });
-            webClient.Verify(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [TestMethod]
         public void Validate_CallsSave_WithOriginalAddress()
         {
             AddressEntity originalAddress = null;

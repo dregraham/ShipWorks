@@ -30,7 +30,10 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static void PropagateAddressChangesToShipments(long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, ActionStepContext context)
         {
-            PropagateAddressChangesToShipments(new SqlAdapter(), orderID, originalShippingAddress, newShippingAddress, (shipment) => context.CommitWork.AddForSave(shipment));
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                PropagateAddressChangesToShipments(adapter, orderID, originalShippingAddress, newShippingAddress, (shipment) => context.CommitWork.AddForSave(shipment));   
+            }
         }
 
 

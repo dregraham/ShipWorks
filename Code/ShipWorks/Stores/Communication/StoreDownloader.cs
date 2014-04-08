@@ -578,29 +578,26 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
 
-
-                    AddressValidationQueue addressValidationQueue = new AddressValidationQueue();
-
                     // Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
                         PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
                         if (originalShippingAddress != newShippingAddress)
                         {
-                            order.ShipAddressValidationStatus = (int) AddressValidationStatusType.Pending;
+                            SetAddressValidationStatus(order);
                             adapter.SaveAndRefetch(order);
 
-                            addressValidationQueue.Enqueue(order);
+                            QueueAddressValidation(order);
 
                             ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
                         }
                     }
                     else
                     {
-                        order.ShipAddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                        SetAddressValidationStatus(order);
                         adapter.SaveAndRefetch(order);
 
-                        addressValidationQueue.Enqueue(order);
+                        QueueAddressValidation(order);
                     }
                     
                     log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");
@@ -623,6 +620,27 @@ namespace ShipWorks.Stores.Communication
             }
 
             log.InfoFormat("Committed order: {0}", sw.Elapsed.TotalSeconds);
+        }
+
+        /// <summary>
+        /// Sets the address validation status on the order, depending on the store settings
+        /// </summary>
+        private void SetAddressValidationStatus(OrderEntity order)
+        {
+            order.ShipAddressValidationStatus = store.AutoAddressValidation
+                ? (int) AddressValidationStatusType.Pending
+                : (int) AddressValidationStatusType.NotChecked;
+        }
+
+        /// <summary>
+        /// Queue the order for address validation if necessary
+        /// </summary>
+        private void QueueAddressValidation(OrderEntity order)
+        {
+            if (store.AutoAddressValidation)
+            {
+                new AddressValidationQueue().Enqueue(order);
+            }
         }
 
         /// <summary>
