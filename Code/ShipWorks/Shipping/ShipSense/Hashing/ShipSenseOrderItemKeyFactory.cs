@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
             {
                 ShipSenseOrderItemKey key = new ShipSenseOrderItemKey() { Quantity = item.Quantity };
 
-                foreach (string property in propertyNames.OrderBy(p => p.ToUpperInvariant()))
+                foreach (string property in propertyNames.OrderBy(p => p))
                 {
                     object currentValue = item.Fields[property].CurrentValue;
                     key.Add(property, currentValue == null ? string.Empty : currentValue.ToString());

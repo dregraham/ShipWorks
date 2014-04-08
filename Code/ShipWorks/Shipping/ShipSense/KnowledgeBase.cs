@@ -219,7 +219,7 @@ namespace ShipWorks.Shipping.ShipSense
                     propertiesToInclude = shipSenseUniquenessXElement
                                                     .Descendants("ItemProperty")
                                                     .Descendants("Name")
-                                                    .Select(n => n.Value.ToUpperInvariant())
+                                                    .Select(n => n.Value)
                                                     .OrderBy(n => n).ToList();
                 }
                 catch (InvalidOperationException ex)
