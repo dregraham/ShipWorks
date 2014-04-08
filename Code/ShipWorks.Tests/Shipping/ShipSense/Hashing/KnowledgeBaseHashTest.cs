@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             
             KnowledgebaseHashResult result = testObject.ComputeHash(keys);
 
-            Assert.AreEqual("2JzA5V//RUKSN2J5eBE2dsy8O0MqBR5UldufSSPbrIU=", result.HashValue);
+            Assert.AreEqual("hZjpDRmimvKCHMvXJ8TuqDrr86dCZ3/yrTmxaaLoEnk=", result.HashValue);
         }
 
         [TestMethod]
@@ -71,7 +71,41 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             KnowledgebaseHashResult result = testObject.ComputeHash(keys);
 
-            Assert.AreEqual("3LeCGrCdBjjTNrLSH6wa8y3sC/Bc8EwH8VnJk8VfoGs=", result.HashValue);
+            Assert.AreEqual("ks2iA3JFLyllOGXXYo1FmYWuBQJbVddkk82xXfL3+YI=", result.HashValue);
+        }
+
+        [TestMethod]
+        public void ComputeHash_ReturnsSameResult_WhenKeyValuesAreSame_AndQuantitiesAreSame_Test()
+        {
+            ShipSenseOrderItemKey key1 = new ShipSenseOrderItemKey { Quantity = 3 };
+            key1.Add("Code", "Code-1");
+            key1.Add("SKU", "ABC123");
+
+            ShipSenseOrderItemKey key2 = new ShipSenseOrderItemKey { Quantity = 3 };
+            key2.Add("Code", "Code-1");
+            key2.Add("SKU", "ABC123");
+
+            KnowledgebaseHashResult result1 = testObject.ComputeHash(new List<ShipSenseOrderItemKey> { key1 });
+            KnowledgebaseHashResult result2 = testObject.ComputeHash(new List<ShipSenseOrderItemKey> { key2 });
+
+            Assert.AreEqual(result1.HashValue, result2.HashValue);
+        }
+
+        [TestMethod]
+        public void ComputeHash_ReturnsDifferentResults_WhenKeyValuesAreSame_AndQuantitiesDiffer_Test()
+        {
+            ShipSenseOrderItemKey key1 = new ShipSenseOrderItemKey { Quantity = 3 };
+            key1.Add("Code", "Code-1");
+            key1.Add("SKU", "ABC123");
+
+            ShipSenseOrderItemKey key2 = new ShipSenseOrderItemKey { Quantity = 4 };
+            key2.Add("Code", "Code-1");
+            key2.Add("SKU", "ABC123");
+            
+            KnowledgebaseHashResult result1 = testObject.ComputeHash(new List<ShipSenseOrderItemKey> { key1 });
+            KnowledgebaseHashResult result2 = testObject.ComputeHash(new List<ShipSenseOrderItemKey> { key2 });
+
+            Assert.AreNotEqual(result1.HashValue, result2.HashValue);
         }
         
     }

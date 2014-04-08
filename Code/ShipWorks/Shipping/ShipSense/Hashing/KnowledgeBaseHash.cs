@@ -34,8 +34,8 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
          /// <returns>A KnowledgebaseHashResult instance containing the value of the computed hash and whether it is valid.</returns>
          private KnowledgebaseHashResult CreateValidHashResult(IEnumerable<ShipSenseOrderItemKey> keys)
          {
-             // Create a single string representing all of the keys
-             string valueToHash = string.Join("|", keys.Select(k => k.KeyValue));
+             // Create a single string representing all of the keys and the quantity of each
+             string valueToHash = string.Join("|", keys.Select(k => string.Format("{0}-{1}", k.KeyValue, k.Quantity)));
 
              // Salt the hash, so it's a little more difficult to crack
              string hash = Hash(valueToHash, "BananaHammock7458");
