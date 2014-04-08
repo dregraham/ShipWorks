@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -96,6 +97,9 @@ namespace ShipWorks.AddressValidation
             SqlAdapter sqlAdapter = new SqlAdapter();
 
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
+            
+            PersonAdapter originalShippingAddress = new PersonAdapter();
+            PersonAdapter.Copy(order, "Ship", originalShippingAddress);
 
             if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
             {
@@ -111,6 +115,8 @@ namespace ShipWorks.AddressValidation
 
                     order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
                     sqlAdapter.SaveEntity(order);
+
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"));
                 });
             }
         }

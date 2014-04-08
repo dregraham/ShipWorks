@@ -16,10 +16,28 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public static class ValidatedAddressManager
     {
+
+        /// <summary>
+        /// Propagates the address changes to shipments.
+        /// </summary>
+        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        {
+            PropagateAddressChangesToShipments(adapter, orderID, originalShippingAddress, newShippingAddress, (shipment) => adapter.SaveEntity(shipment));
+        }
+
+        /// <summary>
+        /// Propagates the address changes to shipments.
+        /// </summary>
+        public static void PropagateAddressChangesToShipments(long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, ActionStepContext context)
+        {
+            PropagateAddressChangesToShipments(new SqlAdapter(), orderID, originalShippingAddress, newShippingAddress, (shipment) => context.CommitWork.AddForSave(shipment));
+        }
+
+
         /// <summary>
         /// Propagate order address changes to unprocessed shipments if necessary
         /// </summary>
-        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        private static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, Action<IEntity2> saveAction)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
             if (originalShippingAddress == newShippingAddress)
@@ -40,7 +58,7 @@ namespace ShipWorks.AddressValidation
                     newShippingAddress.CopyTo(shipmentAddress);
                 }
 
-                adapter.SaveEntity(shipment);
+                saveAction(shipment);
             }
         }
 

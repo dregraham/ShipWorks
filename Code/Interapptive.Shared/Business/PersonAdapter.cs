@@ -171,8 +171,8 @@ namespace Interapptive.Shared.Business
                 Phone == other.Phone &&
                 Fax == other.Fax &&
                 Email == other.Email &&
-                Website == other.Website &&
-                AddressValidationStatus == other.AddressValidationStatus;
+                Website == other.Website; // &&
+            // AddressValidationStatus == other.AddressValidationStatus;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -48,6 +49,10 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (long orderID in inputKeys)
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
+                
+                PersonAdapter originalShippingAddress = new PersonAdapter();
+                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                
 
                 // If the address has already been validated, don't bother validating it again
                 if (order == null ||
@@ -71,6 +76,8 @@ namespace ShipWorks.Actions.Tasks.Common
 
                         order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
                         context.CommitWork.AddForSave(order);
+
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"), context);
                     });
                 }
                 catch (AddressValidationException ex)
