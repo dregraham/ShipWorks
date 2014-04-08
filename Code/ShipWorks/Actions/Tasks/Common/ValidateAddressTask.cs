@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -51,9 +48,13 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (long orderID in inputKeys)
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
-                if (order == null)
+
+                // If the address has already been validated, don't bother validating it again
+                if (order == null ||
+                    (order.ShipAddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
+                     order.ShipAddressValidationStatus != (int)AddressValidationStatusType.Pending))
                 {
-                    continue;
+                    return;
                 }
 
                 try

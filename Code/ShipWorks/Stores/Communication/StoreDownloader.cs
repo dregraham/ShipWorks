@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.UI.WebControls.WebParts;
+using Microsoft.Web.Services3.Addressing;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
@@ -577,13 +578,31 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
 
+
+                    AddressValidationQueue addressValidationQueue = new AddressValidationQueue();
+
                     // Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
                         PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
-                        ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
-                    }
+                        if (originalShippingAddress != newShippingAddress)
+                        {
+                            order.ShipAddressValidationStatus = (int) AddressValidationStatusType.Pending;
+                            adapter.SaveAndRefetch(order);
 
+                            addressValidationQueue.Enqueue(order);
+
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
+                        }
+                    }
+                    else
+                    {
+                        order.ShipAddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                        adapter.SaveAndRefetch(order);
+
+                        addressValidationQueue.Enqueue(order);
+                    }
+                    
                     log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
