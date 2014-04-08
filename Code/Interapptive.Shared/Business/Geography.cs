@@ -398,6 +398,12 @@ namespace Interapptive.Shared.Business
                 return "QC";
             }
 
+            // Since Puerto Rico is not included in the list of states, we need to handle it separately
+            if (name.Equals("puerto rico", StringComparison.OrdinalIgnoreCase))
+            {
+                return "PR";
+            }
+
             // Check for lowercase codes
             if (name.Length <= 2)
             {
@@ -439,7 +445,8 @@ namespace Interapptive.Shared.Business
                 }
             }
 
-            return code;
+            // Since Puerto Rico is not included in the list of states, we need to handle it separately
+            return code.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "Puerto Rico" : code;
         }
 
         #region Loading

@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                 //Make sure the addresses only have two lines
+                //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
                 // Make sure we have a trusted connection with FedEx before making any requests that would

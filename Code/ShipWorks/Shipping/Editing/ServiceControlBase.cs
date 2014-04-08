@@ -508,7 +508,7 @@ namespace ShipWorks.Shipping.Editing
             string country = "Domestic\\International";
             if (personControl.CountryCode != null)
             {
-                country = ShipmentType.IsDomestic(loadedShipments[0]) ? "Domestic" : "International";
+                country = ShipmentTypeManager.GetType(loadedShipments[0]).IsDomestic(loadedShipments[0]) ? "Domestic" : "International";
             }
 
             sectionRecipient.ExtraText = string.Format("{0}, {1}", name, country);

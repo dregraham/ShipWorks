@@ -366,7 +366,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Validate that scan based payment returns is allowed
         /// </summary>
-        public static void ValidateScanBasedReturns(ShipmentEntity shipment)
+        public void ValidateScanBasedReturns(ShipmentEntity shipment)
         {
             if (IsScanBasedReturnsAllowed(shipment))
             {
@@ -698,7 +698,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
-        protected static void ValidateShipment(ShipmentEntity shipment)
+        protected void ValidateShipment(ShipmentEntity shipment)
         {
             if (shipment.TotalWeight == 0)
             {
