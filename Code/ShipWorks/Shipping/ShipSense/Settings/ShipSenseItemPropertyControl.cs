@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             itemPropertyCheckboxMap.Add("ISBN", itemISBN);
             itemPropertyCheckboxMap.Add("Location", itemLocation);
             itemPropertyCheckboxMap.Add("UnitPrice", itemUnitPrice);
-            itemPropertyCheckboxMap.Add("UnitCost", itemUnitPrice);
+            itemPropertyCheckboxMap.Add("UnitCost", itemUnitCost);
             itemPropertyCheckboxMap.Add("LocalStatus", itemLocalStatus);
         }
 

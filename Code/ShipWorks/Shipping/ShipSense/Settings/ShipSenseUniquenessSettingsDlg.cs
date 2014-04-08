@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Interapptive.Shared.UI;
@@ -33,6 +28,14 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             XElement uniquenessXml = XElement.Parse(settings.ShipSenseUniquenessXml);
 
+            // Load the selected properties
+            XElement propertyElement = uniquenessXml.Descendants("ItemProperty").FirstOrDefault();
+            if (propertyElement != null)
+            {
+                configurationControl.LoadItemPropertyControl(propertyElement.Descendants("Name").Select(e => e.Value));
+            }
+
+            // Load the attribute names
             XElement attributeElement = uniquenessXml.Descendants("ItemAttribute").FirstOrDefault();
             if (attributeElement != null)
             {
@@ -50,7 +53,16 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             // The XML will be in the following format: <ShipSenseUniqueness><ItemAttribute><Name>...</Name><Name>...</Name></ItemAttribute></ShipSenseUniqueness>
             XElement uniquenessXml = new XElement("ShipSenseUniqueness");
-            
+
+            // Build up the item property node with the selected property values
+            XElement itemPropertyElement = new XElement("ItemProperty");
+            uniquenessXml.Add(itemPropertyElement);
+            foreach (string propertyname in configurationControl.SelectedPropertyNames)
+            {
+                itemPropertyElement.Add(new XElement("Name", propertyname));
+            }
+
+            // Build up the item attribute node with the attribute names
             XElement itemAttributeElement = new XElement("ItemAttribute");
             uniquenessXml.Add(itemAttributeElement);
 
@@ -59,6 +71,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                 itemAttributeElement.Add(new XElement("Name", attributeName));
             }
 
+            // Update the ShipSense configuration and save it back
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             settings.ShipSenseUniquenessXml = uniquenessXml.ToString();
 
@@ -74,7 +87,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             // Present the user with a confirmation message box describing what will happen and only save the settings if Yes is chosen
             const string ConfirmationText = @"Adjusting the ShipSense configuration could result in ShipSense " +
-                                            "not being able to recognize how orders until it has recognized your shipping patterns based on the new configuration.\n\n" +
+                                            "not being able to recognize how orders should be shipped until it has recognized your shipping patterns based on the new configuration.\n\n" +
                                             "Do you wish to continue?";
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Question, MessageBoxButtons.YesNo, ConfirmationText);

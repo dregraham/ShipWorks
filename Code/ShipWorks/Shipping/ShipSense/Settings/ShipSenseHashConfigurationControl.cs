@@ -18,7 +18,10 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         public ShipSenseHashConfigurationControl()
         {
             InitializeComponent();
-
+            
+            // Call update layout, so the add attribute button is up snug against the 
+            // instructional text if there aren't any items
+            UpdateLayout();
         }
 
         /// <summary>
@@ -30,12 +33,22 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             {
                 // Reverse the order, so the values appear in the same order as they are on screen
                 // since the update layout adjusts sets the index of controls that get added to zero
-                return panelMain.Controls.OfType<ShipSenseItemAttributeControl>().Select(c => c.AttributeName).Reverse();
+                return panelAttributes.Controls.OfType<ShipSenseItemAttributeControl>()
+                                      .Where(c => !string.IsNullOrWhiteSpace(c.AttributeName))
+                                      .Select(c => c.AttributeName).Reverse();
             }
         }
 
         /// <summary>
-        /// Loads an attribute controls for each of the attribute name provided.
+        /// Gets the selected property names that should be used when building the ShipSense hash key.
+        /// </summary>
+        public IEnumerable<string> SelectedPropertyNames
+        {
+            get { return itemProperties.SelectedItemProperties; }
+        }
+
+        /// <summary>
+        /// Loads an attribute control for each of the attribute name provided.
         /// </summary>
         /// <param name="attributeNames">The attribute names.</param>
         public void LoadAttributeControls(IEnumerable<string> attributeNames)
@@ -44,6 +57,16 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             {
                 AddAttributeControl(name);
             }
+        }
+
+        /// <summary>
+        /// Loads the item property control and selects/checks the check boxes of the 
+        /// properties corresponding to the names provided.
+        /// </summary>
+        /// <param name="selectedPropertyNames">The property names that should be selected/checked.</param>
+        public void LoadItemPropertyControl(IEnumerable<string> selectedPropertyNames)
+        {
+            itemProperties.LoadSelectedProperties(selectedPropertyNames);
         }
         
         /// <summary>
@@ -54,25 +77,25 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             // Add a new attribute control to the UI
             ShipSenseItemAttributeControl attributeControl = new ShipSenseItemAttributeControl(attributeName);
-            attributeControl.Width = panelMain.Width;
+            attributeControl.Width = panelProperties.Width;
             attributeControl.Dock = DockStyle.Top;
             attributeControl.DeleteAttributeClick += OnDeleteAttribute;
             
             // Set the child index to zero, so the control gets added to the bottom of the list
-            panelMain.Controls.Add(attributeControl);
-            panelMain.Controls.SetChildIndex(attributeControl, 0);
+            panelAttributes.Controls.Add(attributeControl);
+            panelAttributes.Controls.SetChildIndex(attributeControl, 0);
 
             UpdateLayout();
         }
 
         /// <summary>
-        /// Updates the layout according to the number of attribute controls in the main panel.
+        /// Updates the layout according to the number of attribute controls in the attributes panel.
         /// </summary>
         private void UpdateLayout()
         {
-            // Slide the panels up/down based on the content of the main panel
-            panelMain.Height = panelMain.Controls.Count == 0 ? 0 : panelMain.Controls.OfType<Control>().Max(c => c.Bottom);
-            panelBottom.Top = panelMain.Bottom;
+            // Slide the panels up/down based on the content of the attributes panel
+            panelAttributes.Height = panelAttributes.Controls.Count == 0 ? 0 : panelAttributes.Controls.OfType<Control>().Max(c => c.Bottom);
+            panelBottom.Top = panelAttributes.Bottom;
 
             // Adjust the height of the overall control according to the bottom panel
             Height = panelBottom.Bottom;
@@ -98,7 +121,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             ShipSenseItemAttributeControl attributeControl = (ShipSenseItemAttributeControl)sender;
             
             attributeControl.DeleteAttributeClick -= OnDeleteAttribute;
-            panelMain.Controls.Remove(attributeControl);
+            panelAttributes.Controls.Remove(attributeControl);
             
             UpdateLayout();
         }
