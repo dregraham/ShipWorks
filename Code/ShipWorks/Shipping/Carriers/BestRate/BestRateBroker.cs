@@ -410,7 +410,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         protected virtual void UpdateShipmentOriginAddress(ShipmentEntity currentShipment, ShipmentEntity originalShipment, TAccount account)
         {
             // Set the address of the shipment to either the account, or the address of the original shipment
-            if (currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            if (!IsCounterRate && currentShipment.OriginOriginID == (int)ShipmentOriginSource.Account)
             {
                 PersonAdapter.Copy(account, "", currentShipment, "Origin");
             }
