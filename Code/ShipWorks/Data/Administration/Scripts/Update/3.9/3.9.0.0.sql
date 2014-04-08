@@ -29,7 +29,7 @@ GO
 UPDATE [ShippingSettings] 
 SET 
 	[ShipSenseEnabled] = 1,
-	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness/>'
+	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>'
 GO
 
 ALTER TABLE [dbo].[ShippingSettings] 
