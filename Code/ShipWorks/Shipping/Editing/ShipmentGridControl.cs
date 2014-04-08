@@ -456,7 +456,7 @@ namespace ShipWorks.Shipping.Editing
 
             try
             {
-                ShipmentEntity shipment = ShippingManager.CreateShipment(selectedShipment);
+                ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
                 ShipmentGridRow row = AddShipment(shipment, selectedRow.SortIndex);
 
                 SelectShipments(new List<ShipmentEntity>() { shipment });
