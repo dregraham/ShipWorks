@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Settings
             settings.ActivatedTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
             settings.ConfiguredTypes = new int[1] { (int)ShipmentTypeCode.BestRate };
             settings.ExcludedTypes = new int[0];
-            settings.DefaultType = (int) ShipmentTypeCode.BestRate;
+            settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
             settings.BlankPhoneNumber = "999-999-9999";
