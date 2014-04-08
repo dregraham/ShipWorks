@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using RestSharp.Validation;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.AddressValidation
 {
@@ -66,9 +63,36 @@ namespace ShipWorks.AddressValidation
             Monitor.Exit(timerLock);
         }
 
+        /// <summary>
+        /// Validates the specified order identifier.
+        /// </summary>
+        /// <param name="orderID">The order identifier.</param>
         private void Validate(long orderID)
         {
+            try
+            {
+                CallValidate(orderID);
+            }
+            catch (ObjectDeletedException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (SqlForeignKeyException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (ORMConcurrencyException)
+            {
+                Validate(orderID);
+            }
+        }
 
+        /// <summary>
+        /// Actually calls validation and saves.
+        /// </summary>
+        /// <param name="orderID">The order identifier.</param>
+        private void CallValidate(long orderID)
+        {
             SqlAdapter sqlAdapter = new SqlAdapter();
 
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
