@@ -217,7 +217,8 @@ namespace ShipWorks.Shipping.ShipSense
                 {
                     XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
                     propertiesToInclude = shipSenseUniquenessXElement
-                                                    .Descendants("Property")
+                                                    .Descendants("ItemProperty")
+                                                    .Descendants("Name")
                                                     .Select(n => n.Value.ToUpperInvariant())
                                                     .OrderBy(n => n).ToList();
                 }
@@ -245,6 +246,7 @@ namespace ShipWorks.Shipping.ShipSense
                 {
                     XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
                     attributeNamesToInclude = shipSenseUniquenessXElement
+                                                    .Descendants("ItemAttribute")
                                                     .Descendants("Name")
                                                     .Select(n => n.Value.ToUpperInvariant())
                                                     .OrderBy(n => n).ToList();
