@@ -5,8 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.UI;
 using ShipWorks.Data;
 using ShipWorks.UI.Controls;
@@ -47,6 +51,7 @@ namespace ShipWorks.Stores.Management
 
         // the control for store-specific settings
         StoreSettingsControlBase storeSettingsControl;
+        private bool resetPendingValidations;
 
         public enum Section
         {
@@ -278,6 +283,8 @@ namespace ShipWorks.Stores.Management
                 result = storeSettingsControl.SaveToEntity(store);
             }
 
+            // Check whether we should reset any pending address validations
+            resetPendingValidations = !autoAddressValidation.Checked && store.AutoAddressValidation;
             store.AutoAddressValidation = autoAddressValidation.Checked;
 
             return result;
@@ -446,6 +453,26 @@ namespace ShipWorks.Stores.Management
                     StoreManager.SaveStore(store, adapter);
 
                     adapter.Commit();
+                }
+
+                // If the user has just disabled address validation, we should mark any pending orders
+                // as not checked.  This is being done in its own transaction so that it doesn't affect
+                // saving the changes to the store if the update fails.
+                if (resetPendingValidations)
+                {
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        OrderEntity orderUpdate = new OrderEntity
+                        {
+                            ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked
+                        };
+
+                        var pendingOrderBucket = new RelationPredicateBucket();
+                        pendingOrderBucket.PredicateExpression.Add(OrderFields.StoreID == store.StoreID);
+                        pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Pending);
+
+                        adapter.UpdateEntitiesDirectly(orderUpdate, pendingOrderBucket);
+                    }
                 }
 
                 // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point - 
