@@ -526,7 +526,24 @@ namespace ShipWorks.Stores.Management
             bool downloadSettings = PrepareSettingsInitialDownloadUI(e);
             bool uploadSettings = PrepareSettingsActionUI(e);
 
-            e.Skip = !downloadSettings && !uploadSettings;
+            autoAddressValidation.Checked = store.AutoAddressValidation;
+
+            // Update the location of the autoAddressValidation control based on which upload and download controls are shown
+            if (!uploadSettings && !downloadSettings)
+            {
+                autoAddressValidation.Top = panelDownloadSettings.Top + 12;
+            }
+            else if (!uploadSettings)
+            {
+                autoAddressValidation.Top = panelDownloadSettings.Bottom + 12;
+            }
+            else
+            {
+                autoAddressValidation.Top = panelUploadSettings.Bottom + 12;
+            }
+
+            // We can't skip this screen anymore since all stores will have the option of auto validating addresses
+            e.Skip = false;
             e.RaiseStepEventWhenSkipping = false;
         }
 
@@ -639,6 +656,8 @@ namespace ShipWorks.Stores.Management
                 // Clear out any previous control they may have had and add the new one
                 panelOnlineUpdatePlaceholder.Controls.Clear();
                 panelOnlineUpdatePlaceholder.Controls.Add(onlineUpdateControl);
+                panelOnlineUpdatePlaceholder.Height = onlineUpdateControl.Height;
+                panelUploadSettings.Height = panelOnlineUpdatePlaceholder.Bottom;
 
                 // Update what store we are configured for
                 onlineUpdateConfiguredStoreID = store.StoreID;
@@ -662,6 +681,8 @@ namespace ShipWorks.Stores.Management
 
             panelEditDownloadRange.Height = panelDateRange.Bottom;
             panelDownloadSettings.Height = panelEditDownloadRange.Bottom;
+
+            autoAddressValidation.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
         }
 
         /// <summary>
@@ -685,6 +706,8 @@ namespace ShipWorks.Stores.Management
             }
 
             SaveSettingsActions();
+
+            store.AutoAddressValidation = autoAddressValidation.Checked;
         }
 
         /// <summary>

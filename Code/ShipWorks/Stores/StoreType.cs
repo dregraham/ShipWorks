@@ -75,6 +75,8 @@ namespace ShipWorks.Stores
             store.ManualOrderPostfix = "-M";
 
             store.DefaultEmailAccountID = -1;
+
+            store.AutoAddressValidation = true;
         }
 
         /// <summary>

@@ -61,6 +61,7 @@ namespace ShipWorks.Stores.Management
             this.labelLicense = new System.Windows.Forms.Label();
             this.labelWelcomeBack = new System.Windows.Forms.Label();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
+            this.autoAddressValidation = new System.Windows.Forms.CheckBox();
             this.panelSettingsContainer = new System.Windows.Forms.Panel();
             this.panelUploadSettings = new System.Windows.Forms.Panel();
             this.labelShipmentUpdate = new System.Windows.Forms.Label();
@@ -112,9 +113,7 @@ namespace ShipWorks.Stores.Management
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(380, 379);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -126,7 +125,7 @@ namespace ShipWorks.Stores.Management
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinished);
+            this.mainPanel.Controls.Add(this.wizardPageStoreType);
             this.mainPanel.Size = new System.Drawing.Size(548, 307);
             // 
             // etchBottom
@@ -514,17 +513,28 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageSettings
             // 
+            this.wizardPageSettings.Controls.Add(this.autoAddressValidation);
             this.wizardPageSettings.Controls.Add(this.panelSettingsContainer);
             this.wizardPageSettings.Description = "Configure how ShipWorks will work with your store.";
             this.wizardPageSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageSettings.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSettings.Name = "wizardPageSettings";
-            this.wizardPageSettings.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageSettings.Size = new System.Drawing.Size(548, 607);
             this.wizardPageSettings.TabIndex = 0;
             this.wizardPageSettings.Title = "Store Setup";
             this.wizardPageSettings.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSettings);
             this.wizardPageSettings.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSettings);
+            // 
+            // autoAddressValidation
+            // 
+            this.autoAddressValidation.AutoSize = true;
+            this.autoAddressValidation.Location = new System.Drawing.Point(30, 320);
+            this.autoAddressValidation.Name = "autoAddressValidation";
+            this.autoAddressValidation.Size = new System.Drawing.Size(274, 17);
+            this.autoAddressValidation.TabIndex = 29;
+            this.autoAddressValidation.Text = "Automatically validate new and updated addresses.";
+            this.autoAddressValidation.UseVisualStyleBackColor = true;
             // 
             // panelSettingsContainer
             // 
@@ -818,6 +828,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAlreadyActive.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLicense)).EndInit();
             this.wizardPageSettings.ResumeLayout(false);
+            this.wizardPageSettings.PerformLayout();
             this.panelSettingsContainer.ResumeLayout(false);
             this.panelUploadSettings.ResumeLayout(false);
             this.panelUploadSettings.PerformLayout();
@@ -898,5 +909,6 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        private System.Windows.Forms.CheckBox autoAddressValidation;
     }
 }
