@@ -1995,6 +1995,7 @@
     <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />
     <Compile Include="Shipping\ShipSense\IChangeSetXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\IKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\Knowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItem.cs" />
     <Compile Include="Shipping\ShipSense\KnowledgebaseEntry.cs" />
@@ -2030,6 +2031,7 @@
     <Compile Include="Shipping\ShipSense\ShipSenseException.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseStatus.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseUniquenessXmlParser.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleParameters.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />

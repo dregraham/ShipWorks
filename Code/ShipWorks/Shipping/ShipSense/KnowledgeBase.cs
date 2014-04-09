@@ -23,18 +23,21 @@ namespace ShipWorks.Shipping.ShipSense
     /// <summary>
     /// Acts as the data source for ShipSense: knowledge base entries can be saved and fetched.
     /// </summary>
-    public class Knowledgebase
+    public class Knowledgebase : IKnowledgebase
     {
         private readonly ILog log;
         private readonly IKnowledgebaseHash hashingStrategy;
         private readonly IShipSenseOrderItemKeyFactory keyFactory;
+        private readonly ShipSenseUniquenessXmlParser shipSenseUniquenessXmlParser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase"/> class.
         /// </summary>
         public Knowledgebase()
             : this(new KnowledgebaseHash(), new ShipSenseOrderItemKeyFactory(), LogManager.GetLogger(typeof(Knowledgebase)))
-        { }
+        {
+            shipSenseUniquenessXmlParser = new ShipSenseUniquenessXmlParser();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Knowledgebase" /> class.
@@ -44,9 +47,26 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="log">The log.</param>
         public Knowledgebase(IKnowledgebaseHash hashingStrategy, IShipSenseOrderItemKeyFactory keyFactory, ILog log)
         {
+            shipSenseUniquenessXmlParser = new ShipSenseUniquenessXmlParser();
             this.hashingStrategy = hashingStrategy;
             this.keyFactory = keyFactory;
             this.log = log;
+        }
+
+        /// <summary>
+        /// Gets the hashing strategy used by the knowledge base.
+        /// </summary>
+        public IKnowledgebaseHash HashingStrategy
+        {
+            get { return hashingStrategy; }
+        }
+
+        /// <summary>
+        /// Gets the IShipSenseOrderItemKeyFactory being used by the knowledge base.
+        /// </summary>
+        public IShipSenseOrderItemKeyFactory KeyFactory
+        {
+            get { return keyFactory; }
         }
 
         /// <summary>
@@ -70,7 +90,7 @@ namespace ShipWorks.Shipping.ShipSense
             // Note: in a later story we should probably look into caching this data to 
             // reduce the number of database calls 
             string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
-            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, GetItemProperties(shipSenseXml), GetItemAttributes(shipSenseXml));
+            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
 
             KnowledgebaseHashResult hash = hashingStrategy.ComputeHash(keys);
             if (hash.IsValid)
@@ -192,7 +212,7 @@ namespace ShipWorks.Shipping.ShipSense
         private ShipSenseKnowledgebaseEntity FetchEntity(OrderEntity order)
         {
             string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
-            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, GetItemProperties(shipSenseXml), GetItemAttributes(shipSenseXml));
+            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
 
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
                 {
@@ -200,64 +220,6 @@ namespace ShipWorks.Shipping.ShipSense
                 };
 
             return FetchEntity(lookupEntity);
-        }
-
-        /// <summary>
-        /// Returns a list of item property/field names used to determine the uniqueness string.  Only the 
-        /// names in this list are used when creating the uniqueness string.
-        /// </summary>
-        /// <param name="shipSenseUniquenessXml">The ShipSense uniqueness settings XML as a string.</param>
-        private List<string> GetItemProperties(string shipSenseUniquenessXml)
-        {
-            List<string> propertiesToInclude = new List<string>();
-
-            if (!string.IsNullOrWhiteSpace(shipSenseUniquenessXml))
-            {
-                try
-                {
-                    XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
-                    propertiesToInclude = shipSenseUniquenessXElement
-                                                    .Descendants("ItemProperty")
-                                                    .Descendants("Name")
-                                                    .Select(n => n.Value)
-                                                    .OrderBy(n => n).ToList();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    throw new ShipSenseException("ShipSense was unable to determine its property settings.", ex);
-                }
-            }
-
-            return propertiesToInclude;
-        }
-
-        /// <summary>
-        /// Returns a list of names used to determine uniqueness string.  Only the names in this list are used when
-        /// creating the uniqueness string.
-        /// </summary>
-        /// <param name="shipSenseUniquenessXml">The ShipSense uniqueness settings XML as a string.</param>
-        private List<string> GetItemAttributes(string shipSenseUniquenessXml)
-        {
-            List<string> attributeNamesToInclude = new List<string>();
-
-            if (!string.IsNullOrWhiteSpace(shipSenseUniquenessXml))
-            {
-                try
-                {
-                    XElement shipSenseUniquenessXElement = XElement.Parse(shipSenseUniquenessXml);
-                    attributeNamesToInclude = shipSenseUniquenessXElement
-                                                    .Descendants("ItemAttribute")
-                                                    .Descendants("Name")
-                                                    .Select(n => n.Value.ToUpperInvariant())
-                                                    .OrderBy(n => n).ToList();
-                }
-                catch (InvalidOperationException ex)
-                {
-                    throw new ShipSenseException("ShipSense was unable to determine its attribute settings.", ex);
-                }
-            }
-
-            return attributeNamesToInclude;
         }
 
         /// <summary>
