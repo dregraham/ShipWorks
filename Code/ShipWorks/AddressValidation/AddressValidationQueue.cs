@@ -11,6 +11,9 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.AddressValidation
 {
+    /// <summary>
+    /// Queue that handles validating order shipping addresses in the background
+    /// </summary>
     internal class AddressValidationQueue : IDisposable
     {
         private static readonly Lazy<ConcurrentQueue<long>> lazyOrderQueue = new Lazy<ConcurrentQueue<long>>(() => new ConcurrentQueue<long>());
@@ -94,8 +97,6 @@ namespace ShipWorks.AddressValidation
         /// <param name="orderID">The order identifier.</param>
         private void CallValidate(long orderID)
         {
-            SqlAdapter sqlAdapter = new SqlAdapter();
-
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
             
             PersonAdapter originalShippingAddress = new PersonAdapter();
@@ -103,21 +104,11 @@ namespace ShipWorks.AddressValidation
 
             if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
             {
-                addressValidator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    ValidatedAddressManager.DeleteExistingAddresses(sqlAdapter, order.OrderID);
-                    ValidatedAddressManager.SaveOrderAddress(sqlAdapter, order, originalAddress, true);
-
-                    foreach (AddressEntity address in suggestedAddresses)
-                    {
-                        ValidatedAddressManager.SaveOrderAddress(sqlAdapter, order, address, false);
-                    }
-
-                    order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
-                    sqlAdapter.SaveEntity(order);
-
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"));
-                });
+                    addressValidator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
+                        ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
+                }
             }
         }
 
@@ -126,7 +117,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void Dispose()
         {
-            ((IDisposable)timer).Dispose();
+            timer.Dispose();
         }
     }
 }

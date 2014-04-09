@@ -127,6 +127,7 @@
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
     <Compile Include="AddressValidation\AddressValidationResultTest.cs" />
     <Compile Include="AddressValidation\AddressValidatorTest.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />

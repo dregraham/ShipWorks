@@ -53,7 +53,6 @@ namespace ShipWorks.Actions.Tasks.Common
                 PersonAdapter originalShippingAddress = new PersonAdapter();
                 PersonAdapter.Copy(order, "Ship", originalShippingAddress);
                 
-
                 // If the address has already been validated, don't bother validating it again
                 if (order == null ||
                     (order.ShipAddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
@@ -64,21 +63,8 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 try
                 {
-                    validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
-                    {
-                        ValidatedAddressManager.DeleteExistingAddresses(context, order.OrderID);
-                        ValidatedAddressManager.SaveOrderAddress(context, order, originalAddress, true);
-
-                        foreach (AddressEntity address in suggestedAddresses)
-                        {
-                            ValidatedAddressManager.SaveOrderAddress(context, order, address, false);
-                        }
-
-                        order.ShipAddressValidationSuggestionCount = suggestedAddresses.Count();
-                        context.CommitWork.AddForSave(order);
-
-                        ValidatedAddressManager.PropagateAddressChangesToShipments(order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"), context);
-                    });
+                    validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) => 
+                        ValidatedAddressManager.SaveValidatedOrder(context, order, originalShippingAddress, originalAddress, suggestedAddresses));
                 }
                 catch (AddressValidationException ex)
                 {

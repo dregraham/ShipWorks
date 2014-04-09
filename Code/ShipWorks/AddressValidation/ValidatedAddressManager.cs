@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.AddressValidation
 {
@@ -16,31 +14,18 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public static class ValidatedAddressManager
     {
-
         /// <summary>
         /// Propagates the address changes to shipments.
         /// </summary>
         public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
         {
-            PropagateAddressChangesToShipments(adapter, orderID, originalShippingAddress, newShippingAddress, (shipment) => adapter.SaveEntity(shipment));
+            PropagateAddressChangesToShipments(new AdapterAddressValidationDataAccess(adapter), orderID, originalShippingAddress, newShippingAddress);
         }
-
-        /// <summary>
-        /// Propagates the address changes to shipments.
-        /// </summary>
-        public static void PropagateAddressChangesToShipments(long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, ActionStepContext context)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                PropagateAddressChangesToShipments(adapter, orderID, originalShippingAddress, newShippingAddress, (shipment) => context.CommitWork.AddForSave(shipment));   
-            }
-        }
-
 
         /// <summary>
         /// Propagate order address changes to unprocessed shipments if necessary
         /// </summary>
-        private static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress, Action<IEntity2> saveAction)
+        public static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
             if (originalShippingAddress == newShippingAddress)
@@ -49,8 +34,7 @@ namespace ShipWorks.AddressValidation
             }
 
             // Get the shipments we might need to update
-            LinqMetaData metaData = new LinqMetaData(adapter);
-            List<ShipmentEntity> shipments = metaData.Shipment.Where(x => x.OrderID == orderID && !x.Processed).ToList();
+            List<ShipmentEntity> shipments = dataAccess.Shipment.Where(x => x.OrderID == orderID && !x.Processed).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -59,20 +43,8 @@ namespace ShipWorks.AddressValidation
                 if (originalShippingAddress == shipmentAddress)
                 {
                     newShippingAddress.CopyTo(shipmentAddress);
+                    dataAccess.SaveEntity(shipment);
                 }
-
-                saveAction(shipment);
-            }
-        }
-
-        /// <summary>
-        /// Deletes existing validated addresses
-        /// </summary>
-        public static void DeleteExistingAddresses(ActionStepContext context, long entityId)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                DeleteExistingAddresses(adapter, entityId, entity2 => context.CommitWork.AddForDelete(entity2));
             }
         }
 
@@ -81,51 +53,83 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static void DeleteExistingAddresses(DataAccessAdapter adapter, long entityId)
         {
-            DeleteExistingAddresses(adapter, entityId, entity2 => adapter.DeleteEntity(entity2));
+            DeleteExistingAddresses(new AdapterAddressValidationDataAccess(adapter), entityId);
         }
 
         /// <summary>
         /// Deletes existing validated addresses
         /// </summary>
-        private static void DeleteExistingAddresses(IDataAccessAdapter adapter, long entityId, Action<IEntity2> deleteAction)
+        public static void DeleteExistingAddresses(IAddressValidationDataAccess dataAccess, long entityId)
         {
-            // Retrieve the addresses 
-            LinqMetaData metaData = new LinqMetaData(adapter);
-            List<ValidatedAddressEntity> addressesToDelete = metaData.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
+            // Retrieve the addresses
+            List<ValidatedAddressEntity> addressesToDelete = dataAccess.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
 
             // Mark each address for deletion
             addressesToDelete.ForEach(x =>
             {
                 AddressEntity addressToDelete = new AddressEntity {AddressID = x.AddressID, IsNew = false};
 
-                deleteAction(x);
-                deleteAction(addressToDelete);
+                dataAccess.DeleteEntity(x);
+                dataAccess.DeleteEntity(addressToDelete);
             });
         }
 
         /// <summary>
-        /// Deletes existing validated addresses
+        /// Save an order that has just been validated
         /// </summary>
-        public static void SaveOrderAddress(ActionStepContext context, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        /// <param name="context">Interface with the database</param>
+        /// <param name="order">Order that was validated</param>
+        /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                SaveOrderAddress(order, address, isOriginalAddress, entity2 => context.CommitWork.AddForSave(entity2));
-            }
+            SaveValidatedOrder(new ContextAddressValidationDataAccess(context), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }
 
         /// <summary>
-        /// Deletes existing validated addresses
+        /// Save an order that has just been validated
         /// </summary>
-        public static void SaveOrderAddress(DataAccessAdapter adapter, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        /// <param name="adapter">Interface with the database</param>
+        /// <param name="order">Order that was validated</param>
+        /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        public static void SaveValidatedOrder(DataAccessAdapter adapter, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
-            SaveOrderAddress(order, address, isOriginalAddress, entity2 => adapter.SaveEntity(entity2));
+            SaveValidatedOrder(new AdapterAddressValidationDataAccess(adapter), order, originalShippingAddress, enteredAddress, suggestedAddresses);
+        }
+
+        /// <summary>
+        /// Save an order that has just been validated
+        /// </summary>
+        /// <param name="dataAccess">Interface with the database</param>
+        /// <param name="order">Order that was validated</param>
+        /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        {
+            DeleteExistingAddresses(dataAccess, order.OrderID);
+            SaveOrderAddress(dataAccess, order, enteredAddress, true);
+
+            List<AddressEntity> suggestedAddressList = suggestedAddresses.ToList();
+
+            foreach (AddressEntity address in suggestedAddressList)
+            {
+                SaveOrderAddress(dataAccess, order, address, false);
+            }
+
+            order.ShipAddressValidationSuggestionCount = suggestedAddressList.Count();
+            dataAccess.SaveEntity(order);
+
+            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"));
         }
 
         /// <summary>
         /// Save a validated address
         /// </summary>
-        private static void SaveOrderAddress(OrderEntity order, AddressEntity address, bool isOriginalAddress, Action<IEntity2> saveAction)
+        public static void SaveOrderAddress(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressEntity address, bool isOriginalAddress)
         {
             // If the address is null, we obviously don't need to save it
             if (address == null)
@@ -140,7 +144,7 @@ namespace ShipWorks.AddressValidation
                 IsOriginal = isOriginalAddress
             };
 
-            saveAction(validatedAddressEntity);
+            dataAccess.SaveEntity(validatedAddressEntity);
         }
     }
 }
