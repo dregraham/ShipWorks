@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -59,12 +60,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                          .Returns((OrderEntity order) =>
                          {
                              // By default return an entry with "10" as the weight and dimension values
-                             KnowledgebaseEntry entry = new KnowledgebaseEntry("{\"Packages\":[{\"Hash\":\"hlSh5NM0o5rQy3iA9AAS1D6fbTjHgRPTwWVQblq+yJk=\",\"Length\":10.0,\"Width\":10.0,\"Height\":10.0,\"Weight\":10.0,\"ApplyAdditionalWeight\":false,\"AdditionalWeight\":10.0}],\"CustomsItems\":[{\"Hash\":\"FPvuFwoAMW/h1HvR8vi6HTiWP0O6VjXqdk9SRY4MpV8=\",\"Description\":\"Apple iPhone Bluetooth Headset\",\"Quantity\":1.0,\"Weight\":1.0,\"UnitValue\":99.0000,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"\",\"NumberOfPieces\":0,\"UnitPriceAmount\":99.0000}]}");
+                             KnowledgebaseEntry entry = new KnowledgebaseEntry("{\"Packages\":[{\"Hash\":\"2QFOGnmDmXBNQn/6vhAgRGyLQ1txl+/f9thbvbIl4N4=\",\"Length\":10.0,\"Width\":10.0,\"Height\":10.0,\"Weight\":10.0,\"ApplyAdditionalWeight\":false,\"AdditionalWeight\":10.0}],\"CustomsItems\":[{\"Hash\":\"FPvuFwoAMW/h1HvR8vi6HTiWP0O6VjXqdk9SRY4MpV8=\",\"Description\":\"Apple iPhone Bluetooth Headset\",\"Quantity\":1.0,\"Weight\":1.0,\"UnitValue\":99.0000,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"\",\"NumberOfPieces\":0,\"UnitPriceAmount\":99.0000}]}");
 
                              if (order.OrderID == 1)
                              {
                                  // Return a entry with "5" as the weight and dimension values for order ID 1
-                                 entry = new KnowledgebaseEntry("{\"Packages\":[{\"Hash\":\"A1XuGqpzO6Ej++h2L8Re0U/bBS32jkemNhjfWLaU8NE=\",\"Length\":5.0,\"Width\":5.0,\"Height\":5.0,\"Weight\":5.0,\"ApplyAdditionalWeight\":false,\"AdditionalWeight\":5.0}],\"CustomsItems\":[{\"Hash\":\"wX6QbOdK0DoJQP8ZlIvgIMwtbMYet2yAlouOBvhfh4E=\",\"Description\":\"Apple iPhone Bluetooth Headset\",\"Quantity\":1.0,\"Weight\":1.0,\"UnitValue\":99.0,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"\",\"NumberOfPieces\":0,\"UnitPriceAmount\":99.0}]}");
+                                 entry = new KnowledgebaseEntry("{\"Packages\":[{\"Hash\":\"/FnBE8xclha9OT7LTyLjPQClF4y8bdBdO8T/CjOeDnE=\",\"Length\":5.0,\"Width\":5.0,\"Height\":5.0,\"Weight\":5.0,\"ApplyAdditionalWeight\":false,\"AdditionalWeight\":5.0}],\"CustomsItems\":[{\"Hash\":\"FPvuFwoAMW/h1HvR8vi6HTiWP0O6VjXqdk9SRY4MpV8=\",\"Description\":\"Apple iPhone Bluetooth Headset\",\"Quantity\":1.0,\"Weight\":1.0,\"UnitValue\":99.0000,\"CountryOfOrigin\":\"US\",\"HarmonizedCode\":\"\",\"NumberOfPieces\":0,\"UnitPriceAmount\":99.0000}]}");
                              }
 
                              return entry;
@@ -220,6 +221,285 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
         }
 
+        [TestMethod]
+        public void SynchronizeWith_RemovesProcessedShipments_WhenShipSenseIsDisabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = false;
+            shipments[2].Processed = true;
+
+            int originalCount = testObject.MonitoredShipments.Count();
+
+            testObject.SynchronizeWith(shipments[0]);
+
+            Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_RemovesProcessedShipments_WhenShipSenseIsEnabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+            shipments[2].Processed = true;
+
+            int originalCount = testObject.MonitoredShipments.Count();
+
+            testObject.SynchronizeWith(shipments[0]);
+
+            Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
+        }
+        
+        [TestMethod]
+        public void SynchronizeWith_LeavesStatusAsNotApplied_WhenShipmentShipSenseStatusIsNotApplied_AndShipSenseIsDisabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = false;
+
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_LeavesStatusAsNotApplied_WhenShipmentShipSenseStatusIsNotApplied_AndShipSenseIsEnabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SetsStatusToOverwritten_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsEnabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            // Based on the mocked knowledge base, the shipment should be seen as overwritten
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SetsStatusToOverwritten_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsDisabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = false;
+
+            // Based on the mocked knowledge base, the shipment should be seen as overwritten
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SetsStatusToApplied_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsEnabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+            // Setup the shipment to be the same its corresponding KB entry
+            KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            entry.ApplyTo(shipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
+
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SetsStatusToApplied_WhenShipmentShipSenseStatusIsApplied_AndShipSenseIsDisabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = false;
+
+            ShipmentEntity shipment = shipments[0];
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+            // Setup the shipment to be the same its corresponding KB entry
+            KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+            entry.ApplyTo(shipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
+
+            testObject.SynchronizeWith(shipment);
+
+            Assert.AreEqual((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_DoesNotChangeMatchingShipments_WhenShipSenseIsDisabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = false;
+
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 1;
+            shipment.Postal.DimsLength = 1;
+            shipment.Postal.DimsWidth = 1;
+            shipment.Postal.DimsWeight = 1;
+            
+            testObject.SynchronizeWith(shipment);
+
+            KnowledgebaseEntry entry = knowledgebase.Object.GetEntry(shipment.Order);
+
+            for (int i = 1; i < shipments.Count; i++)
+            {
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipments[i]);
+                Assert.IsFalse(entry.Matches(shipments[i]));
+            }
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SynchronizesMatchingShipments_WhenShipSenseIsEnabled_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 1;
+            shipment.Postal.DimsLength = 1;
+            shipment.Postal.DimsWidth = 1;
+            shipment.Postal.DimsWeight = 1;
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+            KnowledgebaseEntry entry = new KnowledgebaseEntry();
+            entry.ApplyFrom(shipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
+
+            testObject.SynchronizeWith(shipment);
+
+            // Shipments 2, 4, and 5 should match based on the initialization
+            Assert.IsTrue(entry.Matches(shipments[2]));
+            Assert.IsTrue(entry.Matches(shipments[4]));
+            Assert.IsTrue(entry.Matches(shipments[5]));
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsSameAsSourcedShipment_WhenShipSenseIsEnabled_AndMatchedShipmentsAndSourcedShipmentHaveShipSenseApplied_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+            
+            foreach (ShipmentEntity entity in shipments)
+            {
+                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            }
+
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 1;
+            shipment.Postal.DimsLength = 1;
+            shipment.Postal.DimsWidth = 1;
+            shipment.Postal.DimsWeight = 1;
+
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+            KnowledgebaseEntry entry = new KnowledgebaseEntry();
+            entry.ApplyFrom(shipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
+
+            testObject.SynchronizeWith(shipment);
+
+            // Shipments 2, 4, and 5 should match based on the initialization
+            Assert.AreEqual(shipment.ShipSenseStatus, shipments[2].ShipSenseStatus);
+            Assert.AreEqual(shipment.ShipSenseStatus, shipments[4].ShipSenseStatus);
+            Assert.AreEqual(shipment.ShipSenseStatus, shipments[5].ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsApplied_WhenShipSenseIsEnabled_AndSourcedShipmentHasNotHadShipSenseApplied_AndSourcedShipmentMatchesEntry_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            foreach (ShipmentEntity entity in shipments)
+            {
+                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            }
+            
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 5.0;
+            shipment.ContentWeight = 5.0;
+            shipment.Postal.DimsLength = 5.0;
+            shipment.Postal.DimsWidth = 5.0;
+            shipment.Postal.DimsWeight = 5.0;
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            
+            testObject.SynchronizeWith(shipment);
+
+            // Shipments 2, 4, and 5 should match based on the initialization
+            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[2].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[4].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[5].ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsOverwritten_WhenShipSenseIsEnabled_AndSourcedShipmentHasNotHadShipSenseApplied_AndSourcedShipmentDoesNotMatchEntry_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            foreach (ShipmentEntity entity in shipments)
+            {
+                entity.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+            }
+
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 1;
+            shipment.Postal.DimsLength = 1;
+            shipment.Postal.DimsWidth = 1;
+            shipment.Postal.DimsWeight = 1;
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+
+            testObject.SynchronizeWith(shipment);
+
+            // Shipments 2, 4, and 5 should match based on the initialization
+            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[2].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[4].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[5].ShipSenseStatus);
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_ShipSenseStatusOfMatchedShipmentsIsNotApplied_WhenShipSenseIsEnabled_AndSourcedShipmentHasHadShipSenseApplied_AndSourcedShipmentDoesNotMatchEntry_Test()
+        {
+            shippingSettings.ShipSenseEnabled = true;
+
+            foreach (ShipmentEntity entity in shipments)
+            {
+                entity.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            }
+
+            // Shipment[0] is for order1 based on the initialization, so all elements 
+            // should still have their original values
+            ShipmentEntity shipment = shipments[0];
+            shipment.Postal.DimsHeight = 1;
+            shipment.Postal.DimsLength = 1;
+            shipment.Postal.DimsWidth = 1;
+            shipment.Postal.DimsWeight = 1;
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+
+            testObject.SynchronizeWith(shipment);
+
+            // Shipments 2, 4, and 5 should match based on the initialization
+            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[2].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[4].ShipSenseStatus);
+            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
+        }
 
         private ShipmentEntity GetShipmentForOrder1()
         {
@@ -228,7 +508,20 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = order
+                Order = order,
+                OriginCountryCode = "US",
+                OriginPostalCode = "63102",
+                ShipCountryCode = "US",
+                ShipPostalCode = "63102",
+                ShipmentType = (int)ShipmentTypeCode.Endicia,
+                Postal = new PostalShipmentEntity
+                {
+                    Endicia = new EndiciaShipmentEntity(),
+                    DimsHeight = 35,
+                    DimsLength = 35,
+                    DimsWidth = 35,
+                    DimsWeight = 35
+                }
             };
 
             return shipment;
@@ -241,9 +534,16 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = order
+                Order = order,
+                OriginCountryCode = "US",
+                OriginPostalCode = "63102",
+                ShipCountryCode = "US",
+                ShipPostalCode = "63102",
+                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                FedEx = new FedExShipmentEntity()
             };
 
+            shipment.FedEx.Packages.Add(new FedExPackageEntity { DimsWidth = 5, DimsHeight = 4, DimsLength = 3, DimsWeight = 2 });
             return shipment;
         }
 

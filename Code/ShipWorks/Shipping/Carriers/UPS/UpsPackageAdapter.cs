@@ -11,7 +11,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public class UpsPackageAdapter : IPackageAdapter
     {
         private readonly UpsPackageEntity packageEntity;
-        private string hashSalt = "UpsPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsPackageAdapter"/> class.
@@ -85,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
-            return stringHash.Hash(rawValue, hashSalt);
+            return stringHash.Hash(rawValue, string.Empty);
         }
     }
 }

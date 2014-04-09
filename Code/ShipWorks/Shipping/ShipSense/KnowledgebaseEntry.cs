@@ -328,7 +328,14 @@ namespace ShipWorks.Shipping.ShipSense
 
             // The Store ID, packages, and customs must all coincide for the 
             // shipment to match the entry
-            return PackagesMatch(packageAdapters) && CustomsMatch(shipment);
+            bool matches = PackagesMatch(packageAdapters);
+
+            if (matches && shipmentType.IsCustomsRequired(shipment))
+            {
+                matches = CustomsMatch(shipment);
+            }
+
+            return matches;
         }
 
         /// <summary>

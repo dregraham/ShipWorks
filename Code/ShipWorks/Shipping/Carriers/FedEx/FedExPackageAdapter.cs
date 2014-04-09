@@ -7,7 +7,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExPackageAdapter : IPackageAdapter
     {
         private readonly FedExPackageEntity packageEntity;
-        private string hashSalt = "FedExPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageAdapter"/> class.
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
-            return stringHash.Hash(rawValue, hashSalt);
+            return stringHash.Hash(rawValue, string.Empty);
         }
     }
 }

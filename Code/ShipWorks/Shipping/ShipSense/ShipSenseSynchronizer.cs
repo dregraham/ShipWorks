@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
@@ -14,7 +12,7 @@ namespace ShipWorks.Shipping.ShipSense
         private readonly string shipSenseUniquenessXml;
 
         private readonly IKnowledgebase knowledgebase;
-        
+
         private readonly Dictionary<string, List<ShipmentEntity>> shipmentDictionary;
         private readonly Dictionary<string, KnowledgebaseEntry> knowledgebaseEntryDictionary;
         private readonly ShipSenseUniquenessXmlParser parser;
@@ -26,7 +24,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="shippingSettings">The shipping settings.</param>
         public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments)
             : this(shipments, ShippingSettings.Fetch(), new Knowledgebase())
-        { }
+        {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseSynchronizer" /> class.
@@ -46,7 +44,7 @@ namespace ShipWorks.Shipping.ShipSense
 
             shipmentDictionary = new Dictionary<string, List<ShipmentEntity>>();
             knowledgebaseEntryDictionary = new Dictionary<string, KnowledgebaseEntry>();
-            
+
             // Add the shipments to the shipment dictionary; this will also create
             // the necessary KB entry dictionary items as well
             Add(shipmentEntities);
@@ -68,7 +66,7 @@ namespace ShipWorks.Shipping.ShipSense
         {
             get { return knowledgebaseEntryDictionary.Select(d => d.Value); }
         }
-        
+
         /// <summary>
         /// Adds a collection of shipments to the list of shipments being synchronized.
         /// </summary>
@@ -130,7 +128,85 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="shipment">The shipment.</param>
         public void SynchronizeWith(ShipmentEntity shipment)
         {
-            
+            // Do some housekeeping and remove any shipments that have been processed, so we 
+            // don't have to worry about excluding these later
+            List<ShipmentEntity> processedShipments = MonitoredShipments.Where(s => s.Processed).ToList();
+            foreach (ShipmentEntity processedShipment in processedShipments)
+            {
+                Remove(processedShipment);
+            }
+
+            // This shipment has had ShipSense applied previously, so we need to update the status
+            KnowledgebaseHashResult hashResult = GetHashResult(shipment);
+            if (hashResult.IsValid)
+            {
+                if (shipment.ShipSenseStatus != (int)ShipSenseStatus.NotApplied)
+                {
+                    KnowledgebaseEntry entry = knowledgebaseEntryDictionary[hashResult.HashValue];
+                    if (entry != null)
+                    {
+                        // Consider a status of ShipSense applied if the shipment matches the corresponding KB entry
+                        shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+                    }
+                }
+
+                SynchronizeMatchingShipments(hashResult, shipment);
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes the ShipSense data from the shipment provided to all of the shipments having 
+        /// the same KB hash as the one provided (if ShipSense is enabled).
+        /// </summary>
+        /// <param name="hashResult">The hash result.</param>
+        /// <param name="shipment">The shipment that the ShipSense data is being sourced from.</param>
+        private void SynchronizeMatchingShipments(KnowledgebaseHashResult hashResult, ShipmentEntity shipment)
+        {
+            if (isShipSenseEnabled)
+            {
+                // Create a knowledge base entry and populate it based on the shipment provided. We'll
+                // use this to apply the ShipSense settings to any other shipments with the same hash
+                ShipmentType sourceShipmentType = ShipmentTypeManager.GetType(shipment);
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(sourceShipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
+
+                foreach (ShipmentEntity matchedShipment in shipmentDictionary[hashResult.HashValue])
+                {
+                    // Use the KB entry created above to simulate ShipSense being applied again
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(matchedShipment);
+                    entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment), matchedShipment.CustomsItems);
+
+                    // Update the status of the matched shipment if needed
+                    if (IsShipSenseApplied(matchedShipment))
+                    {
+                        // ShipSense has been applied to the matching shipment at some point in
+                        // the past, so we need to update its status to reflect the current state
+                        if (IsShipSenseApplied(shipment))
+                        {
+                            // ShipSense was applied to the shipment that triggered the synchronization, so 
+                            // we can rely on its status
+                            matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
+                        }
+                        else
+                        {
+                            // We can't rely on the status of the shipment that triggered the synchronization, since
+                            // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
+                            // a status of ShipSense applied if the shipment matches the corresponding KB entry
+                            KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
+                            matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Inspects the ShipSense status of the given shipment to determine whether ShipSense 
+        /// has ever been applied.
+        /// </summary>
+        private bool IsShipSenseApplied(ShipmentEntity shipment)
+        {
+            return shipment.ShipSenseStatus != (int)ShipSenseStatus.NotApplied;
         }
 
         /// <summary>

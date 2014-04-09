@@ -7,7 +7,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     public class iParcelPackageAdapter : IPackageAdapter
     {
         private readonly IParcelPackageEntity packageEntity;
-        private string hashSalt = "iParcelPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelPackageAdapter"/> class.
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
-            return stringHash.Hash(rawValue, hashSalt);
+            return stringHash.Hash(rawValue, string.Empty);
         }
     }
 }

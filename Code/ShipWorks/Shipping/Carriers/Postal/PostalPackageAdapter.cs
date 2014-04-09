@@ -7,7 +7,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public class PostalPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
-        private string hashSalt = "PostalPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PostalPackageAdapter"/> class.
@@ -81,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
-            return stringHash.Hash(rawValue, hashSalt);
+            return stringHash.Hash(rawValue, string.Empty);
         }
     }
 }

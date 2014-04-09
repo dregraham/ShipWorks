@@ -10,7 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Other
     public class OtherPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
-        private string hashSalt = "OtherPackageAdapter";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OtherPackageAdapter"/> class.
@@ -84,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             string rawValue = string.Format("{0}-{1}-{2}-{3}-{4}-{5}", Length, Width, Height, Weight, AdditionalWeight, ApplyAdditionalWeight);
 
-            return stringHash.Hash(rawValue, hashSalt);
+            return stringHash.Hash(rawValue, string.Empty);
         }
     }
 }
