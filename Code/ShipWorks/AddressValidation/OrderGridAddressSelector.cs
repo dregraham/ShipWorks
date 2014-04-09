@@ -98,9 +98,13 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void SelectAddress(OrderEntity order, ValidatedAddressEntity validatedAddressEntity)
         {
+            PersonAdapter originalAddress = new PersonAdapter();
+
             // Copy the values manually instead of using the person adapter copy so that we don't overwrite values that
             // address entity does not support (like name, email, etc.)
             PersonAdapter orderAdapter = new PersonAdapter(order, "Ship");
+            orderAdapter.CopyTo(originalAddress);
+
             orderAdapter.Street1 = validatedAddressEntity.Address.Street1;
             orderAdapter.Street2 = validatedAddressEntity.Address.Street2;
             orderAdapter.Street3 = validatedAddressEntity.Address.Street3;
@@ -115,6 +119,7 @@ namespace ShipWorks.AddressValidation
 
             using (SqlAdapter adapter = new SqlAdapter())
             {
+                ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalAddress, orderAdapter);
                 adapter.SaveAndRefetch(order);
             }
 
