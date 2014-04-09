@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -37,8 +38,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
         /// </summary>
-        public FedExRequestFactory()
-            : this(new FedExServiceGateway(new FedExSettingsRepository()), new FedExSettingsRepository(), new FedExShipmentTokenProcessor(),  new FedExResponseFactory())
+        public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExServiceGateway(settingsRepository), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
         { }
 
         /// <summary>
@@ -133,19 +134,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountLocationId">The account location ID.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx to do the version capture.</returns>
-        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId)
+        public CarrierRequest CreateVersionCaptureRequest(ShipmentEntity shipmentEntity, string accountLocationId, FedExAccountEntity account)
         {
-            FedExAccountEntity accountEntity = (FedExAccountEntity) settingsRepository.GetAccount(shipmentEntity);
-
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExRegistrationWebAuthenticationDetailManipulator(),
+                new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExRegistrationClientDetailManipulator(settingsRepository),
                 new FedExRegistrationVersionManipulator()
             };
 
             // TODO: Look into injecting the response factory here like that used in the CreateShipResponse method
-            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, accountEntity);
+            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, fedExService, account);
         }
 
         /// <summary>
@@ -159,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExPackageMovementWebAuthenticationDetailManipulator(),
+                new FedExPackageMovementWebAuthenticationDetailManipulator(settingsRepository),
                 new FedExPackageMovementClientDetailManipulator(settingsRepository),
                 new FedExPackageMovementVersionManipulator()
             };
@@ -297,21 +296,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// FedEx for obtaining shipping rates.</returns>
         public CarrierRequest CreateRateRequest(ShipmentEntity shipmentEntity, IEnumerable<ICarrierRequestManipulator> specializedManipulators)
         {
+            FedExSettings settings = new FedExSettings(settingsRepository);
+
             // Create the "standard" manipulators for a FedEx rate request
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRateClientDetailManipulator(settingsRepository),
-                new FedExRateWebAuthenticationManipulator(),
+                new FedExRateWebAuthenticationManipulator(settings),
                 new FedExRateVersionManipulator(),
                 new FedExRateReturnTransitManipulator(),
                 new FedExRateShipperManipulator(),
                 new FedExRateRecipientManipulator(),
                 new FedExRateShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTotalInsuredValueManipulator(),
+                new FedExRateTotalInsuredValueManipulator(settings),
                 new FedExRateTotalWeightManipulator(),
                 new FedExRateRateTypeManipulator(settingsRepository),
                 new FedExRatePickupManipulator(),
-                new FedExRatePackageDetailsManipulator(),
+                new FedExRatePackageDetailsManipulator(settings),
                 new FedExRatePackageSpecialServicesManipulator(),
                 new FedExRatePackagingTypeManipulator()
             };
@@ -322,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 manipulators.AddRange(specializedManipulators);
             }
 
-            return new FedExRateRequest(manipulators, shipmentEntity);
+            return new FedExRateRequest(manipulators, shipmentEntity, settingsRepository);
         }
 
         /// <summary>
@@ -331,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx to retrive tracking data.</returns>
+        /// FedEx to retrieve tracking data.</returns>
         public CarrierRequest CreateTrackRequest(FedExAccountEntity accountEntity, ShipmentEntity shipmentEntity)
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
@@ -343,6 +344,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             return new FedExTrackRequest(manipulators, shipmentEntity, fedExService, new FedExResponseFactory(), accountEntity);
+        }
+
+        /// <summary>
+        /// Creates the certificate request.
+        /// </summary>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        /// <returns>An instance of an ICertificateRequest that can be used to check the security level
+        /// of a host's certificate.</returns>
+        public ICertificateRequest CreateCertificateRequest(ICertificateInspector certificateInspector)
+        {
+            Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
+            return new CertificateRequest(fedExEndpoint, certificateInspector);
         }
     }
 }

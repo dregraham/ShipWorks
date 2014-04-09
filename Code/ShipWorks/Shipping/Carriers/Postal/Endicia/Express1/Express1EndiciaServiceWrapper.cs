@@ -441,7 +441,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1EndiciaServiceWrapper(ApiLogEntry logEntry)
+        public Express1EndiciaServiceWrapper(IApiLogEntry logEntry)
             : base(logEntry)
         {
 

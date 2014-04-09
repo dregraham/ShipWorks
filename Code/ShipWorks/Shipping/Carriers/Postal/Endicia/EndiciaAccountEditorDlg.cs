@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaAccountEditorDlg : Form
     {
         EndiciaAccountEntity account;
+        private readonly EndiciaApiClient endiciaApiClient;
 
         // Indicates if postage was purchased while the window was open
         bool postagePurchased = false;
@@ -41,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             InitializeComponent();
 
+            endiciaApiClient = new EndiciaApiClient();
             this.account = account;
 
             EndiciaReseller reseller = (EndiciaReseller)account.EndiciaReseller;
@@ -109,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                EndiciaAccountStatus status = EndiciaApiClient.GetAccountStatus(account);
+                EndiciaAccountStatus status = endiciaApiClient.GetAccountStatus(account);
 
                 balance.Text = status.PostageBalance.ToString("c");
             }
@@ -202,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 try
                 {
-                    EndiciaApiClient.GetAccountStatus(account);
+                    endiciaApiClient.GetAccountStatus(account);
                 }
                 catch (EndiciaException ex)
                 {

@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using Interapptive.Shared.Business;
 
@@ -26,10 +27,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// Constructor
         /// </summary>
         public OnTracRates(OnTracAccountEntity account)
-            : base(
+            : this(
                 account.AccountNumber,
                 SecureText.Decrypt(account.Password, account.AccountNumber.ToString()),
-                "OnTracRateRequest")
+                new HttpVariableRequestSubmitter(), 
+                new LogEntryFactory())
         {
             httpVariableRequestSubmitter = new HttpVariableRequestSubmitter();
         }
@@ -37,12 +39,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracRates(
-            long onTracAccountNumber,
-            string onTracPassword,
-            IApiLogEntry apiLogEntry,
-            HttpVariableRequestSubmitter httpVariableRequestSubmitter)
-            : base(onTracAccountNumber, onTracPassword, apiLogEntry)
+        public OnTracRates(long onTracAccountNumber, string onTracPassword, HttpVariableRequestSubmitter httpVariableRequestSubmitter, ILogEntryFactory logEntryFactory)
+            : base(onTracAccountNumber, onTracPassword, logEntryFactory, ApiLogSource.OnTrac, "OnTracRateRequest", LogActionType.GetRates)
         {
             this.httpVariableRequestSubmitter = httpVariableRequestSubmitter;
         }
@@ -72,7 +70,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                         onTracServiceType)
                     {
                         ExpectedDeliveryDate = expectedDeliveryDate,
-                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays)
+                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays),
+                        ShipmentType = ShipmentTypeCode.OnTrac,
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.OnTrac)
                     });
             }
 

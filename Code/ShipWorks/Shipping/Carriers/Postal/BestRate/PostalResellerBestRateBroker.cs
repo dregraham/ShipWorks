@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using System;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
@@ -25,6 +29,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
+        /// Get best rates for the specified shipment
+        /// </summary>
+        public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
+        {
+            brokerExceptions.Add(new BrokerException(new ShippingException("Flat rate and regional boxes were not checked for best rates."), BrokerExceptionSeverityLevel.Information, ShipmentType));
+
+            // Postal services do not ship weights over 70 lbs.  Return no rates if this is the case.
+            if (shipment.TotalWeight > 70)
+            {
+                return new RateGroup(new List<RateResult>());
+            }
+
+            return base.GetBestRates(shipment, brokerExceptions);
+        }
+
+        /// <summary>
         /// Gets a list of Postal rates
         /// </summary>
         /// <param name="shipment">Shipment for which rates should be retrieved</param>
@@ -33,8 +53,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         protected override RateGroup GetRates(ShipmentEntity shipment)
         {
             RateGroup rates = base.GetRates(shipment);
-            MergeDescriptionsWithNonSelectableRates(rates.Rates);
+            
+            rates = rates.CopyWithRates(MergeDescriptionsWithNonSelectableRates(rates.Rates));
+            // If a postal counter provider, show USPS logo, otherwise show appropriate logo such as endicia:
+            rates.Rates.ForEach(f => UseProperUspsLogo(f));
+
             return rates;
+        }
+
+        /// <summary>
+        /// Masks the usps logo.
+        /// </summary>
+        /// <param name="rate">The rate.</param>
+        /// <returns></returns>
+        private static void UseProperUspsLogo(RateResult rate)
+        {
+            if (ShipmentTypeManager.IsPostal(rate.ShipmentType))
+            {
+                rate.ProviderLogo = rate.IsCounterRate ? ShippingIcons.usps : EnumHelper.GetImage(rate.ShipmentType);
+            }
         }
 
         /// <summary>
@@ -43,15 +80,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="rates">Collection of rates to update</param>
         /// <remarks>It is important that these rates are in the same order that they are returned from
         /// the shipment type's GetRates method or the merging could be incorrect</remarks>
-        private static void MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
+        private List<RateResult>  MergeDescriptionsWithNonSelectableRates(IEnumerable<RateResult> rates)
         {
             Regex beginsWithSpaces = new Regex("^[ ]+");
             Regex removeDeliveryConfirmation = new Regex(@" Delivery Confirmation \(\$\d*\.\d\d\)");
 
             RateResult lastNonSelectable = null;
 
-            foreach (RateResult rate in rates)
+            List<RateResult> RatesToReturn = new List<RateResult>();
+
+            foreach (RateResult originalRate in rates)
             {
+                RateResult rate = originalRate.Copy();
+                RatesToReturn.Add(rate);
+
                 if (rate.Selectable)
                 {
                     if (beginsWithSpaces.IsMatch(rate.Description) && lastNonSelectable != null)
@@ -64,9 +106,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                 {
                     lastNonSelectable = rate;
                 }
-
+                
                 rate.Description = removeDeliveryConfirmation.Replace(rate.Description, string.Empty);
             }
+
+            return RatesToReturn;
         }
 
         /// <summary>
@@ -93,6 +137,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <param name="account">The Account Entity for this shipment.</param>
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, T account)
         {
+            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
             currentShipment.Postal.DimsHeight = currentShipment.BestRate.DimsHeight;
             currentShipment.Postal.DimsWidth = currentShipment.BestRate.DimsWidth;
             currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
@@ -135,11 +181,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
-        /// Convert the best rate shipment into the specified postal reseller shipment
+        /// Gets the result key for a given rate
         /// </summary>
-        /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        /// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        protected abstract void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment);
+        /// <param name="rate">Rate result for which to create a result key</param>
+        /// <returns>Concatenation of the carrier description and the original rate tag</returns>
+        protected override string GetResultKey(RateResult rate)
+        {
+            // Account for the rate being a previously cached rate where the tag is already a best rate tag; 
+            // we need to pass the original tag that is a postal service type
+            object originalTag = rate.OriginalTag;
+            return "Postal" + EnumHelper.GetDescription((PostalServiceType)GetServiceTypeFromTag(originalTag));
+        }
 
         /// <summary>
         /// Updates the account id on the postal reseller shipment

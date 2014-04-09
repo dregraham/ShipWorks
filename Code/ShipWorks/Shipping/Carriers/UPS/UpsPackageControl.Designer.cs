@@ -71,6 +71,7 @@
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(416, 46);
             this.insuranceControl.TabIndex = 6;
+            this.insuranceControl.InsuranceOptionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // packagingType
             // 
@@ -178,7 +179,6 @@
             this.kryptonBorderEdge.Location = new System.Drawing.Point(5, 13);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(26, 1);
-            this.kryptonBorderEdge.TabIndex = 15;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge.Visible = false;
             // 
@@ -190,7 +190,6 @@
             this.kryptonBorderEdge1.Location = new System.Drawing.Point(5, 273);
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(26, 1);
-            this.kryptonBorderEdge1.TabIndex = 16;
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Visible = false;
             // 
@@ -203,7 +202,6 @@
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(5, 13);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
             this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 260);
-            this.kryptonBorderEdge3.TabIndex = 17;
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge1";
             this.kryptonBorderEdge3.Visible = false;
             // 

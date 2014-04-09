@@ -14,6 +14,8 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -25,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the USPS rates for a shipment of the given information
         /// </summary>
-        public static List<RateResult> GetRates(ShipmentEntity shipment)
+        public static List<RateResult> GetRates(ShipmentEntity shipment, LogEntryFactory logEntryFactory)
         {
             string xmlRequest;
 
@@ -45,6 +47,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 XmlTextWriter xmlWriter = new XmlTextWriter(writer);
                 xmlWriter.Formatting = Formatting.Indented;
 
+                // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
+                // is the category that most of our users will be in.
+                double ratedWeight = shipment.TotalWeight > 0 ? shipment.TotalWeight : BestRateScope.IsActive ? 0.88 : .1;
+
                 // Domestic
                 if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
                 {
@@ -59,8 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("FirstClassMailType", GetFirstClassMailType(packaging));
                     xmlWriter.WriteElementString("ZipOrigination", new PersonAdapter(shipment, "Origin").PostalCode5);
                     xmlWriter.WriteElementString("ZipDestination", new PersonAdapter(shipment, "Ship").PostalCode5);
-
-                    WeightValue weightValue = new WeightValue(shipment.TotalWeight);
+                    
+                    WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
                     xmlWriter.WriteElementString("Container", GetContainerValue(packaging, shipment.Postal.NonRectangular));
@@ -87,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteStartElement("Package");
                     xmlWriter.WriteAttributeString("ID", "0");
 
-                    WeightValue weightValue = new WeightValue(shipment.TotalWeight);
+                    WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
 
@@ -102,8 +108,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlRequest = writer.ToString();
             }
 
-            // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.UspsNoPostage, "Rate");
+            
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.UspsNoPostage, "Rate", LogActionType.GetRates);
+
             logger.LogRequest(xmlRequest);
 
             // Process the request
@@ -235,16 +242,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 if (serviceType == PostalServiceType.ExpressMail)
                 {
                     rates.Add(new RateResult(
-                        EnumHelper.GetDescription(serviceType), 
+                        EnumHelper.GetDescription(serviceType),
                         PostalUtility.GetServiceTransitDays(serviceType),
                         amount,
-                        new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                        new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                        {
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                        });
                 }
                 else
                 {
                     rates.Add(new RateResult(
                         EnumHelper.GetDescription(serviceType),
-                        PostalUtility.GetServiceTransitDays(serviceType)));
+                        PostalUtility.GetServiceTransitDays(serviceType))
+                    {
+                        Tag = new PostalRateSelection(serviceType, PostalConfirmationType.Delivery),
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                    });
 
                     decimal deliveryAmount = (serviceType == PostalServiceType.PriorityMail || serviceType == PostalServiceType.FirstClass) ? 0m : .19m;
                     decimal signatureAmount = 1.80m;
@@ -265,8 +279,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 }
             }
 
-            rates.ForEach(PostalUtility.SetServiceDetails);
-
+            foreach (var rate in rates)
+            {
+                PostalUtility.SetServiceDetails(rate);
+                rate.ShipmentType = ShipmentTypeCode.PostalWebTools;
+            }
+            
             return rates;
         }
 
@@ -418,7 +436,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     EnumHelper.GetDescription(serviceType), 
                     days, 
                     amount, 
-                    new PostalRateSelection(serviceType, PostalConfirmationType.None)));
+                    new PostalRateSelection(serviceType, PostalConfirmationType.None))
+                    {
+                        ShipmentType = ShipmentTypeCode.PostalWebTools,
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools)
+                    });
             }
 
             return rates;

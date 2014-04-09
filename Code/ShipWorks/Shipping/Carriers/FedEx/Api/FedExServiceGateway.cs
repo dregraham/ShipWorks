@@ -27,14 +27,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// </summary>
     public class FedExServiceGateway : IFedExServiceGateway
     {
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly FedExSettings settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExServiceGateway" /> class.
         /// </summary>
         /// <param name="settingsRepository">The settings repository.</param>
-        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository)
+        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository) 
+			: this(settingsRepository, new LogEntryFactory())
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FedExServiceGateway" /> class.
+        /// </summary>
+        public FedExServiceGateway(ICarrierSettingsRepository settingsRepository, ILogEntryFactory logEntryFactory)
         {
+            this.logEntryFactory = logEntryFactory;
             // Tell the FedEx settings which data source to use 
             settings = new FedExSettings(settingsRepository);
         }
@@ -380,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // RateService object here (i.e. no more abstractions can be made)
-                using (RateService service = new RateService(new ApiLogEntry(ApiLogSource.FedEx, "Rates")))
+                using (RateService service = new RateService(logEntryFactory.GetLogEntry(ApiLogSource.FedEx, "Rates", LogActionType.GetRates)))
                 {
                     // Point the service to the correct endpoint
                     service.Url = settings.EndpointUrl;
@@ -393,7 +402,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {
                         string uniqueId = string.IsNullOrEmpty(shipmentEntity.FedEx.ReferencePO) ? Guid.NewGuid().ToString() : shipmentEntity.FedEx.ReferencePO;
-                        FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
+                        try
+                        {
+                            // Now that we are doing get rates for multiple accounts in parallel, this call can try to write to the same file at the same time
+                            // and throw an error.  However, if it does, we don't care because this is only for certification purposes.
+                            FedExUtility.SaveCertificationRequestAndResponseFiles(uniqueId, "Rates", service.RawSoap);
+                        }
+                        catch
+                        {
+                        }
                     }
                 }
 

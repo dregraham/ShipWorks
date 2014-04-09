@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Shipping.Settings.Origin;
@@ -388,15 +389,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
         
         /// <summary>
-        /// Temporary helper method to add the old service name to the end of the new service name for ExpressMail and InternationalExpress
+        /// Helper method to get postal service description.
         /// </summary>
         public static string GetPostalServiceTypeDescription(PostalServiceType postalServiceType)
         {
-            if (postalServiceType == PostalServiceType.ExpressMail)
-            {
-                return EnumHelper.GetDescription(postalServiceType) + " (Express Mail)";
-            }
-
             return EnumHelper.GetDescription(postalServiceType);
         }
 
@@ -416,7 +412,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <param name="baseRate">Rate on which service level details should be set</param>
         public static void SetServiceDetails(RateResult baseRate)
         {
-            PostalRateSelection rateSelection = baseRate.Tag as PostalRateSelection;
+            PostalRateSelection rateSelection = baseRate.OriginalTag as PostalRateSelection;
 
             if (rateSelection != null)
             {

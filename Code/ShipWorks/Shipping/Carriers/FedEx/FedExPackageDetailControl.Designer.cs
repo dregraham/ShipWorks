@@ -150,6 +150,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.containsAlcohol.TabIndex = 22;
             this.containsAlcohol.Text = "This package contains alcohol";
             this.containsAlcohol.UseVisualStyleBackColor = true;
+            this.containsAlcohol.CheckStateChanged += new System.EventHandler(this.OnPackageDetailsChanged);
             // 
             // labelAlcohol
             // 

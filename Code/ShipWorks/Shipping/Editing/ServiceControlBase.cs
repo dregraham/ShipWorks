@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
 using Divelements.SandGrid;
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Editing
     public partial class ServiceControlBase : UserControl
     {
         // The type of shipment this instance is servicing 
-        ShipmentTypeCode shipmentTypeCode;
+        readonly ShipmentTypeCode shipmentTypeCode;
 
         // The values last past to the LoadShipments function
         List<ShipmentEntity> loadedShipments;
@@ -58,27 +59,10 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler RateCriteriaChanged;
 
         /// <summary>
-        /// Raised when something occurs that should cause rates to immediately refresh.  For example, this was created to support the Endicia Express1 promotional window, and allowing
-        /// rates to instantly refresh when Express1 discounted rates are enabled.
-        /// </summary>
-        public event EventHandler ReloadRatesRequired;
-
-        /// <summary>
         /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support 
         /// the best rate shipment type and allowing the selection of a rate to change the shipment type.
         /// </summary>
         public event EventHandler ShipmentTypeChanged;
-
-        /// <summary>
-        /// The shipment type this instance is servicing
-        /// </summary>
-        public ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return shipmentTypeCode;
-            }
-        }
 
         /// <summary>
         /// Constructor
@@ -91,12 +75,54 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode)
+        public ServiceControlBase(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : this()
         {
             this.shipmentTypeCode = shipmentTypeCode;
+            
+            // Make sure the rate control shows all rates by default; other 
+            // service controls (i.e. best rate) can override this as needed 
+            RateControl = rateControl;
+            RateControl.ShowAllRates = true;
         }
 
+        /// <summary>
+        /// The shipment type this instance is servicing
+        /// </summary>
+        public ShipmentTypeCode ShipmentTypeCode
+        {
+            get
+            {
+                return shipmentTypeCode;
+            }
+        }
+        
+        /// <summary>
+        /// A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control
+        /// </summary>
+        protected RateControl RateControl { get; private set; }
+
+        /// <summary>
+        /// The shipments last past to LoadShipments
+        /// </summary>
+        public List<ShipmentEntity> LoadedShipments
+        {
+            get { return loadedShipments; }
+        }
+
+        /// <summary>
+        /// The enable editing value last past to LoadShipments
+        /// </summary>
+        protected bool EnableEditing
+        {
+            get { return enableEditing; }
+        }
+
+        /// <summary>
+        /// Clear the rates in the main rates grid
+        /// </summary>
+        public Action<string> ClearRatesAction { get; set; }
 
         /// <summary>
         /// Initialization
@@ -104,6 +130,15 @@ namespace ShipWorks.Shipping.Editing
         public virtual void Initialize()
         {
 
+        }
+
+        /// <summary>
+        /// Loads the accounts. This should be overridden in derived classes to account for a sign-up via 
+        // processing a shipment with a provider that doesn't have any accounts
+        /// </summary>
+        public virtual void LoadAccounts()
+        {
+            
         }
 
         /// <summary>
@@ -188,6 +223,21 @@ namespace ShipWorks.Shipping.Editing
             UpdateExtraText();
 
             ResumeRateCriteriaChangeEvent();
+        }
+
+        /// <summary>
+        /// Event raised when Rate is selected in rate control.
+        /// </summary>
+        public virtual void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Called when the configure rate is clicked
+        /// </summary>
+        public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
+        {
+            OnRateSelected(sender, e);
         }
 
         /// <summary>
@@ -362,65 +412,6 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Load the given rates into the control.  Will be null if no rates are available.  outOfDate indicates if the shipment has changed since the 
-        /// rates were retrieved.
-        /// </summary>
-        public void LoadRates(RateGroup rateGroup)
-        {
-            CollapsibleGroupControl ratesSection = Controls.OfType<CollapsibleGroupControl>().Where(c => c.SectionName == "Rates").SingleOrDefault();
-            if (ratesSection != null)
-            {
-                RateControl rateControl = ratesSection.ContentPanel.Controls.OfType<RateControl>().SingleOrDefault();
-                if (rateControl != null)
-                {
-                    if (LoadedShipments.Count > 1)
-                    {
-                        rateControl.ClearRates("(Multiple)");
-                    }
-                    else
-                    {
-                        if (rateGroup == null)
-                        {
-                            if (LoadedShipments.Count == 1 && LoadedShipments[0].Processed)
-                            {
-                                rateControl.ClearRates("The shipment has already been processed.");
-                            }
-                            else
-                            {
-                                rateControl.ClearRates("Click 'Get Rates'.");
-                            }
-                        }
-                        else if (rateGroup.Rates.Count == 0)
-                        {
-                            rateControl.ClearRates("No rates are available for the shipment.", rateGroup);
-                            ratesSection.Collapsed = false;
-                        }
-                        else
-                        {
-                            rateControl.LoadRates(rateGroup);
-                            ratesSection.Collapsed = false;
-                        }
-                    }
-                }
-
-                int rateLines = Math.Max(2, rateGroup != null ? rateGroup.Rates.Count : 0);
-                int height = (ratesSection.Height - ratesSection.ContentPanel.Height) + (rateLines + 1) * DetailViewSettings.SingleRowHeight + 6;
-
-                if (rateGroup != null && rateGroup.Rates.Count > 0)
-                {
-                    if (rateGroup.OutOfDate)
-                    {
-                        height += 30;
-                    }
-                }
-
-                height += rateControl.FootnoteHeight;
-
-                ratesSection.Height = height;
-            }
-        }
-
-        /// <summary>
         /// Suspend raising the event that rate criteria has changed
         /// </summary>
         protected void SuspendRateCriteriaChangeEvent()
@@ -448,33 +439,6 @@ namespace ShipWorks.Shipping.Editing
                     RateCriteriaChanged(this, EventArgs.Empty);
                 }
             }
-        }
-
-        /// <summary>
-        /// Event raised indicating that a full reload of the rates is required
-        /// </summary>
-        protected void OnReloadRatesRequired(object sender, EventArgs e)
-        {
-            if (ReloadRatesRequired != null)
-            {
-                ReloadRatesRequired(this, EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
-        /// The shipments last past to LoadShipments
-        /// </summary>
-        protected List<ShipmentEntity> LoadedShipments
-        {
-            get { return loadedShipments; }
-        }
-
-        /// <summary>
-        /// The enable editing value last past to LoadShipments
-        /// </summary>
-        protected bool EnableEditing
-        {
-            get { return enableEditing; }
         }
 
         /// <summary>
@@ -506,6 +470,12 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentsAdded(this, new ShipmentsAddedRemovedEventArgs(shipments));
             }
         }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public virtual void SyncSelectedRate()
+        { }
 
         /// <summary>
         /// User has changed the recipient state\country
@@ -581,6 +551,5 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentTypeChanged(this, EventArgs.Empty);
             }
         }
-
     }
 }

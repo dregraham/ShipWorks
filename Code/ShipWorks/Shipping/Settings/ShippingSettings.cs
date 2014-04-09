@@ -119,12 +119,6 @@ namespace ShipWorks.Shipping.Settings
             {
                 configured.Add((int) shipmentTypeCode);
                 settings.ConfiguredTypes = configured.ToArray();
-
-                // If this is the first one to be setup, set it as the default
-                if (configured.Count == 1)
-                {
-                    settings.DefaultType = configured[0];
-                }
             }
 
             // Save the changes, if any

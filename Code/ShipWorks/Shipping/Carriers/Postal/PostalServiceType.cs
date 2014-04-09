@@ -35,11 +35,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         BoundPrintedMatter = 6,
 
         [Deprecated]
-        [Description("Global Express Guarunteed")]
+        [Description("Global Express Guaranteed")]
         GlobalExpressGuaranteed = 7,
 
         [Deprecated]
-        [Description("Global Express Gaurunteed Non-Document")]
+        [Description("Global Express Guaranteed Non-Document")]
         GlobalExpressGuaranteedNonDocument = 8,
 
         [Description("International First")]

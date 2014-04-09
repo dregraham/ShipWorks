@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public void ReloadContent()
+        public virtual void ReloadContent()
         {
             entityGrid.ReloadGridRows();
         }
@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
-        public void UpdateContent()
+        public virtual void UpdateContent()
         {
             entityGrid.UpdateGridRows();
         }
@@ -234,7 +234,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Update the IdealSize and raise event if necessary
         /// </summary>
-        private void UpdateIdealSize()
+        protected virtual void UpdateIdealSize()
         {
             int idealHeight = entityGrid.MinimumNoScrollSize.Height + addLink.Height + 10;
 

@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates.Processing.TemplateXml;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Data;
 using System.Drawing.Imaging;
 using System.Drawing;
-using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -38,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Create the wizard used to do the initial setup
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new PostalWebSetupWizard();
         }
@@ -46,9 +41,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Create the UserControl used to handle USPS WebTools shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new PostalWebServiceControl();
+            return new PostalWebServiceControl(rateControl);
         }
 
         /// <summary>
@@ -76,16 +73,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Get the rates for the given shipment.
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            if (shipment.TotalWeight == 0)
-            {
-                throw new ShippingException("The shipment weight cannot be zero.");
-            }
+            return GetCachedRates<ShippingException>(shipment, GetRatesFromApi);
+        }
 
-            return new RateGroup(PostalWebClientRates.GetRates(shipment));
+        /// <summary>
+        /// Get the rates from the postal api
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            return new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
+        }
+
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new WebToolsShipmentProcessingSynchronizer();
         }
 
         /// <summary>
@@ -137,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             outline.AddElement("LabelOnlyRot90", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
             outline.AddElement("LabelOnlyRot270", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate270FlipNone, primaryLabelPath.Value), ElementOutline.If(() => labels.Value.Count > 0));
         }
-
+        
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
@@ -164,15 +180,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             return labelData;
-        }
-
-        /// <summary>
-        /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type.
-        /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
-        {
-            return new WebToolsBestRateBroker();
         }
     }
 }

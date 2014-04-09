@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Settings;
@@ -198,7 +199,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         private static WorldShipShipmentEntity SaveToShipmentTable(ShipmentEntity shipment, SqlAdapter adapter, bool customsIsRequired, PersonAdapter from, PersonAdapter to)
         {
-            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
+            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
             UpsShipmentEntity ups = shipment.Ups;
             bool isDomestic = ShipmentTypeManager.GetType(shipment).IsDomestic(shipment);
 

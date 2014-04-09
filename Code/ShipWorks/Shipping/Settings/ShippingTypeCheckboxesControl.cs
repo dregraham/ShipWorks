@@ -73,6 +73,9 @@ namespace ShipWorks.Shipping.Settings
             }
         }
 
+        /// <summary>
+        /// A shipment type has been either selected or unselected
+        /// </summary>
         public event EventHandler ChangeEnabledShipmentTypes;
 
         /// <summary>
@@ -86,9 +89,15 @@ namespace ShipWorks.Shipping.Settings
             }
         }
 
+        /// <summary>
+        /// Gets the shipment types that are currently not selected
+        /// </summary>
         public List<ShipmentType> UnselectedShipmentTypes
         {
-            get { return shipmentTypes.Except(SelectedShipmentTypes).ToList(); }
+            get
+            {
+                return shipmentTypes.Except(SelectedShipmentTypes).ToList();
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Api

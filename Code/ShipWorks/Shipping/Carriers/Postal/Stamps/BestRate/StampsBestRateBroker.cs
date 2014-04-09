@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// Constructor
         /// </summary>
         public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
-            this(shipmentType, accountRepository, "Stamps")
+            this(shipmentType, accountRepository, "USPS")
         {
 
         }
@@ -34,22 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
             base(shipmentType, accountRepository, carrierDescription)
         {
 
-        }
-
-        /// <summary>
-        /// Convert the best rate shipment into the specified postal reseller shipment
-        /// </summary>
-        /// <param name="rateShipment">Postal shipment on which to set reseller shipment data</param>
-        /// <param name="selectedShipment">Best rate shipment that is being converted</param>
-        protected override void SelectChildShipment(PostalShipmentEntity rateShipment, ShipmentEntity selectedShipment)
-        {
-            // Save a reference to the stamps shipment entity because if we set the shipment id while it's 
-            // attached to the Postal entity, the Stamps entity will be set to null
-            StampsShipmentEntity newStampsShipment = rateShipment.Stamps;
-            newStampsShipment.ShipmentID = selectedShipment.ShipmentID;
-
-            selectedShipment.Postal.Stamps = newStampsShipment;
-            selectedShipment.Postal.Stamps.IsNew = false;
         }
 
         /// <summary>
@@ -78,6 +63,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, StampsAccountEntity account)
         {
             postalShipmentEntity.Stamps.StampsAccountID = account.StampsAccountID;
+        }
+
+        /// <summary>
+        /// Configures the specified broker settings.
+        /// </summary>
+        public override void Configure(IBestRateBrokerSettings brokerSettings)
+        {
+            base.Configure(brokerSettings);
+
+            ((StampsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = brokerSettings.CheckExpress1Rates(ShipmentType);
+        }
+
+        /// <summary>
+        /// Gets a description from the specified account
+        /// </summary>
+        protected override string AccountDescription(StampsAccountEntity account)
+        {
+            return account.Description;
         }
     }
 }

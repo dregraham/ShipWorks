@@ -1,10 +1,12 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -16,16 +18,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         readonly bool isExpress1;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StampsServiceControl"/> class.
         /// </summary>
-        public StampsServiceControl()
-            : this(ShipmentTypeCode.Stamps, false) { }
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public StampsServiceControl(RateControl rateControl)
+            : this(ShipmentTypeCode.Stamps, false, rateControl) 
+        { }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StampsServiceControl(ShipmentTypeCode shipmentTypeCode, bool isExpress1)
-            : base(shipmentTypeCode)
+        protected StampsServiceControl(ShipmentTypeCode shipmentTypeCode, bool isExpress1, RateControl rateControl)
+            : base(shipmentTypeCode, rateControl)
         {
             this.isExpress1 = isExpress1;
 
@@ -42,13 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             originControl.Initialize(ShipmentTypeCode);
 
             linkManageStampsAccounts.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
-            LoadStampsAccounts();
+            LoadAccounts();
         }
 
         /// <summary>
         /// Load the list of stamps.com accounts
         /// </summary>
-        private void LoadStampsAccounts()
+        public override void LoadAccounts()
         {
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
@@ -72,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
+
             if (shipments == null)
             {
                 throw new ArgumentNullException("shipments");
@@ -94,7 +100,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
                 }
             }
-
             ResumeRateCriteriaChangeEvent();
         }
 
@@ -166,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             stampsAccount.SelectedValueChanged -= this.OnOriginChanged;
 
-            LoadStampsAccounts();
+            LoadAccounts();
 
             if (multiValue)
             {

@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// The ShippingSettingsEntity.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public ShippingSettingsEntity GetShippingSettings()
+        public virtual ShippingSettingsEntity GetShippingSettings()
         {
             return ShippingSettings.Fetch();
         }
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A FedExAccountEntity object.</returns>
-        public IEntity2 GetAccount(ShipmentEntity shipment)
+        public virtual IEntity2 GetAccount(ShipmentEntity shipment)
         {
             if (shipment == null || shipment.FedEx == null)
             {
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// A collection of FedExAccountEntity object. (The return type may need to be changed to an IEntity2 object
         /// if this interface is used outside of FedEx in the future.)
         /// </returns>
-        public IEnumerable<IEntity2> GetAccounts()
+        public virtual IEnumerable<IEntity2> GetAccounts()
         {
             return FedExAccountManager.Accounts;
         }

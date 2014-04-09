@@ -37,23 +37,28 @@
             this.menuCopyTracking = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.ratesControl = new ShipWorks.Shipping.Editing.Rating.RatesPanel();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // addLink
             // 
-            this.addLink.Location = new System.Drawing.Point(185, 46);
+            this.addLink.Location = new System.Drawing.Point(582, 42);
             this.addLink.Size = new System.Drawing.Size(73, 13);
             this.addLink.Text = "Add Shipment";
             this.addLink.Click += new System.EventHandler(this.OnAddShipment);
             // 
             // entityGrid
             // 
+            this.entityGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.entityGrid.ContextMenuStrip = this.contextMenu;
+            this.entityGrid.Dock = System.Windows.Forms.DockStyle.Top;
             this.entityGrid.EmptyText = "The order has no shipments.";
             this.entityGrid.EmptyTextForeColor = System.Drawing.SystemColors.GrayText;
-            this.entityGrid.Size = new System.Drawing.Size(262, 41);
+            this.entityGrid.Size = new System.Drawing.Size(659, 37);
+            this.entityGrid.RowLoadingComplete += new System.EventHandler(this.OnShipmentGridLoaded);
             this.entityGrid.GridCellLinkClicked += new ShipWorks.Data.Grid.GridHyperlinkClickEventHandler(this.OnGridCellLinkClicked);
+            this.entityGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnShipmentSelectionChanged);
             // 
             // contextMenu
             // 
@@ -118,13 +123,26 @@
             this.menuCopy.Size = new System.Drawing.Size(198, 22);
             this.menuCopy.Text = "Copy";
             // 
+            // ratesControl
+            // 
+            this.ratesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ratesControl.Location = new System.Drawing.Point(0, 64);
+            this.ratesControl.Name = "ratesControl";
+            this.ratesControl.Size = new System.Drawing.Size(659, 184);
+            this.ratesControl.TabIndex = 5;
+            // 
             // ShipmentsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.Controls.Add(this.ratesControl);
             this.Name = "ShipmentsPanel";
+            this.Size = new System.Drawing.Size(659, 327);
             this.Controls.SetChildIndex(this.addLink, 0);
             this.Controls.SetChildIndex(this.entityGrid, 0);
+            this.Controls.SetChildIndex(this.ratesControl, 0);
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -141,5 +159,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuTrack;
         private System.Windows.Forms.ToolStripMenuItem menuCopyTracking;
         private System.Windows.Forms.ToolStripSeparator menuSep2;
+        private Shipping.Editing.Rating.RatesPanel ratesControl;
     }
 }

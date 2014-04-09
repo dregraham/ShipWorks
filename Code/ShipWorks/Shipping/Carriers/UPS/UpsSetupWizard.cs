@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
 using System.Xml;
-using System.IO;
-using System.Drawing.Printing;
-using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -30,7 +23,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
-using System.Diagnostics;
 using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -38,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    public partial class UpsSetupWizard : WizardForm
+    public partial class UpsSetupWizard : ShipmentTypeSetupWizardForm
     {
         ShipmentType shipmentType;
         bool forceAccountOnly;
@@ -231,12 +223,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
+            string accountNumber = EnteredAccountNumber();
+
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
                 if (!worldShipAgree1.Checked || !worldShipAgree2.Checked)
                 {
-                    MessageHelper.ShowInformation(this,
-                                                  "You must read and agree to the WorldShip information statements.");
+                    MessageHelper.ShowInformation(this, "You must read and agree to the WorldShip information statements.");
 
                     e.NextPage = CurrentPage;
                     return;
@@ -250,6 +243,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     MessageHelper.ShowMessage(this, "Please select an account option, New or Existing.");
                     e.NextPage = CurrentPage;
                 }
+            }
+
+            // Validate the entered account number
+            if (string.IsNullOrWhiteSpace(accountNumber))
+            {
+                // Note: this will need to be refactored when we unhide the ability to create 
+                // a new UPS account from ShipWorks
+                MessageHelper.ShowMessage(this, "Please enter your account number.");
+                e.NextPage = CurrentPage;
             }
 
             // Start with a fresh page collection
@@ -346,17 +348,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnSteppingNextAgreement(object sender, WizardStepEventArgs e)
         {
+            // Code below was for certification purposes
+
             //
             // This is a UPS requirement - but it causes annoyance and problems for our customers. They probably will never notice.
             //
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
+            //NativeMethods.POINT point = new NativeMethods.POINT();
+            //NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
 
-            if (point.y <= 7550)
-            {
-                MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
-                e.NextPage = CurrentPage;
-            }
+            //if (point.y <= 7550)
+            //{
+            //    MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
+            //    e.NextPage = CurrentPage;
+            //}
         }
 
         /// <summary>
@@ -395,12 +399,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the account number the user entered
+        /// </summary>
+        /// <returns></returns>
+        private string EnteredAccountNumber()
+        {
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+            {
+                return wsUpsAccountNumber.Text.Trim();
+            }
+            else
+            {
+                return account.Text.Trim();
+            }
+        }
+
+        /// <summary>
         /// Stepping next from the account page
         /// </summary>
         private void OnStepNextAccount(object sender, WizardStepEventArgs e)
         {
             personControl.SaveToEntity();
-            upsAccount.AccountNumber = account.Text.Trim();
+            upsAccount.AccountNumber = EnteredAccountNumber();
 
             // Edition check
             if (!EditionManager.HandleRestrictionIssue(this, EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsAccountNumbers, upsAccount.AccountNumber)))
@@ -674,6 +694,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                 UpsAccountManager.SaveAccount(upsAccount);
+
+                // Mark the new account as configured
+                ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                // If this is the only account, update this UPS shipment type profiles with this account
+                if (UpsAccountManager.Accounts.Count == 1)
+                {
+                    UpsAccountEntity upsAccountEntity = UpsAccountManager.Accounts.First();
+
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentType.ShipmentTypeCode))
+                    {
+                        shippingProfileEntity.Ups.UpsAccountID = upsAccountEntity.UpsAccountID;
+                        ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                    }
+                }
             }
         }
 
@@ -686,6 +721,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (DialogResult == DialogResult.Cancel && upsAccount != null && !upsAccount.IsNew)
             {
                 UpsAccountManager.DeleteAccount(upsAccount);
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
             }
         }
 

@@ -1,12 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -16,6 +23,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
     [Obfuscation(Exclude = true, ApplyToMembers = false)]
     public class Express1EndiciaShipmentType : EndiciaShipmentType
     {
+        /// <summary>
+        /// Create an instance of the Express1 Endicia Shipment Type
+        /// </summary>
+        public Express1EndiciaShipmentType()
+        {
+            AccountRepository = new Express1EndiciaAccountRepository();
+        }
+
         /// <summary>
         /// Postal Shipment Type
         /// </summary>
@@ -65,12 +80,56 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new Express1EndiciaShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Create the Service Control
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new Express1EndiciaServiceControl();
+            return new Express1EndiciaServiceControl(rateControl);
         }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            ICarrierAccountRepository<EndiciaAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
+
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
+
+                // This call to GetRates won't be recursive since the counter rate account repository will return an account
+                return GetRates(shipment);
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+            finally
+            {
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
+            }
+        }
+
+        
 
         /// <summary>
         /// Process the label server shipment
@@ -81,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
             try
             {
-                EndiciaApiClient.ProcessShipment(shipment, this);
+                (new EndiciaApiClient()).ProcessShipment(shipment, this);
             }
             catch (EndiciaException ex)
             {
@@ -106,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <summary>
         /// Create the setup wizard for configuring an Express 1 account.
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new EndiciaExpress1RegistrationGateway(), new EndiciaExpress1RegistrationRepository(), 
                 new EndiciaExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
@@ -155,12 +214,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Express1 for Endicia shipment type.
+        /// Gets an instance to the best rate shipping broker for the Express1 for Endicia shipment type based on the shipment configuration.
         /// </summary>
-        /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an Express1EndiciaBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new Express1EndiciaBestRateBroker();
+            return (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any()) ?
+                new Express1EndiciaBestRateBroker() : 
+                new Express1EndiciaCounterRatesBroker();
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
         }
     }
 }

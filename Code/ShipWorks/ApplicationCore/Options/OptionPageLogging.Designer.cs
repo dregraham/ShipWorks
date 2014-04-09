@@ -43,6 +43,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.label3 = new System.Windows.Forms.Label();
             this.logAge = new System.Windows.Forms.ComboBox();
             this.panelContentOptions = new System.Windows.Forms.Panel();
+            this.logRateCalls = new System.Windows.Forms.CheckBox();
             this.panelLogFiles = new System.Windows.Forms.Panel();
             this.panelLogContent.SuspendLayout();
             this.panelOtherOptions.SuspendLayout();
@@ -52,8 +53,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionShipWorks
             // 
-            this.sectionShipWorks.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionShipWorks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionShipWorks.Location = new System.Drawing.Point(10, 9);
             this.sectionShipWorks.Name = "sectionShipWorks";
             this.sectionShipWorks.Size = new System.Drawing.Size(366, 22);
@@ -62,8 +63,8 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // sectionTitle1
             // 
-            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitle1.Location = new System.Drawing.Point(10, 10);
             this.sectionTitle1.Name = "sectionTitle1";
             this.sectionTitle1.Size = new System.Drawing.Size(366, 22);
@@ -161,14 +162,14 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelLogContent.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogContent.Location = new System.Drawing.Point(0, 0);
             this.panelLogContent.Name = "panelLogContent";
-            this.panelLogContent.Size = new System.Drawing.Size(390, 113);
+            this.panelLogContent.Size = new System.Drawing.Size(390, 139);
             this.panelLogContent.TabIndex = 14;
             // 
             // panelOtherOptions
             // 
             this.panelOtherOptions.Controls.Add(this.label3);
             this.panelOtherOptions.Controls.Add(this.logAge);
-            this.panelOtherOptions.Location = new System.Drawing.Point(25, 79);
+            this.panelOtherOptions.Location = new System.Drawing.Point(25, 100);
             this.panelOtherOptions.Name = "panelOtherOptions";
             this.panelOtherOptions.Size = new System.Drawing.Size(348, 27);
             this.panelOtherOptions.TabIndex = 16;
@@ -197,13 +198,24 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // panelContentOptions
             // 
+            this.panelContentOptions.Controls.Add(this.logRateCalls);
             this.panelContentOptions.Controls.Add(this.logShipWorks);
             this.panelContentOptions.Controls.Add(this.logApiCalls);
             this.panelContentOptions.Controls.Add(this.linkLabelExtendedLogging);
             this.panelContentOptions.Location = new System.Drawing.Point(25, 32);
             this.panelContentOptions.Name = "panelContentOptions";
-            this.panelContentOptions.Size = new System.Drawing.Size(350, 47);
+            this.panelContentOptions.Size = new System.Drawing.Size(350, 71);
             this.panelContentOptions.TabIndex = 12;
+            // 
+            // logRateCalls
+            // 
+            this.logRateCalls.AutoSize = true;
+            this.logRateCalls.Location = new System.Drawing.Point(34, 48);
+            this.logRateCalls.Name = "logRateCalls";
+            this.logRateCalls.Size = new System.Drawing.Size(109, 17);
+            this.logRateCalls.TabIndex = 12;
+            this.logRateCalls.Text = "Log rate API calls";
+            this.logRateCalls.UseVisualStyleBackColor = true;
             // 
             // panelLogFiles
             // 
@@ -214,7 +226,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.panelLogFiles.Controls.Add(this.linkViewCurrent);
             this.panelLogFiles.Controls.Add(this.label2);
             this.panelLogFiles.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelLogFiles.Location = new System.Drawing.Point(0, 113);
+            this.panelLogFiles.Location = new System.Drawing.Point(0, 139);
             this.panelLogFiles.Name = "panelLogFiles";
             this.panelLogFiles.Size = new System.Drawing.Size(390, 99);
             this.panelLogFiles.TabIndex = 15;
@@ -226,9 +238,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panelLogFiles);
             this.Controls.Add(this.panelLogContent);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageLogging";
-            this.Size = new System.Drawing.Size(390, 336);
+            this.Size = new System.Drawing.Size(390, 243);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelLogContent.ResumeLayout(false);
             this.panelOtherOptions.ResumeLayout(false);
@@ -259,5 +271,6 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Panel panelContentOptions;
         private System.Windows.Forms.ComboBox logAge;
         private System.Windows.Forms.Panel panelOtherOptions;
+        private System.Windows.Forms.CheckBox logRateCalls;
     }
 }

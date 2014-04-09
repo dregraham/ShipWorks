@@ -1,4 +1,5 @@
 using System;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
@@ -8,15 +9,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipula
     public class FedExPackageMovementWebAuthenticationDetailManipulator : ICarrierRequestManipulator
     {
         private readonly FedExSettings fedExSettings;
-
-
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPackageMovementWebAuthenticationDetailManipulator" /> class.
+        /// Initializes a new instance of the <see cref="FedExPackageMovementWebAuthenticationDetailManipulator"/> class.
         /// </summary>
-        public FedExPackageMovementWebAuthenticationDetailManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
+        /// <param name="settingsRepository">The settings repository.</param>
+        public FedExPackageMovementWebAuthenticationDetailManipulator(ICarrierSettingsRepository settingsRepository)
+            : this(new FedExSettings(settingsRepository))
         { }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageMovementWebAuthenticationDetailManipulator" /> class.

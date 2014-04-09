@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -20,6 +21,17 @@ namespace ShipWorks.Shipping.Insurance
         List<InsuranceChoice> loadedInsurance = new List<InsuranceChoice>();
 
         /// <summary>
+        /// The user has edited\changed something about the insurance
+        /// </summary>
+        public event EventHandler InsuranceOptionsChanged;
+
+        // So we know when not to raise the changed event
+        bool loading = false;
+
+        // The last valud value. This tracks if the value has changed.
+        private decimal? lastValue = null;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public InsuranceSelectionControl()
@@ -32,6 +44,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void LoadInsuranceChoices(IEnumerable<InsuranceChoice> choices)
         {
+            loading = true;
+
             loadedInsurance = choices.ToList();
 
             bool allFedEx = true;
@@ -131,6 +145,8 @@ namespace ShipWorks.Shipping.Insurance
                 ClearInsuranceCost();
             }
 
+            loading = false;
+
             OnChangeUseInsurance(null, EventArgs.Empty);
         }
 
@@ -155,6 +171,8 @@ namespace ShipWorks.Shipping.Insurance
 
             insuredValue.Enabled = inputEnabled;
             labelCost.ForeColor = inputEnabled ? Color.Green : Color.DarkGray;
+
+            OnInsuranceOptionsChanged(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -401,13 +419,51 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
-        /// The insured amount changed
+        /// Called when [text changed].
         /// </summary>
-        private void OnAmountChanged(object sender, EventArgs e)
+        private void OnTextChanged(object sender, EventArgs e)
         {
+            bool valueChanged = false;
+
             if (loadedInsurance != null && loadedInsurance.Count == 1 && !insuredValue.MultiValued)
             {
-                UpdateCostDisplay(loadedInsurance[0].Shipment, insuredValue.Amount);
+                decimal amount;
+
+                if (decimal.TryParse(insuredValue.Text, NumberStyles.Currency, null, out amount))
+                {
+                    if (lastValue.HasValue && amount != lastValue.Value)
+                    {
+                        valueChanged = true;
+                    }
+
+                    lastValue = amount;
+                }
+            }
+
+            if (valueChanged)
+            {
+                UpdateCostDisplay(loadedInsurance[0].Shipment, lastValue.Value);
+                SaveToInsuranceChoices();
+
+                insuredValue.IgnoreSet = true;
+                OnInsuranceOptionsChanged(this, EventArgs.Empty);
+                insuredValue.IgnoreSet = false;
+            }
+        }
+
+        /// <summary>
+        /// Indicates that the user has changed insurance values 
+        /// </summary>
+        private void OnInsuranceOptionsChanged(object sender, EventArgs e)
+        {
+            if (loading)
+            {
+                return;
+            }
+
+            if (InsuranceOptionsChanged != null)
+            {
+                InsuranceOptionsChanged(this, EventArgs.Empty);
             }
         }
     }

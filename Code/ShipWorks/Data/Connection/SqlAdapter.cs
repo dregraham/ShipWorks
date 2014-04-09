@@ -385,7 +385,7 @@ namespace ShipWorks.Data.Connection
         #region Utility
 
         /// <summary>
-        /// Save the given entity, and automatically refetch it back.  Return strue if there were any entities in the graph that were dirty and saved.  Returns
+        /// Save the given entity, and automatically refetch it back.  Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>
         public bool SaveAndRefetch(IEntity2 entity)

@@ -103,7 +103,7 @@
             this.insuredValue.Size = new System.Drawing.Size(84, 21);
             this.insuredValue.TabIndex = 19;
             this.insuredValue.Text = "$0.00";
-            this.insuredValue.AmountChanged += new System.EventHandler(this.OnAmountChanged);
+            this.insuredValue.TextChanged += new System.EventHandler(this.OnTextChanged);
             // 
             // labelValue
             // 

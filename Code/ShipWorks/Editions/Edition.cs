@@ -145,7 +145,7 @@ namespace ShipWorks.Editions
         /// </summary>
         public virtual ShipmentTypeCode? DefaultShipmentType
         {
-            get { return null; }
+            get { return ShipmentTypeCode.BestRate; }
         }
     }
 }

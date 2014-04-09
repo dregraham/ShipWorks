@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using System.Xml;
 using System.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Stores;
 using ShipWorks.Data;
@@ -23,6 +26,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using System.Reflection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -65,6 +69,164 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "getstatus");
 
             return ProcessAccountRequest(postRequest, store, license);
+        }
+
+        /// <summary>
+        /// Get the status of the specified license
+        /// </summary>
+        public static Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string action = "getcounterratecredentials";
+
+            // Get the license from the store so we know how to log
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            // Get the store type
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // Create our http variable request submitter
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            // Both methods use action
+            postRequest.Variables.Add("action", action);
+
+            // Trial shipment logging
+            if (license.IsTrial)
+            {
+                postRequest.Variables.Add("storecode", storeType.TangoCode);
+                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            else
+            {
+                postRequest.Variables.Add("license", license.Key);
+            }
+
+            // Get the credentials from Tango
+            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
+
+            // Pull the credentials from the response; none of the fields are encrypted in the response
+            // so we can easily/quickly update them in Tango if they ever need to change
+
+            // FedEx fields - password needs to encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", "/CounterRateCredentials/FedEx/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results, "FedEx");
+
+            // UPS fields - access key needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UpsPassword", "/CounterRateCredentials/UPS/Password", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "UpsAccessKey", "/CounterRateCredentials/UPS/AccessKey", results, "UPS");
+
+            // Express1 for Endicia fields - passphrase needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
+
+            // Express1 for Stamps.com fields - password needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
+
+            return results;
+        }
+
+        /// <summary>
+        /// Get the status of the specified license
+        /// </summary>
+        public static Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store)
+        {
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
+
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string action = "getcertificateverificationdata";
+
+            // Get the license from the store so we know how to log
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            // Get the store type
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // Create our http variable request submitter
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            // Both methods use action
+            postRequest.Variables.Add("action", action);
+
+            // Trial shipment logging
+            if (license.IsTrial)
+            {
+                postRequest.Variables.Add("storecode", storeType.TangoCode);
+                postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
+            }
+            else
+            {
+                postRequest.Variables.Add("license", license.Key);
+            }
+
+            // Get the certificate verification data from Tango
+            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCarrierCertificateVerificationData");
+
+            // Pull certificate verification data from the response; none of the fields are encrypted in the response
+            // so we can easily/quickly update them in Tango if they ever need to change
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+
+            return results;
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response.
+        /// </summary>
+        private static void AddCarrierCertificateVerificationDataDictionaryEntries(XmlDocument responseXmlDocument, string serviceName, string keyName, Dictionary<string, string> dictionary)
+        {
+            string subjectXPath = string.Format("/CertificateVerificationData/Service[@name='{0}'][@enabled='true']", serviceName);
+            XmlNode subjectNode = responseXmlDocument.SelectSingleNode(subjectXPath);
+
+            if (subjectNode != null)
+            {
+                dictionary.Add(keyName, subjectNode.OuterXml);
+            }
+            else
+            {
+                dictionary.Add(keyName, string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response.
+        /// </summary>
+        private static void AddCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                dictionary.Add(keyName, node.InnerText.Trim());
+            }
+        }
+
+        /// <summary>
+        /// Helper method to pull counter rate credentials from the tango response and encrypt the value. This is necessary
+        /// for a couple of the password and access key values since the API web clients are expecting these values to
+        /// be encrypted.
+        /// </summary>
+        private static void AddEncryptedCounterRateDictionaryEntry(XmlDocument responseXmlDocument, string keyName, string xPathToNode, Dictionary<string, string> dictionary, string salt)
+        {
+            XmlNode node = responseXmlDocument.SelectSingleNode(xPathToNode);
+            if (node != null)
+            {
+                string encryptedValue = SecureText.Encrypt(node.InnerText.Trim(), salt);
+                dictionary.Add(keyName, encryptedValue);
+            }
         }
 
         /// <summary>
@@ -571,9 +733,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Process the given requiest against the interapptive license server
+        /// Process the given request against the interapptive license server
         /// </summary>
         private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest)
+        {
+            return ProcessRequest(postRequest, "License");
+        }
+
+        /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
+        private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
         {
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(60);
@@ -582,7 +752,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
 
             // Logging
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, "License");
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
             logEntry.LogRequest(postRequest);
 
             // Setup parameters

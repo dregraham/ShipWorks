@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Utility;
@@ -35,17 +36,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public partial class UpsServiceControl : ServiceControlBase
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="UpsServiceControl"/> class.
         /// </summary>
-        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode)
-            : base (shipmentTypeCode)
+        /// <param name="shipmentTypeCode"></param>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
+            : base (shipmentTypeCode, rateControl)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
 
             originControl.Initialize(ShipmentTypeCode.UpsOnLineTools);
 
-            LoadUpsAccounts();
+            LoadAccounts();
 
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
@@ -78,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load the list of UPS accounts
         /// </summary>
-        private void LoadUpsAccounts()
+        public override void LoadAccounts()
         {
             upsAccount.DisplayMember = "Key";
             upsAccount.ValueMember = "Value";
@@ -107,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages
@@ -385,13 +388,50 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
             UpdateCodVisibility();
-            UpdateMiAndSurePostSpecificVisibility(GetLoadedServiceTypes());
+            UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() {(UpsServiceType)service.SelectedValue});
 
             RaiseShipmentServiceChanged();
 
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 UpdateBillingSectionDisplay();
+
+                SyncSelectedRate();
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                UpsServiceType selectedServiceType = (UpsServiceType)service.SelectedValue;
+
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    List<ShipmentTypeCode> upsTypeCodes = new List<ShipmentTypeCode> { ShipmentTypeCode.UpsWorldShip, ShipmentTypeCode.UpsOnLineTools };
+
+                    if (!upsTypeCodes.Contains(r.ShipmentType))
+                    {
+                        return false;
+                    }
+
+                    if (r.Tag == null || !(r.OriginalTag is UpsServiceType))
+                    {
+                        return false;
+                    }
+
+                    return (UpsServiceType)r.OriginalTag == selectedServiceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
             }
         }
 
@@ -778,16 +818,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 
-            UpsServiceType servicetype = (UpsServiceType) e.Rate.Tag;
-
-            service.SelectedValue = servicetype;
-            if (service.SelectedIndex == -1 && oldIndex != -1)
+            if (e.Rate.OriginalTag is UpsServiceType)
             {
-                service.SelectedIndex = oldIndex;
+                UpsServiceType serviceType = (UpsServiceType)e.Rate.OriginalTag;
+
+                service.SelectedValue = serviceType;
+                if (service.SelectedIndex == -1 && oldIndex != -1)
+                {
+                    service.SelectedIndex = oldIndex;
+                }
             }
         }
 

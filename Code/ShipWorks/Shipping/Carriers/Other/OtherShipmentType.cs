@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
@@ -18,6 +19,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
@@ -37,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the Setup Wizard used to setup the "Other" shipment type
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new OtherSetupWizard();
         }
@@ -45,9 +47,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Create the control needed to edit service options for the type
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new OtherServiceControl();
+            return new OtherServiceControl(rateControl);
         }
 
         /// <summary>
@@ -166,6 +170,14 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new OtherShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -192,10 +204,11 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Other shipment type.
+        /// Gets an instance to the best rate shipping broker for the Other shipment type based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
         }

@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <returns>A StampsRegistrationResult object.</returns>
         public StampsRegistrationResult Register(StampsRegistration registration)
         {
-            StampsRegistrationResult result = StampsApiSession.RegisterAccount(registration);
+            StampsRegistrationResult result = new StampsApiSession().RegisterAccount(registration);
 
             if (!result.IsSuccessful)
             {

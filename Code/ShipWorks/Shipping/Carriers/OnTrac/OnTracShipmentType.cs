@@ -6,7 +6,9 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -17,12 +19,14 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -67,9 +71,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Returns new OnTrac Service Control
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new OnTracServiceControl();
+            return new OnTracServiceControl(rateControl);
         }
 
         /// <summary>
@@ -143,6 +149,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new OnTracShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -195,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Get new OnTracSetupWizard
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new OnTracSetupWizard();
         }
@@ -303,18 +317,35 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            return GetCachedRates<OnTracException>(shipment, GetRatesFromApi);  
+        }
+
+        /// <summary>
+        /// Gets rates from the OnTrac API
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            OnTracAccountEntity account = null;
+
             try
             {
-                var rateRequest = new OnTracRates(GetAccountForShipment(shipment));
-
-                RateGroup rates = rateRequest.GetRates(shipment);
-
-                return rates;
+                account = GetAccountForShipment(shipment);
             }
             catch (OnTracException ex)
             {
-                throw new ShippingException(ex.Message, ex);
+                if (ex.Message == "No OnTrac account is selected for the shipment.")
+                {
+                    // Provide a message with additional context
+                    throw new OnTracException("An OnTrac account is required to view rates.", ex);
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            OnTracRates rateRequest = new OnTracRates(account);
+            return rateRequest.GetRates(shipment);
         }
 
         /// <summary>
@@ -351,12 +382,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Generate the carrier specific template xml
+        /// Generate the carrier specific template XML
         /// </summary>
         public override void GenerateTemplateElements(
             ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
             // Add the labels content
             container.AddElement(
@@ -398,8 +429,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             try
             {
-                var shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
-
+                OnTracTrackedShipment shipmentRequest = new OnTracTrackedShipment(GetAccountForShipment(shipment), new HttpVariableRequestSubmitter());
                 TrackingResult trackingResults = shipmentRequest.GetTrackingResults(shipment.TrackingNumber);
 
                 return trackingResults;
@@ -461,7 +491,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
                 else
                 {
-                    // origin not specidied as an account. Use base behavior.
+                    // origin not specified as an account. Use base behavior.
                     isSuccessfull = base.UpdatePersonAddress(shipment, person, originID);
                 }
             }
@@ -487,11 +517,43 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the OnTrac shipment type.
+        /// Gets an instance to the best rate shipping broker for the OnTrac shipment type based on the shipment configuration.
         /// </summary>
-        public override IBestRateShippingBroker GetShippingBroker()
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an OnTracBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new OnTracBestRateBroker();
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.OnTrac.Fields[OnTracShipmentFields.OnTracAccountID.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.CodAmount.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.CodType.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DeclaredValue.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.PackagingType.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsAddWeight.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsHeight.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsLength.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWidth.FieldIndex],
+                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWeight.FieldIndex],
+                }
+            );
+
+            return fields;
         }
 
         /// <summary>

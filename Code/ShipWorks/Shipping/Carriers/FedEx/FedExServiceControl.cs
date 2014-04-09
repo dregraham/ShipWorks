@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,13 +33,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         bool updatingPayorChoices = false;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="FedExServiceControl"/> class.
         /// </summary>
-        public FedExServiceControl()
-            : base (ShipmentTypeCode.FedEx)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public FedExServiceControl(RateControl rateControl)
+            : base (ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
-            this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnReloadRatesRequired);
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             originControl.Initialize(ShipmentTypeCode.FedEx);
             codOrigin.Initialize(ShipmentTypeCode.FedEx);
 
-            LoadFedExAccounts();
+            LoadAccounts();
 
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
@@ -77,9 +79,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Load the list of fedex accounts
+        /// Loads the list of FedEx accounts into the account drop down list.
         /// </summary>
-        private void LoadFedExAccounts()
+        public override void LoadAccounts()
         {
             fedexAccount.DisplayMember = "Key";
             fedexAccount.ValueMember = "Value";
@@ -108,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
 
-            // The base will disable if editing is not enabled, but due to the packaging selction, we need to customize how it works
+            // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 
             // Manually disable all shipment panel controls, except the packaging control.  They still need to be able to switch packages
@@ -635,14 +637,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 nonStandardPackaging.Visible =
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
+
+                SyncSelectedRate();
             }
             else
             {
                 UpdatePackagingChoices(null);
+
+                // Don't show any selection when multiple services are selected
+                RateControl.ClearSelection();
             }
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+
+            
+        }
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.FedEx)
+                    {
+                        return false;
+                    }
+
+                    return ((FedExRateSelection)r.OriginalTag).ServiceType == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
         }
 
         /// <summary>
@@ -830,11 +865,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 
-            FedExRateSelection rate = e.Rate.Tag as FedExRateSelection;
+            FedExRateSelection rate = e.Rate.OriginalTag as FedExRateSelection;
 
             service.SelectedValue = rate.ServiceType;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -1001,6 +1036,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 infotipSmartPostConfirmation.Visible = true;
                 smartConfirmation.Enabled = true;
             }
+
+            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -1070,6 +1107,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             otherPackageHolder.Height = packageDetailsControl.Bottom;
             sectionPackageDetails.Height = packageDetailsControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
+        }
+
+        /// <summary>
+        /// Signal that rates are now invalid due to the residential flag changing.
+        /// </summary>
+        private void OnResidentialDeterminationChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
         }
     }
 }

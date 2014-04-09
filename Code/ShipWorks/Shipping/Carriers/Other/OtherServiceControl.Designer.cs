@@ -66,7 +66,7 @@
             // 
             this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.personControl.Size = new System.Drawing.Size(377, 330);
+            this.personControl.Size = new System.Drawing.Size(391, 330);
             // 
             // sectionReturns
             // 

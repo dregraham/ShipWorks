@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.EquaShip.Enums;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Stores;
 using ShipWorks.Data;
@@ -24,8 +25,10 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Constructor
         /// </summary>
-        public EquaShipServiceControl() 
-            : base(ShipmentTypeCode.EquaShip)
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public EquaShipServiceControl(RateControl rateControl) 
+            : base(ShipmentTypeCode.EquaShip, rateControl)
         {
             InitializeComponent();
         }
@@ -367,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// A rate has been selected
         /// </summary>
-        private void OnRateSelected(object sender, RateSelectedEventArgs e)
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
         {
             int oldIndex = service.SelectedIndex;
 

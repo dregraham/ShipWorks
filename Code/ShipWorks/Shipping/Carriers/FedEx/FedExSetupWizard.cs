@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,13 +19,15 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// Wizard for registering to use FedEx
     /// </summary>
-    public partial class FedExSetupWizard : WizardForm
+    public partial class FedExSetupWizard : ShipmentTypeSetupWizardForm
     {
         FedExAccountEntity account;
 
@@ -119,6 +122,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             WebHelper.OpenUrl("http://www.fedex.com/us/oadr/en/discounts/index.html", this);
         }
 
+
+        /// <summary>
+        /// Stepping next from the initial page.
+        /// </summary>
+        private void OnStepNextInitialPage(object sender, WizardStepEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(accountNumber.Text))
+            {
+                MessageHelper.ShowInformation(this, "Please enter your FedEx account number.");
+                e.NextPage = CurrentPage;
+            }
+        }
+
         /// <summary>
         /// Stepping next from the account information page
         /// </summary>
@@ -152,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                IShippingClerk clerk = new FedExShippingClerk();
+                IShippingClerk clerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
                 clerk.RegisterAccount(account);
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
@@ -212,6 +228,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     account.RollbackChanges();
                 }
+            }
+            else if (DialogResult == DialogResult.OK)
+            {
+                // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
+                // that a new account has been added.
+                RateCache.Instance.Clear();
+
+                if (FedExAccountManager.Accounts.Count == 1)
+                {
+                    // Update any profiles to use this FedEx account if this is the only account
+                    // in the system. This is to account for the situation where there a multiple
+                    // profiles that may be associated with a previous FedEx account that has since
+                    // been deleted. 
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.FedEx))
+                    {
+                        if (shippingProfileEntity.FedEx.FedExAccountID.HasValue)
+                        {
+                            shippingProfileEntity.FedEx.FedExAccountID = account.FedExAccountID;
+                            ShippingProfileManager.SaveProfile(shippingProfileEntity);
+                        }
+                    }
+                }
+
+                // Make sure the shipment is marked as configured and activated
+                ShippingSettings.MarkAsActivated(ShipmentTypeCode.FedEx);
+                ShippingSettings.MarkAsConfigured(ShipmentTypeCode.FedEx);
             }
         }
     }

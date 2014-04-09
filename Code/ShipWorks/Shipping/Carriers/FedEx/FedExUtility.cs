@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
+using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -348,10 +349,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             // Get the list of hubs for the account
-            XElement defaultHub = XElement.Parse(account.SmartPostHubList).Descendants("HubID").FirstOrDefault();
-            if (defaultHub != null)
+            try
             {
-                return (string) defaultHub;
+                XElement defaultHub = XElement.Parse(account.SmartPostHubList).Descendants("HubID").FirstOrDefault();
+                if (defaultHub != null)
+                {
+                    return (string)defaultHub;
+                }
+            }
+            catch (XmlException)
+            {
+                // This is most likely the result of the hub ID being zero
+                // Do nothing and let flow fall through to return an empty string
             }
 
             return "";
@@ -405,6 +414,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // return a file name in the format of {output directory}\[uniqueId_]action_postfix.extension; unique ID 
             return string.Format(@"{0}{1}{2}_{3}.{4}", outputFolder, isForDebugging ? uniqueId + "_" : string.Empty, action, postfix, extension);
+        }
+
+        /// <summary>
+        /// Determines whether Smart Post is enabled.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
+        public static bool IsSmartPostEnabled(ShipmentEntity shipment)
+        {
+            bool isEnabled = false;
+
+            if (shipment != null && shipment.FedEx != null)
+            {
+                isEnabled = !String.IsNullOrEmpty(shipment.FedEx.SmartPostHubID);
+            }
+
+            return isEnabled;
         }
     }
 }

@@ -97,6 +97,7 @@
             this.additionalHandling.TabIndex = 0;
             this.additionalHandling.Text = "This package requires additional handling";
             this.additionalHandling.UseVisualStyleBackColor = true;
+            this.additionalHandling.CheckStateChanged += new System.EventHandler(this.OnPackageDetailsChanged);
             // 
             // labelAdditionalHandling
             // 
@@ -130,6 +131,7 @@
             this.verbalConfirmation.Size = new System.Drawing.Size(377, 80);
             this.verbalConfirmation.State = false;
             this.verbalConfirmation.TabIndex = 2;
+            this.verbalConfirmation.ContactInfoChanged += new System.EventHandler(this.OnPackageDetailsChanged);
             // 
             // dryIceDetails
             // 

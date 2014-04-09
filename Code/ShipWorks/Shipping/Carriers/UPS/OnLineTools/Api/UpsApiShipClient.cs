@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
 using ShipWorks.Email;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
@@ -53,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static XmlDocument ProcessShipConfirm(ShipmentEntity shipment)
         {
-            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
+            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
             // Create the client for connecting to the UPS server
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.ShipConfirm, account);
@@ -308,7 +310,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 UpsApiCore.WritePackagesXml(ups, xmlWriter, true, new UpsPackageWeightElementWriter(xmlWriter), new UpsPackageServiceOptionsElementWriter(xmlWriter));
             }
 
-            return UpsWebClient.ProcessRequest(xmlWriter);
+            return UpsWebClient.ProcessRequest(xmlWriter, new TrustingCertificateInspector());
         }
         
         /// <summary>
@@ -972,7 +974,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void ProcessShipAccept(ShipmentEntity shipment, string shipmentDigest)
         {
-            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment);
+            UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
             // Create the client for connecting to the UPS server
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.ShipAccept, account);

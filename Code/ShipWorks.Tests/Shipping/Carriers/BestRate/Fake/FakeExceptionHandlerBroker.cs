@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
@@ -49,18 +50,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
         /// on the configuration of the best rate shipment data.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="exceptionHandler"></param>
+        /// <param name="brokerExceptions"></param>
         /// <returns>
         /// A list of RateResults for each account of a specific shipping provider (i.e. if
         /// two accounts are registered for a single provider, the list of rates would have two entries
         /// if both accounts returned rates).
         /// </returns>
-        public RateGroup GetBestRates(ShipmentEntity shipment, Action<BrokerException> exceptionHandler)
+        public RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             foreach (BrokerException brokerException in brokerExceptionsToThrow)
             {
                 // We just want call the exception handler
-                exceptionHandler(brokerException);
+                brokerExceptions.Add(brokerException);
             }
 
             return new RateGroup(new List<RateResult>());
@@ -83,6 +84,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
         public bool IsCustomsRequired(ShipmentEntity shipment)
         {
             return false;
+        }
+        
+        /// <summary>
+        /// Configures the broker using the given settings.
+        /// </summary>
+        /// <param name="brokerSettings">The broker settings.</param>
+        public void Configure(IBestRateBrokerSettings brokerSettings)
+        { }
+
+
+        /// <summary>
+        /// Gets a value indicating whether [is counter rate].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is counter rate]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCounterRate
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

@@ -15,11 +15,14 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -29,6 +32,8 @@ using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Api;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -37,6 +42,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public class FedExShipmentType : ShipmentType
     {
+        private ICarrierSettingsRepository settingsRepository;
+        
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
@@ -82,9 +89,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// Gets or sets the settings repository that the shipment type should use
+        /// to obtain FedEx related settings and account information. This provides
+        /// the ability to use different FedEx settings depending on how the shipment
+        /// type is going to be used. For example, to obtain counter rates with a
+        /// generic FedEx account intended to be used with ShipWorks, all that would
+        /// have to be done is to assign this property with a repository that contains
+        /// the appropriate account information for getting counter rates.
+        /// </summary>
+        public ICarrierSettingsRepository SettingsRepository
+        {
+            get
+            {
+                // Default the settings repository to the "live" FedExSettingsRepository if
+                // it hasn't been set already
+                return settingsRepository ?? (settingsRepository = new FedExSettingsRepository());
+            }
+            set
+            {
+                settingsRepository = value;
+            }
+        }
+        
+        /// <summary>
         /// Create the setup wizard used for setting up the shipment type
         /// </summary>
-        public override Form CreateSetupWizard()
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return new FedExSetupWizard();
         }
@@ -92,9 +130,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create the UserControl used to handle FedEx shipments
         /// </summary>
-        public override ServiceControlBase CreateServiceControl()
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
-            return new FedExServiceControl();
+            return new FedExServiceControl(rateControl);
         }
 
         /// <summary>
@@ -834,15 +874,73 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            ICarrierSettingsRepository originalSettings = SettingsRepository;
+            ICertificateInspector originalInspector = CertificateInspector;
+            string originalHubID = shipment.FedEx.SmartPostHubID;
+
             try
             {
-                return new FedExShippingClerk().GetRates(shipment);
+                // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
+                // counter rates from the broker is not impacted
+                if (!SettingsRepository.GetAccounts().Any())
+                {
+                    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                    // We need to swap out the SettingsRepository and certificate inspector 
+                    // to get FedEx counter rates
+                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+                }
+
+                return GetCachedRates<FedExException>(shipment, GetRatesFromApi);
             }
-            catch (FedExException ex)
+            catch (CounterRatesOriginAddressException)
             {
-                throw new ShippingException(ex.Message, ex);
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+            finally
+            {
+                // Switch the settings repository back to the original now that we have counter rates
+                SettingsRepository = originalSettings;
+                CertificateInspector = originalInspector;
+                shipment.FedEx.SmartPostHubID = originalHubID;
             }
         }
+
+        /// <summary>
+        /// Get a list of rates for the FedEx shipment from the FedEx API
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
+        }
+
+        ///// <summary>
+        ///// Gets the FedEx counter rates for a shipment
+        ///// </summary>
+        ///// <param name="shipment">The shipment for which to retrieve rates.</param>
+        ///// <returns>A RateGroup containing the counter rate results.</returns>
+        //private RateGroup GetCounterRates(ShipmentEntity shipment)
+        //{
+        //    // We need to swap out the SettingsRepository and certificate inspector 
+        //    // to get FedEx counter rates
+        //    ICarrierSettingsRepository originalSettings = SettingsRepository;
+        //    ICertificateInspector originalInspector = CertificateInspector;
+
+        //    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+        //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+
+        //    // Get the rates from the API as usual now that we've switched over to the counter rates configuration
+        //    RateGroup rateGroup = GetRatesFromApi(shipment);
+
+        //    // Switch the settings repository back to the original now that we have counter rates
+        //    SettingsRepository = originalSettings;
+        //    CertificateInspector = originalInspector;
+
+        //    return rateGroup;
+        //}
 
         /// <summary>
         /// Provide FedEx tracking results for the given shipment
@@ -851,7 +949,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -870,6 +968,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return new FedExShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -879,7 +985,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Okay to "new up" the shipping clerk here, as this class is the root consumer 
                 // that drives the underlying FedEx API and outside of the current scope of unit testing,
                 // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -895,7 +1001,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk();
+                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)
@@ -1002,12 +1108,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the FedEx shipment type.
+        /// Gets an instance to the best rate shipping broker for the FedEx shipment type based on the shipment configuration.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a FedExBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker()
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return new FedExBestRateBroker();
+            if (FedExAccountManager.Accounts.Any())
+            {
+                return new FedExBestRateBroker();
+            }
+            else
+            {
+                // We want to be able to show counter rates to users that don't have 
+                // their own account in ShipWorks
+                return new FedExCounterRatesBroker();
+            }
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            
+            fields.AddRange
+            (
+                new List<IEntityField2>()
+                {
+                    shipment.FedEx.Fields[FedExShipmentFields.FedExAccountID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.WeightUnitType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Signature.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.Service.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.PackagingType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.DropoffType.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.OriginResidentialDetermination.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostHubID.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                }
+            );
+
+            // Grab all the fields for all the package in this shipment
+            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+            {
+                fields.Add(package.Fields[FedExPackageFields.DimsWeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DeclaredValue.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsLength.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
+            }
+
+            return fields;
         }
 
         /// <summary>

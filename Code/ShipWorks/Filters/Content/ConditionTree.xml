@@ -259,7 +259,7 @@
 
     <Category name="Shipment">
       <Condition identifier="Shipment.ShipmentType" />
-      <!-- <Condition identifier="Shipment.BestRateProcessed" />-->
+      <Condition identifier="Shipment.BestRateProcessed" />
       <Group name="Ship To">
         <Group name="Name">
           <Condition identifier="Shipment.ShipTo.FirstName" displayAs="First Name"/>
