@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.AddressValidation
 {
@@ -71,6 +74,40 @@ namespace ShipWorks.AddressValidation
                 dataAccess.DeleteEntity(x);
                 dataAccess.DeleteEntity(addressToDelete);
             });
+        }
+
+        /// <summary>
+        /// Deletes addresses for all orders associated with the specified customer id
+        /// </summary>
+        public static void DeleteAddressesForCustomer(DataAccessAdapter adapter, long customerId)
+        {
+            // Delete all the validated address entries
+            RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
+            validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
+            validatedAddressDeleteBucket.PredicateExpression.Add(OrderFields.CustomerID == customerId);
+            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
+
+            // Delete all addresses that are not referenced by a validated address entry
+            RelationPredicateBucket addressDeleteBucket = new RelationPredicateBucket();
+            addressDeleteBucket.PredicateExpression.Add(new FieldCompareSetPredicate(AddressFields.AddressID, null, ValidatedAddressFields.AddressID, null, SetOperator.In, null, true));
+            adapter.DeleteEntitiesDirectly(typeof(AddressEntity), addressDeleteBucket);
+        }
+
+        /// <summary>
+        /// Deletes addresses for all orders associated with the specified store id
+        /// </summary>
+        public static void DeleteAddressesForStore(DataAccessAdapter adapter, long storeId)
+        {
+            // Delete all the validated address entries
+            RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
+            validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
+            validatedAddressDeleteBucket.PredicateExpression.Add(OrderFields.StoreID == storeId);
+            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
+
+            // Delete all addresses that are not referenced by a validated address entry
+            RelationPredicateBucket addressDeleteBucket = new RelationPredicateBucket();
+            addressDeleteBucket.PredicateExpression.Add(new FieldCompareSetPredicate(AddressFields.AddressID, null, ValidatedAddressFields.AddressID, null, SetOperator.In, null, true));
+            adapter.DeleteEntitiesDirectly(typeof(AddressEntity), addressDeleteBucket);
         }
 
         /// <summary>

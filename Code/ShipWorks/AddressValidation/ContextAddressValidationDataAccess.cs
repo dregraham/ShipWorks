@@ -1,4 +1,5 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Linq;
