@@ -96,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             // load the base
             base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
@@ -119,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             UpdateInsuranceDisplay();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -127,6 +129,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -154,6 +157,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>

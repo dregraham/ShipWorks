@@ -72,6 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             // Load the base
             base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
@@ -94,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             UpdateInsuranceDisplay();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -301,6 +303,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -327,6 +330,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -344,6 +348,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
         }
 
         /// <summary>

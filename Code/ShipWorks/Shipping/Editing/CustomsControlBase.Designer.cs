@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sectionGeneral = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.label1 = new System.Windows.Forms.Label();
             this.customsValue = new ShipWorks.UI.Controls.MoneyTextBox();
@@ -52,20 +52,20 @@
             this.delete = new System.Windows.Forms.Button();
             this.add = new System.Windows.Forms.Button();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).BeginInit();
             this.sectionGeneral.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
             this.groupSelectedContent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // sectionGeneral
             // 
-            this.sectionGeneral.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionGeneral.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // sectionGeneral.ContentPanel
             // 
@@ -96,6 +96,7 @@
             0,
             0,
             131072});
+            this.customsValue.IgnoreSet = false;
             this.customsValue.Location = new System.Drawing.Point(61, 7);
             this.customsValue.Name = "customsValue";
             this.customsValue.Size = new System.Drawing.Size(100, 21);
@@ -104,8 +105,8 @@
             // 
             // sectionContents
             // 
-            this.sectionContents.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionContents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // sectionContents.ContentPanel
             // 
@@ -123,13 +124,13 @@
             // 
             // sandGrid
             // 
-            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnDescription});
             this.sandGrid.Location = new System.Drawing.Point(8, 10);
             this.sandGrid.Name = "sandGrid";
-            this.sandGrid.Renderer = windowsXPRenderer2;
+            this.sandGrid.Renderer = windowsXPRenderer1;
             this.sandGrid.Size = new System.Drawing.Size(486, 116);
             this.sandGrid.TabIndex = 0;
             this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnChangeSelectedRow);
@@ -142,8 +143,8 @@
             // 
             // groupSelectedContent
             // 
-            this.groupSelectedContent.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupSelectedContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupSelectedContent.BackColor = System.Drawing.Color.Transparent;
             this.groupSelectedContent.Controls.Add(this.labelHarmonized);
             this.groupSelectedContent.Controls.Add(this.harmonizedCode);
@@ -180,18 +181,20 @@
             this.harmonizedCode.Name = "harmonizedCode";
             this.harmonizedCode.Size = new System.Drawing.Size(95, 21);
             this.harmonizedCode.TabIndex = 9;
+            this.harmonizedCode.TextChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.weight.Location = new System.Drawing.Point(105, 79);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300;
-            this.weight.RangeMin = 0;
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(218, 24);
             this.weight.TabIndex = 5;
-            this.weight.Weight = 0;
+            this.weight.Weight = 0D;
+            this.weight.WeightChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // value
             // 
@@ -200,11 +203,13 @@
             0,
             0,
             131072});
+            this.value.IgnoreSet = false;
             this.value.Location = new System.Drawing.Point(105, 105);
             this.value.Name = "value";
             this.value.Size = new System.Drawing.Size(95, 21);
             this.value.TabIndex = 7;
             this.value.Text = "$0.00";
+            this.value.TextChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             this.value.Leave += new System.EventHandler(this.OnLeaveValueAffectingControl);
             // 
             // labelQuantity
@@ -258,8 +263,10 @@
             this.countryOfOrigin.FormattingEnabled = true;
             this.countryOfOrigin.Location = new System.Drawing.Point(105, 159);
             this.countryOfOrigin.Name = "countryOfOrigin";
+            this.countryOfOrigin.PromptText = "(Multiple Values)";
             this.countryOfOrigin.Size = new System.Drawing.Size(160, 21);
             this.countryOfOrigin.TabIndex = 11;
+            this.countryOfOrigin.SelectedIndexChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // quantity
             // 
@@ -267,12 +274,13 @@
             this.quantity.Name = "quantity";
             this.quantity.Size = new System.Drawing.Size(95, 21);
             this.quantity.TabIndex = 1;
+            this.quantity.TextChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             this.quantity.Leave += new System.EventHandler(this.OnLeaveValueAffectingControl);
             // 
             // description
             // 
-            this.description.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.description.Location = new System.Drawing.Point(105, 51);
             this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.CustomsDescription);
             this.description.Name = "description";
@@ -282,7 +290,7 @@
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(500, 37);
@@ -296,7 +304,7 @@
             // 
             // add
             // 
-            this.add.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.add.Image = global::ShipWorks.Properties.Resources.add16;
             this.add.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.add.Location = new System.Drawing.Point(500, 10);
@@ -314,19 +322,19 @@
             this.AutoScroll = true;
             this.Controls.Add(this.sectionGeneral);
             this.Controls.Add(this.sectionContents);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CustomsControlBase";
             this.Size = new System.Drawing.Size(581, 480);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).EndInit();
             this.sectionGeneral.ContentPanel.ResumeLayout(false);
             this.sectionGeneral.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
             this.groupSelectedContent.ResumeLayout(false);
             this.groupSelectedContent.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }

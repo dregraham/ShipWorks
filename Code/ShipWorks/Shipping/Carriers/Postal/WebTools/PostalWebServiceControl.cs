@@ -65,6 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -72,6 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             originControl.SaveToEntities();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
     }
 }

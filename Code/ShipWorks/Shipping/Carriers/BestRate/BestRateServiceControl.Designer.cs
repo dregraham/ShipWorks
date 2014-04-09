@@ -158,6 +158,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.weight.TabIndex = 68;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // labelWeight
             // 
@@ -189,6 +190,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 70;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // serviceLevelLabel
             // 

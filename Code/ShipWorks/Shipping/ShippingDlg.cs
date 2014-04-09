@@ -848,6 +848,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
                     newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
                     newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+                    newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
                     newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
@@ -864,6 +865,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
                     oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
                     oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                    oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
                     oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
@@ -1060,6 +1062,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// The selected shipment(s) has been edited in a such a way that ShipSense values may no longer valid.
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        /// <summary>
         /// Update the display of our insurance rates for the given shipments
         /// </summary>
         private void UpdateInsuranceDisplay()
@@ -1105,6 +1115,7 @@ namespace ShipWorks.Shipping
             if (newCustomsControl != null)
             {
                 newCustomsControl.LoadShipments(shipments, enableEditing);
+                newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             }
 
             // See if the customs control has changed
@@ -2326,6 +2337,7 @@ namespace ShipWorks.Shipping
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+            ServiceControl.SuspendRateCriteriaChangeEvent();
 
             // Save changes to the current selection to in memory.  Anything not selected
             // will already be saved in memory.
