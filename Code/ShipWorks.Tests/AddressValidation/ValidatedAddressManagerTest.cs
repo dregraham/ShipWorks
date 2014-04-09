@@ -17,6 +17,7 @@ namespace ShipWorks.Tests.AddressValidation
         private PersonAdapter originalAddress;
         private PersonAdapter newAddress;
         private Mock<IAddressValidationDataAccess> dataAccess;
+        private Mock<ILinqCollections> linqCollections;
         private ShipmentEntity shipmentFromOtherOrder;
         private ShipmentEntity shipmentIsProcessed;
         private ShipmentEntity shipmentWithOtherAddress;
@@ -97,19 +98,23 @@ namespace ShipWorks.Tests.AddressValidation
                 addressForOtherOrder,
                 addressForOrder
             };
+
+            linqCollections = new Mock<ILinqCollections>();
+            linqCollections.SetupGet(x => x.Shipment)
+                .Returns(shipments.AsQueryable());
+            linqCollections.SetupGet(x => x.ValidatedAddress)
+                .Returns(validatedAddresses.AsQueryable());
             
             dataAccess = new Mock<IAddressValidationDataAccess>();
-            dataAccess.SetupGet(x => x.Shipment)
-                .Returns(shipments.AsQueryable());
-            dataAccess.SetupGet(x => x.ValidatedAddress)
-                .Returns(validatedAddresses.AsQueryable());
+            dataAccess.SetupGet(x => x.LinqCollections)
+                .Returns(linqCollections.Object);
         }
 
         [TestMethod]
         public void PropogateAddressChangesToShipments_DoesNotQueryShipments_WhenAddressHasNotChanged()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, originalAddress);
-            dataAccess.Verify(x => x.Shipment, Times.Never);
+            linqCollections.Verify(x => x.Shipment, Times.Never);
         }
 
         [TestMethod]

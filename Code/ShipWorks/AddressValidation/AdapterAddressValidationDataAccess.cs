@@ -24,22 +24,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Allow shipments to be queried
         /// </summary>
-        public IQueryable<ShipmentEntity> Shipment
+        public ILinqCollections LinqCollections
         {
             get
             {
-                return new LinqMetaData(adapter).Shipment;
-            }
-        }
-
-        /// <summary>
-        /// Allow validated addresses to be queried
-        /// </summary>
-        public IQueryable<ValidatedAddressEntity> ValidatedAddress
-        {
-            get
-            {
-                return new LinqMetaData(adapter).ValidatedAddress;
+                return new LLBLGenLinqCollections(new LinqMetaData(adapter));
             }
         }
 

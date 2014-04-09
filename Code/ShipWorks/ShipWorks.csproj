@@ -496,6 +496,8 @@
     <Compile Include="AddressValidation\IAddressValidationDataAccess.cs" />
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\AddressValidator.cs" />
+    <Compile Include="AddressValidation\ILinqCollections.cs" />
+    <Compile Include="AddressValidation\LLBLGenLinqCollections.cs" />
     <Compile Include="AddressValidation\OrderGridAddressSelector.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AnalysisSuppressions.cs" />

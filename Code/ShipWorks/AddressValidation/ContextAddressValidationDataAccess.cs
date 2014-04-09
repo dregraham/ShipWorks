@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.AddressValidation
@@ -25,22 +23,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Allow shipments to be queried
         /// </summary>
-        public IQueryable<ShipmentEntity> Shipment
+        public ILinqCollections LinqCollections
         {
             get
             {
-                return new LinqMetaData(new SqlAdapter()).Shipment;
-            }
-        }
-
-        /// <summary>
-        /// Allow validated addresses to be queried
-        /// </summary>
-        public IQueryable<ValidatedAddressEntity> ValidatedAddress
-        {
-            get
-            {
-                return new LinqMetaData(new SqlAdapter()).ValidatedAddress;
+                return new LLBLGenLinqCollections(new LinqMetaData(new SqlAdapter()));
             }
         }
 

@@ -12,14 +12,9 @@ namespace ShipWorks.AddressValidation
     public interface IAddressValidationDataAccess
     {
         /// <summary>
-        /// Allow shipments to be queried
+        /// Allow collections to be queried
         /// </summary>
-        IQueryable<ShipmentEntity> Shipment { get; }
-
-        /// <summary>
-        /// Allow validated addresses to be queried
-        /// </summary>
-        IQueryable<ValidatedAddressEntity> ValidatedAddress { get; }
+        ILinqCollections LinqCollections{ get; }
 
         /// <summary>
         /// Delete an entity from the database

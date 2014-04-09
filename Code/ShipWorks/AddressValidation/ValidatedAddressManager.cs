@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Actions;
@@ -34,7 +33,7 @@ namespace ShipWorks.AddressValidation
             }
 
             // Get the shipments we might need to update
-            List<ShipmentEntity> shipments = dataAccess.Shipment.Where(x => x.OrderID == orderID && !x.Processed).ToList();
+            List<ShipmentEntity> shipments = dataAccess.LinqCollections.Shipment.Where(x => x.OrderID == orderID && !x.Processed).ToList();
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -62,7 +61,7 @@ namespace ShipWorks.AddressValidation
         public static void DeleteExistingAddresses(IAddressValidationDataAccess dataAccess, long entityId)
         {
             // Retrieve the addresses
-            List<ValidatedAddressEntity> addressesToDelete = dataAccess.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
+            List<ValidatedAddressEntity> addressesToDelete = dataAccess.LinqCollections.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
 
             // Mark each address for deletion
             addressesToDelete.ForEach(x =>
