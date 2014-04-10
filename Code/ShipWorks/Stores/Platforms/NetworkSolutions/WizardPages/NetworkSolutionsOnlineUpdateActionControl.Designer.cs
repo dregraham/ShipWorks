@@ -67,15 +67,15 @@
             this.uploadTracking.Text = "Upload the shipment tracking number";
             this.uploadTracking.UseVisualStyleBackColor = true;
             // 
-            // NetworkSolutionsOnlineUpdateControl
+            // NetworkSolutionsOnlineUpdateActionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.uploadTracking);
             this.Controls.Add(this.status);
             this.Controls.Add(this.setStatus);
-            this.Name = "NetworkSolutionsOnlineUpdateControl";
-            this.Size = new System.Drawing.Size(459, 56);
+            this.Name = "NetworkSolutionsOnlineUpdateActionControl";
+            this.Size = new System.Drawing.Size(459, 50);
             this.ResumeLayout(false);
             this.PerformLayout();
 

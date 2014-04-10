@@ -656,8 +656,6 @@ namespace ShipWorks.Stores.Management
                 // Clear out any previous control they may have had and add the new one
                 panelOnlineUpdatePlaceholder.Controls.Clear();
                 panelOnlineUpdatePlaceholder.Controls.Add(onlineUpdateControl);
-                panelOnlineUpdatePlaceholder.Height = onlineUpdateControl.Height;
-                panelUploadSettings.Height = panelOnlineUpdatePlaceholder.Bottom;
 
                 // Update what store we are configured for
                 onlineUpdateConfiguredStoreID = store.StoreID;
@@ -665,6 +663,10 @@ namespace ShipWorks.Stores.Management
 
             // Let the control initialize itself
             onlineUpdateControl.UpdateForStore(store);
+
+            panelOnlineUpdatePlaceholder.Width = onlineUpdateControl.Width;
+            panelOnlineUpdatePlaceholder.Height = onlineUpdateControl.Height;
+            panelUploadSettings.Height = panelOnlineUpdatePlaceholder.Bottom;
 
             return true;
         }
