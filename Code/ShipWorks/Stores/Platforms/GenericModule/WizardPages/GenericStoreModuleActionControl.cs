@@ -41,7 +41,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
             GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport) generic.ModuleOnlineStatusSupport;
 
             // See if its available
-            if (statusSupport == GenericOnlineStatusSupport.StatusOnly || statusSupport == GenericOnlineStatusSupport.StatusWithComment)
+            if (statusSupport == GenericOnlineStatusSupport.StatusOnly ||
+                statusSupport == GenericOnlineStatusSupport.StatusWithComment)
             {
                 panelOrderStatus.Visible = true;
 
@@ -53,8 +54,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
 
                 object current = comboStatus.SelectedValue;
 
-                GenericStoreStatusCodeProvider statusProvider = ((GenericModuleStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
-                comboStatus.DataSource = statusProvider.CodeValues.Select(c => new KeyValuePair<string, object>(statusProvider.GetCodeName(c), c)).ToList();
+                GenericStoreStatusCodeProvider statusProvider =
+                    ((GenericModuleStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
+                comboStatus.DataSource =
+                    statusProvider.CodeValues.Select(
+                        c => new KeyValuePair<string, object>(statusProvider.GetCodeName(c), c)).ToList();
 
                 // Try to revert back to what was selected before
                 if (current != null)
@@ -77,10 +81,19 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
                     statusUpdate.Checked = false;
                 }
 
+                if (!commentToken.Visible)
+                {
+                    Height = panelOrderStatus.Top + commentToken.Top;
+                }
+                else
+                {
+                    Height = panelOrderStatus.Bottom;
+                }
             }
             else
             {
                 panelOrderStatus.Visible = false;
+                Height = panelOrderStatus.Top + comboStatus.Top;
             }
         }
 

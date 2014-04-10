@@ -74,7 +74,7 @@
             this.Controls.Add(this.statusUpdate);
             this.Controls.Add(this.shipmentUpdate);
             this.Name = "InfopiaOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(459, 74);
+            this.Size = new System.Drawing.Size(459, 58);
             this.ResumeLayout(false);
             this.PerformLayout();
 

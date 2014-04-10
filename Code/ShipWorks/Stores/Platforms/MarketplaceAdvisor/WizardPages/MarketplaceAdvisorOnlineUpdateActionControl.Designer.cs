@@ -63,7 +63,7 @@
             this.Controls.Add(this.promote);
             this.Controls.Add(this.shipmentUpdate);
             this.Name = "MarketplaceAdvisorOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(459, 56);
+            this.Size = new System.Drawing.Size(459, 47);
             this.ResumeLayout(false);
             this.PerformLayout();
 

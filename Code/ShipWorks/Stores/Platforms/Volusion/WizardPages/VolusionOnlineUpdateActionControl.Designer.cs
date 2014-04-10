@@ -61,7 +61,7 @@
             this.Controls.Add(this.sendEmail);
             this.Controls.Add(this.createTask);
             this.Name = "VolusionOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(324, 50);
+            this.Size = new System.Drawing.Size(324, 47);
             this.ResumeLayout(false);
             this.PerformLayout();
 
