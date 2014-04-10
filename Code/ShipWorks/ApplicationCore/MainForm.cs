@@ -404,6 +404,8 @@ namespace ShipWorks
                 SaveCurrentUserSettings();
 
                 UserSession.Logoff(clearRememberMe);
+
+                AddressValidationQueue.Clear();
             }
 
             // Can't do anything when logged off

@@ -18,7 +18,7 @@ namespace ShipWorks.AddressValidation
     internal static class AddressValidationQueue
     {
         private static ConcurrentQueue<long> orderQueue = new ConcurrentQueue<long>();
-        private static Timer timer = new Timer(OnTimerTick, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
+        private static readonly Timer timer = new Timer(OnTimerTick, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
         private static readonly AddressValidator addressValidator = new AddressValidator();
 
         /// <summary>
@@ -52,6 +52,14 @@ namespace ShipWorks.AddressValidation
                     orderQueue.Enqueue(id);
                 }
             }
+        }
+
+        /// <summary>
+        /// Clears the queue so that processing stops immediately
+        /// </summary>
+        public static void Clear()
+        {
+            orderQueue = new ConcurrentQueue<long>();
         }
 
         /// <summary>

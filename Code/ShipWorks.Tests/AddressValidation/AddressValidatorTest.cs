@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -62,6 +63,20 @@ namespace ShipWorks.Tests.AddressValidation
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(results);
             testObject = new AddressValidator(webClient.Object);
+        }
+
+        [TestMethod]
+        public void Validate_DoesNotCallWebClient_WhenAddressHasBeenValidated()
+        {
+            EnumHelper.GetEnumList<AddressValidationStatusType>()
+                .Where(x => x.Value != AddressValidationStatusType.NotChecked && x.Value != AddressValidationStatusType.Pending)
+                .ToList()
+                .ForEach(status =>
+            {
+                sampleOrder.ShipAddressValidationStatus = (int) status.Value;
+                testObject.Validate(sampleOrder, "Ship", (x, y) => { });
+                webClient.Verify(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            });
         }
 
         [TestMethod]

@@ -43,6 +43,13 @@ namespace ShipWorks.AddressValidation
         {
             PersonAdapter adapter = new PersonAdapter(addressEntity, addressPrefix);
 
+            // We don't want to validate already validated addresses because we'll lose the original address
+            if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.NotChecked &&
+                adapter.AddressValidationStatus != (int) AddressValidationStatusType.Pending)
+            {
+                return;
+            }
+
             List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode) ??
                                                                new List<AddressValidationResult>();
 
