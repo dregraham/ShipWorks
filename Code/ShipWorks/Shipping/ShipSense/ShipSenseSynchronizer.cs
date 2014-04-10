@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -21,8 +25,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseSynchronizer" /> class.
         /// </summary>
-        /// <param name="shipments">The shipments.</param>
-        /// <param name="shippingSettings">The shipping settings.</param>
+        /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments)
             : this(shipments, ShippingSettings.Fetch(), new Knowledgebase())
         {}
@@ -30,7 +33,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseSynchronizer" /> class.
         /// </summary>
-        /// <param name="shipments">The shipments.</param>
+        /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         /// <param name="shippingSettings">The shipping settings.</param>
         /// <param name="knowledgebase">The knowledge base that entries should be retrieved from.</param>
         public ShipSenseSynchronizer(IEnumerable<ShipmentEntity> shipments, ShippingSettingsEntity shippingSettings, IKnowledgebase knowledgebase)
@@ -71,7 +74,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Adds a collection of shipments to the list of shipments being synchronized.
         /// </summary>
-        /// <param name="shipments">The shipments.</param>
+        /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void Add(IEnumerable<ShipmentEntity> shipments)
         {
             foreach (ShipmentEntity shipment in shipments)
@@ -83,7 +86,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Adds the specified shipment to the list of shipments being synchronized.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
+        /// <param name="shipment">The shipment.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void Add(ShipmentEntity shipment)
         {
             if (shipment != null)
@@ -110,7 +113,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <summary>
         /// Removes the specified shipment from being synchronized.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
+        /// <param name="shipment">The shipment.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void Remove(ShipmentEntity shipment)
         {
             // Find the hash for the shipment and remove it from the corresponding 
@@ -126,7 +129,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// Synchronizes the ShipSense tracked values of any shipments matching the same 
         /// knowledge base entry as the given shipment.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
+        /// <param name="shipment">The shipment.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void SynchronizeWith(ShipmentEntity shipment)
         {
             // Do some housekeeping and remove any shipments that have been processed, so we 
@@ -143,9 +146,9 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 if (shipment.ShipSenseStatus != (int)ShipSenseStatus.NotApplied)
                 {
-                    KnowledgebaseEntry entry = knowledgebaseEntryDictionary[hashResult.HashValue];
-                    if (entry != null)
+                    if (knowledgebaseEntryDictionary.ContainsKey(hashResult.HashValue))
                     {
+                        KnowledgebaseEntry entry = knowledgebaseEntryDictionary[hashResult.HashValue];
                         // Consider a status of ShipSense applied if the shipment matches the corresponding KB entry
                         shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
                     }
@@ -194,7 +197,7 @@ namespace ShipWorks.Shipping.ShipSense
                                 // we can rely on its status
                                 matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
                             }
-                            else
+                        else
                             {
                                 // We can't rely on the status of the shipment that triggered the synchronization, since
                                 // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
@@ -234,7 +237,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// Adds a knowledge base entry to dictionary.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <param name="shipment">The shipment.</param>
+        /// <param name="shipment">The shipment.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         private void AddKnowledgebaseEntryToDictionary(string key, ShipmentEntity shipment)
         {
             // Don't add an entry if there is already a dictionary item for the given key
@@ -244,6 +247,7 @@ namespace ShipWorks.Shipping.ShipSense
                 // and use the shipment entities to populate the KB entries here because the shipment 
                 // entities may reflect different ShipSense values due to a shipping profile being applied
                 OrderEntity order = shipment.Order;
+
                 KnowledgebaseEntry entry = knowledgebase.GetEntry(order);
                 if (entry != null && entry.Packages.Any())
                 {
@@ -252,6 +256,5 @@ namespace ShipWorks.Shipping.ShipSense
                 }
             }
         }
-
     }
 }

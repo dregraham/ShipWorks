@@ -329,5 +329,26 @@ namespace ShipWorks.Stores.Content
             }
         }
 
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public static void PopulateOrderDetails(ShipmentEntity shipment)
+        {
+            if (shipment.Order == null)
+            {
+                shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            }
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+
+                foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
+                {
+                    adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                }
+            }
+        }
     }
 }

@@ -27,7 +27,9 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
@@ -83,6 +85,8 @@ namespace ShipWorks.Shipping
         
         private RateSelectedEventArgs preSelectedRateEventArgs;
 
+        private readonly ShipSenseSynchronizer shipSenseSynchronizer;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -137,6 +141,11 @@ namespace ShipWorks.Shipping
 
             ResizeBegin += (sender, args) => ratesSplitContainer.Panel1MinSize = 0;
             ResizeEnd += (sender, args) => SetServiceControlMinimumHeight();
+
+            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+            shipments.ForEach(OrderUtility.PopulateOrderDetails);
+
+            shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
         }
 
         /// <summary>
@@ -1066,7 +1075,15 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
         {
-            
+            if (uiDisplayedShipments.Count > 0)
+            {
+                ShipmentEntity shipment = uiDisplayedShipments[0];
+
+                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+                OrderUtility.PopulateOrderDetails(shipment);
+
+                shipSenseSynchronizer.SynchronizeWith(shipment);
+            }
         }
 
         /// <summary>
@@ -1518,6 +1535,14 @@ namespace ShipWorks.Shipping
         private void OnShipmentsAdded(object sender, EventArgs e)
         {
             UpdateEditControlsSecurity();
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
+            foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
+            {
+                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+                OrderUtility.PopulateOrderDetails(shipment);
+                shipSenseSynchronizer.Add(shipment);
+            }
         }
 
         /// <summary>
@@ -1526,6 +1551,12 @@ namespace ShipWorks.Shipping
         private void OnShipmentsRemoved(object sender, EventArgs e)
         {
             UpdateEditControlsSecurity();
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
+            foreach (ShipmentEntity shipment in eventArgs.ShipmentsRemoved)
+            {
+                shipSenseSynchronizer.Remove(shipment);
+            }
         }
 
         /// <summary>
