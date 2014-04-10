@@ -40,5 +40,16 @@ namespace ShipWorks.AddressValidation
                 return metaData.ValidatedAddress;
             }
         }
+
+        /// <summary>
+        /// Allow orders to be queried
+        /// </summary>
+        public IQueryable<OrderEntity> Order
+        {
+            get
+            {
+                return metaData.Order;
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ using System.Xml;
 using Divelements.SandRibbon;
 using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared.IO.Zip;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Data.Administration.Versioning;
@@ -659,6 +660,9 @@ namespace ShipWorks
             {
                 ShowDownloadProgress();
             }
+
+            // Load any pending address validations
+            AddressValidationQueue.ReloadPendingValidations();
         }
 
         /// <summary>

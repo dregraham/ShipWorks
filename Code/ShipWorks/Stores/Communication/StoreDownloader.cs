@@ -639,7 +639,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (store.AutoAddressValidation)
             {
-                new AddressValidationQueue().Enqueue(order);
+                AddressValidationQueue.Enqueue(order);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Interapptive.Shared.Business;
@@ -14,30 +15,17 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Queue that handles validating order shipping addresses in the background
     /// </summary>
-    internal class AddressValidationQueue : IDisposable
+    internal static class AddressValidationQueue
     {
-        private static readonly Lazy<ConcurrentQueue<long>> lazyOrderQueue = new Lazy<ConcurrentQueue<long>>(() => new ConcurrentQueue<long>());
-
-        private static ConcurrentQueue<long> orderQueue;
-        private static readonly object timerLock = new object();
-        private Timer timer;
-
-        private readonly AddressValidator addressValidator = new AddressValidator();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddressValidationQueue"/> class.
-        /// </summary>
-        public AddressValidationQueue()
-        {
-            orderQueue = lazyOrderQueue.Value;
-            timer = new Timer(OnTimerTick, null, 0, 1000);
-        }
+        private static ConcurrentQueue<long> orderQueue = new ConcurrentQueue<long>();
+        private static Timer timer = new Timer(OnTimerTick, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
+        private static readonly AddressValidator addressValidator = new AddressValidator();
 
         /// <summary>
         /// Enqueue the order.
         /// </summary>
         /// <param name="order">The order.</param>
-        public void Enqueue(OrderEntity order)
+        public static void Enqueue(OrderEntity order)
         {
             if ((AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
             {
@@ -46,16 +34,31 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Load any pending validations so they can be processed
+        /// </summary>
+        public static void ReloadPendingValidations()
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                // Get a list of all order ids that are pending address validation
+                AdapterAddressValidationDataAccess dataAccess = new AdapterAddressValidationDataAccess(adapter);
+                IEnumerable<long> orderIds = dataAccess.LinqCollections
+                    .Order
+                    .Where(x => x.ShipAddressValidationStatus == (int)AddressValidationStatusType.Pending)
+                    .Select(x => x.OrderID);
+
+                foreach (long id in orderIds)
+                {
+                    orderQueue.Enqueue(id);
+                }
+            }
+        }
+
+        /// <summary>
         /// Called when [timer tick].
         /// </summary>
-        private void OnTimerTick(object state)
+        private static void OnTimerTick(object state)
         {
-            if (!Monitor.TryEnter(timerLock))
-            {
-                // already in timer. Exit.
-                return;
-            }
-
             long orderID;
 
             while (orderQueue.TryDequeue(out orderID))
@@ -63,15 +66,15 @@ namespace ShipWorks.AddressValidation
                 Validate(orderID);
             }
 
-            // then release the lock
-            Monitor.Exit(timerLock);
+            // Tell the timer to check again in 5 seconds
+            timer.Change(5000, Timeout.Infinite);
         }
 
         /// <summary>
         /// Validates the specified order identifier.
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
-        private void Validate(long orderID)
+        private static void Validate(long orderID)
         {
             try
             {
@@ -95,7 +98,7 @@ namespace ShipWorks.AddressValidation
         /// Actually calls validation and saves.
         /// </summary>
         /// <param name="orderID">The order identifier.</param>
-        private void CallValidate(long orderID)
+        private static void CallValidate(long orderID)
         {
             OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
             
@@ -110,14 +113,6 @@ namespace ShipWorks.AddressValidation
                         ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
                 }
             }
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            timer.Dispose();
         }
     }
 }

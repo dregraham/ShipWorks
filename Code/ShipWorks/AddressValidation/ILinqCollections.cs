@@ -17,5 +17,10 @@ namespace ShipWorks.AddressValidation
         /// Allow validated addresses to be queried
         /// </summary>
         IQueryable<ValidatedAddressEntity> ValidatedAddress { get; }
+
+        /// <summary>
+        /// Allow orders to be queried
+        /// </summary>
+        IQueryable<OrderEntity> Order { get; }
     }
 }
