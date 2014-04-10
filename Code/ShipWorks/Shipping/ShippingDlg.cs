@@ -2337,7 +2337,11 @@ namespace ShipWorks.Shipping
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            ServiceControl.SuspendRateCriteriaChangeEvent();
+
+            if (ServiceControl != null)
+            {
+                ServiceControl.SuspendRateCriteriaChangeEvent();
+            }
 
             // Save changes to the current selection to in memory.  Anything not selected
             // will already be saved in memory.
