@@ -94,8 +94,16 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         private void UpdateLayout()
         {
             // Slide the panels up/down based on the content of the attributes panel
-            panelAttributes.Height = panelAttributes.Controls.Count == 0 ? 0 : panelAttributes.Controls.OfType<Control>().Max(c => c.Bottom);
-            panelBottom.Top = panelAttributes.Bottom;
+            if (panelAttributes.Controls.Count == 0)
+            {
+                panelAttributes.Height = 0;
+                panelBottom.Top = labelAttributeInstructions.Bottom;
+            }
+            else
+            {
+                panelAttributes.Height = panelAttributes.Controls.OfType<Control>().Max(c => c.Bottom);
+                panelBottom.Top = panelAttributes.Bottom;
+            }
 
             // Adjust the height of the overall control according to the bottom panel
             Height = panelBottom.Bottom;

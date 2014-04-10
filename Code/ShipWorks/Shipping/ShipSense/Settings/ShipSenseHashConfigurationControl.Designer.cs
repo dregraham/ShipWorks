@@ -62,7 +62,7 @@
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.toolStripAddRule);
-            this.panelBottom.Location = new System.Drawing.Point(18, 348);
+            this.panelBottom.Location = new System.Drawing.Point(12, 348);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(471, 35);
             this.panelBottom.TabIndex = 3;
