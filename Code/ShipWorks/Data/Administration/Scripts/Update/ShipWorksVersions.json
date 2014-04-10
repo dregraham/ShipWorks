@@ -89,5 +89,7 @@
 {"ToVersion":"3.7.1.0","FromVersion":["3.7.0.3"]},
 {"ToVersion":"3.7.1.1","FromVersion":["3.7.1.0"]},
 {"ToVersion":"3.7.4.1","FromVersion":["3.7.1.1"]},
-{"ToVersion":"3.8.0.0","FromVersion":["3.7.4.1"]},
-{"ToVersion":"3.8.0.1","FromVersion":["3.8.0.0"]}]
+{"ToVersion":"3.8.0.0","FromVersion":["3.7.4.1"]},  /* sets provider to best rate - only released to beta customers */
+{"ToVersion":"3.8.0.1","FromVersion":["3.8.0.0"]},  /* sets provider back to none, if not best rate. Only needed for customers that had the beta. */
+{"ToVersion":"BestRateToAddressValidation","FromVersion":["3.8.0.1","3.7.4.1" ]}  /* upgrade beta to Address validation, upgrade non-beta users */
+]
