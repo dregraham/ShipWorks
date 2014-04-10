@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         {
             // Present the user with a confirmation message box describing what will happen and only save the settings if Yes is chosen
             const string ConfirmationText = @"Adjusting the ShipSense configuration could result in ShipSense " +
-                                            "not being able to recognize how orders should be shipped until it has recognized your shipping patterns based on the new configuration.\n\n" +
+                                            "not being able to know how orders should be shipped until it has recognized your shipping patterns based on the new configuration.\n\n" +
                                             "Do you wish to continue?";
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Question, MessageBoxButtons.YesNo, ConfirmationText);

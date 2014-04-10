@@ -33,9 +33,9 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.panelMain = new System.Windows.Forms.Panel();
             this.panelConfiguration = new System.Windows.Forms.Panel();
+            this.labelDescription = new System.Windows.Forms.Label();
             this.labelTitle = new System.Windows.Forms.Label();
             this.configurationControl = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseHashConfigurationControl();
-            this.labelDescription = new System.Windows.Forms.Label();
             this.panelBottom.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.panelConfiguration.SuspendLayout();
@@ -84,6 +84,7 @@
             // panelConfiguration
             // 
             this.panelConfiguration.AutoScroll = true;
+            this.panelConfiguration.BackColor = System.Drawing.Color.White;
             this.panelConfiguration.Controls.Add(this.labelDescription);
             this.panelConfiguration.Controls.Add(this.labelTitle);
             this.panelConfiguration.Controls.Add(this.configurationControl);
@@ -91,6 +92,16 @@
             this.panelConfiguration.Name = "panelConfiguration";
             this.panelConfiguration.Size = new System.Drawing.Size(567, 481);
             this.panelConfiguration.TabIndex = 1;
+            // 
+            // labelDescription
+            // 
+            this.labelDescription.Location = new System.Drawing.Point(22, 20);
+            this.labelDescription.Name = "labelDescription";
+            this.labelDescription.Size = new System.Drawing.Size(493, 33);
+            this.labelDescription.TabIndex = 2;
+            this.labelDescription.Text = "You can customize how ShipSense learns about the way you ship by telling ShipSens" +
+    "e which properties and attributes of items have an impact on how orders get ship" +
+    "ped.";
             // 
             // labelTitle
             // 
@@ -105,21 +116,12 @@
             // configurationControl
             // 
             this.configurationControl.AutoScroll = true;
+            this.configurationControl.BackColor = System.Drawing.Color.White;
             this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.configurationControl.Location = new System.Drawing.Point(25, 58);
+            this.configurationControl.Location = new System.Drawing.Point(7, 58);
             this.configurationControl.Name = "configurationControl";
-            this.configurationControl.Size = new System.Drawing.Size(515, 373);
+            this.configurationControl.Size = new System.Drawing.Size(533, 373);
             this.configurationControl.TabIndex = 0;
-            // 
-            // labelDescription
-            // 
-            this.labelDescription.Location = new System.Drawing.Point(22, 20);
-            this.labelDescription.Name = "labelDescription";
-            this.labelDescription.Size = new System.Drawing.Size(493, 33);
-            this.labelDescription.TabIndex = 2;
-            this.labelDescription.Text = "You can customize how ShipSense learns about the way you ship by telling ShipSens" +
-    "e which properties and attributes of items have an impact on how orders get ship" +
-    "ped.";
             // 
             // ShipSenseUniquenessSettingsDlg
             // 
@@ -131,6 +133,7 @@
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelBottom);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ShipSenseUniquenessSettingsDlg";

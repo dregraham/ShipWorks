@@ -33,11 +33,11 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.toolStripAddRule = new System.Windows.Forms.ToolStrip();
             this.addItemAttributeLine = new System.Windows.Forms.ToolStripButton();
-            this.labelAttributesHeader = new System.Windows.Forms.Label();
             this.labelAttributeInstructions = new System.Windows.Forms.Label();
-            this.labelItemPropertiesHeader = new System.Windows.Forms.Label();
             this.labelItemPropertiesInstructions = new System.Windows.Forms.Label();
             this.panelAttributes = new System.Windows.Forms.Panel();
+            this.itemPropertiesSection = new ShipWorks.UI.Controls.SectionTitle();
+            this.sectionAddressCasing = new ShipWorks.UI.Controls.SectionTitle();
             this.panelProperties.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.toolStripAddRule.SuspendLayout();
@@ -45,9 +45,9 @@
             // 
             // panelProperties
             // 
-            this.panelProperties.BackColor = System.Drawing.SystemColors.Control;
+            this.panelProperties.BackColor = System.Drawing.Color.White;
             this.panelProperties.Controls.Add(this.itemProperties);
-            this.panelProperties.Location = new System.Drawing.Point(2, 36);
+            this.panelProperties.Location = new System.Drawing.Point(5, 43);
             this.panelProperties.Name = "panelProperties";
             this.panelProperties.Size = new System.Drawing.Size(487, 236);
             this.panelProperties.TabIndex = 2;
@@ -62,7 +62,7 @@
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.toolStripAddRule);
-            this.panelBottom.Location = new System.Drawing.Point(12, 348);
+            this.panelBottom.Location = new System.Drawing.Point(13, 356);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(471, 35);
             this.panelBottom.TabIndex = 3;
@@ -93,39 +93,19 @@
             this.addItemAttributeLine.Text = "Add Attribute";
             this.addItemAttributeLine.Click += new System.EventHandler(this.OnAddAttribute);
             // 
-            // labelAttributesHeader
-            // 
-            this.labelAttributesHeader.AutoSize = true;
-            this.labelAttributesHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.labelAttributesHeader.Location = new System.Drawing.Point(-1, 282);
-            this.labelAttributesHeader.Name = "labelAttributesHeader";
-            this.labelAttributesHeader.Size = new System.Drawing.Size(96, 13);
-            this.labelAttributesHeader.TabIndex = 4;
-            this.labelAttributesHeader.Text = "Item Attributes";
-            // 
             // labelAttributeInstructions
             // 
-            this.labelAttributeInstructions.Location = new System.Drawing.Point(15, 296);
+            this.labelAttributeInstructions.Location = new System.Drawing.Point(16, 304);
             this.labelAttributeInstructions.Name = "labelAttributeInstructions";
             this.labelAttributeInstructions.Size = new System.Drawing.Size(474, 32);
             this.labelAttributeInstructions.TabIndex = 5;
             this.labelAttributeInstructions.Text = "ShipSense only uses the item attributes that match the attributes below. Any attr" +
     "ibutes that are not applicable to an item will be ignored.";
             // 
-            // labelItemPropertiesHeader
-            // 
-            this.labelItemPropertiesHeader.AutoSize = true;
-            this.labelItemPropertiesHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.labelItemPropertiesHeader.Location = new System.Drawing.Point(-1, 3);
-            this.labelItemPropertiesHeader.Name = "labelItemPropertiesHeader";
-            this.labelItemPropertiesHeader.Size = new System.Drawing.Size(97, 13);
-            this.labelItemPropertiesHeader.TabIndex = 6;
-            this.labelItemPropertiesHeader.Text = "Item Properties";
-            // 
             // labelItemPropertiesInstructions
             // 
             this.labelItemPropertiesInstructions.AutoSize = true;
-            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(15, 18);
+            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(18, 25);
             this.labelItemPropertiesInstructions.Name = "labelItemPropertiesInstructions";
             this.labelItemPropertiesInstructions.Size = new System.Drawing.Size(441, 13);
             this.labelItemPropertiesInstructions.TabIndex = 7;
@@ -134,25 +114,46 @@
             // 
             // panelAttributes
             // 
-            this.panelAttributes.Location = new System.Drawing.Point(18, 332);
+            this.panelAttributes.Location = new System.Drawing.Point(19, 340);
             this.panelAttributes.Name = "panelAttributes";
             this.panelAttributes.Size = new System.Drawing.Size(471, 10);
             this.panelAttributes.TabIndex = 8;
+            // 
+            // itemPropertiesSection
+            // 
+            this.itemPropertiesSection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.itemPropertiesSection.Location = new System.Drawing.Point(0, 0);
+            this.itemPropertiesSection.Name = "itemPropertiesSection";
+            this.itemPropertiesSection.Size = new System.Drawing.Size(492, 22);
+            this.itemPropertiesSection.TabIndex = 9;
+            this.itemPropertiesSection.Text = "Item Properties";
+            // 
+            // sectionAddressCasing
+            // 
+            this.sectionAddressCasing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionAddressCasing.Location = new System.Drawing.Point(5, 280);
+            this.sectionAddressCasing.Name = "sectionAddressCasing";
+            this.sectionAddressCasing.Size = new System.Drawing.Size(487, 22);
+            this.sectionAddressCasing.TabIndex = 10;
+            this.sectionAddressCasing.Text = "Item Attributes";
             // 
             // ShipSenseHashConfigurationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.sectionAddressCasing);
+            this.Controls.Add(this.itemPropertiesSection);
             this.Controls.Add(this.panelAttributes);
             this.Controls.Add(this.labelItemPropertiesInstructions);
-            this.Controls.Add(this.labelItemPropertiesHeader);
             this.Controls.Add(this.labelAttributeInstructions);
-            this.Controls.Add(this.labelAttributesHeader);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelProperties);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "ShipSenseHashConfigurationControl";
-            this.Size = new System.Drawing.Size(493, 400);
+            this.Size = new System.Drawing.Size(493, 537);
             this.panelProperties.ResumeLayout(false);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
@@ -170,10 +171,10 @@
         private System.Windows.Forms.ToolStrip toolStripAddRule;
         private System.Windows.Forms.ToolStripButton addItemAttributeLine;
         private ShipSenseItemPropertyControl itemProperties;
-        private System.Windows.Forms.Label labelAttributesHeader;
         private System.Windows.Forms.Label labelAttributeInstructions;
-        private System.Windows.Forms.Label labelItemPropertiesHeader;
         private System.Windows.Forms.Label labelItemPropertiesInstructions;
         private System.Windows.Forms.Panel panelAttributes;
+        private UI.Controls.SectionTitle itemPropertiesSection;
+        private UI.Controls.SectionTitle sectionAddressCasing;
     }
 }
