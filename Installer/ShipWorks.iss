@@ -183,27 +183,27 @@ begin
 	then begin
 		newAppID := GetGuid('');
 	end;
-	
+
 	try
 	    appPath := ExpandConstant('{app}');
 
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
-		then begin	
+		then begin
 			Result := instanceID;
 		end
 		else
-		begin		
+		begin
 			Result := newAppID;
 		end;
-		
+
     except
-    
+
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
 		then begin
 			Result := instanceID;
 		end
 		else
-		begin			
+		begin
 			Result := newAppID;
 		end;
     end;
@@ -242,7 +242,7 @@ var
 begin
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-	if (FileExists(TargetExe)) 
+	if (FileExists(TargetExe))
     then begin
 
 	    if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
@@ -268,7 +268,7 @@ begin
         end;
 	end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -280,12 +280,12 @@ end;
 function CommonAppDataExists(): Boolean;
 begin
 
-	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive')) 
+	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive'))
     then begin
         Result := true;
     end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -326,12 +326,15 @@ function CheckUpgradeIssues() : Boolean;
 var
 	TargetExe: string;
 	VersionFound: string;
-	SchemaFound: Integer;
+	NeedsUpgrade: Integer;
+	VersionInstalling: string;
 begin
 
 	Result := True;
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
+
+	VersionInstalling := '' + '{#= RequiredSchemaID}' + '';
 
 	if (FileExists(TargetExe))
 	then begin
@@ -356,10 +359,10 @@ begin
 		then begin
 
 			// See if a DB upgrade will be required.
-		    if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+		    if Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
 		    then begin
 
-				if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
+				if (NeedsUpgrade = 1)
 				then begin
 
 					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
@@ -409,12 +412,12 @@ begin
 			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
 		end;
 
-        if IsTaskSelected('desktopicon') 
+        if IsTaskSelected('desktopicon')
         then begin
             // We now call it just ShipWorks instead of ShipWorks 3
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
-        end;    
-  
+        end;
+
   end;
 
 end;

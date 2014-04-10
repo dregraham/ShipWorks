@@ -11,6 +11,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared.IO.Zip;
 using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
+using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
@@ -765,11 +766,12 @@ namespace ShipWorks
         /// </summary>
         private bool CheckDatabaseVersion()
         {
-            Version installedVersion;
+            SchemaVersion databaseSchemaVersion;
+            SchemaVersion softwareSchemaVersion = (new SchemaVersionManager()).GetRequiredSchemaVersion();
 
             try
             {
-                installedVersion = SqlSchemaUpdater.GetInstalledSchemaVersion();
+                databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion();
             }
             catch (InvalidShipWorksDatabaseException ex)
             {
@@ -779,10 +781,20 @@ namespace ShipWorks
                 return false;
             }
 
-            log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
+            log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", databaseSchemaVersion, softwareSchemaVersion);
 
             // See if it needs upgraded
-            if (installedVersion < SqlSchemaUpdater.GetRequiredSchemaVersion() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
+            SchemaVersionComparisonResult softwareSchemaComparedToDatabaseSchema = databaseSchemaVersion.Compare(softwareSchemaVersion);
+
+            if (softwareSchemaComparedToDatabaseSchema==SchemaVersionComparisonResult.Unknown)
+            {
+                log.Error("Upgrade path not found.");
+
+                MessageHelper.ShowError(this, "Cannot upgrade database.");
+                return false;
+            }
+
+            if (softwareSchemaComparedToDatabaseSchema == SchemaVersionComparisonResult.Newer || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -807,7 +819,7 @@ namespace ShipWorks
             }
             
             // See if its too new
-            if (installedVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if (softwareSchemaComparedToDatabaseSchema == SchemaVersionComparisonResult.Older)
             {
                 using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
                 {

@@ -2,6 +2,8 @@
 
   <Import Project="shared.targets" />
 
+  <UsingTask TaskName="VersionIdentifier.VersionIdentifier" AssemblyFile="..\Components\VersionIdentifier.dll"></UsingTask>
+  
   <PropertyGroup>
     <Configuration Condition=" $(Configuration) == '' ">Release</Configuration>
 
@@ -418,6 +420,11 @@
       <ExeAppend>_UPS</ExeAppend>
     </InstallerTypes>
   </ItemGroup>
+  
+  <ItemGroup>
+    <VersionFile Include="ShipWorksVersions.json"></VersionFile>
+  </ItemGroup>
+    
   <!-- Create the installer -->
   <Target Name="InnoSetup" >
 
@@ -443,12 +450,16 @@
     </CreateProperty>
 
     <!-- We need to embed the db version used by this version of ShipWorks -->
-    <Exec Command='"$(AppDirectory)\ShipWorks.exe" -instanceID:{CBD776DE-BA3F-4913-8B10-CFC6CE01363A} /command:getdbschemaversion -type:required' IgnoreExitCode='true'>
+    <!--<Exec Command='"$(AppDirectory)\ShipWorks.exe" -instanceID:{CBD776DE-BA3F-4913-8B10-CFC6CE01363A} /command:getdbschemaversion -type:required' IgnoreExitCode='true'>
       <Output TaskParameter="ExitCode" PropertyName="SchemaID"/>
-    </Exec>
+    </Exec>-->
+    
+    <VersionIdentifier VersionFile='..\Code\ShipWorks\Data\Administration\Scripts\Update\ShipWorksVersions.json'>
+      <Output TaskParameter='FoundVersion' PropertyName='FoundVersion' />
+    </VersionIdentifier>
 
     <!-- Batching will kick in, calling this line once per installer type -->
-    <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(SchemaID) ' />
+    <Exec Command='"$(InnoSetupExe)" ..\Installer\ShipWorks.iss /O"$(InstallerPath)" /F"$(InstallerExeBaseName)%(InstallerTypes.ExeAppend)" /DEditionType=%(InstallerTypes.Identity) /DVersion=$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision) /DAppArtifacts="$(AppPath)" /DRequiredSchemaID=$(FoundVersion) ' />
 
     <!-- Copy the log to the right place.  Due to the way the Inno preprocessor works, we can't pass it in -->
     <Copy SourceFiles='InnoSetup.iss' DestinationFolder='$(LogDirectory)' />

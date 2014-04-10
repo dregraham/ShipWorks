@@ -5,6 +5,7 @@ using System.Text;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using System.Data;
+using ShipWorks.Data.Administration.Versioning;
 using log4net;
 
 namespace ShipWorks.Data.Administration
@@ -19,7 +20,7 @@ namespace ShipWorks.Data.Administration
         string name;
         SqlDatabaseStatus status;
 
-        Version schemaVersion;
+        string schemaVersion;
 
         string lastUsedBy;
         DateTime lastUsedOn;
@@ -70,9 +71,11 @@ namespace ShipWorks.Data.Administration
             cmd.CommandText = "GetSchemaVersion";
             cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.schemaVersion = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+            SchemaVersion version = new SchemaVersion((string) SqlCommandProvider.ExecuteScalar(cmd));
 
-            detail.status = detail.schemaVersion.Major < 3 ? SqlDatabaseStatus.ShipWorks2x : SqlDatabaseStatus.ShipWorks;
+            detail.schemaVersion = version.VersionName;
+
+            detail.status = version.DatabaseStatus;
         }
 
         /// <summary>
@@ -156,7 +159,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// ShipWorks schema version of the database
         /// </summary>
-        public Version SchemaVersion
+        public string SchemaVersion
         {
             get { return schemaVersion; }
         }

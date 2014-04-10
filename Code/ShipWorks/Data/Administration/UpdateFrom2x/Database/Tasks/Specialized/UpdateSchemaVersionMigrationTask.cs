@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
+using ShipWorks.Data.Administration.Versioning;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 {
@@ -54,7 +55,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
 
             using (SqlConnection con = MigrationTaskBase.OpenConnectionForTask(this))
             {
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, new Version("3.0.0.6"));
+                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, new SchemaVersion("3.0.0.6"));
             }
 
             return 0;
