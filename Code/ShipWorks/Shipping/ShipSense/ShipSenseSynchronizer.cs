@@ -3,6 +3,7 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.ShipSense
 {
@@ -172,33 +173,40 @@ namespace ShipWorks.Shipping.ShipSense
 
                 foreach (ShipmentEntity matchedShipment in shipmentDictionary[hashResult.HashValue])
                 {
-                    // Use the KB entry created above to simulate ShipSense being applied again
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(matchedShipment);
-                    entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment), matchedShipment.CustomsItems);
+                    IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(matchedShipment);
 
-                    // Update the status of the matched shipment if needed
-                    if (IsShipSenseApplied(matchedShipment))
+                    // We can't guarantee that package details will be the same if the counts do not match to 
+                    // begin with for whatever reason
+                    if (entry.Packages.Count() == packageAdapters.Count())
                     {
-                        // ShipSense has been applied to the matching shipment at some point in
-                        // the past, so we need to update its status to reflect the current state
-                        if (IsShipSenseApplied(shipment))
+                        // Use the KB entry created above to simulate ShipSense being applied again
+                        entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment), matchedShipment.CustomsItems);
+
+                        // Update the status of the matched shipment if needed
+                        if (IsShipSenseApplied(matchedShipment))
                         {
-                            // ShipSense was applied to the shipment that triggered the synchronization, so 
-                            // we can rely on its status
-                            matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
-                        }
-                        else
-                        {
-                            // We can't rely on the status of the shipment that triggered the synchronization, since
-                            // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
-                            // a status of ShipSense applied if the shipment matches the corresponding KB entry
-                            KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
-                            matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+                            // ShipSense has been applied to the matching shipment at some point in
+                            // the past, so we need to update its status to reflect the current state
+                            if (IsShipSenseApplied(shipment))
+                            {
+                                // ShipSense was applied to the shipment that triggered the synchronization, so 
+                                // we can rely on its status
+                                matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
+                            }
+                            else
+                            {
+                                // We can't rely on the status of the shipment that triggered the synchronization, since
+                                // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
+                                // a status of ShipSense applied if the shipment matches the corresponding KB entry
+                                KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
+                                matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+                            }
                         }
                     }
                 }
             }
-        }
+        }        
 
         /// <summary>
         /// Inspects the ShipSense status of the given shipment to determine whether ShipSense 

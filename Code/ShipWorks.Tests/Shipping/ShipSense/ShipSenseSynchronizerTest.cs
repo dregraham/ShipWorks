@@ -79,12 +79,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipments = new List<ShipmentEntity>
             {
-                GetShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
                 GetShipmentForOrder2(),
-                GetShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
                 GetShipmentForOrder2(),
-                GetShipmentForOrder1(),
-                GetShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1()
             };
 
             testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             List<ShipmentEntity> addedShipments = new List<ShipmentEntity>
             {
                 GetShipmentForOrder2(),
-                GetShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1()
             };
 
             int originalCount = testObject.MonitoredShipments.Count();
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             List<ShipmentEntity> addedShipments = new List<ShipmentEntity>
             {
                 GetShipmentForOrder2(),
-                GetShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1()
             };
 
             testObject.Add(addedShipments);
@@ -501,7 +501,96 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
         }
 
-        private ShipmentEntity GetShipmentForOrder1()
+        [TestMethod]
+        public void SynchronizeWith_IgnoresShipmentsForProvidersNotSupportingMultiplePackages_WhenSourcedShipmentContainsMultiplePackages_Test()
+        {
+            shipments = new List<ShipmentEntity>
+            {
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1()
+            };
+
+            ShipmentEntity multiPackageShipment = shipments[1];
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(multiPackageShipment);
+
+            // Create KB entry for the multi package shipment to use in our assertions
+            KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
+            multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
+
+
+            testObject.SynchronizeWith(multiPackageShipment);
+
+
+            Assert.IsFalse(multiPackageEntry.Matches(shipments[0]));
+            Assert.IsFalse(multiPackageEntry.Matches(shipments[2]));
+            Assert.IsFalse(multiPackageEntry.Matches(shipments[3]));
+            Assert.IsFalse(multiPackageEntry.Matches(shipments[5]));
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_SynchronizesMutliplePackageShipments_WhenSourcedShipmentAndTarget_PackageCountsAreEqual_Test()
+        {
+            shipments = new List<ShipmentEntity>
+            {
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1()
+            };
+
+            ShipmentEntity multiPackageShipment = shipments[1];            
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(multiPackageShipment);
+
+            // Create KB entry for the multi package shipment to use in our assertions
+            KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
+            multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
+
+
+            testObject.SynchronizeWith(multiPackageShipment);
+
+
+            Assert.IsTrue(multiPackageEntry.Matches(shipments[4]));
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_IgnoresShipments_WhenSourcedShipmentAndTarget_PackageCountsAreDifferent_Test()
+        {
+            shipments = new List<ShipmentEntity>
+            {
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1(),
+                GetMultiplePackageShipmentForOrder1(),
+                GetSinglePackageShipmentForOrder1()
+            };
+
+            testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
+
+            ShipmentEntity multiPackageShipment = shipments[1];
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(multiPackageShipment);
+
+            // Remove one package from the target
+            shipments[4].FedEx.Packages.RemoveAt(0);
+
+            // Create KB entry for the multi package shipment to use in our assertions
+            KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
+            multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
+
+
+            testObject.SynchronizeWith(multiPackageShipment);
+
+
+            Assert.IsFalse(multiPackageEntry.Matches(shipments[4]));
+        }
+
+        private ShipmentEntity GetSinglePackageShipmentForOrder1()
         {
             OrderEntity order = new OrderEntity { OrderID = 1 };
             order.OrderItems.Add(new OrderItemEntity { SKU = "123", Code = "ABC", Quantity = 1 });
@@ -523,6 +612,28 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                     DimsWeight = 35
                 }
             };
+
+            return shipment;
+        }
+
+        private ShipmentEntity GetMultiplePackageShipmentForOrder1()
+        {
+            OrderEntity order = new OrderEntity { OrderID = 1 };
+            order.OrderItems.Add(new OrderItemEntity { SKU = "123", Code = "ABC", Quantity = 1 });
+
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Order = order,
+                OriginCountryCode = "US",
+                OriginPostalCode = "63102",
+                ShipCountryCode = "US",
+                ShipPostalCode = "63102",
+                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                FedEx = new FedExShipmentEntity()
+            };
+
+            shipment.FedEx.Packages.Add(new FedExPackageEntity { DimsWidth = 5, DimsHeight = 4, DimsLength = 3, DimsWeight = 2 });
+            shipment.FedEx.Packages.Add(new FedExPackageEntity { DimsWidth = 6, DimsHeight = 7, DimsLength = 8, DimsWeight = 9 });
 
             return shipment;
         }
