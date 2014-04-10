@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.ShipSense.Hashing
@@ -28,8 +29,24 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
 
                 foreach (string property in propertyNames.OrderBy(p => p))
                 {
-                    object currentValue = item.Fields[property].CurrentValue;
-                    key.Add(property, currentValue == null ? string.Empty : currentValue.ToString());
+                    IEntityFieldCore field = item.Fields[property];
+                    if (field == null || item.Fields[property] == null)
+                    {
+                        key.Add(property, string.Empty);
+                    }
+                    else
+                    {
+                        if (field.DataType == typeof (decimal))
+                        {
+                            decimal currentValue = (decimal) item.Fields[property].CurrentValue;
+                            key.Add(property, currentValue.ToString("N4"));
+                        }
+                        else
+                        {
+                            object currentValue = item.Fields[property].CurrentValue;
+                            key.Add(property, currentValue.ToString());
+                        }
+                    }
                 }
                 
                 // Find the item attributes that match the list of attribute names provided.

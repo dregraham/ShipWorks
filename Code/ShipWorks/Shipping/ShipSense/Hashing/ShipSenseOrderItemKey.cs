@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseOrderItemKey" /> class.
         /// </summary>
-        /// <param name="quantity">The quantity of a particular order item.</param>
         public ShipSenseOrderItemKey()
         {
             itemPropertyAttributeKeys = new Dictionary<string, string>();
