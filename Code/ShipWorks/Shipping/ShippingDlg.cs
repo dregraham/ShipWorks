@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping
 
             //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
             shipments.ForEach(OrderUtility.PopulateOrderDetails);
-
+            shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
         }
 
@@ -709,6 +709,8 @@ namespace ShipWorks.Shipping
                 ClearRates(string.Empty);
                 GetRates();
             }
+
+            shipSenseSynchronizer.Add(loadedShipmentEntities);
         }
         
         /// <summary>
@@ -1082,6 +1084,7 @@ namespace ShipWorks.Shipping
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
                 OrderUtility.PopulateOrderDetails(shipment);
 
+                shipSenseSynchronizer.Add(loadedShipmentEntities);
                 shipSenseSynchronizer.SynchronizeWith(shipment);
             }
         }

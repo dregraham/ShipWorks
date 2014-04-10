@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping.ShipSense
                         shipmentDictionary[hashResult.HashValue] = new List<ShipmentEntity>();
                     }
 
+                    shipmentDictionary[hashResult.HashValue].RemoveAll(s => s.ShipmentID == shipment.ShipmentID);
                     shipmentDictionary[hashResult.HashValue].Add(shipment);
 
                     // We also need to create a corresponding entry in the KB entry dictionary
