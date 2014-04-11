@@ -85,6 +85,7 @@
             // 
             this.panelConfiguration.AutoScroll = true;
             this.panelConfiguration.BackColor = System.Drawing.Color.White;
+            this.panelConfiguration.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelConfiguration.Controls.Add(this.labelDescription);
             this.panelConfiguration.Controls.Add(this.labelTitle);
             this.panelConfiguration.Controls.Add(this.configurationControl);
@@ -115,12 +116,11 @@
             // 
             // configurationControl
             // 
-            this.configurationControl.AutoScroll = true;
             this.configurationControl.BackColor = System.Drawing.Color.White;
             this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.configurationControl.Location = new System.Drawing.Point(7, 58);
             this.configurationControl.Name = "configurationControl";
-            this.configurationControl.Size = new System.Drawing.Size(533, 373);
+            this.configurationControl.Size = new System.Drawing.Size(524, 382);
             this.configurationControl.TabIndex = 0;
             // 
             // ShipSenseUniquenessSettingsDlg
