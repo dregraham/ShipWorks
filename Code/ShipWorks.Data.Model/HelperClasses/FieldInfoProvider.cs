@@ -2365,7 +2365,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StoreEntity", "AutoDownload", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownload, 0, 0, 0);
 			base.AddElementFieldInfo("StoreEntity", "AutoDownloadMinutes", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadMinutes, 0, 0, 10);
 			base.AddElementFieldInfo("StoreEntity", "AutoDownloadOnlyAway", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadOnlyAway, 0, 0, 0);
-			base.AddElementFieldInfo("StoreEntity", "AutoAddressValidation", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoAddressValidation, 0, 0, 0);
+			base.AddElementFieldInfo("StoreEntity", "AddressValidationSetting", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AddressValidationSetting, 0, 0, 10);
 			base.AddElementFieldInfo("StoreEntity", "ComputerDownloadPolicy", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ComputerDownloadPolicy, 2147483647, 0, 0);
 			base.AddElementFieldInfo("StoreEntity", "DefaultEmailAccountID", typeof(System.Int64), false, false, false, false,  (int)StoreFieldIndex.DefaultEmailAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("StoreEntity", "ManualOrderPrefix", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ManualOrderPrefix, 10, 0, 0);

@@ -14,4 +14,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ConsumerID" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5a268481-3a79-4e4e-b7cf-d190c55d8f7d" ChangeDateTime="04/11/2014 13:53:12">
+    <Property Name="ElementName" Value="[dbo].[Store].[AutoAddressValidation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Store]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AddressValidationSetting" />
+  </Operation>
 </Operations>
