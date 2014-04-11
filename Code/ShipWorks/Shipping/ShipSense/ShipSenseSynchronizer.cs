@@ -112,6 +112,19 @@ namespace ShipWorks.Shipping.ShipSense
             }
         }
 
+        public void RefreshKnowledgebaseEntries()
+        {
+            knowledgebaseEntryDictionary.Clear();
+            foreach (string key in shipmentDictionary.Keys)
+            {
+                ShipmentEntity shipmentEntity = shipmentDictionary[key].FirstOrDefault();
+                if (shipmentEntity != null)
+                {
+                    AddKnowledgebaseEntryToDictionary(key, shipmentEntity);
+                }
+            }
+        }
+
         /// <summary>
         /// Removes the specified shipment from being synchronized.
         /// </summary>

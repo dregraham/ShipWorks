@@ -2087,6 +2087,11 @@ namespace ShipWorks.Shipping
                 }
                 
                 LoadSelectedShipments(true);
+
+                // We want to update the synchronizer with the KB entry of the latest processed
+                // shipment, so the status of any remaining unprocessed shipments are reflected correctly
+                shipSenseSynchronizer.RefreshKnowledgebaseEntries();
+                shipSenseSynchronizer.MonitoredShipments.ToList().ForEach(shipSenseSynchronizer.SynchronizeWith);
             };
 
             // Code to execute for each shipment
