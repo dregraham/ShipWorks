@@ -112,6 +112,9 @@ namespace ShipWorks.Shipping.ShipSense
             }
         }
 
+        /// <summary>
+        /// Refreshes the data in the synchronizer's knowledge base entries.
+        /// </summary>
         public void RefreshKnowledgebaseEntries()
         {
             knowledgebaseEntryDictionary.Clear();

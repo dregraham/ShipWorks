@@ -610,14 +610,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Create KB entry for the multi package shipment to use in our assertions
             KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
             multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
-
-
+            
             testObject.SynchronizeWith(multiPackageShipment);
-
 
             Assert.IsFalse(multiPackageEntry.Matches(shipments[4]));
         }
-
+        
         private ShipmentEntity GetSinglePackageShipmentForOrder1(int shipmentID)
         {
             OrderEntity order = new OrderEntity { OrderID = 1 };
