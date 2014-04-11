@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
                         else
                         {
                             object currentValue = item.Fields[property].CurrentValue;
-                            key.Add(property, currentValue.ToString());
+                            key.Add(property, currentValue == null ? string.Empty : currentValue.ToString());
                         }
                     }
                 }
