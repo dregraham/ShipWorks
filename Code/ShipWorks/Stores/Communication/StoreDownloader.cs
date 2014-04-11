@@ -86,6 +86,18 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Gets the address validation setting.
+        /// </summary>
+        private AddressValidationStoreSettingType addressValidationSetting
+        {
+            get
+            {
+                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType)store.AddressValidationSetting);
+                return storeSetting;
+            }
+        }
+
+        /// <summary>
         /// The progress reporting interface used to report progress and check cancelation.
         /// </summary>
         public IProgressReporter Progress
@@ -627,9 +639,11 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private void SetAddressValidationStatus(OrderEntity order)
         {
-            order.ShipAddressValidationStatus = store.AutoAddressValidation
-                ? (int) AddressValidationStatusType.Pending
-                : (int) AddressValidationStatusType.NotChecked;
+            order.ShipAddressValidationStatus =
+                addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify
+                    ? (int)AddressValidationStatusType.Pending
+                    : (int)AddressValidationStatusType.NotChecked;
         }
 
         /// <summary>
@@ -637,7 +651,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private void QueueAddressValidation(OrderEntity order)
         {
-            if (store.AutoAddressValidation)
+            if (addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply || addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify)
             {
                 AddressValidationQueue.Enqueue(order);
             }

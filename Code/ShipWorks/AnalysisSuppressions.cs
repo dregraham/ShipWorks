@@ -13401,3 +13401,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.AddressValidation.ContextAddressValidationDataAccess.#ValidatedAddress")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "metaData", Scope = "member", Target = "ShipWorks.AddressValidation.LLBLGenLinqCollections.#.ctor(ShipWorks.Data.Model.Linq.LinqMetaData)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.AddressValidation.ContextAddressValidationDataAccess.#LinqCollections")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "ShipWorks.Stores.StoreType.#GetDefaultValidationSetting()")]

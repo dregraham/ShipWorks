@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Adapter.Custom;
@@ -220,6 +221,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void LoadSettingsTab()
         {
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
+
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
             manualOrderSettingsControl.Location = new Point(23, sectionTitleManualOrders.Bottom + 8);
             manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
@@ -245,7 +248,7 @@ namespace ShipWorks.Stores.Management
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
-            autoAddressValidation.Checked = store.AutoAddressValidation;
+            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
 
             // Download on\off
             comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
@@ -284,8 +287,15 @@ namespace ShipWorks.Stores.Management
             }
 
             // Check whether we should reset any pending address validations
-            resetPendingValidations = !autoAddressValidation.Checked && store.AutoAddressValidation;
-            store.AutoAddressValidation = autoAddressValidation.Checked;
+            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType)store.AddressValidationSetting;
+            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType)addressValidationSetting.SelectedValue;
+
+            resetPendingValidations = (currentSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                                       currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
+                                      && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
+                                          newSetting == AddressValidationStoreSettingType.ValidationDisabled);
+            
+            store.AddressValidationSetting = (int)addressValidationSetting.SelectedValue;
 
             return result;
         }

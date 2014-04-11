@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
@@ -76,7 +77,15 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AutoAddressValidation = true;
+            store.AddressValidationSetting = (int)GetDefaultValidationSetting();
+        }
+
+        /// <summary>
+        /// Gets the default validation setting.
+        /// </summary>
+        protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
+        {
+            return AddressValidationStoreSettingType.ValidateAndApply;
         }
 
         /// <summary>

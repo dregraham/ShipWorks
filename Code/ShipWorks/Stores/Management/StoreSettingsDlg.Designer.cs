@@ -39,7 +39,8 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
-            this.autoAddressValidation = new System.Windows.Forms.CheckBox();
+            this.panelAddressValidation = new System.Windows.Forms.Panel();
+            this.sectionAddressValidation = new ShipWorks.UI.Controls.SectionTitle();
             this.labelAllowDownload = new System.Windows.Forms.Label();
             this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
             this.panelStoreStatus = new System.Windows.Forms.Panel();
@@ -51,7 +52,6 @@ namespace ShipWorks.Stores.Management
             this.sectionAutoDownloads = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionTitleManualOrders = new ShipWorks.UI.Controls.SectionTitle();
             this.automaticDownloadControl = new ShipWorks.Stores.Management.AutomaticDownloadControl();
-            this.sectionAddressValidation = new ShipWorks.UI.Controls.SectionTitle();
             this.optionPageOnlineAccount = new ShipWorks.UI.Controls.OptionPage();
             this.optionPageStatusPreset = new ShipWorks.UI.Controls.OptionPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -71,11 +71,13 @@ namespace ShipWorks.Stores.Management
             this.labelStatus = new System.Windows.Forms.Label();
             this.licenseKey = new System.Windows.Forms.TextBox();
             this.changeLicense = new System.Windows.Forms.Button();
-            this.panelAddressValidation = new System.Windows.Forms.Panel();
+            this.addressValidationSetting = new System.Windows.Forms.ComboBox();
+            this.labelAddressValidationSetting = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageStore)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
+            this.panelAddressValidation.SuspendLayout();
             this.panelStoreStatus.SuspendLayout();
             this.optionPageStatusPreset.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -84,7 +86,6 @@ namespace ShipWorks.Stores.Management
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.optionPageLicense.SuspendLayout();
-            this.panelAddressValidation.SuspendLayout();
             this.SuspendLayout();
             // 
             // ok
@@ -206,15 +207,25 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.TabIndex = 7;
             this.optionPageSettings.Text = "Store Settings";
             // 
-            // autoAddressValidation
+            // panelAddressValidation
             // 
-            this.autoAddressValidation.AutoSize = true;
-            this.autoAddressValidation.Location = new System.Drawing.Point(20, 28);
-            this.autoAddressValidation.Name = "autoAddressValidation";
-            this.autoAddressValidation.Size = new System.Drawing.Size(274, 17);
-            this.autoAddressValidation.TabIndex = 32;
-            this.autoAddressValidation.Text = "Automatically validate new and updated addresses.";
-            this.autoAddressValidation.UseVisualStyleBackColor = true;
+            this.panelAddressValidation.Controls.Add(this.addressValidationSetting);
+            this.panelAddressValidation.Controls.Add(this.labelAddressValidationSetting);
+            this.panelAddressValidation.Controls.Add(this.sectionAddressValidation);
+            this.panelAddressValidation.Location = new System.Drawing.Point(15, 324);
+            this.panelAddressValidation.Name = "panelAddressValidation";
+            this.panelAddressValidation.Size = new System.Drawing.Size(564, 64);
+            this.panelAddressValidation.TabIndex = 33;
+            // 
+            // sectionAddressValidation
+            // 
+            this.sectionAddressValidation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionAddressValidation.Location = new System.Drawing.Point(0, 0);
+            this.sectionAddressValidation.Name = "sectionAddressValidation";
+            this.sectionAddressValidation.Size = new System.Drawing.Size(564, 22);
+            this.sectionAddressValidation.TabIndex = 3;
+            this.sectionAddressValidation.Text = "Address Validation";
             // 
             // labelAllowDownload
             // 
@@ -325,16 +336,6 @@ namespace ShipWorks.Stores.Management
             this.automaticDownloadControl.Name = "automaticDownloadControl";
             this.automaticDownloadControl.Size = new System.Drawing.Size(292, 50);
             this.automaticDownloadControl.TabIndex = 1;
-            // 
-            // sectionAddressValidation
-            // 
-            this.sectionAddressValidation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionAddressValidation.Location = new System.Drawing.Point(0, 0);
-            this.sectionAddressValidation.Name = "sectionAddressValidation";
-            this.sectionAddressValidation.Size = new System.Drawing.Size(564, 22);
-            this.sectionAddressValidation.TabIndex = 3;
-            this.sectionAddressValidation.Text = "Address Validation";
             // 
             // optionPageOnlineAccount
             // 
@@ -544,14 +545,23 @@ namespace ShipWorks.Stores.Management
             this.changeLicense.Text = "Change Activation...";
             this.changeLicense.Click += new System.EventHandler(this.OnChangeLicense);
             // 
-            // panelAddressValidation
+            // addressValidationSetting
             // 
-            this.panelAddressValidation.Controls.Add(this.sectionAddressValidation);
-            this.panelAddressValidation.Controls.Add(this.autoAddressValidation);
-            this.panelAddressValidation.Location = new System.Drawing.Point(15, 324);
-            this.panelAddressValidation.Name = "panelAddressValidation";
-            this.panelAddressValidation.Size = new System.Drawing.Size(564, 64);
-            this.panelAddressValidation.TabIndex = 33;
+            this.addressValidationSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.addressValidationSetting.FormattingEnabled = true;
+            this.addressValidationSetting.Location = new System.Drawing.Point(162, 28);
+            this.addressValidationSetting.Name = "addressValidationSetting";
+            this.addressValidationSetting.Size = new System.Drawing.Size(264, 21);
+            this.addressValidationSetting.TabIndex = 33;
+            // 
+            // labelAddressValidationSetting
+            // 
+            this.labelAddressValidationSetting.AutoSize = true;
+            this.labelAddressValidationSetting.Location = new System.Drawing.Point(20, 31);
+            this.labelAddressValidationSetting.Name = "labelAddressValidationSetting";
+            this.labelAddressValidationSetting.Size = new System.Drawing.Size(136, 13);
+            this.labelAddressValidationSetting.TabIndex = 32;
+            this.labelAddressValidationSetting.Text = "Address Validation Setting:";
             // 
             // StoreSettingsDlg
             // 
@@ -584,6 +594,8 @@ namespace ShipWorks.Stores.Management
             this.optionPageStoreDetails.ResumeLayout(false);
             this.optionPageSettings.ResumeLayout(false);
             this.optionPageSettings.PerformLayout();
+            this.panelAddressValidation.ResumeLayout(false);
+            this.panelAddressValidation.PerformLayout();
             this.panelStoreStatus.ResumeLayout(false);
             this.panelStoreStatus.PerformLayout();
             this.optionPageStatusPreset.ResumeLayout(false);
@@ -596,8 +608,6 @@ namespace ShipWorks.Stores.Management
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.optionPageLicense.ResumeLayout(false);
             this.optionPageLicense.PerformLayout();
-            this.panelAddressValidation.ResumeLayout(false);
-            this.panelAddressValidation.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -646,7 +656,8 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label labelAllowDownload;
         private ComputerDownloadAllowedComboBox comboAllowDownload;
         private StoreAddressControl storeAddressControl;
-        private System.Windows.Forms.CheckBox autoAddressValidation;
         private System.Windows.Forms.Panel panelAddressValidation;
+        private System.Windows.Forms.ComboBox addressValidationSetting;
+        private System.Windows.Forms.Label labelAddressValidationSetting;
     }
 }
