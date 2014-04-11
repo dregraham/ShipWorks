@@ -404,8 +404,6 @@ namespace ShipWorks
                 SaveCurrentUserSettings();
 
                 UserSession.Logoff(clearRememberMe);
-
-                AddressValidationQueue.Clear();
             }
 
             // Can't do anything when logged off
@@ -662,9 +660,6 @@ namespace ShipWorks
             {
                 ShowDownloadProgress();
             }
-
-            // Load any pending address validations
-            AddressValidationQueue.ReloadPendingValidations();
         }
 
         /// <summary>

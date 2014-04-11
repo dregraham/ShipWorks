@@ -599,8 +599,6 @@ namespace ShipWorks.Stores.Communication
                             SetAddressValidationStatus(order);
                             adapter.SaveAndRefetch(order);
 
-                            QueueAddressValidation(order);
-
                             ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
                         }
                     }
@@ -608,8 +606,6 @@ namespace ShipWorks.Stores.Communication
                     {
                         SetAddressValidationStatus(order);
                         adapter.SaveAndRefetch(order);
-
-                        QueueAddressValidation(order);
                     }
                     
                     log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");

@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.Linq;
+using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.AddressValidation
 {
@@ -17,76 +18,80 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     internal static class AddressValidationQueue
     {
-        private static ConcurrentQueue<long> orderQueue = new ConcurrentQueue<long>();
-        private static readonly Timer timer = new Timer(OnTimerTick, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(5));
+        public const string SqlAppLockName = "ValidateAddresses";
         private static readonly AddressValidator addressValidator = new AddressValidator();
+        private static object lockObj = new object();
+        private static Task validationThread;
 
         /// <summary>
-        /// Enqueue the order.
+        /// Attempt to validate any pending orders
         /// </summary>
-        /// <param name="order">The order.</param>
-        public static void Enqueue(OrderEntity order)
+        public static void PerformValidation()
         {
-            if ((AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
+            lock (lockObj)
             {
-                orderQueue.Enqueue(order.OrderID);
+                if (validationThread != null && !validationThread.IsCompleted)
+                {
+                    return;
+                }
+
+                validationThread = Task.Factory.StartNew(ValidatePendingOrders);
             }
         }
 
         /// <summary>
-        /// Load any pending validations so they can be processed
+        /// Try to validate any orders that are pending validation
         /// </summary>
-        public static void ReloadPendingValidations()
+        private static void ValidatePendingOrders()
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
-                // Get a list of all order ids that are pending address validation
-                AdapterAddressValidationDataAccess dataAccess = new AdapterAddressValidationDataAccess(adapter);
-                IEnumerable<long> orderIds = dataAccess.LinqCollections
-                    .Order
-                    .Where(x => x.ShipAddressValidationStatus == (int)AddressValidationStatusType.Pending)
-                    .Select(x => x.OrderID);
-
-                foreach (long id in orderIds)
+                // Just quit if we can't get a lock because some other computer is validating
+                if (SqlAppLockUtility.IsLocked(connection, SqlAppLockName) ||
+                    !SqlAppLockUtility.AcquireLock(connection, SqlAppLockName))
                 {
-                    orderQueue.Enqueue(id);
+                    return;
+                }
+
+                try
+                {
+                    using (SqlAdapter adapter = new SqlAdapter(connection))
+                    {
+                        List<OrderEntity> pendingOrders;
+                        LinqMetaData linqMetaData = new LinqMetaData(adapter);
+
+                        do
+                        {
+                            pendingOrders = linqMetaData.Order
+                                .Where(x => x.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending)
+                                .Take(50)
+                                .ToList();
+                            pendingOrders.ForEach(x => Validate(x, adapter));
+                        } while (pendingOrders.Any());
+                    }
+                }
+                finally
+                {
+                    SqlAppLockUtility.ReleaseLock(connection, SqlAppLockName);
                 }
             }
         }
 
         /// <summary>
-        /// Clears the queue so that processing stops immediately
-        /// </summary>
-        public static void Clear()
-        {
-            orderQueue = new ConcurrentQueue<long>();
-        }
-
-        /// <summary>
-        /// Called when [timer tick].
-        /// </summary>
-        private static void OnTimerTick(object state)
-        {
-            long orderID;
-
-            while (orderQueue.TryDequeue(out orderID))
-            {
-                Validate(orderID);
-            }
-
-            // Tell the timer to check again in 5 seconds
-            timer.Change(5000, Timeout.Infinite);
-        }
-
-        /// <summary>
         /// Validates the specified order identifier.
         /// </summary>
-        /// <param name="orderID">The order identifier.</param>
-        private static void Validate(long orderID)
+        private static void Validate(OrderEntity order, SqlAdapter adapter)
         {
             try
             {
-                CallValidate(orderID);
+                PersonAdapter originalShippingAddress = new PersonAdapter();
+                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+
+                if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
+                {
+                    addressValidator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
+                        ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
+                }
             }
             catch (ObjectDeletedException)
             {
@@ -98,29 +103,16 @@ namespace ShipWorks.AddressValidation
             }
             catch (ORMConcurrencyException)
             {
-                Validate(orderID);
+                // Don't worry about this...  The next pass through will grab this order again
             }
         }
 
         /// <summary>
-        /// Actually calls validation and saves.
+        /// Listen for entity changes from the data provider
         /// </summary>
-        /// <param name="orderID">The order identifier.</param>
-        private static void CallValidate(long orderID)
+        public static void OnEntityChangeDetected(object sender, EventArgs e)
         {
-            OrderEntity order = (OrderEntity)DataProvider.GetEntity(orderID);
-            
-            PersonAdapter originalShippingAddress = new PersonAdapter();
-            PersonAdapter.Copy(order, "Ship", originalShippingAddress);
-
-            if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
-            {
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    addressValidator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
-                        ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
-                }
-            }
+            PerformValidation();
         }
     }
 }
