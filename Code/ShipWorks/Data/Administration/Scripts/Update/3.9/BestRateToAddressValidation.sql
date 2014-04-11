@@ -13,12 +13,10 @@ SET NUMERIC_ROUNDABORT OFF;
 
 
 GO
-/*
 :setvar DatabaseName "BestRate"
 :setvar DefaultFilePrefix "BestRate"
 :setvar DefaultDataPath ""
 :setvar DefaultLogPath ""
-*/
 
 GO
 :on error exit
@@ -47,6 +45,10 @@ PRINT N'Rename refactoring operation with key 0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e
 
 GO
 PRINT N'Rename refactoring operation with key 4ed1e7a8-6e41-4a51-864b-f9934613b641 is skipped, element [dbo].[ValidatedAddress].[OrderID] (SqlSimpleColumn) will not be renamed to ConsumerID';
+
+
+GO
+PRINT N'Rename refactoring operation with key 5a268481-3a79-4e4e-b7cf-d190c55d8f7d is skipped, element [dbo].[Store].[AutoAddressValidation] (SqlSimpleColumn) will not be renamed to AddressValidationSetting';
 
 
 GO
@@ -492,8 +494,8 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_3e1466180be54546a233d292f00da376] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_7fd2b255ef874d3bbdb19dd74a71be7a] DEFAULT 0 FOR [ShipAddressValidationStatus];
+    ADD CONSTRAINT [SD_Order_bad1e0d55f004ba989b74629b74e70e4] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_f010dd7e32d84f469a50451903b16a0e] DEFAULT 0 FOR [ShipAddressValidationStatus];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -561,7 +563,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_3e1466180be54546a233d292f00da376], CONSTRAINT [SD_Order_7fd2b255ef874d3bbdb19dd74a71be7a];
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_bad1e0d55f004ba989b74629b74e70e4], CONSTRAINT [SD_Order_f010dd7e32d84f469a50451903b16a0e];
 
 DROP TABLE [dbo].[Order];
 
@@ -843,41 +845,41 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SET XACT_ABORT ON;
 
 CREATE TABLE [dbo].[tmp_ms_xx_Store] (
-    [StoreID]                BIGINT         IDENTITY (1005, 1000) NOT NULL,
-    [RowVersion]             ROWVERSION     NOT NULL,
-    [License]                NVARCHAR (150) NOT NULL,
-    [Edition]                NVARCHAR (MAX) NOT NULL,
-    [TypeCode]               INT            NOT NULL,
-    [Enabled]                BIT            NOT NULL,
-    [SetupComplete]          BIT            NOT NULL,
-    [StoreName]              NVARCHAR (75)  NOT NULL,
-    [Company]                NVARCHAR (60)  NOT NULL,
-    [Street1]                NVARCHAR (60)  NOT NULL,
-    [Street2]                NVARCHAR (60)  NOT NULL,
-    [Street3]                NVARCHAR (60)  NOT NULL,
-    [City]                   NVARCHAR (50)  NOT NULL,
-    [StateProvCode]          NVARCHAR (50)  NOT NULL,
-    [PostalCode]             NVARCHAR (20)  NOT NULL,
-    [CountryCode]            NVARCHAR (50)  NOT NULL,
-    [Phone]                  NVARCHAR (25)  NOT NULL,
-    [Fax]                    NVARCHAR (35)  NOT NULL,
-    [Email]                  NVARCHAR (100) NOT NULL,
-    [Website]                NVARCHAR (50)  NOT NULL,
-    [AutoDownload]           BIT            NOT NULL,
-    [AutoDownloadMinutes]    INT            NOT NULL,
-    [AutoDownloadOnlyAway]   BIT            NOT NULL,
-    [AutoAddressValidation]  BIT            NOT NULL,
-    [ComputerDownloadPolicy] NVARCHAR (MAX) NOT NULL,
-    [DefaultEmailAccountID]  BIGINT         NOT NULL,
-    [ManualOrderPrefix]      NVARCHAR (10)  NOT NULL,
-    [ManualOrderPostfix]     NVARCHAR (10)  NOT NULL,
-    [InitialDownloadDays]    INT            NULL,
-    [InitialDownloadOrder]   BIGINT         NULL,
+    [StoreID]                  BIGINT         IDENTITY (1005, 1000) NOT NULL,
+    [RowVersion]               ROWVERSION     NOT NULL,
+    [License]                  NVARCHAR (150) NOT NULL,
+    [Edition]                  NVARCHAR (MAX) NOT NULL,
+    [TypeCode]                 INT            NOT NULL,
+    [Enabled]                  BIT            NOT NULL,
+    [SetupComplete]            BIT            NOT NULL,
+    [StoreName]                NVARCHAR (75)  NOT NULL,
+    [Company]                  NVARCHAR (60)  NOT NULL,
+    [Street1]                  NVARCHAR (60)  NOT NULL,
+    [Street2]                  NVARCHAR (60)  NOT NULL,
+    [Street3]                  NVARCHAR (60)  NOT NULL,
+    [City]                     NVARCHAR (50)  NOT NULL,
+    [StateProvCode]            NVARCHAR (50)  NOT NULL,
+    [PostalCode]               NVARCHAR (20)  NOT NULL,
+    [CountryCode]              NVARCHAR (50)  NOT NULL,
+    [Phone]                    NVARCHAR (25)  NOT NULL,
+    [Fax]                      NVARCHAR (35)  NOT NULL,
+    [Email]                    NVARCHAR (100) NOT NULL,
+    [Website]                  NVARCHAR (50)  NOT NULL,
+    [AutoDownload]             BIT            NOT NULL,
+    [AutoDownloadMinutes]      INT            NOT NULL,
+    [AutoDownloadOnlyAway]     BIT            NOT NULL,
+    [AddressValidationSetting] INT            NOT NULL,
+    [ComputerDownloadPolicy]   NVARCHAR (MAX) NOT NULL,
+    [DefaultEmailAccountID]    BIGINT         NOT NULL,
+    [ManualOrderPrefix]        NVARCHAR (10)  NOT NULL,
+    [ManualOrderPostfix]       NVARCHAR (10)  NOT NULL,
+    [InitialDownloadDays]      INT            NULL,
+    [InitialDownloadOrder]     BIGINT         NULL,
     CONSTRAINT [tmp_ms_xx_constraint_PK_Store] PRIMARY KEY CLUSTERED ([StoreID] ASC)
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_c5c0b37533dd4af79734767be542ba6d] DEFAULT 0 FOR [AutoAddressValidation];
+    ADD CONSTRAINT [SD_Store_d9c788a5e4f34f89848768037a9a22f9] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -917,7 +919,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_c5c0b37533dd4af79734767be542ba6d];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_d9c788a5e4f34f89848768037a9a22f9];
 
 DROP TABLE [dbo].[Store];
 
@@ -1634,6 +1636,8 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e58')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '4ed1e7a8-6e41-4a51-864b-f9934613b641')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('4ed1e7a8-6e41-4a51-864b-f9934613b641')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
 
 GO
 
