@@ -44,8 +44,8 @@ namespace ShipWorks.Shipping.ShipSense.Customs
             get
             {
                 string valueForHashing = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
-                                                       Description, Quantity, Weight, UnitValue, CountryOfOrigin, HarmonizedCode,
-                                                       NumberOfPieces, UnitPriceAmount);
+                                                       Description, Quantity, Weight, UnitValue.ToString("N4"), CountryOfOrigin, HarmonizedCode,
+                                                       NumberOfPieces, UnitPriceAmount.ToString("N4"));
 
                 // Since Description is being used in the hash value, 
                 // use SHA256 value to reduce the length of the hash value
