@@ -1086,6 +1086,9 @@ namespace ShipWorks.Shipping
 
                 shipSenseSynchronizer.Add(loadedShipmentEntities);
                 shipSenseSynchronizer.SynchronizeWith(shipment);
+
+                // Refresh the shipment control, so any status changes are reflected
+                shipmentControl.RefreshAndResort();
             }
         }
 
