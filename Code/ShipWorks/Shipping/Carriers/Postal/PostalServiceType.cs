@@ -97,6 +97,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [ApiValue("DHLGMSMMEDIAMAILGROUND")]
         DhlMediaMailStandard = 108,
 
+        [Description("DHL GM SM Marketing Ground")]
+        [ApiValue("DHLGMSMMarketingParcelGround")]
+        DhlMarketingStandard = 109,
+
+        [Description("DHL GM SM Marketing Expedited")]
+        [ApiValue("DHLGMSMMarketingParcelExpedited")]
+        DhlMarketingExpedited = 110,
+
         [Description("Consolidator Label")]
         [ApiValue("ParcelSelect")]
         ConsolidatorDomestic = 200,
