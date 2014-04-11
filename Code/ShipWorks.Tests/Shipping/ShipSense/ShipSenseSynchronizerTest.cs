@@ -79,12 +79,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             shipments = new List<ShipmentEntity>
             {
-                GetSinglePackageShipmentForOrder1(),
-                GetShipmentForOrder2(),
-                GetSinglePackageShipmentForOrder1(),
-                GetShipmentForOrder2(),
-                GetSinglePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1(1),
+                GetShipmentForOrder2(2),
+                GetSinglePackageShipmentForOrder1(3),
+                GetShipmentForOrder2(4),
+                GetSinglePackageShipmentForOrder1(5),
+                GetSinglePackageShipmentForOrder1(6)
             };
 
             testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         [TestMethod]
         public void Add_MonitorsShipment_WhenOneShipmentIsAdded_Test()
         {
-            ShipmentEntity shipment = GetShipmentForOrder2();
+            ShipmentEntity shipment = GetShipmentForOrder2(10);
             int originalCount = testObject.MonitoredShipments.Count();
 
             testObject.Add(shipment);
@@ -123,8 +123,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             List<ShipmentEntity> addedShipments = new List<ShipmentEntity>
             {
-                GetShipmentForOrder2(),
-                GetSinglePackageShipmentForOrder1()
+                GetShipmentForOrder2(10),
+                GetSinglePackageShipmentForOrder1(11)
             };
 
             int originalCount = testObject.MonitoredShipments.Count();
@@ -135,11 +135,39 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [TestMethod]
-        public void Add_UpdatesKnowledgebaseEntries_WhenShipmentIsAdded_AndKonwledgebaseEntryDoesNotAlreadyExist_Test()
+        public void Add_UpdatesKnowledgebaseEntries_WhenShipmentIsAdded_AndKnowledgebaseEntryDoesNotAlreadyExist_Test()
         {
             // Create a shipment and change the order item SKU, so it gets 
             // recognized as a new entry that needs to be added (based on our mocks)
-            ShipmentEntity shipment = GetShipmentForOrder2();
+            ShipmentEntity shipment = GetShipmentForOrder2(10);
+            shipment.Order.OrderItems[0].SKU = "ABC123";
+
+            int originalCount = testObject.KnowledgebaseEntries.Count();
+
+            testObject.Add(shipment);
+
+            Assert.AreEqual(originalCount + 1, testObject.KnowledgebaseEntries.Count());
+        }
+
+        [TestMethod]
+        public void Add_DoesNotRemoveExistingShipments_WithSameShipmentID_WhenHashIsSame_Test()
+        {
+            // Create a new shipment with the same ID as one already in the synchronizer
+            ShipmentEntity shipment = GetShipmentForOrder2(1);
+
+            int originalCount = testObject.KnowledgebaseEntries.Count();
+
+            testObject.Add(shipment);
+
+            Assert.AreEqual(originalCount, testObject.KnowledgebaseEntries.Count());
+        }
+
+        [TestMethod]
+        public void Add_DoesNotRemoveExistingShipments_WithSameShipmentID_WhenHashIsDifferent_Test()
+        {
+            // Create a shipment and change the order item SKU, so it gets 
+            // recognized as a new entry that needs to be added (based on our mocks)
+            ShipmentEntity shipment = GetShipmentForOrder2(1);
             shipment.Order.OrderItems[0].SKU = "ABC123";
 
             int originalCount = testObject.KnowledgebaseEntries.Count();
@@ -154,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             knowledgebase.Setup(k => k.GetEntry(It.IsAny<OrderEntity>())).Returns<KnowledgebaseEntry>(null);
 
-            ShipmentEntity shipment = GetShipmentForOrder2();
+            ShipmentEntity shipment = GetShipmentForOrder2(10);
 
             int originalCount = testObject.KnowledgebaseEntries.Count();
 
@@ -168,7 +196,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             knowledgebase.Setup(k => k.GetEntry(It.IsAny<OrderEntity>())).Returns(new KnowledgebaseEntry());
 
-            ShipmentEntity shipment = GetShipmentForOrder2();
+            ShipmentEntity shipment = GetShipmentForOrder2(10);
 
             int originalCount = testObject.KnowledgebaseEntries.Count();
 
@@ -187,8 +215,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             List<ShipmentEntity> addedShipments = new List<ShipmentEntity>
             {
-                GetShipmentForOrder2(),
-                GetSinglePackageShipmentForOrder1()
+                GetShipmentForOrder2(10),
+                GetSinglePackageShipmentForOrder1(11)
             };
 
             testObject.Add(addedShipments);
@@ -506,12 +534,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             shipments = new List<ShipmentEntity>
             {
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1(1),
+                GetMultiplePackageShipmentForOrder1(2),
+                GetSinglePackageShipmentForOrder1(3),
+                GetSinglePackageShipmentForOrder1(4),
+                GetMultiplePackageShipmentForOrder1(5),
+                GetSinglePackageShipmentForOrder1(6)
             };
 
             ShipmentEntity multiPackageShipment = shipments[1];
@@ -536,12 +564,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             shipments = new List<ShipmentEntity>
             {
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1(1),
+                GetMultiplePackageShipmentForOrder1(2),
+                GetSinglePackageShipmentForOrder1(3),
+                GetSinglePackageShipmentForOrder1(4),
+                GetMultiplePackageShipmentForOrder1(5),
+                GetSinglePackageShipmentForOrder1(6)
             };
 
             ShipmentEntity multiPackageShipment = shipments[1];            
@@ -563,12 +591,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             shipments = new List<ShipmentEntity>
             {
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1(),
-                GetMultiplePackageShipmentForOrder1(),
-                GetSinglePackageShipmentForOrder1()
+                GetSinglePackageShipmentForOrder1(1),
+                GetMultiplePackageShipmentForOrder1(2),
+                GetSinglePackageShipmentForOrder1(3),
+                GetSinglePackageShipmentForOrder1(4),
+                GetMultiplePackageShipmentForOrder1(5),
+                GetSinglePackageShipmentForOrder1(6)
             };
 
             testObject = new ShipSenseSynchronizer(shipments, shippingSettings, knowledgebase.Object);
@@ -590,13 +618,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             Assert.IsFalse(multiPackageEntry.Matches(shipments[4]));
         }
 
-        private ShipmentEntity GetSinglePackageShipmentForOrder1()
+        private ShipmentEntity GetSinglePackageShipmentForOrder1(int shipmentID)
         {
             OrderEntity order = new OrderEntity { OrderID = 1 };
             order.OrderItems.Add(new OrderItemEntity { SKU = "123", Code = "ABC", Quantity = 1 });
 
             ShipmentEntity shipment = new ShipmentEntity
             {
+                ShipmentID = shipmentID,
                 Order = order,
                 OriginCountryCode = "US",
                 OriginPostalCode = "63102",
@@ -616,13 +645,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             return shipment;
         }
 
-        private ShipmentEntity GetMultiplePackageShipmentForOrder1()
+        private ShipmentEntity GetMultiplePackageShipmentForOrder1(int shipmentID)
         {
             OrderEntity order = new OrderEntity { OrderID = 1 };
             order.OrderItems.Add(new OrderItemEntity { SKU = "123", Code = "ABC", Quantity = 1 });
 
             ShipmentEntity shipment = new ShipmentEntity
             {
+                ShipmentID = shipmentID,
                 Order = order,
                 OriginCountryCode = "US",
                 OriginPostalCode = "63102",
@@ -638,13 +668,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             return shipment;
         }
 
-        private ShipmentEntity GetShipmentForOrder2()
+        private ShipmentEntity GetShipmentForOrder2(int shipmentID)
         {
             OrderEntity order = new OrderEntity { OrderID = 2 };
             order.OrderItems.Add(new OrderItemEntity { SKU = "789", Code = "XYZ", Quantity = 2 });
 
             ShipmentEntity shipment = new ShipmentEntity
             {
+                ShipmentID = shipmentID,
                 Order = order,
                 OriginCountryCode = "US",
                 OriginPostalCode = "63102",

@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping.ShipSense
                         shipmentDictionary[hashResult.HashValue] = new List<ShipmentEntity>();
                     }
 
+                    // Remove any existing shipments that have the same shipment ID, so we don't have any duplicates
                     shipmentDictionary[hashResult.HashValue].RemoveAll(s => s.ShipmentID == shipment.ShipmentID);
                     shipmentDictionary[hashResult.HashValue].Add(shipment);
 
