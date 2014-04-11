@@ -643,17 +643,6 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Queue the order for address validation if necessary
-        /// </summary>
-        private void QueueAddressValidation(OrderEntity order)
-        {
-            if (addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply || addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify)
-            {
-                AddressValidationQueue.Enqueue(order);
-            }
-        }
-
-        /// <summary>
         /// Create the proper AuditBehaviorScope to used based on the configuration of auditing new orders.
         /// </summary>
         public static AuditBehaviorScope CreateOrderAuditScope(OrderEntity order)
