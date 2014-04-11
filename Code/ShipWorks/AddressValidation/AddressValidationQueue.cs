@@ -47,8 +47,7 @@ namespace ShipWorks.AddressValidation
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
                 // Just quit if we can't get a lock because some other computer is validating
-                if (SqlAppLockUtility.IsLocked(connection, SqlAppLockName) ||
-                    !SqlAppLockUtility.AcquireLock(connection, SqlAppLockName))
+                if (!SqlAppLockUtility.AcquireLock(connection, SqlAppLockName))
                 {
                     return;
                 }
