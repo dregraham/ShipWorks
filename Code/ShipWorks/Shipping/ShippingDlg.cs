@@ -87,6 +87,10 @@ namespace ShipWorks.Shipping
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
+        private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
+        private const int shipSenseChangedDebounceTime = 500;
+        private bool shipSenseNeedsUpdated = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -123,6 +127,9 @@ namespace ShipWorks.Shipping
 
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
+
+            shipSenseChangedTimer.Tick += OnShipSenseChangedTimerTick;
+            shipSenseChangedTimer.Interval = shipSenseChangedDebounceTime;
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
@@ -280,6 +287,10 @@ namespace ShipWorks.Shipping
             {
                 // Save all changes from the UI to the previous entity selection
                 SaveUIDisplayedShipments();
+
+                // The user could have changed something and clicked a different shipment before the timer fired, so apply any ShipSense
+                // if needed.
+                SynchronizeWithShipSense();
 
                 UpdateSelectedShipmentCount();
 
@@ -1077,6 +1088,22 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
         {
+            // Stop the timer
+            shipSenseChangedTimer.Stop();
+
+            // Make a note that something changed and we still need to apply ShipSense.  This is for the race condition with the user
+            // making changes and clicking a different shipment before the timer fires.
+            shipSenseNeedsUpdated = true;
+
+            // Restart the timer
+            shipSenseChangedTimer.Start();
+        }
+
+        /// <summary>
+        /// Synchronize the shipment with other matching shipments
+        /// </summary>
+        private void SynchronizeWithShipSense()
+        {
             if (uiDisplayedShipments.Count > 0)
             {
                 // The UI hasn't updated the shipment properties, so we need to force an update to the entities
@@ -1090,8 +1117,14 @@ namespace ShipWorks.Shipping
                 shipSenseSynchronizer.Add(loadedShipmentEntities);
                 shipSenseSynchronizer.SynchronizeWith(shipment);
 
-                // Refresh the shipment control, so any status changes are reflected
-                shipmentControl.RefreshAndResort();
+                if (shipSenseNeedsUpdated)
+                {
+                    // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
+                    shipSenseNeedsUpdated = false;
+
+                    // Refresh the shipment control, so any status changes are reflected
+                    shipmentControl.RefreshAndResort();
+                }
             }
         }
 
@@ -1829,6 +1862,15 @@ namespace ShipWorks.Shipping
 
             rateControl.ShowSpinner = true;
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
+        }
+
+        /// <summary>
+        /// Actually makes the ShipSense changed call when the debounce timer has elapsed
+        /// </summary>
+        private void OnShipSenseChangedTimerTick(object sender, EventArgs e)
+        {
+            shipSenseChangedTimer.Stop();
+            SynchronizeWithShipSense();
         }
         
         /// <summary>
