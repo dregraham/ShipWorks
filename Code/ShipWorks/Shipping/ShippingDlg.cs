@@ -1079,6 +1079,9 @@ namespace ShipWorks.Shipping
         {
             if (uiDisplayedShipments.Count > 0)
             {
+                // The UI hasn't updated the shipment properties, so we need to force an update to the entities
+                CustomsControl.SaveToShipments();
+
                 ShipmentEntity shipment = uiDisplayedShipments[0];
 
                 //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!

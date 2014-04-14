@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using Divelements.SandGrid;
@@ -89,6 +90,7 @@ namespace ShipWorks.Shipping.Editing
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
         {
             SuspendShipSenseFieldChangeEvent();
+
             this.enableEditing = enableEditing;
             this.selectedRows.Clear();
 
@@ -351,6 +353,13 @@ namespace ShipWorks.Shipping.Editing
             {
                 foreach (ShipmentCustomsItemEntity customsItem in (List<ShipmentCustomsItemEntity>) row.Tag)
                 {
+                    // Sometimes the shipment is null, but we need it to be populated for the changed weights
+                    // We could refactor to use shipmentID instead at somepoint in the future...
+                    if (customsItem.Shipment == null)
+                    {
+                        customsItem.Shipment = DataProvider.GetEntity(customsItem.ShipmentID, true) as ShipmentEntity;
+                    }
+                    
                     SaveCustomsItem(customsItem, changedWeights, changedValues);
                 }
             }
