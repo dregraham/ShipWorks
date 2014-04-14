@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using Interapptive.Shared.IO.Zip;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -150,16 +145,14 @@ namespace ShipWorks.Shipping.ShipSense
                 // an instance of a KnowledgebaseEntry
                 return CreateKnowledgebaseEntry(entity.Entry);
             }
-            else
-            {
-                // There wasn't an entry in the data source for the items in this order,
-                // so we'll just return a new, empty entry
-                return new KnowledgebaseEntry();
-            }
+            
+            // There wasn't an entry in the data source for the items in this order,
+            // so we'll just return a new, empty entry
+            return new KnowledgebaseEntry();
         }
 
         /// <summary>
-        /// Determines whether the specified shipment is overwritten.
+        /// Determines whether the specified shipment has overwritten the data in the ShipSense knowledge base.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A Boolean value indicating if the shipment has overwritten data provided by ShipSense.</returns>

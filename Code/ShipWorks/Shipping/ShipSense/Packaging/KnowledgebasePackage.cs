@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Shipping.ShipSense.Packaging
 {

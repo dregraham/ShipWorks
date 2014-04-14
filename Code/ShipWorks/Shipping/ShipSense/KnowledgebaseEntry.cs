@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.ShipSense
             foreach (KnowledgebaseCustomsItem knowledgebaseCustomsItem in CustomsItems)
             {
                 shipmentCustomsItems.Add(
-                    new ShipmentCustomsItemEntity()
+                    new ShipmentCustomsItemEntity
                     {
                         Description = knowledgebaseCustomsItem.Description,
                         Quantity = knowledgebaseCustomsItem.Quantity,

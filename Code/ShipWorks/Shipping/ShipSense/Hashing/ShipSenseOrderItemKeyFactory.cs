@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -25,7 +23,7 @@ namespace ShipWorks.Shipping.ShipSense.Hashing
 
             foreach (OrderItemEntity item in sortedItems)
             {
-                ShipSenseOrderItemKey key = new ShipSenseOrderItemKey() { Quantity = item.Quantity };
+                ShipSenseOrderItemKey key = new ShipSenseOrderItemKey { Quantity = item.Quantity };
 
                 foreach (string property in propertyNames.OrderBy(p => p))
                 {

@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -166,8 +162,8 @@ namespace ShipWorks.Shipping.ShipSense
                 {
                     if (knowledgebaseEntryDictionary.ContainsKey(hashResult.HashValue))
                     {
-                        KnowledgebaseEntry entry = knowledgebaseEntryDictionary[hashResult.HashValue];
                         // Consider a status of ShipSense applied if the shipment matches the corresponding KB entry
+                        KnowledgebaseEntry entry = knowledgebaseEntryDictionary[hashResult.HashValue];
                         shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
                     }
                 }
