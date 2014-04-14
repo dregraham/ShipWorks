@@ -1131,21 +1131,24 @@ namespace ShipWorks.Shipping
                 // The UI hasn't updated the shipment properties, so we need to force an update to the entities
                 CustomsControl.SaveToShipments();
 
-                ShipmentEntity shipment = uiDisplayedShipments[0];
+                ShipmentEntity shipment = uiDisplayedShipments.FirstOrDefault(s => !s.Processed);
 
-                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
-                OrderUtility.PopulateOrderDetails(shipment);
-
-                shipSenseSynchronizer.Add(loadedShipmentEntities);
-                shipSenseSynchronizer.SynchronizeWith(shipment);
-
-                if (shipSenseNeedsUpdated)
+                if (shipment != null)
                 {
-                    // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
-                    shipSenseNeedsUpdated = false;
+                    //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+                    OrderUtility.PopulateOrderDetails(shipment);
 
-                    // Refresh the shipment control, so any status changes are reflected
-                    shipmentControl.RefreshAndResort();
+                    shipSenseSynchronizer.Add(loadedShipmentEntities);
+                    shipSenseSynchronizer.SynchronizeWith(shipment);
+
+                    if (shipSenseNeedsUpdated)
+                    {
+                        // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
+                        shipSenseNeedsUpdated = false;
+
+                        // Refresh the shipment control, so any status changes are reflected
+                        shipmentControl.RefreshAndResort();
+                    }
                 }
             }
         }
@@ -1224,6 +1227,7 @@ namespace ShipWorks.Shipping
                 // Finally, remove the old service control, or the blank panel we created
                 if (oldCustomsControl != null)
                 {
+                    oldCustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
                     oldCustomsControl.Dispose();
                 }
                 else
