@@ -285,6 +285,17 @@ namespace ShipWorks.Shipping
             // in the shipment grid real fast.
             if (!loadingSelectedShipments)
             {
+                // Detach from the ShipSense events, so we aren't handling events as the shipments get loaded
+                if (ServiceControl != null)
+                {
+                    ServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                }
+
+                if (CustomsControl != null)
+                {
+                    CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                }
+
                 // Save all changes from the UI to the previous entity selection
                 SaveUIDisplayedShipments();
 
@@ -296,6 +307,17 @@ namespace ShipWorks.Shipping
 
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
+
+                // Re-attach to the ShipSense changed event now that the shipments have been loaded
+                if (ServiceControl != null)
+                {
+                    ServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                }
+
+                if (CustomsControl != null)
+                {
+                    CustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                }
 
                 ClearRates(string.Empty);
                 GetRates();
@@ -1299,7 +1321,7 @@ namespace ShipWorks.Shipping
                     if (ServiceControl != null)
                     {
                         ServiceControl.RefreshContentWeight();
-                    }
+                    }                    
                 }
             }
         }
