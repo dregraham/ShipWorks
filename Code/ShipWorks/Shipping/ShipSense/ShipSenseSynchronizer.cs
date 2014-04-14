@@ -210,22 +210,14 @@ namespace ShipWorks.Shipping.ShipSense
                         // Update the status of the matched shipment if needed
                         if (IsShipSenseApplied(matchedShipment))
                         {
-                            // ShipSense has been applied to the matching shipment at some point in
-                            // the past, so we need to update its status to reflect the current state
-                            if (IsShipSenseApplied(shipment))
-                            {
-                                // ShipSense was applied to the shipment that triggered the synchronization, so 
-                                // we can rely on its status
-                                matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
-                            }
-                            else
-                            {
-                                // We can't rely on the status of the shipment that triggered the synchronization, since
-                                // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
-                                // a status of ShipSense applied if the shipment matches the corresponding KB entry
-                                KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
-                                matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
-                            }
+                            // Consult the original entry to see if this shipment matches or not. We can't just use the status
+                            // of the shipment that triggered the change since the triggering shipment may be an international
+                            // shipment where the customs data makes it seen as overwritten but that data didn't impact the 
+                            // configuration of a domestic shipment meaning the domestic shipment still matches the KB entry
+                            // (e.g. the harmonized code of an international shipment changed which does not impact weight 
+                            // or dimensions of a domestic shipment)
+                            KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
+                            matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
                         }
                     }
                 }
