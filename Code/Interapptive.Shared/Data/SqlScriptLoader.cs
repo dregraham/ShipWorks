@@ -69,6 +69,14 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public virtual SqlScript LoadScript(string name)
         {
+            return new SqlScript(name, GetScript(name));
+        }
+        
+        /// <summary>
+        /// Get the sql script of the given name from the configured location.
+        /// </summary>
+        public string GetScript(string name)
+        {
             if (name == null)
             {
                 throw new ArgumentNullException("name");
@@ -96,7 +104,7 @@ namespace Interapptive.Shared.Data
                     // Return the contents
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        return new SqlScript(name, reader.ReadToEnd());
+                        return reader.ReadToEnd();
                     }
                 }
             }
@@ -104,7 +112,7 @@ namespace Interapptive.Shared.Data
             // Load from directory
             if (folder != null)
             {
-                return new SqlScript(name, File.ReadAllText(Path.Combine(folder.FullName, name)));
+                return File.ReadAllText(Path.Combine(folder.FullName, name));
             }
 
             throw new InvalidOperationException("SqlScriptLoader not configured with location.");

@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Administration.Versioning
             List<SqlUpdateScript> scripts = GetAllScripts();
 
 			// select s
-			// from upgradPath up
+			// from upgradePath up
 			// inner join scripts s on up.scriptname = s.schemaversion 
 			return upgradePath.Join(scripts, up => up, s => s.SchemaVersion, (s, script) => script).ToList();			
         }
@@ -121,7 +121,6 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Gets the script names from the version file.
         /// </summary>
-        /// <returns></returns>
         private HashSet<string> GetScriptNames()
         {
             HashSet<string> versions = new HashSet<string>();
@@ -137,7 +136,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Deserailize serializedVersions
         /// </summary>
-        public List<UpgradePath> GetAllVersions(string serializedVersions)
+        private List<UpgradePath> GetAllVersions(string serializedVersions)
         {
             List<UpgradePath> versions =
                 JsonConvert.DeserializeObject<List<UpgradePath>>(serializedVersions);

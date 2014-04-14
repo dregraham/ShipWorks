@@ -246,6 +246,7 @@ namespace ShipWorks.Data.Administration.Versioning
 
                     // Execute the script
                     SqlScript executor = sqlLoader[script.ScriptName];
+                    executor.AppendSql(sqlLoader.GetScript(string.Format("{0}.data", script.ScriptName)));
 
                     // Update the progress as we complete each bactch in the script
                     executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)

@@ -105,7 +105,6 @@
   <ItemGroup>
     <None Include="Snapshots\InitialDatabase.dacpac" />
     <None Include="Assemblies\ShipWorks.SqlServer.dll" />
-    <None Include="Snapshots\AddressValidationSettingChanged.dacpac" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Resource.sql">

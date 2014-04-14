@@ -111,6 +111,15 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Appends the SQL.
+        /// </summary>
+        /// <param name="sql">The SQL.</param>
+        public void AppendSql(string sql)
+        {
+            Content = string.Format("{0}{1}{2}", Content, Environment.NewLine, sql);
+        }
+
+        /// <summary>
         /// Executes the specified SQL script with default options
         /// </summary>
         public void Execute(SqlConnection connection)
