@@ -198,7 +198,14 @@ namespace ShipWorks.Shipping.ShipSense
                     if (entry.Packages.Count() == packageAdapters.Count())
                     {
                         // Use the KB entry created above to simulate ShipSense being applied again
-                        entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment), matchedShipment.CustomsItems);
+                        if (shipmentType.IsCustomsRequired(matchedShipment))
+                        {
+                            entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment), matchedShipment.CustomsItems);
+                        }
+                        else
+                        {
+                            entry.ApplyTo(shipmentType.GetPackageAdapters(matchedShipment));
+                        }
 
                         // Update the status of the matched shipment if needed
                         if (IsShipSenseApplied(matchedShipment))
@@ -211,7 +218,7 @@ namespace ShipWorks.Shipping.ShipSense
                                 // we can rely on its status
                                 matchedShipment.ShipSenseStatus = shipment.ShipSenseStatus;
                             }
-                        else
+                            else
                             {
                                 // We can't rely on the status of the shipment that triggered the synchronization, since
                                 // ShipSense was never applied, so we need to figure out the status for ourselves - consider 
