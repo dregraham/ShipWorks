@@ -353,13 +353,6 @@ namespace ShipWorks.Shipping.Editing
             {
                 foreach (ShipmentCustomsItemEntity customsItem in (List<ShipmentCustomsItemEntity>) row.Tag)
                 {
-                    // Sometimes the shipment is null, but we need it to be populated for the changed weights
-                    // We could refactor to use shipmentID instead at somepoint in the future...
-                    if (customsItem.Shipment == null)
-                    {
-                        customsItem.Shipment = DataProvider.GetEntity(customsItem.ShipmentID, true) as ShipmentEntity;
-                    }
-                    
                     SaveCustomsItem(customsItem, changedWeights, changedValues);
                 }
             }

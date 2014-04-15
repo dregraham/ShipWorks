@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.ShipSense
                 KnowledgebaseEntry entry = new KnowledgebaseEntry();
                 entry.ApplyFrom(sourceShipmentType.GetPackageAdapters(shipment), shipment.CustomsItems);
 
-                foreach (ShipmentEntity matchedShipment in shipmentDictionary[hashResult.HashValue])
+                foreach (ShipmentEntity matchedShipment in shipmentDictionary[hashResult.HashValue].Where(s => s.ShipmentID != shipment.ShipmentID))
                 {
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(matchedShipment);
                     IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(matchedShipment);
