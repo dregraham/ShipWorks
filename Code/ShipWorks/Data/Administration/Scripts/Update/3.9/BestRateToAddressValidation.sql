@@ -478,6 +478,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
     [ShipWebsite]                          NVARCHAR (50)  NOT NULL,
     [ShipAddressValidationSuggestionCount] INT            NOT NULL,
     [ShipAddressValidationStatus]          INT            NOT NULL,
+    [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
     [RollupItemCode]                       NVARCHAR (300) NULL,
@@ -494,8 +495,9 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_bad1e0d55f004ba989b74629b74e70e4] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_f010dd7e32d84f469a50451903b16a0e] DEFAULT 0 FOR [ShipAddressValidationStatus];
+    ADD CONSTRAINT [SD_Order_9d7d03448e884aad83056aed7e838278] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_44750dd8550144ae9cf338fc93127166] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Order_489ca52d4118404a9aa5bd242dde9376] DEFAULT N'' FOR [ShipAddressValidationError];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -563,7 +565,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_bad1e0d55f004ba989b74629b74e70e4], CONSTRAINT [SD_Order_f010dd7e32d84f469a50451903b16a0e];
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_9d7d03448e884aad83056aed7e838278], CONSTRAINT [SD_Order_44750dd8550144ae9cf338fc93127166], CONSTRAINT [SD_Order_489ca52d4118404a9aa5bd242dde9376];
 
 DROP TABLE [dbo].[Order];
 
@@ -577,57 +579,22 @@ SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillCompany]...';
+PRINT N'Creating [dbo].[Order].[IX_OnlineLastModified_StoreID_IsManual]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany]
-    ON [dbo].[Order]([BillCompany] ASC);
+CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual]
+    ON [dbo].[Order]([OnlineLastModified] DESC, [StoreID] ASC, [IsManual] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillCountryCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_StoreID]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode]
-    ON [dbo].[Order]([BillCountryCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillEmail]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail]
-    ON [dbo].[Order]([BillEmail] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillLastName]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
-    ON [dbo].[Order]([BillLastName] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillPostalCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
-    ON [dbo].[Order]([BillPostalCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillStateProvCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
-    ON [dbo].[Order]([BillStateProvCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_StoreID]
+    ON [dbo].[Order]([StoreID] ASC)
+    INCLUDE([IsManual]);
 
 
 GO
@@ -637,33 +604,6 @@ PRINT N'Creating [dbo].[Order].[IX_Auto_CustomerID]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_CustomerID]
     ON [dbo].[Order]([CustomerID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_LocalStatus]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_LocalStatus]
-    ON [dbo].[Order]([LocalStatus] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_OnlineStatus]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus]
-    ON [dbo].[Order]([OnlineStatus] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_OrderDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderDate]
-    ON [dbo].[Order]([OrderDate] ASC);
 
 
 GO
@@ -685,12 +625,48 @@ CREATE NONCLUSTERED INDEX [IX_Auto_OrderNumberComplete]
 
 
 GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_OrderDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_OrderDate]
+    ON [dbo].[Order]([OrderDate] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Order].[IX_Auto_OrderTotal]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_OrderTotal]
     ON [dbo].[Order]([OrderTotal] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_LocalStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_LocalStatus]
+    ON [dbo].[Order]([LocalStatus] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_OnlineCustomerID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_OnlineCustomerID]
+    ON [dbo].[Order]([OnlineCustomerID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_OnlineStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus]
+    ON [dbo].[Order]([OnlineStatus] ASC);
 
 
 GO
@@ -703,48 +679,66 @@ CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping]
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillLastName]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCode]
-    ON [dbo].[Order]([RollupItemCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
+    ON [dbo].[Order]([BillLastName] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCount]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillCompany]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCount]
-    ON [dbo].[Order]([RollupItemCount] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany]
+    ON [dbo].[Order]([BillCompany] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemName]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillStateProvCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemName]
-    ON [dbo].[Order]([RollupItemName] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
+    ON [dbo].[Order]([BillStateProvCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemSKU]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillPostalCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemSKU]
-    ON [dbo].[Order]([RollupItemSKU] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
+    ON [dbo].[Order]([BillPostalCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupNoteCount]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillCountryCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
-    ON [dbo].[Order]([RollupNoteCount] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode]
+    ON [dbo].[Order]([BillCountryCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillEmail]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail]
+    ON [dbo].[Order]([BillEmail] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipLastName]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
+    ON [dbo].[Order]([ShipLastName] ASC);
 
 
 GO
@@ -754,6 +748,24 @@ PRINT N'Creating [dbo].[Order].[IX_Auto_ShipCompany]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany]
     ON [dbo].[Order]([ShipCompany] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipStateProvCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
+    ON [dbo].[Order]([ShipStateProvCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipPostalCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
+    ON [dbo].[Order]([ShipPostalCode] ASC);
 
 
 GO
@@ -775,58 +787,48 @@ CREATE NONCLUSTERED INDEX [IX_Auto_ShipEmail]
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipLastName]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
-    ON [dbo].[Order]([ShipLastName] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCount]
+    ON [dbo].[Order]([RollupItemCount] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipPostalCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemName]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
-    ON [dbo].[Order]([ShipPostalCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemName]
+    ON [dbo].[Order]([RollupItemName] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipStateProvCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
-    ON [dbo].[Order]([ShipStateProvCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCode]
+    ON [dbo].[Order]([RollupItemCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_StoreID]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemSKU]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_StoreID]
-    ON [dbo].[Order]([StoreID] ASC)
-    INCLUDE([IsManual]);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemSKU]
+    ON [dbo].[Order]([RollupItemSKU] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_OnlineCustomerID]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupNoteCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_OnlineCustomerID]
-    ON [dbo].[Order]([OnlineCustomerID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_OnlineLastModified_StoreID_IsManual]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual]
-    ON [dbo].[Order]([OnlineLastModified] DESC, [StoreID] ASC, [IsManual] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
+    ON [dbo].[Order]([RollupNoteCount] ASC);
 
 
 GO
@@ -879,7 +881,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_d9c788a5e4f34f89848768037a9a22f9] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_f7ed885be81a471497393e9aee51fcfd] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -919,7 +921,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_d9c788a5e4f34f89848768037a9a22f9];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_f7ed885be81a471497393e9aee51fcfd];
 
 DROP TABLE [dbo].[Store];
 

@@ -902,6 +902,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipAddressValidationStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ShipAddressValidationError", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("RollupItemCount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1652,6 +1655,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipAddressValidationStatus, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipAddressValidationStatus, value); }
+		}
+
+		/// <summary> The ShipAddressValidationError property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipAddressValidationError"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipAddressValidationError
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.ShipAddressValidationError, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipAddressValidationError, value); }
 		}
 
 		/// <summary> The RollupItemCount property of the Entity Order<br/><br/>

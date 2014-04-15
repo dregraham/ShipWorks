@@ -351,6 +351,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1152,6 +1154,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1443,6 +1447,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1576,6 +1582,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1929,6 +1937,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -2724,6 +2734,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4343,6 +4355,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4591,6 +4605,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4965,6 +4981,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5179,6 +5197,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5668,6 +5688,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5892,6 +5914,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6163,6 +6187,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6559,6 +6585,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6864,6 +6892,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -7687,6 +7717,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -9458,6 +9490,8 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationSuggestionCount,
 		///<summary>ShipAddressValidationStatus. </summary>
 		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>

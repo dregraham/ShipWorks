@@ -46,6 +46,7 @@
     [ShipWebsite]           NVARCHAR (50)  NOT NULL,
 	[ShipAddressValidationSuggestionCount] INT NOT NULL,
 	[ShipAddressValidationStatus] INT NOT NULL,
+	[ShipAddressValidationError] NVARCHAR(300) NOT NULL,
     [RollupItemCount]       INT            NOT NULL,
     [RollupItemName]        NVARCHAR (300) NULL,
     [RollupItemCode]        NVARCHAR (300) NULL,

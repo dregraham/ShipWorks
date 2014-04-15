@@ -1704,6 +1704,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "ShipWebsite", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipWebsite, 50, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationSuggestionCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationSuggestionCount, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationStatus, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationError", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationError, 300, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.RollupItemCount, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemName", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemName, 300, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemCode", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemCode, 300, 0, 0);
