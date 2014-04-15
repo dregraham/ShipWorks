@@ -90,7 +90,7 @@ namespace Interapptive.Shared.Data
             Name = name;
             Content = sql;
 
-            BatchCount = Regex.Split(sql, @"^\s*?GO(?!TO)", RegexOptions.Multiline).Count(b => !string.IsNullOrWhiteSpace(b));
+            BatchCount = Math.Max(Regex.Split(sql, @"^\s*?GO(?!TO)", RegexOptions.Multiline).Count(b => !string.IsNullOrWhiteSpace(b)), 1);
 
             lines = (sql.Replace(Environment.NewLine, "\n") + "\nGO\n").Split('\n').ToList();
 
@@ -117,6 +117,10 @@ namespace Interapptive.Shared.Data
         public void AppendSql(string sql)
         {
             Content = string.Format("{0}{1}{2}", Content, Environment.NewLine, sql);
+
+            BatchCount = Math.Max(Regex.Split(Content, @"^\s*?GO(?!TO)", RegexOptions.Multiline).Count(b => !string.IsNullOrWhiteSpace(b)), 1);
+
+            lines = (Content.Replace(Environment.NewLine, "\n") + "\nGO\n").Split('\n').ToList();
         }
 
         /// <summary>

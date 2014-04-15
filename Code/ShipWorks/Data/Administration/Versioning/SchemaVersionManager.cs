@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <returns></returns>
         public SchemaVersion GetRequiredSchemaVersion()
         {
-            return new SchemaVersion(allVersions.Last().ToVersion);
+            return new SchemaVersion(allVersions.Last().To);
         }
         
         /// <summary>
@@ -50,14 +50,14 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             VersionGraph versionGraph = new VersionGraph();
 
-            List<string> upgradePath = versionGraph.GetUpgradePath(fromVersion, toVersion, allVersions);
+            List<VersionAndScriptName> upgradePath = versionGraph.GetUpgradePath(fromVersion, toVersion, allVersions);
 
             List<SqlUpdateScript> scripts = GetAllScripts();
 
 			// select s
 			// from upgradePath up
 			// inner join scripts s on up.scriptname = s.schemaversion 
-			return upgradePath.Join(scripts, up => up, s => s.SchemaVersion, (s, script) => script).ToList();			
+			return upgradePath.Join(scripts, up => up.Version, s => s.SchemaVersion, (s, script) => script).ToList();			
         }
 
         /// <summary>
@@ -106,11 +106,22 @@ namespace ShipWorks.Data.Administration.Versioning
             // Step 5: return abc.
             resource = resource.Replace(".sql", string.Empty);
 
+            bool isDataFile = resource.EndsWith(".data", StringComparison.OrdinalIgnoreCase);
+            if (isDataFile)
+            {
+                resource = resource.Replace(".data", string.Empty);
+            }
+
             for (int i = 1; i <= resource.Length; i++)
             {
                 string checkName = resource.Substring(resource.Length - i);
                 if (scriptNames.Contains(checkName))
                 {
+                    if (isDataFile)
+                    {
+                        checkName = string.Format("{0}.data", checkName);
+                    }
+
                     return checkName;
                 }
             }
@@ -127,7 +138,7 @@ namespace ShipWorks.Data.Administration.Versioning
 
             foreach (var versionPair in allVersions)
             {
-                versions.Add(versionPair.ToVersion);
+                versions.Add(versionPair.To);
             }
 
             return versions;

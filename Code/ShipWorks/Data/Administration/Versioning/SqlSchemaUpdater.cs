@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Transactions;
 using Interapptive.Shared.Data;
@@ -246,11 +247,18 @@ namespace ShipWorks.Data.Administration.Versioning
 
                     // Execute the script
                     SqlScript executor = sqlLoader[script.ScriptName];
-                    executor.AppendSql(sqlLoader.GetScript(string.Format("{0}.data", script.ScriptName)));
+                    executor.AppendSql(sqlLoader.GetScript(GetDataScriptName(script.ScriptName), false));
 
                     // Update the progress as we complete each bactch in the script
                     executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
                     {
+                        int percentComplete = Math.Min(100, ((int)(scriptsCompleted*scriptProgressValue)) + (int)((args.Batch + 1)*(scriptProgressValue/executor.BatchCount)));
+
+                        if (percentComplete < 0)
+                        {
+                            Debug.Write(percentComplete);    
+                        }
+                        
                         // Update the progress
                         progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.BatchCount)));
                     };
@@ -263,6 +271,15 @@ namespace ShipWorks.Data.Administration.Versioning
                 progress.Detail = "Done";
                 progress.Completed();
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the data script.
+        /// </summary>
+        private static string GetDataScriptName(string scriptName)
+        {
+            scriptName = scriptName.Replace(".sql", string.Empty);
+            return string.Format("{0}.data.sql", scriptName);
         }
 
         /// <summary>
