@@ -615,6 +615,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 ShipCountryCode = "US",
                 ShipPostalCode = "63102",
                 ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ContentWeight = 0,
                 FedEx = new FedExShipmentEntity()
             };
 

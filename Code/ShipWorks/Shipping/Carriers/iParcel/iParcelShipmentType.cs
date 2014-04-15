@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
             foreach (IParcelPackageEntity packageEntity in shipment.IParcel.Packages)
             {
-                adapters.Add(new iParcelPackageAdapter(packageEntity));
+                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity));
             }
 
             return adapters;

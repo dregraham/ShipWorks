@@ -6,14 +6,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 {
     public class iParcelPackageAdapter : IPackageAdapter
     {
+        private readonly ShipmentEntity shipmentEntity;
         private readonly IParcelPackageEntity packageEntity;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="iParcelPackageAdapter"/> class.
+        /// Initializes a new instance of the <see cref="iParcelPackageAdapter" /> class.
         /// </summary>
+        /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="packageEntity">The package entity.</param>
-        public iParcelPackageAdapter(IParcelPackageEntity packageEntity)
+        public iParcelPackageAdapter(ShipmentEntity shipmentEntity, IParcelPackageEntity packageEntity)
         {
+            this.shipmentEntity = shipmentEntity;
             this.packageEntity = packageEntity;
         }
 
@@ -49,8 +52,24 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public double Weight
         {
-            get { return packageEntity.Weight; }
-            set { packageEntity.Weight = value; }
+            get
+            {
+                // The shipment's content weight is updated when one of the customs items' quantity or weight changes 
+                // when there is a only single package. When there are multiple packages, the weight differences are 
+                // distributed evenly across packages, so the content weight does not have to be modified via the package adapter.
+                return shipmentEntity.IParcel.Packages.Count == 1 ? shipmentEntity.ContentWeight : packageEntity.Weight;
+            }
+            set
+            {
+                if (shipmentEntity.IParcel.Packages.Count == 1)
+                {
+                    // The shipment's content weight will need to be updated as well in the event
+                    // that the weight change is a result of a customs item's weight changing
+                    shipmentEntity.ContentWeight = value;
+                }
+
+                packageEntity.Weight = value;
+            }
         }
 
         /// <summary>

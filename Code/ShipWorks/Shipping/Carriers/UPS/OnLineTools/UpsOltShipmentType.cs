@@ -56,27 +56,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override SettingsControlBase CreateSettingsControl()
         {
             return new UpsOltSettingsControl();
-        }
-
-        /// <summary>
-        /// Gets the package adapter for the shipment.
-        /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
-        {
-            if (!shipment.Ups.Packages.Any())
-            {
-                throw new UpsException("There must be at least one package to create the UPS package adapter.");
-            }
-
-            // Return an adapter per package
-            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
-            foreach (UpsPackageEntity packageEntity in shipment.Ups.Packages)
-            {
-                adapters.Add(new UpsPackageAdapter(packageEntity));
-            }
-
-            return adapters;
-        }
+        }        
 
         /// <summary>
         /// Creates the Returns control

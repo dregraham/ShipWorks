@@ -187,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<IPackageAdapter> adapters = new List<IPackageAdapter>();
             foreach (FedExPackageEntity packageEntity in shipment.FedEx.Packages)
             {
-                adapters.Add(new FedExPackageAdapter(packageEntity));
+                adapters.Add(new FedExPackageAdapter(shipment, packageEntity));
             }
 
             return adapters;
