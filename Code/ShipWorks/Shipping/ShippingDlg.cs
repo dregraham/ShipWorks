@@ -1126,7 +1126,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void SynchronizeWithShipSense()
         {
-            if (uiDisplayedShipments.Count > 0)
+            if (uiDisplayedShipments.Count > 0 && shipSenseNeedsUpdated)
             {
                 // The UI hasn't updated the shipment properties, so we need to force an update to the entities
                 CustomsControl.SaveToShipments();
@@ -1141,14 +1141,11 @@ namespace ShipWorks.Shipping
                     shipSenseSynchronizer.Add(loadedShipmentEntities);
                     shipSenseSynchronizer.SynchronizeWith(shipment);
 
-                    if (shipSenseNeedsUpdated)
-                    {
-                        // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
-                        shipSenseNeedsUpdated = false;
+                    // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
+                    shipSenseNeedsUpdated = false;
 
-                        // Refresh the shipment control, so any status changes are reflected
-                        shipmentControl.RefreshAndResort();
-                    }
+                    // Refresh the shipment control, so any status changes are reflected
+                    shipmentControl.RefreshAndResort();
                 }
             }
         }
