@@ -94,7 +94,6 @@
 {"To":"3.8.0.1","From":[{"Version":"3.8.0.0","Script":"3.8.0.1"}]},   /* sets provider back to none, if not best rate. Only needed for customers that had the beta. */
 {"To":"AddressValidation", 
 	"From":[
-		{"Version":"3.8.0.1","Script":"BestRateToAddressValidation"},
-		{"Version":"3.7.4.1","Script":"BestRateToAddressValidation"} ]}  /* upgrade beta to Address validation, upgrade non-beta users */
-
+		{"Version":"3.7.4.1","Script":"BestRateToAddressValidation"},
+		{"Version":"3.8.0.1","Script":"BestRateToAddressValidation"} ]}  /* upgrade beta to Address validation, upgrade non-beta users */
 ]
