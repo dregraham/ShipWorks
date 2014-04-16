@@ -903,6 +903,16 @@ PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
 GO
+PRINT N'Creating index [IX_Shipment_ShipmentID_HashKey] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ShipmentID_HashKey] ON [dbo].[Shipment] 
+(
+	[ShipSenseHashKey] ASC,
+	[Processed] ASC,
+	[ShipSenseStatus] ASC
+)
+GO
+
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Shipment]'

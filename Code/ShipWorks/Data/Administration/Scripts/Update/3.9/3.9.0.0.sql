@@ -11,6 +11,16 @@ ALTER TABLE [dbo].[Shipment] ADD
 [ShipSenseEntry] varbinary(max) NULL
 GO
 
+PRINT N'Creating index [IX_Shipment_ShipmentID_HashKey] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ShipmentID_HashKey] ON [dbo].[Shipment] 
+(
+	[ShipSenseHashKey] ASC,
+	[Processed] ASC,
+	[ShipSenseStatus] ASC
+)
+GO
+
 UPDATE [Shipment] SET [ShipSenseStatus] = 0, [ShipSenseChangeSets] = '<ChangeSets/>', [ShipSenseHashKey] = '', [ShipSenseEntry] = 0x00
 GO
 
