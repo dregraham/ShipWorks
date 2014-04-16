@@ -14,8 +14,8 @@ namespace ShipWorks.Tests.AddressValidation
     public class ValidatedAddressManagerTest
     {
         private OrderEntity testOrder;
-        private PersonAdapter originalAddress;
-        private PersonAdapter newAddress;
+        private AddressAdapter originalAddress;
+        private AddressAdapter newAddress;
         private Mock<IAddressValidationDataAccess> dataAccess;
         private Mock<ILinqCollections> linqCollections;
         private ShipmentEntity shipmentFromOtherOrder;
@@ -28,12 +28,12 @@ namespace ShipWorks.Tests.AddressValidation
         [TestInitialize]
         public void Initialize()
         {
-            originalAddress = new PersonAdapter
+            originalAddress = new AddressAdapter
             {
                 Street1 = "123 Main"
             };
 
-            newAddress = new PersonAdapter
+            newAddress = new AddressAdapter
             {
                 Street1 = "456 Main"
             };
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_CallsDelete_OnlyOnAddressesAssociatedWithOrder()
         {
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new PersonAdapter(), null, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter(), null, new List<AddressEntity>());
             dataAccess.Verify(x => x.DeleteEntity(addressForOrder), Times.Once);
             dataAccess.Verify(x => x.DeleteEntity(addressForOtherOrder), Times.Never);
         }
@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.AddressValidation
         public void SaveValidatedOrder_PropagatesAddressChanges_OnlyOnShipmentWithIdenticalAddress()
         {
             testOrder.ShipStreet1 = "999 Main";
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new PersonAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 }, null, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 }, null, new List<AddressEntity>());
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOrderAddress), Times.Once);
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOtherAddress), Times.Never);
             dataAccess.Verify(x => x.SaveEntity(shipmentFromOtherOrder), Times.Never);

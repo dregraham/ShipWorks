@@ -41,7 +41,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="saveAction">Action that should save changes to the database</param>
         public void Validate(IEntity2 addressEntity, string addressPrefix, Action<AddressEntity, IEnumerable<AddressEntity>> saveAction)
         {
-            PersonAdapter adapter = new PersonAdapter(addressEntity, addressPrefix);
+            AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
 
             // We don't want to validate already validated addresses because we'll lose the original address
             if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.NotChecked &&
@@ -73,7 +73,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Set the validation status on the entity
         /// </summary>
-        private static void SetValidationStatus(List<AddressValidationResult> suggestedAddresses, PersonAdapter adapter)
+        private static void SetValidationStatus(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
         {
             if (!suggestedAddresses.Any())
             {
@@ -94,7 +94,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Update the adapter's address to the first valid address if its status is adjusted
         /// </summary>
-        private static void UpdateAddressIfAdjusted(PersonAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
+        private static void UpdateAddressIfAdjusted(AddressAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
         {
             if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.Adjusted)
             {
@@ -114,7 +114,7 @@ namespace ShipWorks.AddressValidation
         private static AddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult)
         {
             AddressEntity address = new AddressEntity();
-            validationResult.CopyTo(new PersonAdapter(address, string.Empty));
+            validationResult.CopyTo(new AddressAdapter(address, string.Empty));
             return address;
         }
     }

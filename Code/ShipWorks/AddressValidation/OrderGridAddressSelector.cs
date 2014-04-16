@@ -98,20 +98,12 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void SelectAddress(OrderEntity order, ValidatedAddressEntity validatedAddressEntity)
         {
-            PersonAdapter originalAddress = new PersonAdapter();
+            AddressAdapter originalAddress = new AddressAdapter();
 
-            // Copy the values manually instead of using the person adapter copy so that we don't overwrite values that
-            // address entity does not support (like name, email, etc.)
-            PersonAdapter orderAdapter = new PersonAdapter(order, "Ship");
+            AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
             orderAdapter.CopyTo(originalAddress);
-
-            orderAdapter.Street1 = validatedAddressEntity.Address.Street1;
-            orderAdapter.Street2 = validatedAddressEntity.Address.Street2;
-            orderAdapter.Street3 = validatedAddressEntity.Address.Street3;
-            orderAdapter.City = validatedAddressEntity.Address.City;
-            orderAdapter.StateProvCode = validatedAddressEntity.Address.StateProvCode;
-            orderAdapter.PostalCode = validatedAddressEntity.Address.PostalCode;
-            orderAdapter.CountryCode = validatedAddressEntity.Address.CountryCode;
+            
+            AddressAdapter.Copy(validatedAddressEntity, string.Empty, orderAdapter);
 
             order.ShipAddressValidationStatus = validatedAddressEntity.IsOriginal ? 
                 (int) AddressValidationStatusType.Overridden : 

@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Communication
 
         int quantitySaved = 0;
         int quantityNew = 0;
-        private PersonAdapter originalShippingAddress;
+        private AddressAdapter originalShippingAddress;
 
         /// <summary>
         /// Constructor
@@ -296,8 +296,8 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                originalShippingAddress = new PersonAdapter();
-                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                originalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
 
                 return order;
             }
@@ -593,7 +593,7 @@ namespace ShipWorks.Stores.Communication
                     // Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
-                        PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
+                        AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
                         if (originalShippingAddress != newShippingAddress)
                         {
                             SetAddressValidationStatus(order);

@@ -18,7 +18,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propagates the address changes to shipments.
         /// </summary>
-        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        public static void PropagateAddressChangesToShipments(SqlAdapter adapter, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
             PropagateAddressChangesToShipments(new AdapterAddressValidationDataAccess(adapter), orderID, originalShippingAddress, newShippingAddress);
         }
@@ -26,7 +26,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propagate order address changes to unprocessed shipments if necessary
         /// </summary>
-        public static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, PersonAdapter originalShippingAddress, PersonAdapter newShippingAddress)
+        public static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
             if (originalShippingAddress == newShippingAddress)
@@ -40,7 +40,7 @@ namespace ShipWorks.AddressValidation
             foreach (ShipmentEntity shipment in shipments)
             {
                 // Update the shipment address if its current address is the same as the original shipment address
-                PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
+                AddressAdapter shipmentAddress = new AddressAdapter(shipment, "Ship");
                 if (originalShippingAddress == shipmentAddress)
                 {
                     newShippingAddress.CopyTo(shipmentAddress);
@@ -116,7 +116,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
             SaveValidatedOrder(new ContextAddressValidationDataAccess(context), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }
@@ -129,7 +129,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(DataAccessAdapter adapter, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(DataAccessAdapter adapter, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
             SaveValidatedOrder(new AdapterAddressValidationDataAccess(adapter), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }
@@ -142,7 +142,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, PersonAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
             DeleteExistingAddresses(dataAccess, order.OrderID);
             SaveOrderAddress(dataAccess, order, enteredAddress, true);
@@ -157,7 +157,7 @@ namespace ShipWorks.AddressValidation
             order.ShipAddressValidationSuggestionCount = suggestedAddressList.Count();
             dataAccess.SaveEntity(order);
 
-            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalShippingAddress, new PersonAdapter(order, "Ship"));
+            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalShippingAddress, new AddressAdapter(order, "Ship"));
         }
 
         /// <summary>

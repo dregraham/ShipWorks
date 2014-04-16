@@ -83,8 +83,8 @@ namespace ShipWorks.AddressValidation
         {
             try
             {
-                PersonAdapter originalShippingAddress = new PersonAdapter();
-                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                AddressAdapter originalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
 
                 if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
                 {

@@ -66,7 +66,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Checks whether this result is equal to the address in the adapter
         /// </summary>
-        public bool IsEqualTo(PersonAdapter adapter)
+        public bool IsEqualTo(AddressAdapter adapter)
         {
             if (adapter == null)
             {
@@ -86,7 +86,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Copies the address of this result into the specified adapter
         /// </summary>
-        public void CopyTo(PersonAdapter adapter)
+        public void CopyTo(AddressAdapter adapter)
         {
             adapter.Street1 = Street1;
             adapter.Street2 = Street2;

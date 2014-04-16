@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.AddressValidation
     public class AddressValidationResultTest
     {
         private AddressValidationResult result;
-        private PersonAdapter adapter;
+        private AddressAdapter adapter;
 
         [TestInitialize]
         public void Initialize()
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.AddressValidation
                 PostalCode = "12345"
             };
 
-            adapter = new PersonAdapter
+            adapter = new AddressAdapter
             {
                 Street1 = "Street1",
                 Street2 = "Street2",
@@ -43,13 +43,6 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void IsEqualTo_ReturnsTrue_WhenAdapterIsEqual()
         {
-            Assert.IsTrue(result.IsEqualTo(adapter));
-        }
-
-        [TestMethod]
-        public void IsEqualTo_ReturnsTrue_WhenAdapterHasUnrelatedFieldsSet()
-        {
-            adapter.FirstName = "Bob";
             Assert.IsTrue(result.IsEqualTo(adapter));
         }
 
@@ -105,7 +98,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void CopyTo_CopiesResultToAdapter()
         {
-            PersonAdapter newAdapter = new PersonAdapter();
+            AddressAdapter newAdapter = new AddressAdapter();
             result.CopyTo(newAdapter);
             Assert.AreEqual("Street1", newAdapter.Street1);
             Assert.AreEqual("Street2", newAdapter.Street2);
@@ -114,19 +107,6 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("MO", newAdapter.StateProvCode);
             Assert.AreEqual("US", newAdapter.CountryCode);
             Assert.AreEqual("12345", newAdapter.PostalCode);
-        }
-
-        [TestMethod]
-        public void CopyTo_DoesNotModifyUnrelatedFields()
-        {
-            PersonAdapter newAdapter = new PersonAdapter
-            {
-                FirstName = "Bob"
-            };
-
-            result.CopyTo(newAdapter);
-
-            Assert.AreEqual("Bob", newAdapter.FirstName);
         }
     }
 }

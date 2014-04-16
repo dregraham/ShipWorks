@@ -50,8 +50,8 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
                 
-                PersonAdapter originalShippingAddress = new PersonAdapter();
-                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                AddressAdapter originalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
                 
                 // If the address has already been validated, don't bother validating it again
                 if (order == null ||
