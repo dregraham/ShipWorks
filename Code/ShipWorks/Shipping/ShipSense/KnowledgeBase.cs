@@ -80,14 +80,7 @@ namespace ShipWorks.Shipping.ShipSense
                 }
             }
 
-            // Fetch the entity because if it exists, we need the IsNew property to
-            // be set to false otherwise a PK violation will be thrown if it already exists
-            // Note: in a later story we should probably look into caching this data to 
-            // reduce the number of database calls 
-            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
-            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
-
-            KnowledgebaseHashResult hash = hashingStrategy.ComputeHash(keys);
+            KnowledgebaseHashResult hash = GetHashResult(order);
             if (hash.IsValid)
             {
                 ShipSenseKnowledgebaseEntity entity = FetchEntity(hash.HashValue);
@@ -114,7 +107,7 @@ namespace ShipWorks.Shipping.ShipSense
                 }
 
                 // Update the compressed JSON of the entity to reflect the latest KB entry            
-            entity.Entry = GZipUtility.Compress(Encoding.UTF8.GetBytes(entry.ToJson()));
+                entity.Entry = CompressEntry(entry);
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -127,6 +120,33 @@ namespace ShipWorks.Shipping.ShipSense
                 log.WarnFormat("A knowledge base entry was not created for order {0}. A unique value could not be determined based " +
                                "on the ShipSense uniqueness settings.", order.OrderID);
             }
+        }
+
+        /// <summary>
+        /// Compresses the data in the knowledge base entry into a byte array.
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <returns>A byte[] containing the compressed data of the knowledge base entry.</returns>
+        public byte[] CompressEntry(KnowledgebaseEntry entry)
+        {
+            return GZipUtility.Compress(Encoding.UTF8.GetBytes(entry.ToJson()));
+        }
+
+        /// <summary>
+        /// Gets the hash result for the given order.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        /// <returns>A KnowledgebaseHashResult object.</returns>
+        public KnowledgebaseHashResult GetHashResult(OrderEntity order)
+        {
+            // Fetch the entity because if it exists, we need the IsNew property to
+            // be set to false otherwise a PK violation will be thrown if it already exists
+            // Note: in a later story we should probably look into caching this data to 
+            // reduce the number of database calls 
+            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
+            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
+
+            return hashingStrategy.ComputeHash(keys);
         }
 
         /// <summary>
@@ -204,12 +224,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
         private ShipSenseKnowledgebaseEntity FetchEntity(OrderEntity order)
         {
-            string shipSenseXml = ShippingSettings.Fetch().ShipSenseUniquenessXml;
-            IEnumerable<ShipSenseOrderItemKey> keys = keyFactory.GetKeys(order.OrderItems, shipSenseUniquenessXmlParser.GetItemProperties(shipSenseXml), shipSenseUniquenessXmlParser.GetItemAttributes(shipSenseXml));
-
             ShipSenseKnowledgebaseEntity lookupEntity = new ShipSenseKnowledgebaseEntity
                 {
-                    Hash = hashingStrategy.ComputeHash(keys).HashValue
+                    Hash = GetHashResult(order).HashValue
                 };
 
             return FetchEntity(lookupEntity);
@@ -260,6 +277,6 @@ namespace ShipWorks.Shipping.ShipSense
             // Deserialize the compressed JSON into an instance of KnowledgebaseEntry
             string serializedJson = Encoding.UTF8.GetString(GZipUtility.Decompress(compressedJson));
             return new KnowledgebaseEntry(serializedJson);
-        }
+        }        
     }
 }

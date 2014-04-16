@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -42,8 +43,8 @@ namespace ShipWorks.Shipping.ShipSense.Customs
             get
             {
                 string valueForHashing = string.Format("{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}",
-                                                       Description, Quantity, Weight, UnitValue.ToString("N4"), CountryOfOrigin, HarmonizedCode,
-                                                       NumberOfPieces, UnitPriceAmount.ToString("N4"));
+                                                       Description, Quantity.ToString("N4", CultureInfo.InvariantCulture), Weight.ToString("N4", CultureInfo.InvariantCulture), UnitValue.ToString("N4"), CountryOfOrigin, HarmonizedCode,
+                                                       NumberOfPieces.ToString("N", CultureInfo.InvariantCulture), UnitPriceAmount.ToString("N4"));
 
                 // Since Description is being used in the hash value, 
                 // use SHA256 value to reduce the length of the hash value

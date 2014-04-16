@@ -47,6 +47,8 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping
 {
@@ -185,6 +187,8 @@ namespace ShipWorks.Shipping
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
+            shipment.ShipSenseHashKey = string.Empty;
+            shipment.ShipSenseEntry = new byte[0];
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -428,6 +432,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static void SaveShipment(ShipmentEntity shipment)
         {
+            // Ensure the latest ShipSense data is recorded for this shipment before saving
+            SaveShipSenseFieldsToShipment(shipment);
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 bool rootDirty = shipment.IsDirty;
@@ -505,6 +512,36 @@ namespace ShipWorks.Shipping
                 }
 
                 adapter.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Saves the ShipSense fields to shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment)
+        {
+            if (!shipment.Processed)
+            {
+                // Ensure the order details are populated, so we get the correct hash key
+                OrderUtility.PopulateOrderDetails(shipment);
+
+                IEnumerable<IPackageAdapter> packageAdapters = ShipmentTypeManager.GetType(shipment).GetPackageAdapters(shipment);
+
+                // Create a knowledge base entry that represents the current shipment/package and customs configuration
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+
+                // Now compress the entry so we can record the ShipSense data for this shipment; this will be used
+                // for quickly comparing/updating the ShipSense status of unprocessed shipments as new shipments
+                // get processed.
+                Knowledgebase knowledgebase = new Knowledgebase();
+                shipment.ShipSenseEntry = knowledgebase.CompressEntry(entry);
+
+                // Use the knowledge base to determine the hash key as well, so the values sync up with
+                // what actually is used by the knowledge base
+                KnowledgebaseHashResult hash = knowledgebase.GetHashResult(shipment.Order);
+                shipment.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
             }
         }
 
