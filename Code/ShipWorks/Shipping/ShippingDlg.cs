@@ -1128,8 +1128,13 @@ namespace ShipWorks.Shipping
         {
             if (uiDisplayedShipments.Count > 0 && shipSenseNeedsUpdated)
             {
-                // The UI hasn't updated the shipment properties, so we need to force an update to the entities
-                CustomsControl.SaveToShipments();
+                // Check for null in case the ShipSense timer fires as the window is closing and the customs
+                // control is no longer available
+                if (CustomsControl != null)
+                {
+                    // The UI hasn't updated the shipment properties, so we need to force an update to the entities
+                    CustomsControl.SaveToShipments();
+                }
 
                 ShipmentEntity shipment = uiDisplayedShipments.FirstOrDefault(s => !s.Processed);
 
@@ -1144,8 +1149,13 @@ namespace ShipWorks.Shipping
                     // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
                     shipSenseNeedsUpdated = false;
 
-                    // Refresh the shipment control, so any status changes are reflected
-                    shipmentControl.RefreshAndResort();
+                    // Check for the handle, so we don't crash if the shipping dialog is closed
+                    // in the middle of the synchronization
+                    if (IsHandleCreated)
+                    {
+                        // Refresh the shipment control, so any status changes are reflected
+                        shipmentControl.RefreshAndResort();
+                    }
                 }
             }
         }
@@ -2448,6 +2458,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            // Disable the ShipSense timer and make one final call to synchronize to make sure we have
+            // everything matching that should be matching; otherwise changing a value and closing
+            // the dialog before the timer kicks would result in shipments being out of sync
+            shipSenseChangedTimer.Enabled = false;
+            SynchronizeWithShipSense();
+
             Cursor.Current = Cursors.WaitCursor;
 
             if (ServiceControl != null)
@@ -2463,8 +2479,8 @@ namespace ShipWorks.Shipping
             if (SaveShipmentsToDatabase(shipmentControl.AllRows.Select(r => r.Shipment), false).Count > 0)
             {
                 MessageHelper.ShowWarning(this,
-                    "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
-                    "Your changes to those shipments were not saved.");
+                                          "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
+                                          "Your changes to those shipments were not saved.");
             }
 
             processingErrors.Clear();
