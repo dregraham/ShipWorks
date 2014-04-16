@@ -222,6 +222,7 @@
     <Compile Include="Purge\PurgeAbandonedResources.cs" />
     <Compile Include="Data\Auditing\AuditState.cs" />
     <Compile Include="Shipping\ResetShipSenseProcedure.cs" />
+    <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
