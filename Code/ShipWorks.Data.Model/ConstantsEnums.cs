@@ -7139,6 +7139,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseStatus,
 		///<summary>ShipSenseChangeSets. </summary>
 		ShipSenseChangeSets,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseEntry. </summary>
+		ShipSenseEntry,
 		/// <summary></summary>
 		AmountOfFields
 	}

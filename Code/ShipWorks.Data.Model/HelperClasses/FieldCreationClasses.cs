@@ -15207,6 +15207,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseChangeSets);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipSenseEntry field instance</summary>
+		public static EntityField2 ShipSenseEntry
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseEntry);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

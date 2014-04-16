@@ -6,16 +6,24 @@ PRINT N'Altering [dbo].[Shipment]'
 GO
 ALTER TABLE [dbo].[Shipment] ADD
 [ShipSenseStatus] [int] NULL,
-[ShipSenseChangeSets] [xml] NULL
+[ShipSenseChangeSets] [xml] NULL,
+[ShipSenseHashKey] varchar(64) NULL,
+[ShipSenseEntry] varbinary(max) NULL
 GO
 
-update [Shipment] set [ShipSenseStatus] = 0, [ShipSenseChangeSets] = '<ChangeSets/>'
+UPDATE [Shipment] SET [ShipSenseStatus] = 0, [ShipSenseChangeSets] = '<ChangeSets/>', [ShipSenseHashKey] = '', [ShipSenseEntry] = 0x00
 GO
 
 ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseStatus] [int] NOT NULL
 GO
 
 ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseChangeSets] [xml] NOT NULL
+GO
+
+ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseHashKey] [varchar(64)] NOT NULL
+GO
+
+ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseEntry] [varbinary(max)] NOT NULL
 GO
 
 
