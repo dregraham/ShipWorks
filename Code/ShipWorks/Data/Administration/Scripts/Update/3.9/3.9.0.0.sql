@@ -7,7 +7,7 @@ GO
 ALTER TABLE [dbo].[Shipment] ADD
 [ShipSenseStatus] [int] NULL,
 [ShipSenseChangeSets] [xml] NULL,
-[ShipSenseHashKey] varchar(64) NULL,
+[ShipSenseHashKey] nvarchar(64) NULL,
 [ShipSenseEntry] varbinary(max) NULL
 GO
 
@@ -20,10 +20,10 @@ GO
 ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseChangeSets] [xml] NOT NULL
 GO
 
-ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseHashKey] [varchar(64)] NOT NULL
+ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseHashKey] nvarchar(64) NOT NULL
 GO
 
-ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseEntry] [varbinary(max)] NOT NULL
+ALTER TABLE [dbo].[Shipment] ALTER COLUMN [ShipSenseEntry] varbinary(max) NOT NULL
 GO
 
 
