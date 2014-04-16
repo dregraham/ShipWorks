@@ -19,7 +19,7 @@ namespace ShipWorks.AddressValidation
         [Description("Manual Validation Only")] 
         ManualValidationOnly = 2,
 
-        [Description("ValidationDisabled")] 
+        [Description("Validation Disabled")] 
         ValidationDisabled = 3
     }
 }
