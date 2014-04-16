@@ -71,6 +71,10 @@ namespace ShipWorks.Data
         /// </summary>
         public static event EventHandler EntityChangeDetected;
 
+        /// <summary>
+        /// Raised when order entities are detected as being dirty and are removed from cache.  Can be called from any thread.
+        /// </summary>
+        public static event EventHandler OrderEntityChangeDetected;
 
         /// <summary>
         /// Do one-time application level initialization
@@ -327,12 +331,12 @@ namespace ShipWorks.Data
             {
                 Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {
-                        RaiseEntityChangeDetected();
+                        RaiseEntityChangeDetected(e);
                     });
             }
             else
             {
-                RaiseEntityChangeDetected();
+                RaiseEntityChangeDetected(e);
             }
         }
 
@@ -348,12 +352,25 @@ namespace ShipWorks.Data
         /// <summary>
         /// Raise the EntityChangeDetected event
         /// </summary>
-        private static void RaiseEntityChangeDetected()
+        private static void RaiseEntityChangeDetected(EntityCacheChangeMonitoredChangedEventArgs e)
         {
             EventHandler handler = EntityChangeDetected;
             if (handler != null)
             {
                 handler(null, EventArgs.Empty);
+            }
+            
+            // Only raise the order specific entity change event if it's subscribed to 
+            // and if any of the changes are for order entities
+            EventHandler orderHandler = OrderEntityChangeDetected;
+            if (orderHandler != null)
+            {
+                if (e.Inserted.Any(x => x == EntityType.OrderEntity) ||
+                    e.Updated.Any(x => x == EntityType.OrderEntity) ||
+                    e.Deleted.Any(x => x == EntityType.OrderEntity))
+                {
+                    orderHandler(null, EventArgs.Empty);
+                }
             }
         }
     }

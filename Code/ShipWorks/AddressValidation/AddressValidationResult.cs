@@ -88,6 +88,11 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void CopyTo(AddressAdapter adapter)
         {
+            if (adapter == null)
+            {
+                return;
+            }
+
             adapter.Street1 = Street1;
             adapter.Street2 = Street2;
             adapter.Street3 = Street3;

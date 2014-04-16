@@ -174,7 +174,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             IdleWatcher.Initialize();
 
             // Listen for entity changes so we know when to validate orders
-            DataProvider.EntityChangeDetected += AddressValidationQueue.OnEntityChangeDetected;
+            DataProvider.OrderEntityChangeDetected += AddressValidationQueue.OnOrderEntityChangeDetected;
         }
 
         /// <summary>

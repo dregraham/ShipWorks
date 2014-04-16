@@ -109,7 +109,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Listen for entity changes from the data provider
         /// </summary>
-        public static void OnEntityChangeDetected(object sender, EventArgs e)
+        public static void OnOrderEntityChangeDetected(object sender, EventArgs e)
         {
             PerformValidation();
         }
