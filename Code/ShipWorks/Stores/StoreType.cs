@@ -130,7 +130,10 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual OrderEntity CreateOrderInstance()
         {
-            return new OrderEntity();
+            return new OrderEntity
+            {
+                ShipAddressValidationError = string.Empty
+            };
         }
 
         /// <summary>

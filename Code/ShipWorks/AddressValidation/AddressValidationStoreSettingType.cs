@@ -10,7 +10,7 @@ namespace ShipWorks.AddressValidation
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AddressValidationStoreSettingType
     {
-        [Description("Automaticly Validate and Apply")] 
+        [Description("Automatically Validate and Apply")] 
         ValidateAndApply = 0,
 
         [Description("Automatically Validate and Notify")] 
