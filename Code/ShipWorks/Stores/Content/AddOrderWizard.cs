@@ -485,6 +485,12 @@ namespace ShipWorks.Stores.Content
                         adapter.SaveAndRefetch(charge);
                     }
 
+                    // Everything has been set on the order, so calculate the hash key
+                    OrderUtility.PopulateOrderDetails(order, adapter);
+                    OrderUtility.UpdateShipSenseHashKey(order);
+
+                    adapter.SaveAndRefetch(order);
+
                     adapter.Commit();
                 }
             }

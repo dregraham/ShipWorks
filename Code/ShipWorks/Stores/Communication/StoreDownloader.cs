@@ -574,6 +574,11 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
 
+                    // Everything has been set on the order, so calculate the hash key
+                    OrderUtility.PopulateOrderDetails(order, adapter);
+                    OrderUtility.UpdateShipSenseHashKey(order);
+                    adapter.SaveAndRefetch(order);
+
                     log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
