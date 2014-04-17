@@ -9,10 +9,12 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
+using ShipWorks.Shipping.ShipSense;
 using log4net;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Stores.Content
 {
@@ -348,6 +350,55 @@ namespace ShipWorks.Stores.Content
                 {
                     adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given order.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        public static void PopulateOrderDetails(OrderEntity order)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                PopulateOrderDetails(order, adapter);
+            }
+        }
+
+        /// <summary>
+        /// Populates the order, order items, and order item attribute for the given order.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        /// <param name="adapter">The adapter.</param>
+        public static void PopulateOrderDetails(OrderEntity order, SqlAdapter adapter)
+        {
+            adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+
+            foreach (OrderItemEntity orderItemEntity in order.OrderItems)
+            {
+                adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+            }
+        }
+
+        /// <summary>
+        /// Updates the ShipSense hash key of an order if any of the properties/attributes of the
+        /// order items are dirty.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        public static void UpdateShipSenseHashKey(OrderEntity order)
+        {
+            // The hash is composed of the properties and attributes of the order items, so 
+            // we need to re-calculated the hash if any of these are dirty
+            bool needsHashCalculated = string.IsNullOrWhiteSpace(order.ShipSenseHashKey) || order.OrderItems.Any(i => i.IsDirty || i.OrderItemAttributes.Any(a => a.IsDirty));
+            
+            if (needsHashCalculated)
+            {
+                // Use the knowledge base to determine the hash key as well, so the values sync up with
+                // what actually is used by the knowledge base
+                Knowledgebase knowledgebase = new Knowledgebase();
+
+                KnowledgebaseHashResult hash = knowledgebase.GetHashResult(order);
+                order.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
             }
         }
     }
