@@ -387,19 +387,12 @@ namespace ShipWorks.Stores.Content
         /// <param name="order">The order.</param>
         public static void UpdateShipSenseHashKey(OrderEntity order)
         {
-            // The hash is composed of the properties and attributes of the order items, so 
-            // we need to re-calculated the hash if any of these are dirty
-            bool needsHashCalculated = string.IsNullOrWhiteSpace(order.ShipSenseHashKey) || order.OrderItems.Any(i => i.IsDirty || i.OrderItemAttributes.Any(a => a.IsDirty));
-            
-            if (needsHashCalculated)
-            {
-                // Use the knowledge base to determine the hash key as well, so the values sync up with
-                // what actually is used by the knowledge base
-                Knowledgebase knowledgebase = new Knowledgebase();
+            // Use the knowledge base to determine the hash key as well, so the values sync up with
+            // what actually is used by the knowledge base
+            Knowledgebase knowledgebase = new Knowledgebase();
 
-                KnowledgebaseHashResult hash = knowledgebase.GetHashResult(order);
-                order.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
-            }
+            KnowledgebaseHashResult hash = knowledgebase.GetHashResult(order);
+            order.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
         }
     }
 }
