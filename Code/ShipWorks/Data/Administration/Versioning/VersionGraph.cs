@@ -46,14 +46,14 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <param name="toVersion">The target version.</param>
         public List<VersionAndScriptName> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> shipWorksVersions)
         {
+            if (toVersion == fromVersion)
+            {
+                return new List<VersionAndScriptName>();
+            }
+
             foreach (var shipWorksVersion in shipWorksVersions)
             {
                 AddVersion(shipWorksVersion.To, shipWorksVersion.From);
-            }
-
-            if (toVersion==fromVersion)
-            {
-                return new List<VersionAndScriptName>();
             }
 
             TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths;

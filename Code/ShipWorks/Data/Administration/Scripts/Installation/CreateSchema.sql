@@ -48,6 +48,10 @@ PRINT N'Rename refactoring operation with key 4ed1e7a8-6e41-4a51-864b-f9934613b6
 
 
 GO
+PRINT N'Rename refactoring operation with key 5a268481-3a79-4e4e-b7cf-d190c55d8f7d is skipped, element [dbo].[Store].[AutoAddressValidation] (SqlSimpleColumn) will not be renamed to AddressValidationSetting';
+
+
+GO
 PRINT N'Creating [dbo].[Action]...';
 
 
@@ -113,21 +117,21 @@ CREATE TABLE [dbo].[ActionQueue] (
 
 
 GO
-PRINT N'Creating [dbo].[ActionQueue].[IX_ActionQueue_ContextLock]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock]
-    ON [dbo].[ActionQueue]([ContextLock] ASC);
-
-
-GO
 PRINT N'Creating [dbo].[ActionQueue].[IX_ActionQueue_Search]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search]
     ON [dbo].[ActionQueue]([ActionQueueID] ASC, [ActionQueueType] ASC, [Status] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[ActionQueue].[IX_ActionQueue_ContextLock]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock]
+    ON [dbo].[ActionQueue]([ContextLock] ASC);
 
 
 GO
@@ -341,21 +345,21 @@ CREATE TABLE [dbo].[Audit] (
 
 
 GO
-PRINT N'Creating [dbo].[Audit].[IX_Audit_Action]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Audit_Action]
-    ON [dbo].[Audit]([Action] ASC);
-
-
-GO
 PRINT N'Creating [dbo].[Audit].[IX_Audit_TransactionID]...';
 
 
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Audit_TransactionID]
     ON [dbo].[Audit]([TransactionID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Audit].[IX_Audit_Action]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Audit_Action]
+    ON [dbo].[Audit]([Action] ASC);
 
 
 GO
@@ -686,12 +690,39 @@ CREATE TABLE [dbo].[Customer] (
 
 
 GO
+PRINT N'Creating [dbo].[Customer].[IX_Auto_BillLastName]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
+    ON [dbo].[Customer]([BillLastName] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Customer].[IX_Auto_BillCompany]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany]
     ON [dbo].[Customer]([BillCompany] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Customer].[IX_Auto_BillStateProvCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
+    ON [dbo].[Customer]([BillStateProvCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Customer].[IX_Auto_BillPostalCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
+    ON [dbo].[Customer]([BillPostalCode] ASC);
 
 
 GO
@@ -713,57 +744,12 @@ CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail]
 
 
 GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_BillLastName]...';
+PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipLastName]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
-    ON [dbo].[Customer]([BillLastName] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_BillPostalCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
-    ON [dbo].[Customer]([BillPostalCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_BillStateProvCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
-    ON [dbo].[Customer]([BillStateProvCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupNoteCount]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
-    ON [dbo].[Customer]([RollupNoteCount] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupOrderCount]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderCount]
-    ON [dbo].[Customer]([RollupOrderCount] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupOrderTotal]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderTotal]
-    ON [dbo].[Customer]([RollupOrderTotal] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
+    ON [dbo].[Customer]([ShipLastName] ASC);
 
 
 GO
@@ -773,6 +759,24 @@ PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipCompany]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany]
     ON [dbo].[Customer]([ShipCompany] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipStateProvCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
+    ON [dbo].[Customer]([ShipStateProvCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipPostalCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
+    ON [dbo].[Customer]([ShipPostalCode] ASC);
 
 
 GO
@@ -794,30 +798,30 @@ CREATE NONCLUSTERED INDEX [IX_Auto_ShipEmail]
 
 
 GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipLastName]...';
+PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupOrderCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
-    ON [dbo].[Customer]([ShipLastName] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderCount]
+    ON [dbo].[Customer]([RollupOrderCount] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipPostalCode]...';
+PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupOrderTotal]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
-    ON [dbo].[Customer]([ShipPostalCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupOrderTotal]
+    ON [dbo].[Customer]([RollupOrderTotal] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipStateProvCode]...';
+PRINT N'Creating [dbo].[Customer].[IX_Auto_RollupNoteCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
-    ON [dbo].[Customer]([ShipStateProvCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
+    ON [dbo].[Customer]([RollupNoteCount] ASC);
 
 
 GO
@@ -919,21 +923,21 @@ CREATE TABLE [dbo].[DownloadDetail] (
 
 
 GO
-PRINT N'Creating [dbo].[DownloadDetail].[IX_DownloadDetail_BigIntIndex]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex]
-    ON [dbo].[DownloadDetail]([ExtraBigIntData1] ASC, [ExtraBigIntData2] ASC, [ExtraBigIntData3] ASC);
-
-
-GO
 PRINT N'Creating [dbo].[DownloadDetail].[IX_DownloadDetail_OrderNumber]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber]
     ON [dbo].[DownloadDetail]([OrderNumber] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[DownloadDetail].[IX_DownloadDetail_BigIntIndex]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex]
+    ON [dbo].[DownloadDetail]([ExtraBigIntData1] ASC, [ExtraBigIntData2] ASC, [ExtraBigIntData3] ASC);
 
 
 GO
@@ -2711,6 +2715,7 @@ CREATE TABLE [dbo].[Order] (
     [ShipWebsite]                          NVARCHAR (50)  NOT NULL,
     [ShipAddressValidationSuggestionCount] INT            NOT NULL,
     [ShipAddressValidationStatus]          INT            NOT NULL,
+    [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
     [RollupItemCode]                       NVARCHAR (300) NULL,
@@ -2728,57 +2733,22 @@ CREATE TABLE [dbo].[Order] (
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillCompany]...';
+PRINT N'Creating [dbo].[Order].[IX_OnlineLastModified_StoreID_IsManual]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany]
-    ON [dbo].[Order]([BillCompany] ASC);
+CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual]
+    ON [dbo].[Order]([OnlineLastModified] DESC, [StoreID] ASC, [IsManual] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillCountryCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_StoreID]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode]
-    ON [dbo].[Order]([BillCountryCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillEmail]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail]
-    ON [dbo].[Order]([BillEmail] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillLastName]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
-    ON [dbo].[Order]([BillLastName] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillPostalCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
-    ON [dbo].[Order]([BillPostalCode] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_BillStateProvCode]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
-    ON [dbo].[Order]([BillStateProvCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_StoreID]
+    ON [dbo].[Order]([StoreID] ASC)
+    INCLUDE([IsManual]);
 
 
 GO
@@ -2788,33 +2758,6 @@ PRINT N'Creating [dbo].[Order].[IX_Auto_CustomerID]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_CustomerID]
     ON [dbo].[Order]([CustomerID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_LocalStatus]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_LocalStatus]
-    ON [dbo].[Order]([LocalStatus] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_OnlineStatus]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus]
-    ON [dbo].[Order]([OnlineStatus] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_OrderDate]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_OrderDate]
-    ON [dbo].[Order]([OrderDate] ASC);
 
 
 GO
@@ -2836,12 +2779,48 @@ CREATE NONCLUSTERED INDEX [IX_Auto_OrderNumberComplete]
 
 
 GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_OrderDate]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_OrderDate]
+    ON [dbo].[Order]([OrderDate] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Order].[IX_Auto_OrderTotal]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_OrderTotal]
     ON [dbo].[Order]([OrderTotal] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_LocalStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_LocalStatus]
+    ON [dbo].[Order]([LocalStatus] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_OnlineCustomerID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_OnlineCustomerID]
+    ON [dbo].[Order]([OnlineCustomerID] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_OnlineStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus]
+    ON [dbo].[Order]([OnlineStatus] ASC);
 
 
 GO
@@ -2854,48 +2833,66 @@ CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping]
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillLastName]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCode]
-    ON [dbo].[Order]([RollupItemCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillLastName]
+    ON [dbo].[Order]([BillLastName] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCount]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillCompany]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCount]
-    ON [dbo].[Order]([RollupItemCount] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillCompany]
+    ON [dbo].[Order]([BillCompany] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemName]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillStateProvCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemName]
-    ON [dbo].[Order]([RollupItemName] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillStateProvCode]
+    ON [dbo].[Order]([BillStateProvCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemSKU]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillPostalCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemSKU]
-    ON [dbo].[Order]([RollupItemSKU] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillPostalCode]
+    ON [dbo].[Order]([BillPostalCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_RollupNoteCount]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillCountryCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
-    ON [dbo].[Order]([RollupNoteCount] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_BillCountryCode]
+    ON [dbo].[Order]([BillCountryCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_BillEmail]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillEmail]
+    ON [dbo].[Order]([BillEmail] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipLastName]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
+    ON [dbo].[Order]([ShipLastName] ASC);
 
 
 GO
@@ -2905,6 +2902,24 @@ PRINT N'Creating [dbo].[Order].[IX_Auto_ShipCompany]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany]
     ON [dbo].[Order]([ShipCompany] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipStateProvCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
+    ON [dbo].[Order]([ShipStateProvCode] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipPostalCode]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
+    ON [dbo].[Order]([ShipPostalCode] ASC);
 
 
 GO
@@ -2926,58 +2941,48 @@ CREATE NONCLUSTERED INDEX [IX_Auto_ShipEmail]
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipLastName]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
-    ON [dbo].[Order]([ShipLastName] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCount]
+    ON [dbo].[Order]([RollupItemCount] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipPostalCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemName]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
-    ON [dbo].[Order]([ShipPostalCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemName]
+    ON [dbo].[Order]([RollupItemName] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_ShipStateProvCode]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemCode]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
-    ON [dbo].[Order]([ShipStateProvCode] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemCode]
+    ON [dbo].[Order]([RollupItemCode] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_Auto_StoreID]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupItemSKU]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_StoreID]
-    ON [dbo].[Order]([StoreID] ASC)
-    INCLUDE([IsManual]);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupItemSKU]
+    ON [dbo].[Order]([RollupItemSKU] ASC);
 
 
 GO
-PRINT N'Creating [dbo].[Order].[IX_OnlineCustomerID]...';
+PRINT N'Creating [dbo].[Order].[IX_Auto_RollupNoteCount]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_OnlineCustomerID]
-    ON [dbo].[Order]([OnlineCustomerID] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Order].[IX_OnlineLastModified_StoreID_IsManual]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IX_OnlineLastModified_StoreID_IsManual]
-    ON [dbo].[Order]([OnlineLastModified] DESC, [StoreID] ASC, [IsManual] ASC);
+CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
+    ON [dbo].[Order]([RollupNoteCount] ASC);
 
 
 GO
@@ -3477,21 +3482,21 @@ CREATE TABLE [dbo].[Scheduling_FIRED_TRIGGERS] (
 
 
 GO
+PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_TRIG_INST_NAME]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_TRIG_INST_NAME]
+    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [INSTANCE_NAME] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_INST_JOB_REQ_RCVRY]...';
 
 
 GO
 CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_INST_JOB_REQ_RCVRY]
     ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [INSTANCE_NAME] ASC, [REQUESTS_RECOVERY] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_J_G]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_J_G]
-    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [JOB_NAME] ASC, [JOB_GROUP] ASC);
 
 
 GO
@@ -3504,12 +3509,12 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_JG]
 
 
 GO
-PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_T_G]...';
+PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_J_G]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_T_G]
-    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_NAME] ASC, [TRIGGER_GROUP] ASC);
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_J_G]
+    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [JOB_NAME] ASC, [JOB_GROUP] ASC);
 
 
 GO
@@ -3522,12 +3527,12 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_TG]
 
 
 GO
-PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_TRIG_INST_NAME]...';
+PRINT N'Creating [dbo].[Scheduling_FIRED_TRIGGERS].[IDX_Scheduling_FT_T_G]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_TRIG_INST_NAME]
-    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [INSTANCE_NAME] ASC);
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_T_G]
+    ON [dbo].[Scheduling_FIRED_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_NAME] ASC, [TRIGGER_GROUP] ASC);
 
 
 GO
@@ -3664,12 +3669,12 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_C]
 
 
 GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_G]...';
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_JG]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_G]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_GROUP] ASC);
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_JG]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [JOB_GROUP] ASC);
 
 
 GO
@@ -3682,12 +3687,48 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_J]
 
 
 GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_JG]...';
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_MISFIRE]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_JG]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [JOB_GROUP] ASC);
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_MISFIRE]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC, [TRIGGER_GROUP] ASC, [TRIGGER_STATE] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST_MISFIRE]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST_MISFIRE]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC, [TRIGGER_STATE] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NEXT_FIRE_TIME]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NEXT_FIRE_TIME]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [NEXT_FIRE_TIME] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_G]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_G]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_GROUP] ASC);
 
 
 GO
@@ -3709,21 +3750,12 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_N_STATE]
 
 
 GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NEXT_FIRE_TIME]...';
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_STATE]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NEXT_FIRE_TIME]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [NEXT_FIRE_TIME] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_MISFIRE]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_MISFIRE]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC);
+CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_STATE]
+    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_STATE] ASC);
 
 
 GO
@@ -3733,33 +3765,6 @@ PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST]...';
 GO
 CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST]
     ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_STATE] ASC, [NEXT_FIRE_TIME] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST_MISFIRE]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST_MISFIRE]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC, [TRIGGER_STATE] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC, [TRIGGER_GROUP] ASC, [TRIGGER_STATE] ASC);
-
-
-GO
-PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_STATE]...';
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_STATE]
-    ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [TRIGGER_STATE] ASC);
 
 
 GO
@@ -3850,12 +3855,12 @@ CREATE TABLE [dbo].[ServerMessage] (
 
 
 GO
-PRINT N'Creating [dbo].[ServerMessage].[IX_ServerMessage_Expires]...';
+PRINT N'Creating [dbo].[ServerMessage].[IX_ServerMessage_RowVersion]...';
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_ServerMessage_Expires]
-    ON [dbo].[ServerMessage]([Expires] ASC);
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessage_RowVersion]
+    ON [dbo].[ServerMessage]([RowVersion] ASC);
 
 
 GO
@@ -3868,12 +3873,12 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessage_Number]
 
 
 GO
-PRINT N'Creating [dbo].[ServerMessage].[IX_ServerMessage_RowVersion]...';
+PRINT N'Creating [dbo].[ServerMessage].[IX_ServerMessage_Expires]...';
 
 
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ServerMessage_RowVersion]
-    ON [dbo].[ServerMessage]([RowVersion] ASC);
+CREATE NONCLUSTERED INDEX [IX_ServerMessage_Expires]
+    ON [dbo].[ServerMessage]([Expires] ASC);
 
 
 GO
@@ -4408,36 +4413,36 @@ PRINT N'Creating [dbo].[Store]...';
 
 GO
 CREATE TABLE [dbo].[Store] (
-    [StoreID]                BIGINT         IDENTITY (1005, 1000) NOT NULL,
-    [RowVersion]             ROWVERSION     NOT NULL,
-    [License]                NVARCHAR (150) NOT NULL,
-    [Edition]                NVARCHAR (MAX) NOT NULL,
-    [TypeCode]               INT            NOT NULL,
-    [Enabled]                BIT            NOT NULL,
-    [SetupComplete]          BIT            NOT NULL,
-    [StoreName]              NVARCHAR (75)  NOT NULL,
-    [Company]                NVARCHAR (60)  NOT NULL,
-    [Street1]                NVARCHAR (60)  NOT NULL,
-    [Street2]                NVARCHAR (60)  NOT NULL,
-    [Street3]                NVARCHAR (60)  NOT NULL,
-    [City]                   NVARCHAR (50)  NOT NULL,
-    [StateProvCode]          NVARCHAR (50)  NOT NULL,
-    [PostalCode]             NVARCHAR (20)  NOT NULL,
-    [CountryCode]            NVARCHAR (50)  NOT NULL,
-    [Phone]                  NVARCHAR (25)  NOT NULL,
-    [Fax]                    NVARCHAR (35)  NOT NULL,
-    [Email]                  NVARCHAR (100) NOT NULL,
-    [Website]                NVARCHAR (50)  NOT NULL,
-    [AutoDownload]           BIT            NOT NULL,
-    [AutoDownloadMinutes]    INT            NOT NULL,
-    [AutoDownloadOnlyAway]   BIT            NOT NULL,
-    [AutoAddressValidation]  BIT            NOT NULL,
-    [ComputerDownloadPolicy] NVARCHAR (MAX) NOT NULL,
-    [DefaultEmailAccountID]  BIGINT         NOT NULL,
-    [ManualOrderPrefix]      NVARCHAR (10)  NOT NULL,
-    [ManualOrderPostfix]     NVARCHAR (10)  NOT NULL,
-    [InitialDownloadDays]    INT            NULL,
-    [InitialDownloadOrder]   BIGINT         NULL,
+    [StoreID]                  BIGINT         IDENTITY (1005, 1000) NOT NULL,
+    [RowVersion]               ROWVERSION     NOT NULL,
+    [License]                  NVARCHAR (150) NOT NULL,
+    [Edition]                  NVARCHAR (MAX) NOT NULL,
+    [TypeCode]                 INT            NOT NULL,
+    [Enabled]                  BIT            NOT NULL,
+    [SetupComplete]            BIT            NOT NULL,
+    [StoreName]                NVARCHAR (75)  NOT NULL,
+    [Company]                  NVARCHAR (60)  NOT NULL,
+    [Street1]                  NVARCHAR (60)  NOT NULL,
+    [Street2]                  NVARCHAR (60)  NOT NULL,
+    [Street3]                  NVARCHAR (60)  NOT NULL,
+    [City]                     NVARCHAR (50)  NOT NULL,
+    [StateProvCode]            NVARCHAR (50)  NOT NULL,
+    [PostalCode]               NVARCHAR (20)  NOT NULL,
+    [CountryCode]              NVARCHAR (50)  NOT NULL,
+    [Phone]                    NVARCHAR (25)  NOT NULL,
+    [Fax]                      NVARCHAR (35)  NOT NULL,
+    [Email]                    NVARCHAR (100) NOT NULL,
+    [Website]                  NVARCHAR (50)  NOT NULL,
+    [AutoDownload]             BIT            NOT NULL,
+    [AutoDownloadMinutes]      INT            NOT NULL,
+    [AutoDownloadOnlyAway]     BIT            NOT NULL,
+    [AddressValidationSetting] INT            NOT NULL,
+    [ComputerDownloadPolicy]   NVARCHAR (MAX) NOT NULL,
+    [DefaultEmailAccountID]    BIGINT         NOT NULL,
+    [ManualOrderPrefix]        NVARCHAR (10)  NOT NULL,
+    [ManualOrderPostfix]       NVARCHAR (10)  NOT NULL,
+    [InitialDownloadDays]      INT            NULL,
+    [InitialDownloadOrder]     BIGINT         NULL,
     CONSTRAINT [PK_Store] PRIMARY KEY CLUSTERED ([StoreID] ASC)
 );
 
@@ -5207,21 +5212,21 @@ ALTER TABLE [dbo].[ActionQueue]
 
 
 GO
-PRINT N'Creating DF_ActionQueue_QueuedDate...';
-
-
-GO
-ALTER TABLE [dbo].[ActionQueue]
-    ADD CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()) FOR [TriggerDate];
-
-
-GO
 PRINT N'Creating DF_ActionQueue_QueueVersion...';
 
 
 GO
 ALTER TABLE [dbo].[ActionQueue]
     ADD CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts) FOR [QueueVersion];
+
+
+GO
+PRINT N'Creating DF_ActionQueue_QueuedDate...';
+
+
+GO
+ALTER TABLE [dbo].[ActionQueue]
+    ADD CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()) FOR [TriggerDate];
 
 
 GO
@@ -6644,776 +6649,6 @@ PRINT N'Creating FK_YahooStore_Store...';
 GO
 ALTER TABLE [dbo].[YahooStore] WITH NOCHECK
     ADD CONSTRAINT [FK_YahooStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
-
-
-GO
-PRINT N'Creating [dbo].[ActionDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ActionDeleteTrigger]
-    ON [dbo].[Action]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ActionDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ActionQueueStepDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ActionQueueStepDeleteTrigger]
-    ON [dbo].[ActionQueueStep]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ActionQueueStepDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ActionQueueStepUpdateTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ActionQueueStepUpdateTrigger]
-    ON [dbo].[ActionQueueStep]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ActionQueueStepUpdateTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyAmazonOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyAmazonOrder]
-    ON [dbo].[AmazonOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyAmazonOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyBuyDotComOrderItem]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyBuyDotComOrderItem]
-    ON [dbo].[BuyDotComOrderItem]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyBuyDotComOrderItem]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyChannelAdvisorOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyChannelAdvisorOrder]
-    ON [dbo].[ChannelAdvisorOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyChannelAdvisorOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyChannelAdvisorOrderItem]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyChannelAdvisorOrderItem]
-    ON [dbo].[ChannelAdvisorOrderItem]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyChannelAdvisorOrderItem]
-
-
-GO
-PRINT N'Creating [dbo].[CustomerAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[CustomerAuditTrigger]
-    ON [dbo].[Customer]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[CustomerAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[CustomerLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[CustomerLabelTrigger]
-    ON [dbo].[Customer]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[CustomerLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyCustomer]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyCustomer]
-    ON [dbo].[Customer]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyCustomer]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyDownloadDetail]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyDownloadDetail]
-    ON [dbo].[DownloadDetail]
-    AFTER INSERT
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyDownloadDetail]
-
-
-GO
-PRINT N'Creating [dbo].[EbayOrderAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[EbayOrderAuditTrigger]
-    ON [dbo].[EbayOrder]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[EbayOrderAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyEbayOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyEbayOrder]
-    ON [dbo].[EbayOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyEbayOrder]
-
-
-GO
-PRINT N'Creating [dbo].[EbayOrderItemRollupTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[EbayOrderItemRollupTrigger]
-    ON [dbo].[EbayOrderItem]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[EbayOrderItemRollupTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyEbayOrderItem]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyEbayOrderItem]
-    ON [dbo].[EbayOrderItem]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyEbayOrderItem]
-
-
-GO
-PRINT N'Creating [dbo].[EmailOutboundDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[EmailOutboundDeleteTrigger]
-    ON [dbo].[EmailOutbound]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[EmailOutboundDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyEmailOutbound]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyEmailOutbound]
-    ON [dbo].[EmailOutbound]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyEmailOutbound]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyEmailOutboundRelation]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyEmailOutboundRelation]
-    ON [dbo].[EmailOutboundRelation]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyEmailOutboundRelation]
-
-
-GO
-PRINT N'Creating [dbo].[EndiciaShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[EndiciaShipmentAuditTrigger]
-    ON [dbo].[EndiciaShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[EndiciaShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[EquashipShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[EquashipShipmentAuditTrigger]
-    ON [dbo].[EquaShipShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[EquashipShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyEtsyOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyEtsyOrder]
-    ON [dbo].[EtsyOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyEtsyOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FedExPackageDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FedExPackageDeleteTrigger]
-    ON [dbo].[FedExPackage]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FedExPackageDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FedExShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FedExShipmentAuditTrigger]
-    ON [dbo].[FedExShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FedExShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyFedExShipment]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyFedExShipment]
-    ON [dbo].[FedExShipment]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyFedExShipment]
-
-
-GO
-PRINT N'Creating [dbo].[FilterNodeLayoutDirty]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterNodeLayoutDirty]
-    ON [dbo].[FilterNode]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterNodeLayoutDirty]
-
-
-GO
-PRINT N'Creating [dbo].[FilterNodeColumnSettingsDeleted]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterNodeColumnSettingsDeleted]
-    ON [dbo].[FilterNodeColumnSettings]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterNodeColumnSettingsDeleted]
-
-
-GO
-PRINT N'Creating [dbo].[FilterSequenceLayoutDirty]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterSequenceLayoutDirty]
-    ON [dbo].[FilterSequence]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterSequenceLayoutDirty]
-
-
-GO
-PRINT N'Creating [dbo].[iParcelShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[iParcelShipmentAuditTrigger]
-    ON [dbo].[iParcelShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[iParcelShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyMarketplaceAdvisorOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyMarketplaceAdvisorOrder]
-    ON [dbo].[MarketplaceAdvisorOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyMarketplaceAdvisorOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyNeweggOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyNeweggOrder]
-    ON [dbo].[NeweggOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyNeweggOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyNote]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyNote]
-    ON [dbo].[Note]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyNote]
-
-
-GO
-PRINT N'Creating [dbo].[NoteAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[NoteAuditTrigger]
-    ON [dbo].[Note]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[NoteAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[NoteLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[NoteLabelTrigger]
-    ON [dbo].[Note]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[NoteLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyOrder]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrder]
-
-
-GO
-PRINT N'Creating [dbo].[OrderAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderAuditTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderLabelTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderRollupTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderRollupTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderRollupTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyOrderCharge]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyOrderCharge]
-    ON [dbo].[OrderCharge]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrderCharge]
-
-
-GO
-PRINT N'Creating [dbo].[OrderChargeAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderChargeAuditTrigger]
-    ON [dbo].[OrderCharge]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderChargeAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderChargeLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderChargeLabelTrigger]
-    ON [dbo].[OrderCharge]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderChargeLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyOrderItem]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyOrderItem]
-    ON [dbo].[OrderItem]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrderItem]
-
-
-GO
-PRINT N'Creating [dbo].[OrderItemAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderItemAuditTrigger]
-    ON [dbo].[OrderItem]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderItemAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderItemLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderItemLabelTrigger]
-    ON [dbo].[OrderItem]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderItemLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderItemRollupTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderItemRollupTrigger]
-    ON [dbo].[OrderItem]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderItemRollupTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderItemAttributeAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderItemAttributeAuditTrigger]
-    ON [dbo].[OrderItemAttribute]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderItemAttributeAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[OrderItemAttributeLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OrderItemAttributeLabelTrigger]
-    ON [dbo].[OrderItemAttribute]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderItemAttributeLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyOrderMotionOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyOrderMotionOrder]
-    ON [dbo].[OrderMotionOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrderMotionOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyOrderPaymentDetail]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyOrderPaymentDetail]
-    ON [dbo].[OrderPaymentDetail]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrderPaymentDetail]
-
-
-GO
-PRINT N'Creating [dbo].[OtherShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[OtherShipmentAuditTrigger]
-    ON [dbo].[OtherShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OtherShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyPayPalOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyPayPalOrder]
-    ON [dbo].[PayPalOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyPayPalOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyPostalShipment]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyPostalShipment]
-    ON [dbo].[PostalShipment]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyPostalShipment]
-
-
-GO
-PRINT N'Creating [dbo].[PostalShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[PostalShipmentAuditTrigger]
-    ON [dbo].[PostalShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[PostalShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyPrintResult]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyPrintResult]
-    ON [dbo].[PrintResult]
-    AFTER INSERT, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyPrintResult]
-
-
-GO
-PRINT N'Creating [dbo].[PrintResultDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[PrintResultDeleteTrigger]
-    ON [dbo].[PrintResult]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[PrintResultDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyProStoresOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyProStoresOrder]
-    ON [dbo].[ProStoresOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyProStoresOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtySearsOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtySearsOrder]
-    ON [dbo].[SearsOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtySearsOrder]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyShipment]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyShipment]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyShipment]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentAuditTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentDeleteTrigger]
-    ON [dbo].[Shipment]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentLabelTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyShopifyOrder]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyShopifyOrder]
-    ON [dbo].[ShopifyOrder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyShopifyOrder]
-
-
-GO
-PRINT N'Creating [dbo].[StampsShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[StampsShipmentAuditTrigger]
-    ON [dbo].[StampsShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[StampsShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[StoreLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[StoreLabelTrigger]
-    ON [dbo].[Store]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[StoreLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[TemplateDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TemplateDeleteTrigger]
-    ON [dbo].[Template]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[TemplateDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[TemplateLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TemplateLabelTrigger]
-    ON [dbo].[Template]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[TemplateLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[TemplateFolderLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TemplateFolderLabelTrigger]
-    ON [dbo].[TemplateFolder]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[TemplateFolderLabelTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[TemplateUserSettingsTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[TemplateUserSettingsTrigger]
-    ON [dbo].[TemplateUserSettings]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[TemplateUserSettingsTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[UpsPackageDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[UpsPackageDeleteTrigger]
-    ON [dbo].[UpsPackage]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[UpsPackageDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[FilterDirtyUpsShipment]...';
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyUpsShipment]
-    ON [dbo].[UpsShipment]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyUpsShipment]
-
-
-GO
-PRINT N'Creating [dbo].[UpsShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[UpsShipmentAuditTrigger]
-    ON [dbo].[UpsShipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[UpsShipmentAuditTrigger]
 
 
 GO
@@ -9781,6 +9016,8 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e58')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '4ed1e7a8-6e41-4a51-864b-f9934613b641')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('4ed1e7a8-6e41-4a51-864b-f9934613b641')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
 
 GO
 
