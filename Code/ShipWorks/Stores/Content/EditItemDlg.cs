@@ -305,7 +305,7 @@ namespace ShipWorks.Stores.Content
                         {
                             OrderItemAttributeEntity attribute = (OrderItemAttributeEntity) row.Tag;
 
-                            // If the item was new, then we have just gotten the itemid
+                            // If the item was new, then we have just gotten the item ID
                             attribute.OrderItemID = item.OrderItemID;
 
                             adapter.SaveEntity(attribute);
@@ -317,6 +317,14 @@ namespace ShipWorks.Stores.Content
                         {
                             item.LocalStatus = TemplateTokenProcessor.ProcessTokens(item.LocalStatus, item.OrderItemID);
                         }
+
+
+                        // Everything has been set on the order, so calculate the hash key
+                        OrderEntity order = (OrderEntity) DataProvider.GetEntity(item.OrderID);
+                        OrderUtility.PopulateOrderDetails(order, adapter);
+                        
+                        OrderUtility.UpdateShipSenseHashKey(order);
+                        adapter.SaveAndRefetch(order);
 
                         adapter.Commit();
                     }

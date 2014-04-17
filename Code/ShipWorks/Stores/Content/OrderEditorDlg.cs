@@ -341,6 +341,11 @@ namespace ShipWorks.Stores.Content
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     adapter.SaveAndRefetch(order);
+
+                    // Everything has been set on the order, so calculate the hash key
+                    OrderUtility.PopulateOrderDetails(order, adapter);
+                    OrderUtility.UpdateShipSenseHashKey(order);
+                    adapter.SaveAndRefetch(order);
                 }
             }
 
