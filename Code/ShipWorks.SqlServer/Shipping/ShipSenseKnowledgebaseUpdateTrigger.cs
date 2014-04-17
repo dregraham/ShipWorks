@@ -24,7 +24,7 @@ public partial class Triggers
 		                        end
 	                        from Shipment s
 		                        join
-		                        [Order] o on o.OrderID = s.OrderID
+		                        [Order] o with(nolock) on o.OrderID = s.OrderID
 		                        join
 		                        inserted i on i.Hash = o.ShipSenseHashKey
 	                        where s.Processed = 0
