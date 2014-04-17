@@ -24,7 +24,9 @@ public partial class Triggers
 		                        end
 	                        from Shipment s
 		                        join
-		                        inserted i on i.Hash = s.ShipSenseHashKey
+		                        [Order] o on o.OrderID = s.OrderID
+		                        join
+		                        inserted i on i.Hash = o.ShipSenseHashKey
 	                        where s.Processed = 0
 	                          and s.ShipSenseStatus <> 0
                         ";
