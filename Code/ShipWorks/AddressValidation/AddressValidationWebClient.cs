@@ -126,7 +126,7 @@ namespace ShipWorks.AddressValidation
             {
                 XPathNavigator address = addressIterator.Current;
 
-                string pLow = XPathUtility.Evaluate(address, "PLow", string.Empty).TrimStart('0');
+                string pLow = XPathUtility.Evaluate(address, "MPNum", string.Empty).TrimStart('0');
                 string pHigh = XPathUtility.Evaluate(address, "PHigh", string.Empty).TrimStart('0');
                 string sLow = XPathUtility.Evaluate(address, "SLow", string.Empty).TrimStart('0');
                 string sHigh = XPathUtility.Evaluate(address, "SHigh", string.Empty).TrimStart('0');
