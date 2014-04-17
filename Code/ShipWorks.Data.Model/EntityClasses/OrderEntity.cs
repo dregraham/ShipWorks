@@ -930,6 +930,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipUnparsedName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseHashKey", fieldHashtable);
 		}
 		#endregion
 
@@ -1756,6 +1759,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipUnparsedName, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipUnparsedName, value); }
+		}
+
+		/// <summary> The ShipSenseHashKey property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipSenseHashKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipSenseHashKey
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.ShipSenseHashKey, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipSenseHashKey, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'.

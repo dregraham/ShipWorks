@@ -187,7 +187,6 @@ namespace ShipWorks.Shipping
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
-            shipment.ShipSenseHashKey = string.Empty;
             shipment.ShipSenseEntry = new byte[0];
 
             // We have to get the order items to calculate the weight
@@ -537,11 +536,6 @@ namespace ShipWorks.Shipping
                 // get processed.
                 Knowledgebase knowledgebase = new Knowledgebase();
                 shipment.ShipSenseEntry = knowledgebase.CompressEntry(entry);
-
-                // Use the knowledge base to determine the hash key as well, so the values sync up with
-                // what actually is used by the knowledge base
-                KnowledgebaseHashResult hash = knowledgebase.GetHashResult(shipment.Order);
-                shipment.ShipSenseHashKey = hash.IsValid ? hash.HashValue : string.Empty;
             }
         }
 

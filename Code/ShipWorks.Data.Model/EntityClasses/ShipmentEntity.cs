@@ -1095,9 +1095,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipSenseChangeSets", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipSenseHashKey", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ShipSenseEntry", fieldHashtable);
 		}
 		#endregion
@@ -2253,17 +2250,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipSenseChangeSets, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseChangeSets, value); }
-		}
-
-		/// <summary> The ShipSenseHashKey property of the Entity Shipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "Shipment"."ShipSenseHashKey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShipSenseHashKey
-		{
-			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipSenseHashKey, true); }
-			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseHashKey, value); }
 		}
 
 		/// <summary> The ShipSenseEntry property of the Entity Shipment<br/><br/>
