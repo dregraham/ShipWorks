@@ -36,9 +36,9 @@ namespace ShipWorks.AddressValidation
         /// </exception>
         public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip)
         {
-            XPathNavigator zipMResult = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
+            XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
-            int returnCode = XPathUtility.Evaluate(zipMResult, "//DAZMultipleMatch//ReturnCode", 0);
+            int returnCode = XPathUtility.Evaluate(zip1Result, "//DAZMultipleMatch//ReturnCode", 0);
 
             List<AddressValidationResult> validationResults;
 
@@ -55,12 +55,13 @@ namespace ShipWorks.AddressValidation
                 // Multiple options
                 case 22:
                 case 32:
+                    XPathNavigator zipMResult = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
                     validationResults = ParseZipM(zipMResult);
                     break;
 
                 case 31:
                     
-                    if (!DoesAddressExist(street1, street2, city, state, zip))
+                    if (!DoesAddressExist(zip1Result))
                     {
                         validationResults = null; // "Address is not a deliverable address, might be a parking lot or vacant lot"
                     }
@@ -87,10 +88,8 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Does the address exist.
         /// </summary>
-        private static bool DoesAddressExist(string street1, string street2, string city, string state, string zip)
+        private static bool DoesAddressExist(XPathNavigator zip1Result)
         {
-            XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
-            
             return XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
         }
 
