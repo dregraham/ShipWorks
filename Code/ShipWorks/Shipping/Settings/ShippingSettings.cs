@@ -208,6 +208,8 @@ namespace ShipWorks.Shipping.Settings
             settings.BestRateExcludedTypes = new int[0];
             settings.ShipSenseEnabled = true;
             settings.ShipSenseUniquenessXml = "<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>";
+            settings.ShipSenseProcessedShipmentID = 0;
+            settings.ShipSenseEndShipmentID = 0;
 
             adapter.SaveAndRefetch(settings);
         }

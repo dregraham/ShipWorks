@@ -617,6 +617,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseUniquenessXml", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseProcessedShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipSenseEndShipmentID", fieldHashtable);
 		}
 		#endregion
 
@@ -1362,6 +1368,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, value); }
+		}
+
+		/// <summary> The ShipSenseProcessedShipmentID property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseProcessedShipmentID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ShipSenseProcessedShipmentID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, false); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, value); }
+		}
+
+		/// <summary> The ShipSenseEndShipmentID property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseEndShipmentID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> ShipSenseEndShipmentID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, false); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, value); }
 		}
 
 

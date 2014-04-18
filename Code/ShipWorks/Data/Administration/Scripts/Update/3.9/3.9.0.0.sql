@@ -44,7 +44,9 @@ PRINT N'Altering [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD
 [ShipSenseEnabled] [bit] NULL,
-[ShipSenseUniquenessXml] [xml] NULL
+[ShipSenseUniquenessXml] [xml] NULL,
+[ShipSenseProcessedShipmentID] [bigint] NULL,
+[ShipSenseEndShipmentID] [bigint] NULL
 GO
 
 
@@ -53,9 +55,10 @@ GO
 UPDATE [ShippingSettings] 
 SET 
 	[ShipSenseEnabled] = 1,
-	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>'
+	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>',
+	[ShipSenseProcessedShipmentID] = 0, 
+	[ShipSenseEndShipmentID] = (select max(ShipmentID) from Shipment where Processed = 1)
 GO
-
 
 PRINT N'Altering [dbo].[ShippingSettings][ShipSenseEnabled]'
 GO
@@ -67,6 +70,18 @@ PRINT N'Altering [dbo].[ShippingSettings][ShipSenseUniquenessXml]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] 
 	ALTER COLUMN [ShipSenseUniquenessXml] [xml] NOT NULL
+GO
+
+PRINT N'Altering [dbo].[ShippingSettings][ShipSenseProcessedShipmentID]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] 
+	ALTER COLUMN [ShipSenseProcessedShipmentID] [bit] NOT NULL
+GO
+
+PRINT N'Altering [dbo].[ShippingSettings][ShipSenseEndShipmentID]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] 
+	ALTER COLUMN [ShipSenseEndShipmentID] [bit] NOT NULL
 GO
 
 PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'

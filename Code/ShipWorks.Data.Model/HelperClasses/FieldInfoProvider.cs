@@ -2228,6 +2228,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 30, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseUniquenessXml", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, 2147483647, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseEndShipmentID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, 0, 0, 19);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

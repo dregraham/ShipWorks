@@ -4370,7 +4370,9 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,
 [BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseEnabled] [bit] NOT NULL,
-[ShipSenseUniquenessXml] [xml] NOT NULL
+[ShipSenseUniquenessXml] [xml] NOT NULL,
+[ShipSenseProcessedShipmentID] [bigint] NOT NULL,
+[ShipSenseEndShipmentID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

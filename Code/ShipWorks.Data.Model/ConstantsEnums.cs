@@ -7527,6 +7527,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEnabled,
 		///<summary>ShipSenseUniquenessXml. </summary>
 		ShipSenseUniquenessXml,
+		///<summary>ShipSenseProcessedShipmentID. </summary>
+		ShipSenseProcessedShipmentID,
+		///<summary>ShipSenseEndShipmentID. </summary>
+		ShipSenseEndShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -309,6 +309,7 @@ namespace ShipWorks.Stores.Communication
                 order.RollupItemTotalWeight = 0;
                 
                 order.ShipSenseHashKey = string.Empty;
+                order.ShipSensible = false;
             }
 
             return order;
