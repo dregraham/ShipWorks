@@ -43,8 +43,3 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_StoreName]
 
 
 GO
-CREATE TRIGGER [dbo].[StoreLabelTrigger]
-    ON [dbo].[Store]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[StoreLabelTrigger]
-

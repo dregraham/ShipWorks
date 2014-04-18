@@ -211,34 +211,6 @@ CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
 
 
 GO
-CREATE TRIGGER [dbo].[FilterDirtyOrder]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyOrder]
-
-
-GO
-CREATE TRIGGER [dbo].[OrderAuditTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderAuditTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[OrderLabelTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderLabelTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[OrderRollupTrigger]
-    ON [dbo].[Order]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[OrderRollupTrigger]
-
-
-GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'4', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Order', @level2type = N'COLUMN', @level2name = N'StoreID';
 
 
