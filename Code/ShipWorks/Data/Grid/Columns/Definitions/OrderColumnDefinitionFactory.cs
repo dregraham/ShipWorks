@@ -532,6 +532,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
                         new GridMoneyDisplayType(), "Total", 1024.18m,
                         OrderFields.OrderTotal), 
+
+                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}", false,
+                        new GridBooleanDisplayType()
+                        {
+                            FalseText = "No",
+                            TrueText = "Yes"
+                        },
+                        "ShipSensible", "Yes",
+                        OrderFields.ShipSensible),
                 };
 
             return definitions;
