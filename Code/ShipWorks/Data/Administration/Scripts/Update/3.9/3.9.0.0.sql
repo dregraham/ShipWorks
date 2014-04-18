@@ -85,14 +85,15 @@ GO
 
 PRINT N'Altering [dbo].[Order]'
 GO
--- Add Hash Key column to Order table
+-- Add Hash Key column and ShipSensible to Order table
 ALTER TABLE [dbo].[Order] ADD
-	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[ShipSensible] bit NULL
 GO
 
 PRINT N'Updating [dbo].[Order] defaults'
 GO
-update [dbo].[Order] set [ShipSenseHashKey] = ''
+update [dbo].[Order] set [ShipSenseHashKey] = '', [ShipSensible] = 0
 GO
 
 PRINT N'Altering [dbo].[Order][ShipSenseHashKey]'
@@ -101,5 +102,19 @@ ALTER TABLE [dbo].[Order]
 	ALTER COLUMN [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 GO
 
+PRINT N'Altering [dbo].[Order][ShipSensible]'
+GO
+ALTER TABLE [dbo].[Order]
+	ALTER COLUMN [ShipSensible] bit NOT NULL
+GO
 
+PRINT N'Adding [Order].[IX_Auto_ShipSensbile] Index'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSensbile] ON [dbo].[Order] ([ShipSensible])
+GO
+
+PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
+GO
 

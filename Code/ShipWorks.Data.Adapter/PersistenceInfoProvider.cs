@@ -1733,7 +1733,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OrderEntity's mappings</summary>
 		private void InitOrderEntityMappings()
 		{
-			base.AddElementMapping( "OrderEntity", "ShipWorksLocal", @"dbo", "Order", 58 );
+			base.AddElementMapping( "OrderEntity", "ShipWorksLocal", @"dbo", "Order", 59 );
 			base.AddElementFieldMapping( "OrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OrderEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "OrderEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -1792,6 +1792,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "OrderEntity", "ShipNameParseStatus", "ShipNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 55 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 56 );
 			base.AddElementFieldMapping( "OrderEntity", "ShipSenseHashKey", "ShipSenseHashKey", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 57 );
+			base.AddElementFieldMapping( "OrderEntity", "ShipSensible", "ShipSensible", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
 		}
 		/// <summary>Inits OrderChargeEntity's mappings</summary>
 		private void InitOrderChargeEntityMappings()

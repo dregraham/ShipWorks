@@ -428,16 +428,13 @@ CREATE TABLE [dbo].[Order]
 [BillUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipSensible] bit NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED  ([OrderID])
-GO
-PRINT N'Creating index [IX_ShipSenseHashKey] on [dbo].[Order]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ShipSenseHashKey] ON [dbo].[Order] ([OrderID], [ShipSenseHashKey])
 GO
 PRINT N'Creating index [IX_OnlineLastModified_StoreID_IsManual] on [dbo].[Order]'
 GO
@@ -550,6 +547,14 @@ GO
 PRINT N'Creating index [IX_Auto_RollupNoteCount] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount] ON [dbo].[Order] ([RollupNoteCount])
+GO
+PRINT N'Adding [Order].[IX_Auto_ShipSensbile] Index'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSensbile] ON [dbo].[Order] ([ShipSensible])
+GO
+PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
 GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO

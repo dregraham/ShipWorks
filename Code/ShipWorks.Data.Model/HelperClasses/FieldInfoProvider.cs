@@ -1702,6 +1702,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "ShipNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipNameParseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipUnparsedName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipSenseHashKey", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipSenseHashKey, 64, 0, 0);
+			base.AddElementFieldInfo("OrderEntity", "ShipSensible", typeof(System.Boolean), false, false, false, false,  (int)OrderFieldIndex.ShipSensible, 0, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
