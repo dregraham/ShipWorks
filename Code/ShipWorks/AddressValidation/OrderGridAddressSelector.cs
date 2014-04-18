@@ -103,7 +103,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
             orderAdapter.CopyTo(originalAddress);
             
-            AddressAdapter.Copy(validatedAddressEntity, string.Empty, orderAdapter);
+            AddressAdapter.Copy(validatedAddressEntity.Address, string.Empty, orderAdapter);
 
             order.ShipAddressValidationStatus = validatedAddressEntity.IsOriginal ? 
                 (int) AddressValidationStatusType.Overridden : 
