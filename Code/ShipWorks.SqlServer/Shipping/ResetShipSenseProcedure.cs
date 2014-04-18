@@ -14,7 +14,10 @@ public partial class StoredProcedures
             try
             {
                 SqlCommand command = connection.CreateCommand();
-                command.CommandText = "TRUNCATE TABLE ShipSenseKnowledgebase";
+                command.CommandText = @"
+                    UPDATE [ORDER] SET ShipSensible = 0
+
+                    TRUNCATE TABLE ShipSenseKnowledgebase";
 
                 connection.Open();
 
