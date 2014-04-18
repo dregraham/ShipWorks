@@ -4,7 +4,9 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.AddressValidation
@@ -38,8 +40,9 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         /// <param name="addressEntity">Entity whose address should be validated</param>
         /// <param name="addressPrefix"></param>
+        /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(IEntity2 addressEntity, string addressPrefix, Action<AddressEntity, IEnumerable<AddressEntity>> saveAction)
+        public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<AddressEntity, IEnumerable<AddressEntity>> saveAction)
         {
             AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
 
@@ -57,8 +60,16 @@ namespace ShipWorks.AddressValidation
             AddressEntity originalAddress = new AddressEntity();
             adapter.CopyTo(originalAddress, string.Empty);
 
-            SetValidationStatus(suggestedAddresses, adapter);
-            UpdateAddressIfAdjusted(adapter, suggestedAddresses);
+            // Set the validation status based on the settings of the store
+            if (canAdjustAddress)
+            {
+                SetValidationStatus(suggestedAddresses, adapter);
+                UpdateAddressIfAdjusted(adapter, suggestedAddresses);   
+            }
+            else
+            {
+                SetValidationStatusForNotify(suggestedAddresses, adapter);
+            }
 
             if (suggestedAddresses.Count > 0)
             {
@@ -67,6 +78,25 @@ namespace ShipWorks.AddressValidation
             else
             {
                 saveAction(null, new List<AddressEntity>());
+            }
+        }
+
+        /// <summary>
+        /// Set the validation status on the entity when we should only notify instead of update
+        /// </summary>
+        private static void SetValidationStatusForNotify(List<AddressValidationResult> suggestedAddresses, AddressAdapter adapter)
+        {
+            if (!suggestedAddresses.Any())
+            {
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NotValid;
+            }
+            else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
+            {
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.Valid;
+            }
+            else
+            {
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NeedsAttention;
             }
         }
 

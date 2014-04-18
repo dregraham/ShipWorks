@@ -6,6 +6,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -50,9 +51,6 @@ namespace ShipWorks.Actions.Tasks.Common
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
                 
-                AddressAdapter originalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
-                
                 // If the address has already been validated, don't bother validating it again
                 if (order == null ||
                     (order.ShipAddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
@@ -61,9 +59,18 @@ namespace ShipWorks.Actions.Tasks.Common
                     return;
                 }
 
+                StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
+                if (store == null || store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidationDisabled)
+                {
+                    return;
+                }
+
+                AddressAdapter originalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
+
                 try
                 {
-                    validator.Validate(order, "Ship", (originalAddress, suggestedAddresses) => 
+                    validator.Validate(order, "Ship", true, (originalAddress, suggestedAddresses) => 
                         ValidatedAddressManager.SaveValidatedOrder(context, order, originalShippingAddress, originalAddress, suggestedAddresses));
                 }
                 catch (AddressValidationException ex)

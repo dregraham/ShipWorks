@@ -10,6 +10,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.SqlServer.Common.Data;
+using ShipWorks.Stores;
 
 namespace ShipWorks.AddressValidation
 {
@@ -88,8 +89,11 @@ namespace ShipWorks.AddressValidation
 
                 if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
                 {
-                    addressValidator.Validate(order, "Ship", (originalAddress, suggestedAddresses) =>
-                        ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
+                    StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
+                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
+
+                    addressValidator.Validate(order, "Ship", shouldAutomaticallyAdjustAddress, (originalAddress, suggestedAddresses) =>
+                            ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
                 }
             }
             catch (ObjectDeletedException)
