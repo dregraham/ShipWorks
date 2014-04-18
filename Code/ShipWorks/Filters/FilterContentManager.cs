@@ -372,9 +372,19 @@ namespace ShipWorks.Filters
             // See if we have to update date filters
             if (dateFiltersLastUpdated != serverDate)
             {
-                // Make sure we have the most up-to-date date they were updated
-                SystemData.CheckForChangesNeeded();
-                dateFiltersLastUpdated = SystemData.Fetch().DateFiltersLastUpdate.Date;
+                try
+                {
+                    // Make sure we have the most up-to-date date they were updated
+                    SystemData.CheckForChangesNeeded();
+                    dateFiltersLastUpdated = SystemData.Fetch().DateFiltersLastUpdate.Date;
+                }
+                catch (ORMEntityOutOfSyncException ex)
+                {
+                    // Fix for FogBugz #267990: Since we just wait until next run when the filter layout context is dirty,
+                    // we should be able to do the same thing here
+                    log.Warn("SystemData out of sync while checking relative date filters", ex);
+                    return;
+                }
             }
 
             // See if we have to update date filters
