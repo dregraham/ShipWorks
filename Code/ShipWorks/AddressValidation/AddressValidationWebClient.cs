@@ -36,7 +36,7 @@ namespace ShipWorks.AddressValidation
         {
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
-            int returnCode = XPathUtility.Evaluate(zip1Result, "//DAZMultipleMatch//ReturnCode", 0);
+            int returnCode = XPathUtility.Evaluate(zip1Result, "Dial-A-ZIP_Response/ReturnCode", 0);
 
             List<AddressValidationResult> validationResults;
 
@@ -67,19 +67,21 @@ namespace ShipWorks.AddressValidation
                     {
                         string validatedZip = GetZipPlus4(zip1Result);
 
-                        return new List<AddressValidationResult>()
+                        AddressValidationResult addressValidationResult = new AddressValidationResult()
                         {
-                            new AddressValidationResult()
-                            {
-                                Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
-                                Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
-                                City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
-                                StateProvCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty),
-                                PostalCode = validatedZip,
-                                CountryCode = "USA",
-                                IsValid = true
-                            }
+                            Street1 = XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/AddrLine1", String.Empty),
+                            Street2 = XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/AddrLine2", String.Empty),
+                            Street3 = string.Empty,
+                            City = XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/City", String.Empty),
+                            StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/State", String.Empty)),
+                            PostalCode = validatedZip,
+                            CountryCode = Geography.GetCountryCode("US"),
+                            IsValid = true
                         };
+                        
+                        ParseStreet1(addressValidationResult);
+
+                        validationResults = new List<AddressValidationResult>() { addressValidationResult };
                     }
                     break;
 
@@ -92,12 +94,64 @@ namespace ShipWorks.AddressValidation
             return validationResults;
         }
 
+        private static void ParseStreet1(AddressValidationResult addressValidationResult)
+        {
+            if (string.IsNullOrEmpty(addressValidationResult.Street1))
+            {
+                return;
+            }
+
+            List<string> unitDesignators = new List<String>()
+            {
+                " APT ",
+                " BSMT ",
+                " BLDG ",
+                " DEPT ",
+                " FL ",
+                " FRNT ",
+                " HNGR ",
+                " KEY ",
+                " LBBY ",
+                " LOT ",
+                " LOWR ",
+                " OFC ",
+                " PH ",
+                " PIER ",
+                " REAR ",
+                " RM ",
+                " SIDE ",
+                " SLIP ",
+                " SPC ",
+                " STOP ",
+                " STE ",
+                " TRLR ",
+                " UNIT ",
+                " UPPR ",
+                " # "
+            };
+
+            string lineToParse = addressValidationResult.Street1;
+
+            foreach (var designator in unitDesignators)
+            {
+                int designatorLocation = lineToParse.IndexOf(designator, StringComparison.InvariantCultureIgnoreCase);
+             
+                if (designatorLocation >=0)
+                {
+                    addressValidationResult.Street1 = lineToParse.Substring(0, designatorLocation).Trim();
+                    addressValidationResult.Street2 = lineToParse.Substring(designatorLocation).Trim();
+
+                    break;
+                }
+            }
+        }
+
         /// <summary>
         /// Zips the specified zip1 result.
         /// </summary>
         private static string GetZipPlus4(XPathNavigator zip1Result)
         {
-            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Zip5", String.Empty);
+            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/ZIP5", String.Empty);
             string plus4 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Plus4", String.Empty);
             if (!string.IsNullOrEmpty(plus4))
             {
