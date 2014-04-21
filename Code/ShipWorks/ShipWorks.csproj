@@ -2006,6 +2006,9 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackage.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Packaging\NullPackageAdapter.cs" />
+    <Compile Include="Shipping\ShipSense\Population\IShipSenseLoaderGateway.cs" />
+    <Compile Include="Shipping\ShipSense\Population\ShipSenseLoader.cs" />
+    <Compile Include="Shipping\ShipSense\Population\ShipSenseLoaderGateway.cs" />
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

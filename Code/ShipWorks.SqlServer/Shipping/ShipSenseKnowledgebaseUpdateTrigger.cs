@@ -29,6 +29,12 @@ public partial class Triggers
 		                        inserted i on i.Hash = o.ShipSenseHashKey
 	                        where s.Processed = 0
 	                          and s.ShipSenseStatus <> 0
+
+                            update o
+                            set o.ShipSensible = 1 
+                            from [Order] o
+                                join inserted i on i.Hash = o.ShipSenseHashKey
+                            and o.ShipSensible = 0
                         ";
 
             using (SqlCommand sqlCommand = con.CreateCommand())

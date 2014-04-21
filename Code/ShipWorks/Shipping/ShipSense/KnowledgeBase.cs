@@ -7,6 +7,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Settings;
@@ -111,6 +112,11 @@ namespace ShipWorks.Shipping.ShipSense
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
+                    // Since we need the trigger to fire, we need to force an update even if the values haven't changed
+                    entity.Fields[0].IsChanged = true;
+                    entity.Fields[1].IsChanged = true;
+                    entity.IsDirty = true;
+
                     adapter.SaveEntity(entity);
                     adapter.Commit();
                 }
