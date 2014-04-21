@@ -2352,8 +2352,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEnabled", "ShipSenseEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 60 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseUniquenessXml", "ShipSenseUniquenessXml", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 61 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 62 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEndShipmentID", "ShipSenseEndShipmentID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 63 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 62 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEndShipmentID", "ShipSenseEndShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 63 );
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()

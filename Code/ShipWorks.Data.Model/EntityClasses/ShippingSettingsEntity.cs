@@ -1374,10 +1374,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseProcessedShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ShipSenseProcessedShipmentID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 ShipSenseProcessedShipmentID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, false); }
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, value); }
 		}
 
@@ -1385,10 +1385,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipSenseEndShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> ShipSenseEndShipmentID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 ShipSenseEndShipmentID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, false); }
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, value); }
 		}
 
