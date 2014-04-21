@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -23,6 +24,7 @@ namespace ShipWorks.AddressValidation
         private static readonly AddressValidator addressValidator = new AddressValidator();
         private static object lockObj = new object();
         private static Task validationThread;
+        private static CancellationToken cancellationToken;
 
         /// <summary>
         /// Attempt to validate any pending orders
@@ -36,8 +38,18 @@ namespace ShipWorks.AddressValidation
                     return;
                 }
 
-                validationThread = Task.Factory.StartNew(ValidatePendingOrders);
+                validationThread = Task.Factory.StartNew(ValidatePendingOrders, cancellationToken);
             }
+        }
+
+        /// <summary>
+        /// Attempt to validate any pending orders
+        /// </summary>
+        public static void PerformValidation(CancellationToken token)
+        {
+            cancellationToken = token;
+
+            PerformValidation();
         }
 
         /// <summary>
@@ -45,6 +57,11 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void ValidatePendingOrders()
         {
+            if (SqlSession.Current == null)
+            {
+                return;
+            }
+
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
                 // Just quit if we can't get a lock because some other computer is validating
@@ -66,7 +83,16 @@ namespace ShipWorks.AddressValidation
                                 .Where(x => x.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending)
                                 .Take(50)
                                 .ToList();
-                            pendingOrders.ForEach(x => Validate(x, adapter));
+
+                            pendingOrders.ForEach(x =>
+                            {
+                                if (cancellationToken.IsCancellationRequested)
+                                {
+                                    return;
+                                }
+
+                                Validate(x, adapter);
+                            });
                         } while (pendingOrders.Any());
                     }
                 }

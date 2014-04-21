@@ -168,7 +168,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
-            IdleWatcher.RegisterDatabaseDependentWork("ValidatePendingAddresses", AddressValidationQueue.PerformValidation, "validating addresses", TimeSpan.FromMinutes(5));
+            IdleWatcher.RegisterDatabaseDependentWork("ValidatePendingAddresses", AddressValidationQueue.PerformValidation, "validating addresses", TimeSpan.FromMinutes(2));
 
             // Start idle processing
             IdleWatcher.Initialize();
