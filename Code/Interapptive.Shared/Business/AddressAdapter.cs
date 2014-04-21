@@ -350,6 +350,15 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Gets or sets the address validation error.
+        /// </summary>
+        public string AddressValidationError
+        {
+            get { return GetField<string>("AddressValidationError"); }
+            set { SetField("AddressValidationError", value); }
+        }
+
+        /// <summary>
         /// Checks whether two strings are equal after trimming
         /// </summary>
         private static bool AreEqualTrimmed(string left, string right)

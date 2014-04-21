@@ -53,12 +53,15 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode) ??
+            string addressValidationError;
+            List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
                                                                new List<AddressValidationResult>();
 
             // Store the original address so that the user can revert later if they want
             AddressEntity originalAddress = new AddressEntity();
             adapter.CopyTo(originalAddress, string.Empty);
+
+            adapter.AddressValidationError = addressValidationError;
 
             // Set the validation status based on the settings of the store
             if (canAdjustAddress)

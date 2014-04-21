@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.AddressValidation
@@ -32,22 +33,35 @@ namespace ShipWorks.AddressValidation
         /// or
         /// Unknown error validating address.
         /// </exception>
-        public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip)
+        public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip, out string addressValidationError)
         {
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
             int returnCode = XPathUtility.Evaluate(zip1Result, "Dial-A-ZIP_Response/ReturnCode", 0);
 
-            List<AddressValidationResult> validationResults;
+            List<AddressValidationResult> validationResults = null;
+            addressValidationError = string.Empty;
 
             switch (returnCode)
             {
-                case 11: // "Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present."
-                case 12: // "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid."
-                case 13: // "The City in the address submitted is invalid. Remember, city names cannot begin with numbers."
-                case 21: // "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."
-                case 25: // "City, State and ZIP Code are valid, but street address is not a match."
-                    validationResults = null;
+                case 11:
+                    addressValidationError = "Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present.";
+                    break;
+
+                case 12:
+                    addressValidationError = "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.";
+                    break;
+                
+                case 13:
+                    addressValidationError = "The City in the address submitted is invalid. Remember, city names cannot begin with numbers.";
+                    break;
+                
+                case 21:
+                    addressValidationError = "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
+                    break;
+                
+                case 25:
+                    addressValidationError = "City, State and ZIP Code are valid, but street address is not a match.";
                     break;
 
                     // Multiple options
@@ -61,7 +75,7 @@ namespace ShipWorks.AddressValidation
 
                     if (!DoesAddressExist(zip1Result))
                     {
-                        validationResults = null; // "Address is not a deliverable address, might be a parking lot or vacant lot"
+                        addressValidationError = "Address is not a deliverable address, might be a parking lot or vacant lot";
                     }
                     else
                     {
@@ -360,7 +374,8 @@ namespace ShipWorks.AddressValidation
             }
             catch (Exception ex)
             {
-                throw new AddressValidationException("Error validating address.", ex);
+                WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+                return null;
             }
         }
     }
