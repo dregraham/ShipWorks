@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -52,7 +50,7 @@ namespace ShipWorks.AddressValidation
                     validationResults = null;
                     break;
 
-                // Multiple options
+                    // Multiple options
                 case 22:
                 case 32:
                     XPathNavigator zipMResult = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
@@ -60,18 +58,28 @@ namespace ShipWorks.AddressValidation
                     break;
 
                 case 31:
-                    
+
                     if (!DoesAddressExist(zip1Result))
                     {
                         validationResults = null; // "Address is not a deliverable address, might be a parking lot or vacant lot"
                     }
                     else
                     {
-                        validationResults = ParseZipM(zipMResult);
-                        if (validationResults.Count == 1)
+                        string validatedZip = GetZipPlus4(zip1Result);
+
+                        return new List<AddressValidationResult>()
                         {
-                            validationResults.First().IsValid = true;
-                        }
+                            new AddressValidationResult()
+                            {
+                                Street1 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine1", String.Empty),
+                                Street2 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrLine2", String.Empty),
+                                City = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/City", String.Empty),
+                                StateProvCode = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/State", String.Empty),
+                                PostalCode = validatedZip,
+                                CountryCode = "USA",
+                                IsValid = true
+                            }
+                        };
                     }
                     break;
 
@@ -79,10 +87,23 @@ namespace ShipWorks.AddressValidation
                     throw new AddressValidationException("Address Validation failed to return a known Return Code");
             }
 
-
             ApplyAddressCasing(validationResults);
 
             return validationResults;
+        }
+
+        /// <summary>
+        /// Zips the specified zip1 result.
+        /// </summary>
+        private static string GetZipPlus4(XPathNavigator zip1Result)
+        {
+            string zip = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Zip5", String.Empty);
+            string plus4 = XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/Plus4", String.Empty);
+            if (!string.IsNullOrEmpty(plus4))
+            {
+                zip = string.Format("{0}-{1}", zip, plus4);
+            }
+            return zip;
         }
 
         /// <summary>
@@ -103,7 +124,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            foreach (var validationResult in validationResults)
+            foreach (AddressValidationResult validationResult in validationResults)
             {
                 validationResult.Street1 = AddressCasing.Apply(validationResult.Street1);
                 validationResult.Street2 = AddressCasing.Apply(validationResult.Street2);
