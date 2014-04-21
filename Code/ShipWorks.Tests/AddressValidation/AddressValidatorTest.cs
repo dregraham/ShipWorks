@@ -357,5 +357,17 @@ namespace ShipWorks.Tests.AddressValidation
 
             Assert.AreEqual(errorMessage, sampleOrder.ShipAddressValidationError);
         }
+
+        [TestMethod]
+        public void Validate_SetsStatusToError_WhenWebClientReturnsErrorMessage()
+        {
+            errorMessage = "blah";
+
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage));
+
+            testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
+
+            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+        }
     }
 }
