@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -77,6 +79,22 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     throw new ActionTaskRunException("Error validating address", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Commit the database changes
+        /// </summary>
+        public override void Commit(List<long> inputKeys, ActionStepContext context)
+        {
+            try
+            {
+                base.Commit(inputKeys, context);
+            }
+            catch (ORMConcurrencyException ex)
+            {
+                // If the order has changed since validation begun, throw a task exception
+                throw new ActionTaskRunException("Order was changed after validation begun. Try re-running the action.", ex);
             }
         }
     }

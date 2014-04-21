@@ -3,6 +3,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -152,6 +153,12 @@ namespace ShipWorks.AddressValidation
             foreach (AddressEntity address in suggestedAddressList)
             {
                 SaveOrderAddress(dataAccess, order, address, false);
+            }
+
+            // Unless concurency for this type has been set elsewhere, set the order up to use optimistic concurrency
+            if (order.ConcurrencyPredicateFactoryToUse == null)
+            {
+                order.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();   
             }
 
             order.ShipAddressValidationSuggestionCount = suggestedAddressList.Count();
