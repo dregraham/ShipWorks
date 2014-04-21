@@ -1241,8 +1241,6 @@ namespace ShipWorks.Data.Administration
                 string activity = "";
                 string order = "";
 
-                SchemaVersionComparisonResult databaseVersionComparedWithSoftwareVersion = softwareSchemaVersion.Compare(new SchemaVersion(database.SchemaVersion));
-
                 bool isCurrent = SqlSession.IsConfigured &&
                     SqlSession.Current.Configuration.ServerInstance == configuration.ServerInstance &&
                     SqlSession.Current.Configuration.DatabaseName == database.Name;
@@ -1252,10 +1250,13 @@ namespace ShipWorks.Data.Administration
                 {
                     status = "(Active)";
                 }
+
                 // A ShipWorks 3x database get's it's status based on schema being older, newer, or same
                 else switch (database.Status)
                 {
                     case SqlDatabaseStatus.ShipWorks:
+                        SchemaVersionComparisonResult databaseVersionComparedWithSoftwareVersion = softwareSchemaVersion.Compare(new SchemaVersion(database.SchemaVersion));
+
                         switch (databaseVersionComparedWithSoftwareVersion)
                         {
                             case SchemaVersionComparisonResult.Newer: status = "Newer";
