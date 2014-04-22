@@ -13,6 +13,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
+using log4net;
 
 namespace ShipWorks.AddressValidation
 {
@@ -21,6 +22,9 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     internal static class AddressValidationQueue
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(AddressValidationQueue));
+
         public const string SqlAppLockName = "ValidateAddresses";
         private static readonly AddressValidator addressValidator = new AddressValidator();
         private static object lockObj = new object();
@@ -65,11 +69,15 @@ namespace ShipWorks.AddressValidation
 
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
+                log.InfoFormat("Acquiring Lock - {0}", SqlAppLockName);
                 // Just quit if we can't get a lock because some other computer is validating
                 if (!SqlAppLockUtility.AcquireLock(connection, SqlAppLockName))
                 {
+                    log.InfoFormat("Could not acquire Lock - {0}", SqlAppLockName);
                     return;
                 }
+
+                log.InfoFormat("Lock Acquired - {0}", SqlAppLockName);
 
                 try
                 {
