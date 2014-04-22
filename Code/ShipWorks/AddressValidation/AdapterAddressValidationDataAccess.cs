@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 
@@ -12,12 +13,12 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class AdapterAddressValidationDataAccess : IAddressValidationDataAccess
     {
-        private readonly DataAccessAdapter adapter;
+        private readonly SqlAdapter adapter;
 
         /// <summary>
         /// Instantiate the object
         /// </summary>
-        public AdapterAddressValidationDataAccess(DataAccessAdapter adapter)
+        public AdapterAddressValidationDataAccess(SqlAdapter adapter)
         {
             this.adapter = adapter;
         }
@@ -46,7 +47,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void SaveEntity(IEntity2 entity)
         {
-            adapter.SaveEntity(entity);
+            adapter.SaveAndRefetch(entity);
         }
     }
 }

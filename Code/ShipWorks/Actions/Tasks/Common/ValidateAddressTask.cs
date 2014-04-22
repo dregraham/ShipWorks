@@ -54,9 +54,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
                 
                 // If the address has already been validated, don't bother validating it again
-                if (order == null ||
-                    (order.ShipAddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
-                     order.ShipAddressValidationStatus != (int)AddressValidationStatusType.Pending))
+                if (order == null || !AddressValidator.ShouldValidateAddress(new AddressAdapter(order, "Ship")))
                 {
                     return;
                 }

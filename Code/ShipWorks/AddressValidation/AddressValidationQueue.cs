@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
@@ -24,6 +23,12 @@ namespace ShipWorks.AddressValidation
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AddressValidationQueue));
+
+        static readonly List<int> validatableStatuses = new List<int>
+            {
+                (int) AddressValidationStatusType.Pending,
+                (int) AddressValidationStatusType.Error
+            };
 
         public const string SqlAppLockName = "ValidateAddresses";
         private static readonly AddressValidator addressValidator = new AddressValidator();
@@ -137,7 +142,7 @@ namespace ShipWorks.AddressValidation
                 AddressAdapter originalShippingAddress = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", originalShippingAddress);
 
-                if (order != null && (AddressValidationStatusType)order.ShipAddressValidationStatus == AddressValidationStatusType.Pending)
+                if (order != null && validatableStatuses.Contains(order.ShipAddressValidationStatus))
                 {
                     StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
                     bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;

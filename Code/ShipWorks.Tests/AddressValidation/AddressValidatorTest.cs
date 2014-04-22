@@ -71,7 +71,9 @@ namespace ShipWorks.Tests.AddressValidation
         public void Validate_DoesNotCallWebClient_WhenAddressHasBeenValidated()
         {
             EnumHelper.GetEnumList<AddressValidationStatusType>()
-                .Where(x => x.Value != AddressValidationStatusType.NotChecked && x.Value != AddressValidationStatusType.Pending)
+                .Where(x => x.Value != AddressValidationStatusType.NotChecked && 
+                    x.Value != AddressValidationStatusType.Pending &&
+                    x.Value != AddressValidationStatusType.Error)
                 .ToList()
                 .ForEach(status =>
             {

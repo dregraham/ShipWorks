@@ -55,7 +55,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Deletes existing validated addresses
         /// </summary>
-        public static void DeleteExistingAddresses(DataAccessAdapter adapter, long entityId)
+        public static void DeleteExistingAddresses(SqlAdapter adapter, long entityId)
         {
             DeleteExistingAddresses(new AdapterAddressValidationDataAccess(adapter), entityId);
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(DataAccessAdapter adapter, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(SqlAdapter adapter, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
         {
             SaveValidatedOrder(new AdapterAddressValidationDataAccess(adapter), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }

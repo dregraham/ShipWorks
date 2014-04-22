@@ -49,8 +49,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
 
             // We don't want to validate already validated addresses because we'll lose the original address
-            if (adapter.AddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
-                adapter.AddressValidationStatus != (int)AddressValidationStatusType.Pending)
+            if (!ShouldValidateAddress(adapter))
             {
                 return;
             }
@@ -96,6 +95,16 @@ namespace ShipWorks.AddressValidation
                 adapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
                 saveAction(null, new List<AddressEntity>());
             }
+        }
+
+        /// <summary>
+        /// Should the specified address be validated
+        /// </summary>
+        public static bool ShouldValidateAddress(AddressAdapter adapter)
+        {
+            return adapter.AddressValidationStatus == (int) AddressValidationStatusType.NotChecked ||
+                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Pending ||
+                   adapter.AddressValidationStatus == (int) AddressValidationStatusType.Error;
         }
 
         /// <summary>
