@@ -8,6 +8,8 @@ using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.AddressValidation
 {
@@ -187,5 +189,22 @@ namespace ShipWorks.AddressValidation
 
             dataAccess.SaveEntity(validatedAddressEntity);
         }
+
+        /// <summary>
+        /// Check whether the specified address can be validated
+        /// </summary>
+        public static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
+        {
+            if (PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) ||
+                PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
+            {
+                return true;
+            }
+
+            currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
+            currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WontValidate;
+
+            return false;
+        } 
     }
 }

@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Content
 
             if (!previousShippingAddress.Equals(currentShippingAddress))
             {
-                if (EnsureAddressCanBeValidated(currentShippingAddress))
+                if (ValidatedAddressManager.EnsureAddressCanBeValidated(currentShippingAddress))
                 {
                     currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
                     currentShippingAddress.AddressValidationError = string.Empty;
@@ -96,23 +96,6 @@ namespace ShipWorks.Stores.Content
                 currentShippingAddress.AddressValidationSuggestionCount = 0;
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
             }
-        }
-
-        /// <summary>
-        /// Check whether the specified address can be validated
-        /// </summary>
-        private static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
-        {
-            if (PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) ||
-                PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
-            {
-                return true;
-            }
-
-            currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-            currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WontValidate;
-
-            return false;
         }
     }
 }

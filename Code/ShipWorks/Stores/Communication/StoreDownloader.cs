@@ -635,11 +635,14 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private void SetAddressValidationStatus(OrderEntity order)
         {
-            order.ShipAddressValidationStatus =
-                addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify
-                    ? (int)AddressValidationStatusType.Pending
-                    : (int)AddressValidationStatusType.NotChecked;
+            if (ValidatedAddressManager.EnsureAddressCanBeValidated(new AddressAdapter(order, "Ship")))
+            {
+                order.ShipAddressValidationStatus =
+                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify
+                        ? (int)AddressValidationStatusType.Pending
+                        : (int)AddressValidationStatusType.NotChecked;    
+            }
         }
 
         /// <summary>
