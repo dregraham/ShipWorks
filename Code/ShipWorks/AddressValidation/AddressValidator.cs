@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using log4net;
 using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -17,6 +18,7 @@ namespace ShipWorks.AddressValidation
     public class AddressValidator
     {
         private readonly IAddressValidationWebClient webClient;
+        static readonly ILog log = LogManager.GetLogger(typeof(AddressValidator));
 
         /// <summary>
         /// Creates a new instance of the AddressValidator with the default web client
@@ -47,39 +49,51 @@ namespace ShipWorks.AddressValidation
             AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
 
             // We don't want to validate already validated addresses because we'll lose the original address
-            if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.NotChecked &&
-                adapter.AddressValidationStatus != (int) AddressValidationStatusType.Pending)
+            if (adapter.AddressValidationStatus != (int)AddressValidationStatusType.NotChecked &&
+                adapter.AddressValidationStatus != (int)AddressValidationStatusType.Pending)
             {
                 return;
             }
 
-            string addressValidationError;
-            List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
-                                                               new List<AddressValidationResult>();
-
-            // Store the original address so that the user can revert later if they want
-            AddressEntity originalAddress = new AddressEntity();
-            adapter.CopyTo(originalAddress, string.Empty);
-
-            adapter.AddressValidationError = addressValidationError;
-
-            // Set the validation status based on the settings of the store
-            if (canAdjustAddress)
+            List<AddressValidationResult> suggestedAddresses = new List<AddressValidationResult>();
+            try
             {
-                SetValidationStatus(suggestedAddresses, adapter);
-                UpdateAddressIfAdjusted(adapter, suggestedAddresses);   
+                string addressValidationError;
+                suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
+                                     new List<AddressValidationResult>();
+
+                // Store the original address so that the user can revert later if they want
+                AddressEntity originalAddress = new AddressEntity();
+                adapter.CopyTo(originalAddress, string.Empty);
+
+                adapter.AddressValidationError = addressValidationError;
+
+                // Set the validation status based on the settings of the store
+                if (canAdjustAddress)
+                {
+                    SetValidationStatus(suggestedAddresses, adapter);
+                    UpdateAddressIfAdjusted(adapter, suggestedAddresses);
+                }
+                else
+                {
+                    SetValidationStatusForNotify(suggestedAddresses, adapter);
+                }
+
+                if (suggestedAddresses.Count > 0)
+                {
+                    saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
+                }
+                else
+                {
+                    saveAction(null, new List<AddressEntity>());
+                }
+
             }
-            else
+            catch (AddressValidationException ex)
             {
-                SetValidationStatusForNotify(suggestedAddresses, adapter);
-            }
-
-            if (suggestedAddresses.Count > 0)
-            {
-                saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
-            }
-            else
-            {
+                log.Warn("Error communicating with Address Validation Server.", ex);
+                adapter.AddressValidationError = "Error communicating with Address Validation Server.";
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
                 saveAction(null, new List<AddressEntity>());
             }
         }

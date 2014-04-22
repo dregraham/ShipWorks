@@ -8,6 +8,9 @@ using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
+using log4net.Core;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.AddressValidation
 {
@@ -35,11 +38,12 @@ namespace ShipWorks.AddressValidation
         /// </exception>
         public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip, out string addressValidationError)
         {
+            List<AddressValidationResult> validationResults = null;
+
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
             int returnCode = XPathUtility.Evaluate(zip1Result, "Dial-A-ZIP_Response/ReturnCode", 0);
-
-            List<AddressValidationResult> validationResults = null;
+            
             addressValidationError = string.Empty;
 
             switch (returnCode)
@@ -51,15 +55,15 @@ namespace ShipWorks.AddressValidation
                 case 12:
                     addressValidationError = "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.";
                     break;
-                
+
                 case 13:
                     addressValidationError = "The City in the address submitted is invalid. Remember, city names cannot begin with numbers.";
                     break;
-                
+
                 case 21:
                     addressValidationError = "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
                     break;
-                
+
                 case 25:
                     addressValidationError = "City, State and ZIP Code are valid, but street address is not a match.";
                     break;
@@ -92,7 +96,7 @@ namespace ShipWorks.AddressValidation
                             CountryCode = Geography.GetCountryCode("US"),
                             IsValid = true
                         };
-                        
+
                         ParseStreet1(addressValidationResult);
 
                         validationResults = new List<AddressValidationResult>() { addressValidationResult };
@@ -374,8 +378,7 @@ namespace ShipWorks.AddressValidation
             }
             catch (Exception ex)
             {
-                WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
-                return null;
+                throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
             }
         }
     }
