@@ -194,7 +194,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 OpenConnection();
                 using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
                 {
-                    sqlAdapter.FetchEntityCollection(orders, orderBucket);
+                    sqlAdapter.FetchEntityCollection(orders, orderBucket, 1);
 
                     if (orders.Any())
                     {

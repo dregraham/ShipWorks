@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Transactions;
 using System.Windows.Forms;
 using log4net;
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
         private readonly IShipSenseLoaderGateway shipSenseLoaderGateway;
+        private static object runningLock = new object();
 
         /// <summary>
         /// Constructor
@@ -35,13 +37,26 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
+        /// Starts loading order and ship sense data on a new thread.
+        /// </summary>
+        public static void StartLoading()
+        {
+            ShipSenseLoader shipSenseLoader = new ShipSenseLoader(new ShipSenseLoaderGateway(new Knowledgebase()));
+
+            Task.Factory.StartNew(() => shipSenseLoader.LoadData());
+        }
+
+        /// <summary>
         /// Populates the ShipSenseKnowledgebase based on shipment history
         /// </summary>
-        public void LoadData()
+        private void LoadData()
         {
-            UpdateOrderHashes();
+            lock (runningLock)
+            {
+                UpdateOrderHashes();
 
-            AddKnowledgebaseEntries();
+                AddKnowledgebaseEntries();
+            }
         }
 
         /// <summary>
