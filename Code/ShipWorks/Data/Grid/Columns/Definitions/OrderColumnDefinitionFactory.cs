@@ -568,12 +568,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             {
                 case AddressValidationStatusType.Adjusted:
                 case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
                     return order.ShipAddressValidationSuggestionCount > 0;
+                case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.WillNotValidate:
-                    return true;
+                case AddressValidationStatusType.Error:
+                    return !string.IsNullOrEmpty(order.ShipAddressValidationError);
                 default:
                     return false;
             }
@@ -598,12 +599,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     return string.Empty;
                 case AddressValidationStatusType.Adjusted:
                 case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
                     return string.Format("{0} Suggestion{1}", order.ShipAddressValidationSuggestionCount, order.ShipAddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.WillNotValidate:
-                    return "Details...";
+                case AddressValidationStatusType.Error:
+                    return string.IsNullOrEmpty(order.ShipAddressValidationError) ? string.Empty : "Details...";
                 default:
                     return string.Empty;
             }

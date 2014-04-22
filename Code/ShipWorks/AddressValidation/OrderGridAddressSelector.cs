@@ -32,8 +32,10 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            // If we won't validate, let the user know why and don't show the address selection menu
-            if (order.ShipAddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate)
+            // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
+            if (order.ShipAddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
+                order.ShipAddressValidationStatus == (int)AddressValidationStatusType.NotValid ||
+                order.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error)
             {
                 MessageHelper.ShowInformation(Program.MainForm, order.ShipAddressValidationError);
                 return;
