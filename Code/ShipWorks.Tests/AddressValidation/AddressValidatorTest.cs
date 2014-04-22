@@ -335,8 +335,7 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
-        [ExpectedException(typeof(AddressValidationException))]
-        public void Validate_ThrowsAddressValidationException_WhenWebClientThrowsAddressValidationException()
+        public void Validate_OrderStatusIsError_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
                 .Throws<AddressValidationException>();
@@ -344,6 +343,21 @@ namespace ShipWorks.Tests.AddressValidation
             testObject.Validate(sampleOrder, "Ship", true, (addressEntity, addressList) =>
             {
             });
+
+            Assert.AreEqual(AddressValidationStatusType.Error, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+        }
+
+        [TestMethod]
+        public void Validate_StoresValidationError_WhenWebClientThrowsAddressValidationException()
+        {
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
+                .Throws<AddressValidationException>();
+
+            testObject.Validate(sampleOrder, "Ship", true, (addressEntity, addressList) =>
+            {
+            });
+
+            Assert.AreEqual("Error communicating with Address Validation Server.", sampleOrder.ShipAddressValidationError);
         }
 
         [TestMethod]

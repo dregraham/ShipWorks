@@ -637,11 +637,18 @@ namespace ShipWorks.Stores.Communication
         {
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(new AddressAdapter(order, "Ship")))
             {
-                order.ShipAddressValidationStatus =
-                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify
-                        ? (int)AddressValidationStatusType.Pending
-                        : (int)AddressValidationStatusType.NotChecked;    
+                if (addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify)
+                {
+                    order.ShipAddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                }
+                else
+                {
+                    order.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                }
+
+                order.ShipAddressValidationSuggestionCount = 0;
+                order.ShipAddressValidationError = string.Empty;
             }
         }
 
