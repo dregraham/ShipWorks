@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Configuration;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
@@ -15,6 +16,7 @@ using log4net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Content
 {
@@ -51,8 +53,8 @@ namespace ShipWorks.Stores.Content
         private void OnOK(object sender, EventArgs e)
         {
             // Save the current address so we can check if it's changed later
-            PersonAdapter previousShippingAddress = new PersonAdapter();
-            PersonAdapter.Copy(entity, "Ship", previousShippingAddress);
+            AddressAdapter previousShippingAddress = new AddressAdapter();
+            AddressAdapter.Copy(entity, "Ship", previousShippingAddress);
 
             shipBillControl.SavePendingChanges();
 
@@ -79,15 +81,38 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// If the shipping address has changed, reset the validation status and delete existing suggestions
         /// </summary>
-        private void ResetAddressValidationIfNecessary(PersonAdapter previousShippingAddress, SqlAdapter adapter)
+        private void ResetAddressValidationIfNecessary(AddressAdapter previousShippingAddress, SqlAdapter adapter)
         {
-            PersonAdapter currentShippingAddress = new PersonAdapter(entity, "Ship");
+            AddressAdapter currentShippingAddress = new AddressAdapter(entity, "Ship");
+
             if (!previousShippingAddress.Equals(currentShippingAddress))
             {
+                if (EnsureAddressCanBeValidated(currentShippingAddress))
+                {
+                    currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                    currentShippingAddress.AddressValidationError = string.Empty;
+                }
+
                 currentShippingAddress.AddressValidationSuggestionCount = 0;
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
             }
+        }
+
+        /// <summary>
+        /// Check whether the specified address can be validated
+        /// </summary>
+        private static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
+        {
+            if (PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) ||
+                PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
+            {
+                return true;
+            }
+
+            currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
+            currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WontValidate;
+
+            return false;
         }
     }
 }
