@@ -16,25 +16,12 @@ public partial class Triggers
             con.Open();
 
             string sql = @"
-	                        update s
-	                        set s.ShipSenseStatus = 
-		                        case
-			                        when s.ShipSenseEntry = i.Entry then 1
-			                        else 2
-		                        end
-	                        from Shipment s
-		                        join
-		                        [Order] o with(nolock) on o.OrderID = s.OrderID
-		                        join
-		                        inserted i on i.Hash = o.ShipSenseHashKey
-	                        where s.Processed = 0
-	                          and s.ShipSenseStatus <> 0
-
-                            update o
-                            set o.ShipSensible = 1 
-                            from [Order] o
-                                join inserted i on i.Hash = o.ShipSenseHashKey
-                            and o.ShipSensible = 0
+	                        UPDATE o
+                            SET o.ShipSensible = 1 
+                            FROM [Order] o
+                                INNER JOIN inserted i 
+                                    ON i.Hash = o.ShipSenseHashKey
+                                        AND o.ShipSensible = 0
                         ";
 
             using (SqlCommand sqlCommand = con.CreateCommand())

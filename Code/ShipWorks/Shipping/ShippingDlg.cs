@@ -2100,6 +2100,10 @@ namespace ShipWorks.Shipping
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
+
+            List<string> orderHashes = new List<string>();
+            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = shipmentControl.AllRows.Select(r => r.Shipment);
+
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
             {
@@ -2170,6 +2174,13 @@ namespace ShipWorks.Shipping
                 // shipment, so the status of any remaining unprocessed shipments are reflected correctly
                 shipSenseSynchronizer.RefreshKnowledgebaseEntries();
                 shipSenseSynchronizer.MonitoredShipments.ToList().ForEach(shipSenseSynchronizer.SynchronizeWith);
+
+                // Refresh/update the ShipSense status of any unprocessed shipments that are outside of the shipping dialog
+                Knowledgebase knowledgebase = new Knowledgebase();
+                foreach (string hash in orderHashes.Distinct())
+                {
+                    knowledgebase.RefreshShipSenseStatus(hash, exludedShipmentsFromShipSenseRefresh.Select(s => s.ShipmentID));
+                }
             };
 
             // Code to execute for each shipment
@@ -2193,7 +2204,9 @@ namespace ShipWorks.Shipping
                     {
                         throw concurrencyEx;
                     }
-                    
+
+                    orderHashes.Add(shipment.Order.ShipSenseHashKey);
+
                     // Process it       
                     if (shipment.ShipmentType == (int)ShipmentTypeCode.BestRate)
                     {

@@ -225,6 +225,32 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Refreshes the ShipSense status of unprocessed shipments whose order has a hash key matching
+        /// the one provided. Shipments corresponding to the list of shipment IDs provided will not be
+        /// impacted. This is useful for the case where the shipping window is open with a batch of 
+        /// shipments and you don't want the underlying data to be refreshed when processing a shipment.
+        /// Otherwise, you would get an error message indicating that the shipment has been updated when
+        /// you go to process the next shipment.
+        /// </summary>
+        /// <param name="hashKey">The hash key.</param>
+        /// <param name="excludedShipmentIDs">The excluded shipment IDs.</param>
+        public void RefreshShipSenseStatus(string hashKey, IEnumerable<long> excludedShipmentIDs)
+        {
+            // Build the shipment XML for the excluded shipments
+            StringBuilder shipmentXml = new StringBuilder();
+            foreach (long shipmentID in excludedShipmentIDs)
+            {
+                shipmentXml.AppendFormat("<shipment><id>{0}</id></shipment>", shipmentID);
+            }
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                ActionProcedures.ShipmentShipSenseProcedure(hashKey, shipmentXml.ToString(), adapter);
+            }
+
+        }
+
+        /// <summary>
         /// Fetches a ShipSenseKnowledgebaseEntity from the database based on the items in the given order.
         /// </summary>
         /// <returns>null if the ShipSenseKnowledgebaseEntity does not exist.  Otherwise, the ShipSenseKnowledgebaseEntity is returned.</returns>
