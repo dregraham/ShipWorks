@@ -48,6 +48,6 @@ namespace ShipWorks.AddressValidation
 
         [Description("Won't Validate")]
         [ImageResource("warning16")]
-        WontValidate = 9
+        WillNotValidate = 9
     }
 }

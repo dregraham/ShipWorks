@@ -202,7 +202,7 @@ namespace ShipWorks.AddressValidation
             }
 
             currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-            currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WontValidate;
+            currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
 
             return false;
         } 
