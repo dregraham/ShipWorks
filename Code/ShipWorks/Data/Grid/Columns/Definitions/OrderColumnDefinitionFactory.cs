@@ -572,6 +572,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
                     return order.ShipAddressValidationSuggestionCount > 0;
+                case AddressValidationStatusType.WillNotValidate:
+                    return true;
                 default:
                     return false;
             }
@@ -600,6 +602,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
                     return string.Format("{0} Suggestion{1}", order.ShipAddressValidationSuggestionCount, order.ShipAddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                case AddressValidationStatusType.WillNotValidate:
+                    return "Details...";
                 default:
                     return string.Empty;
             }

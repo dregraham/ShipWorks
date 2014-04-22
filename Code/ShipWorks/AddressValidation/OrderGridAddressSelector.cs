@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.LinqSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
@@ -28,6 +29,13 @@ namespace ShipWorks.AddressValidation
 
             if (order == null)
             {
+                return;
+            }
+
+            // If we won't validate, let the user know why and don't show the address selection menu
+            if (order.ShipAddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate)
+            {
+                MessageHelper.ShowInformation(Program.MainForm, order.ShipAddressValidationError);
                 return;
             }
 
