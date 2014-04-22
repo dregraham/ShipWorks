@@ -13,34 +13,42 @@ public partial class Triggers
             con.Open();
 
             string sql = @"
-	            -- If we do not match a ShipSenseKnowledgeBase Hash, then always update the shipment shipsense status to 0, Not Applied
-	            -- for all shipments assigned to the inserted order
-	            if not exists (select * from ShipSenseKnowledgeBase sskb, inserted i where sskb.[Hash] = i.ShipSenseHashKey)
-	            begin
-		            update s
-		            set s.ShipSenseStatus = 0
-		            from Shipment s, inserted i
-		            where s.OrderID = i.OrderID
-		                and s.Processed = 0
-		                and s.ShipSenseStatus <> 0
-	            end
-	            else
-	            begin
-		            -- We have a ShipSenseKnowledgeBase entry based on Hash, so now we check shipments for the inserted order
-		            update s
-		            set s.ShipSenseStatus =
-			            case
-				            when sskb.Entry = s.ShipSenseEntry then 1
-				            else 2
-			            end
-		            from Shipment s
-			            join
-			            inserted i on i.OrderID = s.OrderID
-			            join
-			            ShipSenseKnowledgeBase sskb with(nolock) on sskb.Hash = i.ShipSenseHashKey
-		            where s.Processed = 0
-		                and s.ShipSenseStatus <> 0
-	            end
+                -- Only execute the trigger if the ShipSense hash key of an order has changed to avoid deadlocks
+                -- that could occur while processing the shipment and the order's local status gets updated
+                IF (UPDATE(ShipSenseHashKey))
+                BEGIN
+	                -- If we do not match a ShipSenseKnowledgeBase Hash, then always update the shipment shipsense status to 0, Not Applied
+	                -- for all shipments assigned to the inserted order
+	                IF NOT EXISTS (SELECT * FROM ShipSenseKnowledgeBase sskb, INSERTED i WHERE sskb.[Hash] = i.ShipSenseHashKey)
+	                BEGIN
+		                UPDATE s
+		                SET s.ShipSenseStatus = 0
+		                FROM Shipment s, INSERTED i
+		                WHERE s.OrderID = i.OrderID
+		                    AND s.Processed = 0
+		                    AND s.ShipSenseStatus <> 0
+	                END
+	                ELSE
+	                BEGIN
+		                -- We have a ShipSenseKnowledgeBase entry based on Hash, so now we check shipments for the inserted order
+		                UPDATE s
+		                SET s.ShipSenseStatus =
+			                CASE
+				                WHEN sskb.Entry = s.ShipSenseEntry THEN 1
+				                ELSE 2
+			                END
+		                FROM Shipment s
+			                INNER JOIN
+			                    INSERTED i 
+                                ON i.OrderID = s.OrderID
+			                INNER JOIN 
+                                ShipSenseKnowledgeBase sskb WITH(NOLOCK) 
+                                ON sskb.Hash = i.ShipSenseHashKey
+		                WHERE 
+                            s.Processed = 0
+		                    AND s.ShipSenseStatus <> 0
+	                END
+                END
                         ";
 
             using (SqlCommand sqlCommand = con.CreateCommand())
