@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using System.Windows.Forms;
+﻿using System.Threading.Tasks;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users.Audit;
 
@@ -41,9 +29,11 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         public static void StartLoading()
         {
-            ShipSenseLoader shipSenseLoader = new ShipSenseLoader(new ShipSenseLoaderGateway(new Knowledgebase()));
-
-            Task.Factory.StartNew(() => shipSenseLoader.LoadData());
+            using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
+            {
+                ShipSenseLoader shipSenseLoader = new ShipSenseLoader(gateway);
+                Task.Factory.StartNew(shipSenseLoader.LoadData);
+            }
         }
 
         /// <summary>
@@ -78,14 +68,9 @@ namespace ShipWorks.Shipping.ShipSense.Population
                             while (order != null)
                             {
                                 OrderUtility.UpdateShipSenseHashKey(order);
+                                shipSenseLoaderGateway.SaveOrder(order);
 
-                                using (TransactionScope scope = new TransactionScope())
-                                {
-                                    shipSenseLoaderGateway.SaveOrder(order);
-                                    scope.Complete();
-                                }
-
-                                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
+                                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
                             }
                         }
                     }
@@ -120,17 +105,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                             while (shipment != null)
                             {
                                 ShippingManager.EnsureShipmentLoaded(shipment);
-
-                                using (TransactionScope scope = new TransactionScope())
-                                {
-                                    shipSenseLoaderGateway.Save(shipment);
-
-                                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                                    shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
-                                    ShippingSettings.Save(shippingSettings);
-
-                                    scope.Complete();
-                                }
+                                shipSenseLoaderGateway.Save(shipment);
 
                                 shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
                             }

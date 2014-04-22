@@ -3,25 +3,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.IO.Text.Sgml;
+using System.Transactions;
 using log4net;
-using Microsoft.Web.Services3.Addressing;
-using SD.LLBLGen.Pro.LinqSupportClasses.ExpressionClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.ShipSense.Population
 {
@@ -151,25 +144,33 @@ namespace ShipWorks.Shipping.ShipSense.Population
             try
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
                 IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
                 // Make sure we have all of the order information
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
 
-                OpenConnection();
-                using (SqlAdapter adapter = new SqlAdapter(connection))
+                using (TransactionScope scope = new TransactionScope())
                 {
-                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                    OpenConnection();
+                    using (SqlAdapter adapter = new SqlAdapter(connection))
+                    {
+                        adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                    }
+
+                    // Apply the data from the package adapters and the customs items to the knowledge base 
+                    // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                    // is smart enough to know when to save the customs items associated with an entry.
+                    KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                    entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+
+                    knowledgebase.Save(entry, order);
+
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
+                    ShippingSettings.Save(shippingSettings);
+
+                    scope.Complete();
                 }
-
-                // Apply the data from the package adapters and the customs items to the knowledge base 
-                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
-                // is smart enough to know when to save the customs items associated with an entry.
-                KnowledgebaseEntry entry = new KnowledgebaseEntry();
-                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
-
-                knowledgebase.Save(entry, order);
             }
             catch (Exception ex)
             {
@@ -184,9 +185,25 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         public OrderEntity FetchNextOrderOrderToProcess()
         {
+            // Create an order with an ID of zero to force the gateway to use the first order it
+            // encounters
+            OrderEntity simulatedPreviousOrder = new OrderEntity(0);
+            return FetchNextOrderOrderToProcess(simulatedPreviousOrder);
+        }
+
+
+        /// <summary>
+        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey and is not the same as the previous order. 
+        /// This overload is useful when you want to bypass the previous order if it is returned again, 
+        /// ensure that you don't get into an infinite loop state
+        /// </summary>
+        /// <param name="previousOrder">The previous order.</param>
+        public OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder)
+        {
             OrderEntity orderEntity = null;
 
             RelationPredicateBucket orderBucket = new RelationPredicateBucket();
+            orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousOrder.OrderID);
             orderBucket.PredicateExpression.Add(OrderFields.ShipSenseHashKey == string.Empty);
 
             using (OrderCollection orders = new OrderCollection())
@@ -212,10 +229,15 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         public void SaveOrder(OrderEntity order)
         {
-            OpenConnection();
-            using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
+            using (TransactionScope scope = new TransactionScope())
             {
-                sqlAdapter.SaveAndRefetch(order);
+                OpenConnection();
+                using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
+                {
+                    sqlAdapter.SaveAndRefetch(order);
+                }
+
+                scope.Complete();
             }
         }
 

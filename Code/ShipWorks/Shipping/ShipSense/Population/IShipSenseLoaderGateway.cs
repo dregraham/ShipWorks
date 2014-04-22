@@ -37,6 +37,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
         OrderEntity FetchNextOrderOrderToProcess();
 
         /// <summary>
+        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey and is not the same as the previous order. 
+        /// This overload is useful when you want to bypass the previous order if it is returned again, 
+        /// ensure that you don't get into an infinite loop state
+        /// </summary>
+        /// <param name="previousOrder">The previous order.</param>
+        OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder);
+
+        /// <summary>
         /// Saves an OrderEntity
         /// </summary>
         void SaveOrder(OrderEntity order);
