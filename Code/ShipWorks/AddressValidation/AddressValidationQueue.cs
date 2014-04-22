@@ -81,35 +81,50 @@ namespace ShipWorks.AddressValidation
 
                 try
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(connection))
-                    {
-                        List<OrderEntity> pendingOrders;
-                        LinqMetaData linqMetaData = new LinqMetaData(adapter);
+                    // Validate any pending orders first
+                    ValidateAddresses(connection, AddressValidationStatusType.Pending, orders => orders.Any());
 
-                        do
-                        {
-                            pendingOrders = linqMetaData.Order
-                                .Where(x => x.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending)
-                                .Take(50)
-                                .ToList();
-
-                            pendingOrders.ForEach(x =>
-                            {
-                                if (cancellationToken.IsCancellationRequested)
-                                {
-                                    return;
-                                }
-
-                                Validate(x, adapter);
-                            });
-                        } while (pendingOrders.Any());
-                    }
+                    // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
+                    // since that would suggest that there is still something wrong with the web service
+                    ValidateAddresses(connection, AddressValidationStatusType.Error, 
+                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
                 }
                 finally
                 {
                     SqlAppLockUtility.ReleaseLock(connection, SqlAppLockName);
                 }
             }
+        }
+
+        /// <summary>
+        /// Validate orders with a given address validation status
+        /// </summary>
+        private static void ValidateAddresses(SqlConnection connection, AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
+        {
+            List<OrderEntity> pendingOrders;
+
+            do
+            {
+                using (SqlAdapter adapter = new SqlAdapter(connection))
+                {
+                    LinqMetaData linqMetaData = new LinqMetaData(adapter);
+
+                    pendingOrders = linqMetaData.Order
+                        .Where(x => x.ShipAddressValidationStatus == (int) statusToValidate)
+                        .Take(50)
+                        .ToList();
+
+                    pendingOrders.ForEach(x =>
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        Validate(x, adapter);
+                    });
+                }
+            } while (shouldContinue(pendingOrders));
         }
 
         /// <summary>
