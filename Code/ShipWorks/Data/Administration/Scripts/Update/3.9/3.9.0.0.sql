@@ -75,13 +75,13 @@ GO
 PRINT N'Altering [dbo].[ShippingSettings][ShipSenseProcessedShipmentID]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] 
-	ALTER COLUMN [ShipSenseProcessedShipmentID] [bit] NOT NULL
+	ALTER COLUMN [ShipSenseProcessedShipmentID] [bigint] NOT NULL
 GO
 
 PRINT N'Altering [dbo].[ShippingSettings][ShipSenseEndShipmentID]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] 
-	ALTER COLUMN [ShipSenseEndShipmentID] [bit] NOT NULL
+	ALTER COLUMN [ShipSenseEndShipmentID] [bigint] NOT NULL
 GO
 
 PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
