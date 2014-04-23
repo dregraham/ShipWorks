@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 OpenConnection();
                 using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
                 {
-                    sqlAdapter.SaveAndRefetch(order);
+                    sqlAdapter.SaveEntity(order, false, false);
                 }
 
                 scope.Complete();
