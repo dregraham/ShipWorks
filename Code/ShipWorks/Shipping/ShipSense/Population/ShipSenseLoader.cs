@@ -62,16 +62,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 {
                     using (new LoggedStopwatch(log, appLockName))
                     {
-                        using (new AuditBehaviorScope(AuditState.Disabled))
+                        OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
+                        while (order != null)
                         {
-                            OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
-                            while (order != null)
-                            {
-                                OrderUtility.UpdateShipSenseHashKey(order);
-                                shipSenseLoaderGateway.SaveOrder(order);
+                            OrderUtility.UpdateShipSenseHashKey(order);
+                            shipSenseLoaderGateway.SaveOrder(order);
 
-                                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
-                            }
+                            order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
                         }
                     }
                 }

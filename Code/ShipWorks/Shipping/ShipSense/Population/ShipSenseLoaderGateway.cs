@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
+using ShipWorks.Users.Audit;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -229,15 +230,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         public void SaveOrder(OrderEntity order)
         {
-            using (TransactionScope scope = new TransactionScope())
+            using (new AuditBehaviorScope(AuditState.Disabled))
             {
-                OpenConnection();
-                using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
+                using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                 {
                     sqlAdapter.SaveEntity(order, false, false);
+                    sqlAdapter.Commit();
                 }
-
-                scope.Complete();
             }
         }
 
