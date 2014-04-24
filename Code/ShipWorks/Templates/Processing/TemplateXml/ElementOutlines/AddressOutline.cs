@@ -55,6 +55,11 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Fax", () => person.Fax);
             AddElement("Email", () => person.Email);
             AddElement("Website", () => person.Website);
+
+            AddElement("ResidentialStatus", () => person.ResidentialStatus);
+            AddElement("POBox", () => person.POBox);
+            AddElement("InternationalTerritory", () => person.InternationalTerritory);
+            AddElement("MilitaryAddress", () => person.MilitaryAddress);
         }
 
         /// <summary>
