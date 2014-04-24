@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.ShipSense
                     entity.Fields[1].IsChanged = true;
                     entity.IsDirty = true;
 
-                    adapter.SaveEntity(entity);
+                    adapter.SaveEntity(entity, false, false);
                     adapter.Commit();
                 }
             }
