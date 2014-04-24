@@ -8,9 +8,6 @@ using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using log4net;
-using log4net.Core;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.AddressValidation
 {
@@ -94,6 +91,8 @@ namespace ShipWorks.AddressValidation
                             StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/State", String.Empty)),
                             PostalCode = validatedZip,
                             CountryCode = Geography.GetCountryCode("US"),
+                            ResidentialStatus = GetResidentialStatus(zip1Result),
+                            POBox = GetPOBox(zip1Result, "/Dial-A-ZIP_Response/RecType"),
                             IsValid = true
                         };
 
@@ -110,6 +109,46 @@ namespace ShipWorks.AddressValidation
             ApplyAddressCasing(validationResults);
 
             return validationResults;
+        }
+
+        /// <summary>
+        /// Gets whether the specified address result is a PO Box or not
+        /// </summary>
+        private static POBoxType GetPOBox(XPathNavigator zip1Result, string path)
+        {
+            string poBox = XPathUtility.Evaluate(zip1Result, path, String.Empty);
+
+            if (poBox == "P")
+            {
+                return POBoxType.POBox;
+            }
+
+            if (string.IsNullOrEmpty(poBox))
+            {
+                return POBoxType.Unknown;
+            }
+
+            return POBoxType.NotPOBox;
+        }
+
+        /// <summary>
+        /// Gets whether the specified address result is commercial or residential
+        /// </summary>
+        private static ResidentialStatusType GetResidentialStatus(XPathNavigator zip1Result)
+        {
+            string residentialStatus = XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/RDI", String.Empty);
+
+            if (residentialStatus == "R")
+            {
+                return ResidentialStatusType.Residential;
+            }
+
+            if (residentialStatus == "B")
+            {
+                return ResidentialStatusType.Commercial;
+            }
+
+            return ResidentialStatusType.Unknown;
         }
 
         private static void ParseStreet1(AddressValidationResult addressValidationResult)
@@ -273,7 +312,8 @@ namespace ShipWorks.AddressValidation
                     City = validatedCity,
                     StateProvCode = Geography.GetStateProvCode(validatedState),
                     PostalCode = GetMultiZipPlus4(zip5, lPlus4, hPlus4),
-                    CountryCode = Geography.GetCountryCode("US")
+                    CountryCode = Geography.GetCountryCode("US"),
+                    POBox = GetPOBox(address, "Type")
                 };
 
                 validationResults.Add(addressValidationResult);

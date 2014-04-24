@@ -132,7 +132,11 @@ namespace ShipWorks.Stores
         {
             return new OrderEntity
             {
-                ShipAddressValidationError = string.Empty
+                ShipAddressValidationError = string.Empty,
+                ShipResidentialStatus = (int) ResidentialStatusType.Unknown,
+                ShipPOBox = (int) POBoxType.Unknown,
+                ShipInternationalTerritory = (int) InternationalTerritoryType.Unknown,
+                ShipMilitaryAddress = (int) MilitaryAddressType.Unknown
             };
         }
 
