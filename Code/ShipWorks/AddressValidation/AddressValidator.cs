@@ -79,7 +79,7 @@ namespace ShipWorks.AddressValidation
                     {
                         adapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
                         adapter.POBox = (int) validatedAddress.POBox;
-                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.CountryCode);
+                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
                         adapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
                     }
                 }
@@ -190,7 +190,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void UpdateInternationalTerritoryAndMilitaryAddress(AddressAdapter address)
         {
-            address.InternationalTerritory = InternationalTerritoryStatus(address.CountryCode);
+            address.InternationalTerritory = InternationalTerritoryStatus(address.StateProvCode, address.CountryCode);
             address.MilitaryAddress = MilitaryAddressStatus(address.StateProvCode);
         }
 
@@ -207,9 +207,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets the international territory status form the country code
         /// </summary>
-        private static int InternationalTerritoryStatus(string countryCode)
+        private static int InternationalTerritoryStatus(string stateProvCode, string countryCode)
         {
-            return PostalUtility.IsUSInternationalTerritory(countryCode) ?
+            return PostalUtility.IsUSInternationalTerritory(countryCode) || PostalUtility.IsUSInternationalTerritory(stateProvCode) ?
                 (int) InternationalTerritoryType.InternationalTerritory :
                 (int) InternationalTerritoryType.NotInternationalTerritory;
         }
