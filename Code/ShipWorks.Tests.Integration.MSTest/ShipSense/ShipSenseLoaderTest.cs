@@ -76,9 +76,9 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
                 
                 UserSession.InitializeForCurrentDatabase(executionMode.Object);
 
-                if (!UserSession.Logon("shipworks", "", true))
+                if (!UserSession.Logon("shipworks", "shipworks", true))
                 {
-                    throw new Exception("A 'shipworks' account with password '' needs to be created.");
+                    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
                 }
 
                 ShippingManager.InitializeForCurrentDatabase();
@@ -101,8 +101,14 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
                 stopWatch.Stop();
             }
 
-            Console.WriteLine("Elapsed time: {0} seconds", stopWatch.ElapsedMilliseconds / 1000.0M);
             Assert.IsTrue(stopWatch.ElapsedMilliseconds < 60000);
+
+            Console.WriteLine(@"===================================================================================================");
+            Console.WriteLine(@"====                           ShipSense Loader                                                ====");
+            Console.WriteLine(@"===================================================================================================");
+            Console.WriteLine(@"Elapsed time: {0} seconds", stopWatch.ElapsedMilliseconds / 1000.0M);
+            Console.WriteLine(@"===================================================================================================");
+
         }
     }
 }
