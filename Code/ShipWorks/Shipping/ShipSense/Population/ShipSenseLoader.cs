@@ -44,8 +44,6 @@ namespace ShipWorks.Shipping.ShipSense.Population
             lock (runningLock)
             {
                 UpdateOrderHashes();
-
-                AddKnowledgebaseEntries();
             }
         }
 
@@ -54,13 +52,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void UpdateOrderHashes()
         {
-            string appLockName = "ShipSenseLoader_UpdateOrderHashes";
+            string appLockName = "ShipSenseLoader_Working";
 
             if (shipSenseLoaderGateway.GetAppLock(appLockName))
             {
                 try
                 {
-                    using (new LoggedStopwatch(log, appLockName))
+                    using (new LoggedStopwatch(log, "ShipSenseLoader.UpdateOrderHashes"))
                     {
                         OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
                         while (order != null)
@@ -71,6 +69,9 @@ namespace ShipWorks.Shipping.ShipSense.Population
                             order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
                         }
                     }
+
+                    // Now populate any kb entries
+                    AddKnowledgebaseEntries();
                 }
                 finally
                 {
@@ -79,7 +80,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
             else
             {
-                log.DebugFormat("Unable to get app lock for ShipSenseLoader.UpdateOrderHashes");
+                log.DebugFormat("Unable to get app lock ShipSenseLoader_Working");
             }
         }
 
@@ -88,35 +89,19 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void AddKnowledgebaseEntries()
         {
-            string appLockName = "ShipSenseLoader_AddKnowledgebaseEntries";
-
-            if (shipSenseLoaderGateway.GetAppLock(appLockName))
+            using (new LoggedStopwatch(log, "ShipSenseLoader.AddKnowledgebaseEntries"))
             {
-                try
+                using (new AuditBehaviorScope(AuditState.Disabled))
                 {
-                    using (new LoggedStopwatch(log, appLockName))
+                    ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                    while (shipment != null)
                     {
-                        using (new AuditBehaviorScope(AuditState.Disabled))
-                        {
-                            ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                            while (shipment != null)
-                            {
-                                ShippingManager.EnsureShipmentLoaded(shipment);
-                                shipSenseLoaderGateway.Save(shipment);
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        shipSenseLoaderGateway.Save(shipment);
 
-                                shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                            }
-                        }
+                        shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
                     }
                 }
-                finally
-                {
-                    shipSenseLoaderGateway.ReleaseAppLock(appLockName);
-                }
-            }
-            else
-            {
-                log.DebugFormat("Unable to get app lock for ShipSenseLoader.AddKnowledgebaseEntries");
             }
         }
     }
