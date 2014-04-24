@@ -93,6 +93,11 @@ namespace ShipWorks.Stores.Content
                     currentShippingAddress.AddressValidationError = string.Empty;
                 }
 
+                currentShippingAddress.ResidentialStatus = (int) ResidentialStatusType.Unknown;
+                currentShippingAddress.POBox = (int) POBoxType.Unknown;
+                currentShippingAddress.InternationalTerritory = (int) InternationalTerritoryType.Unknown;
+                currentShippingAddress.MilitaryAddress = (int) MilitaryAddressType.Unknown;
+
                 currentShippingAddress.AddressValidationSuggestionCount = 0;
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
             }
