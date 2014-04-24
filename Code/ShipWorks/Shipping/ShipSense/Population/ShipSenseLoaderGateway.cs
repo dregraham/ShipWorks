@@ -74,21 +74,23 @@ namespace ShipWorks.Shipping.ShipSense.Population
         public ShipmentEntity FetchNextShipmentToProcess()
         {
             ShipmentEntity shipment = null;
-            /*         
-            select max(s.shipmentID)
-            from Shipment s with(nolock), [Order] o with(nolock)
-            where s.shipmentID <= @endShipmentID 
-              and s.ShipmentID > @processedShipmentID 
-              and s.Processed = 1
-              and s.OrderID = o.OrderID
-            group by o.ShipSenseHashKey  
-            order by max(s.shipmentID) asc       
-             */
 
             ShippingSettingsEntity shippingSettings = FetchShippingSettingsEntity();
             long endShipmentID = shippingSettings.ShipSenseEndShipmentID;
             long lastProcessedShipmentID = shippingSettings.ShipSenseProcessedShipmentID;
-
+            
+            /*         
+            SELECT MAX(s.shipmentID)
+            FROM 
+                Shipment s WITH(NOLOCK), 
+                [Order] o WITH(NOLOCK)
+            WHERE s.shipmentID <= @endShipmentID 
+              AND s.ShipmentID > @processedShipmentID 
+              AND s.Processed = 1
+              AND s.OrderID = o.OrderID
+            GROUP BY o.ShipSenseHashKey  
+            ORDER BY MAX(s.shipmentID) ASC       
+             */
             RelationPredicateBucket shipmentBucket = new RelationPredicateBucket();
             shipmentBucket.Relations.Add(new EntityRelation(ShipmentFields.OrderID, OrderFields.OrderID, RelationType.ManyToOne));
 
@@ -109,8 +111,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
             ISortClause datePartSortClause = new SortClause(datePartField, null, SortOperator.Ascending);
             SortExpression sort = new SortExpression(datePartSortClause);
 
-            OpenConnection();
-            using (SqlAdapter sqlAdapter = new SqlAdapter(connection))
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 using (SqlDataReader sqlDataReader = (SqlDataReader) sqlAdapter.FetchDataReader(resultFields, shipmentBucket, CommandBehavior.SequentialAccess, 1, sort, groupByCollection, false, 1, 1))
                 {
@@ -133,7 +134,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
         /// <summary>
         /// Saves the shipment data to the ShipSense knowledge base. All exceptions will be caught
-        /// and logged and wrapped in a ShippingException.
+        /// and logged and wrapped in a ShipSenseException.
         /// </summary>
         public void Save(ShipmentEntity shipment)
         {
@@ -149,35 +150,25 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
                 // Make sure we have all of the order information
                 OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                OrderUtility.PopulateOrderDetails(order);
 
-                using (TransactionScope scope = new TransactionScope())
-                {
-                    OpenConnection();
-                    using (SqlAdapter adapter = new SqlAdapter(connection))
-                    {
-                        adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
-                    }
+                // Apply the data from the package adapters and the customs items to the knowledge base 
+                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                // is smart enough to know when to save the customs items associated with an entry.
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
 
-                    // Apply the data from the package adapters and the customs items to the knowledge base 
-                    // entry, so the shipment data will get saved to the knowledge base; the knowledge base
-                    // is smart enough to know when to save the customs items associated with an entry.
-                    KnowledgebaseEntry entry = new KnowledgebaseEntry();
-                    entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+                knowledgebase.Save(entry, order);
 
-                    knowledgebase.Save(entry, order);
-
-                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                    shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
-                    ShippingSettings.Save(shippingSettings);
-
-                    scope.Complete();
-                }
+                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
+                ShippingSettings.Save(shippingSettings);
             }
             catch (Exception ex)
             {
                 // We may want to eat this exception entirely, so the user isn't impacted 
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
-                throw new ShippingException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
+                throw new ShipSenseException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
             }
         }
 

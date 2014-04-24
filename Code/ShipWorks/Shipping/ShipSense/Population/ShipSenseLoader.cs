@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// <summary>
         /// Populates the ShipSenseKnowledgebase based on shipment history
         /// </summary>
-        private void LoadData()
+        public void LoadData()
         {
             lock (runningLock)
             {

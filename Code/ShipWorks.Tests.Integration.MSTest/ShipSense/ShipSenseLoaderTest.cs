@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
-using Interapptive.Shared.Win32;
-using ShipWorks.Actions;
+using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -9,26 +10,27 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
-using log4net;
 
-namespace ShipWorks.Tests.Integration.MSTest
+namespace ShipWorks.Tests.Integration.MSTest.ShipSense
 {
-    /// <summary>
-    /// Base class for tests to initialize ShipWorks
-    /// </summary>
-    public abstract class ShipWorksInitializer
+    [TestClass]
+    public class ShipSenseLoaderTest
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksInitializer));
+        private ShipSenseLoader testObject;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        protected ShipWorksInitializer()
+        private readonly Mock<ExecutionMode> executionMode;
+
+        public ShipSenseLoaderTest()
         {
+            executionMode = new Mock<ExecutionMode>();
+            executionMode.Setup(m => m.IsUISupported).Returns(true);
+
             Guid swInstance;
             switch (Environment.MachineName.ToLower())
             {
@@ -48,7 +50,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                     swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
                     break;
                 default:
-                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in ShipWorksInitializer()");
+                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in ShipSenseLoaderTest()");
             }
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
@@ -62,7 +64,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                 DataProvider.InitializeForApplication();
                 AuditProcessor.InitializeForApplication();
-
+                
                 ShippingSettings.InitializeForCurrentDatabase();
                 ShippingProfileManager.InitializeForCurrentSession();
                 ShippingDefaultsRuleManager.InitializeForCurrentSession();
@@ -71,66 +73,36 @@ namespace ShipWorks.Tests.Integration.MSTest
                 StoreManager.InitializeForCurrentSession();
 
                 UserManager.InitializeForCurrentUser();
+                
+                UserSession.InitializeForCurrentDatabase(executionMode.Object);
 
-                UserSession.InitializeForCurrentDatabase();
-
-                if (!UserSession.Logon("shipworks", "shipworks", true))
+                if (!UserSession.Logon("shipworks", "", true))
                 {
-                    throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
+                    throw new Exception("A 'shipworks' account with password '' needs to be created.");
                 }
-                ;
 
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
 
                 TemplateManager.InitializeForCurrentSession();
-
-                ActionManager.InitializeForCurrentSession();
             }
         }
 
-        /// <summary>
-        /// Determines if a special key combination is active.  Can be used
-        /// for enabling "hidden" (but not secure!) functionality.
-        /// </summary>
-        public static bool MagicKeysDown
+        [TestMethod]
+        public void LoadData_CompletesInTwentySeconds_Test()
         {
-            get
+            Stopwatch stopWatch = new Stopwatch();
+            using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
             {
-                return Control.ModifierKeys == (Keys.Control | Keys.Shift) &&
-                    (NativeMethods.GetAsyncKeyState(Keys.LWin) & 0x8000) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Determines if a special key combination is active.  Can be used
-        /// for enabling "hidden" (but not secure!) functionality.
-        /// </summary>
-        public static bool DebugKeysDown
-        {
-            get
-            {
-                return Control.ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) &&
-                    (NativeMethods.GetAsyncKeyState(Keys.LWin) & 0x8000) != 0;
-            }
-        }
-
-        /// <summary>
-        /// Gets the next.
-        /// </summary>
-        /// <param name="from">From.</param>
-        /// <param name="dayOfWeek">The day of week.</param>
-        /// <returns></returns>
-        private DateTime GetNext(DateTime from, DayOfWeek dayOfWeek)
-        {
-            DateTime date = new DateTime(from.Ticks);
-
-            while (date.DayOfWeek != dayOfWeek)
-            {
-                date = date.AddDays(1);
+                testObject = new ShipSenseLoader(gateway);
+                
+                stopWatch.Start();
+                testObject.LoadData();
+                stopWatch.Stop();
             }
 
-            return date;
+            Console.WriteLine("Elapsed time: {0} seconds", stopWatch.ElapsedMilliseconds / 1000.0M);
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 60000);
         }
     }
 }
