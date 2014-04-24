@@ -8,5 +8,9 @@
     [StateProvCode]     NVARCHAR (50)  NOT NULL,
     [PostalCode]        NVARCHAR (20)  NOT NULL,
     [CountryCode]       NVARCHAR (50)  NOT NULL,
-	CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
+	[ResidentialStatus] INT NOT NULL, 
+    [POBox] INT NOT NULL, 
+    [InternationalTerritory] INT NOT NULL, 
+    [MilitaryAddress] INT NOT NULL, 
+    CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
 )
