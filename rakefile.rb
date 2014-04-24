@@ -209,7 +209,8 @@ end
 namespace :db do
 
 	desc "Create and populate a new ShipWorks database with seed data"
-	task :rebuild => [:create, :schema, :seed]	
+	task :rebuild, [:schemaVersion] => [:create, :schema, :seed] do |t, args|
+	end
 
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create do
@@ -261,8 +262,15 @@ namespace :db do
 	end
 
 	desc "Build the ShipWorks_SeedData database schema from scratch"
-	task :schema do
+	task :schema, :schemaVersion do |t, args|
 		puts "Creating the database schema..."
+				
+		versionForProcedure = "3.0.0.0"
+		
+		if args != nil and args.schemaVersion != nil and args.schemaVersion != ""
+			# A label was passed in, so use it for the Major.Minor.Patch 
+			versionForProcedure = args.schemaVersion
+		end
 				
 		# Clean up any remnants of the temporary script that may exist from a previous run
 		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
@@ -277,6 +285,15 @@ namespace :db do
 		# Concatenate the schema script to our string
 		sqlText.concat(File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateSchema.sql"))
 
+		sqlText.concat("
+		        CREATE PROCEDURE [dbo].[GetSchemaVersion] 
+                
+                AS 
+                SELECT '{SCHEMA_VERSION_VALUE}' AS 'SchemaVersion'
+				GO
+		")
+		sqlText = sqlText.sub(/{SCHEMA_VERSION_VALUE}/, versionForProcedure)
+		
 		# Write our script to a temporary file and execute the SQL
 		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
 		sh "sqlcmd -S (local) -i CreateSeedSchema.sql"
