@@ -802,6 +802,9 @@ namespace ShipWorks
                         {
                             return false;
                         }
+
+                        // Kick off the loader for loading data into ShipSense as needed
+                        ShipSenseLoader.StartLoading();
                     }
                     else
                     {
