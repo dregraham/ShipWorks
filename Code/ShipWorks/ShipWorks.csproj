@@ -611,6 +611,10 @@
     <Compile Include="Data\Administration\Versioning\UpgradePath.cs" />
     <Compile Include="Data\Administration\Versioning\VersionGraph.cs" />
     <Compile Include="Data\Administration\Versioning\SchemaVersionComparisonResult.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\InternationalTerritoryCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\MilitaryAddressCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\POBoxCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\ResidentialStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
