@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                 //Make sure the addresses only have two lines
+                //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
                 // Make sure we have a trusted connection with FedEx before making any requests that would
@@ -612,21 +612,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             try
             {
-                // Create a request that will retrieve smart post rates by supplying a smart post manipulator
-                CarrierRequest smartPostRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> {new FedExRateSmartPostManipulator()});
-                ICarrierResponse smartPostResponse = smartPostRequest.Submit();
-                smartPostResponse.Process();
+                if (FedExUtility.IsSmartPostEnabled(shipment))
+                {
+                    // Create a request that will retrieve smart post rates by supplying a smart post manipulator
+                    CarrierRequest smartPostRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> {new FedExRateSmartPostManipulator()});
+                    ICarrierResponse smartPostResponse = smartPostRequest.Submit();
+                    smartPostResponse.Process();
 
-                RateReply smartPostNativeResponse = smartPostResponse.NativeResponse as RateReply;
-                if (smartPostNativeResponse == null)
-                {
-                    // We don't have the correct response type to continue processing
-                    log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", smartPostResponse.GetType().FullName));
-                }
-                else
-                {
-                    // We have the appropriate response type, so we can build the list of rate results
-                    rates = BuildRateResults(shipment, new List<RateReplyDetail>(smartPostNativeResponse.RateReplyDetails));
+                    RateReply smartPostNativeResponse = smartPostResponse.NativeResponse as RateReply;
+                    if (smartPostNativeResponse == null)
+                    {
+                        // We don't have the correct response type to continue processing
+                        log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", smartPostResponse.GetType().FullName));
+                    }
+                    else
+                    {
+                        // We have the appropriate response type, so we can build the list of rate results
+                        rates = BuildRateResults(shipment, new List<RateReplyDetail>(smartPostNativeResponse.RateReplyDetails));
+                    }
                 }
             }
             catch (FedExException ex)

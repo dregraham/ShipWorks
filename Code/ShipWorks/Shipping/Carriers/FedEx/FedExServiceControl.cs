@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Need to check with the store  to see if anything about the shipment was overridden in case
                 // it may have affected the shipping services available (i.e. the eBay GSP program)
                 ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
-                if (ShipmentType.IsDomestic(overriddenShipment)) 
+                if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment)) 
                 {
                     anyDomestic = true;
                     allInternational = false;

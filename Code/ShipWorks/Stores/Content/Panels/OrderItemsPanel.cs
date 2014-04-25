@@ -141,12 +141,22 @@ namespace ShipWorks.Stores.Content.Panels
         {
             menuItemStatus.DropDownItems.Clear();
 
+            // Address FB #266809: EntityID was null below and I think it was a race condition
+            // Because of that, we get the value once, then check that the copy is valid
+            long localEntityValue = EntityID.GetValueOrDefault(long.MinValue);
+            Debug.Assert(localEntityValue != long.MinValue);
+
+            if (localEntityValue == long.MinValue)
+            {
+                return;
+            }
+
             List<long> storeKeys = new List<long>();
 
             // For live database use the selected store keys
             if (dataMode == PanelDataMode.LiveDatabase)
             {
-                storeKeys = DataProvider.GetRelatedKeys(EntityID.Value, EntityType.StoreEntity);
+                storeKeys = DataProvider.GetRelatedKeys(localEntityValue, EntityType.StoreEntity);
             }
             // For local mode use the specified storeID
             else

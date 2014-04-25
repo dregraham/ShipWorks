@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
                                             new XElement("Address1", shipment.ShipStreet1),
                                             new XElement("Address2", shipment.ShipStreet2),
                                             new XElement("City", shipment.ShipCity),
-                                            new XElement("StateProvince", shipment.ShipStateProvCode),
+                                            new XElement("StateProvince", shipment.ShipCountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : shipment.ShipStateProvCode),
                                             new XElement("PostCode", shipment.ShipPostalCode),
                                             new XElement("CountryCode", AdjustCountryCode(shipment.ShipCountryCode)),
                                             new XElement("Phone", shipment.ShipPhone),

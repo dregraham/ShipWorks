@@ -203,6 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             labelRepository.Setup(f => f.ClearReferences(It.IsAny<ShipmentEntity>()));
 
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            shipmentEntity.FedEx.SmartPostHubID = "5571";
 
             // Force our test object to perform version capture when called.
             testObject = new FedExShippingClerk(settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, true, labelRepository.Object);

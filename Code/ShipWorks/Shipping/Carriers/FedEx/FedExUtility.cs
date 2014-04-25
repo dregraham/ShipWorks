@@ -39,14 +39,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <returns>A List of FedExServiceType objects.</returns>
         public static List<FedExServiceType> GetValidServiceTypes(List<ShipmentEntity> shipments)
         {
+            FedExShipmentType shipmentType = new FedExShipmentType();
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>();
 
-            if (shipments.All(s => ShipmentType.IsDomestic(s)))
+            if (shipments.All(shipmentType.IsDomestic))
             {
                 // All shipments are domestic
                 serviceTypes = GetDomesticServiceTypes(shipments);
             }
-            else if (shipments.All(s => !ShipmentType.IsDomestic(s)))
+            else if (shipments.All(s => !shipmentType.IsDomestic(s)))
             {
                 // All the shipments are international shipments
                 serviceTypes = GetInternationalServiceTypes(shipments);
@@ -413,6 +414,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // return a file name in the format of {output directory}\[uniqueId_]action_postfix.extension; unique ID 
             return string.Format(@"{0}{1}{2}_{3}.{4}", outputFolder, isForDebugging ? uniqueId + "_" : string.Empty, action, postfix, extension);
+        }
+
+        /// <summary>
+        /// Determines whether Smart Post is enabled.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
+        public static bool IsSmartPostEnabled(ShipmentEntity shipment)
+        {
+            bool isEnabled = false;
+
+            if (shipment != null && shipment.FedEx != null)
+            {
+                isEnabled = !String.IsNullOrEmpty(shipment.FedEx.SmartPostHubID);
+            }
+
+            return isEnabled;
         }
     }
 }

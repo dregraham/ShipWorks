@@ -710,14 +710,14 @@ namespace ShipWorks.Shipping
 		/// Determines if a shipment will be domestic or international
 		/// </summary>
 		/// <param name="shipmentEntity"></param>
-		public static bool IsDomestic(ShipmentEntity shipmentEntity)
+        public virtual bool IsDomestic(ShipmentEntity shipmentEntity)
 		{
 			if (shipmentEntity == null)
 			{
 				throw new ArgumentNullException("shipmentEntity");
 			}
 
-			return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
 		}
 
 		/// <summary>
@@ -947,7 +947,7 @@ namespace ShipWorks.Shipping
 		/// </summary>
 		protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
 		{
-			bool requiresCustoms = !ShipmentType.IsDomestic(shipment);
+            bool requiresCustoms = !IsDomestic(shipment);
 
 			if (shipment.ShipCountryCode == "US")
 			{
@@ -989,5 +989,35 @@ namespace ShipWorks.Shipping
 
 			return requiresCustoms;
 		}
+
+        /// <summary>
+        /// Gets whether the shipment is going from the US to PR or from PR to US
+        /// </summary>
+        /// <param name="shipment">Shipment that should be checked</param>
+        /// <returns></returns>
+        /// <remarks>This check handles the situation where a PR address has US as the country but PR as the state</remarks>
+        public static bool IsShipmentBetweenUnitedStatesAndPuertoRico(ShipmentEntity shipment)
+        {
+            return (shipment.OriginCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && 
+                    !IsPuertoRicoAddress(shipment, "Origin") && 
+                    IsPuertoRicoAddress(shipment, "Ship")) ||
+                   (IsPuertoRicoAddress(shipment, "Origin") && 
+                    shipment.ShipCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) &&
+                    !IsPuertoRicoAddress(shipment, "Ship"));
+        }
+
+        /// <summary>
+        /// Gets whether the entity's specified address is in Puerto Rico
+        /// </summary>
+        /// <param name="entity">Entity whose address should be checked</param>
+        /// <param name="fieldPrefix">Prefix of the address that should be checked</param>
+        /// <returns>True if the address is a Puerto Rico address or false if not</returns>
+        /// <remarks>This check handles situations where the address has US as the country but PR as the state</remarks>
+        public static bool IsPuertoRicoAddress(EntityBase2 entity, string fieldPrefix)
+        {
+            PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
+            return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) || 
+                (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
+        }
 	}
 }
