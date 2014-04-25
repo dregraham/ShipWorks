@@ -1,5 +1,5 @@
 require 'albacore'
-
+require 'win32/registry'
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
@@ -209,7 +209,7 @@ end
 namespace :db do
 
 	desc "Create and populate a new ShipWorks database with seed data"
-	task :rebuild, [:schemaVersion] => [:create, :schema, :seed] do |t, args|
+	task :rebuild, [:schemaVersion, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy] do |t, args|
 	end
 
 	desc "Drop and create the ShipWorks_SeedData database"
@@ -267,9 +267,9 @@ namespace :db do
 				
 		versionForProcedure = "3.0.0.0"
 		
-		if args != nil and args.schemaVersion != nil and args.schemaVersion != ""
-			# A label was passed in, so use it for the Major.Minor.Patch 
-			versionForProcedure = args.schemaVersion
+		if args != nil and args[:schemaVersion] != nil and args[:schemaVersion] != ""
+			# A schema version was passed in, so use it for the schema version procedure
+			versionForProcedure = args[:schemaVersion]
 		end
 				
 		# Clean up any remnants of the temporary script that may exist from a previous run
@@ -325,5 +325,53 @@ namespace :db do
 
 		# Clean up the temporary script
 		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
+	end
+	
+	desc "Switch the ShipWorks settings to point to a given database"
+	task :switch, :targetDatabase do |t, args|
+		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
+			# A target database was passed in, so update the sql session file
+			
+			# Assume we're in the directory containing the ShipWorks solution - we need to get
+			# the registry key name based on the directory to the ShipWorks.exe to figure out
+			# which GUID to use in our path to the the SQL session file.
+			appDirectory = Dir.pwd + "/Artifacts/Application"
+			appDirectory = appDirectory.gsub('/', '\\')
+			
+			instanceGuid = ""
+			
+			
+			# Read the GUID from the registry, so we know which directory to look in; pass in 
+			# 0x100 to read from 64-bit registry otherwise the key will not be found
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+				instanceGuid = reg[appDirectory]				
+			end
+			
+			if instanceGuid != ""
+				puts "Found an instance GUID: " + instanceGuid
+				fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"
+				
+				puts "Updating SQL session file..."			
+				
+				# Replace the current database name with that of our seed database
+				contents = File.read(fileName)				
+				contents = contents.gsub(/<Database>[\w]*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
+				
+				# Write the updated SQL session XML back to the file
+				File.open(fileName, 'w') { |file| file.write(contents) }
+				
+				puts "Updating SQL session file is now..."			
+				puts contents
+			end
+		else
+			puts "Did not switch database used by ShipWorks: a target database was not specified."
+		end
+	end
+	
+	desc "Deploy assemblies to the given database"
+	task :deploy do |t, args|
+		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:redeployassemblies"
+		sh command
 	end
 end
