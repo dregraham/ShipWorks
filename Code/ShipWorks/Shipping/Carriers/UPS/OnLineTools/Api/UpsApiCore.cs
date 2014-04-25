@@ -149,9 +149,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AddressLine2", person.Street2);
             xmlWriter.WriteElementString("AddressLine3", person.Street3);
             xmlWriter.WriteElementString("City", person.City);
-            xmlWriter.WriteElementString("StateProvinceCode", person.StateProvCode);
+            xmlWriter.WriteElementString("StateProvinceCode", AdjustUpsStateProvinceCode(person.CountryCode, person.StateProvCode));
             xmlWriter.WriteElementString("PostalCode", person.PostalCode);
-            xmlWriter.WriteElementString("CountryCode", AdjustUpsCountryCode(person.CountryCode));
+            xmlWriter.WriteElementString("CountryCode", AdjustUpsCountryCode(person.CountryCode, person.StateProvCode));
 
             if (!string.IsNullOrWhiteSpace(residentialFlag))
             {
@@ -162,14 +162,31 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         }
 
         /// <summary>
+        /// Translate the state if necessary
+        /// </summary>
+        /// <param name="countryCode">Country associated with the address</param>
+        /// <param name="stateProvCode">State or province code associated with the address</param>
+        /// <returns></returns>
+        public static string AdjustUpsStateProvinceCode(string countryCode, string stateProvCode)
+        {
+            // If Puerto Rico is the country, we'll just use it as the state as well
+            return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : stateProvCode;
+        }
+
+        /// <summary>
         /// Translate the given country code to that which UPS will be happy with
         /// </summary>
-        public static string AdjustUpsCountryCode(string code)
+        public static string AdjustUpsCountryCode(string code, string state)
         {
             // UPS does not like UK.. only GB
             if (code == "UK")
             {
                 code = "GB";
+            }
+
+            if (code == "US" && state == "PR")
+            {
+                code = "PR";
             }
 
             return code;
@@ -266,9 +283,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         private static void WritePackageReference(string referenceNumber, UpsShipmentEntity ups, XmlTextWriter xmlWriter, bool forLabels)
         {
             // Package ref # only included if we are doing the actual ShipAPI, and not just rates and origin/destination is US/US or PR/PR
-            if (forLabels && 
-                ((ups.Shipment.ShipCountryCode == "US" && ups.Shipment.OriginCountryCode == "US") ||
-                 (ups.Shipment.ShipCountryCode=="PR" && ups.Shipment.OriginCountryCode == "PR")))
+            if (forLabels && IsDomesticUnitedStatesOrPuertoRico(ups.Shipment))
             {
                 WriteReference(referenceNumber, ups, xmlWriter, "01");
             }
@@ -284,9 +299,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         public static void WriteShipmentReference(string referenceNumber, UpsShipmentEntity ups, XmlTextWriter xmlWriter, bool forLabels)
         {
             // Shipment ref # only included if we are doing the actual ShipAPI, and not just rates and origin/destination is NOT US/US or PR/PR
-            if (forLabels &&
-                (!(ups.Shipment.OriginCountryCode == "US" && ups.Shipment.ShipCountryCode == "US") &&
-                 !(ups.Shipment.OriginCountryCode == "PR" && ups.Shipment.ShipCountryCode == "PR")))
+            if (forLabels && !IsDomesticUnitedStatesOrPuertoRico(ups.Shipment))
             {
                 WriteReference(referenceNumber, ups, xmlWriter, "XX");
             }
@@ -416,6 +429,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         public static string GetUspsEndorsementTypeCode(UspsEndorsementType endorsementType)
         {
             return EnumHelper.GetApiValue(endorsementType);
+        }
+
+        /// <summary>
+        /// Gets whether a shipment is a domestic US to US or PR to PR
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public static bool IsDomesticUnitedStatesOrPuertoRico(ShipmentEntity shipment)
+        {
+            return !ShipmentType.IsShipmentBetweenUnitedStatesAndPuertoRico(shipment) &&
+                   ((shipment.ShipCountryCode == "US" && shipment.OriginCountryCode == "US") ||
+                    (ShipmentType.IsPuertoRicoAddress(shipment, "Ship") && ShipmentType.IsPuertoRicoAddress(shipment, "Origin")));
         }
     }
 }

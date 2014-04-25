@@ -1015,6 +1015,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Determines if a shipment will be domestic or international
+        /// </summary>
+        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        {
+            return base.IsDomestic(shipmentEntity) && !IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
+        }
+
+        /// <summary>
         /// Gets an instance to the best rate shipping broker for the UPS shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
