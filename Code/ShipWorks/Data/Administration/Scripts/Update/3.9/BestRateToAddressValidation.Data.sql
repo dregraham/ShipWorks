@@ -13,6 +13,7 @@ GO
 UPDATE FedExProfile
 SET ResidentialDetermination = 4
 WHERE ResidentialDetermination = 0
+	AND ShippingProfileID IN (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentTypePrimary = 1)
 
 GO
 
@@ -21,6 +22,7 @@ GO
 UPDATE UpsProfile
 SET ResidentialDetermination = 4
 WHERE ResidentialDetermination = 0
+	AND ShippingProfileID IN (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentTypePrimary = 1)
 
 GO
 
@@ -29,6 +31,7 @@ GO
 UPDATE OnTracProfile
 SET ResidentialDetermination = 4
 WHERE ResidentialDetermination = 0
+	AND ShippingProfileID IN (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentTypePrimary = 1)
 
 GO
 
