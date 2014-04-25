@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
@@ -12,8 +13,6 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class ImageComboBox : PopupComboBox
 	{
-        const int imageSize = 16;
-
         // Used to track mouse wheel movement
         private int totalWheelAmount = 0;
 
@@ -209,23 +208,18 @@ namespace ShipWorks.UI.Controls
 
             // The filter is what we are going to be dropping down
             this.PopupController = popupController;
-		}
 
-        /// <summary>
-        /// Disposing
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-        }
+            // Refresh item list on focus instead of on show to handle tabbing to the drop down
+            // and then using arrow keys to select an item.  Refreshing on show resulted in an
+            // exception because we were trying to select an item that wasn't in the list yet.
+            GotFocus += (sender, args) => RefreshItemList();
+		}
 
         /// <summary>
         /// Dropdown is showing, we have to fill the box
         /// </summary>
         protected override void OnShowingDropDown()
         {
-            RefreshItemList();
-
             AnimateImages(true);
         }
 

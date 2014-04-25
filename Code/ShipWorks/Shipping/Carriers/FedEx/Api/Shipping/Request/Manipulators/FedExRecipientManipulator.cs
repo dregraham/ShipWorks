@@ -1,3 +1,4 @@
+using System;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -40,6 +41,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             ShipmentEntity shipment = request.ShipmentEntity;
             Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment, "Ship"));
             Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment, "Ship"));
+
+            if (address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
+            {
+                address.StateOrProvinceCode = "PR";
+            }
 
             // Create the shipper
             Party recipient = new Party()

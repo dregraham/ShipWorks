@@ -66,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             PersonAdapter person = new PersonAdapter(shipment, "Ship");
             Address address = FedExRequestManipulatorUtilities.CreateAddress<Address> (person);
 
+            if (address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
+            {
+                address.StateOrProvinceCode = "PR";
+            }
+
             // Use the address to create the party/recipient
             Party recipient = new Party { Address = address };
 

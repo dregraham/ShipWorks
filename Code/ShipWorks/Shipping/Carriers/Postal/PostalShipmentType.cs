@@ -309,7 +309,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a WebToolsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             // We want to return the null broker if there is already an Endicia or Stamps.com
             // account setup, so postal rates for Web Tools aren't used as well (i.e. just use
@@ -353,7 +352,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
         {
             List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
 

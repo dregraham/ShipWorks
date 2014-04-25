@@ -502,7 +502,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Uploads the shipment details for the specified order
         /// </summary>
-        public void UploadShipmentDetails(int caOrderID, DateTime dateShipped, string carrierCode, string classCode, string trackingNumber, decimal shipmentCost)
+        public void UploadShipmentDetails(int caOrderID, DateTime dateShipped, string carrierCode, string classCode, string trackingNumber)
         {
             using (caShippingService.ShippingService service = CreateShippingService("OrderShipped"))
             {
@@ -521,8 +521,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                                 carrierCode = carrierCode, 
                                 classCode = classCode, 
                                 trackingNumber = trackingNumber, 
-                                dateShippedGMT = dateShipped,
-                                shipmentCost = shipmentCost
+                                dateShippedGMT = dateShipped 
                             } 
                         }
                     };

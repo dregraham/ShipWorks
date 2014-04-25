@@ -6,6 +6,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml;
+using ShipWorks.Email;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -128,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsApiCore.WriteShipmentReference(ups.ReferenceNumber2, ups, xmlWriter, true);
 
             // International stuff
-            if (!ShipmentType.IsDomestic(shipment))
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment))
             {
                 string customsDescription = ups.CustomsDescription;
 
@@ -152,8 +153,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 //=================================================================
                 //To	US	 |  Not Allowed	Not Allowed	    Required	Not Allowed
                 //    CA/PR	 |  Not Allowed	Required	    Not Allowed	Not Allowed
-                if ((shipment.ReturnShipment && ((shipment.OriginCountryCode == "CA" || shipment.OriginCountryCode == "PR") && shipment.ShipCountryCode == "US")) ||
-                    (!shipment.ReturnShipment && (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "CA" || shipment.ShipCountryCode == "PR"))))
+                if ((shipment.ReturnShipment && ((shipment.OriginCountryCode == "CA" || ShipmentType.IsPuertoRicoAddress(shipment, "Origin")) && shipment.ShipCountryCode == "US")) ||
+                    (!shipment.ReturnShipment && (shipment.OriginCountryCode == "US" && (shipment.ShipCountryCode == "CA" || ShipmentType.IsPuertoRicoAddress(shipment, "Ship")))))
                 {
                     xmlWriter.WriteStartElement("InvoiceLineTotal");
                     xmlWriter.WriteElementString("CurrencyCode", UpsUtility.GetCurrency(account));
@@ -171,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("AttentionName", new PersonName(origin).FullName);
             xmlWriter.WriteElementString("ShipperNumber", account.AccountNumber);
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", ""));
-            xmlWriter.WriteElementString("EMailAddress", origin.Email);
+            xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(origin.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
 
@@ -206,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // International requires attention
-            if (attention.Length == 0 && (!ShipmentType.IsDomestic(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode)))
+            if (attention.Length == 0 && (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode)))
             {
                 attention = companyOrName;
             }
@@ -218,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("CompanyName", StringUtility.Truncate(companyOrName, 35));
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attention, 35));
             xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
-            xmlWriter.WriteElementString("EMailAddress", recipient.Email);
+            xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, recipient, ResidentialDeterminationService.DetermineResidentialAddress(shipment) ? "ResidentialAddress" : (string) null );
             xmlWriter.WriteEndElement();
 
@@ -255,7 +256,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             WriteInternationalBilling(ups, account, xmlWriter);
 
             // Commercial invoice requires Sold To 
-            if (!ShipmentType.IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
+            if (!ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) && ups.CommercialPaperlessInvoice && !isSurePost)
             {
                 xmlWriter.WriteStartElement("SoldTo");
                 xmlWriter.WriteElementString("CompanyName", companyOrName);
@@ -317,7 +318,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void WriteInternationalBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
-            if (!ShipmentType.IsDomestic(ups.Shipment))
+            if (!ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
             {
                 // Payment info (SurePost must be sender)
                 if (ups.PayorType == (int) UpsPayorType.Sender || UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service))
@@ -444,7 +445,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void WriteDomesticBilling(UpsShipmentEntity ups, UpsAccountEntity account, XmlWriter xmlWriter)
         {
-            if (ShipmentType.IsDomestic(ups.Shipment))
+            if (ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
             {
                 // Payment info (SurePost must be sender)
                 if (ups.PayorType == (int) UpsPayorType.Sender ||
@@ -507,15 +508,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // start email
                 xmlWriter.WriteStartElement("EMailMessage");
 
-                xmlWriter.WriteElementString("EMailAddress", ups.Shipment.ShipEmail);
+                xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.Shipment.ShipEmail));
 
                 // it is coming from the UPS email address
-                xmlWriter.WriteElementString("FromEMailAddress", account.Email);
+                xmlWriter.WriteElementString("FromEMailAddress", UpsUtility.GetCorrectedEmailAddress(account.Email));
 
                 // use undeliverable address if supplied.  UPS will default this to the FromEmailAddress
                 if (ups.ReturnUndeliverableEmail.Length > 0)
                 {
-                    xmlWriter.WriteElementString("UndeliverableEMailAddress", ups.ReturnUndeliverableEmail);
+                    xmlWriter.WriteElementString("UndeliverableEMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.ReturnUndeliverableEmail));
                 }
 
                 // Reference number to appear in the subject
@@ -539,7 +540,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             bool isMilitarySurePost = isSurePost && PostalUtility.IsMilitaryState(ups.Shipment.ShipStateProvCode);
 
             // Has to be internation or Military SurePost
-            if (ShipmentType.IsDomestic(ups.Shipment) && !isMilitarySurePost)
+            if (ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment) && !isMilitarySurePost)
             {
                 return;
             }
@@ -697,7 +698,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("PackageID", packageID);
 
                 // If an international shipment, write out the MILabelCN22Indicator so that the label will be the combined label with CN22 form
-                if (!ShipmentType.IsDomestic(ups.Shipment))
+                if (!ShipmentTypeManager.GetType(ups.Shipment).IsDomestic(ups.Shipment))
                 {
                     xmlWriter.WriteElementString("MILabelCN22Indicator", string.Empty);
                 }
@@ -909,6 +910,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         private static void AddEmailToNotificationLists(int notifyTypes, string email, List<string> shipRecipients, List<string> exceptRecipients, List<string> deliverRecipients)
         {
+            email = UpsUtility.GetCorrectedEmailAddress(email);
+
             if ((notifyTypes & (int) UpsEmailNotificationType.Ship) != 0)
             {
                 shipRecipients.Add(email);
@@ -946,13 +949,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // Add in each recipient
             foreach (string recipient in recipients)
             {
-                xmlWriter.WriteElementString("EMailAddress", recipient);
+                xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient));
             }
 
             if (!headerWritten)
             {
-                xmlWriter.WriteElementString("UndeliverableEMailAddress", ups.Shipment.OriginEmail);
-                xmlWriter.WriteElementString("FromName", ups.EmailNotifyFrom);
+                xmlWriter.WriteElementString("UndeliverableEMailAddress", UpsUtility.GetCorrectedEmailAddress(ups.Shipment.OriginEmail));
+                xmlWriter.WriteElementString("FromName", UpsUtility.GetCorrectedEmailAddress(ups.EmailNotifyFrom));
                 xmlWriter.WriteElementString("Memo", ups.EmailNotifyMessage);
                 xmlWriter.WriteElementString("SubjectCode", (ups.EmailNotifySubject == (int) UpsEmailNotificationSubject.ReferenceNumber) ? "01" : "");
 
