@@ -717,7 +717,7 @@ namespace ShipWorks.Shipping
 				throw new ArgumentNullException("shipmentEntity");
 			}
 
-            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant(); // || IsPuertoRicoShipment(shipmentEntity);
 		}
 
 		/// <summary>

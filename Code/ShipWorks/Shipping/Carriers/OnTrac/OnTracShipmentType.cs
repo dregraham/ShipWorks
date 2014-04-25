@@ -540,9 +540,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets the fields used for rating a shipment.
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
         {
             List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
 
@@ -564,6 +564,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
             );
 
+            return fields;
+        }
+
+        /// <summary>
+        /// Customs is never required for OnTrac.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            return false;
         }
     }
 }

@@ -10,6 +10,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Editing.Rating
@@ -172,24 +174,30 @@ namespace ShipWorks.Shipping.Editing.Rating
                         // Fetch the rates and add them to the cache
                         panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
                     }
-                    catch (ShippingException ex)
+                    catch (InvalidRateGroupShippingException ex)
                     {
-                        InvalidRateGroupShippingException invalidRateGroupException = ex as InvalidRateGroupShippingException;
-                        if (invalidRateGroupException != null)
-                        {
-                            panelRateGroup = new ShipmentRateGroup(invalidRateGroupException.InvalidRates, shipment);
-                        }
-                        else
-                        {
-                            // The invalid rate group should be cached, so use the shipping manager to get the rate
-                            // so we can have access to the exception footer.
-                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-                        }
+                        panelRateGroup = new ShipmentRateGroup(ex.InvalidRates, shipment);
 
                         // Add the shipment ID to the exception data, so we can determine whether
                         // to update the rate control
                         ex.Data.Add("shipmentID", shipment.ShipmentID);
                         args.Result = ex;
+                    }
+                    catch (FedExAddressValidationException ex)
+                    {
+                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex), shipment);
+
+                        // Add the shipment ID to the exception data, so we can determine whether
+                        // to update the rate control
+                        ex.Data.Add("shipmentID", shipment.ShipmentID);
+                        args.Result = ex;
+
+                    }
+                    catch (ShippingException)
+                    {
+                        // The invalid rate group should be cached, so use the shipping manager to get the rate
+                        // so we can have access to the exception footer.
+                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
                     }
                 };
 

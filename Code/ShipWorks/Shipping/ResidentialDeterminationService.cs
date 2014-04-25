@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping
                         }
                         catch (FedExException ex)
                         {
-                            throw new ShippingException(ex.Message, ex);
+                            throw new FedExAddressValidationException(ex.Message, ex);
                         }
                     }
             }
