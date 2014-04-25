@@ -63,6 +63,7 @@ namespace ShipWorks.Stores.Content
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     ResetAddressValidationIfNecessary(previousShippingAddress, adapter);
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, (long) entity.PrimaryKeyFields[0].CurrentValue, previousShippingAddress, new AddressAdapter(entity, "Ship"));
                     adapter.SaveAndRefetch(entity);
                 }
             }

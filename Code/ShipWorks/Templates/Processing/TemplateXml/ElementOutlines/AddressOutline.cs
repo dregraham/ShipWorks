@@ -75,7 +75,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Create the outline for the status element
         /// </summary>
-        private ElementOutline CreateStatusElement(TemplateTranslationContext context, Func<Enum> value)
+        private static ElementOutline CreateStatusElement(TemplateTranslationContext context, Func<Enum> value)
         {
             ElementOutline outline = new ElementOutline(context);
             outline.AddAttribute("code", () => Convert.ChangeType(value(), value().GetTypeCode()));
