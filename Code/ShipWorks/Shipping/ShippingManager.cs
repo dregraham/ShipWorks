@@ -221,21 +221,12 @@ namespace ShipWorks.Shipping
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
 
-                // If the type is not none, apply defaults
-                if (shipmentTypeCode != ShipmentTypeCode.None)
-                {
-                    // If it's activated they can create new shipments of the type - even though it hasn't been configured yet.  Kind of weird, but
-                    // our best option given you can upgrade from 2x and have FedEx\UPS shipments - but opt not to go through the configuration migration.
-                    // You can't actually process though until you go through configuration.
-                    if (IsShipmentTypeActivated(shipmentTypeCode))
-                    {
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                        shipmentType.LoadShipmentData(shipment, false);
-                        shipmentType.UpdateDynamicShipmentData(shipment);
+                // Apply the default values to the shipment
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                shipmentType.LoadShipmentData(shipment, false);
+                shipmentType.UpdateDynamicShipmentData(shipment);
 
-                        adapter.SaveAndRefetch(shipment);
-                    }
-                }
+                adapter.SaveAndRefetch(shipment);
 
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
