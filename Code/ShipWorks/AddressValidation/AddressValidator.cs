@@ -158,17 +158,20 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void UpdateAddressIfAdjusted(AddressAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
         {
-            if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.Adjusted)
+            AddressValidationResult adjustedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
+            if (adjustedAddress == null)
             {
                 return;
             }
 
-            AddressValidationResult adjustedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
-            if (adjustedAddress != null)
+            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.Adjusted)
             {
                 adjustedAddress.CopyTo(adapter);
-                UpdateInternationalTerritoryAndMilitaryAddress(adapter);
             }
+
+            adapter.ResidentialStatus = (int) adjustedAddress.ResidentialStatus;
+            adapter.POBox = (int) adjustedAddress.POBox;
+            UpdateInternationalTerritoryAndMilitaryAddress(adapter);
         }
 
         /// <summary>
