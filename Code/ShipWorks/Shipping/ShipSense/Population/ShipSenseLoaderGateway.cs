@@ -145,30 +145,33 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
             try
             {
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
+                using (new AuditBehaviorScope(AuditState.Disabled))
+                {
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
 
-                // Make sure we have all of the order information
-                OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
-                OrderUtility.PopulateOrderDetails(order);
+                    // Make sure we have all of the order information
+                    OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                    OrderUtility.PopulateOrderDetails(order);
 
-                // Apply the data from the package adapters and the customs items to the knowledge base 
-                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
-                // is smart enough to know when to save the customs items associated with an entry.
-                KnowledgebaseEntry entry = new KnowledgebaseEntry();
-                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+                    // Apply the data from the package adapters and the customs items to the knowledge base 
+                    // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                    // is smart enough to know when to save the customs items associated with an entry.
+                    KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                    entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
 
-                knowledgebase.Save(entry, order);
+                    knowledgebase.Save(entry, order);
 
-                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-                shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
-                ShippingSettings.Save(shippingSettings);
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    shippingSettings.ShipSenseProcessedShipmentID = shipment.ShipmentID;
+                    ShippingSettings.Save(shippingSettings);
+                }
             }
             catch (Exception ex)
             {
                 // We may want to eat this exception entirely, so the user isn't impacted 
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
-                throw new ShipSenseException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
+                throw new ShipSenseException("Shipment ID {0} was not logged to the knowledge base during data population.", ex);
             }
         }
 

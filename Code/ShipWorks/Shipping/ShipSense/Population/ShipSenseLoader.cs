@@ -91,16 +91,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             using (new LoggedStopwatch(log, "ShipSenseLoader.AddKnowledgebaseEntries"))
             {
-                using (new AuditBehaviorScope(AuditState.Disabled))
+                ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                while (shipment != null)
                 {
-                    ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                    while (shipment != null)
-                    {
-                        ShippingManager.EnsureShipmentLoaded(shipment);
-                        shipSenseLoaderGateway.Save(shipment);
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+                    shipSenseLoaderGateway.Save(shipment);
 
-                        shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                    }
+                    shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
                 }
             }
         }
