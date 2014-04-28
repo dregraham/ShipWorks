@@ -90,8 +90,10 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
 
         [TestMethod]
         [TestCategory("ShipSense")]
-        public void LoadData_CompletesInTwentySeconds_Test()
+        public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess_Test()
         {
+            // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
+            // in solution directory)
             Stopwatch stopWatch = new Stopwatch();
             using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
             {
@@ -102,7 +104,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
                 stopWatch.Stop();
             }
 
-            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 60000);
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 5000);
 
             Console.WriteLine(@"===================================================================================================");
             Console.WriteLine(@"====                           ShipSense Loader                                                ====");
