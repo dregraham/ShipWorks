@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Filters;
@@ -84,6 +87,11 @@ namespace ShipWorks.Data.Administration
             FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
             FilterLayoutContext.Current.AddFilter(CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
             FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
+            
+            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
+            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Ready to Go", CreateAddressValidationDefinition(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Address to Look at", CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.WillNotValidate, AddressValidationStatusType.SuggestedSelected)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Not Validated", CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending)), addressValidationNode, 0);
         }
 
         /// <summary>
@@ -119,6 +127,28 @@ namespace ShipWorks.Data.Administration
             processedCondition.Value = ShipmentStatusType.Processed;
             anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
             definition.RootContainer.FirstGroup.Conditions.Add(anyShipment);
+
+            return definition;
+        }
+
+
+        /// <summary>
+        /// Creates fitler for address validation statuses.
+        /// </summary>
+        private static FilterDefinition CreateAddressValidationDefinition(params AddressValidationStatusType[] statusesToInclude)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            // If [Any]
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
+
+            AddressValidationStatusCondition statusCondition = new AddressValidationStatusCondition()
+            {
+                Operator = EqualityOperator.Equals,
+                StatusTypes = statusesToInclude.ToList()
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
 
             return definition;
         }
