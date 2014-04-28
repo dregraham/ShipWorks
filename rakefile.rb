@@ -192,13 +192,21 @@ namespace :test do
 	end	
 	
 	desc "Execute integration tests"
-	mstest :integration do |mstest|
+	mstest :integration, :categoryFilter do |mstest, args|
 		print "Deleting previous result...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		File.delete("TestResults/integration-results.trx") if File.exist?("TestResults/integration-results.trx")
 		
+		categoryParameter = ""
+		if args != nil and args.categoryFilter != nil and args.categoryFilter != ""
+			# We need to filter the tests based on the categories provided
+			categoryParameter = "/category:" + args.categoryFilter
+		end
+		
+		puts categoryParameter
+		
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
-		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", "/resultsfile:TestResults/integration-results.trx"
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
 	end
 end
 

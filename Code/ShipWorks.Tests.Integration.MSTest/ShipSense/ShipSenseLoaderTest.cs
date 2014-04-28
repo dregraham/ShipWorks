@@ -89,6 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
         }
 
         [TestMethod]
+        [TestCategory("ShipSense")]
         public void LoadData_CompletesInTwentySeconds_Test()
         {
             Stopwatch stopWatch = new Stopwatch();
