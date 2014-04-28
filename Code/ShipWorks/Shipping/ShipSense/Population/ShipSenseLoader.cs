@@ -12,27 +12,30 @@ namespace ShipWorks.Shipping.ShipSense.Population
     /// </summary>
     public class ShipSenseLoader
     {
+        private const string AppLockName = "ShipSenseLoader_Working";
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
+        
         private readonly IShipSenseLoaderGateway shipSenseLoaderGateway;
         private static object runningLock = new object();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ShipSenseLoader"/> class.
         /// </summary>
+        /// <param name="shipSenseLoaderGateway">The ship sense loader gateway.</param>
         public ShipSenseLoader(IShipSenseLoaderGateway shipSenseLoaderGateway)
         {
             this.shipSenseLoaderGateway = shipSenseLoaderGateway;
         }
 
         /// <summary>
-        /// Starts loading order and ship sense data on a new thread.
+        /// Starts loading order and ShipSense data on a new thread.
         /// </summary>
-        public static void StartLoading()
+        public static void LoadDataAsync()
         {
             using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
             {
                 ShipSenseLoader shipSenseLoader = new ShipSenseLoader(gateway);
-                Task.Factory.StartNew(shipSenseLoader.LoadData);
+                Task.Factory.StartNew(shipSenseLoader.LoadData);                
             }
         }
 
@@ -43,7 +46,25 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             lock (runningLock)
             {
-                UpdateOrderHashes();
+                if (shipSenseLoaderGateway.GetAppLock(AppLockName))
+                {
+                    try
+                    {
+                        // Re-calculate the ShipSense hash key for orders that are eligible
+                        // and add entries to the ShipSense knowledge base for the orders
+                        // that have processed shipment.
+                        UpdateOrderHashes();
+                        AddKnowledgebaseEntries();
+                    }
+                    finally
+                    {
+                        shipSenseLoaderGateway.ReleaseAppLock(AppLockName);
+                    }
+                }
+                else
+                {
+                    log.DebugFormat("Unable to get applock ShipSenseLoader_Working");
+                }
             }
         }
 
@@ -52,53 +73,28 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void UpdateOrderHashes()
         {
-            string appLockName = "ShipSenseLoader_Working";
-
-            if (shipSenseLoaderGateway.GetAppLock(appLockName))
+            OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
+            while (order != null)
             {
-                try
-                {
-                    using (new LoggedStopwatch(log, "ShipSenseLoader.UpdateOrderHashes"))
-                    {
-                        OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
-                        while (order != null)
-                        {
-                            OrderUtility.UpdateShipSenseHashKey(order);
-                            shipSenseLoaderGateway.SaveOrder(order);
+                OrderUtility.UpdateShipSenseHashKey(order);
+                shipSenseLoaderGateway.SaveOrder(order);
 
-                            order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
-                        }
-                    }
-
-                    // Now populate any kb entries
-                    AddKnowledgebaseEntries();
-                }
-                finally
-                {
-                    shipSenseLoaderGateway.ReleaseAppLock(appLockName);
-                }
-            }
-            else
-            {
-                log.DebugFormat("Unable to get app lock ShipSenseLoader_Working");
+                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
             }
         }
 
         /// <summary>
-        /// Adds a knowledgebase entry for each unique order that has processed shipments
+        /// Adds a knowledge base entry for each unique order that has processed shipments
         /// </summary>
         private void AddKnowledgebaseEntries()
         {
-            using (new LoggedStopwatch(log, "ShipSenseLoader.AddKnowledgebaseEntries"))
+            ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+            while (shipment != null)
             {
-                ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                while (shipment != null)
-                {
-                    ShippingManager.EnsureShipmentLoaded(shipment);
-                    shipSenseLoaderGateway.Save(shipment);
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipSenseLoaderGateway.Save(shipment);
 
-                    shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                }
+                shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
             }
         }
     }

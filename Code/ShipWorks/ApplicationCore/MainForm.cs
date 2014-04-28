@@ -282,7 +282,7 @@ namespace ShipWorks
             // Initiate the logon sequence
             InitiateLogon();
 
-            ShipSenseLoader.StartLoading();
+            ShipSenseLoader.LoadDataAsync();
 
         }
 
@@ -804,7 +804,7 @@ namespace ShipWorks
                         }
 
                         // Kick off the loader for loading data into ShipSense as needed
-                        ShipSenseLoader.StartLoading();
+                        ShipSenseLoader.LoadDataAsync();
                     }
                     else
                     {
