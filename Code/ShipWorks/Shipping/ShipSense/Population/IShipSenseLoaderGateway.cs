@@ -12,16 +12,6 @@ namespace ShipWorks.Shipping.ShipSense.Population
     public interface IShipSenseLoaderGateway : IDisposable
     {
         /// <summary>
-        /// Gets the ShippingSettingsEntity
-        /// </summary>
-        ShippingSettingsEntity FetchShippingSettingsEntity();
-
-        /// <summary>
-        /// Saves the ShippingSettingsEntity
-        /// </summary>
-        void SaveShippingSettings(ShippingSettingsEntity shippingSettings);
-
-        /// <summary>
         /// Gets the next shipment to process based on ShippingSettings
         /// </summary>
         ShipmentEntity FetchNextShipmentToProcess();

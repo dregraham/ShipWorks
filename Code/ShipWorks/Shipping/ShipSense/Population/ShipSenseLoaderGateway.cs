@@ -37,7 +37,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Opens the current connection if it is not already open
+        /// Opens the current connection if it is not already open. This is primarily 
+        /// intended for maintaining the connection to the applock.
         /// </summary>
         private void OpenConnection()
         {
@@ -51,31 +52,15 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 connection.Open();
             }
         }
-
-        /// <summary>
-        /// Gets the ShippingSettingsEntity
-        /// </summary>
-        public ShippingSettingsEntity FetchShippingSettingsEntity()
-        {
-            return ShippingSettings.Fetch();
-        }
-
-        /// <summary>
-        /// Saves the ShippingSettingsEntity
-        /// </summary>
-        public void SaveShippingSettings(ShippingSettingsEntity shippingSettings)
-        {
-            ShippingSettings.Save(shippingSettings);
-        }
-
+        
         /// <summary>
         /// Gets the next shipment to process based on ShippingSettings
         /// </summary>
         public ShipmentEntity FetchNextShipmentToProcess()
         {
             ShipmentEntity shipment = null;
+            ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
 
-            ShippingSettingsEntity shippingSettings = FetchShippingSettingsEntity();
             long endShipmentID = shippingSettings.ShipSenseEndShipmentID;
             long lastProcessedShipmentID = shippingSettings.ShipSenseProcessedShipmentID;
             
@@ -235,7 +220,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Gets a sql app lock for loading ShipSense data
+        /// Gets a SQL app lock for loading ShipSense data
         /// </summary>
         public bool GetAppLock(string appLockName)
         {
