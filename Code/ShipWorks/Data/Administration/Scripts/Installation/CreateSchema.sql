@@ -224,14 +224,18 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[Address] (
-    [AddressID]     BIGINT        IDENTITY (1101, 1000) NOT NULL,
-    [Street1]       NVARCHAR (60) NOT NULL,
-    [Street2]       NVARCHAR (60) NOT NULL,
-    [Street3]       NVARCHAR (60) NOT NULL,
-    [City]          NVARCHAR (50) NOT NULL,
-    [StateProvCode] NVARCHAR (50) NOT NULL,
-    [PostalCode]    NVARCHAR (20) NOT NULL,
-    [CountryCode]   NVARCHAR (50) NOT NULL,
+    [AddressID]              BIGINT        IDENTITY (1101, 1000) NOT NULL,
+    [Street1]                NVARCHAR (60) NOT NULL,
+    [Street2]                NVARCHAR (60) NOT NULL,
+    [Street3]                NVARCHAR (60) NOT NULL,
+    [City]                   NVARCHAR (50) NOT NULL,
+    [StateProvCode]          NVARCHAR (50) NOT NULL,
+    [PostalCode]             NVARCHAR (20) NOT NULL,
+    [CountryCode]            NVARCHAR (50) NOT NULL,
+	[ResidentialStatus]      INT           NOT NULL, 
+    [POBox]                  INT           NOT NULL, 
+    [InternationalTerritory] INT           NOT NULL, 
+    [MilitaryAddress]        INT           NOT NULL, 
     CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
 );
 
@@ -2716,6 +2720,10 @@ CREATE TABLE [dbo].[Order] (
     [ShipAddressValidationSuggestionCount] INT            NOT NULL,
     [ShipAddressValidationStatus]          INT            NOT NULL,
     [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
+	[ShipResidentialStatus]                INT            NOT NULL, 
+    [ShipPOBox]                            INT            NOT NULL, 
+    [ShipInternationalTerritory]           INT            NOT NULL, 
+    [ShipMilitaryAddress]                  INT            NOT NULL, 
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
     [RollupItemCode]                       NVARCHAR (300) NULL,

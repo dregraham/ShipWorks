@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Interapptive.Shared.Business;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -54,6 +54,26 @@ namespace ShipWorks.Shipping
                             throw new FedExAddressValidationException(ex.Message, ex);
                         }
                     }
+
+                case ResidentialDeterminationType.FromAddressValidation:
+                    OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+
+                    // If we found an order and the address matches the shipment, try using the ShipResidentialStatus field
+                    if (order != null && new AddressAdapter(shipment, "Ship") == new AddressAdapter(order, "Ship"))
+                    {
+                        if (order.ShipResidentialStatus == (int) ResidentialStatusType.Residential)
+                        {
+                            return true;
+                        }
+
+                        if (order.ShipResidentialStatus == (int) ResidentialStatusType.Commercial)
+                        {
+                            return false;
+                        }
+                    }
+
+                    // Just fall back on testing whether the company is set to determine if the address is commercial
+                    return string.IsNullOrEmpty(shipment.ShipCompany);
             }
 
             throw new InvalidOperationException("Invalid residential determination type: " + type);

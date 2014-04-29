@@ -63,6 +63,7 @@ namespace ShipWorks.Stores.Content
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
                     ResetAddressValidationIfNecessary(previousShippingAddress, adapter);
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, (long) entity.PrimaryKeyFields[0].CurrentValue, previousShippingAddress, new AddressAdapter(entity, "Ship"));
                     adapter.SaveAndRefetch(entity);
                 }
             }
@@ -92,6 +93,11 @@ namespace ShipWorks.Stores.Content
                     currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
                     currentShippingAddress.AddressValidationError = string.Empty;
                 }
+
+                currentShippingAddress.ResidentialStatus = (int) ResidentialStatusType.Unknown;
+                currentShippingAddress.POBox = (int) POBoxType.Unknown;
+                currentShippingAddress.InternationalTerritory = (int) InternationalTerritoryType.Unknown;
+                currentShippingAddress.MilitaryAddress = (int) MilitaryAddressType.Unknown;
 
                 currentShippingAddress.AddressValidationSuggestionCount = 0;
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);

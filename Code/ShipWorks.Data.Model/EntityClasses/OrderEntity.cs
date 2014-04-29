@@ -905,6 +905,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipAddressValidationError", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ShipResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipPOBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipInternationalTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipMilitaryAddress", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("RollupItemCount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1666,6 +1678,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderFieldIndex.ShipAddressValidationError, true); }
 			set	{ SetValue((int)OrderFieldIndex.ShipAddressValidationError, value); }
+		}
+
+		/// <summary> The ShipResidentialStatus property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipResidentialStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipResidentialStatus, value); }
+		}
+
+		/// <summary> The ShipPOBox property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipPOBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipPOBox
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipPOBox, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipPOBox, value); }
+		}
+
+		/// <summary> The ShipInternationalTerritory property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipInternationalTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipInternationalTerritory
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipInternationalTerritory, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipInternationalTerritory, value); }
+		}
+
+		/// <summary> The ShipMilitaryAddress property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."ShipMilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipMilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipMilitaryAddress, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipMilitaryAddress, value); }
 		}
 
 		/// <summary> The RollupItemCount property of the Entity Order<br/><br/>

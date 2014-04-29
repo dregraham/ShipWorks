@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -55,6 +57,11 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Fax", () => person.Fax);
             AddElement("Email", () => person.Email);
             AddElement("Website", () => person.Website);
+
+            AddElement("ResidentialStatus", CreateStatusElement(context, () => (ResidentialStatusType)person.ResidentialStatus));
+            AddElement("POBox", CreateStatusElement(context, () => (POBoxType)person.POBox));
+            AddElement("InternationalTerritory", CreateStatusElement(context, () => (InternationalTerritoryType)person.InternationalTerritory));
+            AddElement("MilitaryAddress", CreateStatusElement(context, () => (MilitaryAddressType)person.MilitaryAddress));
         }
 
         /// <summary>
@@ -63,6 +70,18 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public override ElementOutline CreateDataBoundClone(object data)
         {
             return new AddressOutline(Context, type, includeName) { person = (PersonAdapter) data };
+        }
+
+        /// <summary>
+        /// Create the outline for the status element
+        /// </summary>
+        private static ElementOutline CreateStatusElement(TemplateTranslationContext context, Func<Enum> value)
+        {
+            ElementOutline outline = new ElementOutline(context);
+            outline.AddAttribute("code", () => Convert.ChangeType(value(), value().GetTypeCode()));
+            outline.AddTextContent(() => value().ToString());
+
+            return outline;
         }
     }
 }

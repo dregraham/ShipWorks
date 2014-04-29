@@ -298,7 +298,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             profile.Ups.UpsAccountID = shipperID;
             profile.OriginID = (int)ShipmentOriginSource.Account;
-            profile.Ups.ResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            profile.Ups.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
 
             profile.Ups.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
             profile.Ups.ReferenceNumber = "Order {//Order/Number}";

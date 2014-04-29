@@ -229,6 +229,14 @@ namespace ShipWorks.Data.Model
 		PostalCode,
 		///<summary>CountryCode. </summary>
 		CountryCode,
+		///<summary>ResidentialStatus. </summary>
+		ResidentialStatus,
+		///<summary>POBox. </summary>
+		POBox,
+		///<summary>InternationalTerritory. </summary>
+		InternationalTerritory,
+		///<summary>MilitaryAddress. </summary>
+		MilitaryAddress,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -353,6 +361,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1156,6 +1172,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1449,6 +1473,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1584,6 +1616,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1939,6 +1979,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -2736,6 +2784,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4357,6 +4413,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4607,6 +4671,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4983,6 +5055,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5199,6 +5279,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5690,6 +5778,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5916,6 +6012,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6189,6 +6293,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6587,6 +6699,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6894,6 +7014,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -7719,6 +7847,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -9492,6 +9628,14 @@ namespace ShipWorks.Data.Model
 		ShipAddressValidationStatus,
 		///<summary>ShipAddressValidationError. </summary>
 		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>

@@ -323,6 +323,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AddressEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.StateProvCode, 50, 0, 0);
 			base.AddElementFieldInfo("AddressEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.PostalCode, 20, 0, 0);
 			base.AddElementFieldInfo("AddressEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AddressFieldIndex.CountryCode, 50, 0, 0);
+			base.AddElementFieldInfo("AddressEntity", "ResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)AddressFieldIndex.ResidentialStatus, 0, 0, 10);
+			base.AddElementFieldInfo("AddressEntity", "POBox", typeof(System.Int32), false, false, false, false,  (int)AddressFieldIndex.POBox, 0, 0, 10);
+			base.AddElementFieldInfo("AddressEntity", "InternationalTerritory", typeof(System.Int32), false, false, false, false,  (int)AddressFieldIndex.InternationalTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("AddressEntity", "MilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)AddressFieldIndex.MilitaryAddress, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonASINEntity's FieldInfo objects</summary>
 		private void InitAmazonASINEntityInfos()
@@ -1705,6 +1709,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationSuggestionCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationSuggestionCount, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationStatus, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationError", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationError, 300, 0, 0);
+			base.AddElementFieldInfo("OrderEntity", "ShipResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipResidentialStatus, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipPOBox", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipPOBox, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipInternationalTerritory", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipInternationalTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipMilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipMilitaryAddress, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.RollupItemCount, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemName", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemName, 300, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemCode", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemCode, 300, 0, 0);

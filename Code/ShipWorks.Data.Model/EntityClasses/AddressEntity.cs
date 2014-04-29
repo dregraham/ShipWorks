@@ -479,6 +479,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("POBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InternationalTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("MilitaryAddress", fieldHashtable);
 		}
 		#endregion
 
@@ -641,6 +653,50 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AddressFieldIndex.CountryCode, true); }
 			set	{ SetValue((int)AddressFieldIndex.CountryCode, value); }
+		}
+
+		/// <summary> The ResidentialStatus property of the Entity Address<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Address"."ResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)AddressFieldIndex.ResidentialStatus, true); }
+			set	{ SetValue((int)AddressFieldIndex.ResidentialStatus, value); }
+		}
+
+		/// <summary> The POBox property of the Entity Address<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Address"."POBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 POBox
+		{
+			get { return (System.Int32)GetValue((int)AddressFieldIndex.POBox, true); }
+			set	{ SetValue((int)AddressFieldIndex.POBox, value); }
+		}
+
+		/// <summary> The InternationalTerritory property of the Entity Address<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Address"."InternationalTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 InternationalTerritory
+		{
+			get { return (System.Int32)GetValue((int)AddressFieldIndex.InternationalTerritory, true); }
+			set	{ SetValue((int)AddressFieldIndex.InternationalTerritory, value); }
+		}
+
+		/// <summary> The MilitaryAddress property of the Entity Address<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Address"."MilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 MilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)AddressFieldIndex.MilitaryAddress, true); }
+			set	{ SetValue((int)AddressFieldIndex.MilitaryAddress, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ValidatedAddressEntity' which are related to this entity via a relation of type '1:n'.

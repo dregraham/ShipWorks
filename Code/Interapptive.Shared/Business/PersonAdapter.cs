@@ -500,5 +500,41 @@ namespace Interapptive.Shared.Business
             get { return GetField<int>("AddressValidationSuggestionCount"); }
             set { SetField("AddressValidationSuggestionCount", value); }
         }
+
+        /// <summary>
+        /// Whether the address is residential or commercial
+        /// </summary>
+        public int ResidentialStatus
+        {
+            get { return GetField<int>("ResidentialStatus"); }
+            set { SetField("ResidentialStatus", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a PO Box
+        /// </summary>
+        public int POBox
+        {
+            get { return GetField<int>("POBox"); }
+            set { SetField("POBox", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is an international territory
+        /// </summary>
+        public int InternationalTerritory
+        {
+            get { return GetField<int>("InternationalTerritory"); }
+            set { SetField("InternationalTerritory", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a military address
+        /// </summary>
+        public int MilitaryAddress
+        {
+            get { return GetField<int>("MilitaryAddress"); }
+            set { SetField("MilitaryAddress", value); }
+        }
     }
 }

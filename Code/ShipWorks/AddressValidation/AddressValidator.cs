@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using log4net;
-using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
 {
@@ -76,6 +73,15 @@ namespace ShipWorks.AddressValidation
                 else
                 {
                     SetValidationStatusForNotify(suggestedAddresses, adapter);
+
+                    AddressValidationResult validatedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
+                    if (validatedAddress != null)
+                    {
+                        adapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
+                        adapter.POBox = (int) validatedAddress.POBox;
+                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
+                        adapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
+                    }
                 }
 
                 if (suggestedAddresses.Count > 0)
@@ -152,16 +158,20 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void UpdateAddressIfAdjusted(AddressAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
         {
-            if (adapter.AddressValidationStatus != (int) AddressValidationStatusType.Adjusted)
+            AddressValidationResult adjustedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
+            if (adjustedAddress == null)
             {
                 return;
             }
 
-            AddressValidationResult adjustedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
-            if (adjustedAddress != null)
+            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.Adjusted)
             {
                 adjustedAddress.CopyTo(adapter);
             }
+
+            adapter.ResidentialStatus = (int) adjustedAddress.ResidentialStatus;
+            adapter.POBox = (int) adjustedAddress.POBox;
+            UpdateInternationalTerritoryAndMilitaryAddress(adapter);
         }
 
         /// <summary>
@@ -170,8 +180,41 @@ namespace ShipWorks.AddressValidation
         private static AddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult)
         {
             AddressEntity address = new AddressEntity();
-            validationResult.CopyTo(new AddressAdapter(address, string.Empty));
+            AddressAdapter adapter = new AddressAdapter(address, string.Empty);
+            
+            validationResult.CopyTo(adapter);
+            UpdateInternationalTerritoryAndMilitaryAddress(adapter);
+
             return address;
+        }
+
+        /// <summary>
+        /// Updates the international territory and military address details
+        /// </summary>
+        private static void UpdateInternationalTerritoryAndMilitaryAddress(AddressAdapter address)
+        {
+            address.InternationalTerritory = InternationalTerritoryStatus(address.StateProvCode, address.CountryCode);
+            address.MilitaryAddress = MilitaryAddressStatus(address.StateProvCode);
+        }
+
+        /// <summary>
+        /// Gets the mility address status from the state code
+        /// </summary>
+        private static int MilitaryAddressStatus(string stateProvCode)
+        {
+            return (stateProvCode == "AE" || stateProvCode == "AP" || stateProvCode == "AA") ?
+                (int) MilitaryAddressType.MilitaryAddress :
+                (int) MilitaryAddressType.NotMilitaryAddress;
+        }
+
+        /// <summary>
+        /// Gets the international territory status form the country code
+        /// </summary>
+        private static int InternationalTerritoryStatus(string stateProvCode, string countryCode)
+        {
+            return PostalUtility.IsUSInternationalTerritory(countryCode) || PostalUtility.IsUSInternationalTerritory(stateProvCode) ?
+                (int) InternationalTerritoryType.InternationalTerritory :
+                (int) InternationalTerritoryType.NotInternationalTerritory;
         }
     }
 }

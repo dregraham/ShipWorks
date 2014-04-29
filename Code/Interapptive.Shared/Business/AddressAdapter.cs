@@ -49,6 +49,11 @@ namespace Interapptive.Shared.Business
 
             adapter.AddressValidationStatus = 0;
             adapter.AddressValidationSuggestionCount = 0;
+
+            adapter.ResidentialStatus = 0;
+            adapter.POBox = 0;
+            adapter.InternationalTerritory = 0;
+            adapter.MilitaryAddress = 0;
         }
 
         /// <summary>
@@ -96,6 +101,11 @@ namespace Interapptive.Shared.Business
             toAdapter.StateProvCode = fromAdapter.StateProvCode;
             toAdapter.PostalCode = fromAdapter.PostalCode;
             toAdapter.CountryCode = fromAdapter.CountryCode;
+
+            toAdapter.ResidentialStatus = fromAdapter.ResidentialStatus;
+            toAdapter.POBox = fromAdapter.POBox;
+            toAdapter.InternationalTerritory = fromAdapter.InternationalTerritory;
+            toAdapter.MilitaryAddress = fromAdapter.MilitaryAddress;
         }
 
         /// <summary>
@@ -356,6 +366,42 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<string>("AddressValidationError"); }
             set { SetField("AddressValidationError", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is residential or commercial
+        /// </summary>
+        public int ResidentialStatus
+        {
+            get { return GetField<int>("ResidentialStatus"); }
+            set { SetField("ResidentialStatus", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a PO Box
+        /// </summary>
+        public int POBox
+        {
+            get { return GetField<int>("POBox"); }
+            set { SetField("POBox", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is an international territory
+        /// </summary>
+        public int InternationalTerritory
+        {
+            get { return GetField<int>("InternationalTerritory"); }
+            set { SetField("InternationalTerritory", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a military address
+        /// </summary>
+        public int MilitaryAddress
+        {
+            get { return GetField<int>("MilitaryAddress"); }
+            set { SetField("MilitaryAddress", value); }
         }
 
         /// <summary>
