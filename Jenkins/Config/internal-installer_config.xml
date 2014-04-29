@@ -45,7 +45,7 @@
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@ - Push Pre-alpha</childProjects>
+      <childProjects>@@FEATURE_NAME@@-publish-internal-release</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

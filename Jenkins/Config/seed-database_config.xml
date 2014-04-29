@@ -30,7 +30,7 @@
   </builders>
   <publishers>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@ - deploy assemblies</childProjects>
+      <childProjects>@@FEATURE_NAME@@-deploy-assemblies</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
