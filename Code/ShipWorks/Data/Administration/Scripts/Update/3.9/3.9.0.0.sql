@@ -52,11 +52,16 @@ GO
 
 PRINT N'Update [dbo].[ShippingSettings] defaults'
 GO
+
+-- Determine the shipment id from which to start
+DECLARE @shipSenseProcessedShipmentID bigint
+WITH Shipments AS(	SELECT TOP 25000 ShipmentID FROM Shipment WHERE Processed = 1 ORDER BY ShipmentID DESC)SELECT @shipSenseProcessedShipmentID = min(ShipmentID) FROM Shipments
+
 UPDATE [ShippingSettings] 
 SET 
 	[ShipSenseEnabled] = 1,
 	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>',
-	[ShipSenseProcessedShipmentID] = 0, 
+	[ShipSenseProcessedShipmentID] = @shipSenseProcessedShipmentID, 
 	[ShipSenseEndShipmentID] = (select max(ShipmentID) from Shipment where Processed = 1)
 GO
 
