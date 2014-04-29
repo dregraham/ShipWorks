@@ -19242,11 +19242,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.ConsumerID);}
 		}
-		/// <summary>Creates a new ValidatedAddressEntity.AddressID field instance</summary>
-		public static EntityField2 AddressID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.AddressID);}
-		}
 		/// <summary>Creates a new ValidatedAddressEntity.IsOriginal field instance</summary>
 		public static EntityField2 IsOriginal
 		{

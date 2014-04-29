@@ -1,7 +1,6 @@
 ﻿CREATE TABLE [dbo].[ValidatedAddress] (
     [ValidatedAddressID]     BIGINT IDENTITY (1100, 1000) NOT NULL,
     [ConsumerID]             BIGINT NOT NULL,
-    [AddressID]              BIGINT NOT NULL,
     [IsOriginal]             BIT    NOT NULL,
 	[Street1]                NVARCHAR (60)  NOT NULL,
     [Street2]                NVARCHAR (60)  NOT NULL,

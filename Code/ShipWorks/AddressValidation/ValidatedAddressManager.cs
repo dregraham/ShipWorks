@@ -9,7 +9,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.AddressValidation
 {
@@ -69,13 +68,7 @@ namespace ShipWorks.AddressValidation
             List<ValidatedAddressEntity> addressesToDelete = dataAccess.LinqCollections.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
 
             // Mark each address for deletion
-            addressesToDelete.ForEach(x =>
-            {
-                AddressEntity addressToDelete = new AddressEntity {AddressID = x.AddressID, IsNew = false};
-
-                dataAccess.DeleteEntity(x);
-                dataAccess.DeleteEntity(addressToDelete);
-            });
+            addressesToDelete.ForEach(dataAccess.DeleteEntity);
         }
 
         /// <summary>
@@ -104,11 +97,6 @@ namespace ShipWorks.AddressValidation
             validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
             validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
             adapter.DeleteEntitiesDirectly(typeof (ValidatedAddressEntity), validatedAddressDeleteBucket);
-
-            // Delete all addresses that are not referenced by a validated address entry
-            RelationPredicateBucket addressDeleteBucket = new RelationPredicateBucket();
-            addressDeleteBucket.PredicateExpression.Add(new FieldCompareSetPredicate(AddressFields.AddressID, null, ValidatedAddressFields.AddressID, null, SetOperator.In, null, true));
-            adapter.DeleteEntitiesDirectly(typeof (AddressEntity), addressDeleteBucket);
         }
 
         /// <summary>
@@ -119,7 +107,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, AddressAdapter originalShippingAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
         {
             SaveValidatedOrder(new ContextAddressValidationDataAccess(context), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }
@@ -132,7 +120,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(SqlAdapter adapter, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(SqlAdapter adapter, OrderEntity order, AddressAdapter originalShippingAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
         {
             SaveValidatedOrder(new AdapterAddressValidationDataAccess(adapter), order, originalShippingAddress, enteredAddress, suggestedAddresses);
         }
@@ -145,14 +133,14 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, AddressEntity enteredAddress, IEnumerable<AddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
         {
             DeleteExistingAddresses(dataAccess, order.OrderID);
             SaveOrderAddress(dataAccess, order, enteredAddress, true);
 
-            List<AddressEntity> suggestedAddressList = suggestedAddresses.ToList();
+            List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
 
-            foreach (AddressEntity address in suggestedAddressList)
+            foreach (ValidatedAddressEntity address in suggestedAddressList)
             {
                 SaveOrderAddress(dataAccess, order, address, false);
             }
@@ -172,7 +160,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save a validated address
         /// </summary>
-        public static void SaveOrderAddress(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressEntity address, bool isOriginalAddress)
+        public static void SaveOrderAddress(IAddressValidationDataAccess dataAccess, OrderEntity order, ValidatedAddressEntity address, bool isOriginalAddress)
         {
             // If the address is null, we obviously don't need to save it
             if (address == null)
@@ -180,14 +168,10 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            ValidatedAddressEntity validatedAddressEntity = new ValidatedAddressEntity
-            {
-                ConsumerID = order.OrderID,
-                Address = address,
-                IsOriginal = isOriginalAddress
-            };
+            address.ConsumerID = order.OrderID;
+            address.IsOriginal = isOriginalAddress;
 
-            dataAccess.SaveEntity(validatedAddressEntity);
+            dataAccess.SaveEntity(address);
         }
 
         /// <summary>

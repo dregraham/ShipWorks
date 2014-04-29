@@ -2827,22 +2827,21 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ValidatedAddressEntity's mappings</summary>
 		private void InitValidatedAddressEntityMappings()
 		{
-			base.AddElementMapping( "ValidatedAddressEntity", "ShipWorksLocal", @"dbo", "ValidatedAddress", 15 );
+			base.AddElementMapping( "ValidatedAddressEntity", "ShipWorksLocal", @"dbo", "ValidatedAddress", 14 );
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "ValidatedAddressID", "ValidatedAddressID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "ConsumerID", "ConsumerID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "AddressID", "AddressID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "IsOriginal", "IsOriginal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "ResidentialStatus", "ResidentialStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "POBox", "POBox", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "InternationalTerritory", "InternationalTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "MilitaryAddress", "MilitaryAddress", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "IsOriginal", "IsOriginal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "ResidentialStatus", "ResidentialStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "POBox", "POBox", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "InternationalTerritory", "InternationalTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "MilitaryAddress", "MilitaryAddress", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
 		}
 		/// <summary>Inits VersionSignoffEntity's mappings</summary>
 		private void InitVersionSignoffEntityMappings()

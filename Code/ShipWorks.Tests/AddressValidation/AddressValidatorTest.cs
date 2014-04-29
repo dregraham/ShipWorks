@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_CallsSave_WithOriginalAddress()
         {
-            AddressEntity originalAddress = null;
+             ValidatedAddressEntity originalAddress = null;
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => originalAddress = x);
 
             Assert.AreEqual("Street 1", originalAddress.Street1);
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_CallsSave_WithSuggestedAddresses()
         {
-            List<AddressEntity> suggestedAddresses = null;
+            List< ValidatedAddressEntity> suggestedAddresses = null;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => suggestedAddresses = y.OrderBy(z => z.Street1).ToList());
 
@@ -313,7 +313,7 @@ namespace ShipWorks.Tests.AddressValidation
             result1.CountryCode = "BA";
             result1.PostalCode = "12345";
 
-            AddressEntity originalAddress = null;
+             ValidatedAddressEntity originalAddress = null;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { originalAddress = x; });
 
@@ -388,7 +388,7 @@ namespace ShipWorks.Tests.AddressValidation
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
                 .Throws<AddressValidationException>();
 
-            testObject.Validate(sampleOrder, "Ship", true, (addressEntity, addressList) =>
+            testObject.Validate(sampleOrder, "Ship", true, ( ValidatedAddressEntity, addressList) =>
             {
             });
 
@@ -401,7 +401,7 @@ namespace ShipWorks.Tests.AddressValidation
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
                 .Throws<AddressValidationException>();
 
-            testObject.Validate(sampleOrder, "Ship", true, (addressEntity, addressList) =>
+            testObject.Validate(sampleOrder, "Ship", true, ( ValidatedAddressEntity, addressList) =>
             {
             });
 

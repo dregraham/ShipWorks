@@ -6,7 +6,6 @@ using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.AddressValidation
 {
@@ -75,14 +74,12 @@ namespace ShipWorks.Tests.AddressValidation
 
             addressForOrder = new ValidatedAddressEntity
             {
-                ConsumerID = testOrder.OrderID,
-                AddressID = 6
+                ConsumerID = testOrder.OrderID
             };
 
             addressForOtherOrder = new ValidatedAddressEntity
             {
-                ConsumerID = testOrder.OrderID + 1,
-                AddressID = 7
+                ConsumerID = testOrder.OrderID + 1
             };
 
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
@@ -146,21 +143,9 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
-        public void DeleteExistingAddresses_CallsDelete_WithAddressWithCorrectId()
-        {
-            bool wasCalledCorrectly = false;
-            dataAccess.Setup(x => x.DeleteEntity(It.IsAny<AddressEntity>()))
-                .Callback<IEntity2>(x => wasCalledCorrectly = ((AddressEntity)x).AddressID == addressForOrder.AddressID);
-
-            ValidatedAddressManager.DeleteExistingAddresses(dataAccess.Object, testOrder.OrderID);
-
-            Assert.IsTrue(wasCalledCorrectly);
-        }
-
-        [TestMethod]
         public void SaveValidatedOrder_CallsDelete_OnlyOnAddressesAssociatedWithOrder()
         {
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter(), null, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter(), null, new List<ValidatedAddressEntity>());
             dataAccess.Verify(x => x.DeleteEntity(addressForOrder), Times.Once);
             dataAccess.Verify(x => x.DeleteEntity(addressForOtherOrder), Times.Never);
         }
@@ -168,12 +153,12 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_CallsSaveOnEnteredAddress()
         {
-            AddressEntity orderAddress = new AddressEntity();
+            ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
             List<ValidatedAddressEntity> savedAddresses = new List<ValidatedAddressEntity>();
             dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
                 .Callback<IEntity2>(x => savedAddresses.Add(x as ValidatedAddressEntity));
 
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<ValidatedAddressEntity>());
 
             AssertSavedAddress(savedAddresses, orderAddress, true);
         }
@@ -181,15 +166,15 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_CallsSaveOnAddressSuggestions()
         {
-            AddressEntity orderAddress = new AddressEntity();
-            AddressEntity suggestion1 = new AddressEntity();
-            AddressEntity suggestion2 = new AddressEntity();
+            ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
+            ValidatedAddressEntity suggestion1 = new ValidatedAddressEntity();
+            ValidatedAddressEntity suggestion2 = new ValidatedAddressEntity();
 
             List<ValidatedAddressEntity> savedAddresses = new List<ValidatedAddressEntity>();
             dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
                 .Callback<IEntity2>(x => savedAddresses.Add(x as ValidatedAddressEntity));
 
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<AddressEntity> {suggestion1, suggestion2});
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<ValidatedAddressEntity> { suggestion1, suggestion2 });
 
             AssertSavedAddress(savedAddresses, suggestion1, false);
             AssertSavedAddress(savedAddresses, suggestion2, false);
@@ -198,11 +183,11 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_UpdatesSuggestionCount_WithSuggestedAddresses()
         {
-            AddressEntity orderAddress = new AddressEntity();
-            AddressEntity suggestion1 = new AddressEntity();
-            AddressEntity suggestion2 = new AddressEntity();
+            ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
+            ValidatedAddressEntity suggestion1 = new ValidatedAddressEntity();
+            ValidatedAddressEntity suggestion2 = new ValidatedAddressEntity();
 
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<AddressEntity> { suggestion1, suggestion2 });
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<ValidatedAddressEntity> { suggestion1, suggestion2 });
 
             Assert.AreEqual(2, testOrder.ShipAddressValidationSuggestionCount);
         }
@@ -210,7 +195,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_SavesOrder()
         {
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, null, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, null, new List<ValidatedAddressEntity>());
 
             dataAccess.Verify(x => x.SaveEntity(testOrder));
         }
@@ -219,7 +204,7 @@ namespace ShipWorks.Tests.AddressValidation
         public void SaveValidatedOrder_PropagatesAddressChanges_OnlyOnShipmentWithIdenticalAddress()
         {
             testOrder.ShipStreet1 = "999 Main";
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 }, null, new List<AddressEntity>());
+            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, new AddressAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 }, null, new List<ValidatedAddressEntity>());
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOrderAddress), Times.Once);
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOtherAddress), Times.Never);
             dataAccess.Verify(x => x.SaveEntity(shipmentFromOtherOrder), Times.Never);
@@ -236,7 +221,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveOrderAddress_CallsSave_WhenAddressIsNotNull()
         {
-            AddressEntity testAddress = new AddressEntity();
+            ValidatedAddressEntity testAddress = new ValidatedAddressEntity();
             ValidatedAddressEntity savedEntity = null;
 
             dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
@@ -244,17 +229,17 @@ namespace ShipWorks.Tests.AddressValidation
             ValidatedAddressManager.SaveOrderAddress(dataAccess.Object, testOrder, testAddress, true);
             
             Assert.AreEqual(testOrder.OrderID, savedEntity.ConsumerID);
-            Assert.AreEqual(testAddress, savedEntity.Address);
+            Assert.AreEqual(testAddress, savedEntity);
             Assert.AreEqual(true, savedEntity.IsOriginal);
         }
 
-        private void AssertSavedAddress(IEnumerable<ValidatedAddressEntity> savedAddresses, AddressEntity orderAddress, bool isOriginalExpected)
+        private void AssertSavedAddress(IEnumerable<ValidatedAddressEntity> savedAddresses, ValidatedAddressEntity orderAddress, bool isOriginalExpected)
         {
             bool wasFound = false;
 
             foreach (var validatedAddress in savedAddresses)
             {
-                if (validatedAddress.Address == orderAddress)
+                if (validatedAddress == orderAddress)
                 {
                     Assert.AreEqual(testOrder.OrderID, validatedAddress.ConsumerID);
                     Assert.AreEqual(isOriginalExpected, validatedAddress.IsOriginal);

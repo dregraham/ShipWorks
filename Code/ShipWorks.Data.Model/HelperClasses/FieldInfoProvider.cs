@@ -2679,7 +2679,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("ValidatedAddressEntity", "ValidatedAddressID", typeof(System.Int64), true, false, true, false,  (int)ValidatedAddressFieldIndex.ValidatedAddressID, 0, 0, 19);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "ConsumerID", typeof(System.Int64), false, false, false, false,  (int)ValidatedAddressFieldIndex.ConsumerID, 0, 0, 19);
-			base.AddElementFieldInfo("ValidatedAddressEntity", "AddressID", typeof(System.Int64), false, false, false, false,  (int)ValidatedAddressFieldIndex.AddressID, 0, 0, 19);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "IsOriginal", typeof(System.Boolean), false, false, false, false,  (int)ValidatedAddressFieldIndex.IsOriginal, 0, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "Street1", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.Street1, 60, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "Street2", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.Street2, 60, 0, 0);

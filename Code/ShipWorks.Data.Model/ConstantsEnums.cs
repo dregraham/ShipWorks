@@ -9068,8 +9068,6 @@ namespace ShipWorks.Data.Model
 		ValidatedAddressID,
 		///<summary>ConsumerID. </summary>
 		ConsumerID,
-		///<summary>AddressID. </summary>
-		AddressID,
 		///<summary>IsOriginal. </summary>
 		IsOriginal,
 		///<summary>Street1. </summary>

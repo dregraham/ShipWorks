@@ -194,6 +194,11 @@ namespace ShipWorks.Shipping
 
             // Initialize the to address
             PersonAdapter.Copy(order, shipment, "Ship");
+            AddressAdapter.Copy(order, shipment, "Ship");
+
+            shipment.ShipAddressValidationError = order.ShipAddressValidationError;
+            shipment.ShipAddressValidationStatus = order.ShipAddressValidationStatus;
+            shipment.ShipAddressValidationSuggestionCount = order.ShipAddressValidationSuggestionCount;
 
             shipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 

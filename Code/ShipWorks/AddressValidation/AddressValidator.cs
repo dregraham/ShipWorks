@@ -41,7 +41,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressPrefix"></param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<AddressEntity, IEnumerable<AddressEntity>> saveAction)
+        public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
 
@@ -59,7 +59,7 @@ namespace ShipWorks.AddressValidation
                                      new List<AddressValidationResult>();
 
                 // Store the original address so that the user can revert later if they want
-                AddressEntity originalAddress = new AddressEntity();
+                ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
                 adapter.CopyTo(originalAddress, string.Empty);
 
                 adapter.AddressValidationError = addressValidationError;
@@ -90,7 +90,7 @@ namespace ShipWorks.AddressValidation
                 }
                 else
                 {
-                    saveAction(null, new List<AddressEntity>());
+                    saveAction(null, new List<ValidatedAddressEntity>());
                 }
 
             }
@@ -99,7 +99,7 @@ namespace ShipWorks.AddressValidation
                 log.Warn("Error communicating with Address Validation Server.", ex);
                 adapter.AddressValidationError = "Error communicating with Address Validation Server.";
                 adapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
-                saveAction(null, new List<AddressEntity>());
+                saveAction(null, new List<ValidatedAddressEntity>());
             }
         }
 
@@ -177,9 +177,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create an AddressEntity from an AddressValidationResult
         /// </summary>
-        private static AddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult)
+        private static ValidatedAddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult)
         {
-            AddressEntity address = new AddressEntity();
+            ValidatedAddressEntity address = new ValidatedAddressEntity();
             AddressAdapter adapter = new AddressAdapter(address, string.Empty);
             
             validationResult.CopyTo(adapter);

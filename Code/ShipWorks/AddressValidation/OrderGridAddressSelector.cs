@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.LinqSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
@@ -83,7 +82,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, OrderEntity order)
         {
-            string title = FormatAddress(validatedAddress.Address) + 
+            string title = FormatAddress(validatedAddress) + 
                 (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
 
             return new MenuItem(title, (sender, args) => SelectAddress(order, validatedAddress));
@@ -97,8 +96,8 @@ namespace ShipWorks.AddressValidation
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 LinqMetaData metaData = new LinqMetaData(adapter);
-                return metaData.ValidatedAddress.Where(x => x.ConsumerID == order.OrderID)
-                    .WithPath(x => x.Prefetch(y => y.Address))
+                return metaData.ValidatedAddress
+                    .Where(x => x.ConsumerID == order.OrderID)
                     .ToList();
             }
         }
@@ -113,7 +112,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
             orderAdapter.CopyTo(originalAddress);
             
-            AddressAdapter.Copy(validatedAddressEntity.Address, string.Empty, orderAdapter);
+            AddressAdapter.Copy(validatedAddressEntity, string.Empty, orderAdapter);
 
             order.ShipAddressValidationStatus = validatedAddressEntity.IsOriginal ? 
                 (int) AddressValidationStatusType.Overridden : 
@@ -131,7 +130,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Format the address for display in the menu
         /// </summary>
-        private static string FormatAddress(AddressEntity address)
+        private static string FormatAddress(ValidatedAddressEntity address)
         {
             StringBuilder format = new StringBuilder();
             AddAddressPart(format, address.Street1);
