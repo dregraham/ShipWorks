@@ -1,5 +1,6 @@
 require 'albacore'
 require 'win32/registry'
+require "securerandom"
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
@@ -158,7 +159,7 @@ namespace :build do
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
-	end
+	end	
 end
 
 ########################################################################
@@ -381,5 +382,20 @@ namespace :db do
 	task :deploy do |t, args|
 		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:redeployassemblies"
 		sh command
+	end
+end
+
+namespace :setup do
+
+	desc "Creates ShipWorks entry in the registry"
+	task :registry, :registryValue do |t, args|
+		if args != nil and args[:registryValue] != nil and args[:registryValue] != ""
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
+				data = SecureRandom.uuid
+				puts data
+				reg[args.registryValue] = '{' + data + '}'
+			end
+		end
 	end
 end
