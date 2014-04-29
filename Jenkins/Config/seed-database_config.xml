@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>21</daysToKeep>
+    <numToKeep>50</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.7.4">
+      <taskName>Seed database</taskName>
+      <stageName>Stage 2: Integration test</stageName>
+    </se.diabol.jenkins.pipeline.PipelineProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>E:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>rake db:create db:schema[3.9.0.0] db:seed</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>@@FEATURE_NAME@@ - deploy assemblies</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+    <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
+      <unstableOnWarning>false</unstableOnWarning>
+      <failBuildOnError>false</failBuildOnError>
+      <parsingRulesPath>e:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+    </hudson.plugins.logparser.LogParserPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.8">
+      <recipients>j.yedlicka@shipworks.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+</project>

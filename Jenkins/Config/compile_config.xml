@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>21</daysToKeep>
+    <numToKeep>50</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.7.4">
+      <taskName>Compile the solution</taskName>
+      <stageName>Stage 1: Build</stageName>
+    </se.diabol.jenkins.pipeline.PipelineProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.0.1">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <name>ShipWorks3</name>
+        <url>//intfs01/development/Git/ShipWorks3x.git</url>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>@@BRANCH_NAME@@</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions>
+      <hudson.plugins.git.extensions.impl.PerBuildTag/>
+    </extensions>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/10 * * * * </spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>E:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>rake rebuild</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.test.AggregatedTestResultPublisher>
+      <includeFailedBuilds>true</includeFailedBuilds>
+    </hudson.tasks.test.AggregatedTestResultPublisher>
+    <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
+      <unstableOnWarning>false</unstableOnWarning>
+      <failBuildOnError>false</failBuildOnError>
+      <parsingRulesPath>e:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+    </hudson.plugins.logparser.LogParserPublisher>
+    <hudson.tasks.Mailer plugin="mailer@1.8">
+      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>@@FEATURE_NAME@@ - code analysis,@@FEATURE_NAME@@ - units</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+    <join.JoinTrigger plugin="join@1.15">
+      <joinProjects>@@FEATURE_NAME@@ - seed database</joinProjects>
+      <joinPublishers/>
+      <evenIfDownstreamUnstable>false</evenIfDownstreamUnstable>
+    </join.JoinTrigger>
+    <hudson.tasks.Fingerprinter>
+      <targets>Artifacts/Application/*.*</targets>
+      <recordBuildArtifacts>false</recordBuildArtifacts>
+    </hudson.tasks.Fingerprinter>
+  </publishers>
+  <buildWrappers>
+    <se.diabol.jenkins.pipeline.PipelineVersionContributor plugin="delivery-pipeline-plugin@0.7.4">
+      <versionTemplate>0.0.0.${BUILD_NUMBER}</versionTemplate>
+      <updateDisplayName>true</updateDisplayName>
+    </se.diabol.jenkins.pipeline.PipelineVersionContributor>
+  </buildWrappers>
+</project>
