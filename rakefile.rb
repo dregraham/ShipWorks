@@ -387,15 +387,59 @@ end
 
 namespace :setup do
 
-	desc "Creates ShipWorks entry in the registry"
-	task :registry, :registryValue do |t, args|
-		if args != nil and args[:registryValue] != nil and args[:registryValue] != ""
-			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
+	task :registry, :instancePath do |t, args|
+	
+		instanceGuid = SecureRandom.uuid
+		puts instanceGuid
+		
+		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""
+			
+			# Create the ShipWorks instance value based on the registryKey name provided
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
 			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
-				data = SecureRandom.uuid
-				puts data
-				reg[args.registryValue] = '{' + data + '}'
+				reg[args.instancePath] = '{' + instanceGuid + '}'
 			end
+		end		
+	end
+	
+	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
+	task :sqlSession, :instancePath, :targetDatabase do |t, args|
+	
+		instanceGuid = ""
+		
+		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
+		# registry otherwise the key will not be found
+		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			# Read the instance GUID from the registry
+			instanceGuid = reg[args.instancePath]				
 		end
+			
+		
+		# Write out some boiler plate XML that will contain the database name provided
+		boilerPlateXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<SqlSession>
+  <Server>
+    <Instance>(local)\\DEVELOPMENT</Instance>
+    <Database>@@DATABASE_NAME@@</Database>
+  </Server>
+  <Credentials>
+    <Username />
+    <Password>dgPE4WpwFQg=</Password>
+    <WindowsAuth>True</WindowsAuth>
+  </Credentials>
+</SqlSession>"
+		boilerPlateXml = boilerPlateXml.gsub(/<Database>@@DATABASE_NAME@@<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
+		
+		# Make sure the directories are created before writing to the sqlsession file
+		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid) if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid)
+		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings") if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings")
+		
+		# Create/write the SQL Session file
+		fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"	
+		sessionFile = File.new(fileName, 'w')
+		sessionFile.puts(boilerPlateXml)
+		sessionFile.close
 	end
 end
