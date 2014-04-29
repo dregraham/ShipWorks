@@ -50,9 +50,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ActionTaskEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ActionTaskEntity");
 					break;
-				case ShipWorks.Data.Model.EntityType.AddressEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AddressEntity");
-					break;
 				case ShipWorks.Data.Model.EntityType.AmazonASINEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonASINEntity");
 					break;

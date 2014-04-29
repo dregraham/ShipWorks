@@ -364,71 +364,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity AddressEntity</summary>
-	public partial class AddressFields
-	{
-		/// <summary>Creates a new AddressEntity.AddressID field instance</summary>
-		public static EntityField2 AddressID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.AddressID);}
-		}
-		/// <summary>Creates a new AddressEntity.Street1 field instance</summary>
-		public static EntityField2 Street1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street1);}
-		}
-		/// <summary>Creates a new AddressEntity.Street2 field instance</summary>
-		public static EntityField2 Street2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street2);}
-		}
-		/// <summary>Creates a new AddressEntity.Street3 field instance</summary>
-		public static EntityField2 Street3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.Street3);}
-		}
-		/// <summary>Creates a new AddressEntity.City field instance</summary>
-		public static EntityField2 City
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.City);}
-		}
-		/// <summary>Creates a new AddressEntity.StateProvCode field instance</summary>
-		public static EntityField2 StateProvCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.StateProvCode);}
-		}
-		/// <summary>Creates a new AddressEntity.PostalCode field instance</summary>
-		public static EntityField2 PostalCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.PostalCode);}
-		}
-		/// <summary>Creates a new AddressEntity.CountryCode field instance</summary>
-		public static EntityField2 CountryCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.CountryCode);}
-		}
-		/// <summary>Creates a new AddressEntity.ResidentialStatus field instance</summary>
-		public static EntityField2 ResidentialStatus
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.ResidentialStatus);}
-		}
-		/// <summary>Creates a new AddressEntity.POBox field instance</summary>
-		public static EntityField2 POBox
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.POBox);}
-		}
-		/// <summary>Creates a new AddressEntity.InternationalTerritory field instance</summary>
-		public static EntityField2 InternationalTerritory
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.InternationalTerritory);}
-		}
-		/// <summary>Creates a new AddressEntity.MilitaryAddress field instance</summary>
-		public static EntityField2 MilitaryAddress
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AddressFieldIndex.MilitaryAddress);}
-		}
-	}
-
 	/// <summary>Field Creation Class for entity AmazonASINEntity</summary>
 	public partial class AmazonASINFields
 	{
@@ -15752,6 +15687,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipEmail);}
 		}
+		/// <summary>Creates a new ShipmentEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipInternationalTerritory field instance</summary>
+		public static EntityField2 ShipInternationalTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipInternationalTerritory);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipMilitaryAddress);}
+		}
 		/// <summary>Creates a new ShipmentEntity.ResidentialDetermination field instance</summary>
 		public static EntityField2 ResidentialDetermination
 		{
@@ -19281,6 +19251,61 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsOriginal
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.IsOriginal);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.City);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.ResidentialStatus field instance</summary>
+		public static EntityField2 ResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.ResidentialStatus);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.POBox field instance</summary>
+		public static EntityField2 POBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.POBox);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.InternationalTerritory field instance</summary>
+		public static EntityField2 InternationalTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.InternationalTerritory);}
+		}
+		/// <summary>Creates a new ValidatedAddressEntity.MilitaryAddress field instance</summary>
+		public static EntityField2 MilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.MilitaryAddress);}
 		}
 	}
 

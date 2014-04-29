@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
 
-			toReturn.Add(this.AddressEntityUsingAddressID);
+
 			return toReturn;
 		}
 
@@ -40,20 +40,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-		/// <summary>Returns a new IEntityRelation object, between ValidatedAddressEntity and AddressEntity over the m:1 relation they have, using the relation between the fields:
-		/// ValidatedAddress.AddressID - Address.AddressID
-		/// </summary>
-		public virtual IEntityRelation AddressEntityUsingAddressID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "Address", false);
-				relation.AddEntityFieldPair(AddressFields.AddressID, ValidatedAddressFields.AddressID);
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AddressEntity", false);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ValidatedAddressEntity", true);
-				return relation;
-			}
-		}
 
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }

@@ -208,41 +208,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Address.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AddressFieldIndex:int
-	{
-		///<summary>AddressID. </summary>
-		AddressID,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>Street2. </summary>
-		Street2,
-		///<summary>Street3. </summary>
-		Street3,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>ResidentialStatus. </summary>
-		ResidentialStatus,
-		///<summary>POBox. </summary>
-		POBox,
-		///<summary>InternationalTerritory. </summary>
-		InternationalTerritory,
-		///<summary>MilitaryAddress. </summary>
-		MilitaryAddress,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -7366,6 +7331,20 @@ namespace ShipWorks.Data.Model
 		ShipPhone,
 		///<summary>ShipEmail. </summary>
 		ShipEmail,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipInternationalTerritory. </summary>
+		ShipInternationalTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>ResidentialDetermination. </summary>
 		ResidentialDetermination,
 		///<summary>ResidentialResult. </summary>
@@ -9093,6 +9072,28 @@ namespace ShipWorks.Data.Model
 		AddressID,
 		///<summary>IsOriginal. </summary>
 		IsOriginal,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>ResidentialStatus. </summary>
+		ResidentialStatus,
+		///<summary>POBox. </summary>
+		POBox,
+		///<summary>InternationalTerritory. </summary>
+		InternationalTerritory,
+		///<summary>MilitaryAddress. </summary>
+		MilitaryAddress,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9835,8 +9836,6 @@ namespace ShipWorks.Data.Model
 		ActionQueueStepEntity,
 		///<summary>ActionTask</summary>
 		ActionTaskEntity,
-		///<summary>Address</summary>
-		AddressEntity,
 		///<summary>AmazonASIN</summary>
 		AmazonASINEntity,
 		///<summary>AmazonOrder</summary>

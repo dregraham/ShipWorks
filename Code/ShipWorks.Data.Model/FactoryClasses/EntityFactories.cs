@@ -323,45 +323,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
-	/// <summary>Factory to create new, empty AddressEntity objects.</summary>
-	[Serializable]
-	public partial class AddressEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public AddressEntityFactory() : base("AddressEntity", ShipWorks.Data.Model.EntityType.AddressEntity) { }
-
-		/// <summary>Creates a new, empty AddressEntity object.</summary>
-		/// <returns>A new, empty AddressEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new AddressEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAddress
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new AddressEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new AddressEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAddressUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<AddressEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
 	/// <summary>Factory to create new, empty AmazonASINEntity objects.</summary>
 	[Serializable]
 	public partial class AmazonASINEntityFactory : EntityFactoryBase2 {
@@ -6756,9 +6717,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ActionTaskEntity:
 					factoryToUse = new ActionTaskEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.AddressEntity:
-					factoryToUse = new AddressEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.AmazonASINEntity:
 					factoryToUse = new AmazonASINEntityFactory();

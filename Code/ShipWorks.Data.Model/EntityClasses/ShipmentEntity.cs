@@ -1011,6 +1011,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipEmail", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ShipAddressValidationSuggestionCount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipAddressValidationStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipAddressValidationError", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipPOBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipInternationalTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipMilitaryAddress", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ResidentialDetermination", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1933,6 +1954,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipEmail, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.ShipEmail, value); }
+		}
+
+		/// <summary> The ShipAddressValidationSuggestionCount property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationSuggestionCount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipAddressValidationSuggestionCount
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipAddressValidationSuggestionCount, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationSuggestionCount, value); }
+		}
+
+		/// <summary> The ShipAddressValidationStatus property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipAddressValidationStatus
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipAddressValidationStatus, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationStatus, value); }
+		}
+
+		/// <summary> The ShipAddressValidationError property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationError"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipAddressValidationError
+		{
+			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipAddressValidationError, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationError, value); }
+		}
+
+		/// <summary> The ShipResidentialStatus property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipResidentialStatus, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipResidentialStatus, value); }
+		}
+
+		/// <summary> The ShipPOBox property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipPOBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipPOBox
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipPOBox, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipPOBox, value); }
+		}
+
+		/// <summary> The ShipInternationalTerritory property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipInternationalTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipInternationalTerritory
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipInternationalTerritory, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipInternationalTerritory, value); }
+		}
+
+		/// <summary> The ShipMilitaryAddress property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipMilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipMilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipMilitaryAddress, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipMilitaryAddress, value); }
 		}
 
 		/// <summary> The ResidentialDetermination property of the Entity Shipment<br/><br/>

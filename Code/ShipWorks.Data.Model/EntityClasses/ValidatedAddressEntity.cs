@@ -39,7 +39,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-		private AddressEntity _address;
+
 
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,8 +53,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name Address</summary>
-			public static readonly string Address = "Address";
+
 
 
 
@@ -118,11 +117,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				_address = (AddressEntity)info.GetValue("_address", typeof(AddressEntity));
-				if(_address!=null)
-				{
-					_address.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
+
 
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -138,9 +133,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch((ValidatedAddressFieldIndex)fieldIndex)
 			{
-				case ValidatedAddressFieldIndex.AddressID:
-					DesetupSyncAddress(true, false);
-					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -163,9 +155,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "Address":
-					this.Address = (AddressEntity)entity;
-					break;
+
 
 
 
@@ -190,9 +180,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "Address":
-					toReturn.Add(ValidatedAddressEntity.Relations.AddressEntityUsingAddressID);
-					break;
+
 
 
 
@@ -231,9 +219,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Address":
-					SetupSyncAddress(relatedEntity);
-					break;
+
 
 
 				default:
@@ -250,9 +236,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Address":
-					DesetupSyncAddress(false, true);
-					break;
+
 
 
 				default:
@@ -275,10 +259,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_address!=null)
-			{
-				toReturn.Add(_address);
-			}
+
 
 			return toReturn;
 		}
@@ -305,7 +286,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				info.AddValue("_address", (!this.MarkedForDeletion?_address:null));
+
 
 			}
 			
@@ -343,15 +324,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'Address' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAddress()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AddressFields.AddressID, null, ComparisonOperator.Equal, this.AddressID));
-			return bucket;
-		}
 
 	
 		
@@ -420,7 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("Address", _address);
+
 
 
 
@@ -432,10 +404,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-			if(_address!=null)
-			{
-				_address.ActiveContext = base.ActiveContext;
-			}
+
 
 		}
 
@@ -445,7 +414,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_address = null;
+
 
 			PerformDependencyInjection();
 			
@@ -474,41 +443,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IsOriginal", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Street1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Street2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Street3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("City", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StateProvCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("PostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("POBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("InternationalTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("MilitaryAddress", fieldHashtable);
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _address</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncAddress(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _address, new PropertyChangedEventHandler( OnAddressPropertyChanged ), "Address", ValidatedAddressEntity.Relations.AddressEntityUsingAddressID, true, signalRelatedEntity, "ValidatedAddress", resetFKFields, new int[] { (int)ValidatedAddressFieldIndex.AddressID } );		
-			_address = null;
-		}
-
-		/// <summary> setups the sync logic for member _address</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAddress(IEntity2 relatedEntity)
-		{
-			if(_address!=relatedEntity)
-			{
-				DesetupSyncAddress(true, true);
-				_address = (AddressEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _address, new PropertyChangedEventHandler( OnAddressPropertyChanged ), "Address", ValidatedAddressEntity.Relations.AddressEntityUsingAddressID, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnAddressPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
@@ -545,17 +515,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Address' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAddress
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AddressEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Address")[0], (int)ShipWorks.Data.Model.EntityType.ValidatedAddressEntity, (int)ShipWorks.Data.Model.EntityType.AddressEntity, 0, null, null, null, null, "Address", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
-			}
-		}
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
@@ -626,42 +585,129 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ValidatedAddressFieldIndex.IsOriginal, value); }
 		}
 
-
-
-		/// <summary> Gets / sets related entity of type 'AddressEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual AddressEntity Address
+		/// <summary> The Street1 property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."Street1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Street1
 		{
-			get
-			{
-				return _address;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncAddress(value);
-				}
-				else
-				{
-					if(value==null)
-					{
-						if(_address != null)
-						{
-							_address.UnsetRelatedEntity(this, "ValidatedAddress");
-						}
-					}
-					else
-					{
-						if(_address!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "ValidatedAddress");
-						}
-					}
-				}
-			}
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.Street1, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.Street1, value); }
 		}
+
+		/// <summary> The Street2 property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."Street2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Street2
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.Street2, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.Street2, value); }
+		}
+
+		/// <summary> The Street3 property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."Street3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 60<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Street3
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.Street3, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.Street3, value); }
+		}
+
+		/// <summary> The City property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."City"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String City
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.City, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.City, value); }
+		}
+
+		/// <summary> The StateProvCode property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."StateProvCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String StateProvCode
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.StateProvCode, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.StateProvCode, value); }
+		}
+
+		/// <summary> The PostalCode property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."PostalCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String PostalCode
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.PostalCode, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.PostalCode, value); }
+		}
+
+		/// <summary> The CountryCode property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."CountryCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String CountryCode
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.CountryCode, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.CountryCode, value); }
+		}
+
+		/// <summary> The ResidentialStatus property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."ResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.ResidentialStatus, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.ResidentialStatus, value); }
+		}
+
+		/// <summary> The POBox property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."POBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 POBox
+		{
+			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.POBox, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.POBox, value); }
+		}
+
+		/// <summary> The InternationalTerritory property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."InternationalTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 InternationalTerritory
+		{
+			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.InternationalTerritory, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.InternationalTerritory, value); }
+		}
+
+		/// <summary> The MilitaryAddress property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."MilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 MilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.MilitaryAddress, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.MilitaryAddress, value); }
+		}
+
+
+
 
 	
 		
