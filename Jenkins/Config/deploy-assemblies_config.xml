@@ -30,7 +30,7 @@
   </builders>
   <publishers>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@ - integrations</childProjects>
+      <childProjects>@@FEATURE_NAME@@-integration-test</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
