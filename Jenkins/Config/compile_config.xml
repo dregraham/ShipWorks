@@ -66,7 +66,7 @@
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@-code analysis,@@FEATURE_NAME@@-units</childProjects>
+      <childProjects>@@FEATURE_NAME@@-code-analysis,@@FEATURE_NAME@@-units</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
@@ -75,7 +75,7 @@
       </threshold>
     </hudson.tasks.BuildTrigger>
     <join.JoinTrigger plugin="join@1.15">
-      <joinProjects>@@FEATURE_NAME@@ - seed database</joinProjects>
+      <joinProjects>@@FEATURE_NAME@@-seed-database</joinProjects>
       <joinPublishers/>
       <evenIfDownstreamUnstable>false</evenIfDownstreamUnstable>
     </join.JoinTrigger>
