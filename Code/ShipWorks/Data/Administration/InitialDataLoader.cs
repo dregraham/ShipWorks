@@ -80,18 +80,18 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Shipped", CreateDefinitionShipped()), ordersNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Not Shipped", CreateDefinitionNotShipped()), ordersNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Shipped", CreateDefinitionShipped()), ordersNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Shipped", CreateDefinitionNotShipped()), ordersNode, 1);
 
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
-            
-            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Ready to Go", CreateAddressValidationDefinition(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Address to Look at", CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.WillNotValidate, AddressValidationStatusType.SuggestedSelected)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Not Validated", CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending)), addressValidationNode, 0);
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
+
+            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Address to Look at", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.WillNotValidate, AddressValidationStatusType.SuggestedSelected)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending)), addressValidationNode, 0);
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateCustomerFilters(FilterNodeEntity customersNode)
         {
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
         }
 
         /// <summary>
@@ -127,28 +127,6 @@ namespace ShipWorks.Data.Administration
             processedCondition.Value = ShipmentStatusType.Processed;
             anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
             definition.RootContainer.FirstGroup.Conditions.Add(anyShipment);
-
-            return definition;
-        }
-
-
-        /// <summary>
-        /// Creates fitler for address validation statuses.
-        /// </summary>
-        private static FilterDefinition CreateAddressValidationDefinition(params AddressValidationStatusType[] statusesToInclude)
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            // If [Any]
-            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
-
-            AddressValidationStatusCondition statusCondition = new AddressValidationStatusCondition()
-            {
-                Operator = EqualityOperator.Equals,
-                StatusTypes = statusesToInclude.ToList()
-            };
-
-            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
 
             return definition;
         }
@@ -387,38 +365,6 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        /// <summary>
-        /// Create a FilterEntity object of the given name from the specified definition
-        /// </summary>
-        public static FilterEntity CreateFilterEntity(string name, FilterDefinition definition)
-        {
-            if (definition == null)
-            {
-                throw new ArgumentNullException("definition");
-            }
-
-            FilterEntity filter = new FilterEntity();
-            filter.Name = name;
-            filter.FilterTarget = (int) definition.FilterTarget;
-            filter.IsFolder = false;
-            filter.Definition = definition.GetXml();
-
-            return filter;
-        }
-
-        /// <summary>
-        /// Create a FilterEntity object of the given name with no definition that represents a folder
-        /// </summary>
-        public static FilterEntity CreateFilterFolderEntity(string name, FilterTarget target)
-        {
-            FilterEntity folder = new FilterEntity();
-            folder.Name = name;
-            folder.FilterTarget = (int) target;
-            folder.IsFolder = true;
-            folder.Definition = null;
-
-            return folder;
-        }
 
         /// <summary>
         /// Create the set of builtin template folders
@@ -445,6 +391,5 @@ namespace ShipWorks.Data.Administration
                 adapter.SaveEntity(snippets);
             }
         }
-
     }
 }

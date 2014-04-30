@@ -122,7 +122,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 if (folder != null)
                 {
                     // Create the v3 folder and put it where it belongs in the tree
-                    FilterEntity v3Folder = InitialDataLoader.CreateFilterFolderEntity(folder.Name, (FilterTarget) parentNode.Filter.FilterTarget);
+                    FilterEntity v3Folder = FilterHelper.CreateFilterFolderEntity(folder.Name, (FilterTarget) parentNode.Filter.FilterTarget);
                     FilterNodeEntity folderNode = FilterLayoutContext.Current.AddFilter(v3Folder, parentNode, nodes.IndexOf(node))[0];
 
                     // Now add all it's children
@@ -133,7 +133,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 if (filter != null)
                 {
                     // Create the v3 filter and add it where it belongs to the tree
-                    FilterEntity v3Filter = InitialDataLoader.CreateFilterEntity(filter.Name, filter.Definition);
+                    FilterEntity v3Filter = FilterHelper.CreateFilterEntity(filter.Name, filter.Definition);
                     FilterLayoutContext.Current.AddFilter(v3Filter, parentNode, nodes.IndexOf(node));
                 }
             }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Transactions;
 using Interapptive.Shared.Data;
 using NDesk.Options;
@@ -248,6 +249,7 @@ namespace ShipWorks.Data.Administration.Versioning
                     // Execute the script
                     SqlScript executor = sqlLoader[script.ScriptName];
                     executor.AppendSql(sqlLoader.GetScript(GetDataScriptName(script.ScriptName), false));
+                    executor.AppendSql(GetUpdateProcessSqlScript(script.UpdateProcessName));
 
                     // Update the progress as we complete each bactch in the script
                     executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
@@ -271,6 +273,25 @@ namespace ShipWorks.Data.Administration.Versioning
                 progress.Detail = "Done";
                 progress.Completed();
             }
+        }
+
+        /// <summary>
+        /// Gets the update process SQL script.
+        /// </summary>
+        /// <param name="updateProcessName">Name of the update process.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private static string GetUpdateProcessSqlScript(string updateProcessName)
+        {
+            if (string.IsNullOrEmpty(updateProcessName))
+            {
+                return string.Empty;
+            }
+
+            return string.Format(
+                "INSERT INTO UpdateQueue (UpdateDatabaseProcessType) VALUES ('{0}'){1}GO",
+                updateProcessName,
+                Environment.NewLine);
         }
 
         /// <summary>

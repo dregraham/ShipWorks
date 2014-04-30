@@ -17994,6 +17994,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity UpdateQueueEntity</summary>
+	public partial class UpdateQueueFields
+	{
+		/// <summary>Creates a new UpdateQueueEntity.UpdateQueueID field instance</summary>
+		public static EntityField2 UpdateQueueID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpdateQueueFieldIndex.UpdateQueueID);}
+		}
+		/// <summary>Creates a new UpdateQueueEntity.UpdateDatabaseProcessType field instance</summary>
+		public static EntityField2 UpdateDatabaseProcessType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpdateQueueFieldIndex.UpdateDatabaseProcessType);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity UpsAccountEntity</summary>
 	public partial class UpsAccountFields
 	{
