@@ -18,6 +18,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         private bool ignoreChanged;
         private Panel statusPanel;
         private Label readyToGoLabel;
+        private Label needsAttentionLabel;
+        private Label notValidated;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddressValidationStatusPopup"/> class.
@@ -49,7 +51,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             {
                 var month = EnumHelper.GetEnumList<AddressValidationStatusType>()[statusIndex];
 
-                int verticlePosition = 23*statusIndex + 23;
+                // * 3 makes room for the label buttons.
+                int verticlePosition = 23*(statusIndex + 3);
 
                 // Build monthsList with new checkboxes and related enums.
                 var checkboxAndMonthType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
@@ -95,6 +98,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         {
             statusPanel = new Panel();
             readyToGoLabel = new Label();
+            needsAttentionLabel = new Label();
+            notValidated = new Label();
             statusPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -102,6 +107,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             // 
             statusPanel.BackColor = SystemColors.ControlLightLight;
             statusPanel.Controls.Add(readyToGoLabel);
+            statusPanel.Controls.Add(needsAttentionLabel);
+            statusPanel.Controls.Add(notValidated);
             statusPanel.Name = "statusPanel";
             statusPanel.Size = new Size(130, 306);
             statusPanel.TabIndex = 7;
@@ -120,6 +127,35 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             readyToGoLabel.Cursor = Cursors.Hand;
             readyToGoLabel.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             readyToGoLabel.ForeColor = Color.Blue;
+            
+            //
+            // needsAttentionLabel 
+            // 
+            needsAttentionLabel.AutoSize = true;
+            needsAttentionLabel.Location = new Point(3, 26);
+            needsAttentionLabel.Name = "needsAttentionLabel";
+            needsAttentionLabel.Size = new Size(120, 17);
+            needsAttentionLabel.TabIndex = 1;
+            needsAttentionLabel.Text = "Select Needs Attention";
+            needsAttentionLabel.Click += OnNeedsAttentionLabelClicked;
+            needsAttentionLabel.Cursor = Cursors.Hand;
+            needsAttentionLabel.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            needsAttentionLabel.ForeColor = Color.Blue;
+
+            //
+            // notValidated 
+            // 
+            notValidated.AutoSize = true;
+            notValidated.Location = new Point(3, 49);
+            notValidated.Name = "notValidated";
+            notValidated.Size = new Size(120, 17);
+            notValidated.TabIndex = 1;
+            notValidated.Text = "Select Not Validated";
+            notValidated.Click += OnNotValidatedClicked;
+            notValidated.Cursor = Cursors.Hand;
+            notValidated.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            notValidated.ForeColor = Color.Blue;
+
             //
             // AddressValidationStatusPopup
             //
@@ -132,18 +168,34 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         }
 
         /// <summary>
+        /// Called when [not validated clicked].
+        /// </summary>
+        private void OnNotValidatedClicked(object sender, EventArgs e)
+        {
+            SelectStatuses(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending, AddressValidationStatusType.WillNotValidate);
+        }
+
+        /// <summary>
+        /// Called when [needs attention label clicked].
+        /// </summary>
+        private void OnNeedsAttentionLabelClicked(object sender, EventArgs e)
+        {
+            SelectStatuses(AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.Error, AddressValidationStatusType.WillNotValidate);
+        }
+
+        /// <summary>
         /// Called when [ready to go label clicked].
         /// </summary>
         private void OnReadyToGoLabelClicked(object sender, EventArgs e)
         {
-            SelectStatuses(new List<AddressValidationStatusType> { AddressValidationStatusType.Valid, AddressValidationStatusType.Adjusted, AddressValidationStatusType.Overridden });
+            SelectStatuses(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted);
         }
 
         /// <summary>
         /// Selects the statuses specified and deselects the other statuses.
         /// </summary>
         /// <param name="addressValidationStatusTypes">The address validation status types to select.</param>
-        public void SelectStatuses(List<AddressValidationStatusType> addressValidationStatusTypes)
+        public void SelectStatuses(params AddressValidationStatusType[] addressValidationStatusTypes)
         {
             ignoreChanged = true;
 

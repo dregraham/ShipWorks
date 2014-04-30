@@ -90,8 +90,8 @@ namespace ShipWorks.Data.Administration
 
             FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Address to Look at", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.WillNotValidate, AddressValidationStatusType.SuggestedSelected)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Address to Look at", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.WillNotValidate)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending, AddressValidationStatusType.WillNotValidate)), addressValidationNode, 0);
         }
 
         /// <summary>

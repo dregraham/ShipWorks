@@ -29,7 +29,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             equalityOperator.InitializeFromEnumType(typeof(EqualityOperator));
             equalityOperator.SelectedValue = condition.Operator;
 
-            addressValidationStatus.SelectStatuses(condition.StatusTypes);
+            addressValidationStatus.SelectStatuses(condition.StatusTypes.ToArray());
             addressValidationStatus.StatusChanged = () =>
             {
                 condition.StatusTypes = addressValidationStatus.GetSelectedStatuses();
