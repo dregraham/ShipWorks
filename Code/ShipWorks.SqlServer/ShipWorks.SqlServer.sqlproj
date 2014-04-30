@@ -224,7 +224,7 @@
     <Compile Include="Shipping\ResetShipSenseProcedure.cs" />
     <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
     <Compile Include="Shipping\OrderShipmentShipSenseStatusTrigger.cs" />
-    <Compile Include="Shipping\OrderShipSensibleTrigger.cs" />
+    <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

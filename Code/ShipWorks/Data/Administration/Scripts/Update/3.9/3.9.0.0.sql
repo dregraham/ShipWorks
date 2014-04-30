@@ -52,11 +52,16 @@ GO
 
 PRINT N'Update [dbo].[ShippingSettings] defaults'
 GO
+
+-- Determine the shipment id from which to start
+DECLARE @shipSenseProcessedShipmentID bigint
+WITH Shipments AS(	SELECT TOP 25000 ShipmentID FROM Shipment WHERE Processed = 1 ORDER BY ShipmentID DESC)SELECT @shipSenseProcessedShipmentID = min(ShipmentID) FROM Shipments
+
 UPDATE [ShippingSettings] 
 SET 
 	[ShipSenseEnabled] = 1,
 	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>',
-	[ShipSenseProcessedShipmentID] = 0, 
+	[ShipSenseProcessedShipmentID] = @shipSenseProcessedShipmentID, 
 	[ShipSenseEndShipmentID] = (select max(ShipmentID) from Shipment where Processed = 1)
 GO
 
@@ -100,15 +105,15 @@ GO
 
 PRINT N'Altering [dbo].[Order]'
 GO
--- Add Hash Key column and ShipSensible to Order table
+-- Add Hash Key column and ShipSenseRecognitionStatus to Order table
 ALTER TABLE [dbo].[Order] ADD
 	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[ShipSensible] bit NULL
+	[ShpSenseRecognitionStatus] int NULL
 GO
 
 PRINT N'Updating [dbo].[Order] defaults'
 GO
-update [dbo].[Order] set [ShipSenseHashKey] = '', [ShipSensible] = 0
+update [dbo].[Order] set [ShipSenseHashKey] = '', [ShpSenseRecognitionStatus] = 2
 GO
 
 PRINT N'Altering [dbo].[Order][ShipSenseHashKey]'
@@ -117,15 +122,15 @@ ALTER TABLE [dbo].[Order]
 	ALTER COLUMN [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 GO
 
-PRINT N'Altering [dbo].[Order][ShipSensible]'
+PRINT N'Altering [dbo].[Order][ShpSenseRecognitionStatus]'
 GO
 ALTER TABLE [dbo].[Order]
-	ALTER COLUMN [ShipSensible] bit NOT NULL
+	ALTER COLUMN [ShpSenseRecognitionStatus] bit NOT NULL
 GO
 
-PRINT N'Adding [Order].[IX_Auto_ShipSensbile] Index'
+PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSensbile] ON [dbo].[Order] ([ShipSensible])
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShpSenseRecognitionStatus])
 GO
 
 PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'

@@ -677,10 +677,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new AmazonOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new AmazonOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new AmazonOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -2367,10 +2367,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -3022,10 +3022,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new ClickCartProOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new ClickCartProOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new ClickCartProOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -3332,10 +3332,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -4057,10 +4057,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new EbayOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new EbayOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -5747,10 +5747,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new EtsyOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new EtsyOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -9122,10 +9122,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new MagentoOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new MagentoOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -9692,10 +9692,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -10527,10 +10527,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -11012,10 +11012,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new NeweggOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new NeweggOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -12027,10 +12027,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new OrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new OrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 	}
 
@@ -12497,10 +12497,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new OrderMotionOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new OrderMotionOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -13057,10 +13057,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new PayPalOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new PayPalOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new PayPalOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -13907,10 +13907,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new ProStoresOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new ProStoresOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new ProStoresOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -14552,10 +14552,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new SearsOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new SearsOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -16317,10 +16317,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new ShopifyOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new ShopifyOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new ShopifyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -19952,10 +19952,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipSenseHashKey);}
 		}
-		/// <summary>Creates a new YahooOrderEntity.ShipSensible field instance</summary>
-		public static EntityField2 ShipSensible
+		/// <summary>Creates a new YahooOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipSensible);}
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipSenseRecognitionStatus);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID

@@ -429,7 +429,7 @@ CREATE TABLE [dbo].[Order]
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSensible] bit NOT NULL
+[ShipSenseRecognitionStatus] int NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -548,9 +548,9 @@ PRINT N'Creating index [IX_Auto_RollupNoteCount] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount] ON [dbo].[Order] ([RollupNoteCount])
 GO
-PRINT N'Adding [Order].[IX_Auto_ShipSensbile] Index'
+PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSensbile] ON [dbo].[Order] ([ShipSensible])
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
 GO
 PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
 GO

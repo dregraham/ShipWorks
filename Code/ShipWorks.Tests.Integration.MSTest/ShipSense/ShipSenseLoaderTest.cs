@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
                 Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
                 Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
 
-                DataProvider.InitializeForApplication();
+                DataProvider.InitializeForApplication(executionMode.Object);
                 AuditProcessor.InitializeForApplication();
                 
                 ShippingSettings.InitializeForCurrentDatabase();

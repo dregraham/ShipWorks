@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Transactions;
 using ShipWorks.Users.Audit;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -25,8 +24,11 @@ namespace ShipWorks.Shipping.ShipSense.Population
     public class ShipSenseLoaderGateway : IShipSenseLoaderGateway
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoaderGateway));
+        
         private SqlConnection connection; 
-        private IKnowledgebase knowledgebase;
+        private readonly IKnowledgebase knowledgebase;
+
+        private OrderEntity previousProcessedOrder;
 
         /// <summary>
         /// Constructor
@@ -34,6 +36,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         public ShipSenseLoaderGateway(IKnowledgebase knowledgebase)
         {
             this.knowledgebase = knowledgebase;
+            previousProcessedOrder = new OrderEntity(0);
         }
 
         /// <summary>
@@ -160,31 +163,19 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
         }
 
-        /// <summary>
-        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey
+        /// <summary>        
+        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey. 
         /// </summary>
-        public OrderEntity FetchNextOrderOrderToProcess()
-        {
-            // Create an order with an ID of zero to force the gateway to use the first order it
-            // encounters
-            OrderEntity simulatedPreviousOrder = new OrderEntity(0);
-            return FetchNextOrderOrderToProcess(simulatedPreviousOrder);
-        }
-
-
-        /// <summary>
-        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey and is not the same as the previous order. 
-        /// This overload is useful when you want to bypass the previous order if it is returned again, 
-        /// ensure that you don't get into an infinite loop state
-        /// </summary>
-        /// <param name="previousOrder">The previous order.</param>
-        public OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder)
+        public OrderEntity FetchNextOrderToProcess()
         {
             OrderEntity orderEntity = null;
 
             RelationPredicateBucket orderBucket = new RelationPredicateBucket();
-            orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousOrder.OrderID);
+
+            // Grab all orders from the last 30 days that don't have a ShipSenseHashKey set
+            orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousProcessedOrder.OrderID);
             orderBucket.PredicateExpression.Add(OrderFields.ShipSenseHashKey == string.Empty);
+            orderBucket.PredicateExpression.Add(OrderFields.OnlineLastModified >= DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)));
 
             using (OrderCollection orders = new OrderCollection())
             {
@@ -200,6 +191,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     }
                 }
             }
+
+            previousProcessedOrder = orderEntity;
 
             return orderEntity;
         }
