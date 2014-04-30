@@ -105,7 +105,7 @@ GO
 
 PRINT N'Altering [dbo].[Order]'
 GO
--- Add Hash Key column and ShipSensible to Order table
+-- Add Hash Key column and ShipSenseRecognitionStatus to Order table
 ALTER TABLE [dbo].[Order] ADD
 	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[ShpSenseRecognitionStatus] int NULL

@@ -8,7 +8,7 @@ using ShipWorks.Shipping.ShipSense;
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
     /// <summary>
-    ///     Filter for OrderShipSensibleCondition
+    /// Filter for ShipSenseOrderRecognitionStatus
     /// </summary>
     [ConditionElement("ShipSense Status", "Order.ShipSenseRecognitionStatus")]
     public class OrderShipSenseStatusCondition : EnumCondition<ShipSenseOrderRecognitionStatus>

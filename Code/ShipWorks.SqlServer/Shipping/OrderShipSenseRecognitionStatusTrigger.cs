@@ -5,7 +5,7 @@ using Microsoft.SqlServer.Server;
 public partial class Triggers
 {
     [SqlTrigger(Target = "Order", Event = "FOR INSERT, UPDATE")]
-    public static void OrderShipSensibleTrigger ()
+    public static void OrderShipSenseRecognitionStatusTrigger ()
     {
         // Attach to the connection
         using (SqlConnection con = new SqlConnection("Context connection = true"))
@@ -16,7 +16,7 @@ public partial class Triggers
                 -- Update the ShipSenseRecognition status based on a matching ShipSenseKnowledgeBase record
 
                 -- NOTE: Since we are in an Order table trigger, and we are updating orders, we need to do the where
-                -- where o.ShipSensible = X below so that we don't get in a infinite recursive loop
+                -- where o.ShipSenseRecognitionStatus = X below so that we don't get in a infinite recursive loop
 
 	            if EXISTS(select * from ShipSenseKnowledgeBase sskb, inserted i where sskb.[Hash] = i.ShipSenseHashKey)
 	            BEGIN
