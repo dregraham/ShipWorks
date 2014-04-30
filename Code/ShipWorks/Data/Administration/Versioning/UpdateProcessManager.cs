@@ -13,7 +13,7 @@ namespace ShipWorks.Data.Administration.Versioning
     /// <summary>
     /// Manages Update process queue
     /// </summary>
-    public class UpdateProcessManager
+    public static class UpdateProcessManager
     {
         /// <summary>
         /// Dequeue update process.

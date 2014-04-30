@@ -75,8 +75,8 @@ namespace ShipWorks.Data.Administration.Versioning
                 return path.Reverse().Select(version => new VersionUpgradeStep()
                 {
                     Version = version.Source, 
-                    Script = shipWorksVersions.First(x => x.To == version.Source).GetScriptName(version.Target),
-                    Process = shipWorksVersions.First(x => x.To == version.Source).GetUpdateProcessName(version.Target)
+                    Script = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetScriptName(version.Target),
+                    Process = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetUpdateProcessName(version.Target)
                 })
                 .ToList();
             }
