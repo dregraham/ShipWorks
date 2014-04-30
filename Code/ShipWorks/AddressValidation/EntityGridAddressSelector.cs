@@ -18,20 +18,20 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Responsible for displaying possible validated addresses
     /// </summary>
-    public class OrderGridAddressSelector
+    public class EntityGridAddressSelector
     {
         /// <summary>
         /// Checks whether the validation suggestion hyperlink should be enabled
         /// </summary>
         public static bool IsValidationSuggestionLinkEnabled(object arg)
         {
-            IEntity2 order = arg as IEntity2;
-            if (order == null)
+            IEntity2 entity = arg as IEntity2;
+            if (entity == null)
             {
                 return false;
             }
 
-            AddressAdapter adapter = new AddressAdapter(order, "Ship");
+            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
 
             switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
             {
@@ -54,13 +54,13 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static string DisplayValidationSuggestionLabel(object arg)
         {
-            IEntity2 order = arg as IEntity2;
-            if (order == null)
+            IEntity2 entity = arg as IEntity2;
+            if (entity == null)
             {
                 return string.Empty;
             }
 
-            AddressAdapter adapter = new AddressAdapter(order, "Ship");
+            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
 
             switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
             {
@@ -86,27 +86,28 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void ShowAddressOptionMenu(object sender, GridHyperlinkClickEventArgs e)
         {
-            OrderEntity order = e.Row.Entity as OrderEntity;
-
-            if (order == null)
+            IEntity2 entity = e.Row.Entity;
+            if (entity == null)
             {
                 return;
             }
+
+            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
 
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
-            if (order.ShipAddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
-                order.ShipAddressValidationStatus == (int)AddressValidationStatusType.NotValid ||
-                order.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error)
+            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
+                adapter.AddressValidationStatus == (int) AddressValidationStatusType.NotValid ||
+                adapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
             {
-                MessageHelper.ShowInformation(Program.MainForm, order.ShipAddressValidationError);
+                MessageHelper.ShowInformation(Program.MainForm, adapter.AddressValidationError);
                 return;
             }
 
-            List<ValidatedAddressEntity> validatedAddresses = GetOrderAddresses(order);
+            List<ValidatedAddressEntity> validatedAddresses = GetEntityAddresses(entity);
             ValidatedAddressEntity originalValidatedAddress = validatedAddresses.FirstOrDefault(x => x.IsOriginal);
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
-            var menu = BuildMenu(order, originalValidatedAddress, suggestedAddresses);
+            var menu = BuildMenu(entity, originalValidatedAddress, suggestedAddresses);
 
             SandGrid grid = sender as SandGrid;
             Debug.Assert(grid != null);
@@ -117,13 +118,13 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Build the context menu
         /// </summary>
-        private static ContextMenu BuildMenu(OrderEntity order, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
+        private static ContextMenu BuildMenu(IEntity2 entity, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
             if (originalValidatedAddress != null)
             {
-                menuItems.Add(CreateMenuItem(originalValidatedAddress, order));
+                menuItems.Add(CreateMenuItem(originalValidatedAddress, entity));
             }
 
             if (suggestedAddresses.Any())
@@ -133,7 +134,7 @@ namespace ShipWorks.AddressValidation
                     menuItems.Add(new MenuItem("-"));
                 }
 
-                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, order)).OrderBy(x => x.Text));
+                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, entity)).OrderBy(x => x.Text));
             }
 
             return new ContextMenu(menuItems.ToArray());
@@ -142,48 +143,57 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create a menu item from a validated address
         /// </summary>
-        private static MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, OrderEntity order)
+        private static MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, IEntity2 entity)
         {
             string title = FormatAddress(validatedAddress) + 
                 (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
 
-            return new MenuItem(title, (sender, args) => SelectAddress(order, validatedAddress));
+            return new MenuItem(title, (sender, args) => SelectAddress(entity, validatedAddress));
         }
 
         /// <summary>
-        /// Get a list of addresses associated with the specified order
+        /// Get a list of addresses associated with the specified entity
         /// </summary>
-        private static List<ValidatedAddressEntity> GetOrderAddresses(OrderEntity order)
+        private static List<ValidatedAddressEntity> GetEntityAddresses(IEntity2 entity)
         {
+            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "GridAddressSelector cannot be used with entities that have compound primary keys");
+            long entityId = (long) entity.PrimaryKeyFields.Single().CurrentValue;
+
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 LinqMetaData metaData = new LinqMetaData(adapter);
                 return metaData.ValidatedAddress
-                    .Where(x => x.ConsumerID == order.OrderID)
+                    .Where(x => x.ConsumerID == entityId)
                     .ToList();
             }
         }
 
         /// <summary>
-        /// Select an address to copy into the order's shipping address
+        /// Select an address to copy into the entity's shipping address
         /// </summary>
-        private static void SelectAddress(OrderEntity order, ValidatedAddressEntity validatedAddressEntity)
+        private static void SelectAddress(IEntity2 entity, ValidatedAddressEntity validatedAddressEntity)
         {
             AddressAdapter originalAddress = new AddressAdapter();
 
-            AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
-            orderAdapter.CopyTo(originalAddress);
+            AddressAdapter entityAdapter = new AddressAdapter(entity, "Ship");
+            entityAdapter.CopyTo(originalAddress);
             
-            AddressAdapter.Copy(validatedAddressEntity, string.Empty, orderAdapter);
+            AddressAdapter.Copy(validatedAddressEntity, string.Empty, entityAdapter);
 
-            order.ShipAddressValidationStatus = validatedAddressEntity.IsOriginal ? 
+            entityAdapter.AddressValidationStatus = validatedAddressEntity.IsOriginal ? 
                 (int) AddressValidationStatusType.Overridden : 
                 (int) AddressValidationStatusType.SuggestedSelected;
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalAddress, orderAdapter);
-                adapter.SaveAndRefetch(order);
+                // If the entity is an order, we need to propagate its address to its shipments
+                OrderEntity order = entity as OrderEntity;
+                if (order != null)
+                {
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);    
+                }
+                
+                sqlAdapter.SaveAndRefetch(entity);
             }
 
             Program.MainForm.ForceHeartbeat();

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Grid.Columns;

@@ -151,14 +151,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ShipmentFields.ShipAddressValidationStatus) 
                     { DefaultWidth = 100 },
 
-                new GridColumnDefinition("{D119D0D9-813B-4767-AC17-6E1BD23BD74F}",
-                    new GridActionDisplayType(OrderGridAddressSelector.DisplayValidationSuggestionLabel, 
-                        (new OrderGridAddressSelector()).ShowAddressOptionMenu, OrderGridAddressSelector.IsValidationSuggestionLinkEnabled), 
-                    "S: Validation Suggestions", "2 Suggestions",
-                    new GridColumnFunctionValueProvider(x => x),
-                    new GridColumnSortProvider(ShipmentFields.ShipAddressValidationSuggestionCount, ShipmentFields.ShipAddressValidationStatus))
-                    { DefaultWidth = 120 }, 
-
                 new GridColumnDefinition("{0791736A-46BC-40D9-A0C2-31432C1D64C4}",
                     new GridEnumDisplayType<ResidentialStatusType>(EnumSortMethod.Description),
                     "S: Residential status", string.Empty,
