@@ -46,27 +46,28 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void BindStatuses()
         {
-            // Loop through all the months in MonthTypeEnum.
+            // Loop through all the statuses in AddressValidationStatusType.
             for (int statusIndex = 0; statusIndex < EnumHelper.GetEnumList<AddressValidationStatusType>().Count; statusIndex++)
             {
-                var month = EnumHelper.GetEnumList<AddressValidationStatusType>()[statusIndex];
+                var status = EnumHelper.GetEnumList<AddressValidationStatusType>()[statusIndex];
 
                 // * 3 makes room for the label buttons.
                 int verticlePosition = 23*(statusIndex + 3);
 
-                // Build monthsList with new checkboxes and related enums.
-                var checkboxAndMonthType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
+                // Build statusList with new checkboxes and related enums.
+                var checkboxAndStatusType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
                 {
-                    Text = month.Key,
-                    Location = new Point(3, verticlePosition)
-                }, month.Value);
+                    Text = status.Key,
+                    Location = new Point(3, verticlePosition),
+                    Width = 150
+                }, status.Value);
 
-                checkboxAndMonthType.Item1.CheckedChanged += OnStatusCheckChanged;
+                checkboxAndStatusType.Item1.CheckedChanged += OnStatusCheckChanged;
 
-                statusList.Add(checkboxAndMonthType);
+                statusList.Add(checkboxAndStatusType);
 
                 // Add checkbox to panel
-                statusPanel.Controls.Add(checkboxAndMonthType.Item1);
+                statusPanel.Controls.Add(checkboxAndStatusType.Item1);
             }
         }
 
@@ -96,75 +97,69 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void InitializeComponent()
         {
-            statusPanel = new Panel();
-            readyToGoLabel = new Label();
-            needsAttentionLabel = new Label();
-            notValidated = new Label();
-            statusPanel.SuspendLayout();
-            SuspendLayout();
+            this.statusPanel = new System.Windows.Forms.Panel();
+            this.readyToGoLabel = new System.Windows.Forms.Label();
+            this.needsAttentionLabel = new System.Windows.Forms.Label();
+            this.notValidated = new System.Windows.Forms.Label();
+            this.statusPanel.SuspendLayout();
+            this.SuspendLayout();
             // 
-            // onTheMonthsPanel
+            // statusPanel
             // 
-            statusPanel.BackColor = SystemColors.ControlLightLight;
-            statusPanel.Controls.Add(readyToGoLabel);
-            statusPanel.Controls.Add(needsAttentionLabel);
-            statusPanel.Controls.Add(notValidated);
-            statusPanel.Name = "statusPanel";
-            statusPanel.Size = new Size(130, 306);
-            statusPanel.TabIndex = 7;
-            statusPanel.Visible = false;
-
-            //
-            // readyToGoLabel 
+            this.statusPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.statusPanel.Controls.Add(this.readyToGoLabel);
+            this.statusPanel.Controls.Add(this.needsAttentionLabel);
+            this.statusPanel.Controls.Add(this.notValidated);
+            this.statusPanel.Location = new System.Drawing.Point(0, 0);
+            this.statusPanel.Name = "statusPanel";
+            this.statusPanel.Size = new System.Drawing.Size(130, 306);
+            this.statusPanel.TabIndex = 7;
+            this.statusPanel.Visible = false;
             // 
-            readyToGoLabel.AutoSize = true;
-            readyToGoLabel.Location = new Point(3, 3);
-            readyToGoLabel.Name = "readyToGoLabel";
-            readyToGoLabel.Size = new Size(120, 17);
-            readyToGoLabel.TabIndex = 1;
-            readyToGoLabel.Text = "Select Ready To Go";
-            readyToGoLabel.Click += OnReadyToGoLabelClicked;
-            readyToGoLabel.Cursor = Cursors.Hand;
-            readyToGoLabel.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            readyToGoLabel.ForeColor = Color.Blue;
-            
-            //
-            // needsAttentionLabel 
+            // readyToGoLabel
             // 
-            needsAttentionLabel.AutoSize = true;
-            needsAttentionLabel.Location = new Point(3, 26);
-            needsAttentionLabel.Name = "needsAttentionLabel";
-            needsAttentionLabel.Size = new Size(120, 17);
-            needsAttentionLabel.TabIndex = 1;
-            needsAttentionLabel.Text = "Select Needs Attention";
-            needsAttentionLabel.Click += OnNeedsAttentionLabelClicked;
-            needsAttentionLabel.Cursor = Cursors.Hand;
-            needsAttentionLabel.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            needsAttentionLabel.ForeColor = Color.Blue;
-
-            //
-            // notValidated 
+            this.readyToGoLabel.AutoSize = true;
+            this.readyToGoLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.readyToGoLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.readyToGoLabel.ForeColor = System.Drawing.Color.Blue;
+            this.readyToGoLabel.Location = new System.Drawing.Point(3, 3);
+            this.readyToGoLabel.Name = "readyToGoLabel";
+            this.readyToGoLabel.Size = new System.Drawing.Size(101, 13);
+            this.readyToGoLabel.TabIndex = 1;
+            this.readyToGoLabel.Text = "Select Ready To Go";
             // 
-            notValidated.AutoSize = true;
-            notValidated.Location = new Point(3, 49);
-            notValidated.Name = "notValidated";
-            notValidated.Size = new Size(120, 17);
-            notValidated.TabIndex = 1;
-            notValidated.Text = "Select Not Validated";
-            notValidated.Click += OnNotValidatedClicked;
-            notValidated.Cursor = Cursors.Hand;
-            notValidated.Font = new Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            notValidated.ForeColor = Color.Blue;
-
-            //
+            // needsAttentionLabel
+            // 
+            this.needsAttentionLabel.AutoSize = true;
+            this.needsAttentionLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.needsAttentionLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.needsAttentionLabel.ForeColor = System.Drawing.Color.Blue;
+            this.needsAttentionLabel.Location = new System.Drawing.Point(3, 26);
+            this.needsAttentionLabel.Name = "needsAttentionLabel";
+            this.needsAttentionLabel.Size = new System.Drawing.Size(117, 13);
+            this.needsAttentionLabel.TabIndex = 1;
+            this.needsAttentionLabel.Text = "Select Needs Attention";
+            // 
+            // notValidated
+            // 
+            this.notValidated.AutoSize = true;
+            this.notValidated.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.notValidated.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.notValidated.ForeColor = System.Drawing.Color.Blue;
+            this.notValidated.Location = new System.Drawing.Point(3, 49);
+            this.notValidated.Name = "notValidated";
+            this.notValidated.Size = new System.Drawing.Size(103, 13);
+            this.notValidated.TabIndex = 1;
+            this.notValidated.Text = "Select Not Validated";
+            // 
             // AddressValidationStatusPopup
-            //
-            Controls.Add(statusPanel);
-            Name = "AddressValidationStatusPopup";
-            Size = new Size(316, 348);
-            statusPanel.ResumeLayout(false);
-            statusPanel.PerformLayout();
-            ResumeLayout(false);
+            // 
+            this.Controls.Add(this.statusPanel);
+            this.Size = new System.Drawing.Size(316, 21);
+            this.statusPanel.ResumeLayout(false);
+            this.statusPanel.PerformLayout();
+            this.ResumeLayout(false);
+
         }
 
         /// <summary>
