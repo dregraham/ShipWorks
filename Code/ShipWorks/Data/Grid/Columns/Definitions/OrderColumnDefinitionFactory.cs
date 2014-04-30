@@ -543,7 +543,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         { DefaultWidth = 100 },
 
                     new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
-                        new GridActionDisplayType(DisplayValidationSuggestionLabel, (new OrderGridAddressSelector()).ShowAddressOptionMenu, IsValidationSuggestionLinkEnabled), 
+                        new GridActionDisplayType(OrderGridAddressSelector.DisplayValidationSuggestionLabel, 
+                            (new OrderGridAddressSelector()).ShowAddressOptionMenu, OrderGridAddressSelector.IsValidationSuggestionLinkEnabled), 
                         "Validation Suggestions", "2 Suggestions",
                         new GridColumnFunctionValueProvider(x => x),
                         new GridColumnSortProvider(OrderFields.ShipAddressValidationSuggestionCount, OrderFields.ShipAddressValidationStatus))
@@ -575,64 +576,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 };
 
             return definitions;
-        }
-
-        /// <summary>
-        /// Checks whether the validation suggestion hyperlink should be enabled
-        /// </summary>
-        private static bool IsValidationSuggestionLinkEnabled(object arg)
-        {
-            var order = arg as OrderEntity;
-            if (order == null)
-            {
-                return false;
-            }
-
-            switch ((AddressValidationStatusType)order.ShipAddressValidationStatus)
-            {
-                case AddressValidationStatusType.Adjusted:
-                case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.Overridden:
-                case AddressValidationStatusType.SuggestedSelected:
-                    return order.ShipAddressValidationSuggestionCount > 0;
-                case AddressValidationStatusType.NotValid:
-                case AddressValidationStatusType.WillNotValidate:
-                case AddressValidationStatusType.Error:
-                    return !string.IsNullOrEmpty(order.ShipAddressValidationError);
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Displays the validation suggestion link text
-        /// </summary>
-        private static string DisplayValidationSuggestionLabel(object arg)
-        {
-            var order = arg as OrderEntity;
-            if (order == null)
-            {
-                return string.Empty;
-            }
-
-            switch ((AddressValidationStatusType) order.ShipAddressValidationStatus)
-            {
-                case AddressValidationStatusType.Valid:
-                case AddressValidationStatusType.NotChecked:
-                case AddressValidationStatusType.Pending:
-                    return string.Empty;
-                case AddressValidationStatusType.Adjusted:
-                case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.Overridden:
-                case AddressValidationStatusType.SuggestedSelected:
-                    return string.Format("{0} Suggestion{1}", order.ShipAddressValidationSuggestionCount, order.ShipAddressValidationSuggestionCount != 1 ? "s" : string.Empty);
-                case AddressValidationStatusType.NotValid:
-                case AddressValidationStatusType.WillNotValidate:
-                case AddressValidationStatusType.Error:
-                    return string.IsNullOrEmpty(order.ShipAddressValidationError) ? string.Empty : "Details...";
-                default:
-                    return string.Empty;
-            }
         }
 
         /// <summary>

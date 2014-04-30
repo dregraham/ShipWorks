@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,6 +20,67 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class OrderGridAddressSelector
     {
+        /// <summary>
+        /// Checks whether the validation suggestion hyperlink should be enabled
+        /// </summary>
+        public static bool IsValidationSuggestionLinkEnabled(object arg)
+        {
+            IEntity2 order = arg as IEntity2;
+            if (order == null)
+            {
+                return false;
+            }
+
+            AddressAdapter adapter = new AddressAdapter(order, "Ship");
+
+            switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
+            {
+                case AddressValidationStatusType.Adjusted:
+                case AddressValidationStatusType.NeedsAttention:
+                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.SuggestedSelected:
+                    return adapter.AddressValidationSuggestionCount > 0;
+                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.WillNotValidate:
+                case AddressValidationStatusType.Error:
+                    return !string.IsNullOrEmpty(adapter.AddressValidationError);
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Displays the validation suggestion link text
+        /// </summary>
+        public static string DisplayValidationSuggestionLabel(object arg)
+        {
+            IEntity2 order = arg as IEntity2;
+            if (order == null)
+            {
+                return string.Empty;
+            }
+
+            AddressAdapter adapter = new AddressAdapter(order, "Ship");
+
+            switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
+            {
+                case AddressValidationStatusType.Valid:
+                case AddressValidationStatusType.NotChecked:
+                case AddressValidationStatusType.Pending:
+                    return string.Empty;
+                case AddressValidationStatusType.Adjusted:
+                case AddressValidationStatusType.NeedsAttention:
+                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.SuggestedSelected:
+                    return string.Format("{0} Suggestion{1}", adapter.AddressValidationSuggestionCount, adapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.WillNotValidate:
+                case AddressValidationStatusType.Error:
+                    return string.IsNullOrEmpty(adapter.AddressValidationError) ? string.Empty : "Details...";
+                default:
+                    return string.Empty;
+            }
+        }
         /// <summary>
         /// Display the list of available addresses
         /// </summary>

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.Common.Threading;
