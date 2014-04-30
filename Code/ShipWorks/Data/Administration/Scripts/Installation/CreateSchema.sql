@@ -4619,6 +4619,26 @@ CREATE TABLE [dbo].[ThreeDCartStore] (
 
 
 GO
+PRINT N'Creating [dbo].[UpdateQueue]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[UpdateQueue] (
+    [UpdateQueueID]             INT           IDENTITY (1, 1) NOT NULL,
+    [UpdateDatabaseProcessType] VARCHAR (200) NOT NULL,
+    PRIMARY KEY CLUSTERED ([UpdateQueueID] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
 PRINT N'Creating [dbo].[UpsAccount]...';
 
 
