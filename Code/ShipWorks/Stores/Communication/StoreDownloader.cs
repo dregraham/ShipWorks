@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
 using log4net;
@@ -310,7 +311,7 @@ namespace ShipWorks.Stores.Communication
                 order.RollupItemTotalWeight = 0;
                 
                 order.ShipSenseHashKey = string.Empty;
-                order.ShipSensible = false;
+                order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
             }
 
             return order;

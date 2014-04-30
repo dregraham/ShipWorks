@@ -15,13 +15,15 @@ public partial class Triggers
         {
             con.Open();
 
+            // Update all orders with the same hash key of the value that was just inserted
+            // to recognized for orders that didn't previously have a status of 1 (Recognized by ShipSense)
             string sql = @"
 	                        UPDATE o
-                            SET o.ShipSensible = 1 
+                            SET o.ShipSenseRecognitionStatus = 1 
                             FROM [Order] o
                                 INNER JOIN inserted i 
                                     ON i.Hash = o.ShipSenseHashKey
-                                        AND o.ShipSensible = 0
+                                        AND o.ShipSenseRecognitionStatus != 1
                         ";
 
             using (SqlCommand sqlCommand = con.CreateCommand())

@@ -935,7 +935,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipSenseHashKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipSensible", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipSenseRecognitionStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -1775,15 +1775,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderFieldIndex.ShipSenseHashKey, value); }
 		}
 
-		/// <summary> The ShipSensible property of the Entity Order<br/><br/>
+		/// <summary> The ShipSenseRecognitionStatus property of the Entity Order<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "Order"."ShipSensible"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "Order"."ShipSenseRecognitionStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ShipSensible
+		public virtual System.Int32 ShipSenseRecognitionStatus
 		{
-			get { return (System.Boolean)GetValue((int)OrderFieldIndex.ShipSensible, true); }
-			set	{ SetValue((int)OrderFieldIndex.ShipSensible, value); }
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipSenseRecognitionStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipSenseRecognitionStatus, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'.
