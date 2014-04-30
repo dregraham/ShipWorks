@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// <summary>
         /// Gets an OrderEntity that doesn't have a ShipSenseHashKey
         /// </summary>
-        public OrderEntity FetchNextOrderOrderToProcess()
+        public OrderEntity FetchNextOrderToProcess()
         {
             if (previousProcessedOrder.OrderID == 0)
             {
@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 previousProcessedOrder = new OrderEntity(shipment.OrderID);
             }
 
-            return FetchNextOrderOrderToProcess(previousProcessedOrder);
+            return FetchNextOrderToProcess(previousProcessedOrder);
         }
 
 
@@ -190,13 +190,18 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// ensure that you don't get into an infinite loop state
         /// </summary>
         /// <param name="previousOrder">The previous order.</param>
-        private OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder)
+        private OrderEntity FetchNextOrderToProcess(OrderEntity previousOrder)
         {
             OrderEntity orderEntity = null;
 
             RelationPredicateBucket orderBucket = new RelationPredicateBucket();
+            FieldCompareSetPredicate fieldCompareSetPredicate = new FieldCompareSetPredicate(OrderFields.OrderID, null, ShipmentFields.OrderID, null, SetOperator.In, null, null, null, true);
+
+            orderBucket.Relations.Add(OrderEntity.Relations.ShipmentEntityUsingOrderID, JoinHint.Left);
             orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousOrder.OrderID);
             orderBucket.PredicateExpression.Add(OrderFields.ShipSenseHashKey == string.Empty);
+            orderBucket.PredicateExpression.Add(OrderFields.OnlineLastModified >= DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)));
+            orderBucket.PredicateExpression.Add(fieldCompareSetPredicate);
 
             using (OrderCollection orders = new OrderCollection())
             {
@@ -212,6 +217,8 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     }
                 }
             }
+
+            previousProcessedOrder = orderEntity;
 
             return orderEntity;
         }

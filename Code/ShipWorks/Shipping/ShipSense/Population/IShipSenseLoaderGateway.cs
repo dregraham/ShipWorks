@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// <summary>
         /// Gets an OrderEntity that doesn't have a ShipSenseHashKey
         /// </summary>
-        OrderEntity FetchNextOrderOrderToProcess();
+        OrderEntity FetchNextOrderToProcess();
         
         /// <summary>
         /// Saves an OrderEntity
