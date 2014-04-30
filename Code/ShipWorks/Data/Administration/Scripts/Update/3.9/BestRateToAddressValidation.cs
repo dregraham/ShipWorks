@@ -15,6 +15,8 @@ namespace ShipWorks.Data.Administration.Scripts.Update
         /// </summary>
         public void Process()
         {
+            FilterLayoutContext.InitializeForCurrentSession();
+
             FilterNodeEntity orderNode = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
 
             FilterNodeEntity examplesNode = orderNode.ChildNodes.FirstOrDefault(filter => filter.Filter.Name == "Examples");

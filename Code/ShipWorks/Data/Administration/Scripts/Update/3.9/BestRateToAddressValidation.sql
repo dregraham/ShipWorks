@@ -495,9 +495,9 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_5c8f4eb25b324b44825c75c253f0b4b8] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863d] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Order_82327358cd3841fc8976877f36996172] DEFAULT N'' FOR [ShipAddressValidationError];
+    ADD CONSTRAINT [SD_Order_a602cb6e57234da8beb0b577d53ba52c] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_12741030a06545c4865b72d1283f9cab] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Order_bc03748cd7e644648ca5b705d515169b] DEFAULT N'' FOR [ShipAddressValidationError];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -565,7 +565,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_5c8f4eb25b324b44825c75c253f0b4b8], CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863d], CONSTRAINT [SD_Order_82327358cd3841fc8976877f36996172];
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_a602cb6e57234da8beb0b577d53ba52c], CONSTRAINT [SD_Order_12741030a06545c4865b72d1283f9cab], CONSTRAINT [SD_Order_bc03748cd7e644648ca5b705d515169b];
 
 DROP TABLE [dbo].[Order];
 
@@ -881,7 +881,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_18c30daa7456438397c257612bab1a55] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -921,7 +921,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_18c30daa7456438397c257612bab1a55];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033];
 
 DROP TABLE [dbo].[Store];
 
@@ -966,6 +966,26 @@ CREATE TABLE [dbo].[Address] (
     [PostalCode]    NVARCHAR (20) NOT NULL,
     [CountryCode]   NVARCHAR (50) NOT NULL,
     CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UpdateQueue]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[UpdateQueue] (
+    [UpdateQueueID]             INT           IDENTITY (1, 1) NOT NULL,
+    [UpdateDatabaseProcessType] VARCHAR (200) NOT NULL,
+    PRIMARY KEY CLUSTERED ([UpdateQueueID] ASC)
 );
 
 

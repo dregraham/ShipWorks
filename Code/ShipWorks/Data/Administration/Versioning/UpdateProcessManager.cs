@@ -28,30 +28,24 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
-        /// Enqueues the update process.
+        /// Deletes the update process from queue.
         /// </summary>
-        /// <param name="processName">Name of the process.</param>
-        public static void EnqueueUpdateProcess(string processName)
+        public static void DeleteUpdateProcessFromQueue(UpdateQueueEntity updateQueueEntity)
         {
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                sqlAdapter.SaveEntity(new UpdateQueueEntity() { UpdateDatabaseProcessType = processName });
+               sqlAdapter.DeleteEntity(updateQueueEntity);
             }
         }
 
         /// <summary>
-        /// Deletes the update process from queue.
+        /// Gets the update process count.
         /// </summary>
-        public static void DeleteUpdateProcessFromQueue(int updateQueueID)
+        public static int GetUpdateProcessCount()
         {
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                UpdateQueueEntity updateQueueEntity = ((new LinqMetaData(sqlAdapter))).UpdateQueue.FirstOrDefault(q => q.UpdateQueueID == updateQueueID);
-                if (updateQueueEntity == null)
-                {
-                    throw new InvalidOperationException(string.Format("Update Process with ID '{0}' not found.", updateQueueID));
-                }
-                sqlAdapter.DeleteEntity(updateQueueEntity);
+                return ((new LinqMetaData(sqlAdapter))).UpdateQueue.Count();
             }
         }
 

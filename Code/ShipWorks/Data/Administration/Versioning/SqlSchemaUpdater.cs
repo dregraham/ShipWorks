@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Transactions;
 using Interapptive.Shared.Data;
+using Microsoft.Web.Services3.Referral;
 using NDesk.Options;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Scripts.Update;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Users.Audit;
 using log4net;
@@ -33,7 +36,8 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
-            return GetDatabaseSchemaVersion().Compare((new SchemaVersionManager()).GetRequiredSchemaVersion()) == SchemaVersionComparisonResult.Equal;
+            return GetDatabaseSchemaVersion().Compare((new SchemaVersionManager()).GetRequiredSchemaVersion()) == SchemaVersionComparisonResult.Equal
+                && UpdateProcessManager.GetUpdateProcessCount() == 0;
         }
 
         /// <summary>
@@ -76,6 +80,10 @@ namespace ShipWorks.Data.Administration.Versioning
             progressScripts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressScripts);
 
+            ProgressItem progressProcesses = new ProgressItem("Programatic Updates");
+            progressProcesses.CanCancel = false;
+            progressProvider.ProgressItems.Add(progressProcesses);
+
             // Create the functionality item
             ProgressItem progressFunctionality = new ProgressItem("Update Functionality");
             progressFunctionality.CanCancel = false;
@@ -93,6 +101,9 @@ namespace ShipWorks.Data.Administration.Versioning
                         {
                             // Update the tables
                             UpdateScripts(fromVersion, toVersion, progressScripts);
+
+                            // Run Update Processes
+                            UpdateProcesses(progressProcesses);
 
                             // Functionality starting
                             progressFunctionality.Starting();
@@ -141,6 +152,36 @@ namespace ShipWorks.Data.Administration.Versioning
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Run the update processes in the UpdateQueue
+        /// </summary>
+        private static void UpdateProcesses(ProgressItem progress)
+        {
+            progress.Starting();
+            progress.Detail = "Processing updates from Update Queue...";
+
+            int queueCount = UpdateProcessManager.GetUpdateProcessCount();
+
+            for (int i = 1; i <= queueCount; i++)
+            {
+                progress.Detail = string.Format("Processing {0} of {1}", i, queueCount);
+                progress.PercentComplete = Math.Min(100,i/queueCount*100);
+                UpdateQueueEntity updateQueueEntity = UpdateProcessManager.DequeueUpdateProcess();
+                using (TransactionScope transactionScope = new TransactionScope())
+                {
+
+                    IUpdateDatabaseProcess updateDatabaseProcess = UpdateProcessManager.GetUpdateProcess(updateQueueEntity);
+                    updateDatabaseProcess.Process();
+                    UpdateProcessManager.DeleteUpdateProcessFromQueue(updateQueueEntity);
+                    transactionScope.Complete();
+                }
+            }
+
+            progress.PercentComplete = 100;
+            progress.Detail = "Done";
+            progress.Completed();
         }
 
         /// <summary>
@@ -210,6 +251,11 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         private static void UpdateScripts(SchemaVersion fromVersion, SchemaVersion toVersion, ProgressItem progress)
         {
+            if (fromVersion.Compare(toVersion) == SchemaVersionComparisonResult.Equal)
+            {
+                return;
+            }
+
             progress.Starting();
             progress.Detail = "Preparing...";
 
@@ -262,7 +308,7 @@ namespace ShipWorks.Data.Administration.Versioning
                         }
                         
                         // Update the progress
-                        progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.BatchCount)));
+                        progress.PercentComplete = percentComplete;
                     };
 
                     // Run all the batches in the script
