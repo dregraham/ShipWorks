@@ -892,7 +892,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_18c30daa7456438397c257612bab1a55] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -932,7 +932,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_18c30daa7456438397c257612bab1a55];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033];
 
 DROP TABLE [dbo].[Store];
 
@@ -981,6 +981,25 @@ CREATE TABLE [dbo].[Address] (
     [InternationalTerritory] INT           NOT NULL, 
     [MilitaryAddress]        INT           NOT NULL, 
     CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
+GO
+PRINT N'Creating [dbo].[UpdateQueue]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[UpdateQueue] (
+    [UpdateQueueID]             INT           IDENTITY (1, 1) NOT NULL,
+    [UpdateDatabaseProcessType] VARCHAR (200) NOT NULL,
+    PRIMARY KEY CLUSTERED ([UpdateQueueID] ASC)
 );
 
 

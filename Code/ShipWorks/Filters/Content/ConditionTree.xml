@@ -77,6 +77,7 @@
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
+        <Condition identifier="Order.AddressValidationStatus" />
         <Separator />
         <Condition identifier="Order.Emailed" displayAs="Emailed With" />
         <Condition identifier="Order.Printed" displayAs="Printed With" />

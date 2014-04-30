@@ -44,11 +44,11 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         /// <param name="fromVersion">The installed version.</param>
         /// <param name="toVersion">The target version.</param>
-        public List<VersionAndScriptName> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> shipWorksVersions)
+        public List<VersionUpgradeStep> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> shipWorksVersions)
         {
             if (toVersion == fromVersion)
             {
-                return new List<VersionAndScriptName>();
+                return new List<VersionUpgradeStep>();
             }
 
             foreach (var shipWorksVersion in shipWorksVersions)
@@ -72,9 +72,11 @@ namespace ShipWorks.Data.Administration.Versioning
 
             if (tryGetPaths(fromVersion.VersionName, out path))
             {
-                return path.Reverse().Select(version => new VersionAndScriptName()
+                return path.Reverse().Select(version => new VersionUpgradeStep()
                 {
-                    Version = version.Source, Script = shipWorksVersions.First(x => x.To == version.Source).GetScriptName(version.Target)
+                    Version = version.Source, 
+                    Script = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetScriptName(version.Target),
+                    Process = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetUpdateProcessName(version.Target)
                 })
                 .ToList();
             }
@@ -88,13 +90,13 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         /// <param name="targetVersion">Version to upgrade to.</param>
         /// <param name="versionsToUpgrade">The first version passed in is the preferred version.</param>
-        private void AddVersion(string targetVersion, IEnumerable<VersionAndScriptName> versionsToUpgrade)
+        private void AddVersion(string targetVersion, IEnumerable<VersionUpgradeStep> versionsToUpgrade)
         {
             graph.AddVertex(targetVersion);
 
             int edgeCost = 0;
 
-            foreach (VersionAndScriptName versionToUpgrade in versionsToUpgrade)
+            foreach (VersionUpgradeStep versionToUpgrade in versionsToUpgrade)
             {
                 Edge<string> edge = new Edge<string>(targetVersion, versionToUpgrade.Version);
 

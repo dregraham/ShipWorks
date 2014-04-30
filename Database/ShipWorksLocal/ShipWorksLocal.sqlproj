@@ -835,6 +835,7 @@
       <AnsiNulls>Off</AnsiNulls>
     </Build>
     <Build Include="Tables\Address.sql" />
+    <Build Include="Tables\UpdateQueue.sql" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ShipWorks.SqlServer">

@@ -29,6 +29,15 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
+        /// Copies existing SqlUpdateScript into a new one. This helps with a linq join.
+        /// </summary>
+        public SqlUpdateScript(SqlUpdateScript script)
+        {
+            schemaVersion = script.schemaVersion;
+            scriptName = script.scriptName;
+        }
+
+        /// <summary>
         /// The ShipWorks database schema version number
         /// </summary>
         public string SchemaVersion
@@ -43,5 +52,11 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             get { return scriptName; }
         }
+
+        /// <summary>
+        /// Gets the name of the update process.
+        /// </summary>
+        public string UpdateProcessName { get; set; }
+
     }
 }

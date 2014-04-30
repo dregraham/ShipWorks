@@ -50,14 +50,19 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             VersionGraph versionGraph = new VersionGraph();
 
-            List<VersionAndScriptName> upgradePath = versionGraph.GetUpgradePath(fromVersion, toVersion, allVersions);
+            List<VersionUpgradeStep> upgradePath = versionGraph.GetUpgradePath(fromVersion, toVersion, allVersions);
 
             List<SqlUpdateScript> scripts = GetAllScripts();
 
 			// select s
 			// from upgradePath up
 			// inner join scripts s on up.scriptname = s.schemaversion 
-			return upgradePath.Join(scripts, up => up.Version, s => s.SchemaVersion, (s, script) => script).ToList();			
+            return upgradePath.Join(scripts, 
+                up => up.Version, 
+                s => s.SchemaVersion, 
+                (versionUpgradeStep, updateScript) => new SqlUpdateScript(updateScript) { UpdateProcessName = versionUpgradeStep.Process })
+                .ToList();
+
         }
 
         /// <summary>

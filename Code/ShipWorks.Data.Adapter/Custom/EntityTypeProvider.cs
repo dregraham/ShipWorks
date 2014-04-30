@@ -183,6 +183,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
 				case "AddressEntity": return EntityType.AddressEntity;
 				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
+				case "UpdateQueueEntity": return EntityType.UpdateQueueEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

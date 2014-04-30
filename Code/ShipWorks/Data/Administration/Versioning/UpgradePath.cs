@@ -15,7 +15,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         public UpgradePath()
         {
-            From = new List<VersionAndScriptName>();    
+            From = new List<VersionUpgradeStep>();    
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// The version we will upgrade From.
         /// </summary>
-        public List<VersionAndScriptName> From
+        public List<VersionUpgradeStep> From
         {
             get;
             private set;
@@ -52,11 +52,21 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <exception cref="System.NotImplementedException"></exception>
         internal string GetScriptName(string FromVersion)
         {
-            VersionAndScriptName selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
 
             return String.IsNullOrEmpty(selectedFromVersion.Script) ? 
                 String.Format("{0}To{1}", selectedFromVersion.Version, To) : 
                 selectedFromVersion.Script;
+        }
+
+        /// <summary>
+        /// Gets the name of the update process.
+        /// </summary>
+        public string GetUpdateProcessName(string FromVersion)
+        {
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
+
+            return selectedFromVersion.Process;
         }
     }
 }

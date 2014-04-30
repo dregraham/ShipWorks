@@ -1168,6 +1168,12 @@
     <Compile Include=".\RelationClasses\ValidatedAddressRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\EntityClasses\UpdateQueueEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\UpdateQueueRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\interapptive_public.snk" />
