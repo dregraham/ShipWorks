@@ -163,45 +163,19 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
         }
 
-        /// <summary>
-        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey
+        /// <summary>        
+        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey. 
         /// </summary>
         public OrderEntity FetchNextOrderToProcess()
-        {
-            if (previousProcessedOrder.OrderID == 0)
-            {
-                // We haven't processed any orders yet, so grab the first order based on the 
-                // ShippingSettings.ShipSenseProcessedShipmentID value
-                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
-
-                ShipmentEntity shipment = new ShipmentEntity(shippingSettings.ShipSenseProcessedShipmentID);
-                shipment = (ShipmentEntity)DataProvider.GetEntity(shipment.ShipmentID);
-
-                previousProcessedOrder = new OrderEntity(shipment.OrderID);
-            }
-
-            return FetchNextOrderToProcess(previousProcessedOrder);
-        }
-
-
-        /// <summary>
-        /// Gets an OrderEntity that doesn't have a ShipSenseHashKey and is not the same as the previous order. 
-        /// This overload is useful when you want to bypass the previous order if it is returned again, 
-        /// ensure that you don't get into an infinite loop state
-        /// </summary>
-        /// <param name="previousOrder">The previous order.</param>
-        private OrderEntity FetchNextOrderToProcess(OrderEntity previousOrder)
         {
             OrderEntity orderEntity = null;
 
             RelationPredicateBucket orderBucket = new RelationPredicateBucket();
-            FieldCompareSetPredicate fieldCompareSetPredicate = new FieldCompareSetPredicate(OrderFields.OrderID, null, ShipmentFields.OrderID, null, SetOperator.In, null, null, null, true);
 
-            orderBucket.Relations.Add(OrderEntity.Relations.ShipmentEntityUsingOrderID, JoinHint.Left);
-            orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousOrder.OrderID);
+            // Grab all orders from the last 30 days that don't have a ShipSenseHashKey set
+            orderBucket.PredicateExpression.Add(OrderFields.OrderID > previousProcessedOrder.OrderID);
             orderBucket.PredicateExpression.Add(OrderFields.ShipSenseHashKey == string.Empty);
             orderBucket.PredicateExpression.Add(OrderFields.OnlineLastModified >= DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)));
-            orderBucket.PredicateExpression.Add(fieldCompareSetPredicate);
 
             using (OrderCollection orders = new OrderCollection())
             {
