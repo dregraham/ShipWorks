@@ -84,6 +84,8 @@ namespace ShipWorks.AddressValidation
                     }
                 }
 
+                adapter.AddressValidationSuggestionCount = suggestedAddresses.Count;
+
                 if (suggestedAddresses.Count > 0)
                 {
                     saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));

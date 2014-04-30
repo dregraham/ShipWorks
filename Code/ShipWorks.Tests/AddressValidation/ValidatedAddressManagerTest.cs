@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveOrderAddress_DoesNotCallSave_WhenAddressIsNull()
         {
-            ValidatedAddressManager.SaveOrderAddress(dataAccess.Object, testOrder, null, true);
+            ValidatedAddressManager.SaveEntityAddress(dataAccess.Object, testOrder.OrderID, null, true);
             dataAccess.Verify(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()), Times.Never);
         }
 
@@ -226,7 +226,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
                 .Callback<IEntity2>(x => savedEntity = x as ValidatedAddressEntity);
-            ValidatedAddressManager.SaveOrderAddress(dataAccess.Object, testOrder, testAddress, true);
+            ValidatedAddressManager.SaveEntityAddress(dataAccess.Object, testOrder.OrderID, testAddress, true);
             
             Assert.AreEqual(testOrder.OrderID, savedEntity.ConsumerID);
             Assert.AreEqual(testAddress, savedEntity);

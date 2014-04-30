@@ -3222,15 +3222,18 @@ namespace ShipWorks
                 return;
             }
 
-            // Show the shipping window.  The Tag property hold the value of whether we are shipping or tracking.
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, (bool) ((ShipmentsLoader) sender).Tag))
+            ValidatedAddressManager.ValidateShipments(this, e.Shipments, () =>
             {
-                dlg.ShowDialog(this);
+                // Show the shipping window.  The Tag property hold the value of whether we are shipping or tracking.
+                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, (bool)((ShipmentsLoader)sender).Tag))
+                {
+                    dlg.ShowDialog(this);
 
-                // We always check for new server messages after shipping, since if there was a shipping problem
-                // it could be we put out a server message related to it.
-                DashboardManager.DownloadLatestServerMessages();
-            }
+                    // We always check for new server messages after shipping, since if there was a shipping problem
+                    // it could be we put out a server message related to it.
+                    DashboardManager.DownloadLatestServerMessages();
+                }    
+            });
         }
 
         /// <summary>

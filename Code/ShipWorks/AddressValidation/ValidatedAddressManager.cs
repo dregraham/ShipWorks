@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
@@ -96,7 +101,7 @@ namespace ShipWorks.AddressValidation
             RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
             validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
             validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
-            adapter.DeleteEntitiesDirectly(typeof (ValidatedAddressEntity), validatedAddressDeleteBucket);
+            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
         }
 
         /// <summary>
@@ -133,22 +138,23 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalShippingAddress">The address of the order before any changes were made to it</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress,
+            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
         {
             DeleteExistingAddresses(dataAccess, order.OrderID);
-            SaveOrderAddress(dataAccess, order, enteredAddress, true);
+            SaveEntityAddress(dataAccess, order.OrderID, enteredAddress, true);
 
             List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
 
             foreach (ValidatedAddressEntity address in suggestedAddressList)
             {
-                SaveOrderAddress(dataAccess, order, address, false);
+                SaveEntityAddress(dataAccess, order.OrderID, address, false);
             }
 
             // Unless concurency for this type has been set elsewhere, set the order up to use optimistic concurrency
             if (order.ConcurrencyPredicateFactoryToUse == null)
             {
-                order.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();   
+                order.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();
             }
 
             order.ShipAddressValidationSuggestionCount = suggestedAddressList.Count();
@@ -160,7 +166,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save a validated address
         /// </summary>
-        public static void SaveOrderAddress(IAddressValidationDataAccess dataAccess, OrderEntity order, ValidatedAddressEntity address, bool isOriginalAddress)
+        public static void SaveEntityAddress(IAddressValidationDataAccess dataAccess, long entityId, ValidatedAddressEntity address, bool isOriginalAddress)
         {
             // If the address is null, we obviously don't need to save it
             if (address == null)
@@ -168,10 +174,61 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            address.ConsumerID = order.OrderID;
+            address.ConsumerID = entityId;
             address.IsOriginal = isOriginalAddress;
 
             dataAccess.SaveEntity(address);
+        }
+
+        /// <summary>
+        /// Save a shipment that has just been validated
+        /// </summary>
+        /// <param name="adapter">Interface with the database</param>
+        /// <param name="shipment">Shipment that was validated</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        private static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
+            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        {
+            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses);
+        }
+
+        /// <summary>
+        /// Save an entity that has just been validated
+        /// </summary>
+        /// <param name="dataAccess">Interface with the database</param>
+        /// <param name="entity">Entity that was validated</param>
+        /// <param name="enteredAddress">The address entered into the entity, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        public static void SaveValidatedEntity(IAddressValidationDataAccess dataAccess, IEntity2 entity,
+            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        {
+            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "SaveValidatedEntity cannot be called on entities with multiple field keys");
+            long entityId = (long)entity.PrimaryKeyFields.Single().CurrentValue;
+
+            DeleteExistingAddresses(dataAccess, entityId);
+            SaveEntityAddress(dataAccess, entityId, enteredAddress, true);
+
+            List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
+
+            foreach (ValidatedAddressEntity address in suggestedAddressList)
+            {
+                SaveEntityAddress(dataAccess, entityId, address, false);
+            }
+
+            // Ensure that we're using optimistic concurrency with this entity because we don't want to overwrite
+            // changes that may have happened elsewhere
+            IConcurrencyPredicateFactory previousConcurrencyPredicateFactory = entity.ConcurrencyPredicateFactoryToUse;
+            entity.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();
+
+            try
+            {
+                dataAccess.SaveEntity(entity);
+            }
+            finally
+            {
+                entity.ConcurrencyPredicateFactoryToUse = previousConcurrencyPredicateFactory;
+            }
         }
 
         /// <summary>
@@ -189,6 +246,108 @@ namespace ShipWorks.AddressValidation
             currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
 
             return false;
-        } 
+        }
+
+        /// <summary>
+        /// Validate the selected list of shipments
+        /// </summary>
+        public static void ValidateShipments(Control owner, List<ShipmentEntity> shipments, Action onCompleted)
+        {
+            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(owner, "Validating Shipment Addresses", "ShipWorks is validating the shipment addresses.", "Shipment {0} of {1}");
+
+            // Code to execute once background load is complete
+            executor.ExecuteCompleted += (sender, args) => onCompleted();
+
+            AddressValidator validator = new AddressValidator();
+
+            // Code to execute for each shipment
+            executor.ExecuteAsync((shipment, state, issueAdder) =>
+            {
+                ValidateShipment(shipment, validator, true);
+            }, shipments, null); // Execute the code for each shipment
+        }
+
+        /// <summary>
+        /// Validates an individual shipment
+        /// </summary>
+        /// <param name="shipment">Shipment to validate</param>
+        /// <param name="validator">Address validator to use</param>
+        /// <param name="retryOnConcurrencyException">Should the validation be retried if there is a concurrency exception</param>
+        private static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator, bool retryOnConcurrencyException)
+        {
+            AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");
+
+            // If the shipment address is anything but pending, we don't need to do anything
+            if (shipmentAdapter.AddressValidationStatus != (int) AddressValidationStatusType.Pending)
+            {
+                return;
+            }
+
+            OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+            if (order == null)
+            {
+                return;
+            }
+
+            StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
+            if (store == null || !ShouldAutoValidate(store))
+            {
+                // If we can't find the store or if its not set up for auto-validation, we shouldn't do any validation
+                return;
+            }
+
+            bool canApplyChanges = store.AddressValidationSetting ==
+                                    (int)AddressValidationStoreSettingType.ValidateAndApply;
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                try
+                {
+                    AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
+
+                    if (orderAdapter == shipmentAdapter)
+                    {
+                        // Since the order and shipment addresses match, validate the order and let propagation take care of updating the shipment
+                        AddressAdapter originalShippingAddress = new AddressAdapter();
+                        orderAdapter.CopyTo(originalShippingAddress);
+
+                        validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                        {
+                            SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
+
+                            // Validating the order and letting its address propagate means that the current instance of the shipment
+                            // won't reflect the changes, so we need to reload it
+                            adapter.FetchEntity(shipment);
+                        });
+                    }
+                    else
+                    {
+                        // Since the addresses don't match, just validate the shipment
+                        validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                            SaveValidatedEntity(adapter, shipment, originalAddress, suggestedAddresses));
+                    }
+                }
+                catch (ORMConcurrencyException)
+                {
+                    if (retryOnConcurrencyException)
+                    {
+                        // Reload the shipment before we retry validation so that we reflect the changes that caused
+                        // the concurrency exception
+                        adapter.FetchEntity(shipment);
+                        ValidateShipment(shipment, validator, false);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the specified store is set up for auto-validation
+        /// </summary>
+        private static bool ShouldAutoValidate(StoreEntity store)
+        {
+            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
+            return setting == AddressValidationStoreSettingType.ValidateAndApply ||
+                   setting == AddressValidationStoreSettingType.ValidateAndNotify;
+        }
     }
 }
