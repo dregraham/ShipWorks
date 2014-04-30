@@ -479,10 +479,10 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
     [ShipAddressValidationSuggestionCount] INT            NOT NULL,
     [ShipAddressValidationStatus]          INT            NOT NULL,
     [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
-	[ShipResidentialStatus]				   INT            NOT NULL, 
-    [ShipPOBox]                            INT            NOT NULL, 
-    [ShipInternationalTerritory]           INT            NOT NULL, 
-    [ShipMilitaryAddress]                  INT            NOT NULL, 
+    [ShipResidentialStatus]                INT            NOT NULL,
+    [ShipPOBox]                            INT            NOT NULL,
+    [ShipInternationalTerritory]           INT            NOT NULL,
+    [ShipMilitaryAddress]                  INT            NOT NULL,
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
     [RollupItemCode]                       NVARCHAR (300) NULL,
@@ -499,13 +499,13 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_5c8f4eb25b324b44825c75c253f0b4b8] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863d] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Order_82327358cd3841fc8976877f36996172] DEFAULT N'' FOR [ShipAddressValidationError],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e1235168641] DEFAULT 0 FOR [ShipResidentialStatus],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863e] DEFAULT 0 FOR [ShipPOBox],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863f] DEFAULT 0 FOR [ShipInternationalTerritory],
-        CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e1235168640] DEFAULT 0 FOR [ShipMilitaryAddress];
+    ADD CONSTRAINT [SD_Order_0f52f99f9659476da5e920346a020691] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_1273b6f3e49a4e21b044dfc3afcc5342] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Order_799bd9e4dba1450190228481acac4f21] DEFAULT N'' FOR [ShipAddressValidationError],
+        CONSTRAINT [SD_Order_3d12e5eefde64ae1bdcafcaeebf2a73a] DEFAULT 0 FOR [ShipResidentialStatus],
+        CONSTRAINT [SD_Order_31c349d6fd4048478de6074b7831a598] DEFAULT 0 FOR [ShipPOBox],
+        CONSTRAINT [SD_Order_6e2c84f9e2a144a380f8920f27609bb3] DEFAULT 0 FOR [ShipInternationalTerritory],
+        CONSTRAINT [SD_Order_ea0b8eb2af29490a83721a7617082916] DEFAULT 0 FOR [ShipMilitaryAddress];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -573,10 +573,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_5c8f4eb25b324b44825c75c253f0b4b8], CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863d], 
-	CONSTRAINT [SD_Order_82327358cd3841fc8976877f36996172], CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e1235168641],
-	CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863e], CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e123516863f],
-	CONSTRAINT [SD_Order_88f5d95051dc441ea8a24e1235168640];
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_0f52f99f9659476da5e920346a020691], CONSTRAINT [SD_Order_1273b6f3e49a4e21b044dfc3afcc5342], CONSTRAINT [SD_Order_799bd9e4dba1450190228481acac4f21], CONSTRAINT [SD_Order_3d12e5eefde64ae1bdcafcaeebf2a73a], CONSTRAINT [SD_Order_31c349d6fd4048478de6074b7831a598], CONSTRAINT [SD_Order_6e2c84f9e2a144a380f8920f27609bb3], CONSTRAINT [SD_Order_ea0b8eb2af29490a83721a7617082916];
 
 DROP TABLE [dbo].[Order];
 
@@ -892,7 +889,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_caa924fbda3940b69f076fe770b3c38e] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -932,7 +929,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_37cfe77e68f94ee38e4f780ba5b13033];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_caa924fbda3940b69f076fe770b3c38e];
 
 DROP TABLE [dbo].[Store];
 
@@ -968,19 +965,20 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[Address] (
-    [AddressID]	    		 BIGINT        IDENTITY (1101, 1000) NOT NULL,
-    [Street1]		    	 NVARCHAR (60) NOT NULL,
-    [Street2]		    	 NVARCHAR (60) NOT NULL,
-    [Street3]		         NVARCHAR (60) NOT NULL,
+    [AddressID]              BIGINT        IDENTITY (1101, 1000) NOT NULL,
+    [Street1]                NVARCHAR (60) NOT NULL,
+    [Street2]                NVARCHAR (60) NOT NULL,
+    [Street3]                NVARCHAR (60) NOT NULL,
     [City]                   NVARCHAR (50) NOT NULL,
     [StateProvCode]          NVARCHAR (50) NOT NULL,
     [PostalCode]             NVARCHAR (20) NOT NULL,
     [CountryCode]            NVARCHAR (50) NOT NULL,
-	[ResidentialStatus]      INT           NOT NULL, 
-    [POBox]                  INT           NOT NULL, 
-    [InternationalTerritory] INT           NOT NULL, 
-    [MilitaryAddress]        INT           NOT NULL, 
+    [ResidentialStatus]      INT           NOT NULL,
+    [POBox]                  INT           NOT NULL,
+    [InternationalTerritory] INT           NOT NULL,
+    [MilitaryAddress]        INT           NOT NULL,
     CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
+);
 
 
 GO
