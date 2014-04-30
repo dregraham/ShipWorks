@@ -66,7 +66,7 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
 
-            return selectedFromVersion.Script;
+            return selectedFromVersion.Process;
         }
     }
 }

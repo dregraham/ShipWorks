@@ -76,7 +76,7 @@ namespace ShipWorks.Data.Administration.Versioning
                 {
                     Version = version.Source, 
                     Script = shipWorksVersions.First(x => x.To == version.Source).GetScriptName(version.Target),
-                    UpgradeProcess = shipWorksVersions.First(x => x.To == version.Source).GetUpdateProcessName(version.Target)
+                    Process = shipWorksVersions.First(x => x.To == version.Source).GetUpdateProcessName(version.Target)
                 })
                 .ToList();
             }

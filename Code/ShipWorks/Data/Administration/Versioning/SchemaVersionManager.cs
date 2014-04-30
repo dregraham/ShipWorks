@@ -57,7 +57,11 @@ namespace ShipWorks.Data.Administration.Versioning
 			// select s
 			// from upgradePath up
 			// inner join scripts s on up.scriptname = s.schemaversion 
-            return upgradePath.Join(scripts, up => up.Version, s => s.SchemaVersion, (s, script) => new SqlUpdateScript(script) { UpdateProcessName = s.UpgradeProcess }).ToList();
+            return upgradePath.Join(scripts, 
+                up => up.Version, 
+                s => s.SchemaVersion, 
+                (versionUpgradeStep, updateScript) => new SqlUpdateScript(updateScript) { UpdateProcessName = versionUpgradeStep.Process })
+                .ToList();
 
         }
 
