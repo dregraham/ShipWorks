@@ -74,12 +74,13 @@ namespace ShipWorks.Shipping.ShipSense.Population
         private void UpdateOrderHashes()
         {
             OrderEntity order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
+
             while (order != null)
             {
                 OrderUtility.UpdateShipSenseHashKey(order);
                 shipSenseLoaderGateway.SaveOrder(order);
 
-                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess(order);
+                order = shipSenseLoaderGateway.FetchNextOrderOrderToProcess();
             }
         }
 

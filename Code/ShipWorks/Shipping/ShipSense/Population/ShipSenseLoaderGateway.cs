@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Transactions;
 using ShipWorks.Users.Audit;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -25,8 +24,11 @@ namespace ShipWorks.Shipping.ShipSense.Population
     public class ShipSenseLoaderGateway : IShipSenseLoaderGateway
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoaderGateway));
+        
         private SqlConnection connection; 
-        private IKnowledgebase knowledgebase;
+        private readonly IKnowledgebase knowledgebase;
+
+        private OrderEntity previousProcessedOrder;
 
         /// <summary>
         /// Constructor
@@ -34,6 +36,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         public ShipSenseLoaderGateway(IKnowledgebase knowledgebase)
         {
             this.knowledgebase = knowledgebase;
+            previousProcessedOrder = new OrderEntity(0);
         }
 
         /// <summary>
@@ -165,10 +168,19 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         public OrderEntity FetchNextOrderOrderToProcess()
         {
-            // Create an order with an ID of zero to force the gateway to use the first order it
-            // encounters
-            OrderEntity simulatedPreviousOrder = new OrderEntity(0);
-            return FetchNextOrderOrderToProcess(simulatedPreviousOrder);
+            if (previousProcessedOrder.OrderID == 0)
+            {
+                // We haven't processed any orders yet, so grab the first order based on the 
+                // ShippingSettings.ShipSenseProcessedShipmentID value
+                ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+
+                ShipmentEntity shipment = new ShipmentEntity(shippingSettings.ShipSenseProcessedShipmentID);
+                shipment = (ShipmentEntity)DataProvider.GetEntity(shipment.ShipmentID);
+
+                previousProcessedOrder = new OrderEntity(shipment.OrderID);
+            }
+
+            return FetchNextOrderOrderToProcess(previousProcessedOrder);
         }
 
 
@@ -178,7 +190,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// ensure that you don't get into an infinite loop state
         /// </summary>
         /// <param name="previousOrder">The previous order.</param>
-        public OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder)
+        private OrderEntity FetchNextOrderOrderToProcess(OrderEntity previousOrder)
         {
             OrderEntity orderEntity = null;
 
