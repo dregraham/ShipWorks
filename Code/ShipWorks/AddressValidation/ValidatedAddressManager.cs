@@ -141,24 +141,7 @@ namespace ShipWorks.AddressValidation
         public static void SaveValidatedOrder(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress,
             ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
         {
-            DeleteExistingAddresses(dataAccess, order.OrderID);
-            SaveEntityAddress(dataAccess, order.OrderID, enteredAddress, true);
-
-            List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
-
-            foreach (ValidatedAddressEntity address in suggestedAddressList)
-            {
-                SaveEntityAddress(dataAccess, order.OrderID, address, false);
-            }
-
-            // Unless concurency for this type has been set elsewhere, set the order up to use optimistic concurrency
-            if (order.ConcurrencyPredicateFactoryToUse == null)
-            {
-                order.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();
-            }
-
-            order.ShipAddressValidationSuggestionCount = suggestedAddressList.Count();
-            dataAccess.SaveEntity(order);
+            SaveValidatedEntity(dataAccess, order, enteredAddress, suggestedAddresses);
 
             PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalShippingAddress, new AddressAdapter(order, "Ship"));
         }
