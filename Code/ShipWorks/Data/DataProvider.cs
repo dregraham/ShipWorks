@@ -92,7 +92,7 @@ namespace ShipWorks.Data
             entityCache = new EntityCache(changeMonitoredEntityTypes);
             relationCache = new EntityRelationCache(entityCache, executionMode);
 
-            orderHeaderProvider = new OrderHeaderProvider(entityCache);
+            orderHeaderProvider = new OrderHeaderProvider(entityCache, executionMode);
 
             // Listen for local entity saves so we can clear those out of our cache right away
             CommonEntityBase.EntityPersisted += new EntityPersistedEventHandler(OnLocalEntityPersisted);
