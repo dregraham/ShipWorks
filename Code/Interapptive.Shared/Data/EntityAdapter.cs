@@ -48,6 +48,17 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Get the underlying entity, if there is one
+        /// </summary>
+        public IEntity2 Entity
+        {
+            get
+            {
+                return entity;
+            }
+        }
+
+        /// <summary>
         /// Get the value of the field with the given field name.  If no field exists then the default of the type is returned
         /// </summary>
         protected T GetField<T>(string fieldName)

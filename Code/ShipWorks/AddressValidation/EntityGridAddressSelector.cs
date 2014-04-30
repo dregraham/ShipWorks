@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -20,6 +21,23 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class EntityGridAddressSelector
     {
+        private readonly string addressPrefix;
+        private readonly bool saveImmediately;
+
+        public EntityGridAddressSelector() :
+            this("Ship", true)
+        {
+            
+        }
+
+        public EntityGridAddressSelector(string addressPrefix, bool saveImmediately)
+        {
+            this.addressPrefix = addressPrefix;
+            this.saveImmediately = saveImmediately;
+        }
+
+        public event EventHandler AddressSelected;
+
         /// <summary>
         /// Checks whether the validation suggestion hyperlink should be enabled
         /// </summary>
@@ -81,6 +99,7 @@ namespace ShipWorks.AddressValidation
                     return string.Empty;
             }
         }
+
         /// <summary>
         /// Display the list of available addresses
         /// </summary>
@@ -92,12 +111,23 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
+            SandGrid grid = sender as SandGrid;
+            Debug.Assert(grid != null);
+
+            ShowAddressOptionMenu(grid, entity, new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset));
+        }
+
+        /// <summary>
+        /// Display the list of available addresses
+        /// </summary>
+        public void ShowAddressOptionMenu(Control owner, IEntity2 entity, Point displayPosition)
+        {
+            AddressAdapter adapter = new AddressAdapter(entity, addressPrefix);
 
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
-            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
-                adapter.AddressValidationStatus == (int) AddressValidationStatusType.NotValid ||
-                adapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
+            if (adapter.AddressValidationStatus == (int)AddressValidationStatusType.WillNotValidate ||
+                adapter.AddressValidationStatus == (int)AddressValidationStatusType.NotValid ||
+                adapter.AddressValidationStatus == (int)AddressValidationStatusType.Error)
             {
                 MessageHelper.ShowInformation(Program.MainForm, adapter.AddressValidationError);
                 return;
@@ -109,16 +139,13 @@ namespace ShipWorks.AddressValidation
 
             var menu = BuildMenu(entity, originalValidatedAddress, suggestedAddresses);
 
-            SandGrid grid = sender as SandGrid;
-            Debug.Assert(grid != null);
-
-            menu.Show(grid, new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset));
+            menu.Show(owner, displayPosition);
         }
 
         /// <summary>
         /// Build the context menu
         /// </summary>
-        private static ContextMenu BuildMenu(IEntity2 entity, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
+        private ContextMenu BuildMenu(IEntity2 entity, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
@@ -143,7 +170,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create a menu item from a validated address
         /// </summary>
-        private static MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, IEntity2 entity)
+        private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, IEntity2 entity)
         {
             string title = FormatAddress(validatedAddress) + 
                 (validatedAddress.IsOriginal ? " (Original)" : string.Empty);
@@ -171,11 +198,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select an address to copy into the entity's shipping address
         /// </summary>
-        private static void SelectAddress(IEntity2 entity, ValidatedAddressEntity validatedAddressEntity)
+        private void SelectAddress(IEntity2 entity, ValidatedAddressEntity validatedAddressEntity)
         {
             AddressAdapter originalAddress = new AddressAdapter();
 
-            AddressAdapter entityAdapter = new AddressAdapter(entity, "Ship");
+            AddressAdapter entityAdapter = new AddressAdapter(entity, addressPrefix);
             entityAdapter.CopyTo(originalAddress);
             
             AddressAdapter.Copy(validatedAddressEntity, string.Empty, entityAdapter);
@@ -184,19 +211,36 @@ namespace ShipWorks.AddressValidation
                 (int) AddressValidationStatusType.Overridden : 
                 (int) AddressValidationStatusType.SuggestedSelected;
 
-            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            // Don't continue if we don't want to save the changes immediately
+            if (saveImmediately)
             {
-                // If the entity is an order, we need to propagate its address to its shipments
-                OrderEntity order = entity as OrderEntity;
-                if (order != null)
+                using (SqlAdapter sqlAdapter = new SqlAdapter())
                 {
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);    
+                    // If the entity is an order, we need to propagate its address to its shipments
+                    OrderEntity order = entity as OrderEntity;
+                    if (order != null)
+                    {
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);
+                    }
+
+                    sqlAdapter.SaveAndRefetch(entity);
                 }
-                
-                sqlAdapter.SaveAndRefetch(entity);
+
+                Program.MainForm.ForceHeartbeat();
             }
 
-            Program.MainForm.ForceHeartbeat();
+            OnAddressSelected();
+        }
+
+        /// <summary>
+        /// An address was selected
+        /// </summary>
+        private void OnAddressSelected()
+        {
+            if (AddressSelected != null)
+            {
+                AddressSelected(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

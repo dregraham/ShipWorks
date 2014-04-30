@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -84,6 +85,9 @@ namespace ShipWorks.Shipping.Editing
             // service controls (i.e. best rate) can override this as needed 
             RateControl = rateControl;
             RateControl.ShowAllRates = true;
+
+            personControl.EnableValidationControls = true;
+            personControl.AddressSelector = new EntityGridAddressSelector("Ship", false);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared;
 using System.Diagnostics;
@@ -55,6 +56,9 @@ namespace ShipWorks.Data.Controls
 
         // Maps a control to the label that labels it on the form
         Dictionary<Control, Label> labelMap;
+
+        private EntityGridAddressSelector addressSelector;
+        private bool isLoadingEntities;
 
         class ControlFieldMap
         {
@@ -132,7 +136,35 @@ namespace ShipWorks.Data.Controls
             state.TextChanged += this.OnDestinationChanged;
 
             InitializeFieldMappings();
+
+            AddressSelector = new EntityGridAddressSelector("Ship", false);
+            EnableValidationControls = false;
         }
+
+        /// <summary>
+        /// Address selector used by the validator
+        /// </summary>
+        public EntityGridAddressSelector AddressSelector {
+            get
+            {
+                return addressSelector;
+            }
+            set
+            {
+                if (addressSelector != null)
+                {
+                    addressSelector.AddressSelected -= OnAddressSelectorAddressSelected;
+                }
+
+                addressSelector = value;
+                addressSelector.AddressSelected += OnAddressSelectorAddressSelected;
+            }
+        }
+
+        /// <summary>
+        /// Should validation controls be displayed at all for this instance
+        /// </summary>
+        public bool EnableValidationControls { get; set; }
 
         /// <summary>
         /// Initialization
@@ -188,7 +220,9 @@ namespace ShipWorks.Data.Controls
                     new ControlFieldMap(labelName, PersonFields.Name | PersonFields.Company),
                     new ControlFieldMap(fullName, PersonFields.Name),
                     new ControlFieldMap(company, PersonFields.Company),
+                    new ControlFieldMap(addressValidationPanel, PersonFields.All),
                     new ControlFieldMap(labelAddress, PersonFields.Street | PersonFields.City | PersonFields.Street | PersonFields.Postal | PersonFields.Country | PersonFields.Residential),
+                    new ControlFieldMap(addressValidationPanel, PersonFields.All),
                     new ControlFieldMap(street, PersonFields.Street),
                     new ControlFieldMap(city, PersonFields.City),
                     new ControlFieldMap(state, PersonFields.State),
@@ -505,6 +539,8 @@ namespace ShipWorks.Data.Controls
             phone.Text = "";
             fax.Text = "";
             website.Text = "";
+
+            addressValidationPanel.Visible = false;
         }
 
         /// <summary>
@@ -531,6 +567,10 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
+            isLoadingEntities = true;
+
+            UpdateValidationDetails();
+
             using (MultiValueScope scope = new MultiValueScope())
             {
                 // Go through each additional person, and see if there are any conflicts
@@ -552,6 +592,8 @@ namespace ShipWorks.Data.Controls
                     website.ApplyMultiText(person.Website);
                 }
             }
+
+            isLoadingEntities = false;
         }
 
         /// <summary>
@@ -853,9 +895,32 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnValueChanged(object sender, EventArgs e)
         {
+            if (!isLoadingEntities &&
+                (sender == street || sender == country || sender == postalCode || sender == state || sender == city))
+            {
+                ResetAddressValidationStatus();
+            }
+
             if (ContentChanged != null)
             {
                 ContentChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Reset the validation details of all addresses
+        /// </summary>
+        private void ResetAddressValidationStatus()
+        {
+            if (loadedPeople != null)
+            {
+                loadedPeople.ForEach(x =>
+                {
+                    x.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+                    x.AddressValidationSuggestionCount = 0;
+                });
+
+                UpdateValidationDetails();
             }
         }
 
@@ -867,6 +932,49 @@ namespace ShipWorks.Data.Controls
             if (DestinationChanged != null)
             {
                 DestinationChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// The address validation suggestions link has been clicked
+        /// </summary>
+        private void OnAddressValidationSuggestionLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (loadedPeople.Count == 1 && AddressSelector != null)
+            {
+                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPeople.Single().Entity, new Point(0, 0));
+            }
+        }
+
+        /// <summary>
+        /// The user has selectd a validated address
+        /// </summary>
+        private void OnAddressSelectorAddressSelected(object sender, EventArgs e)
+        {
+            LoadEntities(loadedPeople);
+        }
+
+        /// <summary>
+        /// Update the validation details from the loaded entities
+        /// </summary>
+        private void UpdateValidationDetails()
+        {
+            if (loadedPeople.Count != 1 || !EnableValidationControls)
+            {
+                addressValidationPanel.Visible = false;
+            }
+            else
+            {
+                PersonAdapter currentPerson = loadedPeople.Single();
+                int currentDistance = addressValidationSuggestionLink.Left - addressValidationStatusText.Right;
+
+                addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType)currentPerson.AddressValidationStatus);
+                addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)currentPerson.AddressValidationStatus);
+                addressValidationSuggestionLink.Text = EntityGridAddressSelector.DisplayValidationSuggestionLabel(currentPerson.Entity);
+                addressValidationSuggestionLink.Enabled = EntityGridAddressSelector.IsValidationSuggestionLinkEnabled(currentPerson.Entity);
+                addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
+
+                addressValidationPanel.Visible = true;
             }
         }
     }
