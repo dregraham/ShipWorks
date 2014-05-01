@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Web;
 using System.Windows.Forms;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -13,6 +14,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -116,8 +118,13 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                     if (!shipmentType.SupportsGetRates)
                     {
+                        RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
+
+                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new RatesNotSupportedFootnoteFactory(new Action<ShipmentTypeCode>(ShipmentTypeSelected)));
+
                         rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
-                                                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
+                                                                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)),
+                                                                rateGroupWithNoRatesFooter);
                     }
                     else
                     {
@@ -134,6 +141,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 rateControl.ClearRates("No shipments are selected.");
             }
+        }
+
+        private void ShipmentTypeSelected(ShipmentTypeCode obj)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

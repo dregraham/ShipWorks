@@ -665,6 +665,13 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
+    <Compile Include="Shipping\Editing\Rating\RatesNotSupportedFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\RatesNotSupportedFootnoteControl.Designer.cs">
+      <DependentUpon>RatesNotSupportedFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\RatesNotSupportedFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\RatesPanel.cs">
       <SubType>UserControl</SubType>
@@ -7076,6 +7083,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.resx">
       <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\RatesNotSupportedFootnoteControl.resx">
+      <DependentUpon>RatesNotSupportedFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
