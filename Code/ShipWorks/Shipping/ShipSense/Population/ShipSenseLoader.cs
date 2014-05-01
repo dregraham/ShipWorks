@@ -73,14 +73,23 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void UpdateOrderHashes()
         {
-            OrderEntity order = shipSenseLoaderGateway.FetchNextOrderToProcess();
+            using (LoggedStopwatch stopwatch = new LoggedStopwatch(log, "OrderHashes"))
+            {                
+                OrderEntity order = shipSenseLoaderGateway.FetchNextOrderToProcess();
 
-            while (order != null)
-            {
-                OrderUtility.UpdateShipSenseHashKey(order);
-                shipSenseLoaderGateway.SaveOrder(order);
+                while (order != null)
+                {
+                    // Update the hash key and set the recognition status to NotRecognized; the second part of the 
+                    // loader will update the status to Recognized if an KB entry gets added that matches the hash.
+                    // This avoid situations where we have orders with a hash key value but still having a status
+                    // of NotApplicable during uploads
+                    OrderUtility.UpdateShipSenseHashKey(order);
+                    order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
 
-                order = shipSenseLoaderGateway.FetchNextOrderToProcess();
+                    shipSenseLoaderGateway.SaveOrder(order);
+
+                    order = shipSenseLoaderGateway.FetchNextOrderToProcess();
+                }
             }
         }
 
@@ -89,13 +98,16 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void AddKnowledgebaseEntries()
         {
-            ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-            while (shipment != null)
+            using (LoggedStopwatch stopwatch = new LoggedStopwatch(log, "KB Entries"))
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-                shipSenseLoaderGateway.Save(shipment);
+                ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                while (shipment != null)
+                {
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+                    shipSenseLoaderGateway.Save(shipment);
 
-                shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                    shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                }
             }
         }
     }
