@@ -125,7 +125,7 @@ GO
 PRINT N'Altering [dbo].[Order][ShipSenseRecognitionStatus]'
 GO
 ALTER TABLE [dbo].[Order]
-	ALTER COLUMN [ShipSenseRecognitionStatus] bit NOT NULL
+	ALTER COLUMN [ShipSenseRecognitionStatus] int NOT NULL
 GO
 
 PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
