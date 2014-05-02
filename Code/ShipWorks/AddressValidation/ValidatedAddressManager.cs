@@ -50,6 +50,12 @@ namespace ShipWorks.AddressValidation
                 if (originalShippingAddress == shipmentAddress)
                 {
                     newShippingAddress.CopyTo(shipmentAddress);
+                    shipmentAddress.AddressValidationStatus = newShippingAddress.AddressValidationStatus;
+                    shipmentAddress.AddressValidationSuggestionCount = newShippingAddress.AddressValidationSuggestionCount;
+                    shipmentAddress.AddressValidationError = newShippingAddress.AddressValidationError;
+
+                    CloneValidatedAddresses(dataAccess, orderID, shipment.ShipmentID);
+
                     dataAccess.SaveEntity(shipment);
                 }
             }
@@ -89,18 +95,6 @@ namespace ShipWorks.AddressValidation
         public static void DeleteAddressesForStore(DataAccessAdapter adapter, long storeId)
         {
             DeleteAddressesInBulk(adapter, OrderFields.StoreID == storeId);
-        }
-
-        /// <summary>
-        /// Bulk delete addresses
-        /// </summary>
-        private static void DeleteAddressesInBulk(DataAccessAdapter adapter, IPredicate predicateToAdd)
-        {
-            // Delete all the validated address entries that match the predicate
-            RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
-            validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
-            validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
-            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
         }
 
         /// <summary>
@@ -160,19 +154,6 @@ namespace ShipWorks.AddressValidation
             address.IsOriginal = isOriginalAddress;
 
             dataAccess.SaveEntity(address);
-        }
-
-        /// <summary>
-        /// Save a shipment that has just been validated
-        /// </summary>
-        /// <param name="adapter">Interface with the database</param>
-        /// <param name="shipment">Shipment that was validated</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        private static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
-            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
-        {
-            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses);
         }
 
         /// <summary>
@@ -243,10 +224,7 @@ namespace ShipWorks.AddressValidation
             AddressValidator validator = new AddressValidator();
 
             // Code to execute for each shipment
-            executor.ExecuteAsync((shipment, state, issueAdder) =>
-            {
-                ValidateShipment(shipment, validator, true);
-            }, shipments, null); // Execute the code for each shipment
+            executor.ExecuteAsync((shipment, state, issueAdder) => ValidateShipment(shipment, validator, true), shipments, null); // Execute the code for each shipment
         }
 
         /// <summary>
@@ -320,6 +298,52 @@ namespace ShipWorks.AddressValidation
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Clone the list of validated addresses from one entity to another
+        /// </summary>
+        private static void CloneValidatedAddresses(IAddressValidationDataAccess dataAccess, long sourceEntityID, long destinationEntityID)
+        {
+            List<ValidatedAddressEntity> addresses = dataAccess.LinqCollections
+                .ValidatedAddress
+                .Where(x => x.ConsumerID == sourceEntityID)
+                .ToList();
+
+            foreach (ValidatedAddressEntity address in addresses)
+            {
+                ValidatedAddressEntity newAddress = new ValidatedAddressEntity();
+                AddressAdapter.Copy(address, newAddress, string.Empty);
+                newAddress.IsOriginal = address.IsOriginal;
+                newAddress.ConsumerID = destinationEntityID;
+
+                dataAccess.SaveEntity(newAddress);
+            }
+        }
+
+        /// <summary>
+        /// Bulk delete addresses
+        /// </summary>
+        private static void DeleteAddressesInBulk(DataAccessAdapter adapter, IPredicate predicateToAdd)
+        {
+            // Delete all the validated address entries that match the predicate
+            RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
+            validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
+            validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
+            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
+        }
+
+        /// <summary>
+        /// Save a shipment that has just been validated
+        /// </summary>
+        /// <param name="adapter">Interface with the database</param>
+        /// <param name="shipment">Shipment that was validated</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        private static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
+            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        {
+            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses);
         }
 
         /// <summary>

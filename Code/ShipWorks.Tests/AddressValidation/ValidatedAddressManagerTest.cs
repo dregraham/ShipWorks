@@ -125,6 +125,15 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
+        public void PropogateAddressChangesToShipments_UpdatesValidationProperties_OnlyOnShipmentWithIdenticalAddress()
+        {
+            ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
+            Assert.AreEqual(newAddress.AddressValidationStatus, shipmentWithOrderAddress.ShipAddressValidationStatus);
+            Assert.AreEqual(newAddress.AddressValidationError, shipmentWithOrderAddress.ShipAddressValidationError);
+            Assert.AreEqual(newAddress.AddressValidationSuggestionCount, shipmentWithOrderAddress.ShipAddressValidationSuggestionCount);
+        }
+
+        [TestMethod]
         public void PropogateAddressChangesToShipments_CallsSave_OnlyOnShipmentWithIdenticalAddress()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
@@ -132,6 +141,19 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOtherAddress), Times.Never);
             dataAccess.Verify(x => x.SaveEntity(shipmentFromOtherOrder), Times.Never);
             dataAccess.Verify(x => x.SaveEntity(shipmentIsProcessed), Times.Never);
+        }
+
+        [TestMethod]
+        public void PropagateAddressChangesToShipments_ClonesOrderValidatedAddresses()
+        {
+            List<ValidatedAddressEntity> savedAddresses = new List<ValidatedAddressEntity>();
+            dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
+                .Callback<IEntity2>(x => savedAddresses.Add(x as ValidatedAddressEntity));
+
+            ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
+
+            Assert.IsTrue(new AddressAdapter(addressForOrder, string.Empty) == new AddressAdapter(savedAddresses[0], string.Empty));
+            Assert.AreEqual(shipmentWithOrderAddress.ShipmentID, savedAddresses[0].ConsumerID);
         }
 
         [TestMethod]
@@ -178,18 +200,6 @@ namespace ShipWorks.Tests.AddressValidation
 
             AssertSavedAddress(savedAddresses, suggestion1, false);
             AssertSavedAddress(savedAddresses, suggestion2, false);
-        }
-
-        [TestMethod]
-        public void SaveValidatedOrder_UpdatesSuggestionCount_WithSuggestedAddresses()
-        {
-            ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
-            ValidatedAddressEntity suggestion1 = new ValidatedAddressEntity();
-            ValidatedAddressEntity suggestion2 = new ValidatedAddressEntity();
-
-            ValidatedAddressManager.SaveValidatedOrder(dataAccess.Object, testOrder, originalAddress, orderAddress, new List<ValidatedAddressEntity> { suggestion1, suggestion2 });
-
-            Assert.AreEqual(2, testOrder.ShipAddressValidationSuggestionCount);
         }
 
         [TestMethod]

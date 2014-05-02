@@ -132,6 +132,18 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [TestMethod]
+        public void Validate_UpdatesSuggestionCount_WithSuggestedAddresses()
+        {
+            //ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
+            //ValidatedAddressEntity suggestion1 = new ValidatedAddressEntity();
+            //ValidatedAddressEntity suggestion2 = new ValidatedAddressEntity();
+
+            testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
+
+            Assert.AreEqual(2, sampleOrder.ShipAddressValidationSuggestionCount);
+        }
+
+        [TestMethod]
         public void Validate_SetsValidationStatusToNotValid_WhenNoResultsAreReturned()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
