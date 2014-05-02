@@ -66,16 +66,17 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
             long endShipmentID = shippingSettings.ShipSenseEndShipmentID;
             long lastProcessedShipmentID = shippingSettings.ShipSenseProcessedShipmentID;
-            
+
             /*         
             SELECT MAX(s.shipmentID)
             FROM 
-                Shipment s WITH(NOLOCK), 
+                Shipment s WITH(NOLOCK)
+            INNER JOIN 
                 [Order] o WITH(NOLOCK)
+            ON s.OrderID = o.OrderID
             WHERE s.shipmentID <= @endShipmentID 
               AND s.ShipmentID > @processedShipmentID 
               AND s.Processed = 1
-              AND s.OrderID = o.OrderID
             GROUP BY o.ShipSenseHashKey  
             ORDER BY MAX(s.shipmentID) ASC       
              */
@@ -93,11 +94,11 @@ namespace ShipWorks.Shipping.ShipSense.Population
             resultFields.DefineField(ShipmentFields.ShipmentID, 0, "ShipmentID", "");
             resultFields[0].AggregateFunctionToApply = AggregateFunction.Max;
 
-            IExpression datePart = new DbFunctionCall("MAX({0})", new object[] { ShipmentFields.ShipmentID });
-            IEntityField2 datePartField = ShipmentFields.ShipmentID.SetExpression(datePart);
+            IExpression shipmentPart = new DbFunctionCall("MAX({0})", new object[] { ShipmentFields.ShipmentID });
+            IEntityField2 shipmentPartField = ShipmentFields.ShipmentID.SetExpression(shipmentPart);
 
-            ISortClause datePartSortClause = new SortClause(datePartField, null, SortOperator.Ascending);
-            SortExpression sort = new SortExpression(datePartSortClause);
+            ISortClause shipmentPartSortClause = new SortClause(shipmentPartField, null, SortOperator.Ascending);
+            SortExpression sort = new SortExpression(shipmentPartSortClause);
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {

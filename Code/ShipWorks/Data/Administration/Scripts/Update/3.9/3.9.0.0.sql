@@ -108,12 +108,12 @@ GO
 -- Add Hash Key column and ShipSenseRecognitionStatus to Order table
 ALTER TABLE [dbo].[Order] ADD
 	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	[ShpSenseRecognitionStatus] int NULL
+	[ShipSenseRecognitionStatus] int NULL
 GO
 
 PRINT N'Updating [dbo].[Order] defaults'
 GO
-update [dbo].[Order] set [ShipSenseHashKey] = '', [ShpSenseRecognitionStatus] = 2
+update [dbo].[Order] set [ShipSenseHashKey] = '', [ShipSenseRecognitionStatus] = 2
 GO
 
 PRINT N'Altering [dbo].[Order][ShipSenseHashKey]'
@@ -122,15 +122,15 @@ ALTER TABLE [dbo].[Order]
 	ALTER COLUMN [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 GO
 
-PRINT N'Altering [dbo].[Order][ShpSenseRecognitionStatus]'
+PRINT N'Altering [dbo].[Order][ShipSenseRecognitionStatus]'
 GO
 ALTER TABLE [dbo].[Order]
-	ALTER COLUMN [ShpSenseRecognitionStatus] bit NOT NULL
+	ALTER COLUMN [ShipSenseRecognitionStatus] int NOT NULL
 GO
 
 PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
 GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShpSenseRecognitionStatus])
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
 GO
 
 PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
