@@ -129,6 +129,14 @@ namespace ShipWorks.Data
                         File.SetLastWriteTime(fullPath, DateTime.Now);
                     }
                 }
+                catch (IOException ex)
+                {
+                    // Just let it go - if its being used, its been touched.
+                    if (!ex.Message.ToUpperInvariant().Contains("being used by another process".ToUpperInvariant()))
+                    {
+                        throw;
+                    }
+                }
                 catch (UnauthorizedAccessException)
                 {
                     // Just let it go - if its being used, its been touched.

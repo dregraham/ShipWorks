@@ -167,13 +167,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 OrderEntity order = shipment.Order;
 
+                // Find the first order item that is a ThreeDCartOrderItemEntity
+                ThreeDCartOrderItemEntity threeDCartOrderItem = order.OrderItems.FirstOrDefault(oi => oi is ThreeDCartOrderItemEntity) as ThreeDCartOrderItemEntity;
+
                 // Get the 3D Cart shipment id from the first 3D Cart order item
-                if (order.OrderItems == null || !order.OrderItems.Any())
+                if (order.OrderItems == null || !order.OrderItems.Any() || threeDCartOrderItem == null)
                 {
                     throw new ThreeDCartException("No items were found on the order.  ShipWorks cannot upload tracking information without items from 3D Cart.");
                 }
 
-                ThreeDCartOrderItemEntity threeDCartOrderItem = (ThreeDCartOrderItemEntity)order.OrderItems.First();
                 long threeDCartShipmentID = threeDCartOrderItem.ThreeDCartShipmentID;
 
                 // Create a 3D Cart fulfillment
