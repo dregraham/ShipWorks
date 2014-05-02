@@ -336,8 +336,8 @@ namespace :db do
 	end
 	
 	desc "Switch the ShipWorks settings to point to a given database"
-	task :switch, :targetDatabase do |t, args|
-		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
+	task :switch, :targetDatabase, :instanceName do |t, args|
+		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""			
 			# A target database was passed in, so update the sql session file
 			
 			# Assume we're in the directory containing the ShipWorks solution - we need to get
@@ -346,11 +346,18 @@ namespace :db do
 			appDirectory = Dir.pwd + "/Artifacts/Application"
 			appDirectory = appDirectory.gsub('/', '\\')
 			
-			instanceGuid = ""
+			instanceName = "(local)\\Development"
 			
+			if args[:instanceName] != nil and args[:instanceName] != ""
+				# Default the instance name to run on the local machine's Development instance if 
+				# none is provided
+				instanceName = args[:instanceName]
+			end
+			
+			instanceGuid = ""		
 			
 			# Read the GUID from the registry, so we know which directory to look in; pass in 
-			# 0x100 to read from 64-bit registry otherwise the key will not be found
+			# 0x100 to read from 64-bit registry otherwise the key will not be found			
 			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
 			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
 				instanceGuid = reg[appDirectory]				
@@ -362,14 +369,15 @@ namespace :db do
 				
 				puts "Updating SQL session file..."			
 				
-				# Replace the current database name with that of our seed database
+				# Replace the current instance and database name with that of the info provided
 				contents = File.read(fileName)				
+				contents = contents.gsub(/<Instance>.*<\/Instance>/, '<Instance>' + instanceName + '</Instance>')
 				contents = contents.gsub(/<Database>[\w]*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
 				
 				# Write the updated SQL session XML back to the file
 				File.open(fileName, 'w') { |file| file.write(contents) }
 				
-				puts "Updating SQL session file is now..."			
+				puts "Updated SQL session file is now..."			
 				puts contents
 			end
 		else
