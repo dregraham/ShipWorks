@@ -157,6 +157,19 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Save a shipment that has just been validated
+        /// </summary>
+        /// <param name="adapter">Interface with the database</param>
+        /// <param name="shipment">Shipment that was validated</param>
+        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
+        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        public static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
+            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        {
+            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses);
+        }
+
+        /// <summary>
         /// Save an entity that has just been validated
         /// </summary>
         /// <param name="dataAccess">Interface with the database</param>
@@ -331,19 +344,6 @@ namespace ShipWorks.AddressValidation
             validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
             validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
             adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
-        }
-
-        /// <summary>
-        /// Save a shipment that has just been validated
-        /// </summary>
-        /// <param name="adapter">Interface with the database</param>
-        /// <param name="shipment">Shipment that was validated</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        private static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
-            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
-        {
-            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses);
         }
 
         /// <summary>

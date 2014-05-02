@@ -5,7 +5,10 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared;
 using System.Diagnostics;
@@ -220,9 +223,7 @@ namespace ShipWorks.Data.Controls
                     new ControlFieldMap(labelName, PersonFields.Name | PersonFields.Company),
                     new ControlFieldMap(fullName, PersonFields.Name),
                     new ControlFieldMap(company, PersonFields.Company),
-                    new ControlFieldMap(addressValidationPanel, PersonFields.All),
-                    new ControlFieldMap(labelAddress, PersonFields.Street | PersonFields.City | PersonFields.Street | PersonFields.Postal | PersonFields.Country | PersonFields.Residential),
-                    new ControlFieldMap(addressValidationPanel, PersonFields.All),
+                    new ControlFieldMap(addressLabelPanel, PersonFields.Street | PersonFields.City | PersonFields.Street | PersonFields.Postal | PersonFields.Country | PersonFields.Residential),
                     new ControlFieldMap(street, PersonFields.Street),
                     new ControlFieldMap(city, PersonFields.City),
                     new ControlFieldMap(state, PersonFields.State),
@@ -976,6 +977,28 @@ namespace ShipWorks.Data.Controls
 
                 addressValidationPanel.Visible = true;
             }
+        }
+
+        /// <summary>
+        /// Address validation link was clicked
+        /// </summary>
+        private void OnValidateAddressLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            BackgroundExecutor<IEntity2> executor = new BackgroundExecutor<IEntity2>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
+
+            // Code to execute once background load is complete
+            executor.ExecuteCompleted += (s, args) => LoadEntities(loadedPeople);
+
+            // Code to execute for each shipment
+            executor.ExecuteAsync((entity, executorState, issueAdder) =>
+            {
+                using (SqlAdapter sqlAdapter = new SqlAdapter())
+                {
+                    AddressValidator validator = new AddressValidator();
+                    validator.Validate(entity, "Ship", true, (addressEntity, entities) =>
+                        ValidatedAddressManager.SaveValidatedEntity(sqlAdapter, entity, addressEntity, entities));   
+                }
+            }, loadedPeople.Select(x => x.Entity), null); // Execute the code for each shipment
         }
     }
 }

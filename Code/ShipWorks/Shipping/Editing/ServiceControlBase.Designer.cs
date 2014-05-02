@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.AddressValidation.EntityGridAddressSelector entityGridAddressSelector1 = new ShipWorks.AddressValidation.EntityGridAddressSelector();
             this.sectionReturns = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.returnsPanel = new System.Windows.Forms.Panel();
             this.returnShipment = new System.Windows.Forms.CheckBox();
@@ -37,17 +38,20 @@
             this.labelResidentialCommercial = new System.Windows.Forms.Label();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.sectionShipment = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
             this.sectionReturns.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.SuspendLayout();
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionReturns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionReturns.Collapsed = true;
             // 
             // sectionReturns.ContentPanel
@@ -65,8 +69,8 @@
             // 
             // returnsPanel
             // 
-            this.returnsPanel.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.returnsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.returnsPanel.AutoSize = true;
             this.returnsPanel.BackColor = System.Drawing.Color.White;
             this.returnsPanel.Location = new System.Drawing.Point(26, 31);
@@ -88,8 +92,8 @@
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionRecipient.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionRecipient.Collapsed = true;
             // 
             // sectionRecipient.ContentPanel
@@ -142,7 +146,7 @@
             // 
             this.labelResidentialCommercial.AutoSize = true;
             this.labelResidentialCommercial.BackColor = System.Drawing.Color.White;
-            this.labelResidentialCommercial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelResidentialCommercial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelResidentialCommercial.Location = new System.Drawing.Point(10, 335);
             this.labelResidentialCommercial.Name = "labelResidentialCommercial";
             this.labelResidentialCommercial.Size = new System.Drawing.Size(149, 13);
@@ -151,17 +155,19 @@
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-                        | ShipWorks.Data.Controls.PersonFields.Street)
-                        | ShipWorks.Data.Controls.PersonFields.City)
-                        | ShipWorks.Data.Controls.PersonFields.State)
-                        | ShipWorks.Data.Controls.PersonFields.Postal)
-                        | ShipWorks.Data.Controls.PersonFields.Country)
-                        | ShipWorks.Data.Controls.PersonFields.Residential)
-                        | ShipWorks.Data.Controls.PersonFields.Email)
-                        | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.personControl.AddressSelector = entityGridAddressSelector1;
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
+            | ShipWorks.Data.Controls.PersonFields.Residential) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.BackColor = System.Drawing.Color.Transparent;
-            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.personControl.EnableValidationControls = false;
+            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(3, 2);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(273, 330);
@@ -170,8 +176,8 @@
             // 
             // sectionShipment
             // 
-            this.sectionShipment.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionShipment.ExtraText = "";
             this.sectionShipment.Location = new System.Drawing.Point(3, 33);
             this.sectionShipment.Name = "sectionShipment";
@@ -188,16 +194,19 @@
             this.Controls.Add(this.sectionShipment);
             this.Controls.Add(this.sectionReturns);
             this.Controls.Add(this.sectionRecipient);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ServiceControlBase";
             this.Size = new System.Drawing.Size(391, 211);
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             this.sectionReturns.ContentPanel.ResumeLayout(false);
             this.sectionReturns.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
             this.ResumeLayout(false);
 
         }
