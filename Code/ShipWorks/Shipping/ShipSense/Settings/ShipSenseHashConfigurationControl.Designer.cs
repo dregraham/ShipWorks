@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panelProperties = new System.Windows.Forms.Panel();
+            this.itemProperties = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseItemPropertyControl();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.toolStripAddRule = new System.Windows.Forms.ToolStrip();
             this.addItemAttributeLine = new System.Windows.Forms.ToolStripButton();
@@ -37,7 +38,6 @@
             this.panelAttributes = new System.Windows.Forms.Panel();
             this.sectionAddressCasing = new ShipWorks.UI.Controls.SectionTitle();
             this.itemPropertiesSection = new ShipWorks.UI.Controls.SectionTitle();
-            this.itemProperties = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseItemPropertyControl();
             this.panelProperties.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.toolStripAddRule.SuspendLayout();
@@ -47,10 +47,17 @@
             // 
             this.panelProperties.BackColor = System.Drawing.Color.White;
             this.panelProperties.Controls.Add(this.itemProperties);
-            this.panelProperties.Location = new System.Drawing.Point(5, 43);
+            this.panelProperties.Location = new System.Drawing.Point(5, 45);
             this.panelProperties.Name = "panelProperties";
-            this.panelProperties.Size = new System.Drawing.Size(479, 236);
+            this.panelProperties.Size = new System.Drawing.Size(479, 231);
             this.panelProperties.TabIndex = 2;
+            // 
+            // itemProperties
+            // 
+            this.itemProperties.Location = new System.Drawing.Point(16, 1);
+            this.itemProperties.Name = "itemProperties";
+            this.itemProperties.Size = new System.Drawing.Size(187, 230);
+            this.itemProperties.TabIndex = 0;
             // 
             // panelBottom
             // 
@@ -98,7 +105,7 @@
             // labelItemPropertiesInstructions
             // 
             this.labelItemPropertiesInstructions.AutoSize = true;
-            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(18, 25);
+            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(18, 28);
             this.labelItemPropertiesInstructions.Name = "labelItemPropertiesInstructions";
             this.labelItemPropertiesInstructions.Size = new System.Drawing.Size(441, 13);
             this.labelItemPropertiesInstructions.TabIndex = 7;
@@ -131,13 +138,6 @@
             this.itemPropertiesSection.Size = new System.Drawing.Size(492, 22);
             this.itemPropertiesSection.TabIndex = 9;
             this.itemPropertiesSection.Text = "Item Properties";
-            // 
-            // itemProperties
-            // 
-            this.itemProperties.Location = new System.Drawing.Point(16, 1);
-            this.itemProperties.Name = "itemProperties";
-            this.itemProperties.Size = new System.Drawing.Size(187, 230);
-            this.itemProperties.TabIndex = 0;
             // 
             // ShipSenseHashConfigurationControl
             // 
