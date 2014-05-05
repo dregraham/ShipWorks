@@ -67,15 +67,40 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void LoadSchemaVersion(SqlDatabaseDetail detail, SqlConnection con)
         {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = "GetSchemaVersion";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            SchemaVersion version = new SchemaVersion((string) SqlCommandProvider.ExecuteScalar(cmd));
+            SchemaVersion version = GetSchemaVersion(con);
 
             detail.schemaVersion = version.VersionName;
 
             detail.status = version.DatabaseStatus;
+        }
+
+        /// <summary>
+        /// Gets the schema version name
+        /// </summary>
+        public static SchemaVersion GetSchemaVersion(SqlConnection con)
+        {
+            string getSchemaVersionToCall = DoesGetNamedSchemaVersionExist(con) ? "GetNamedSchemaVersion" : "GetSchemaVersion";
+
+            SqlCommand cmd = SqlCommandProvider.Create(con);
+            cmd.CommandText = getSchemaVersionToCall;
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
+        }
+
+        /// <summary>
+        /// Determines if GetNamedSchemaVersion exists.
+        /// </summary>
+        private static bool DoesGetNamedSchemaVersionExist(SqlConnection con)
+        {
+            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            {
+                cmd.CommandText = "SELECT count(*) FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[GetNamedSchemaVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1";
+
+                int count = (int)cmd.ExecuteScalar();
+
+                return count > 0;
+            }
         }
 
         /// <summary>

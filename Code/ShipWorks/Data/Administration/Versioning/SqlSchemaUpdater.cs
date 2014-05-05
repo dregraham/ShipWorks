@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Administration.Versioning
             {
                 try
                 {
-                    return GetDatabaseSchemaVersion(con);
+                    return SqlDatabaseDetail.GetSchemaVersion(con);
                 }
                 catch (SqlException ex)
                 {
@@ -213,9 +213,18 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
-        /// Update the schema version stored procedure to say the current schema is the given version
+        /// Updates the named schema version stored procedure.
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, SchemaVersion version)
+        {
+            UpdateSchemaVersionStoredProcedure(con, new SchemaVersion("3.99.9.9"), "GetSchemaVersion");
+            UpdateSchemaVersionStoredProcedure(con, version, "GetNamedSchemaVersion");
+        }
+
+        /// <summary>
+        /// Update the schema version stored procedure to say the current schema is the given version
+        /// </summary>
+        private static void UpdateSchemaVersionStoredProcedure(SqlConnection con, SchemaVersion version, string storedProcName)
         {
             if (version == null)
             {
@@ -224,9 +233,10 @@ namespace ShipWorks.Data.Administration.Versioning
 
             using (SqlCommand cmd = SqlCommandProvider.Create(con))
             {
-                cmd.CommandText = @"
-                IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[GetSchemaVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-                    DROP PROCEDURE [dbo].[GetSchemaVersion]";
+                cmd.CommandText = string.Format(@"
+                IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+                    DROP PROCEDURE [dbo].[{0}]", storedProcName);
+                
                 SqlCommandProvider.ExecuteNonQuery(cmd);
 
 #if DEBUG
@@ -236,10 +246,10 @@ namespace ShipWorks.Data.Administration.Versioning
 #endif
 
                 cmd.CommandText = string.Format(@"
-                CREATE PROCEDURE dbo.GetSchemaVersion 
-                {0}
+                CREATE PROCEDURE dbo.{0} 
+                {1}
                 AS 
-                SELECT '{1}' AS 'SchemaVersion'", withEncryption, version);
+                SELECT '{2}' AS 'SchemaVersion'", storedProcName, withEncryption, version);
                 SqlCommandProvider.ExecuteNonQuery(cmd);
             }
         }
@@ -389,18 +399,6 @@ namespace ShipWorks.Data.Administration.Versioning
             {
                 FilterLayoutContext.PopScope();
             }
-        }
-
-        /// <summary>
-        /// Get the schema version of the ShipWorks database on the given connection
-        /// </summary>
-        public static SchemaVersion GetDatabaseSchemaVersion(SqlConnection con)
-        {
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = "GetSchemaVersion";
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
         }
 
         /// <summary>
