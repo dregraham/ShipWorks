@@ -81,11 +81,13 @@ namespace ShipWorks.Data.Administration
         {
             string getSchemaVersionToCall = DoesGetNamedSchemaVersionExist(con) ? "GetNamedSchemaVersion" : "GetSchemaVersion";
 
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandText = getSchemaVersionToCall;
-            cmd.CommandType = CommandType.StoredProcedure;
+            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            {
+                cmd.CommandText = getSchemaVersionToCall;
+                cmd.CommandType = CommandType.StoredProcedure;
 
-            return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
+                return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
+            }
         }
 
         /// <summary>
