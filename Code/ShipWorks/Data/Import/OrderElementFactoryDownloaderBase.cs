@@ -51,7 +51,7 @@ namespace ShipWorks.Data.Import
         /// </summary>
         NoteEntity IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility)
         {
-            return InstantiateNote(order, noteText, noteDate, noteVisibility);
+            return InstantiateNote(order, noteText, noteDate, noteVisibility, true);
         }
 
         /// <summary>
