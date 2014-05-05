@@ -11,6 +11,9 @@ using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
 {
+    /// <summary>
+    /// Select the country that an Amazon store is in
+    /// </summary>
     public partial class AmazonMwsCountryPage : AddStoreWizardPage
     {
         /// <summary>

@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private void OnGetMerchantID(object sender, EventArgs e)
         {
-            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg())
+            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg(amazonStore.AmazonApiRegion))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
