@@ -127,6 +127,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.readyToGoLabel.Size = new System.Drawing.Size(101, 13);
             this.readyToGoLabel.TabIndex = 1;
             this.readyToGoLabel.Text = "Select Ready To Go";
+            this.readyToGoLabel.Click += OnReadyToGoLabelClicked;
             // 
             // needsAttentionLabel
             // 
@@ -139,6 +140,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.needsAttentionLabel.Size = new System.Drawing.Size(117, 13);
             this.needsAttentionLabel.TabIndex = 1;
             this.needsAttentionLabel.Text = "Select Needs Attention";
+            this.needsAttentionLabel.Click += OnNeedsAttentionLabelClicked;
             // 
             // notValidated
             // 
@@ -151,6 +153,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             this.notValidated.Size = new System.Drawing.Size(103, 13);
             this.notValidated.TabIndex = 1;
             this.notValidated.Text = "Select Not Validated";
+            this.notValidated.Click += OnNotValidatedClicked;
             // 
             // AddressValidationStatusPopup
             // 
