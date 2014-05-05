@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     {
                         RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
 
-                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new RatesNotSupportedFootnoteFactory(new Action<ShipmentTypeCode>(ShipmentTypeSelected)));
+                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
 
                         rateControl.ClearRates(string.Format("The provider \"{0}\" does not support retrieving rates.",
                                                                 EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)),

@@ -8,20 +8,20 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// <summary>
     /// Factory to crate a RateNotSupportedFootnote
     /// </summary>
-    public class RatesNotSupportedFootnoteFactory : IRateFootnoteFactory
+    public class InformationFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly Action<ShipmentTypeCode> shipmentTypeSelected;
+        private readonly string informationText;
 
-        public RatesNotSupportedFootnoteFactory(Action<ShipmentTypeCode> shipmentTypeSelected)
+        public InformationFootnoteFactory(string informationText)
         {
-            this.shipmentTypeSelected = shipmentTypeSelected;
+            this.informationText = informationText;
         }
 
         public ShipmentType ShipmentType { get; private set; }
 
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new RatesNotSupportedFootnoteControl(shipmentTypeSelected);
+            return new InformationFootnoteControl(informationText);
         }
     }
 }
