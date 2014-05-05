@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Data;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     client.TestCredentials();
                 }
-            
+
                 return true;
             }
             catch (AmazonException ex)
@@ -91,6 +92,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
         }
 
+        /// <summary>
+        /// Get the domain name of the marketplace
+        /// </summary>
         private string GetStoreDomainName(string marketplaceId)
         {
             // Find the domain name of the marketplace provided to account for Amazon Canada store; default to an empty string - another
@@ -179,9 +183,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
                 {
                     marketplaces = client.GetMarketplaces(merchantID.Text);
-                    marketplaceCache[merchantID.Text] = marketplaces;
-
-                    return marketplaces;
                 }
             }
             catch (AmazonException ex)
@@ -190,6 +191,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                 return null;
             }
+
+            marketplaceCache[merchantID.Text] = marketplaces;
+
+            return marketplaces;
         }
     }
 }

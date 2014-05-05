@@ -480,6 +480,8 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>AmazonApi. </summary>
 		AmazonApi,
+		///<summary>AmazonApiRegion. </summary>
+		AmazonApiRegion,
 		///<summary>SellerCentralUsername. </summary>
 		SellerCentralUsername,
 		///<summary>SellerCentralPassword. </summary>
