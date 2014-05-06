@@ -113,6 +113,7 @@ namespace ShipWorks.Data.Administration
                     usageAudit.Text = StringUtility.FormatByteCount(SqlDiskUsage.AuditUsage);
                     usageTotal.Text = StringUtility.FormatByteCount(SqlDiskUsage.TotalUsage);
                     usageOther.Text = StringUtility.FormatByteCount(SqlDiskUsage.OtherUsage);
+                    usageShipSense.Text = StringUtility.FormatByteCount(SqlDiskUsage.ShipSenseUsage);
 
                     long remaining = SqlDiskUsage.SpaceRemaining;
                     if (remaining == -1)
