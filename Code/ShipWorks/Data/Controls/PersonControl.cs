@@ -572,6 +572,11 @@ namespace ShipWorks.Data.Controls
 
             isLoadingEntities = true;
 
+            if (loadedPeople.Count == 1 && EnableValidationControls)
+            {
+                lastValidatedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
+            }
+
             UpdateValidationUI();
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -579,20 +584,7 @@ namespace ShipWorks.Data.Controls
                 // Go through each additional person, and see if there are any conflicts
                 foreach (PersonAdapter person in loadedPeople)
                 {
-                    fullName.ApplyMultiText(new PersonName(person).FullName);
-                    company.ApplyMultiText(person.Company);
-
-                    street.ApplyMultiText(StreetEditor.CombinLines(person.Street1, person.Street2, person.Street3));
-
-                    city.ApplyMultiText(person.City);
-                    state.ApplyMultiText(Geography.GetStateProvName(person.StateProvCode, person.CountryCode));
-                    postalCode.ApplyMultiText(person.PostalCode);
-                    country.ApplyMultiValue(Geography.GetCountryName(person.CountryCode));
-
-                    email.ApplyMultiText(person.Email);
-                    phone.ApplyMultiText(person.Phone);
-                    fax.ApplyMultiText(person.Fax);
-                    website.ApplyMultiText(person.Website);
+                    PopulateControls(person);
                 }
             }
 
@@ -707,6 +699,7 @@ namespace ShipWorks.Data.Controls
                 website.ReadMultiText(value => person.Website = value);
 
                 AddressAdapter newAddress = person.ConvertTo<AddressAdapter>();
+
                 if (originalAddress != newAddress)
                 {
                     if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
@@ -716,6 +709,15 @@ namespace ShipWorks.Data.Controls
 
                     newAddress.AddressValidationSuggestionCount = 0;
                     newAddress.AddressValidationError = string.Empty;
+                }
+
+                if (lastValidatedAddress != null)
+                {
+                    AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
+                    lastValidatedAddress.CopyTo(personAddress);
+                    personAddress.AddressValidationError = lastValidatedAddress.AddressValidationError;
+                    personAddress.AddressValidationStatus = lastValidatedAddress.AddressValidationStatus;
+                    personAddress.AddressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
                 }
             }
         }
@@ -935,6 +937,7 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
+            lastValidatedAddress = null;
             //loadedPeople.ForEach(x =>
             //{
             //    AddressAdapter address = x.ConvertTo<AddressAdapter>();
@@ -997,11 +1000,18 @@ namespace ShipWorks.Data.Controls
             }
             else
             {
-                UpdateValidationDetails(loadedPeople.Single().ConvertTo<AddressAdapter>());
+                PersonAdapter dummyPerson = new PersonAdapter();
+                SaveToEntity(dummyPerson);
+
+                UpdateValidationUIDetails(dummyPerson.ConvertTo<AddressAdapter>());
             }
         }
 
-        private void UpdateValidationDetails(AddressAdapter dummyAddress)
+        /// <summary>
+        /// Update the validation UI for the specified address
+        /// </summary>
+        /// <param name="dummyAddress"></param>
+        private void UpdateValidationUIDetails(AddressAdapter dummyAddress)
         {
             dummyAddress.CountryCode = CountryCode;
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
@@ -1022,24 +1032,35 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnValidateAddressLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            BackgroundExecutor<PersonAdapter> executor = new BackgroundExecutor<PersonAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
+            BackgroundExecutor<AddressAdapter> executor = new BackgroundExecutor<AddressAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += (s, args) =>
             {
-                LoadEntity(((List<PersonAdapter>) args.UserState).Single());
-                //LoadEntities(loadedPeople);
+                lastValidatedAddress = args.UserState as AddressAdapter;
+
+                isLoadingEntities = true;
+
+                using (new MultiValueScope())
+                {
+                    PopulateAddressControls(lastValidatedAddress);
+                }
+                
+                isLoadingEntities = false;
+                UpdateValidationUIDetails(lastValidatedAddress);
+
                 OnValueChanged(this, EventArgs.Empty);
             };
 
             PersonAdapter dummyAdapter = new PersonAdapter();
             SaveToEntity(dummyAdapter);
+            AddressAdapter address = dummyAdapter.ConvertTo<AddressAdapter>();
 
             // Code to execute for each shipment
             executor.ExecuteAsync((person, executorState, issueAdder) =>
             {
                 AddressValidator validator = new AddressValidator();
-                validator.Validate(person.ConvertTo<AddressAdapter>(), true, (addressEntity, entities) =>
+                validator.Validate(person, true, (addressEntity, entities) =>
                 {
                     ValidatedAddresses.Clear();
                     if (addressEntity != null)
@@ -1052,9 +1073,41 @@ namespace ShipWorks.Data.Controls
                         ValidatedAddresses.AddRange(entities);   
                     }
                 });
-            }, new List<PersonAdapter> { dummyAdapter }, new List<PersonAdapter> { dummyAdapter }); // Execute the code for each shipment
+            }, new List<AddressAdapter> { address }, address); // Execute the code for each shipment
         }
 
+        /// <summary>
+        /// Populate the controls with the given person adapter
+        /// </summary>
+        /// <param name="person"></param>
+        private void PopulateControls(PersonAdapter person)
+        {
+            fullName.ApplyMultiText(new PersonName(person).FullName);
+            company.ApplyMultiText(person.Company);
+
+            PopulateAddressControls(person.ConvertTo<AddressAdapter>());
+
+            email.ApplyMultiText(person.Email);
+            phone.ApplyMultiText(person.Phone);
+            fax.ApplyMultiText(person.Fax);
+            website.ApplyMultiText(person.Website);
+        }
+
+        /// <summary>
+        /// Populate the address specific controls with the specified address adapter
+        /// </summary>
+        /// <param name="address"></param>
+        private void PopulateAddressControls(AddressAdapter address)
+        {
+            street.ApplyMultiText(StreetEditor.CombinLines(address.Street1, address.Street2, address.Street3));
+
+            city.ApplyMultiText(address.City);
+            state.ApplyMultiText(Geography.GetStateProvName(address.StateProvCode, address.CountryCode));
+            postalCode.ApplyMultiText(address.PostalCode);
+            country.ApplyMultiValue(Geography.GetCountryName(address.CountryCode));
+        }
+
+        private AddressAdapter lastValidatedAddress;
         private List<ValidatedAddressEntity> validatedAddresses; 
 
         public List<ValidatedAddressEntity> ValidatedAddresses
