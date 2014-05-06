@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Common.Threading;
@@ -15,6 +16,7 @@ using System.Diagnostics;
 using ShipWorks.Data;
 using Interapptive.Shared.Utility;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
@@ -60,7 +62,7 @@ namespace ShipWorks.Data.Controls
         // Maps a control to the label that labels it on the form
         Dictionary<Control, Label> labelMap;
 
-        private EntityGridAddressSelector addressSelector;
+        private AddressSelector addressSelector;
         private bool isLoadingEntities;
 
         class ControlFieldMap
@@ -140,14 +142,14 @@ namespace ShipWorks.Data.Controls
 
             InitializeFieldMappings();
 
-            AddressSelector = new EntityGridAddressSelector("Ship", false);
+            AddressSelector = new AddressSelector();
             EnableValidationControls = false;
         }
 
         /// <summary>
         /// Address selector used by the validator
         /// </summary>
-        public EntityGridAddressSelector AddressSelector {
+        public AddressSelector AddressSelector {
             get
             {
                 return addressSelector;
@@ -570,7 +572,7 @@ namespace ShipWorks.Data.Controls
 
             isLoadingEntities = true;
 
-            UpdateValidationDetails();
+            UpdateValidationUI();
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -627,6 +629,9 @@ namespace ShipWorks.Data.Controls
         {
             foreach (PersonAdapter person in list)
             {
+                AddressAdapter originalAddress = new AddressAdapter();
+                person.ConvertTo<AddressAdapter>().CopyTo(originalAddress);
+
                 fullName.ReadMultiText(value =>
                 {
                     PersonName name = PersonName.Parse(value);
@@ -700,6 +705,18 @@ namespace ShipWorks.Data.Controls
                 phone.ReadMultiText(value => person.Phone = value);
                 fax.ReadMultiText(value => person.Fax = value);
                 website.ReadMultiText(value => person.Website = value);
+
+                AddressAdapter newAddress = person.ConvertTo<AddressAdapter>();
+                if (originalAddress != newAddress)
+                {
+                    if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
+                    {
+                        newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                    }
+
+                    newAddress.AddressValidationSuggestionCount = 0;
+                    newAddress.AddressValidationError = string.Empty;
+                }
             }
         }
 
@@ -913,16 +930,25 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void ResetAddressValidationStatus()
         {
-            if (loadedPeople != null)
+            if (loadedPeople == null)
             {
-                loadedPeople.ForEach(x =>
-                {
-                    x.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                    x.AddressValidationSuggestionCount = 0;
-                });
-
-                UpdateValidationDetails();
+                return;
             }
+
+            //loadedPeople.ForEach(x =>
+            //{
+            //    AddressAdapter address = x.ConvertTo<AddressAdapter>();
+
+            //    if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
+            //    {
+            //        address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            //    }
+
+            //    address.AddressValidationSuggestionCount = 0;
+            //    address.AddressValidationError = string.Empty;
+            //});
+
+            UpdateValidationUI();
         }
 
         /// <summary>
@@ -941,10 +967,15 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnAddressValidationSuggestionLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (loadedPeople.Count == 1 && AddressSelector != null)
+            if (loadedPeople.Count != 1 || AddressSelector == null)
             {
-                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPeople.Single().Entity, new Point(0, 0));
+                return;
             }
+
+            PersonAdapter loadedPerson = loadedPeople.Single();
+
+            AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), 
+                EntityUtility.GetEntityId(loadedPerson.Entity), new Point(0, 0));
         }
 
         /// <summary>
@@ -958,7 +989,7 @@ namespace ShipWorks.Data.Controls
         /// <summary>
         /// Update the validation details from the loaded entities
         /// </summary>
-        private void UpdateValidationDetails()
+        private void UpdateValidationUI()
         {
             if (loadedPeople.Count != 1 || !EnableValidationControls)
             {
@@ -966,17 +997,24 @@ namespace ShipWorks.Data.Controls
             }
             else
             {
-                PersonAdapter currentPerson = loadedPeople.Single();
-                int currentDistance = addressValidationSuggestionLink.Left - addressValidationStatusText.Right;
-
-                addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType)currentPerson.AddressValidationStatus);
-                addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)currentPerson.AddressValidationStatus);
-                addressValidationSuggestionLink.Text = EntityGridAddressSelector.DisplayValidationSuggestionLabel(currentPerson.Entity);
-                addressValidationSuggestionLink.Enabled = EntityGridAddressSelector.IsValidationSuggestionLinkEnabled(currentPerson.Entity);
-                addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
-
-                addressValidationPanel.Visible = true;
+                UpdateValidationDetails(loadedPeople.Single().ConvertTo<AddressAdapter>());
             }
+        }
+
+        private void UpdateValidationDetails(AddressAdapter dummyAddress)
+        {
+            dummyAddress.CountryCode = CountryCode;
+            dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
+
+            int currentDistance = addressValidationSuggestionLink.Left - addressValidationStatusText.Right;
+
+            addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+            addressValidationSuggestionLink.Text = EntityGridAddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
+            addressValidationSuggestionLink.Enabled = EntityGridAddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
+            addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
+
+            addressValidationPanel.Visible = true;
         }
 
         /// <summary>
@@ -984,21 +1022,47 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnValidateAddressLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            BackgroundExecutor<IEntity2> executor = new BackgroundExecutor<IEntity2>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
+            BackgroundExecutor<PersonAdapter> executor = new BackgroundExecutor<PersonAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
 
             // Code to execute once background load is complete
-            executor.ExecuteCompleted += (s, args) => LoadEntities(loadedPeople);
+            executor.ExecuteCompleted += (s, args) =>
+            {
+                LoadEntity(((List<PersonAdapter>) args.UserState).Single());
+                //LoadEntities(loadedPeople);
+                OnValueChanged(this, EventArgs.Empty);
+            };
+
+            PersonAdapter dummyAdapter = new PersonAdapter();
+            SaveToEntity(dummyAdapter);
 
             // Code to execute for each shipment
-            executor.ExecuteAsync((entity, executorState, issueAdder) =>
+            executor.ExecuteAsync((person, executorState, issueAdder) =>
             {
-                using (SqlAdapter sqlAdapter = new SqlAdapter())
+                AddressValidator validator = new AddressValidator();
+                validator.Validate(person.ConvertTo<AddressAdapter>(), true, (addressEntity, entities) =>
                 {
-                    AddressValidator validator = new AddressValidator();
-                    validator.Validate(entity, "Ship", true, (addressEntity, entities) =>
-                        ValidatedAddressManager.SaveValidatedEntity(sqlAdapter, entity, addressEntity, entities));   
-                }
-            }, loadedPeople.Select(x => x.Entity), null); // Execute the code for each shipment
+                    ValidatedAddresses.Clear();
+                    if (addressEntity != null)
+                    {
+                        ValidatedAddresses.Add(addressEntity);    
+                    }
+
+                    if (entities != null)
+                    {
+                        ValidatedAddresses.AddRange(entities);   
+                    }
+                });
+            }, new List<PersonAdapter> { dummyAdapter }, new List<PersonAdapter> { dummyAdapter }); // Execute the code for each shipment
+        }
+
+        private List<ValidatedAddressEntity> validatedAddresses; 
+
+        public List<ValidatedAddressEntity> ValidatedAddresses
+        {
+            get
+            {
+                return validatedAddresses ?? (validatedAddresses = new List<ValidatedAddressEntity>());
+            }
         }
     }
 }

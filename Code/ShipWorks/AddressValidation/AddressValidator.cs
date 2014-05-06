@@ -43,8 +43,17 @@ namespace ShipWorks.AddressValidation
         /// <param name="saveAction">Action that should save changes to the database</param>
         public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
-            AddressAdapter adapter = new AddressAdapter(addressEntity, addressPrefix);
+            Validate(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+        }
 
+        /// <summary>
+        /// Validates an address with no prefix on the specified entity
+        /// </summary>
+        /// <param name="adapter">Address that should be validated</param>
+        /// <param name="canAdjustAddress"></param>
+        /// <param name="saveAction">Action that should save changes to the database</param>
+        public void Validate(AddressAdapter adapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        {
             // We don't want to validate already validated addresses because we'll lose the original address
             if (!ShouldValidateAddress(adapter))
             {
@@ -61,6 +70,7 @@ namespace ShipWorks.AddressValidation
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
                 adapter.CopyTo(originalAddress, string.Empty);
+                originalAddress.IsOriginal = true;
 
                 adapter.AddressValidationError = addressValidationError;
 

@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Editing
             RateControl.ShowAllRates = true;
 
             personControl.EnableValidationControls = true;
-            personControl.AddressSelector = new EntityGridAddressSelector("Ship", false);
+            //personControl.AddressSelector = new EntityGridAddressSelector("Ship", false);
         }
 
         /// <summary>

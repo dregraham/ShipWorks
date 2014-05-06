@@ -142,7 +142,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save a validated address
         /// </summary>
-        public static void SaveEntityAddress(IAddressValidationDataAccess dataAccess, long entityId, ValidatedAddressEntity address, bool isOriginalAddress)
+        public static void SaveEntityAddress(IAddressValidationDataAccess dataAccess, long entityId, ValidatedAddressEntity address)
         {
             // If the address is null, we obviously don't need to save it
             if (address == null)
@@ -151,7 +151,6 @@ namespace ShipWorks.AddressValidation
             }
 
             address.ConsumerID = entityId;
-            address.IsOriginal = isOriginalAddress;
 
             dataAccess.SaveEntity(address);
         }
@@ -183,13 +182,13 @@ namespace ShipWorks.AddressValidation
             long entityId = (long)entity.PrimaryKeyFields.Single().CurrentValue;
 
             DeleteExistingAddresses(dataAccess, entityId);
-            SaveEntityAddress(dataAccess, entityId, enteredAddress, true);
+            SaveEntityAddress(dataAccess, entityId, enteredAddress);
 
             List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
 
             foreach (ValidatedAddressEntity address in suggestedAddressList)
             {
-                SaveEntityAddress(dataAccess, entityId, address, false);
+                SaveEntityAddress(dataAccess, entityId, address);
             }
 
             // Ensure that we're using optimistic concurrency with this entity because we don't want to overwrite

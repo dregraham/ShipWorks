@@ -137,5 +137,18 @@ namespace Interapptive.Shared.Data
                 return entity.Fields[fieldPrefix + fieldName] != null;
             }
         }
+
+        /// <summary>
+        /// Convert the current adapter to another type
+        /// </summary>
+        public T ConvertTo<T>() where T : EntityAdapter, new()
+        {
+            return new T
+            {
+                entity = entity, 
+                fieldPrefix = fieldPrefix, 
+                localValues = localValues
+            };
+        }
     }
 }

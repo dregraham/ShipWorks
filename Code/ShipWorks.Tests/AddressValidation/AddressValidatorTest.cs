@@ -105,6 +105,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("MO", originalAddress.StateProvCode);
             Assert.AreEqual("63102", originalAddress.PostalCode);
             Assert.AreEqual("US", originalAddress.CountryCode);
+            Assert.IsTrue(originalAddress.IsOriginal);
         }
 
         [TestMethod]
@@ -121,6 +122,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(result1.StateProvCode, suggestedAddresses[0].StateProvCode);
             Assert.AreEqual(result1.PostalCode, suggestedAddresses[0].PostalCode);
             Assert.AreEqual(result1.CountryCode, suggestedAddresses[0].CountryCode);
+            Assert.IsFalse(suggestedAddresses[0].IsOriginal);
 
             Assert.AreEqual(result2.Street1, suggestedAddresses[1].Street1);
             Assert.AreEqual(result2.Street2, suggestedAddresses[1].Street2);
@@ -129,6 +131,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(result2.StateProvCode, suggestedAddresses[1].StateProvCode);
             Assert.AreEqual(result2.PostalCode, suggestedAddresses[1].PostalCode);
             Assert.AreEqual(result2.CountryCode, suggestedAddresses[1].CountryCode);
+            Assert.IsFalse(suggestedAddresses[1].IsOriginal);
         }
 
         [TestMethod]

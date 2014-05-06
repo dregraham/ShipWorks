@@ -200,19 +200,20 @@ namespace ShipWorks.Data.Controls
             // 
             this.addressValidationPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.addressValidationPanel.Controls.Add(this.validateAddress);
             this.addressValidationPanel.Controls.Add(this.addressValidationSuggestionLink);
             this.addressValidationPanel.Controls.Add(this.addressValidationStatusText);
             this.addressValidationPanel.Controls.Add(this.addressValidationStatusIcon);
             this.addressValidationPanel.Location = new System.Drawing.Point(61, -2);
             this.addressValidationPanel.Name = "addressValidationPanel";
-            this.addressValidationPanel.Size = new System.Drawing.Size(230, 19);
+            this.addressValidationPanel.Size = new System.Drawing.Size(291, 19);
             this.addressValidationPanel.TabIndex = 51;
             // 
             // validateAddress
             // 
             this.validateAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.validateAddress.AutoSize = true;
-            this.validateAddress.Location = new System.Drawing.Point(297, 1);
+            this.validateAddress.Location = new System.Drawing.Point(236, 3);
             this.validateAddress.Name = "validateAddress";
             this.validateAddress.Size = new System.Drawing.Size(45, 13);
             this.validateAddress.TabIndex = 29;
@@ -252,7 +253,6 @@ namespace ShipWorks.Data.Controls
             // 
             this.addressLabelPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.addressLabelPanel.Controls.Add(this.validateAddress);
             this.addressLabelPanel.Controls.Add(this.labelAddress);
             this.addressLabelPanel.Controls.Add(this.addressValidationPanel);
             this.addressLabelPanel.Location = new System.Drawing.Point(0, 76);

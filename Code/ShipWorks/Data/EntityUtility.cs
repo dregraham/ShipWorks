@@ -757,5 +757,14 @@ namespace ShipWorks.Data
                     }
                 });
         }
+
+        /// <summary>
+        /// Gets the id of the entity as a long
+        /// </summary>
+        public static long GetEntityId(IEntity2 entity)
+        {
+            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "GridAddressSelector cannot be used with entities that have compound primary keys");
+            return (long)entity.PrimaryKeyFields.Single().CurrentValue;
+        }
     }
 }
