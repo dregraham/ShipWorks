@@ -220,62 +220,80 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     commandLogWriter.AutoFlush = true;
 
-                    using (Process process = new Process())
+                    try
                     {
-                        process.StartInfo = new ProcessStartInfo
+                        using (Process process = new Process())
                         {
-                            CreateNoWindow = true,
-                            RedirectStandardOutput = true,
-                            RedirectStandardError = true,
-                            RedirectStandardInput = true,
-                            UseShellExecute = false,
-                            WorkingDirectory = GetTempPath(),
-                            FileName = commandPath
-                        };
-
-                        // Wire up the handlers that will take care of logging output and errors
-                        process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
-                        process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
-
-                        process.Start();
-
-                        // Start reading the output and error streams
-                        process.BeginOutputReadLine();
-                        process.BeginErrorReadLine();
-                        process.StandardInput.Close();
-
-                        bool wasResponding = true;
-
-                        do
-                        {
-                            if (!process.HasExited)
+                            process.StartInfo = new ProcessStartInfo
                             {
-                                if (!process.Responding && wasResponding)
-                                {
-                                    log.Warn("Command is not responding");
-                                }
+                                CreateNoWindow = true,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                RedirectStandardInput = true,
+                                UseShellExecute = false,
+                                WorkingDirectory = GetTempPath(),
+                                FileName = commandPath
+                            };
 
-                                wasResponding = process.Responding;
+                            // Wire up the handlers that will take care of logging output and errors
+                            process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
+                            process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
 
-                                if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
+                            process.Start();
+
+                            // Start reading the output and error streams
+                            process.BeginOutputReadLine();
+                            process.BeginErrorReadLine();
+                            process.StandardInput.Close();
+
+                            bool wasResponding = true;
+
+                            do
+                            {
+                                if (!process.HasExited)
                                 {
-                                    KillProcessTree(process);
-                                    throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
-                                                                                   CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
+                                    if (!process.Responding && wasResponding)
+                                    {
+                                        log.Warn("Command is not responding");
+                                    }
+
+                                    wasResponding = process.Responding;
+
+                                    if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
+                                    {
+                                        KillProcessTree(process);
+                                        throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
+                                                                                       CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
+                                    }
                                 }
+                            } while (!process.WaitForExit(500));
+
+                            // Wait for asynchronous output processing to complete
+                            process.WaitForExit();
+
+                            // Verify that the command completed without errors
+                            if (process.ExitCode > 0)
+                            {
+                                string errorMessage = string.Format("The command exited with code {0}.", process.ExitCode);
+                                log.ErrorFormat(errorMessage);
+                                throw new ActionTaskRunException(errorMessage);
                             }
-                        } while (!process.WaitForExit(500));
-
-                        // Wait for asynchronous output processing to complete
-                        process.WaitForExit();
-
-                        // Verify that the command completed without errors
-                        if (process.ExitCode > 0)
-                        {
-                            string errorMessage = string.Format("The command exited with code {0}.", process.ExitCode);
-                            log.ErrorFormat(errorMessage);
-                            throw new ActionTaskRunException(errorMessage);
                         }
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        if (ex.Message.ToUpperInvariant().Contains("Process has exited".ToUpperInvariant()))
+                        {
+                            // There were crashes where there was a race condition between checking HasExited and our other code checking process properties.
+                            // It seems the process had exited after the HasExited check, but before our other checks.  The log files had output info, so it
+                            // should be OK to just log and eat this error and continue on.
+                            log.Error("The processes exited before we could check it's properties.", ex);
+
+                            return;
+                        }
+
+                        // If it isn't the process has exited exception, we haven't seen it, so go ahead and throw it.
+                        throw;
                     }
                 }
             }
