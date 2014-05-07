@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
@@ -82,6 +83,7 @@ namespace ShipWorks.Shipping
         private ShipmentEntity clonedShipmentEntityForRates;
         
         private RateSelectedEventArgs preSelectedRateEventArgs;
+        private ValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
@@ -152,6 +154,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            validatedAddressScope = new ValidatedAddressScope();
+
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
 
@@ -1309,6 +1313,12 @@ namespace ShipWorks.Shipping
                     }
 
                     ShippingManager.SaveShipment(shipment);
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    {
+                        validatedAddressScope.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID);
+                        sqlAdapter.Commit();
+                    }
                 }
                 catch (ObjectDeletedException ex)
                 {
@@ -2340,6 +2350,8 @@ namespace ShipWorks.Shipping
             }
 
             processingErrors.Clear();
+
+            validatedAddressScope.Dispose();
         }
 
         /// <summary>

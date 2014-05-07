@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Divelements.SandGrid;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 
@@ -21,32 +18,38 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class AddressSelector
     {
-        public event EventHandler AddressSelected;
+        /// <summary>
+        /// An address has just been selected from the list of options
+        /// </summary>
+        public event EventHandler<AddressSelectedEventArgs> AddressSelected;
+
+        /// <summary>
+        /// An address is about to be selected from the list of options
+        /// </summary>
+        public event EventHandler AddressSelecting;
 
         /// <summary>
         /// Checks whether the validation suggestion hyperlink should be enabled
         /// </summary>
         public static bool IsValidationSuggestionLinkEnabled(object arg)
         {
-            IEntity2 entity = arg as IEntity2;
-            if (entity == null)
+            AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
+            if (addressAdapter == null)
             {
                 return false;
             }
 
-            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
-
-            switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
+            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Adjusted:
                 case AddressValidationStatusType.NeedsAttention:
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
-                    return adapter.AddressValidationSuggestionCount > 0;
+                    return addressAdapter.AddressValidationSuggestionCount > 0;
                 case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
-                    return !string.IsNullOrEmpty(adapter.AddressValidationError);
+                    return !string.IsNullOrEmpty(addressAdapter.AddressValidationError);
                 default:
                     return false;
             }
@@ -57,15 +60,13 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static string DisplayValidationSuggestionLabel(object arg)
         {
-            IEntity2 entity = arg as IEntity2;
-            if (entity == null)
+            AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
+            if (addressAdapter == null)
             {
                 return string.Empty;
             }
 
-            AddressAdapter adapter = new AddressAdapter(entity, "Ship");
-
-            switch ((AddressValidationStatusType)adapter.AddressValidationStatus)
+            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Valid:
                 case AddressValidationStatusType.NotChecked:
@@ -75,20 +76,47 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.NeedsAttention:
                 case AddressValidationStatusType.Overridden:
                 case AddressValidationStatusType.SuggestedSelected:
-                    return string.Format("{0} Suggestion{1}", adapter.AddressValidationSuggestionCount, adapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                    return string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
                 case AddressValidationStatusType.NotValid:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
-                    return string.IsNullOrEmpty(adapter.AddressValidationError) ? string.Empty : "Details...";
+                    return string.IsNullOrEmpty(addressAdapter.AddressValidationError) ? string.Empty : "Details...";
                 default:
                     return string.Empty;
             }
         }
 
         /// <summary>
+        /// Gets an address adapter from an object, if possible.
+        /// </summary>
+        private static AddressAdapter GetAddressAdapterFromObject(object arg)
+        {
+            AddressAdapter addressAdapter = arg as AddressAdapter;
+
+            if (addressAdapter == null)
+            {
+                IEntity2 entity = arg as IEntity2;
+                if (entity != null)
+                {
+                    addressAdapter = new AddressAdapter(entity, "Ship");
+                }
+            }
+
+            return addressAdapter;
+        }
+
+        /// <summary>
         /// Display the list of available addresses
         /// </summary>
-        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, long entityId, Point displayPosition)
+        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, long entityId)
+        {
+            ShowAddressOptionMenu(owner, entityAdapter, displayPosition, () => GetEntityAddresses(entityId));
+        }
+
+        /// <summary>
+        /// Display the list of available addresses
+        /// </summary>
+        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses)
         {
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.WillNotValidate ||
@@ -99,7 +127,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            List<ValidatedAddressEntity> validatedAddresses = GetEntityAddresses(entityId);
+            List<ValidatedAddressEntity> validatedAddresses = getValidatedAddresses();
             ValidatedAddressEntity originalValidatedAddress = validatedAddresses.FirstOrDefault(x => x.IsOriginal);
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
@@ -147,8 +175,8 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Get a list of addresses associated with the specified entity
         /// </summary>
-        private static List<ValidatedAddressEntity> GetEntityAddresses(long entityId)
-        {
+        protected static List<ValidatedAddressEntity> GetEntityAddresses(long entityId)
+        {   
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 LinqMetaData metaData = new LinqMetaData(adapter);
@@ -163,6 +191,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private void SelectAddress(AddressAdapter entityAdapter, ValidatedAddressEntity validatedAddressEntity)
         {
+            OnAddressSelecting();
+
             AddressAdapter originalAddress = new AddressAdapter();
             entityAdapter.CopyTo(originalAddress);
 
@@ -176,13 +206,24 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// An address is about to be selected
+        /// </summary>
+        private void OnAddressSelecting()
+        {
+            if (AddressSelecting != null)
+            {
+                AddressSelecting(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
         /// An address was selected
         /// </summary>
         protected virtual void OnAddressSelected(AddressAdapter entityAdapter, AddressAdapter originalAddress)
         {
             if (AddressSelected != null)
             {
-                AddressSelected(this, EventArgs.Empty);
+                AddressSelected(this, new AddressSelectedEventArgs(entityAdapter));
             }
         }
 

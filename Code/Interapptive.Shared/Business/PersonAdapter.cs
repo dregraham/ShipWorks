@@ -145,6 +145,24 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Copy the person\address values from this adapter to another
+        /// </summary>
+        /// <param name="destinationAddress"></param>
+        public void CopyTo(AddressAdapter destinationAddress)
+        {
+            destinationAddress.Street1 = Street1;
+            destinationAddress.Street2 = Street2;
+            destinationAddress.Street3 = Street3;
+
+            destinationAddress.City = City;
+            destinationAddress.StateProvCode = StateProvCode;
+            destinationAddress.PostalCode = PostalCode;
+            destinationAddress.CountryCode = CountryCode;
+
+            destinationAddress.AddressValidationStatus = AddressValidationStatus;
+        }
+
+        /// <summary>
         /// Equals
         /// </summary>
         public override bool Equals(object obj)

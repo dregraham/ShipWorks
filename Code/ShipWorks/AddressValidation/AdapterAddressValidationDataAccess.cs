@@ -1,9 +1,5 @@
-using System;
-using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 
 namespace ShipWorks.AddressValidation

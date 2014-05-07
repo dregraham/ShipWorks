@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using Divelements.SandGrid;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -34,8 +33,9 @@ namespace ShipWorks.AddressValidation
             SandGrid grid = sender as SandGrid;
             Debug.Assert(grid != null);
             
-            ShowAddressOptionMenu(grid, new AddressAdapter(entity, "Ship"), EntityUtility.GetEntityId(entity), 
-                new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset));
+            ShowAddressOptionMenu(grid, new AddressAdapter(entity, "Ship"),
+                new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset), 
+                EntityUtility.GetEntityId(entity));
         }
 
         /// <summary>
@@ -55,6 +55,7 @@ namespace ShipWorks.AddressValidation
                 }
 
                 sqlAdapter.SaveAndRefetch(selectedEntity);
+                sqlAdapter.Commit();
             }
 
             Program.MainForm.ForceHeartbeat();

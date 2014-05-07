@@ -21,6 +21,11 @@ namespace ShipWorks.Shipping
                 {
                     components.Dispose();
                 }
+
+                if (validatedAddressScope != null)
+                {
+                    validatedAddressScope.Dispose();
+                }
             }
 
             base.Dispose(disposing);

@@ -64,6 +64,11 @@ namespace ShipWorks.Data.Controls
 
         private AddressSelector addressSelector;
         private bool isLoadingEntities;
+        bool shouldSaveAddressSuggestions = false;
+
+        private AddressAdapter lastValidatedAddress;
+        private List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+
 
         class ControlFieldMap
         {
@@ -158,11 +163,17 @@ namespace ShipWorks.Data.Controls
             {
                 if (addressSelector != null)
                 {
+                    addressSelector.AddressSelecting -= OnAddressSelectorAddressSelecting;
                     addressSelector.AddressSelected -= OnAddressSelectorAddressSelected;
                 }
 
                 addressSelector = value;
-                addressSelector.AddressSelected += OnAddressSelectorAddressSelected;
+
+                if (addressSelector != null)
+                {
+                    addressSelector.AddressSelecting += OnAddressSelectorAddressSelecting;
+                    addressSelector.AddressSelected += OnAddressSelectorAddressSelected;   
+                }
             }
         }
 
@@ -574,19 +585,24 @@ namespace ShipWorks.Data.Controls
 
             if (loadedPeople.Count == 1 && EnableValidationControls)
             {
-                lastValidatedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
-            }
+                AddressAdapter loadedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
+                lastValidatedAddress = new AddressAdapter();
+                loadedAddress.CopyTo(lastValidatedAddress);
 
-            UpdateValidationUI();
+                lastValidatedAddress.AddressValidationStatus = loadedAddress.AddressValidationStatus;
+                lastValidatedAddress.AddressValidationError = loadedAddress.AddressValidationError;
+                lastValidatedAddress.AddressValidationSuggestionCount = loadedAddress.AddressValidationSuggestionCount;
+
+                validatedAddresses = new List<ValidatedAddressEntity>();
+            }
 
             using (MultiValueScope scope = new MultiValueScope())
             {
                 // Go through each additional person, and see if there are any conflicts
-                foreach (PersonAdapter person in loadedPeople)
-                {
-                    PopulateControls(person);
-                }
+                loadedPeople.ForEach(PopulateControls);
             }
+
+            UpdateValidationUI();
 
             isLoadingEntities = false;
         }
@@ -619,84 +635,14 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void SaveToEntities(IEnumerable<PersonAdapter> list)
         {
+            int listCount = list.Count();
+
             foreach (PersonAdapter person in list)
             {
                 AddressAdapter originalAddress = new AddressAdapter();
                 person.ConvertTo<AddressAdapter>().CopyTo(originalAddress);
 
-                fullName.ReadMultiText(value =>
-                {
-                    PersonName name = PersonName.Parse(value);
-
-                    int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
-                    if (name.First.Length > maxFirst)
-                    {
-                        name.Middle = name.First.Substring(maxFirst) + name.Middle;
-                        name.First = name.First.Substring(0, maxFirst);
-                    }
-
-                    int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
-                    if (name.Middle.Length > maxMiddle)
-                    {
-                        name.Last = name.Middle.Substring(maxMiddle) + name.Last;
-                        name.Middle = name.Middle.Substring(0, maxMiddle);
-                    }
-
-                    int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
-                    if (name.Last.Length > maxLast)
-                    {
-                        name.Last = name.Last.Substring(0, maxLast);
-                    }                 
-
-                    person.FirstName = name.First;
-                    person.MiddleName = name.Middle;
-                    person.LastName = name.LastWithSuffix;
-                    person.UnparsedName = name.UnparsedName;
-                    person.NameParseStatus = name.ParseStatus;
-                });
-                company.ReadMultiText(value => person.Company = value);
-
-                street.ReadMultiText(value =>
-                {
-                    int maxStreet1 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet1);
-                    int maxStreet2 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet2);
-                    int maxStreet3 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet3);
-
-                    string line1 = street.Line1;
-                    string line2 = street.Line2;
-                    string line3 = street.Line3;
-
-                    if (line1.Length > maxStreet1)
-                    {
-                        line2 = line1.Substring(maxStreet1) + " " + line2;
-                        line1 = line1.Substring(0, maxStreet1);
-                    }
-
-                    if (line2.Length > maxStreet2)
-                    {
-                        line3 = line2.Substring(maxStreet2) + " " + line3;
-                        line2 = line2.Substring(0, maxStreet2);
-                    }
-
-                    if (line3.Length > maxStreet3)
-                    {
-                        line3 = line3.Substring(09, maxStreet3);
-                    }
-
-                    person.Street1 = line1;
-                    person.Street2 = line2;
-                    person.Street3 = line3;
-                });
-
-                city.ReadMultiText(value => person.City = value);
-                state.ReadMultiText(value => person.StateProvCode = Geography.GetStateProvCode(value));
-                postalCode.ReadMultiText(value => person.PostalCode = value);
-                country.ReadMultiText(value => person.CountryCode = Geography.GetCountryCode(country.Text));
-
-                email.ReadMultiText(value => person.Email = value);
-                phone.ReadMultiText(value => person.Phone = value);
-                fax.ReadMultiText(value => person.Fax = value);
-                website.ReadMultiText(value => person.Website = value);
+                PopulatePersonFromUI(person);
 
                 AddressAdapter newAddress = person.ConvertTo<AddressAdapter>();
 
@@ -711,7 +657,7 @@ namespace ShipWorks.Data.Controls
                     newAddress.AddressValidationError = string.Empty;
                 }
 
-                if (lastValidatedAddress != null)
+                if (listCount == 1 && lastValidatedAddress != null)
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);
@@ -719,7 +665,92 @@ namespace ShipWorks.Data.Controls
                     personAddress.AddressValidationStatus = lastValidatedAddress.AddressValidationStatus;
                     personAddress.AddressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
                 }
+
+                if (shouldSaveAddressSuggestions)
+                {
+                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses);   
+                }
             }
+        }
+
+        /// <summary>
+        /// Populate the person from the values in the UI
+        /// </summary>
+        private void PopulatePersonFromUI(PersonAdapter person)
+        {
+            fullName.ReadMultiText(value =>
+            {
+                PersonName name = PersonName.Parse(value);
+
+                int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
+                if (name.First.Length > maxFirst)
+                {
+                    name.Middle = name.First.Substring(maxFirst) + name.Middle;
+                    name.First = name.First.Substring(0, maxFirst);
+                }
+
+                int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
+                if (name.Middle.Length > maxMiddle)
+                {
+                    name.Last = name.Middle.Substring(maxMiddle) + name.Last;
+                    name.Middle = name.Middle.Substring(0, maxMiddle);
+                }
+
+                int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
+                if (name.Last.Length > maxLast)
+                {
+                    name.Last = name.Last.Substring(0, maxLast);
+                }
+
+                person.FirstName = name.First;
+                person.MiddleName = name.Middle;
+                person.LastName = name.LastWithSuffix;
+                person.UnparsedName = name.UnparsedName;
+                person.NameParseStatus = name.ParseStatus;
+            });
+            company.ReadMultiText(value => person.Company = value);
+
+            street.ReadMultiText(value =>
+            {
+                int maxStreet1 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet1);
+                int maxStreet2 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet2);
+                int maxStreet3 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet3);
+
+                string line1 = street.Line1;
+                string line2 = street.Line2;
+                string line3 = street.Line3;
+
+                if (line1.Length > maxStreet1)
+                {
+                    line2 = line1.Substring(maxStreet1) + " " + line2;
+                    line1 = line1.Substring(0, maxStreet1);
+                }
+
+                if (line2.Length > maxStreet2)
+                {
+                    line3 = line2.Substring(maxStreet2) + " " + line3;
+                    line2 = line2.Substring(0, maxStreet2);
+                }
+
+                if (line3.Length > maxStreet3)
+                {
+                    line3 = line3.Substring(09, maxStreet3);
+                }
+
+                person.Street1 = line1;
+                person.Street2 = line2;
+                person.Street3 = line3;
+            });
+
+            city.ReadMultiText(value => person.City = value);
+            state.ReadMultiText(value => person.StateProvCode = Geography.GetStateProvCode(value));
+            postalCode.ReadMultiText(value => person.PostalCode = value);
+            country.ReadMultiText(value => person.CountryCode = Geography.GetCountryCode(country.Text));
+
+            email.ReadMultiText(value => person.Email = value);
+            phone.ReadMultiText(value => person.Phone = value);
+            fax.ReadMultiText(value => person.Fax = value);
+            website.ReadMultiText(value => person.Website = value);
         }
 
         /// <summary>
@@ -937,19 +968,21 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            lastValidatedAddress = null;
-            //loadedPeople.ForEach(x =>
-            //{
-            //    AddressAdapter address = x.ConvertTo<AddressAdapter>();
+            PersonAdapter person = new PersonAdapter();
+            PopulatePersonFromUI(person);
 
-            //    if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
-            //    {
-            //        address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
-            //    }
+            lastValidatedAddress = new AddressAdapter();
+            person.CopyTo(lastValidatedAddress);
+            lastValidatedAddress.AddressValidationError = string.Empty;
+            lastValidatedAddress.AddressValidationSuggestionCount = 0;
+            
+            if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+            {
+                lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+            }
 
-            //    address.AddressValidationSuggestionCount = 0;
-            //    address.AddressValidationError = string.Empty;
-            //});
+            validatedAddresses.Clear();
+            shouldSaveAddressSuggestions = true;
 
             UpdateValidationUI();
         }
@@ -975,18 +1008,46 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            PersonAdapter loadedPerson = loadedPeople.Single();
+            PersonAdapter loadedPerson = new PersonAdapter();
+            PopulatePersonFromUI(loadedPerson);
 
-            AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), 
-                EntityUtility.GetEntityId(loadedPerson.Entity), new Point(0, 0));
+            if (validatedAddresses.Any())
+            {
+                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), new Point(0, 0), () => validatedAddresses);
+            }
+            else
+            {
+                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), new Point(0, 0), EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+            }
         }
 
         /// <summary>
-        /// The user has selectd a validated address
+        /// The user is selecting a validated address
         /// </summary>
-        private void OnAddressSelectorAddressSelected(object sender, EventArgs e)
+        private void OnAddressSelectorAddressSelecting(object sender, EventArgs e)
         {
-            LoadEntities(loadedPeople);
+            isLoadingEntities = true;
+        }
+
+        /// <summary>
+        /// The user has selected a validated address
+        /// </summary>
+        private void OnAddressSelectorAddressSelected(object sender, AddressSelectedEventArgs e)
+        {
+            using (new MultiValueScope())
+            {
+                PopulateAddressControls(e.SelectedAddress);    
+            }
+
+            int addressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
+            lastValidatedAddress = e.SelectedAddress;
+            lastValidatedAddress.AddressValidationSuggestionCount = addressValidationSuggestionCount;
+
+            UpdateValidationUI();
+
+            OnValueChanged(this, new EventArgs());
+
+            isLoadingEntities = false;
         }
 
         /// <summary>
@@ -1001,9 +1062,16 @@ namespace ShipWorks.Data.Controls
             else
             {
                 PersonAdapter dummyPerson = new PersonAdapter();
-                SaveToEntity(dummyPerson);
+                PopulatePersonFromUI(dummyPerson);
 
-                UpdateValidationUIDetails(dummyPerson.ConvertTo<AddressAdapter>());
+                AddressAdapter detailAddress = (lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>());
+                AddressAdapter dummyAddress = dummyPerson.ConvertTo<AddressAdapter>();
+
+                dummyAddress.AddressValidationStatus = detailAddress.AddressValidationStatus;
+                dummyAddress.AddressValidationSuggestionCount = detailAddress.AddressValidationSuggestionCount;
+                dummyAddress.AddressValidationError = detailAddress.AddressValidationError;
+
+                UpdateValidationUIDetails(dummyAddress);
             }
         }
 
@@ -1023,6 +1091,8 @@ namespace ShipWorks.Data.Controls
             addressValidationSuggestionLink.Text = EntityGridAddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = EntityGridAddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
             addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
+
+            validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
 
             addressValidationPanel.Visible = true;
         }
@@ -1053,8 +1123,14 @@ namespace ShipWorks.Data.Controls
             };
 
             PersonAdapter dummyAdapter = new PersonAdapter();
-            SaveToEntity(dummyAdapter);
+            PopulatePersonFromUI(dummyAdapter);
             AddressAdapter address = dummyAdapter.ConvertTo<AddressAdapter>();
+
+            AddressAdapter detailAddress = (lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>());
+
+            address.AddressValidationStatus = detailAddress.AddressValidationStatus;
+            address.AddressValidationSuggestionCount = detailAddress.AddressValidationSuggestionCount;
+            address.AddressValidationError = detailAddress.AddressValidationError;
 
             // Code to execute for each shipment
             executor.ExecuteAsync((person, executorState, issueAdder) =>
@@ -1062,15 +1138,17 @@ namespace ShipWorks.Data.Controls
                 AddressValidator validator = new AddressValidator();
                 validator.Validate(person, true, (addressEntity, entities) =>
                 {
-                    ValidatedAddresses.Clear();
+                    shouldSaveAddressSuggestions = true;
+
+                    validatedAddresses.Clear();
                     if (addressEntity != null)
                     {
-                        ValidatedAddresses.Add(addressEntity);    
+                        validatedAddresses.Add(addressEntity);    
                     }
 
                     if (entities != null)
                     {
-                        ValidatedAddresses.AddRange(entities);   
+                        validatedAddresses.AddRange(entities);   
                     }
                 });
             }, new List<AddressAdapter> { address }, address); // Execute the code for each shipment
@@ -1105,17 +1183,6 @@ namespace ShipWorks.Data.Controls
             state.ApplyMultiText(Geography.GetStateProvName(address.StateProvCode, address.CountryCode));
             postalCode.ApplyMultiText(address.PostalCode);
             country.ApplyMultiValue(Geography.GetCountryName(address.CountryCode));
-        }
-
-        private AddressAdapter lastValidatedAddress;
-        private List<ValidatedAddressEntity> validatedAddresses; 
-
-        public List<ValidatedAddressEntity> ValidatedAddresses
-        {
-            get
-            {
-                return validatedAddresses ?? (validatedAddresses = new List<ValidatedAddressEntity>());
-            }
         }
     }
 }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.AddressValidation.EntityGridAddressSelector entityGridAddressSelector1 = new ShipWorks.AddressValidation.EntityGridAddressSelector();
+            ShipWorks.AddressValidation.AddressSelector entityGridAddressSelector1 = new ShipWorks.AddressValidation.AddressSelector();
             this.sectionReturns = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.returnsPanel = new System.Windows.Forms.Panel();
             this.returnShipment = new System.Windows.Forms.CheckBox();

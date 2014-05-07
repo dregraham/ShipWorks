@@ -60,12 +60,11 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            List<AddressValidationResult> suggestedAddresses = new List<AddressValidationResult>();
             try
             {
                 string addressValidationError;
-                suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
-                                     new List<AddressValidationResult>();
+                List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
+                                                                   new List<AddressValidationResult>();
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
@@ -196,6 +195,7 @@ namespace ShipWorks.AddressValidation
             
             validationResult.CopyTo(adapter);
             UpdateInternationalTerritoryAndMilitaryAddress(adapter);
+            address.IsOriginal = false;
 
             return address;
         }

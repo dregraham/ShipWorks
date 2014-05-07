@@ -215,36 +215,6 @@ ALTER TABLE [dbo].[ActionTask] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATE
 
 
 GO
-PRINT N'Creating [dbo].[Address]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TABLE [dbo].[Address] (
-    [AddressID]              BIGINT        IDENTITY (1101, 1000) NOT NULL,
-    [Street1]                NVARCHAR (60) NOT NULL,
-    [Street2]                NVARCHAR (60) NOT NULL,
-    [Street3]                NVARCHAR (60) NOT NULL,
-    [City]                   NVARCHAR (50) NOT NULL,
-    [StateProvCode]          NVARCHAR (50) NOT NULL,
-    [PostalCode]             NVARCHAR (20) NOT NULL,
-    [CountryCode]            NVARCHAR (50) NOT NULL,
-	[ResidentialStatus]      INT           NOT NULL, 
-    [POBox]                  INT           NOT NULL, 
-    [InternationalTerritory] INT           NOT NULL, 
-    [MilitaryAddress]        INT           NOT NULL, 
-    CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED ([AddressID] ASC)
-);
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Creating [dbo].[AmazonASIN]...';
 
 
@@ -3977,6 +3947,13 @@ CREATE TABLE [dbo].[Shipment] (
     [ShipCountryCode]          NVARCHAR (50)  NOT NULL,
     [ShipPhone]                NVARCHAR (25)  NOT NULL,
     [ShipEmail]                NVARCHAR (100) NOT NULL,
+    [ShipAddressValidationSuggestionCount] INT            NOT NULL,
+    [ShipAddressValidationStatus]          INT            NOT NULL,
+    [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
+	[ShipResidentialStatus]                INT            NOT NULL, 
+    [ShipPOBox]                            INT            NOT NULL, 
+    [ShipInternationalTerritory]           INT            NOT NULL, 
+    [ShipMilitaryAddress]                  INT            NOT NULL, 
     [ResidentialDetermination] INT            NOT NULL,
     [ResidentialResult]        BIT            NOT NULL,
     [OriginOriginID]           BIGINT         NOT NULL,
@@ -4921,8 +4898,18 @@ GO
 CREATE TABLE [dbo].[ValidatedAddress] (
     [ValidatedAddressID] BIGINT IDENTITY (1100, 1000) NOT NULL,
     [ConsumerID]         BIGINT NOT NULL,
-    [AddressID]          BIGINT NOT NULL,
     [IsOriginal]         BIT    NOT NULL,
+    [Street1]                NVARCHAR (60) NOT NULL,
+    [Street2]                NVARCHAR (60) NOT NULL,
+    [Street3]                NVARCHAR (60) NOT NULL,
+    [City]                   NVARCHAR (50) NOT NULL,
+    [StateProvCode]          NVARCHAR (50) NOT NULL,
+    [PostalCode]             NVARCHAR (20) NOT NULL,
+    [CountryCode]            NVARCHAR (50) NOT NULL,
+	[ResidentialStatus]      INT           NOT NULL, 
+    [POBox]                  INT           NOT NULL, 
+    [InternationalTerritory] INT           NOT NULL, 
+    [MilitaryAddress]        INT           NOT NULL, 
     CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED ([ValidatedAddressID] ASC)
 );
 
@@ -6567,15 +6554,6 @@ PRINT N'Creating FK_UserSetting_User...';
 GO
 ALTER TABLE [dbo].[UserSettings] WITH NOCHECK
     ADD CONSTRAINT [FK_UserSetting_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID]);
-
-
-GO
-PRINT N'Creating FK_ValidatedAddress_Address...';
-
-
-GO
-ALTER TABLE [dbo].[ValidatedAddress] WITH NOCHECK
-    ADD CONSTRAINT [FK_ValidatedAddress_Address] FOREIGN KEY ([AddressID]) REFERENCES [dbo].[Address] ([AddressID]);
 
 
 GO
@@ -9321,8 +9299,6 @@ ALTER TABLE [dbo].[UserColumnSettings] WITH CHECK CHECK CONSTRAINT [FK_UserColum
 ALTER TABLE [dbo].[UserColumnSettings] WITH CHECK CHECK CONSTRAINT [FK_UserColumnSettings_User];
 
 ALTER TABLE [dbo].[UserSettings] WITH CHECK CHECK CONSTRAINT [FK_UserSetting_User];
-
-ALTER TABLE [dbo].[ValidatedAddress] WITH CHECK CHECK CONSTRAINT [FK_ValidatedAddress_Address];
 
 ALTER TABLE [dbo].[VersionSignoff] WITH CHECK CHECK CONSTRAINT [FK_VersionVerification_Computer];
 
