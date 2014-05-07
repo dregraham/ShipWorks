@@ -143,11 +143,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
         }
 
-        private void ShipmentTypeSelected(ShipmentTypeCode obj)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Fetches the rates from the shipment type and 
         /// </summary>

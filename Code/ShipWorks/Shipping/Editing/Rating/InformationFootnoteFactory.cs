@@ -12,6 +12,10 @@ namespace ShipWorks.Shipping.Editing.Rating
     {
         private readonly string informationText;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InformationFootnoteFactory"/> class.
+        /// </summary>
+        /// <param name="informationText">The information text.</param>
         public InformationFootnoteFactory(string informationText)
         {
             this.informationText = informationText;
@@ -19,6 +23,10 @@ namespace ShipWorks.Shipping.Editing.Rating
 
         public ShipmentType ShipmentType { get; private set; }
 
+        /// <summary>
+        /// Creates a footnote control.
+        /// </summary>
+        /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
             return new InformationFootnoteControl(informationText);

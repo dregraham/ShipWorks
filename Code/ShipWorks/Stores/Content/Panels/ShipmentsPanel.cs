@@ -231,6 +231,14 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
+            // If the action data is an event handler, execute it and stop processing
+            var actionMethod = ((GridActionDisplayType)e.Column.DisplayType).ActionData as Action<object, GridHyperlinkClickEventArgs>;
+            if (actionMethod != null)
+            {
+                actionMethod(sender, e);
+                return;
+            }
+
             long entityID = row.EntityID.Value;
 
             GridLinkAction action = (GridLinkAction) ((GridActionDisplayType) e.Column.DisplayType).ActionData;

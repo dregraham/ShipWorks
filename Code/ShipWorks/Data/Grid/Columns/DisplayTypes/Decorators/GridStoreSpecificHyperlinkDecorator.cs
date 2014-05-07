@@ -139,7 +139,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// <summary>
         /// A hyperlink has been clicked
         /// </summary>
-        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column)
+        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             GridColumnFormattedValue formattedValue = row.GetFormattedValue(column);
 
@@ -170,27 +170,29 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     }
                     else if (children.Count > 1)
                     {
-                        ContextMenuStrip menu = new ContextMenuStrip();
-
-                        foreach (EntityBase2 child in children)
+                        using (ContextMenuStrip menu = new ContextMenuStrip())
                         {
-                            // Required to make hoisting work properly - otherwise it uses the same child instead of each loop child
-                            EntityBase2 hoistedChild = child;
-
-                            ToolStripMenuItem menuItem = new ToolStripMenuItem(child.GetCurrentFieldValue(rollupInfo.ChildField.FieldIndex).ToString());
-                            menuItem.Click += (object sender, EventArgs e) => { storeType.GridHyperlinkClick(rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
-
-                            // Disable manual orders \ items
-                            if (skipManual && IsManuallyEntered(hoistedChild))
+                            foreach (EntityBase2 child in children)
                             {
-                                menuItem.Text += " (Manually Entered)";
-                                menuItem.Enabled = false;
+                                // Required to make hoisting work properly - otherwise it uses the same child instead of each loop child
+                                EntityBase2 hoistedChild = child;
+
+                                
+                                ToolStripMenuItem menuItem = new ToolStripMenuItem(child.GetCurrentFieldValue(rollupInfo.ChildField.FieldIndex).ToString());
+                                menuItem.Click += (object sender, EventArgs e) => { storeType.GridHyperlinkClick(rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
+
+                                // Disable manual orders \ items
+                                if (skipManual && IsManuallyEntered(hoistedChild))
+                                {
+                                    menuItem.Text += " (Manually Entered)";
+                                    menuItem.Enabled = false;
+                                }
+
+                                menu.Items.Add(menuItem);
                             }
 
-                            menu.Items.Add(menuItem);
+                            menu.Show(Cursor.Position);
                         }
-
-                        menu.Show(Cursor.Position);
                     }
                 }
                 else
