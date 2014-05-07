@@ -20,9 +20,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
     /// </summary>
     public class GridStoreSpecificHyperlinkDecorator : GridHyperlinkDecorator
     {
-        static readonly bool skipManual = true;
+        private static readonly bool skipManual = true;
 
-        class RollupInfo
+        private class RollupInfo
         {
             public int ChildCount { get; set; }
             public EntityField2 ChildField { get; set; }
@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             StoreType storeType = GetStoreType(formattedValue);
             EntityField2 field = formattedValue.PrimaryField;
 
-            if (storeType == null || (object) field == null)
+            if (storeType == null || (object)field == null)
             {
                 return false;
             }
@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     }
 
                     // Try to get the order from cache
-                    order = (OrderEntity) DataProvider.GetEntity(item.OrderID);
+                    order = (OrderEntity)DataProvider.GetEntity(item.OrderID);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 
             return StoreTypeManager.GetType(store);
         }
-        
+
         /// <summary>
         /// If the given field represents a rollup field, then the get the corresponding child field
         /// </summary>
@@ -128,12 +128,12 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             // TODO
             // Add more as more rollup column support is wanted
 
-            if ((object) childField == null)
+            if ((object)childField == null)
             {
                 return null;
             }
 
-            return new RollupInfo { ChildCount = (int) entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
+            return new RollupInfo { ChildCount = (int)entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     Cursor.Current = Cursors.WaitCursor;
 
                     List<EntityBase2> children = DataProvider.GetRelatedEntities(
-                        (long) formattedValue.Entity.GetCurrentFieldValue(0),
+                        (long)formattedValue.Entity.GetCurrentFieldValue(0),
                         EntityTypeProvider.GetEntityType(rollupInfo.ChildField.ContainingObjectName));
 
                     if (children.Count == 1)
@@ -170,29 +170,27 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     }
                     else if (children.Count > 1)
                     {
-                        using (ContextMenuStrip menu = new ContextMenuStrip())
+                        ContextMenuStrip menu = new ContextMenuStrip();
+
+                        foreach (EntityBase2 child in children)
                         {
-                            foreach (EntityBase2 child in children)
+                            // Required to make hoisting work properly - otherwise it uses the same child instead of each loop child
+                            EntityBase2 hoistedChild = child;
+
+                            ToolStripMenuItem menuItem = new ToolStripMenuItem(child.GetCurrentFieldValue(rollupInfo.ChildField.FieldIndex).ToString());
+                            menuItem.Click += (object sender, EventArgs e) => { storeType.GridHyperlinkClick(rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
+
+                            // Disable manual orders \ items
+                            if (skipManual && IsManuallyEntered(hoistedChild))
                             {
-                                // Required to make hoisting work properly - otherwise it uses the same child instead of each loop child
-                                EntityBase2 hoistedChild = child;
-
-                                
-                                ToolStripMenuItem menuItem = new ToolStripMenuItem(child.GetCurrentFieldValue(rollupInfo.ChildField.FieldIndex).ToString());
-                                menuItem.Click += (object sender, EventArgs e) => { storeType.GridHyperlinkClick(rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
-
-                                // Disable manual orders \ items
-                                if (skipManual && IsManuallyEntered(hoistedChild))
-                                {
-                                    menuItem.Text += " (Manually Entered)";
-                                    menuItem.Enabled = false;
-                                }
-
-                                menu.Items.Add(menuItem);
+                                menuItem.Text += " (Manually Entered)";
+                                menuItem.Enabled = false;
                             }
 
-                            menu.Show(Cursor.Position);
+                            menu.Items.Add(menuItem);
                         }
+
+                        menu.Show(Cursor.Position);
                     }
                 }
                 else
@@ -210,7 +208,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             var manualField = entity.Fields["IsManual"];
             if (manualField != null)
             {
-                return (bool) manualField.CurrentValue;
+                return (bool)manualField.CurrentValue;
             }
             else
             {

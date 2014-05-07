@@ -56,10 +56,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 MessageHelper.ShowInformation(Program.MainForm, "Cannot change provider after shipment has been processed.");
             }
 
-            using (var menu = new ContextMenu(ShipmentTypeManager.EnabledShipmentTypes.Select(type => new MenuItem(type.ShipmentTypeName, (sender, args) => SelectProvider(shipment, type))).ToArray()))
-            {
-                menu.Show(owner, displayPosition);
-            }
+            var menu = new ContextMenu(ShipmentTypeManager.EnabledShipmentTypes.Select(type => new MenuItem(type.ShipmentTypeName, (sender, args) => SelectProvider(shipment, type))).ToArray());
+
+            menu.Show(owner, displayPosition);
         }
 
         /// <summary>
