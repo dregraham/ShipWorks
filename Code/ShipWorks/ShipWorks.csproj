@@ -53,7 +53,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -1910,6 +1910,12 @@
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.Designer.cs">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.Designer.cs">
+      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonFulfillmentChannelCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsFeedRequestSubmitter.cs" />
@@ -1944,6 +1950,12 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\RequestSignature.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\SigningAlgorithm.cs" />
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.Designer.cs">
+      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7022,6 +7034,9 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.resx">
+      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsMarketplaceSelectionDlg.resx">
       <DependentUpon>AmazonMwsMarketplaceSelectionDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -7030,6 +7045,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.resx">
       <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.resx">
+      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.resx">
       <DependentUpon>AmazonMwsPage.cs</DependentUpon>
@@ -10132,6 +10150,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.6.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

@@ -479,6 +479,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonApi", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("SellerCentralUsername", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -601,6 +604,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonStoreFieldIndex.AmazonApi, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonApi, value); }
+		}
+
+		/// <summary> The AmazonApiRegion property of the Entity AmazonStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonApiRegion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AmazonApiRegion
+		{
+			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AmazonApiRegion, true); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonApiRegion, value); }
 		}
 
 		/// <summary> The SellerCentralUsername property of the Entity AmazonStore<br/><br/>

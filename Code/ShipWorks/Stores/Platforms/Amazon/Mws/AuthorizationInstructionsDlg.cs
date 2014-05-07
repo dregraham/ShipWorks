@@ -14,12 +14,57 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     public partial class AuthorizationInstructionsDlg : Form
     {
+        private readonly string amazonApiRegion;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizationInstructionsDlg()
+        /// <param name="amazonApiRegion"></param>
+        public AuthorizationInstructionsDlg(string amazonApiRegion)
         {
             InitializeComponent();
+
+            this.amazonApiRegion = amazonApiRegion;
+            mwsLink.Text = DeveloperUrl + ".";
+            accountNumber.Text = AccountNumber;
+        }
+
+        /// <summary>
+        /// Developer account number for access to Amazon API
+        /// </summary>
+        public string AccountNumber
+        {
+            get
+            {
+                switch (amazonApiRegion)
+                {
+                    case "US":
+                        return "1025-5115-6476";
+                    case "CA":
+                        return "1025-5115-6476";
+                    default:
+                        return "2814-9468-9452";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Url for accessing the Amazon developer portal
+        /// </summary>
+        public string DeveloperUrl
+        {
+            get
+            {
+                switch (amazonApiRegion)
+                {
+                    case "US":
+                        return "http://developer.amazonservices.com";
+                    case "CA":
+                        return "http://developer.amazonservices.ca";
+                    default:
+                        return "http://developer.amazonservices.co.uk";
+                }
+            }
         }
 
         /// <summary>
@@ -27,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         private void OnMWSLinkClick(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://developer.amazonservices.com", this);
+            WebHelper.OpenUrl(DeveloperUrl, this);
         }
 
         /// <summary>
