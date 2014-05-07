@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users.Audit;
@@ -14,29 +16,67 @@ namespace ShipWorks.Shipping.ShipSense.Population
     {
         private const string AppLockName = "ShipSenseLoader_Working";
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
+
+        private static object runningLock = new object();
         
         private readonly IShipSenseLoaderGateway shipSenseLoaderGateway;
-        private static object runningLock = new object();
-
+        private readonly IProgressReporter progressReporter;
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipSenseLoader"/> class.
+        /// Initializes a new instance of the <see cref="ShipSenseLoader" /> class.
         /// </summary>
+        /// <param name="progressReporter">The progress reporter.</param>
+        public ShipSenseLoader(IProgressReporter progressReporter)
+            :this(progressReporter, new ShipSenseLoaderGateway(new Knowledgebase()))
+        { }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipSenseLoader" /> class.
+        /// </summary>
+        /// <param name="progressReporter">The progress reporter.</param>
         /// <param name="shipSenseLoaderGateway">The ship sense loader gateway.</param>
-        public ShipSenseLoader(IShipSenseLoaderGateway shipSenseLoaderGateway)
+        public ShipSenseLoader(IProgressReporter progressReporter, IShipSenseLoaderGateway shipSenseLoaderGateway)
         {
+            this.progressReporter = progressReporter;
             this.shipSenseLoaderGateway = shipSenseLoaderGateway;
+            ResetOrderHashKeys = false;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to [reset order hash keys].
+        /// </summary>
+        private bool ResetOrderHashKeys { get; set; }
+        
         /// <summary>
         /// Starts loading order and ShipSense data on a new thread.
         /// </summary>
         public static void LoadDataAsync()
         {
-            using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
+            LoadDataAsync(new ProgressItem("Reloading ShipSense"), false);
+        }
+
+        /// <summary>
+        /// Starts loading order and ShipSense data on a new thread.
+        /// </summary>
+        /// <param name="progressReporter">The progress reporter.</param>
+        /// <param name="resetOrderHashKeys">if set to <c>true</c> this reset all the order hash keys and reload them.</param>
+        public static void LoadDataAsync(IProgressReporter progressReporter, bool resetOrderHashKeys)
+        {
+            try
             {
-                ShipSenseLoader shipSenseLoader = new ShipSenseLoader(gateway);
-                Task.Factory.StartNew(shipSenseLoader.LoadData);                
+                using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
+                {
+                    ShipSenseLoader shipSenseLoader = new ShipSenseLoader(progressReporter, gateway);
+                    shipSenseLoader.ResetOrderHashKeys = resetOrderHashKeys;
+
+                    Task.Factory.StartNew(shipSenseLoader.LoadData);
+                }
             }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+            }
+
         }
 
         /// <summary>
@@ -50,15 +90,32 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 {
                     try
                     {
+                        progressReporter.Starting();
+                        UpdateProgress("Updating orders...", 0);
+                        
+                        if (ResetOrderHashKeys)
+                        {
+                            shipSenseLoaderGateway.ResetOrderHashKeys();
+                        }
+
                         // Re-calculate the ShipSense hash key for orders that are eligible
                         // and add entries to the ShipSense knowledge base for the orders
                         // that have processed shipment.
                         UpdateOrderHashes();
+
+                        UpdateProgress("Analyzing shipment history...", 0);
                         AddKnowledgebaseEntries();
+                    }
+                    catch (Exception e)
+                    {
+                        log.ErrorFormat(e.Message, e);
                     }
                     finally
                     {
                         shipSenseLoaderGateway.ReleaseAppLock(AppLockName);
+
+                        UpdateProgress("Finished loading the knowledge base.", 100);
+                        progressReporter.Completed();
                     }
                 }
                 else
@@ -73,11 +130,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void UpdateOrderHashes()
         {
+            int totalOrdersToAnalyze = shipSenseLoaderGateway.TotalOrdersToAnalyze;
+            int ordersAnalyzed = 0;
+
             using (LoggedStopwatch stopwatch = new LoggedStopwatch(log, "OrderHashes"))
             {                
-                OrderEntity order = shipSenseLoaderGateway.FetchNextOrderToProcess();
+                OrderEntity order = shipSenseLoaderGateway.FetchNextOrderToAnalyze();
 
-                while (order != null)
+                while (order != null && !progressReporter.IsCancelRequested)
                 {
                     // Update the hash key and set the recognition status to NotRecognized; the second part of the 
                     // loader will update the status to Recognized if an KB entry gets added that matches the hash.
@@ -85,10 +145,12 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     // of NotApplicable during uploads
                     OrderUtility.UpdateShipSenseHashKey(order);
                     order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
-
                     shipSenseLoaderGateway.SaveOrder(order);
 
-                    order = shipSenseLoaderGateway.FetchNextOrderToProcess();
+                    ordersAnalyzed++;
+                    UpdateProgress(progressReporter.Detail, ordersAnalyzed * 100 / totalOrdersToAnalyze);
+
+                    order = shipSenseLoaderGateway.FetchNextOrderToAnalyze();
                 }
             }
         }
@@ -98,16 +160,45 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// </summary>
         private void AddKnowledgebaseEntries()
         {
+            int shipmentsAnalyzed = 0;
+            int totalShipmentsToProcess = shipSenseLoaderGateway.TotalShipmentsToAnalyze;
+
             using (LoggedStopwatch stopwatch = new LoggedStopwatch(log, "KB Entries"))
             {
-                ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
-                while (shipment != null)
+                ShipmentEntity shipment = shipSenseLoaderGateway.FetchNextShipmentToAnalyze();
+                while (shipment != null && !progressReporter.IsCancelRequested)
                 {
+                    // Save the shipment data to the knowledge base
                     ShippingManager.EnsureShipmentLoaded(shipment);
                     shipSenseLoaderGateway.Save(shipment);
 
-                    shipment = shipSenseLoaderGateway.FetchNextShipmentToProcess();
+                    // Update the progress
+                    shipmentsAnalyzed++;
+                    UpdateProgress(progressReporter.Detail, shipmentsAnalyzed * 100 / totalShipmentsToProcess);
+
+                    // Grab the next shipment
+                    shipment = shipSenseLoaderGateway.FetchNextShipmentToAnalyze();
                 }
+            }
+
+            log.InfoFormat("Used {0} shipments to load knowledge base.", shipmentsAnalyzed);
+        }
+
+        /// <summary>
+        /// A helper method to update the progress reporter.
+        /// </summary>
+        /// <param name="detail">The detail.</param>
+        /// <param name="percentComplete">The percent complete.</param>
+        private void UpdateProgress(string detail, int percentComplete)
+        {
+            if (progressReporter.IsCancelRequested)
+            {
+                progressReporter.Detail = "Resetting ShipSense has been canceled.";
+            }
+            else
+            {
+                progressReporter.PercentComplete = percentComplete;
+                progressReporter.Detail = detail;
             }
         }
     }

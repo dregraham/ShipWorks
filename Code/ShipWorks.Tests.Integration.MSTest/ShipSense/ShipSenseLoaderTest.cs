@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
@@ -25,11 +26,14 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
         private ShipSenseLoader testObject;
 
         private readonly Mock<ExecutionMode> executionMode;
+        private Mock<IProgressReporter> progressReporter;
 
         public ShipSenseLoaderTest()
         {
             executionMode = new Mock<ExecutionMode>();
             executionMode.Setup(m => m.IsUISupported).Returns(true);
+
+            progressReporter = new Mock<IProgressReporter>();
 
             Guid swInstance = GetShipWorksInstance();
 
@@ -115,7 +119,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
             Stopwatch stopWatch = new Stopwatch();
             using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
             {
-                testObject = new ShipSenseLoader(gateway);
+                testObject = new ShipSenseLoader(progressReporter.Object, gateway);
                 
                 stopWatch.Start();
                 testObject.LoadData();
