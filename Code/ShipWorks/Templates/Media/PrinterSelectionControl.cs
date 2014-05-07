@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Printing;
+using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using System.Reflection;
@@ -147,6 +148,13 @@ namespace ShipWorks.Templates.Media
             {
                 PrinterSettings printerSettings = new PrinterSettings();
                 printerSettings.PrinterName = selectedInfo.Name;
+
+                if (!printerSettings.IsValid)
+                {
+                    MessageHelper.ShowError(TopLevelControl, string.Format("The printer settings of the selected printer, '{0}', are invalid.  Please check your printer settings in Windows.", selectedInfo.Name));
+                    paperSource.Enabled = false;
+                    return;
+                }
 
                 // If the requested selection wasn't chosen or isn't valid then the selected paper source doesn't matter
                 if (selectedInfo.Name != selectedPrinter || !selectedInfo.IsValid)
@@ -306,6 +314,13 @@ namespace ShipWorks.Templates.Media
             // Create settings for selected printer
             PrinterSettings settings = new PrinterSettings();
             settings.PrinterName = printerInfo.Name;
+
+            if (!settings.IsValid)
+            {
+                MessageHelper.ShowError(TopLevelControl, string.Format("The printer settings of the selected printer, '{0}', are invalid.  Please check your printer settings in Windows.", printerInfo.Name));
+                paperSource.Enabled = false;
+                return;
+            }
 
             // Add each PaperSource
             paperSource.DataSource = settings.PaperSources.Cast<PaperSource>().ToList();
