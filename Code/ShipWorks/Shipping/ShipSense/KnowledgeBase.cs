@@ -214,9 +214,12 @@ namespace ShipWorks.Shipping.ShipSense
         /// </summary>
         public void Reset(UserEntity initiatedBy)
         {
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditState.Disabled))
             {
-                ActionProcedures.ResetShipSense(adapter);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    ActionProcedures.ResetShipSense(adapter);
+                }
             }
 
             AuditUtility.Audit(AuditActionType.ResetShipSense);
