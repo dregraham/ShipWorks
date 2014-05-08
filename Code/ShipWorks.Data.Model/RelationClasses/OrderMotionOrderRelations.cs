@@ -113,6 +113,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between OrderMotionOrderEntity and ValidatedAddressEntity over the 1:n relation they have, using the relation between the fields:
+		/// OrderMotionOrder.OrderID - ValidatedAddress.ConsumerID
+		/// </summary>
+		public override IEntityRelation ValidatedAddressEntityUsingConsumerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ValidatedAddress" , true);
+				relation.AddEntityFieldPair(OrderMotionOrderFields.OrderID, ValidatedAddressFields.ConsumerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderMotionOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ValidatedAddressEntity", false);
+				return relation;
+			}
+		}
+
 
 		/// <summary>Returns a new IEntityRelation object, between OrderMotionOrderEntity and CustomerEntity over the m:1 relation they have, using the relation between the fields:
 		/// OrderMotionOrder.CustomerID - Customer.CustomerID

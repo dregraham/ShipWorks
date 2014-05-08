@@ -12,6 +12,7 @@ using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
@@ -95,22 +96,6 @@ namespace ShipWorks.AddressValidation
 
             // Mark each address for deletion
             addressesToDelete.ForEach(dataAccess.DeleteEntity);
-        }
-
-        /// <summary>
-        /// Deletes addresses for all orders associated with the specified customer id
-        /// </summary>
-        public static void DeleteAddressesForCustomer(DataAccessAdapter adapter, long customerId)
-        {
-            DeleteAddressesInBulk(adapter, OrderFields.CustomerID == customerId);
-        }
-
-        /// <summary>
-        /// Deletes addresses for all orders associated with the specified store id
-        /// </summary>
-        public static void DeleteAddressesForStore(DataAccessAdapter adapter, long storeId)
-        {
-            DeleteAddressesInBulk(adapter, OrderFields.StoreID == storeId);
         }
 
         /// <summary>
@@ -369,18 +354,6 @@ namespace ShipWorks.AddressValidation
 
                 dataAccess.SaveEntity(clonedAddress);
             });
-        }
-
-        /// <summary>
-        /// Bulk delete addresses
-        /// </summary>
-        private static void DeleteAddressesInBulk(IDataAccessAdapter adapter, IPredicate predicateToAdd)
-        {
-            // Delete all the validated address entries that match the predicate
-            RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();
-            validatedAddressDeleteBucket.Relations.Add(new EntityRelation(OrderFields.OrderID, ValidatedAddressFields.ConsumerID, RelationType.OneToMany));
-            validatedAddressDeleteBucket.PredicateExpression.Add(predicateToAdd);
-            adapter.DeleteEntitiesDirectly(typeof(ValidatedAddressEntity), validatedAddressDeleteBucket);
         }
 
         /// <summary>

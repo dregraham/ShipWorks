@@ -145,7 +145,7 @@ namespace ShipWorks.Data
         /// </summary>
         private static void DeleteWithCascade(EntityType entityType, long id)
         {
-            ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteWithCascade(entityType, id, adapter); }, 5);
+            ExecuteWithDeadlockRetry((SqlAdapter adapter) => DeleteWithCascade(entityType, id, adapter), 5);
         }
 
         /// <summary>
@@ -231,9 +231,6 @@ namespace ShipWorks.Data
                 customerOrdersStore.ExpressionToApply = new ScalarQueryExpression(OrderFields.OrderID.SetAggregateFunction(AggregateFunction.Count),
                     OrderFields.CustomerID == CustomerFields.CustomerID & OrderFields.StoreID == store.StoreID);
 
-                // Delete all the validated addresses, since they aren't technically related to stores
-                ValidatedAddressManager.DeleteAddressesForStore(adapter, store.StoreID);
-
                 //  Delete all customers who have orders that are only in the store being deleted, or that have zero orders.
                 RelationPredicateBucket customerBucket = new RelationPredicateBucket(customerOrdersAll == customerOrdersStore);
 
@@ -298,15 +295,7 @@ namespace ShipWorks.Data
                 PrintResultLogger.DeleteForDeletedEntity(id, adapter);
             }
 
-            if (entityType == EntityType.CustomerEntity)
-            {
-                ValidatedAddressManager.DeleteAddressesForCustomer(adapter, id);
-            }
-
             IEntityField2 primaryKeyField = GeneralEntityFactory.Create(entityType).Fields.PrimaryKeyFields[0];
-
-            // Delete any validated addresses, which aren't technically children
-            ValidatedAddressManager.DeleteExistingAddresses(adapter, id);
 
             // Create the base filter, based on ok
             RelationPredicateBucket bucket = new RelationPredicateBucket(new FieldCompareValuePredicate(primaryKeyField, null, ComparisonOperator.Equal, id));

@@ -39,7 +39,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 
 
-
+		private OrderEntity _order;
+		private ShipmentEntity _shipment;
 
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -53,7 +54,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
+			/// <summary>Member name Order</summary>
+			public static readonly string Order = "Order";
+			/// <summary>Member name Shipment</summary>
+			public static readonly string Shipment = "Shipment";
 
 
 
@@ -117,7 +121,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				_order = (OrderEntity)info.GetValue("_order", typeof(OrderEntity));
+				if(_order!=null)
+				{
+					_order.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
+				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
+				if(_shipment!=null)
+				{
+					_shipment.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -133,6 +146,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch((ValidatedAddressFieldIndex)fieldIndex)
 			{
+				case ValidatedAddressFieldIndex.ConsumerID:
+					DesetupSyncOrder(true, false);
+					DesetupSyncShipment(true, false);
+					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -155,7 +172,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-
+				case "Order":
+					this.Order = (OrderEntity)entity;
+					break;
+				case "Shipment":
+					this.Shipment = (ShipmentEntity)entity;
+					break;
 
 
 
@@ -180,7 +202,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
+				case "Order":
+					toReturn.Add(ValidatedAddressEntity.Relations.OrderEntityUsingConsumerID);
+					break;
+				case "Shipment":
+					toReturn.Add(ValidatedAddressEntity.Relations.ShipmentEntityUsingConsumerID);
+					break;
 
 
 
@@ -206,6 +233,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					return ((numberOfOneWayRelations > 0) || base.CheckOneWayRelations(null));
 
 
+
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -219,7 +247,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "Order":
+					SetupSyncOrder(relatedEntity);
+					break;
+				case "Shipment":
+					SetupSyncShipment(relatedEntity);
+					break;
 
 
 				default:
@@ -236,7 +269,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "Order":
+					DesetupSyncOrder(false, true);
+					break;
+				case "Shipment":
+					DesetupSyncShipment(false, true);
+					break;
 
 
 				default:
@@ -259,7 +297,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
+			if(_order!=null)
+			{
+				toReturn.Add(_order);
+			}
+			if(_shipment!=null)
+			{
+				toReturn.Add(_shipment);
+			}
 
 			return toReturn;
 		}
@@ -286,7 +331,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
+				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 
 			}
 			
@@ -324,6 +370,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'Order' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoOrder()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderFields.OrderID, null, ComparisonOperator.Equal, this.ConsumerID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'Shipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ConsumerID));
+			return bucket;
+		}
 
 	
 		
@@ -392,7 +457,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
+			toReturn.Add("Order", _order);
+			toReturn.Add("Shipment", _shipment);
 
 
 
@@ -404,7 +470,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			if(_order!=null)
+			{
+				_order.ActiveContext = base.ActiveContext;
+			}
+			if(_shipment!=null)
+			{
+				_shipment.ActiveContext = base.ActiveContext;
+			}
 
 		}
 
@@ -414,7 +487,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
+			_order = null;
+			_shipment = null;
 
 			PerformDependencyInjection();
 			
@@ -476,6 +550,71 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _order</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncOrder(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ValidatedAddressEntity.Relations.OrderEntityUsingConsumerID, true, signalRelatedEntity, "ValidatedAddress", resetFKFields, new int[] { (int)ValidatedAddressFieldIndex.ConsumerID } );		
+			_order = null;
+		}
+
+		/// <summary> setups the sync logic for member _order</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncOrder(IEntity2 relatedEntity)
+		{
+			if(_order!=relatedEntity)
+			{
+				DesetupSyncOrder(true, true);
+				_order = (OrderEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _order, new PropertyChangedEventHandler( OnOrderPropertyChanged ), "Order", ValidatedAddressEntity.Relations.OrderEntityUsingConsumerID, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnOrderPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Removes the sync logic for member _shipment</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ValidatedAddressEntity.Relations.ShipmentEntityUsingConsumerID, true, signalRelatedEntity, "ValidatedAddress", resetFKFields, new int[] { (int)ValidatedAddressFieldIndex.ConsumerID } );		
+			_shipment = null;
+		}
+
+		/// <summary> setups the sync logic for member _shipment</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncShipment(IEntity2 relatedEntity)
+		{
+			if(_shipment!=relatedEntity)
+			{
+				DesetupSyncShipment(true, true);
+				_shipment = (ShipmentEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ValidatedAddressEntity.Relations.ShipmentEntityUsingConsumerID, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
@@ -512,6 +651,29 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Order' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathOrder
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))),
+					(IEntityRelation)GetRelationsForField("Order")[0], (int)ShipWorks.Data.Model.EntityType.ValidatedAddressEntity, (int)ShipWorks.Data.Model.EntityType.OrderEntity, 0, null, null, null, null, "Order", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathShipment
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))),
+					(IEntityRelation)GetRelationsForField("Shipment")[0], (int)ShipWorks.Data.Model.EntityType.ValidatedAddressEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, 0, null, null, null, null, "Shipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
 
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
@@ -694,6 +856,75 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual OrderEntity Order
+		{
+			get
+			{
+				return _order;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncOrder(value);
+				}
+				else
+				{
+					if(value==null)
+					{
+						if(_order != null)
+						{
+							_order.UnsetRelatedEntity(this, "ValidatedAddress");
+						}
+					}
+					else
+					{
+						if(_order!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "ValidatedAddress");
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual ShipmentEntity Shipment
+		{
+			get
+			{
+				return _shipment;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncShipment(value);
+				}
+				else
+				{
+					if(value==null)
+					{
+						if(_shipment != null)
+						{
+							_shipment.UnsetRelatedEntity(this, "ValidatedAddress");
+						}
+					}
+					else
+					{
+						if(_shipment!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "ValidatedAddress");
+						}
+					}
+				}
+			}
+		}
 
 	
 		

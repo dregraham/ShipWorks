@@ -525,6 +525,8 @@ namespace ShipWorks.Shipping
                 {
                     adapter.DeleteEntity(shipment);
 
+                    ValidatedAddressManager.DeleteExistingAddresses(adapter, shipmentID);
+
                     adapter.Commit();
                 }
 
