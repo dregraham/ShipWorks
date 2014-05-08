@@ -87,7 +87,12 @@ namespace ShipWorks.Shipping.Editing
             RateControl.ShowAllRates = true;
 
             personControl.EnableValidationControls = true;
-            //personControl.AddressSelector = new EntityGridAddressSelector("Ship", false);
+            personControl.LoadStoreAction = entityId =>
+            {
+                ShipmentEntity shipment = DataProvider.GetEntity(entityId) as ShipmentEntity;
+                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+                return DataProvider.GetEntity(order.StoreID) as StoreEntity;
+            };
         }
 
         /// <summary>

@@ -34,8 +34,14 @@ namespace ShipWorks.AddressValidation
             Debug.Assert(grid != null);
             
             ShowAddressOptionMenu(grid, new AddressAdapter(entity, "Ship"),
-                new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset), 
-                EntityUtility.GetEntityId(entity));
+                new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset),
+                () =>
+                {
+                    using (SqlAdapter sqlAdapter = new SqlAdapter())
+                    {
+                        return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(entity));
+                    }
+                });
         }
 
         /// <summary>

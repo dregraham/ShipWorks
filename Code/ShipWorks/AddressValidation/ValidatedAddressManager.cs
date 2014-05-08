@@ -62,6 +62,22 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Gets the associated validated addresses for an entity
+        /// </summary>
+        public static List<ValidatedAddressEntity> GetSuggestedAddresses(SqlAdapter dataAccess, long entityId)
+        {
+            return GetSuggestedAddresses(new AdapterAddressValidationDataAccess(dataAccess), entityId);
+        }
+
+        /// <summary>
+        /// Gets the associated validated addresses for an entity
+        /// </summary>
+        public static List<ValidatedAddressEntity> GetSuggestedAddresses(IAddressValidationDataAccess dataAccess, long entityId)
+        {
+            return dataAccess.LinqCollections.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
+        }
+
+        /// <summary>
         /// Deletes existing validated addresses
         /// </summary>
         public static void DeleteExistingAddresses(SqlAdapter adapter, long entityId)
@@ -75,7 +91,7 @@ namespace ShipWorks.AddressValidation
         public static void DeleteExistingAddresses(IAddressValidationDataAccess dataAccess, long entityId)
         {
             // Retrieve the addresses
-            List<ValidatedAddressEntity> addressesToDelete = dataAccess.LinqCollections.ValidatedAddress.Where(x => x.ConsumerID == entityId).ToList();
+            List<ValidatedAddressEntity> addressesToDelete = GetSuggestedAddresses(dataAccess, entityId);
 
             // Mark each address for deletion
             addressesToDelete.ForEach(dataAccess.DeleteEntity);
@@ -268,46 +284,57 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            bool canApplyChanges = store.AddressValidationSetting ==
-                                    (int)AddressValidationStoreSettingType.ValidateAndApply;
+            bool canApplyChanges = store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidateAndApply;
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            try
             {
-                try
+                AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
+
+                if (orderAdapter == shipmentAdapter)
                 {
-                    AddressAdapter orderAdapter = new AddressAdapter(order, "Ship");
+                    // Since the order and shipment addresses match, validate the order and let propagation take care of updating the shipment
+                    AddressAdapter originalShippingAddress = new AddressAdapter();
+                    orderAdapter.CopyTo(originalShippingAddress);
 
-                    if (orderAdapter == shipmentAdapter)
+                    validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
-                        // Since the order and shipment addresses match, validate the order and let propagation take care of updating the shipment
-                        AddressAdapter originalShippingAddress = new AddressAdapter();
-                        orderAdapter.CopyTo(originalShippingAddress);
-
-                        validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                        using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                         {
-                            SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
+                            SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
 
                             // Validating the order and letting its address propagate means that the current instance of the shipment
                             // won't reflect the changes, so we need to reload it
-                            adapter.FetchEntity(shipment);
-                        });
-                    }
-                    else
-                    {
-                        // Since the addresses don't match, just validate the shipment
-                        validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
-                            SaveValidatedEntity(adapter, shipment, originalAddress, suggestedAddresses));
-                    }
+                            sqlAdapter.FetchEntity(shipment);
+
+                            sqlAdapter.Commit();
+                        }
+                    });
                 }
-                catch (ORMConcurrencyException)
+                else
                 {
-                    if (retryOnConcurrencyException)
+                    // Since the addresses don't match, just validate the shipment
+                    validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    {
+                        using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                        {
+                            SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses);
+                            sqlAdapter.Commit();
+                        }
+                    });
+                }
+            }
+            catch (ORMConcurrencyException)
+            {
+                if (retryOnConcurrencyException)
+                {
+                    using (SqlAdapter sqlAdapter = new SqlAdapter())
                     {
                         // Reload the shipment before we retry validation so that we reflect the changes that caused
                         // the concurrency exception
-                        adapter.FetchEntity(shipment);
-                        ValidateShipment(shipment, validator, false);
+                        sqlAdapter.FetchEntity(shipment);                            
                     }
+
+                    ValidateShipment(shipment, validator, false);
                 }
             }
         }
@@ -336,7 +363,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Bulk delete addresses
         /// </summary>
-        private static void DeleteAddressesInBulk(DataAccessAdapter adapter, IPredicate predicateToAdd)
+        private static void DeleteAddressesInBulk(IDataAccessAdapter adapter, IPredicate predicateToAdd)
         {
             // Delete all the validated address entries that match the predicate
             RelationPredicateBucket validatedAddressDeleteBucket = new RelationPredicateBucket();

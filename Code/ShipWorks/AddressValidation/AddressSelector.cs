@@ -108,14 +108,6 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Display the list of available addresses
         /// </summary>
-        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, long entityId)
-        {
-            ShowAddressOptionMenu(owner, entityAdapter, displayPosition, () => GetEntityAddresses(entityId));
-        }
-
-        /// <summary>
-        /// Display the list of available addresses
-        /// </summary>
         public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses)
         {
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
@@ -172,19 +164,19 @@ namespace ShipWorks.AddressValidation
             return new MenuItem(title, (sender, args) => SelectAddress(entityAdapter, validatedAddress));
         }
 
-        /// <summary>
-        /// Get a list of addresses associated with the specified entity
-        /// </summary>
-        protected static List<ValidatedAddressEntity> GetEntityAddresses(long entityId)
-        {   
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                LinqMetaData metaData = new LinqMetaData(adapter);
-                return metaData.ValidatedAddress
-                    .Where(x => x.ConsumerID == entityId)
-                    .ToList();
-            }
-        }
+        ///// <summary>
+        ///// Get a list of addresses associated with the specified entity
+        ///// </summary>
+        //protected static List<ValidatedAddressEntity> GetEntityAddresses(long entityId)
+        //{   
+        //    using (SqlAdapter adapter = new SqlAdapter())
+        //    {
+        //        LinqMetaData metaData = new LinqMetaData(adapter);
+        //        return metaData.ValidatedAddress
+        //            .Where(x => x.ConsumerID == entityId)
+        //            .ToList();
+        //    }
+        //}
 
         /// <summary>
         /// Select an address to copy into the entity's shipping address

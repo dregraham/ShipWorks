@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Web.Services3.Addressing;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared;
-using System.Diagnostics;
-using ShipWorks.Data;
 using Interapptive.Shared.Utility;
 using System.Linq;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
@@ -68,7 +62,16 @@ namespace ShipWorks.Data.Controls
 
         private AddressAdapter lastValidatedAddress;
         private List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+        private StoreEntity store;
 
+        /// <summary>
+        /// Gets a store from an entity id
+        /// </summary>
+        public Func<long, StoreEntity> LoadStoreAction
+        {
+            get; 
+            set;
+        }
 
         class ControlFieldMap
         {
@@ -589,11 +592,13 @@ namespace ShipWorks.Data.Controls
                 lastValidatedAddress = new AddressAdapter();
                 loadedAddress.CopyTo(lastValidatedAddress);
 
-                lastValidatedAddress.AddressValidationStatus = loadedAddress.AddressValidationStatus;
-                lastValidatedAddress.AddressValidationError = loadedAddress.AddressValidationError;
-                lastValidatedAddress.AddressValidationSuggestionCount = loadedAddress.AddressValidationSuggestionCount;
+                CopyValidationData(loadedAddress, lastValidatedAddress);
 
                 validatedAddresses = new List<ValidatedAddressEntity>();
+
+                Debug.Assert(LoadStoreAction != null, "To use validation with the PersonControl, you must set the LoadStoreAction property");
+                store = LoadStoreAction(EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+
             }
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -661,9 +666,7 @@ namespace ShipWorks.Data.Controls
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);
-                    personAddress.AddressValidationError = lastValidatedAddress.AddressValidationError;
-                    personAddress.AddressValidationStatus = lastValidatedAddress.AddressValidationStatus;
-                    personAddress.AddressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
+                    CopyValidationData(lastValidatedAddress, personAddress);
                 }
 
                 if (shouldSaveAddressSuggestions)
@@ -1008,16 +1011,22 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            PersonAdapter loadedPerson = new PersonAdapter();
-            PopulatePersonFromUI(loadedPerson);
+            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses);
+        }
 
+        /// <summary>
+        /// Create a function that will get a list of validated addresses
+        /// </summary>
+        private List<ValidatedAddressEntity> LoadValidatedAddresses()
+        {
             if (validatedAddresses.Any())
             {
-                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), new Point(0, 0), () => validatedAddresses);
+                return validatedAddresses;
             }
-            else
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                AddressSelector.ShowAddressOptionMenu(sender as Control, loadedPerson.ConvertTo<AddressAdapter>(), new Point(0, 0), EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity));
             }
         }
 
@@ -1039,6 +1048,8 @@ namespace ShipWorks.Data.Controls
                 PopulateAddressControls(e.SelectedAddress);    
             }
 
+            isLoadingEntities = false;
+
             int addressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
             lastValidatedAddress = e.SelectedAddress;
             lastValidatedAddress.AddressValidationSuggestionCount = addressValidationSuggestionCount;
@@ -1046,8 +1057,6 @@ namespace ShipWorks.Data.Controls
             UpdateValidationUI();
 
             OnValueChanged(this, new EventArgs());
-
-            isLoadingEntities = false;
         }
 
         /// <summary>
@@ -1055,23 +1064,21 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void UpdateValidationUI()
         {
+
             if (loadedPeople.Count != 1 || !EnableValidationControls)
             {
                 addressValidationPanel.Visible = false;
             }
             else
             {
-                PersonAdapter dummyPerson = new PersonAdapter();
-                PopulatePersonFromUI(dummyPerson);
-
-                AddressAdapter detailAddress = (lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>());
-                AddressAdapter dummyAddress = dummyPerson.ConvertTo<AddressAdapter>();
-
-                dummyAddress.AddressValidationStatus = detailAddress.AddressValidationStatus;
-                dummyAddress.AddressValidationSuggestionCount = detailAddress.AddressValidationSuggestionCount;
-                dummyAddress.AddressValidationError = detailAddress.AddressValidationError;
-
-                UpdateValidationUIDetails(dummyAddress);
+                if (store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                {
+                    addressValidationPanel.Visible = false;
+                }
+                else
+                {
+                    UpdateValidationUIDetails(CreateClonedAddress());
+                }
             }
         }
 
@@ -1088,8 +1095,8 @@ namespace ShipWorks.Data.Controls
 
             addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
             addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
-            addressValidationSuggestionLink.Text = EntityGridAddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
-            addressValidationSuggestionLink.Enabled = EntityGridAddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
+            addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
+            addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
             addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
 
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
@@ -1102,56 +1109,56 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnValidateAddressLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            AddressAdapter clonedAddress = CreateClonedAddress();
+
+            // Set up background executer to do the actual validation
             BackgroundExecutor<AddressAdapter> executor = new BackgroundExecutor<AddressAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
+            executor.ExecuteCompleted += OnAddressValidated;
+            executor.ExecuteAsync(ValidateAddress, new List<AddressAdapter> { clonedAddress }, clonedAddress); // Execute the code for each shipment
+        }
 
-            // Code to execute once background load is complete
-            executor.ExecuteCompleted += (s, args) =>
+        /// <summary>
+        /// Validate the specified address
+        /// </summary>
+        private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
+        {
+            AddressValidator validator = new AddressValidator();
+            validator.Validate(address, true, (addressEntity, entities) =>
             {
-                lastValidatedAddress = args.UserState as AddressAdapter;
+                shouldSaveAddressSuggestions = true;
 
-                isLoadingEntities = true;
+                validatedAddresses.Clear();
 
-                using (new MultiValueScope())
+                if (addressEntity != null)
                 {
-                    PopulateAddressControls(lastValidatedAddress);
+                    validatedAddresses.Add(addressEntity);    
                 }
-                
-                isLoadingEntities = false;
-                UpdateValidationUIDetails(lastValidatedAddress);
 
-                OnValueChanged(this, EventArgs.Empty);
-            };
-
-            PersonAdapter dummyAdapter = new PersonAdapter();
-            PopulatePersonFromUI(dummyAdapter);
-            AddressAdapter address = dummyAdapter.ConvertTo<AddressAdapter>();
-
-            AddressAdapter detailAddress = (lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>());
-
-            address.AddressValidationStatus = detailAddress.AddressValidationStatus;
-            address.AddressValidationSuggestionCount = detailAddress.AddressValidationSuggestionCount;
-            address.AddressValidationError = detailAddress.AddressValidationError;
-
-            // Code to execute for each shipment
-            executor.ExecuteAsync((person, executorState, issueAdder) =>
-            {
-                AddressValidator validator = new AddressValidator();
-                validator.Validate(person, true, (addressEntity, entities) =>
+                if (entities != null)
                 {
-                    shouldSaveAddressSuggestions = true;
+                    validatedAddresses.AddRange(entities);   
+                }
+            });
+        }
 
-                    validatedAddresses.Clear();
-                    if (addressEntity != null)
-                    {
-                        validatedAddresses.Add(addressEntity);    
-                    }
+        /// <summary>
+        /// Load the validated address into the UI
+        /// </summary>
+        private void OnAddressValidated(object sender, BackgroundExecutorCompletedEventArgs<AddressAdapter> args)
+        {
+            lastValidatedAddress = args.UserState as AddressAdapter;
+            
+            isLoadingEntities = true;
 
-                    if (entities != null)
-                    {
-                        validatedAddresses.AddRange(entities);   
-                    }
-                });
-            }, new List<AddressAdapter> { address }, address); // Execute the code for each shipment
+            using (new MultiValueScope())
+            {
+                PopulateAddressControls(lastValidatedAddress);
+            }
+
+            isLoadingEntities = false;
+            UpdateValidationUIDetails(lastValidatedAddress);
+
+            OnValueChanged(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1183,6 +1190,29 @@ namespace ShipWorks.Data.Controls
             state.ApplyMultiText(Geography.GetStateProvName(address.StateProvCode, address.CountryCode));
             postalCode.ApplyMultiText(address.PostalCode);
             country.ApplyMultiValue(Geography.GetCountryName(address.CountryCode));
+        }
+
+        /// <summary>
+        /// Create a cloned address from the values in the UI and the previously loaded address
+        /// </summary>
+        private AddressAdapter CreateClonedAddress()
+        {
+            PersonAdapter dummyPerson = new PersonAdapter();
+            PopulatePersonFromUI(dummyPerson);
+
+            AddressAdapter clonedAddress = dummyPerson.ConvertTo<AddressAdapter>();
+            CopyValidationData(lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>(), clonedAddress);
+            return clonedAddress;
+        }
+
+        /// <summary>
+        /// Copies validation data from one address to another
+        /// </summary>
+        private static void CopyValidationData(AddressAdapter fromAddress, AddressAdapter toAddress)
+        {
+            toAddress.AddressValidationError = fromAddress.AddressValidationError;
+            toAddress.AddressValidationStatus = fromAddress.AddressValidationStatus;
+            toAddress.AddressValidationSuggestionCount = fromAddress.AddressValidationSuggestionCount;
         }
     }
 }
