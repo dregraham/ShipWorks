@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -236,6 +237,8 @@ namespace ShipWorks.Shipping
 
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
+
+                ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, shipment.ShipmentID);
 
                 adapter.Commit();
             }

@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using Divelements.SandGrid;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -16,6 +18,7 @@ namespace ShipWorks.AddressValidation
     public class EntityGridAddressSelector : AddressSelector
     {
         IEntity2 selectedEntity;
+        SandGrid grid;
 
         /// <summary>
         /// Display the list of available addresses
@@ -30,7 +33,7 @@ namespace ShipWorks.AddressValidation
 
             selectedEntity = entity;
 
-            SandGrid grid = sender as SandGrid;
+            grid = sender as SandGrid;
             Debug.Assert(grid != null);
             
             ShowAddressOptionMenu(grid, new AddressAdapter(entity, "Ship"),
@@ -51,22 +54,29 @@ namespace ShipWorks.AddressValidation
         /// <param name="originalAddress"></param>
         protected override void OnAddressSelected(AddressAdapter entityAdapter, AddressAdapter originalAddress)
         {
-            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+            try
             {
-                // If the entity is an order, we need to propagate its address to its shipments
-                OrderEntity order = selectedEntity as OrderEntity;
-                if (order != null)
+                using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                 {
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);
+                    // If the entity is an order, we need to propagate its address to its shipments
+                    OrderEntity order = selectedEntity as OrderEntity;
+                    if (order != null)
+                    {
+                        ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);
+                    }
+
+                    sqlAdapter.SaveAndRefetch(selectedEntity);
+                    sqlAdapter.Commit();
                 }
 
-                sqlAdapter.SaveAndRefetch(selectedEntity);
-                sqlAdapter.Commit();
+                Program.MainForm.ForceHeartbeat();
+
+                base.OnAddressSelected(entityAdapter, originalAddress);
             }
-
-            Program.MainForm.ForceHeartbeat();
-
-            base.OnAddressSelected(entityAdapter, originalAddress);
+            catch (ORMConcurrencyException)
+            {
+                MessageHelper.ShowError(grid, "The address could not be updated because the item has recently changed.  Please try again.");
+            }
         }
     }
 }

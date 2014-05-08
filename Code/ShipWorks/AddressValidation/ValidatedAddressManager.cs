@@ -54,7 +54,7 @@ namespace ShipWorks.AddressValidation
                     shipmentAddress.AddressValidationSuggestionCount = newShippingAddress.AddressValidationSuggestionCount;
                     shipmentAddress.AddressValidationError = newShippingAddress.AddressValidationError;
 
-                    CloneValidatedAddresses(dataAccess, orderID, shipment.ShipmentID);
+                    CopyValidatedAddresses(dataAccess, orderID, shipment.ShipmentID);
 
                     dataAccess.SaveEntity(shipment);
                 }
@@ -340,24 +340,35 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Clone the list of validated addresses from one entity to another
+        /// Copy all the validated address from one entity to another
         /// </summary>
-        private static void CloneValidatedAddresses(IAddressValidationDataAccess dataAccess, long sourceEntityID, long destinationEntityID)
+        public static void CopyValidatedAddresses(SqlAdapter sqlAdapter, long fromEntityId, long toEntityId)
         {
-            List<ValidatedAddressEntity> addresses = dataAccess.LinqCollections
-                .ValidatedAddress
-                .Where(x => x.ConsumerID == sourceEntityID)
-                .ToList();
+            CopyValidatedAddresses(new AdapterAddressValidationDataAccess(sqlAdapter), fromEntityId, toEntityId);
+        }
 
-            foreach (ValidatedAddressEntity address in addresses)
+        /// <summary>
+        /// Copy all the validated address from one entity to another
+        /// </summary>
+        public static void CopyValidatedAddresses(IAddressValidationDataAccess dataAccess, long fromEntityId, long toEntityId)
+        {
+            List<ValidatedAddressEntity> addresses = GetSuggestedAddresses(dataAccess, fromEntityId);
+
+            DeleteExistingAddresses(dataAccess, toEntityId);
+
+            addresses.ForEach(x =>
             {
-                ValidatedAddressEntity newAddress = new ValidatedAddressEntity();
-                AddressAdapter.Copy(address, newAddress, string.Empty);
-                newAddress.IsOriginal = address.IsOriginal;
-                newAddress.ConsumerID = destinationEntityID;
+                ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(x);
+                clonedAddress.IsNew = true;
+                clonedAddress.ConsumerID = toEntityId;
 
-                dataAccess.SaveEntity(newAddress);
-            }
+                foreach (IEntityField2 field in clonedAddress.Fields)
+                {
+                    field.IsChanged = true;
+                }
+
+                dataAccess.SaveEntity(clonedAddress);
+            });
         }
 
         /// <summary>

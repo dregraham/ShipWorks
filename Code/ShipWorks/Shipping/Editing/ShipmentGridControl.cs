@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.UI.Utility;
@@ -837,6 +838,28 @@ namespace ShipWorks.Shipping.Editing
                 {
                     // save 
                     ShippingManager.SaveShipment(copy);
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    {
+                        ValidatedAddressManager.CopyValidatedAddresses(sqlAdapter, shipment.ShipmentID, copy.ShipmentID);
+                        //List<ValidatedAddressEntity> addresses = ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, shipment.ShipmentID);
+
+                        //addresses.ForEach(x =>
+                        //{
+                        //    ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(x);
+                        //    clonedAddress.IsNew = true;
+                        //    clonedAddress.ConsumerID = copy.ShipmentID;
+
+                        //    foreach (IEntityField2 field in clonedAddress.Fields)
+                        //    {
+                        //        field.IsChanged = true;
+                        //    }
+
+                        //    sqlAdapter.SaveEntity(clonedAddress);
+                        //});
+
+                        sqlAdapter.Commit();
+                    }
 
                     // remember for loading later
                     createdShipments.Add(copy);
