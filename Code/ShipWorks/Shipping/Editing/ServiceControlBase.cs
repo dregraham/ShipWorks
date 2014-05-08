@@ -6,8 +6,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
@@ -87,12 +92,6 @@ namespace ShipWorks.Shipping.Editing
             RateControl.ShowAllRates = true;
 
             personControl.EnableValidationControls = true;
-            personControl.LoadStoreAction = entityId =>
-            {
-                ShipmentEntity shipment = DataProvider.GetEntity(entityId) as ShipmentEntity;
-                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
-                return DataProvider.GetEntity(order.StoreID) as StoreEntity;
-            };
         }
 
         /// <summary>

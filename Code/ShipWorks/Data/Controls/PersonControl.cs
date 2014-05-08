@@ -11,6 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using System.Linq;
+using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
@@ -63,15 +64,6 @@ namespace ShipWorks.Data.Controls
         private AddressAdapter lastValidatedAddress;
         private List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
         private StoreEntity store;
-
-        /// <summary>
-        /// Gets a store from an entity id
-        /// </summary>
-        public Func<long, StoreEntity> LoadStoreAction
-        {
-            get; 
-            set;
-        }
 
         class ControlFieldMap
         {
@@ -596,8 +588,7 @@ namespace ShipWorks.Data.Controls
 
                 validatedAddresses = new List<ValidatedAddressEntity>();
 
-                Debug.Assert(LoadStoreAction != null, "To use validation with the PersonControl, you must set the LoadStoreAction property");
-                store = LoadStoreAction(EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+                store = StoreManager.GetRelatedStore(EntityUtility.GetEntityId(loadedPeople.Single().Entity));
 
             }
 
