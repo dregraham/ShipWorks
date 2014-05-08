@@ -20,7 +20,8 @@ end
 @revisionFilePath = "\\\\INTFS01\\Development\\CruiseControl\\Configuration\\Versioning\\ShipWorks\\NextRevision.txt"
 
 desc "Cleans and builds the solution with the debug config"
-task :rebuild => ["build:clean", "build:debug"]
+task :rebuild, [:forCI] => ["build:clean", "build:debug"] do |t, args|
+end
 
 ########################################################################
 ## Tasks to build in debug and release modes (using Albacore library)
@@ -33,7 +34,44 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
-	msbuild :debug do |msb|
+	msbuild :debug, :forCI do |msb, args|
+		
+		if args != nil and args.forCI != nil and args.forCI == 'true'			
+			puts 'Updating config file for integration tests to run on CI server...'
+			# We are going to adjust the ShipWorks instance used in the config file
+			# based on the registry key value of our current directory path. This is
+			# so that it does not matter where the integration tests are run from, they
+			# will always connect to the appropriate database instance
+			instanceGuid = ""
+			
+			# Assume we're in the directory containing the ShipWorks solution - we need to get
+			# the registry key name based on the directory to the ShipWorks.exe to figure out
+			# which GUID to use in our path to the the SQL session file.
+			appDirectory = Dir.pwd + "/Artifacts/Application"
+			appDirectory = appDirectory.gsub('/', '\\')
+			
+			# Read the GUID from the registry, so we know which directory to look in; pass in 
+			# 0x100 to read from 64-bit registry otherwise the key will not be found			
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+				instanceGuid = reg[appDirectory]				
+				puts 'Found instance GUID: ' + instanceGuid
+			end
+			
+			# Read in the app settings for the integration test project
+			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration.MSTest/App.config"
+			originalAppSettings = File.read(appConfigFilePath)
+			match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
+			puts match
+			updatedAppSettings = originalAppSettings.gsub(/#{match}/, '<add key="ShipWorksInstanceGuid" value="' + instanceGuid + '"/>')
+			
+			# Write the updated app.config settings back to disk, so we connect to the 
+			# correct database in our integration tests
+			File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }	
+			
+			puts 'Updated configuration file: ' + updatedAppSettings
+			puts 'config file has been updated'
+		end 
 		print "Building solution with the debug config...\r\n\r\n"
 
 		msb.properties :configuration => :Debug
@@ -234,11 +272,11 @@ namespace :test do
 		
 		# Write the updated app.config settings back to disk, so we connect to the 
 		# correct database in our integration tests
-		File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }		
+		File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }				
 		puts 'Updated configuration file: ' + updatedAppSettings
 		
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
-		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", "/detail:stdout", "/detail:stderr", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
 	end
 end
 
