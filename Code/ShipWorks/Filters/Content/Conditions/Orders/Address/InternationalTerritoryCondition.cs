@@ -8,14 +8,14 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the international territory field of an order's shipping address
     /// </summary>
     [ConditionElement("International Territory", "Order.Address.InternationalTerritory")]
-    public class InternationalTerritoryCondition : EnumCondition<InternationalTerritoryType>
+    public class InternationalTerritoryCondition : EnumCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public InternationalTerritoryCondition()
         {
-            Value = InternationalTerritoryType.Unknown;
+            Value = ValidationDetailStatusType.Unknown;
         }
 
         /// <summary>

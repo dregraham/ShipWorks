@@ -8,14 +8,14 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the military address field of an order's shipping address
     /// </summary>
     [ConditionElement("Military Address", "Order.Address.MilitaryAddress")]
-    public class MilitaryAddressCondition : EnumCondition<MilitaryAddressType>
+    public class MilitaryAddressCondition : EnumCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public MilitaryAddressCondition()
         {
-            Value = MilitaryAddressType.Unknown;
+            Value = ValidationDetailStatusType.Unknown;
         }
 
         /// <summary>

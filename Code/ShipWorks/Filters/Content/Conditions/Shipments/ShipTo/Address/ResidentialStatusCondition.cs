@@ -8,14 +8,14 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
     /// Condition that compares against the residential status of a shipment's ShipTo address
     /// </summary>
     [ConditionElement("Residential Status", "Shipment.ShipTo.ResidentialStatus")]
-    public class ResidentialStatusCondition : EnumCondition<ResidentialStatusType>
+    public class ResidentialStatusCondition : EnumCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public ResidentialStatusCondition()
         {
-            Value = ResidentialStatusType.Unknown;
+            Value = ValidationDetailStatusType.Unknown;
         }
 
         /// <summary>

@@ -508,12 +508,9 @@
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\AddressValidator.cs" />
     <Compile Include="AddressValidation\ILinqCollections.cs" />
-    <Compile Include="AddressValidation\InternationalTerritoryType.cs" />
     <Compile Include="AddressValidation\LLBLGenLinqCollections.cs" />
-    <Compile Include="AddressValidation\MilitaryAddressType.cs" />
     <Compile Include="AddressValidation\EntityGridAddressSelector.cs" />
-    <Compile Include="AddressValidation\POBoxType.cs" />
-    <Compile Include="AddressValidation\ResidentialStatusType.cs" />
+    <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
     <Compile Include="AnalysisSuppressions.cs" />

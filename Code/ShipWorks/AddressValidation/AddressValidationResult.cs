@@ -21,8 +21,8 @@ namespace ShipWorks.AddressValidation
             StateProvCode = string.Empty;
             PostalCode = string.Empty;
             CountryCode = string.Empty;
-            ResidentialStatus = ResidentialStatusType.Unknown;
-            POBox = POBoxType.Unknown;
+            ResidentialStatus = ValidationDetailStatusType.Unknown;
+            POBox = ValidationDetailStatusType.Unknown;
         }
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Whether the address is residential or commercial
         /// </summary>
-        public ResidentialStatusType ResidentialStatus { get; set; }
+        public ValidationDetailStatusType ResidentialStatus { get; set; }
 
         /// <summary>
         /// Whether the address is a PO Box
         /// </summary>
-        public POBoxType POBox { get; set; }
+        public ValidationDetailStatusType POBox { get; set; }
 
         /// <summary>
         /// Defines whether an address is valid and usable

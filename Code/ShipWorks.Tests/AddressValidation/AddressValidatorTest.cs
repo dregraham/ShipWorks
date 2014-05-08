@@ -245,15 +245,15 @@ namespace ShipWorks.Tests.AddressValidation
             result1.StateProvCode = "AA";
             result1.CountryCode = "US";
             result1.PostalCode = "12345";
-            result1.ResidentialStatus = ResidentialStatusType.Commercial;
-            result1.POBox = POBoxType.POBox;
+            result1.ResidentialStatus = ValidationDetailStatusType.False;
+            result1.POBox = ValidationDetailStatusType.True;
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(ResidentialStatusType.Commercial, (ResidentialStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(POBoxType.POBox, (POBoxType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(MilitaryAddressType.MilitaryAddress, (MilitaryAddressType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(InternationalTerritoryType.NotInternationalTerritory, (InternationalTerritoryType)sampleOrder.ShipInternationalTerritory);
+            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipInternationalTerritory);
         }
 
         [TestMethod]
@@ -304,15 +304,15 @@ namespace ShipWorks.Tests.AddressValidation
             result1.StateProvCode = "AA";
             result1.CountryCode = "US";
             result1.PostalCode = "12345";
-            result1.ResidentialStatus = ResidentialStatusType.Commercial;
-            result1.POBox = POBoxType.POBox;
+            result1.ResidentialStatus = ValidationDetailStatusType.False;
+            result1.POBox = ValidationDetailStatusType.True;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(ResidentialStatusType.Commercial, (ResidentialStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(POBoxType.POBox, (POBoxType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(MilitaryAddressType.MilitaryAddress, (MilitaryAddressType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(InternationalTerritoryType.NotInternationalTerritory, (InternationalTerritoryType)sampleOrder.ShipInternationalTerritory);
+            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipInternationalTerritory);
         }
 
         [TestMethod]

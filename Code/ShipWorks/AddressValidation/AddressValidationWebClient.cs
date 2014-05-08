@@ -114,41 +114,41 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets whether the specified address result is a PO Box or not
         /// </summary>
-        private static POBoxType GetPOBox(XPathNavigator zip1Result, string path)
+        private static ValidationDetailStatusType GetPOBox(XPathNavigator zip1Result, string path)
         {
             string poBox = XPathUtility.Evaluate(zip1Result, path, String.Empty);
 
             if (poBox == "P")
             {
-                return POBoxType.POBox;
+                return ValidationDetailStatusType.True;
             }
 
             if (string.IsNullOrEmpty(poBox))
             {
-                return POBoxType.Unknown;
+                return ValidationDetailStatusType.Unknown;
             }
 
-            return POBoxType.NotPOBox;
+            return ValidationDetailStatusType.False;
         }
 
         /// <summary>
         /// Gets whether the specified address result is commercial or residential
         /// </summary>
-        private static ResidentialStatusType GetResidentialStatus(XPathNavigator zip1Result)
+        private static ValidationDetailStatusType GetResidentialStatus(XPathNavigator zip1Result)
         {
             string residentialStatus = XPathUtility.Evaluate(zip1Result, "/Dial-A-ZIP_Response/RDI", String.Empty);
 
             if (residentialStatus == "R")
             {
-                return ResidentialStatusType.Residential;
+                return ValidationDetailStatusType.True;
             }
 
             if (residentialStatus == "B")
             {
-                return ResidentialStatusType.Commercial;
+                return ValidationDetailStatusType.False;
             }
 
-            return ResidentialStatusType.Unknown;
+            return ValidationDetailStatusType.Unknown;
         }
 
         private static void ParseStreet1(AddressValidationResult addressValidationResult)

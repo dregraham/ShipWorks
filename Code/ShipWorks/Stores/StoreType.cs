@@ -133,10 +133,10 @@ namespace ShipWorks.Stores
             return new OrderEntity
             {
                 ShipAddressValidationError = string.Empty,
-                ShipResidentialStatus = (int) ResidentialStatusType.Unknown,
-                ShipPOBox = (int) POBoxType.Unknown,
-                ShipInternationalTerritory = (int) InternationalTerritoryType.Unknown,
-                ShipMilitaryAddress = (int) MilitaryAddressType.Unknown
+                ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown,
+                ShipPOBox = (int) ValidationDetailStatusType.Unknown,
+                ShipInternationalTerritory = (int) ValidationDetailStatusType.Unknown,
+                ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown
             };
         }
 

@@ -4,18 +4,18 @@ using System.Reflection;
 namespace ShipWorks.AddressValidation
 {
     /// <summary>
-    /// Defines states for whether the address is a PO Box
+    /// Defines states for residential address status
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum POBoxType
+    public enum ValidationDetailStatusType
     {
         [Description("Unknown")]
         Unknown = 0,
 
-        [Description("PO Box")]
-        POBox = 1,
+        [Description("True")]
+        True = 1,
 
-        [Description("Not PO Box")]
-        NotPOBox = 2
+        [Description("False")]
+        False = 2
     }
 }

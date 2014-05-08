@@ -8,14 +8,14 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
     /// Condition that compares against the PO Box field of a shipment's ShipTo address
     /// </summary>
     [ConditionElement("PO Box", "Shipment.ShipTo.POBox")]
-    public class POBoxCondition : EnumCondition<POBoxType>
+    public class POBoxCondition : EnumCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public POBoxCondition()
         {
-            Value = POBoxType.Unknown;
+            Value = ValidationDetailStatusType.Unknown;
         }
 
         /// <summary>

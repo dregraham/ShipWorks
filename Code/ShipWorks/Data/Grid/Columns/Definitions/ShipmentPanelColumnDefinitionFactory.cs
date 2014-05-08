@@ -134,25 +134,25 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     { DefaultWidth = 120 }, 
 
                 new GridColumnDefinition("{70F17C2C-74AD-4AF3-8E44-1DA5597A92F6}",
-                    new GridEnumDisplayType<ResidentialStatusType>(EnumSortMethod.Description),
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: Residential status", string.Empty,
                     ShipmentFields.ShipResidentialStatus) 
                     { DefaultWidth = 100 }, 
 
                 new GridColumnDefinition("{3AF5D697-F319-48E5-87B7-500D3186AABE}",
-                    new GridEnumDisplayType<POBoxType>(EnumSortMethod.Description),
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: PO Box", string.Empty,
                     ShipmentFields.ShipPOBox) 
                     { DefaultWidth = 72 }, 
 
                 new GridColumnDefinition("{2BAFB097-004D-4DE5-9779-F4D86854943E}",
-                    new GridEnumDisplayType<InternationalTerritoryType>(EnumSortMethod.Description),
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: International Territory", string.Empty,
                     ShipmentFields.ShipInternationalTerritory) 
                     { DefaultWidth = 145 }, 
 
                 new GridColumnDefinition("{8097B252-BB97-412E-9DA4-CC1D8ADC0007}",
-                    new GridEnumDisplayType<MilitaryAddressType>(EnumSortMethod.Description),
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: Military Address", string.Empty,
                     ShipmentFields.ShipMilitaryAddress) 
                     { DefaultWidth = 115 }

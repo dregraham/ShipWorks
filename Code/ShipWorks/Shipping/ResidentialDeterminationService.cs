@@ -61,12 +61,12 @@ namespace ShipWorks.Shipping
                     // If we found an order and the address matches the shipment, try using the ShipResidentialStatus field
                     if (order != null && new AddressAdapter(shipment, "Ship") == new AddressAdapter(order, "Ship"))
                     {
-                        if (order.ShipResidentialStatus == (int) ResidentialStatusType.Residential)
+                        if (order.ShipResidentialStatus == (int)ValidationDetailStatusType.True)
                         {
                             return true;
                         }
 
-                        if (order.ShipResidentialStatus == (int) ResidentialStatusType.Commercial)
+                        if (order.ShipResidentialStatus == (int) ValidationDetailStatusType.False)
                         {
                             return false;
                         }

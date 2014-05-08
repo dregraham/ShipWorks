@@ -58,10 +58,11 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Email", () => person.Email);
             AddElement("Website", () => person.Website);
 
-            AddElement("ResidentialStatus", CreateStatusElement(context, () => (ResidentialStatusType)person.ResidentialStatus));
-            AddElement("POBox", CreateStatusElement(context, () => (POBoxType)person.POBox));
-            AddElement("InternationalTerritory", CreateStatusElement(context, () => (InternationalTerritoryType)person.InternationalTerritory));
-            AddElement("MilitaryAddress", CreateStatusElement(context, () => (MilitaryAddressType)person.MilitaryAddress));
+            AddElement("AddressValidationStatus", () => ((AddressValidationStatusType)person.AddressValidationStatus).ToString());
+            AddElement("ResidentialStatus", () => ((ValidationDetailStatusType)person.ResidentialStatus).ToString());
+            AddElement("POBox", () => ((ValidationDetailStatusType)person.POBox).ToString());
+            AddElement("InternationalTerritory", () => ((ValidationDetailStatusType)person.InternationalTerritory).ToString());
+            AddElement("MilitaryAddress", () => ((ValidationDetailStatusType)person.MilitaryAddress).ToString());
         }
 
         /// <summary>

@@ -45,8 +45,6 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Total", () => Order.OrderTotal);
 
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Order, "Ship"));
-            AddElement("ShipAddressValidationStatus", () => ((AddressValidationStatusType)Order.ShipAddressValidationStatus).ToString());
-
             AddElement("Address", new AddressOutline(context, "bill", true), () => new PersonAdapter(Order, "Bill"));
 
             // Add an outline entry for each unique store type that could potentially be used
