@@ -48,7 +48,7 @@
   <customWorkspace>E:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake rebuild</command>
+      <command>rake rebuild[true]</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
