@@ -234,6 +234,13 @@ namespace ShipWorks.Shipping
                 adapter.Commit();
             }
 
+            if (shipment.ShipSenseStatus != (int)ShipSenseStatus.NotApplied)
+            {
+                // Make sure the status is correct in case a rule/profile changed a shipment after ShipSense was applied
+                KnowledgebaseEntry entry = new Knowledgebase().GetEntry(shipment.Order);
+                shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+            }
+
             // Explicitly save the shipment here to delete any entities in the Removed buckets of the 
             // entity collections; after applying ShipSense (where customs items are first loaded in 
             // this path), and entities were removed, they were still being persisted to the database.
