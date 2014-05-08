@@ -2690,10 +2690,10 @@ CREATE TABLE [dbo].[Order] (
     [ShipAddressValidationSuggestionCount] INT            NOT NULL,
     [ShipAddressValidationStatus]          INT            NOT NULL,
     [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
-	[ShipResidentialStatus]                INT            NOT NULL, 
-    [ShipPOBox]                            INT            NOT NULL, 
-    [ShipInternationalTerritory]           INT            NOT NULL, 
-    [ShipMilitaryAddress]                  INT            NOT NULL, 
+    [ShipResidentialStatus]                INT            NOT NULL,
+    [ShipPOBox]                            INT            NOT NULL,
+    [ShipInternationalTerritory]           INT            NOT NULL,
+    [ShipMilitaryAddress]                  INT            NOT NULL,
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
     [RollupItemCode]                       NVARCHAR (300) NULL,
@@ -4601,6 +4601,26 @@ CREATE TABLE [dbo].[ThreeDCartStore] (
     [DownloadModifiedNumberOfDaysBack] INT            NOT NULL,
     CONSTRAINT [PK_ThreeDCartStore] PRIMARY KEY CLUSTERED ([StoreID] ASC)
 );
+
+
+GO
+PRINT N'Creating [dbo].[UpdateQueue]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[UpdateQueue] (
+    [UpdateQueueID]             INT           IDENTITY (1, 1) NOT NULL,
+    [UpdateDatabaseProcessType] VARCHAR (200) NOT NULL,
+    PRIMARY KEY CLUSTERED ([UpdateQueueID] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO

@@ -850,7 +850,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
         /// </summary>
         protected override int RunEstimate(SqlConnection con)
         {
-            SchemaVersion installedVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion(con);
+            SchemaVersion installedVersion = SqlDatabaseDetail.GetSchemaVersion(con);
 
             if (!installedVersion.IsSystemVersion)
             {
@@ -887,7 +887,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
             using (SqlConnection con = OpenConnectionForTask(this))
             {
                 // capture the current database version
-                databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion(con).GetVersion();
+                databaseSchemaVersion = SqlDatabaseDetail.GetSchemaVersion(con).GetVersion();
 
                 // The scripts must run in SQL 2000 mode, as that's what they were generated for.  Most databases will already be at that level unless
                 // they were created in a manually installed instance of 05 or higher.

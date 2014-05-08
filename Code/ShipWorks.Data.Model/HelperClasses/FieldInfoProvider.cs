@@ -200,6 +200,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitTemplateUserSettingsEntityInfos();
 			InitThreeDCartOrderItemEntityInfos();
 			InitThreeDCartStoreEntityInfos();
+			InitUpdateQueueEntityInfos();
 			InitUpsAccountEntityInfos();
 			InitUpsPackageEntityInfos();
 			InitUpsProfileEntityInfos();
@@ -2464,6 +2465,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "TimeZoneID", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.TimeZoneID, 100, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
+		}
+		/// <summary>Inits UpdateQueueEntity's FieldInfo objects</summary>
+		private void InitUpdateQueueEntityInfos()
+		{
+			base.AddElementFieldInfo("UpdateQueueEntity", "UpdateQueueID", typeof(System.Int32), true, false, true, false,  (int)UpdateQueueFieldIndex.UpdateQueueID, 0, 0, 10);
+			base.AddElementFieldInfo("UpdateQueueEntity", "UpdateDatabaseProcessType", typeof(System.String), false, false, false, false,  (int)UpdateQueueFieldIndex.UpdateDatabaseProcessType, 200, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()

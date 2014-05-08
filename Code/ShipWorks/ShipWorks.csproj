@@ -605,7 +605,11 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
-    <Compile Include="Data\Administration\Versioning\VersionAndScriptName.cs" />
+    <Compile Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.cs" />
+    <Compile Include="Data\Administration\Scripts\Update\IUpdateDatabaseProcess.cs" />
+    <Compile Include="Data\Administration\Versioning\UpdateProcessManager.cs" />
+    <Compile Include="Data\Administration\Versioning\VersionUpgradeStep.cs" />
+    <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Data\Administration\Versioning\FindVersionUpgradePathException.cs" />
     <Compile Include="Data\Administration\Versioning\ISchemaVersionManager.cs" />
@@ -621,6 +625,15 @@
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.Designer.cs">
+      <DependentUpon>AddressValidationStatusValueEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\AddressValidationStatusPopup.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -6892,6 +6905,9 @@
     <EmbeddedResource Include="FileTransfer\FtpFolderBrowserDlg.resx">
       <DependentUpon>FtpFolderBrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.resx">
+      <DependentUpon>AddressValidationStatusValueEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\CountryValueEditor.resx">
       <DependentUpon>CountryValueEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -9967,7 +9983,9 @@
     <None Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
-    <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
+    <EmbeddedResource Include="Filters\Content\ConditionTree.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Resources\Progress\indicator_blue.gif" />
     <None Include="Resources\Progress\circling_ball.gif" />
     <None Include="Resources\Progress\arrows_blue.gif" />

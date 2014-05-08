@@ -199,6 +199,7 @@ namespace ShipWorks.Data.Adapter
 			InitTemplateUserSettingsEntityMappings();
 			InitThreeDCartOrderItemEntityMappings();
 			InitThreeDCartStoreEntityMappings();
+			InitUpdateQueueEntityMappings();
 			InitUpsAccountEntityMappings();
 			InitUpsPackageEntityMappings();
 			InitUpsProfileEntityMappings();
@@ -2606,6 +2607,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "TimeZoneID", "TimeZoneID", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "StatusCodes", "StatusCodes", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+		}
+		/// <summary>Inits UpdateQueueEntity's mappings</summary>
+		private void InitUpdateQueueEntityMappings()
+		{
+			base.AddElementMapping( "UpdateQueueEntity", "ShipWorksLocal", @"dbo", "UpdateQueue", 2 );
+			base.AddElementFieldMapping( "UpdateQueueEntity", "UpdateQueueID", "UpdateQueueID", false, (int)SqlDbType.Int, 0, 0, 10, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0 );
+			base.AddElementFieldMapping( "UpdateQueueEntity", "UpdateDatabaseProcessType", "UpdateDatabaseProcessType", false, (int)SqlDbType.VarChar, 200, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
 		/// <summary>Inits UpsAccountEntity's mappings</summary>
 		private void InitUpsAccountEntityMappings()

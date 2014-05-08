@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Management;
 using ShipWorks.Data.Adapter.Custom;
 using System.Data.SqlClient;
@@ -234,7 +237,7 @@ namespace ShipWorks.Filters
             if (name.Length > filter.Fields[(int)FilterFieldIndex.Name].MaxLength)
             {
                 throw new FilterException(
-                    string.Format(
+                    String.Format(
                         "Filter names may only be {0} characters or less.  Please shorten the requested filter name '{1}'.",
                         filter.Fields[(int)FilterFieldIndex.Name].MaxLength, name));
             }
@@ -368,7 +371,7 @@ namespace ShipWorks.Filters
         /// </summary>
         public static Image GetFilterImage(FilterTarget target)
         {
-            return EntityUtility.GetEntityImage(FilterHelper.GetEntityType(target));
+            return EntityUtility.GetEntityImage(GetEntityType(target));
         }
 
         /// <summary>
@@ -523,7 +526,7 @@ namespace ShipWorks.Filters
 
             if (EntityUtility.GetEntitySeed(filterContentID) != 14)
             {
-                throw new InvalidOperationException(string.Format("{0} is not a valid FilterNodeContentID", filterContentID));
+                throw new InvalidOperationException(String.Format("{0} is not a valid FilterNodeContentID", filterContentID));
             }
 
             // If we are within a transaction right now, we don't want the FilterNodeContent table locked into that
@@ -615,5 +618,60 @@ namespace ShipWorks.Filters
             log.InfoFormat("Timed out trying to ensure filters were updated.");
             return false;
         }
+
+        /// <summary>
+        /// Creates fitler for address validation statuses.
+        /// </summary>
+        public static FilterDefinition CreateAddressValidationDefinition(params AddressValidationStatusType[] statusesToInclude)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            // If [Any]
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
+
+            AddressValidationStatusCondition statusCondition = new AddressValidationStatusCondition()
+            {
+                Operator = EqualityOperator.Equals,
+                StatusTypes = statusesToInclude.ToList()
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create a FilterEntity object of the given name from the specified definition
+        /// </summary>
+        public static FilterEntity CreateFilterEntity(string name, FilterDefinition definition)
+        {
+            if (definition == null)
+            {
+                throw new ArgumentNullException("definition");
+            }
+
+            FilterEntity filter = new FilterEntity();
+            filter.Name = name;
+            filter.FilterTarget = (int)definition.FilterTarget;
+            filter.IsFolder = false;
+            filter.Definition = definition.GetXml();
+
+            return filter;
+        }
+
+        /// <summary>
+        /// Create a FilterEntity object of the given name with no definition that represents a folder
+        /// </summary>
+        public static FilterEntity CreateFilterFolderEntity(string name, FilterTarget target)
+        {
+            FilterEntity folder = new FilterEntity();
+            folder.Name = name;
+            folder.FilterTarget = (int)target;
+            folder.IsFolder = true;
+            folder.Definition = null;
+
+            return folder;
+        }
+
     }
 }
