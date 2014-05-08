@@ -36,7 +36,8 @@ namespace ShipWorks.AddressValidation
         public static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
-            if (originalShippingAddress == newShippingAddress)
+            if (originalShippingAddress == newShippingAddress && 
+                originalShippingAddress.AddressValidationStatus == newShippingAddress.AddressValidationStatus)
             {
                 return;
             }

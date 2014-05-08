@@ -87,11 +87,11 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateAddresses(connection, AddressValidationStatusType.Pending, orders => orders.Any());
+                    ValidateAddresses(AddressValidationStatusType.Pending, orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service
-                    ValidateAddresses(connection, AddressValidationStatusType.Error, 
+                    ValidateAddresses(AddressValidationStatusType.Error, 
                         orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
                 }
                 finally
@@ -104,13 +104,13 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static void ValidateAddresses(SqlConnection connection, AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
+        private static void ValidateAddresses(AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
         {
             List<OrderEntity> pendingOrders;
 
             do
             {
-                using (SqlAdapter adapter = new SqlAdapter(connection))
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
                     LinqMetaData linqMetaData = new LinqMetaData(adapter);
 
@@ -119,23 +119,24 @@ namespace ShipWorks.AddressValidation
                         .Take(50)
                         .ToList();
 
-                    pendingOrders.ForEach(x =>
-                    {
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            return;
-                        }
-
-                        Validate(x, adapter);
-                    });
                 }
+
+                pendingOrders.ForEach(x =>
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    Validate(x);
+                });
             } while (shouldContinue(pendingOrders));
         }
 
         /// <summary>
         /// Validates the specified order identifier.
         /// </summary>
-        private static void Validate(OrderEntity order, SqlAdapter adapter)
+        private static void Validate(OrderEntity order)
         {
             try
             {
@@ -147,8 +148,15 @@ namespace ShipWorks.AddressValidation
                     StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
                     bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    addressValidator.Validate(order, "Ship", shouldAutomaticallyAdjustAddress, (originalAddress, suggestedAddresses) =>
-                            ValidatedAddressManager.SaveValidatedOrder(adapter, order, originalShippingAddress, originalAddress, suggestedAddresses));
+                    addressValidator.Validate(order, "Ship", shouldAutomaticallyAdjustAddress,
+                        (originalAddress, suggestedAddresses) =>
+                        {
+                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                            {
+                                ValidatedAddressManager.SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
+                                sqlAdapter.Commit();
+                            }
+                        });
                 }
             }
             catch (ObjectDeletedException)
