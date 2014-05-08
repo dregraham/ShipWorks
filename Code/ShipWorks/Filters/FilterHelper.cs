@@ -6,6 +6,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders.Address;
 using ShipWorks.Filters.Management;
 using ShipWorks.Data.Adapter.Custom;
 using System.Data.SqlClient;
@@ -629,7 +630,7 @@ namespace ShipWorks.Filters
             // If [Any]
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
 
-            AddressValidationStatusCondition statusCondition = new AddressValidationStatusCondition()
+            AddressValidationStatusCondition statusCondition = new OrderAddressValidationStatusCondition()
             {
                 Operator = EqualityOperator.Equals,
                 StatusTypes = statusesToInclude.ToList()

@@ -279,6 +279,11 @@
           <Condition identifier="Shipment.ShipTo.StateProvince" displayAs="State\Province"/>
           <Condition identifier="Shipment.ShipTo.PostalCode" displayAs="Postal Code"/>
           <Condition identifier="Shipment.ShipTo.Country" displayAs="Country"/>
+          <Condition identifier="Shipment.ShipTo.AddressValidationStatus" />
+          <Condition identifier="Shipment.ShipTo.ResidentialStatus" displayAs="Shipping Residential Status" />
+          <Condition identifier="Shipment.ShipTo.POBox" displayAs="Shipping PO Box" />
+          <Condition identifier="Shipment.ShipTo.InternationalTerritory" displayAs="Shipping International Territory" />
+          <Condition identifier="Shipment.ShipTo.MilitaryAddress" displayAs="Shipping Military Address" />
         </Group>
         <Condition identifier="Shipment.ShipTo.Company" displayAs="Company"/>
         <Condition identifier="Shipment.ShipTo.EmailAddress"  displayAs="Email Address"/>
