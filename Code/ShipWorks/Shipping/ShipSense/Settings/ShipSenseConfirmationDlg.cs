@@ -12,17 +12,35 @@ namespace ShipWorks.Shipping.ShipSense.Settings
     public partial class ShipSenseConfirmationDlg : Form
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipSenseConfirmationDlg"/> class.
+        /// Initializes a new instance of the <see cref="ShipSenseConfirmationDlg" /> class.
         /// </summary>
-        /// <param name="description">The description.</param>
-        public ShipSenseConfirmationDlg(string description)
+        /// <param name="confirmationText">The confirmation text.</param>
+        public ShipSenseConfirmationDlg(string confirmationText)
         {
             InitializeComponent();
+
+            this.confirmationText.Text = confirmationText;
+            
+            // Calculate the size of the text and adjust the other controls accordingly
+            using (Graphics g = CreateGraphics())
+            {
+                SizeF size = g.MeasureString(this.confirmationText.Text, this.confirmationText.Font);
+                this.confirmationText.Height = (int)size.Height;
+
+                rebuildKnowledgebase.Top = this.confirmationText.Bottom + 3;
+                yesButton.Top = rebuildKnowledgebase.Bottom + 15;
+                noButton.Top = yesButton.Top;
+
+                this.Height = yesButton.Bottom + 37;
+            }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the user wants to reload the knowledge base.
+        /// Gets a value indicating whether the user wants to reload the knowledge base.
         /// </summary>
-        public bool IsReloadRequested { get; set; }
+        public bool IsReloadRequested
+        {
+            get { return rebuildKnowledgebase.Checked; }
+        }
     }
 }

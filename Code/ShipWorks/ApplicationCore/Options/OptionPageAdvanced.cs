@@ -100,7 +100,6 @@ namespace ShipWorks.ApplicationCore.Options
             const string ConfirmationText = @"Clearing the knowledge base will delete all of the information that ShipWorks " +
                 "uses to create shipments based on your shipment history.\n\n" +
                 "Do you wish to continue?";
-            
 
             bool reloadKnowledgebase = false;
             using (ShipSenseConfirmationDlg confirmationDialog = new ShipSenseConfirmationDlg(ConfirmationText))
