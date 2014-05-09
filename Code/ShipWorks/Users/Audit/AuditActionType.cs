@@ -74,6 +74,13 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         [Description("Reset ShipSense")]
         [ImageResource("delete16")]
-        ResetShipSense = 8
+        ResetShipSense = 8,
+
+        /// <summary>
+        /// A reload of the knowledge base was started.
+        /// </summary>
+        [Description("Reload ShipSense started")]
+        [ImageResource("arrows_green_static")]
+        ReloadShipSenseStarted = 9
     }
 }

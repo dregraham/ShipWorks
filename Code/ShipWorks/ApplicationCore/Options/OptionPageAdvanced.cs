@@ -11,6 +11,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Users;
+using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Shipping.ShipSense.Settings;
 using ShipWorks.Data.Connection;
@@ -99,12 +100,25 @@ namespace ShipWorks.ApplicationCore.Options
             const string ConfirmationText = @"Clearing the knowledge base will delete all of the information that ShipWorks " +
                 "uses to create shipments based on your shipment history.\n\n" +
                 "Do you wish to continue?";
+            
 
-            DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Question, MessageBoxButtons.YesNo, ConfirmationText);
-
-            if (result == DialogResult.Yes)
+            bool reloadKnowledgebase = false;
+            using (ShipSenseConfirmationDlg confirmationDialog = new ShipSenseConfirmationDlg(ConfirmationText))
             {
-                new Knowledgebase().Reset(UserSession.User);
+                if (confirmationDialog.ShowDialog(this) == DialogResult.Yes)
+                {
+                    new Knowledgebase().Reset(UserSession.User);
+                    
+                    // Make note of whether we need to reload the knowledge base here, so we can
+                    // dispose of the confirmation dialog and show the progress dialog while 
+                    // the loader is running.
+                    reloadKnowledgebase = confirmationDialog.IsReloadRequested;
+                }
+            }
+
+            if (reloadKnowledgebase)
+            {
+                ReloadKnowledgebase();
             }
         }
 
@@ -145,13 +159,14 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void ReloadKnowledgebase()
         {
+            // Record an entry in the audit log that the KB reload was started
+            AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
+
+            // Setup dependencies for the progress dialog
             ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
 
             ProgressProvider progressProvider = new ProgressProvider();
             progressProvider.ProgressItems.Add(progressItem);
-
-            UpdateShipmentRange();
-            ShipSenseLoader.LoadDataAsync(progressItem, true);
 
             progressDialog = new ProgressDlg(progressProvider)
             {
@@ -162,78 +177,22 @@ namespace ShipWorks.ApplicationCore.Options
                 AllowCloseWhenRunning = false,
 
                 ActionColumnHeaderText = "ShipSense",
-
                 CloseTextWhenComplete = "Close"
             };
 
+            ShipSenseLoader loader = new ShipSenseLoader(progressItem);
+            
+            // Indicate that we want to reset the hash keys and prepare the environment for the 
+            // load process to begin
+            loader.ResetOrderHashKeys = true;
+            loader.PrepareForLoading();
+
+            // Start the load asynchronously now that everything should be ready to load
+            Task.Factory.StartNew(loader.LoadData);
+            
+            // Show the progress dialog
             progressDialog.ShowDialog(this);
             progressDialog.Dispose();
-
-        }
-
-        /// <summary>
-        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
-        /// the ShipSense knowledge base.
-        /// </summary>
-        private void UpdateShipmentRange()
-        {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            settings.ShipSenseProcessedShipmentID = GetStartingShipmentID();
-            settings.ShipSenseEndShipmentID = GetEndingShipmentID();
-
-            ShippingSettings.Save(settings);
-        }
-
-
-        /// <summary>
-        /// Gets the shipment ID to start from when rebuilding the ShipSense knowledge base.
-        /// </summary>
-        private static long GetStartingShipmentID()
-        {
-            long startingShipmentID = 0;
-
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
-            {
-                SqlCommand command = SqlCommandProvider.Create(connection);
-                command.CommandText = @"
-                                        DECLARE @ShipSenseProcessedShipmentID BIGINT
-                                        WITH Shipments AS                                        (	                                        SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC                                        )                                        SELECT MIN(ShipmentID) FROM Shipments";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
-                {
-                    if (reader.Read())
-                    {
-                        startingShipmentID = reader.GetInt64(0);
-                    }
-                }
-            }
-
-            return startingShipmentID;
-        }
-
-        /// <summary>
-        /// Gets the maximum shipment ID of all the processed shipments.
-        /// </summary>
-        private static long GetEndingShipmentID()
-        {
-            long endingShipmentID = 0;
-
-            using (SqlConnection connection = SqlSession.Current.OpenConnection())
-            {
-                SqlCommand command = SqlCommandProvider.Create(connection);
-                command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
-                {
-                    if (reader.Read())
-                    {
-                        endingShipmentID = reader.GetInt64(0);
-                    }
-                }
-            }
-
-            return endingShipmentID;
         }
     }
 }

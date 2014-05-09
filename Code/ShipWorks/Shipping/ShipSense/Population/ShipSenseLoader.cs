@@ -43,9 +43,9 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to [reset order hash keys].
+        /// Gets or sets a value indicating whether to [reset order hash keys] as part of the load process.
         /// </summary>
-        private bool ResetOrderHashKeys { get; set; }
+        public bool ResetOrderHashKeys { get; set; }
         
         /// <summary>
         /// Does some precursory work prior to (re)loading the ShipSense knowledge base.
