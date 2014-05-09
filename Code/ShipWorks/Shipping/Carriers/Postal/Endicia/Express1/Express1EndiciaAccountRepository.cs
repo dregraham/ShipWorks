@@ -26,7 +26,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="accountID">Id of the account to retrieve</param>
         public override EndiciaAccountEntity GetAccount(long accountID)
         {
-            return EndiciaAccountManager.GetAccount(accountID);
+            EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
+
+            return (endiciaAccountEntity==null || endiciaAccountEntity.EndiciaReseller == 1) ? endiciaAccountEntity : null;
         }
 
         /// <summary>

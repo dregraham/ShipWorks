@@ -55,6 +55,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         }
 
         /// <summary>
+        /// Configures a postal reseller shipment for use in the get rates method
+        /// </summary>
+        /// <param name="shipment">Test shipment that will be used to get rates</param>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            base.CreateShipmentChild(shipment);
+            shipment.Postal.Endicia = new EndiciaShipmentEntity();
+        }
+
+        /// <summary>
         /// Updates the account id on the postal reseller shipment
         /// </summary>
         /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>

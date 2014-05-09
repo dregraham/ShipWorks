@@ -222,6 +222,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
+        /// Creates and attaches a new instance of a UpsShipment to the specified shipment
+        /// </summary>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.Ups = new UpsShipmentEntity();
+        }
+
+        /// <summary>
         /// Sets the service type on the Ups shipment from the value in the rate tag
         /// </summary>
         /// <param name="shipment">Shipment that will be updated</param>

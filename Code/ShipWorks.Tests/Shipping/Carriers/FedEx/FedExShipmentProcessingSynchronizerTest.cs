@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
             {
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.FedEx.FedExAccountID);
+            Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
         }
     }
 }

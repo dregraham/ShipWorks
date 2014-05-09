@@ -228,14 +228,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Loads the child shipment.
-        /// </summary>
-        public virtual void CreateShipmentChild(ShipmentEntity shipment)
-        {
-
-        }
-
-        /// <summary>
 		/// Ensures that the carrier specific data for the given profile exists and is loaded
 		/// </summary>
 		public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)

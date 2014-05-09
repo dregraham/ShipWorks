@@ -91,6 +91,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
+        /// Creates and attaches a new instance of a FedExShipment to the specified shipment
+        /// </summary>
+        protected override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            shipment.FedEx = new FedExShipmentEntity();
+        }
+
+        /// <summary>
         /// Sets the service type on the FedEx shipment from the value in the rate tag
         /// </summary>
         /// <param name="shipment">Shipment that will be updated</param>

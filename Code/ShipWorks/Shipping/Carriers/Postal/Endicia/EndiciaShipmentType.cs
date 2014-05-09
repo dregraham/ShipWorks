@@ -206,14 +206,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Loads the child shipment.
+        /// Configure the properties of a newly created shipment
         /// </summary>
-        public override void CreateShipmentChild(ShipmentEntity shipment)
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            base.CreateShipmentChild(shipment);
-            if (shipment.Postal.Endicia == null)
+            base.ConfigureNewShipment(shipment);
+
+            // We can be called during the creation of the base Postal shipment, before the Endicia one exists
+            if (shipment.Postal.Endicia != null)
             {
-                shipment.Postal.Endicia = new EndiciaShipmentEntity();
+                // Right now its all in the Profile
             }
         }
 

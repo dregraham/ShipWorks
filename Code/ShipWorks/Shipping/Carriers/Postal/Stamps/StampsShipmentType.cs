@@ -637,18 +637,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             return fields;
         }
-
-        /// <summary>
-        /// Loads the child shipment.
-        /// </summary>
-        public override void CreateShipmentChild(ShipmentEntity shipment)
-        {
-            base.CreateShipmentChild(shipment);
-            
-            if (shipment.Postal.Stamps == null)
-            {
-                shipment.Postal.Stamps = new StampsShipmentEntity();
-            }
-        }
     }
 }

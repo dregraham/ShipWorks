@@ -69,7 +69,10 @@ namespace ShipWorks.Shipping
                     }
 
                     IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = shipmentType.GetProcessingSynchronizer();
-                    shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                    if (shipmentProcessingSynchronizer != null)
+                    {
+                        shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                    }
 
                     adapter.Commit();
                 }
