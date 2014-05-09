@@ -289,8 +289,10 @@ namespace ShipWorks.AddressValidation
                             SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
 
                             // Validating the order and letting its address propagate means that the current instance of the shipment
-                            // won't reflect the changes, so we need to reload it
+                            // won't reflect the changes, so we need to reload it. W also need to update the reference to the order,
+                            // since it's had its address updated
                             sqlAdapter.FetchEntity(shipment);
+                            shipment.Order = order;
 
                             sqlAdapter.Commit();
                         }
