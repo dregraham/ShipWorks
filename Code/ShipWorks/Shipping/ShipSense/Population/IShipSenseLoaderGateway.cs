@@ -22,6 +22,12 @@ namespace ShipWorks.Shipping.ShipSense.Population
         int TotalOrdersToAnalyze { get; }
 
         /// <summary>
+        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
+        /// the ShipSense knowledge base.
+        /// </summary>
+        void ResetShippingSettingsForLoading();
+
+        /// <summary>
         /// Gets the next shipment to analyze based on ShippingSettings
         /// </summary>
         ShipmentEntity FetchNextShipmentToAnalyze();

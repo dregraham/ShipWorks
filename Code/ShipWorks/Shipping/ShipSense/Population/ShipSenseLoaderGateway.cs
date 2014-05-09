@@ -173,6 +173,71 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
+        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
+        /// the ShipSense knowledge base.
+        /// </summary>
+        public void ResetShippingSettingsForLoading()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            settings.ShipSenseProcessedShipmentID = GetStartingShipmentID();
+            settings.ShipSenseEndShipmentID = GetEndingShipmentID();
+
+            ShippingSettings.Save(settings);
+        }
+
+
+        /// <summary>
+        /// Gets the shipment ID to start from when rebuilding the ShipSense knowledge base.
+        /// </summary>
+        private static long GetStartingShipmentID()
+        {
+            long startingShipmentID = 0;
+
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            {
+                SqlCommand command = SqlCommandProvider.Create(connection);
+                command.CommandText = @"
+                                        DECLARE @ShipSenseProcessedShipmentID BIGINT
+                                        WITH Shipments AS                                        (	                                        SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC                                        )                                        SELECT MIN(ShipmentID) FROM Shipments";
+
+                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                {
+                    if (reader.Read())
+                    {
+                        startingShipmentID = reader.GetInt64(0);
+                    }
+                }
+            }
+
+            return startingShipmentID;
+        }
+
+        /// <summary>
+        /// Gets the maximum shipment ID of all the processed shipments.
+        /// </summary>
+        private static long GetEndingShipmentID()
+        {
+            long endingShipmentID = 0;
+
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            {
+                SqlCommand command = SqlCommandProvider.Create(connection);
+                command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
+
+                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                {
+                    if (reader.Read())
+                    {
+                        endingShipmentID = reader.GetInt64(0);
+                    }
+                }
+            }
+
+            return endingShipmentID;
+        }
+
+        /// <summary>
         /// Gets the next shipment to process based on ShippingSettings
         /// </summary>
         public ShipmentEntity FetchNextShipmentToAnalyze()

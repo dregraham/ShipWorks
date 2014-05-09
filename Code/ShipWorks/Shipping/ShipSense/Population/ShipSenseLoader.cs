@@ -48,6 +48,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
         private bool ResetOrderHashKeys { get; set; }
         
         /// <summary>
+        /// Does some precursory work prior to (re)loading the ShipSense knowledge base.
+        /// </summary>
+        public void PrepareForLoading()
+        {
+            shipSenseLoaderGateway.ResetShippingSettingsForLoading();
+        }
+
+        /// <summary>
         /// Starts loading order and ShipSense data on a new thread.
         /// </summary>
         public static void LoadDataAsync()
