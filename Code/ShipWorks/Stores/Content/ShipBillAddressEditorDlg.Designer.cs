@@ -15,6 +15,7 @@
         {
             if (disposing && (components != null))
             {
+                validatedAddressScope.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);

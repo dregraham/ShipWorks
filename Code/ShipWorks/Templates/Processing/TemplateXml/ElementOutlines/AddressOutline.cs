@@ -72,17 +72,5 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         {
             return new AddressOutline(Context, type, includeName) { person = (PersonAdapter) data };
         }
-
-        /// <summary>
-        /// Create the outline for the status element
-        /// </summary>
-        private static ElementOutline CreateStatusElement(TemplateTranslationContext context, Func<Enum> value)
-        {
-            ElementOutline outline = new ElementOutline(context);
-            outline.AddAttribute("code", () => Convert.ChangeType(value(), value().GetTypeCode()));
-            outline.AddTextContent(() => value().ToString());
-
-            return outline;
-        }
     }
 }

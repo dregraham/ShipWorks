@@ -49,6 +49,21 @@ namespace ShipWorks.Stores.Content.Controls
         }
 
         /// <summary>
+        /// Enable address validation for the shipping address
+        /// </summary>
+        public bool EnableShipAddressValidation
+        {
+            get
+            {
+                return personShipping.EnableValidationControls;
+            }
+            set
+            {
+                personShipping.EnableValidationControls = value;
+            }
+        }
+
+        /// <summary>
         /// Load the data from the given entity into the control
         /// </summary>
         public void LoadEntity(EntityBase2 entity)

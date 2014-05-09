@@ -223,13 +223,15 @@ namespace ShipWorks.Data.Controls
             // 
             // addressValidationSuggestionLink
             // 
+            this.addressValidationSuggestionLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addressValidationSuggestionLink.AutoSize = true;
-            this.addressValidationSuggestionLink.Location = new System.Drawing.Point(72, 3);
+            this.addressValidationSuggestionLink.Location = new System.Drawing.Point(207, 3);
             this.addressValidationSuggestionLink.Name = "addressValidationSuggestionLink";
             this.addressValidationSuggestionLink.Size = new System.Drawing.Size(74, 13);
             this.addressValidationSuggestionLink.TabIndex = 28;
             this.addressValidationSuggestionLink.TabStop = true;
             this.addressValidationSuggestionLink.Text = "3 Suggestions";
+            this.addressValidationSuggestionLink.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.addressValidationSuggestionLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnAddressValidationSuggestionLinkClicked);
             // 
             // addressValidationStatusText

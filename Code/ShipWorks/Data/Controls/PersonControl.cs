@@ -1082,13 +1082,11 @@ namespace ShipWorks.Data.Controls
             dummyAddress.CountryCode = CountryCode;
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
 
-            int currentDistance = addressValidationSuggestionLink.Left - addressValidationStatusText.Right;
-
             addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
             addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
-            addressValidationSuggestionLink.Left = addressValidationStatusText.Right + currentDistance;
+            addressValidationSuggestionLink.Left = validateAddress.Right - addressValidationSuggestionLink.Width;
 
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
 

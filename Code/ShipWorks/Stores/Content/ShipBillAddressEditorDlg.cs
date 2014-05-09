@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Content
         static readonly ILog log = LogManager.GetLogger(typeof(ShipBillAddressEditorDlg));
 
         EntityBase2 entity;
+        private ValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
@@ -44,6 +45,8 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            validatedAddressScope = new ValidatedAddressScope();
+            shipBillControl.EnableShipAddressValidation = true;
             shipBillControl.LoadEntity(entity);
         }
 
@@ -62,9 +65,9 @@ namespace ShipWorks.Stores.Content
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    ResetAddressValidationIfNecessary(previousShippingAddress, adapter);
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, (long) entity.PrimaryKeyFields[0].CurrentValue, previousShippingAddress, new AddressAdapter(entity, "Ship"));
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
                     adapter.SaveAndRefetch(entity);
+                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity));
                 }
             }
             catch (ORMConcurrencyException ex)
@@ -77,31 +80,6 @@ namespace ShipWorks.Stores.Content
             }
 
             DialogResult = DialogResult.OK;
-        }
-
-        /// <summary>
-        /// If the shipping address has changed, reset the validation status and delete existing suggestions
-        /// </summary>
-        private void ResetAddressValidationIfNecessary(AddressAdapter previousShippingAddress, SqlAdapter adapter)
-        {
-            AddressAdapter currentShippingAddress = new AddressAdapter(entity, "Ship");
-
-            if (!previousShippingAddress.Equals(currentShippingAddress))
-            {
-                if (ValidatedAddressManager.EnsureAddressCanBeValidated(currentShippingAddress))
-                {
-                    currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
-                    currentShippingAddress.AddressValidationError = string.Empty;
-                }
-
-                currentShippingAddress.ResidentialStatus = (int) ValidationDetailStatusType.Unknown;
-                currentShippingAddress.POBox = (int)ValidationDetailStatusType.Unknown;
-                currentShippingAddress.InternationalTerritory = (int)ValidationDetailStatusType.Unknown;
-                currentShippingAddress.MilitaryAddress = (int)ValidationDetailStatusType.Unknown;
-
-                currentShippingAddress.AddressValidationSuggestionCount = 0;
-                ValidatedAddressManager.DeleteExistingAddresses(adapter, (long) entity.Fields.PrimaryKeyFields[0].CurrentValue);
-            }
         }
     }
 }
