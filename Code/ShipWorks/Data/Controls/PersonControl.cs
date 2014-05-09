@@ -1086,9 +1086,12 @@ namespace ShipWorks.Data.Controls
             addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
-            addressValidationSuggestionLink.Left = validateAddress.Right - addressValidationSuggestionLink.Width;
 
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
+
+            addressValidationSuggestionLink.Left = validateAddress.Visible ?
+                validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
+                validateAddress.Right - addressValidationSuggestionLink.Width;
 
             addressValidationPanel.Visible = true;
         }

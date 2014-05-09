@@ -81,5 +81,13 @@ namespace ShipWorks.Stores.Content
 
             DialogResult = DialogResult.OK;
         }
+
+        /// <summary>
+        /// The form has closed
+        /// </summary>
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            validatedAddressScope.Dispose();
+        }
     }
 }
