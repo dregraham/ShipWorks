@@ -72,8 +72,9 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
                     using (SqlConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        SqlCommand command = SqlCommandProvider.Create(conn);
-                        command.CommandText = @"                                        
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = @"                                        
                                         WITH UniqueOrderShipments (Shipments)
                                         AS
                                         (
@@ -86,14 +87,15 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
                                         SELECT COUNT(0) FROM UniqueOrderShipments";
 
-                        command.Parameters.Add(new SqlParameter("LastProcessedShipmentID", shippingSettings.ShipSenseProcessedShipmentID));
-                        command.Parameters.Add(new SqlParameter("EndShipmentID", shippingSettings.ShipSenseEndShipmentID));
+                            command.Parameters.Add(new SqlParameter("LastProcessedShipmentID", shippingSettings.ShipSenseProcessedShipmentID));
+                            command.Parameters.Add(new SqlParameter("EndShipmentID", shippingSettings.ShipSenseEndShipmentID));
 
-                        using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
-                        {
-                            if (reader.Read())
+                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
                             {
-                                total = reader.GetInt32(0);
+                                if (reader.Read())
+                                {
+                                    total = reader.GetInt32(0);
+                                }
                             }
                         }
                     }
@@ -120,19 +122,21 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     int total = 0;
                     using (SqlConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        SqlCommand command = SqlCommandProvider.Create(conn);
-                        command.CommandText = @"                                        
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = @"                                        
                                         SELECT COUNT(0) 
                                         FROM [Order] WITH (NOLOCK)
                                         WHERE 
 	                                        OnlineLastModified >= DATEADD(day, -30, GETUTCDATE()) 
 	                                        AND	LEN(ShipSenseHashKey) = 0";
-                        
-                        using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
-                        {
-                            if (reader.Read())
+
+                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
                             {
-                                total = reader.GetInt32(0);
+                                if (reader.Read())
+                                {
+                                    total = reader.GetInt32(0);
+                                }
                             }
                         }
                     }
@@ -158,10 +162,12 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 {
                     using (SqlConnection conn = SqlSession.Current.OpenConnection())
                     {
-                        SqlCommand command = SqlCommandProvider.Create(conn);
-                        command.CommandText = "UPDATE [Order] SET ShipSenseHashKey = ''";
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = "UPDATE [Order] SET ShipSenseHashKey = ''";
 
-                        SqlCommandProvider.ExecuteNonQuery(command);
+                            SqlCommandProvider.ExecuteNonQuery(command);
+                        }
                     }
                 }
             }
@@ -196,16 +202,18 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
-                SqlCommand command = SqlCommandProvider.Create(connection);
-                command.CommandText = @"
+                using (SqlCommand command = SqlCommandProvider.Create(connection))
+                {
+                    command.CommandText = @"
                                         DECLARE @ShipSenseProcessedShipmentID BIGINT
                                         WITH Shipments AS                                        (	                                        SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC                                        )                                        SELECT MIN(ShipmentID) FROM Shipments";
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
-                {
-                    if (reader.Read())
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
                     {
-                        startingShipmentID = reader.GetInt64(0);
+                        if (reader.Read())
+                        {
+                            startingShipmentID = reader.GetInt64(0);
+                        }
                     }
                 }
             }
@@ -222,14 +230,16 @@ namespace ShipWorks.Shipping.ShipSense.Population
 
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
-                SqlCommand command = SqlCommandProvider.Create(connection);
-                command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
-
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                using (SqlCommand command = SqlCommandProvider.Create(connection))
                 {
-                    if (reader.Read())
+                    command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
+
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
                     {
-                        endingShipmentID = reader.GetInt64(0);
+                        if (reader.Read())
+                        {
+                            endingShipmentID = reader.GetInt64(0);
+                        }
                     }
                 }
             }
