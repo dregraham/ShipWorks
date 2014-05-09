@@ -252,7 +252,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
             Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
             Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipInternationalTerritory);
         }
 
@@ -312,7 +312,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
             Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
             Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipInternationalTerritory);
+            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipInternationalTerritory);
         }
 
         [TestMethod]

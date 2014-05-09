@@ -1101,7 +1101,7 @@ namespace ShipWorks.Data.Controls
             AddressAdapter clonedAddress = CreateClonedAddress();
 
             // Set up background executer to do the actual validation
-            BackgroundExecutor<AddressAdapter> executor = new BackgroundExecutor<AddressAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}");
+            BackgroundExecutor<AddressAdapter> executor = new BackgroundExecutor<AddressAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}", true);
             executor.ExecuteCompleted += OnAddressValidated;
             executor.ExecuteAsync(ValidateAddress, new List<AddressAdapter> { clonedAddress }, clonedAddress); // Execute the code for each shipment
         }
