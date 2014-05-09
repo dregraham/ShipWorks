@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -263,7 +264,7 @@ namespace ShipWorks.Actions.Tasks.Common
                                     {
                                         KillProcessTree(process);
                                         throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
-                                                                                       CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
+                                            CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
                                     }
                                 }
                             } while (!process.WaitForExit(500));
@@ -294,6 +295,17 @@ namespace ShipWorks.Actions.Tasks.Common
 
                         // If it isn't the process has exited exception, we haven't seen it, so go ahead and throw it.
                         throw;
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        if (ex.Message.ToUpperInvariant().Contains("Access is denied".ToUpperInvariant()))
+                        {
+                            string logMessage = string.Format("The processes was unable to start due to 'Access is denied'.  The user under which ShipWorks.exe is running probably does not have rights to start another process.\nThe command attempted was:\n{0}", executionCommand);
+                            log.Error(logMessage, ex);
+
+                            string errorMessage = string.Format("The command task was unable to run due to an 'Access Denied' error.  Please contact your system administrator or ShipWorks support for assistance.");
+                            throw new ActionTaskRunException(errorMessage);
+                        }
                     }
                 }
             }
