@@ -573,25 +573,28 @@ namespace ShipWorks.Shipping.Editing
                 return;
             }
 
-            SuspendSelectionProcessing();
-
-            entityGrid.SelectedElements.Clear();
-
-            // Add all the shipments that we don't already have
-            AddShipments(e.Shipments.Where(shipment => !shipmentRowMap.ContainsKey(shipment.ShipmentID)));
-
-            // Select them all
-            foreach (ShipmentEntity shipment in e.Shipments)
+            ValidatedAddressManager.ValidateShipments(this, e.Shipments, () =>
             {
-                shipmentRowMap[shipment.ShipmentID].Selected = true;
-            }
+                SuspendSelectionProcessing();
 
-            Resort();
-            ResumeSelectionProcessing();
+                entityGrid.SelectedElements.Clear();
 
-            UpdateStatusBar();
+                // Add all the shipments that we don't already have
+                AddShipments(e.Shipments.Where(shipment => !shipmentRowMap.ContainsKey(shipment.ShipmentID)));
 
-            RaiseShipmentsAdded();
+                // Select them all
+                foreach (ShipmentEntity shipment in e.Shipments)
+                {
+                    shipmentRowMap[shipment.ShipmentID].Selected = true;
+                }
+
+                Resort();
+                ResumeSelectionProcessing();
+
+                UpdateStatusBar();
+
+                RaiseShipmentsAdded();
+            });
         }
 
         /// <summary>

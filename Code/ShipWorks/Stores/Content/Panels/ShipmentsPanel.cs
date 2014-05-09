@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -368,13 +369,16 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
-            // Show the shipping window
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments))
+            ValidatedAddressManager.ValidateShipments(this, e.Shipments, () =>
             {
-                dlg.ShowDialog(this);
-            }
+                // Show the shipping window
+                using (ShippingDlg dlg = new ShippingDlg(e.Shipments))
+                {
+                    dlg.ShowDialog(this);
+                }
 
-            ReloadContent();
+                ReloadContent();
+            });
         }
 
         /// <summary>
