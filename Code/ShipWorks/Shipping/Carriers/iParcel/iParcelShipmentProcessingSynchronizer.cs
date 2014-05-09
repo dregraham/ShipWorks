@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.IParcel.IParcelAccountID) == null)
+            if (HasAccounts && accountRepository.GetAccount(shipment.IParcel.IParcelAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

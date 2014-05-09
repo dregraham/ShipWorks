@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
+            if (HasAccounts && shipment.Postal.Endicia != null && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

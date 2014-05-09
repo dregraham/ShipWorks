@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             // PreProcess is overridden to do nothing, so there is nothing to synchronize
             return null;

@@ -206,16 +206,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Configure the properties of a newly created shipment
+        /// Loads the child shipment.
         /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        public override void CreateShipmentChild(ShipmentEntity shipment)
         {
-            base.ConfigureNewShipment(shipment);
-
-            // We can be called during the creation of the base Postal shipment, before the Endicia one exists
-            if (shipment.Postal.Endicia != null)
+            base.CreateShipmentChild(shipment);
+            if (shipment.Postal.Endicia == null)
             {
-                // Right now its all in the Profile
+                shipment.Postal.Endicia = new EndiciaShipmentEntity();
             }
         }
 
@@ -592,7 +590,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new EndiciaShipmentProcessingSynchronizer();
         }

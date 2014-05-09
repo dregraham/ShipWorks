@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.OnTrac.OnTracAccountID) == null)
+            if (HasAccounts && accountRepository.GetAccount(shipment.OnTrac.OnTracAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID) == null)
+            if (HasAccounts && shipment.Postal.Stamps != null && accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

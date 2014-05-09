@@ -68,6 +68,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         {
             shipment.ShipmentType = (int) type.ShipmentTypeCode;
 
+            shipment.Order = (OrderEntity) DataProvider.GetEntity(shipment.OrderID);
+            type.LoadShipmentData(shipment, false);
+
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 sqlAdapter.SaveAndRefetch(shipment);

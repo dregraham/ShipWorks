@@ -74,14 +74,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         }
 
         /// <summary>
-        /// Creates and attaches a new instance of a IParcelShipment to the specified shipment
-        /// </summary>
-        protected override void CreateShipmentChild(ShipmentEntity shipment)
-        {
-            shipment.IParcel = new IParcelShipmentEntity();
-        }
-
-        /// <summary>
         /// Gets the service type from tag.
         /// </summary>
         protected override int GetServiceTypeFromTag(object tag)

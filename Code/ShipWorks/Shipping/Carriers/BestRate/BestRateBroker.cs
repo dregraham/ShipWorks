@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShipmentEntity clonedShipmentEntity = EntityUtility.CloneEntity(shipment);
                 clonedShipmentEntity.ShipmentType = (int)ShipmentType.ShipmentTypeCode;
 
-                CreateShipmentChild(clonedShipmentEntity);
+                ShipmentType.CreateShipmentChild(clonedShipmentEntity);
                 ShipmentType.ConfigureNewShipment(clonedShipmentEntity);
                 UpdateChildShipmentSettings(clonedShipmentEntity, shipment, account);
 
@@ -290,7 +290,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 //Set declared value to 0 (for insurance) on the copied shipment prior to getting rates
                 testRateShipment.BestRate.InsuranceValue = 0;
 
-                CreateShipmentChild(testRateShipment);
+                ShipmentType.CreateShipmentChild(testRateShipment);
                 ShipmentType.ConfigureNewShipment(testRateShipment);
                 UpdateChildShipmentSettings(testRateShipment, shipment, account);
 
@@ -459,12 +459,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="tag">Service type to check</param>
         /// <returns></returns>
         protected abstract bool IsExcludedServiceType(object tag);
-
-        /// <summary>
-        /// Configures a postal reseller shipment for use in the get rates method
-        /// </summary>
-        /// <param name="shipment">Test shipment that will be used to get rates</param>
-        protected abstract void CreateShipmentChild(ShipmentEntity shipment);
 
         /// <summary>
         /// Sets the service type on the shipment from the value in the rate tag

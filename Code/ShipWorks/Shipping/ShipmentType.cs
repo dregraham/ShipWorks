@@ -34,9 +34,9 @@ using System.Security.Cryptography;
 
 namespace ShipWorks.Shipping
 {
-	/// <summary>
-	/// Base class that all shipment types\carriers must derive from
-	/// </summary>
+    /// <summary>
+    /// Base class that all shipment types\carriers must derive from
+    /// </summary>
 	public abstract class ShipmentType
 	{
 	    /// <summary>
@@ -225,9 +225,17 @@ namespace ShipWorks.Shipping
 					}
 				}
 			}
-		}
+        }
 
-		/// <summary>
+        /// <summary>
+        /// Loads the child shipment.
+        /// </summary>
+        public virtual void CreateShipmentChild(ShipmentEntity shipment)
+        {
+
+        }
+
+        /// <summary>
 		/// Ensures that the carrier specific data for the given profile exists and is loaded
 		/// </summary>
 		public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
@@ -726,7 +734,6 @@ namespace ShipWorks.Shipping
 		    if (synchronizer.HasAccounts)
 		    {
                 ShippingManager.EnsureShipmentLoaded(shipment);
-                synchronizer.ReplaceInvalidAccount(shipment);
 		    }
             else
 		    {
@@ -772,7 +779,7 @@ namespace ShipWorks.Shipping
 	    /// <summary>
 	    /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
 	    /// </summary>
-	    protected abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
+	    public abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
 
 		/// <summary>
 		/// Indicates if customs forms may be required to ship the shipment based on the

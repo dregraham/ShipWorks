@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.FedEx.FedExAccountID) == null)
+            if (HasAccounts && accountRepository.GetAccount(shipment.FedEx.FedExAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

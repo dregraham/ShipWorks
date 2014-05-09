@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Ups.UpsAccountID) == null)
+            if (HasAccounts && accountRepository.GetAccount(shipment.Ups.UpsAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

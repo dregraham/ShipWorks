@@ -49,9 +49,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (accountRepository.Accounts.Any())
             {
-                // Grab the first account in the repository to set the account ID
-                shipment.Postal.Endicia.EndiciaAccountID = accountRepository.Accounts.First().EndiciaAccountID;
-            }
+                    // Grab the first account in the repository to set the account ID
+                    shipment.Postal.Endicia.EndiciaAccountID = accountRepository.Accounts.First().EndiciaAccountID;
+                }
             else
             {
                 throw new EndiciaException("An Endicia account must be created to process this shipment.");
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
+            if (HasAccounts && shipment.Postal.Endicia != null && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

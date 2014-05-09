@@ -61,14 +61,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         }
 
         /// <summary>
-        /// Creates and attaches a new instance of a OnTracShipment to the specified shipment
-        /// </summary>
-        protected override void CreateShipmentChild(ShipmentEntity shipment)
-        {
-            shipment.OnTrac = new OnTracShipmentEntity();
-        }
-
-        /// <summary>
         /// Sets the service type on the OnTrac shipment from the value in the rate tag
         /// </summary>
         /// <param name="shipment">Shipment that will be updated</param>

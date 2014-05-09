@@ -323,7 +323,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new StampsShipmentProcessingSynchronizer();
         }
@@ -636,6 +636,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             );
 
             return fields;
+        }
+
+        /// <summary>
+        /// Loads the child shipment.
+        /// </summary>
+        public override void CreateShipmentChild(ShipmentEntity shipment)
+        {
+            base.CreateShipmentChild(shipment);
+            
+            if (shipment.Postal.Stamps == null)
+            {
+                shipment.Postal.Stamps = new StampsShipmentEntity();
+            }
         }
     }
 }
