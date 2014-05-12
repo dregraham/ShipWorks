@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using RestSharp.Validation;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.Common.Threading;
@@ -226,19 +227,11 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Validate the selected list of shipments
+        /// Validate a single shipment
         /// </summary>
-        public static void ValidateShipments(Control owner, List<ShipmentEntity> shipments, Action onCompleted)
+        public static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator)
         {
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(owner, "Validating Shipment Addresses", "ShipWorks is validating the shipment addresses.", "Shipment {0} of {1}");
-
-            // Code to execute once background load is complete
-            executor.ExecuteCompleted += (sender, args) => onCompleted();
-
-            AddressValidator validator = new AddressValidator();
-
-            // Code to execute for each shipment
-            executor.ExecuteAsync((shipment, state, issueAdder) => ValidateShipment(shipment, validator, true), shipments, null); // Execute the code for each shipment
+            ValidateShipment(shipment, validator, true);
         }
 
         /// <summary>

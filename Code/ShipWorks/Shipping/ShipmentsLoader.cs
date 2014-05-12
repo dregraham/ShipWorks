@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
@@ -25,6 +27,8 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
 
+        List<ShipmentEntity> globalShipments;
+        bool wasCanceled;
         Control owner;
         object tag;
 
@@ -44,6 +48,7 @@ namespace ShipWorks.Shipping
             }
 
             this.owner = owner;
+            globalShipments = new List<ShipmentEntity>();
         }
 
         /// <summary>
@@ -80,28 +85,62 @@ namespace ShipWorks.Shipping
                 throw new InvalidOperationException("Too many orders trying to load at once.");
             }
 
-            EntityType keyType = count > 0 ? EntityUtility.GetEntityType(keys.First()) : EntityType.OrderEntity;
+            // Progress Provider
+            ProgressProvider progressProvider = new ProgressProvider();
 
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(owner,
-                "Load Shipments",
-                "ShipWorks is loading shipments for the selected orders.",
-                "Loading {0} of {1}");
+            // Load Shipment Progress Item
+            ProgressItem workProgress = new ProgressItem("Load Shipments");
+            progressProvider.ProgressItems.Add(workProgress);
 
-            // What to do before it gets started (but is on the background thread)
-            executor.ExecuteStarting += (sender, args) =>
-                {
-                    // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
-                    FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
-                };
+            // Validate Shipment Progress Item
+            ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
+            progressProvider.ProgressItems.Add(validationProgress);
 
-            // What to do when its all done
-            executor.ExecuteCompleted += new BackgroundExecutorCompletedEventHandler<long>(OnLoadShipmentsCompleted);
+            // Progress Dialog
+            ProgressDlg progressDlg = new ProgressDlg(progressProvider);
+            progressDlg.Title = "Load Shipments";
+            progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
+            progressDlg.Show(owner);
 
-            // What to do for each shipment
-            executor.ExecuteAsync((entityID, state, issueAdder) =>
+            MethodInvoker<ProgressItem, IList<ShipmentEntity>> validationInvoker = ValidateShipmentsInternal;
+            MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
+
+            invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
             {
-                List<ShipmentEntity> globalShipments = (List<ShipmentEntity>) state;
+                validationInvoker.BeginInvoke(validationProgress, globalShipments, ar2 =>
+                {
+                    owner.Invoke((Action)(progressDlg.CloseForced));
 
+                    OnLoadShipmentsCompleted();
+                }, null);
+            }, null);
+        }
+
+        /// <summary>
+        /// Load all the shipments on a background thread
+        /// </summary>
+        private void LoadShipmentsInternal(ProgressItem workProgress, IList<long> keys)
+        {
+            // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
+            FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+
+            int count = 0;
+            int total = keys.Count;
+            EntityType keyType = keys.Any() ? EntityUtility.GetEntityType(keys.First()) : EntityType.OrderEntity;
+
+            workProgress.Starting();
+
+            foreach (long entityID in keys)
+            {
+                if (workProgress.IsCancelRequested)
+                {
+                    wasCanceled = true;
+                    break;
+                }
+
+                workProgress.Detail = string.Format("Loading {0} of {1}", count + 1, total);
+
+                // Execute the work
                 try
                 {
                     List<ShipmentEntity> iterationShipments = new List<ShipmentEntity>();
@@ -133,29 +172,71 @@ namespace ShipWorks.Shipping
                     // If the order got deleted just forget it - its not an error, the shipments just don't load.
                     log.WarnFormat("Did not load shipments for entity {0} due to FK exception.", entityID);
                 }
-            },
-            keys,
-            new List<ShipmentEntity>());
 
+                count++;
+
+                workProgress.PercentComplete = (100 * count) / total;
+            }
+
+            workProgress.Completed();
+        }
+
+        /// <summary>
+        /// Validate all the shipments on a background thread
+        /// </summary>
+        private void ValidateShipmentsInternal(ProgressItem workProgress, IList<ShipmentEntity> keys)
+        {
+            // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
+            FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
+
+            int count = 0;
+            int total = keys.Count;
+            workProgress.Starting();
+
+            AddressValidator addressValidator = new AddressValidator();
+
+            foreach (ShipmentEntity shipment in keys)
+            {
+                if (workProgress.IsCancelRequested)
+                {
+                    wasCanceled = true;
+                    break;
+                }
+
+                workProgress.Detail = string.Format("Validating {0} of {1}", count + 1, total);
+
+                ValidatedAddressManager.ValidateShipment(shipment, addressValidator);
+
+                count++;
+
+                workProgress.PercentComplete = (100 * count) / total;
+            }
+
+            workProgress.Completed();
         }
 
         /// <summary>
         /// The async loading of shipments for shipping has completed
         /// </summary>
-        void OnLoadShipmentsCompleted(object sender, BackgroundExecutorCompletedEventArgs<long> e)
+        void OnLoadShipmentsCompleted()
         {
-            List<ShipmentEntity> shipments = (List<ShipmentEntity>) e.UserState;
-
-            if (e.Canceled)
+            if (wasCanceled)
             {
-                shipments.Clear();
+                globalShipments.Clear();
             }
 
             ShipmentsLoadedEventHandler handler = LoadCompleted;
             if (handler != null)
             {
-                ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, e.Canceled, e.UserState, shipments);
-                handler(this, args);
+                ShipmentsLoadedEventArgs args = new ShipmentsLoadedEventArgs(null, wasCanceled, null, globalShipments);
+                if (owner.InvokeRequired)
+                {
+                    owner.Invoke((Action)(() => handler(this, args)));
+                }
+                else
+                {
+                    handler(this, args);   
+                }
             }
         }
     }

@@ -369,16 +369,13 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
-            ValidatedAddressManager.ValidateShipments(this, e.Shipments, () =>
+            // Show the shipping window
+            using (ShippingDlg dlg = new ShippingDlg(e.Shipments))
             {
-                // Show the shipping window
-                using (ShippingDlg dlg = new ShippingDlg(e.Shipments))
-                {
-                    dlg.ShowDialog(this);
-                }
+                dlg.ShowDialog(this);
+            }
 
-                ReloadContent();
-            });
+            ReloadContent();
         }
 
         /// <summary>
