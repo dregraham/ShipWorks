@@ -29,7 +29,6 @@ namespace ShipWorks.ApplicationCore.Options
     public partial class OptionPageAdvanced : OptionPageBase
     {
         ConfigurationEntity config;
-        private ProgressDlg progressDialog;
         
         /// <summary>
         /// Constructor
@@ -115,25 +114,23 @@ namespace ShipWorks.ApplicationCore.Options
 
             if (result == DialogResult.Yes)
             {
-                try
+                // Setup dependencies for the progress dialog
+                ProgressItem progressItem = new ProgressItem("Clear ShipSense");
+
+                ProgressProvider progressProvider = new ProgressProvider();
+                progressProvider.ProgressItems.Add(progressItem);
+
+                using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
                 {
-                    // Setup dependencies for the progress dialog
-                    ProgressItem progressItem = new ProgressItem("Clear ShipSense");
+                    progressDialog.Title = "Reload ShipSense";
+                    progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
 
-                    ProgressProvider progressProvider = new ProgressProvider();
-                    progressProvider.ProgressItems.Add(progressItem);
+                    progressDialog.AutoCloseWhenComplete = false;
+                    progressDialog.AllowCloseWhenRunning = false;
 
-                    progressDialog = new ProgressDlg(progressProvider)
-                    {
-                        Title = "Reload ShipSense",
-                        Description = "Your shipment history is being used to reload the ShipSense knowledge base.",
+                    progressDialog.ActionColumnHeaderText = "ShipSense";
+                    progressDialog.CloseTextWhenComplete = "Close";
 
-                        AutoCloseWhenComplete = false,
-                        AllowCloseWhenRunning = false,
-
-                        ActionColumnHeaderText = "ShipSense",
-                        CloseTextWhenComplete = "Close"
-                    };
 
                     // The reset could take a few seconds depending on the size of the database, so 
                     // reset the knowledge base on a separate thread
@@ -146,17 +143,10 @@ namespace ShipWorks.ApplicationCore.Options
                             ReloadKnowledgebase(progressProvider);
                         }
                     });
-                    
+
                     // Start the reset/reload work and show the progress dialog
                     resetTask.Start();
                     progressDialog.ShowDialog(this);
-                }
-                finally
-                {
-                    if (progressDialog != null)
-                    {
-                        progressDialog.Dispose();
-                    }
                 }
             }
         }
@@ -198,37 +188,27 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void ReloadKnowledgebase()
         {
-            try
+            // Setup dependencies for the progress dialog
+            ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
+
+            ProgressProvider progressProvider = new ProgressProvider();
+            progressProvider.ProgressItems.Add(progressItem);
+
+            using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
             {
-                // Setup dependencies for the progress dialog
-                ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
+                progressDialog.Title = "Reload ShipSense";
+                progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
 
-                ProgressProvider progressProvider = new ProgressProvider();
-                progressProvider.ProgressItems.Add(progressItem);
+                progressDialog.AutoCloseWhenComplete = true;
+                progressDialog.AllowCloseWhenRunning = false;
 
-                progressDialog = new ProgressDlg(progressProvider)
-                {
-                    Title = "Reload ShipSense",
-                    Description = "Your shipment history is being used to reload the ShipSense knowledge base.",
-
-                    AutoCloseWhenComplete = true,
-                    AllowCloseWhenRunning = false,
-
-                    ActionColumnHeaderText = "ShipSense",
-                    CloseTextWhenComplete = "Close"
-                };
+                progressDialog.ActionColumnHeaderText = "ShipSense";
+                progressDialog.CloseTextWhenComplete = "Close";
 
                 ReloadKnowledgebase(progressProvider);
 
                 // Show the progress dialog
                 progressDialog.ShowDialog(this);
-            }
-            finally
-            {
-                if (progressDialog != null)
-                {
-                    progressDialog.Dispose();
-                }
             }
         }
 
