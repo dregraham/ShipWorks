@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                 yesButton.Top = rebuildKnowledgebase.Bottom + 15;
                 noButton.Top = yesButton.Top;
 
-                this.Height = yesButton.Bottom + 37;
+                this.Height = yesButton.Bottom + 47;
             }
         }
 
