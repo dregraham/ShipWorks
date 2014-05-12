@@ -101,23 +101,63 @@ namespace ShipWorks.ApplicationCore.Options
                 "uses to create shipments based on your shipment history.\n\n" +
                 "Do you wish to continue?";
 
-            bool reloadKnowledgebase = false;
+            bool isReloadRequested = false;
+            DialogResult result = DialogResult.No;
+
             using (ShipSenseConfirmationDlg confirmationDialog = new ShipSenseConfirmationDlg(ConfirmationText))
             {
-                if (confirmationDialog.ShowDialog(this) == DialogResult.Yes)
-                {
-                    new Knowledgebase().Reset(UserSession.User);
-                    
-                    // Make note of whether we need to reload the knowledge base here, so we can
-                    // dispose of the confirmation dialog and show the progress dialog while 
-                    // the loader is running.
-                    reloadKnowledgebase = confirmationDialog.IsReloadRequested;
-                }
+                // Make note of whether we need to reload the knowledge base here, so we can
+                // dispose of the confirmation dialog and show the progress dialog while 
+                // the loader is running.
+                result = confirmationDialog.ShowDialog(this);
+                isReloadRequested = confirmationDialog.IsReloadRequested;
             }
 
-            if (reloadKnowledgebase)
+            if (result == DialogResult.Yes)
             {
-                ReloadKnowledgebase();
+                try
+                {
+                    // Setup dependencies for the progress dialog
+                    ProgressItem progressItem = new ProgressItem("Clear ShipSense");
+
+                    ProgressProvider progressProvider = new ProgressProvider();
+                    progressProvider.ProgressItems.Add(progressItem);
+
+                    progressDialog = new ProgressDlg(progressProvider)
+                    {
+                        Title = "Reload ShipSense",
+                        Description = "Your shipment history is being used to reload the ShipSense knowledge base.",
+
+                        AutoCloseWhenComplete = false,
+                        AllowCloseWhenRunning = false,
+
+                        ActionColumnHeaderText = "ShipSense",
+                        CloseTextWhenComplete = "Close"
+                    };
+
+                    // The reset could take a few seconds depending on the size of the database, so 
+                    // reset the knowledge base on a separate thread
+                    Task resetTask = new Knowledgebase().ResetAsync(UserSession.User, progressItem);
+                    resetTask.ContinueWith((t) =>
+                    {
+                        // The reset has completed, now do the reload if it was requested
+                        if (isReloadRequested)
+                        {
+                            ReloadKnowledgebase(progressProvider);
+                        }
+                    });
+                    
+                    // Start the reset/reload work and show the progress dialog
+                    resetTask.Start();
+                    progressDialog.ShowDialog(this);
+                }
+                finally
+                {
+                    if (progressDialog != null)
+                    {
+                        progressDialog.Dispose();
+                    }
+                }
             }
         }
 
@@ -160,9 +200,6 @@ namespace ShipWorks.ApplicationCore.Options
         {
             try
             {
-                // Record an entry in the audit log that the KB reload was started
-                AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
-
                 // Setup dependencies for the progress dialog
                 ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
 
@@ -181,15 +218,7 @@ namespace ShipWorks.ApplicationCore.Options
                     CloseTextWhenComplete = "Close"
                 };
 
-                ShipSenseLoader loader = new ShipSenseLoader(progressItem);
-
-                // Indicate that we want to reset the hash keys and prepare the environment for the 
-                // load process to begin
-                loader.ResetOrderHashKeys = true;
-                loader.PrepareForLoading();
-
-                // Start the load asynchronously now that everything should be ready to load
-                Task.Factory.StartNew(loader.LoadData);
+                ReloadKnowledgebase(progressProvider);
 
                 // Show the progress dialog
                 progressDialog.ShowDialog(this);
@@ -201,6 +230,31 @@ namespace ShipWorks.ApplicationCore.Options
                     progressDialog.Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        /// Reloads the ShipSense knowledge base with the latest shipment history. This overloaded
+        /// version allows the reload process to attach a progress item to an existing 
+        /// progress provider.
+        /// </summary>
+        private void ReloadKnowledgebase(ProgressProvider progressProvider)
+        {
+            // Record an entry in the audit log that the KB reload was started
+            AuditUtility.Audit(AuditActionType.ReloadShipSenseStarted);
+
+            // Setup dependencies for the progress dialog
+            ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
+            progressProvider.ProgressItems.Add(progressItem);
+
+            ShipSenseLoader loader = new ShipSenseLoader(progressItem);
+
+            // Indicate that we want to reset the hash keys and prepare the environment for the 
+            // load process to begin
+            loader.ResetOrderHashKeys = true;
+            loader.PrepareForLoading();
+
+            // Start the load asynchronously now that everything should be ready to load
+            Task.Factory.StartNew(loader.LoadData);
         }
     }
 }

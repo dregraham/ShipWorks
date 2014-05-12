@@ -1,4 +1,6 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping.ShipSense
@@ -38,9 +40,12 @@ namespace ShipWorks.Shipping.ShipSense
         bool IsOverwritten(ShipmentEntity shipment);
 
         /// <summary>
-        /// Resets/truncates the underlying knowledge base data causing the knowledge base
-        /// to be reset as if it were new.
+        /// Resets/truncates the underlying knowledge base data on a background thread causing 
+        /// the knowledge base to be reset as if it were new.
         /// </summary>
-        void Reset(UserEntity initiatedBy);
+        /// <param name="initiatedBy">The initiated by.</param>
+        /// <param name="progressReporter">The progress reporter.</param>
+        /// <returns>The Task that is executing the operation.</returns>
+        Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter);
     }
 }
