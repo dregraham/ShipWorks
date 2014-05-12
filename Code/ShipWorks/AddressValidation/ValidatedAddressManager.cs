@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -322,6 +323,13 @@ namespace ShipWorks.AddressValidation
             catch (SqlDeadlockException)
             {
                 RetryValidation(shipment, validator, retryOnConcurrencyException);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Contains("deadlock"))
+                {
+                    RetryValidation(shipment, validator, retryOnConcurrencyException);   
+                }
             }
         }
 

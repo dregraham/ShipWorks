@@ -205,6 +205,7 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
+                ValidatedAddressManager.ValidateShipment(shipment, new AddressValidator());
 
                 using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
                 {
