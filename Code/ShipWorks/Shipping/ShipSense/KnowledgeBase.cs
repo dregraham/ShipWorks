@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.IO.Zip;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
@@ -209,11 +211,26 @@ namespace ShipWorks.Shipping.ShipSense
         }
 
         /// <summary>
+        /// Resets/truncates the underlying knowledge base data on a background thread causing
+        /// the knowledge base to be reset as if it were new.
+        /// </summary>
+        /// <param name="initiatedBy">The initiated by.</param>
+        /// <param name="progressReporter">The progress reporter.</param>
+        /// <returns>The Task that is executing the operation.</returns>
+        public Task ResetAsync(UserEntity initiatedBy, IProgressReporter progressReporter)
+        {
+            return new Task(() => Reset(initiatedBy, progressReporter));
+        }
+
+        /// <summary>
         /// Resets/truncates the underlying knowledge base data causing the knowledge base
         /// to be reset as if it were new.
         /// </summary>
-        public void Reset(UserEntity initiatedBy)
+        private void Reset(UserEntity initiatedBy, IProgressReporter progressReporter)
         {
+            progressReporter.Starting();
+            progressReporter.Detail = "Deleting ShipSense data...";
+
             using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditState.Disabled))
             {
                 using (SqlAdapter adapter = new SqlAdapter())
@@ -225,6 +242,10 @@ namespace ShipWorks.Shipping.ShipSense
             AuditUtility.Audit(AuditActionType.ResetShipSense);
 
             log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", initiatedBy.Username);
+
+            progressReporter.Detail = "ShipSense data deleted";
+            progressReporter.PercentComplete = 100;
+            progressReporter.Completed();
         }
 
         /// <summary>

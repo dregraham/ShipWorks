@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Interapptive.Shared.Data;
 using ShipWorks.Users.Audit;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -55,11 +56,201 @@ namespace ShipWorks.Shipping.ShipSense.Population
                 connection.Open();
             }
         }
-        
+
+
+        /// <summary>
+        /// Gets the total shipments to analyze when building the knowledge base.
+        /// </summary>
+        public int TotalShipmentsToAnalyze
+        {
+            get
+            {
+                try
+                {
+                    ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
+                    int total = 0;
+
+                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    {
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = @"                                        
+                                        WITH UniqueOrderShipments (Shipments)
+                                        AS
+                                        (
+                                            SELECT count(0) as ShipmentCount FROM shipment WITH (NOLOCK)
+                                            INNER JOIN [Order] WITH (NOLOCK)
+                                            ON [Order].OrderID = Shipment.orderID
+                                            WHERE ShipmentID > @LastProcessedShipmentID	AND ShipmentID < @EndShipmentID AND Processed = 1
+                                            GROUP BY [Order].ShipSenseHashKey
+                                        )
+
+                                        SELECT COUNT(0) FROM UniqueOrderShipments";
+
+                            command.Parameters.Add(new SqlParameter("LastProcessedShipmentID", shippingSettings.ShipSenseProcessedShipmentID));
+                            command.Parameters.Add(new SqlParameter("EndShipmentID", shippingSettings.ShipSenseEndShipmentID));
+
+                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                            {
+                                if (reader.Read())
+                                {
+                                    total = reader.GetInt32(0);
+                                }
+                            }
+                        }
+                    }
+
+                    return total;
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.Message, e);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the total orders to analyze when populating the hash key of orders.
+        /// </summary>
+        public int TotalOrdersToAnalyze
+        {
+            get
+            {
+                try
+                {
+                    int total = 0;
+                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    {
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = @"                                        
+                                        SELECT COUNT(0) 
+                                        FROM [Order] WITH (NOLOCK)
+                                        WHERE 
+	                                        OnlineLastModified >= DATEADD(day, -30, GETUTCDATE()) 
+	                                        AND	LEN(ShipSenseHashKey) = 0";
+
+                            using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                            {
+                                if (reader.Read())
+                                {
+                                    total = reader.GetInt32(0);
+                                }
+                            }
+                        }
+                    }
+
+                    return total;
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.Message, e);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resets the hash key of all orders to an empty string.
+        /// </summary>
+        public void ResetOrderHashKeys()
+        {
+            try
+            {
+                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditState.Disabled))
+                {
+                    using (SqlConnection conn = SqlSession.Current.OpenConnection())
+                    {
+                        using (SqlCommand command = SqlCommandProvider.Create(conn))
+                        {
+                            command.CommandText = "UPDATE [Order] SET ShipSenseHashKey = ''";
+
+                            SqlCommandProvider.ExecuteNonQuery(command);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
+        /// the ShipSense knowledge base.
+        /// </summary>
+        public void ResetShippingSettingsForLoading()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            settings.ShipSenseProcessedShipmentID = GetStartingShipmentID();
+            settings.ShipSenseEndShipmentID = GetEndingShipmentID();
+
+            ShippingSettings.Save(settings);
+        }
+
+
+        /// <summary>
+        /// Gets the shipment ID to start from when rebuilding the ShipSense knowledge base.
+        /// </summary>
+        private static long GetStartingShipmentID()
+        {
+            long startingShipmentID = 0;
+
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            {
+                using (SqlCommand command = SqlCommandProvider.Create(connection))
+                {
+                    command.CommandText = @"
+                                        DECLARE @ShipSenseProcessedShipmentID BIGINT
+                                        WITH Shipments AS                                        (	                                        SELECT TOP 25000 ShipmentID FROM Shipment WITH (NOLOCK) WHERE Processed = 1 ORDER BY ShipmentID DESC                                        )                                        SELECT MIN(ShipmentID) FROM Shipments";
+
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                    {
+                        if (reader.Read())
+                        {
+                            startingShipmentID = reader.GetInt64(0);
+                        }
+                    }
+                }
+            }
+
+            return startingShipmentID;
+        }
+
+        /// <summary>
+        /// Gets the maximum shipment ID of all the processed shipments.
+        /// </summary>
+        private static long GetEndingShipmentID()
+        {
+            long endingShipmentID = 0;
+
+            using (SqlConnection connection = SqlSession.Current.OpenConnection())
+            {
+                using (SqlCommand command = SqlCommandProvider.Create(connection))
+                {
+                    command.CommandText = @"SELECT MAX(ShipmentID) FROM SHIPMENT WITH (NOLOCK) WHERE Processed = 1";
+
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(command))
+                    {
+                        if (reader.Read())
+                        {
+                            endingShipmentID = reader.GetInt64(0);
+                        }
+                    }
+                }
+            }
+
+            return endingShipmentID;
+        }
+
         /// <summary>
         /// Gets the next shipment to process based on ShippingSettings
         /// </summary>
-        public ShipmentEntity FetchNextShipmentToProcess()
+        public ShipmentEntity FetchNextShipmentToAnalyze()
         {
             ShipmentEntity shipment = null;
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
@@ -167,7 +358,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
         /// <summary>        
         /// Gets an OrderEntity that doesn't have a ShipSenseHashKey. 
         /// </summary>
-        public OrderEntity FetchNextOrderToProcess()
+        public OrderEntity FetchNextOrderToAnalyze()
         {
             OrderEntity orderEntity = null;
 

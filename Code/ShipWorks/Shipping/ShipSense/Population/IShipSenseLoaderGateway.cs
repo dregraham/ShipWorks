@@ -12,9 +12,25 @@ namespace ShipWorks.Shipping.ShipSense.Population
     public interface IShipSenseLoaderGateway : IDisposable
     {
         /// <summary>
-        /// Gets the next shipment to process based on ShippingSettings
+        /// Gets the total shipments to analyze when building the knowledge base.
         /// </summary>
-        ShipmentEntity FetchNextShipmentToProcess();
+        int TotalShipmentsToAnalyze { get; }
+
+        /// <summary>
+        /// Gets the total orders to analyze when populating the hash key of orders.
+        /// </summary>
+        int TotalOrdersToAnalyze { get; }
+
+        /// <summary>
+        /// Updates the shipment range of the shipping settings that will be used when rebuilding 
+        /// the ShipSense knowledge base.
+        /// </summary>
+        void ResetShippingSettingsForLoading();
+
+        /// <summary>
+        /// Gets the next shipment to analyze based on ShippingSettings
+        /// </summary>
+        ShipmentEntity FetchNextShipmentToAnalyze();
 
         /// <summary>
         /// Saves the ShipSenseKnowledgebaseEntity
@@ -22,9 +38,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
         void Save(ShipmentEntity shipment);
 
         /// <summary>
+        /// Resets the hash key of all orders to an empty string.
+        /// </summary>
+        void ResetOrderHashKeys();
+
+        /// <summary>
         /// Gets an OrderEntity that doesn't have a ShipSenseHashKey
         /// </summary>
-        OrderEntity FetchNextOrderToProcess();
+        OrderEntity FetchNextOrderToAnalyze();
         
         /// <summary>
         /// Saves an OrderEntity
