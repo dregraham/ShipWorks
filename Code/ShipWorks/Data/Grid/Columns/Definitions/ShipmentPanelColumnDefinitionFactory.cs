@@ -48,12 +48,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ShipmentFields.ShipmentID ) { DefaultWidth = 40 },
 
                 new GridColumnDefinition("{DB9C8EC1-1289-48df-A29B-B67D3D391A9C}", true,
-                    new GridEnumDisplayType<ShipmentTypeCode>(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
+                    new GridProviderDisplayType(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
                     ShipmentFields.ShipmentType),
 
                 new GridColumnDefinition("{2CAB6D1F-086E-4CBC-8D6C-9BE88CD1997C}",
-                    new GridActionDisplayType(EntityProviderSelector.DisplayProvider, 
-                        (new EntityProviderSelector()).ShowProviderOptionMenu, EntityProviderSelector.IsLinkEnabled), 
+                    new GridActionDisplayType(EntityGridProviderSelector.DisplayProvider, 
+                        (new EntityGridProviderSelector()).ShowProviderOptionMenu, EntityGridProviderSelector.IsLinkEnabled), 
                     "Provider Selector", EnumHelper.GetDescription(ShipmentTypeCode.Endicia),
                     new GridColumnFunctionValueProvider(x => x),
                     new GridColumnSortProvider(ShipmentFields.ShipmentType)), 

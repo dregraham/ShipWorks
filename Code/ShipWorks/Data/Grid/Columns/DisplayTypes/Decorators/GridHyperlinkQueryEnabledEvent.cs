@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 {
@@ -15,14 +16,16 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
     /// </summary>
     public class GridHyperlinkQueryEnabledEventArgs : EventArgs
     {
+        public EntityBase2 Entity { get; set; }
         bool enabled = true;
         object value;
 
         /// <summary>
         /// Construtor
         /// </summary>
-        public GridHyperlinkQueryEnabledEventArgs(object value)
+        public GridHyperlinkQueryEnabledEventArgs(object value, EntityBase2 entity)
         {
+            Entity = entity;
             this.value = value;
         }
 

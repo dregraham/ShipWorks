@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -11,13 +12,18 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
     /// <summary>
     /// Shows a provider menu when associated with an Entity Grid.
     /// </summary>
-    public class EntityProviderSelector
+    public class EntityGridProviderSelector
     {
         /// <summary>
         /// Displays the provider.
@@ -56,7 +62,25 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 MessageHelper.ShowInformation(Program.MainForm, "Cannot change provider after shipment has been processed.");
             }
 
-            var menu = new ContextMenu(ShipmentTypeManager.EnabledShipmentTypes.Select(type => new MenuItem(type.ShipmentTypeName, (sender, args) => SelectProvider(shipment, type))).ToArray());
+            List<ShipmentType> enabledShipmentTypes = ShipmentTypeManager.EnabledShipmentTypes;
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            if (UpsAccountManager.Accounts.Count == 0 || !settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.UpsWorldShip))
+            {
+                enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
+            }
+
+            if (EndiciaAccountManager.EndiciaAccounts.Any() || EndiciaAccountManager.Express1Accounts.Any() ||
+                                    StampsAccountManager.StampsAccounts.Any() || StampsAccountManager.Express1Accounts.Any())
+            {
+                enabledShipmentTypes.RemoveAll(s =>
+                    s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
+            }
+
+            var menu = new ContextMenu(enabledShipmentTypes.Select(type => new MenuItem(type.ShipmentTypeName, (sender, args) => SelectProvider(shipment, type))).ToArray());
 
             menu.Show(owner, displayPosition);
         }
@@ -75,6 +99,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             {
                 sqlAdapter.SaveAndRefetch(shipment);
             }
+
+            Program.MainForm.ForceHeartbeat();
         }
 
         /// <summary>
