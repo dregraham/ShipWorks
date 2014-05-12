@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                 SizeF size = g.MeasureString(this.confirmationText.Text, this.confirmationText.Font);
                 this.confirmationText.Height = (int)size.Height;
 
-                rebuildKnowledgebase.Top = this.confirmationText.Bottom + 3;
+                rebuildKnowledgebase.Top = this.confirmationText.Bottom;
                 yesButton.Top = rebuildKnowledgebase.Bottom + 15;
                 noButton.Top = yesButton.Top;
 
