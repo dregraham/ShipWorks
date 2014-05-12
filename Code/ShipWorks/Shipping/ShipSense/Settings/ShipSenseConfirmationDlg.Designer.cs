@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.confirmationText = new System.Windows.Forms.Label();
+            this.descriptionText = new System.Windows.Forms.Label();
             this.rebuildKnowledgebase = new System.Windows.Forms.CheckBox();
             this.noButton = new System.Windows.Forms.Button();
             this.yesButton = new System.Windows.Forms.Button();
@@ -37,13 +37,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // confirmationText
+            // descriptionText
             // 
-            this.confirmationText.Location = new System.Drawing.Point(53, 13);
-            this.confirmationText.Name = "confirmationText";
-            this.confirmationText.Size = new System.Drawing.Size(359, 15);
-            this.confirmationText.TabIndex = 0;
-            this.confirmationText.Text = "Confirmation text";
+            this.descriptionText.Location = new System.Drawing.Point(53, 13);
+            this.descriptionText.Name = "descriptionText";
+            this.descriptionText.Size = new System.Drawing.Size(359, 15);
+            this.descriptionText.TabIndex = 0;
+            this.descriptionText.Text = "Description text goes here";
             // 
             // rebuildKnowledgebase
             // 
@@ -105,7 +105,7 @@
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.noButton);
             this.Controls.Add(this.rebuildKnowledgebase);
-            this.Controls.Add(this.confirmationText);
+            this.Controls.Add(this.descriptionText);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -123,7 +123,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label confirmationText;
+        private System.Windows.Forms.Label descriptionText;
         private System.Windows.Forms.CheckBox rebuildKnowledgebase;
         private System.Windows.Forms.Button noButton;
         private System.Windows.Forms.Button yesButton;
