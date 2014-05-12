@@ -33,6 +33,7 @@
             this.noButton = new System.Windows.Forms.Button();
             this.yesButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.labelContinue = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,7 @@
             // noButton
             // 
             this.noButton.DialogResult = System.Windows.Forms.DialogResult.No;
-            this.noButton.Location = new System.Drawing.Point(326, 63);
+            this.noButton.Location = new System.Drawing.Point(326, 108);
             this.noButton.Name = "noButton";
             this.noButton.Size = new System.Drawing.Size(86, 23);
             this.noButton.TabIndex = 2;
@@ -67,7 +68,7 @@
             // yesButton
             // 
             this.yesButton.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.yesButton.Location = new System.Drawing.Point(234, 63);
+            this.yesButton.Location = new System.Drawing.Point(234, 108);
             this.yesButton.Name = "yesButton";
             this.yesButton.Size = new System.Drawing.Size(86, 23);
             this.yesButton.TabIndex = 3;
@@ -84,13 +85,22 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
+            // labelContinue
+            // 
+            this.labelContinue.Location = new System.Drawing.Point(56, 61);
+            this.labelContinue.Name = "labelContinue";
+            this.labelContinue.Size = new System.Drawing.Size(336, 18);
+            this.labelContinue.TabIndex = 6;
+            this.labelContinue.Text = "Do you wish to continue?";
+            // 
             // ShipSenseConfirmationDlg
             // 
             this.AcceptButton = this.noButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.noButton;
-            this.ClientSize = new System.Drawing.Size(424, 98);
+            this.ClientSize = new System.Drawing.Size(424, 143);
+            this.Controls.Add(this.labelContinue);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.yesButton);
             this.Controls.Add(this.noButton);
@@ -118,5 +128,6 @@
         private System.Windows.Forms.Button noButton;
         private System.Windows.Forms.Button yesButton;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label labelContinue;
     }
 }

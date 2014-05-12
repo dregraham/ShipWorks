@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.ShipSense.Settings
@@ -25,13 +19,15 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             using (Graphics g = CreateGraphics())
             {
                 SizeF size = g.MeasureString(this.confirmationText.Text, this.confirmationText.Font);
-                this.confirmationText.Height = (int)size.Height;
+                this.confirmationText.Height = (int)(this.confirmationText.Height * (size.Width / this.confirmationText.Width));
 
-                rebuildKnowledgebase.Top = this.confirmationText.Bottom;
-                yesButton.Top = rebuildKnowledgebase.Bottom + 15;
+                rebuildKnowledgebase.Top = this.confirmationText.Bottom + 10;
+                labelContinue.Top = rebuildKnowledgebase.Bottom + 15;
+
+                yesButton.Top = labelContinue.Bottom + 15;
                 noButton.Top = yesButton.Top;
 
-                this.Height = yesButton.Bottom + 47;
+                this.Height = yesButton.Bottom + 42;
             }
         }
 

@@ -97,8 +97,7 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnClearKnowledgebase(object sender, EventArgs e)
         {
             const string ConfirmationText = @"Clearing the knowledge base will delete all of the information that ShipWorks " +
-                "uses to create shipments based on your shipment history.\n\n" +
-                "Do you wish to continue?";
+                "uses to create shipments based on your shipment history.";
 
             bool isReloadRequested = false;
             DialogResult result = DialogResult.No;

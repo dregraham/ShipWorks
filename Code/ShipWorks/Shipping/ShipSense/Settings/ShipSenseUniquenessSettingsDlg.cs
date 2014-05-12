@@ -20,8 +20,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         
         // Present the user with a confirmation message box describing what will happen and only save the settings if Yes is chosen
         const string ConfirmationText = @"Adjusting the ShipSense configuration could result in ShipSense " +
-                                        "not being able to know how orders should be shipped until it has recognized your shipping patterns based on the new configuration.\n\n" +
-                                        "Do you wish to continue?";
+                                        "not being able to know how orders should be shipped until it has recognized your shipping patterns based on the new configuration.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipSenseUniquenessSettingsDlg"/> class.
