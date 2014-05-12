@@ -104,12 +104,12 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// </summary>
         private bool AreSettingsEqual(XElement newUniquenessElement)
         {
-            IEnumerable<XElement> newSettings = newUniquenessElement.Descendants("Name");
-            IEnumerable<XElement> oldSettings = originalUniquenessXml.Descendants("Name");
+            IEnumerable<XElement> newSettings = newUniquenessElement.Descendants("Name").ToList();
+            IEnumerable<XElement> oldSettings = originalUniquenessXml.Descendants("Name").ToList();
 
-            var same = from newFrom in newSettings
-                       join original in oldSettings on newFrom.Value.ToUpperInvariant() equals original.Value.ToUpperInvariant()
-                       select newFrom;
+            IEnumerable<XElement> same = newSettings.Join(oldSettings, newFrom => newFrom.Value.ToUpperInvariant(),
+                                                          original => original.Value.ToUpperInvariant(),
+                                                          (newFrom, original) => newFrom);
 
             int newCount = newSettings.Count();
             int origCount = oldSettings.Count();
@@ -128,20 +128,25 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             XElement newUniquenessElement = GenerateShipSenseConfiguration();
             if (!AreSettingsEqual(newUniquenessElement))
             {
+                DialogResult result = DialogResult.No;
+                bool isReloadRequested = false;
+                
+                // Confirm that the user actually wants to change the ShipSense settings
                 using (ShipSenseConfirmationDlg shipSenseConfirmationDlg = new ShipSenseConfirmationDlg(ConfirmationText))
                 {
-                    DialogResult result = shipSenseConfirmationDlg.ShowDialog(this);
+                    result = shipSenseConfirmationDlg.ShowDialog(this);
+                    isReloadRequested = shipSenseConfirmationDlg.IsReloadRequested;
+                }
 
-                    if (result == DialogResult.Yes)
+                if (result == DialogResult.Yes)
+                {
+                    SaveShipSenseConfiguration(newUniquenessElement);
+
+                    if (isReloadRequested)
                     {
-                        SaveShipSenseConfiguration(newUniquenessElement);
-
-                        // Setup dependencies for the progress dialog
-                        ProgressItem progressItem = new ProgressItem("Clear ShipSense");
-
+                        // A reload was requested, so setup the progress provider and dialog for the 
+                        // loader to attach to
                         ProgressProvider progressProvider = new ProgressProvider();
-                        progressProvider.ProgressItems.Add(progressItem);
-
                         using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
                         {
                             progressDialog.Title = "Reload ShipSense";
@@ -153,29 +158,15 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                             progressDialog.ActionColumnHeaderText = "ShipSense";
                             progressDialog.CloseTextWhenComplete = "Close";
 
-                            // The reset could take a few seconds depending on the size of the database, so 
-                            // reset the knowledge base on a separate thread
-                            Task resetTask = new Knowledgebase().ResetAsync(UserSession.User, progressItem);
-                            resetTask.ContinueWith((t) =>
-                            {
-                                // The reset has completed, now do the reload if it was requested
-                                if (shipSenseConfirmationDlg.IsReloadRequested)
-                                {
-                                    ReloadKnowledgebase(progressProvider);
-                                }
-                            });
-
-                            resetTask.Start();
+                            // Kick off the reload process and show the progress dialog
+                            ReloadKnowledgebase(progressProvider);
                             progressDialog.ShowDialog(this);
-                            Close();
                         }
                     }
                 }
             }
-            else
-            {
-                Close();
-            }
+                        
+            Close();
         }
 
         /// <summary>
