@@ -277,46 +277,51 @@ namespace ShipWorks.AddressValidation
 
                     validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
-                        using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                        // Use a low priority for deadlocks, since we'll just try again
+                        using (new SqlDeadlockPriorityScope(-4))
                         {
-                            SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
-
-                            // Validating the order and letting its address propagate means that the current instance of the shipment
-                            // won't reflect the changes, so we need to reload it. W also need to update the reference to the order,
-                            // since it's had its address updated
-                            sqlAdapter.FetchEntity(shipment);
-                            shipment.Order = order;
-
-                            sqlAdapter.Commit();
+                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                            {
+                                SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
+                                sqlAdapter.Commit();
+                            }
                         }
                     });
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter())
+                    {
+                        // Validating the order and letting its address propagate means that the current instance of the shipment
+                        // won't reflect the changes, so we need to reload it. We also need to update the reference to the order,
+                        // since it's had its address updated.  This also applies to shipments other than the current shipment that
+                        // had their addresses modified by propagation.
+                        sqlAdapter.FetchEntity(shipment);
+                        shipment.Order = order;
+                    }
                 }
                 else
                 {
                     // Since the addresses don't match, just validate the shipment
                     validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
-                        using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                        // Use a low priority for deadlocks, since we'll just try again
+                        using (new SqlDeadlockPriorityScope(-4))
                         {
-                            SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses);
-                            sqlAdapter.Commit();
+                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                            {
+                                SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses);
+                                sqlAdapter.Commit();
+                            }
                         }
                     });
                 }
             }
             catch (ORMConcurrencyException)
             {
-                if (retryOnConcurrencyException)
-                {
-                    using (SqlAdapter sqlAdapter = new SqlAdapter())
-                    {
-                        // Reload the shipment before we retry validation so that we reflect the changes that caused
-                        // the concurrency exception
-                        sqlAdapter.FetchEntity(shipment);                            
-                    }
-
-                    ValidateShipment(shipment, validator, false);
-                }
+                RetryValidation(shipment, validator, retryOnConcurrencyException);
+            }
+            catch (SqlDeadlockException)
+            {
+                RetryValidation(shipment, validator, retryOnConcurrencyException);
             }
         }
 
@@ -350,6 +355,26 @@ namespace ShipWorks.AddressValidation
 
                 dataAccess.SaveEntity(clonedAddress);
             });
+        }
+
+        /// <summary>
+        /// Attempt to retry validation if necessary
+        /// </summary>
+        private static void RetryValidation(ShipmentEntity shipment, AddressValidator validator, bool retryOnConcurrencyException)
+        {
+            if (!retryOnConcurrencyException)
+            {
+                return;
+            }
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                // Reload the shipment before we retry validation so that we reflect the changes that caused
+                // the concurrency exception
+                sqlAdapter.FetchEntity(shipment);
+            }
+
+            ValidateShipment(shipment, validator, false);
         }
 
         /// <summary>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.ComponentModel;
 using ShipWorks.AddressValidation;
@@ -27,8 +29,10 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentsLoader));
 
+        ConcurrentQueue<ShipmentEntity> shipmentsToValidate; 
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
+        bool finishedLoading;
         Control owner;
         object tag;
 
@@ -49,6 +53,7 @@ namespace ShipWorks.Shipping
 
             this.owner = owner;
             globalShipments = new List<ShipmentEntity>();
+            shipmentsToValidate = new ConcurrentQueue<ShipmentEntity>();
         }
 
         /// <summary>
@@ -102,17 +107,19 @@ namespace ShipWorks.Shipping
             progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
             progressDlg.Show(owner);
 
-            MethodInvoker<ProgressItem, IList<ShipmentEntity>> validationInvoker = ValidateShipmentsInternal;
+            MethodInvoker<ProgressItem, int> validationInvoker = ValidateShipmentsInternal;
             MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
 
             invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
             {
-                validationInvoker.BeginInvoke(validationProgress, globalShipments, ar2 =>
-                {
-                    owner.Invoke((Action)(progressDlg.CloseForced));
+                finishedLoading = true;
+            }, null);
 
-                    OnLoadShipmentsCompleted();
-                }, null);
+            validationInvoker.BeginInvoke(validationProgress, keys.Count(), ar2 =>
+            {
+                owner.Invoke((Action)(progressDlg.CloseForced));
+
+                OnLoadShipmentsCompleted();
             }, null);
         }
 
@@ -166,6 +173,12 @@ namespace ShipWorks.Shipping
 
                     // Add them to the global list
                     globalShipments.AddRange(iterationShipments);
+
+                    // Queue the shipments to be validated
+                    foreach (ShipmentEntity shipment in iterationShipments)
+                    {
+                        shipmentsToValidate.Enqueue(shipment);    
+                    }   
                 }
                 catch (SqlForeignKeyException)
                 {
@@ -184,19 +197,29 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
-        private void ValidateShipmentsInternal(ProgressItem workProgress, IList<ShipmentEntity> keys)
+        private void ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
             FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
 
             int count = 0;
-            int total = keys.Count;
+            int total = initialCount;
             workProgress.Starting();
 
             AddressValidator addressValidator = new AddressValidator();
+            ShipmentEntity shipment = null;
 
-            foreach (ShipmentEntity shipment in keys)
+            while (shipmentsToValidate.TryDequeue(out shipment) || !finishedLoading)
             {
+                if (shipment == null)
+                {
+                    continue;
+                }
+
+                // Loading orders may load more than one shipment, so the actual count of shipments to
+                // validate may change during the loading process
+                total = finishedLoading ? globalShipments.Count : Math.Max(total, globalShipments.Count);
+
                 if (workProgress.IsCancelRequested)
                 {
                     wasCanceled = true;
