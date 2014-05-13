@@ -491,6 +491,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenter", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, 80, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, 10, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
 		}
 		/// <summary>Inits ChannelAdvisorStoreEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorStoreEntityInfos()

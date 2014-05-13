@@ -1218,6 +1218,8 @@ namespace ShipWorks.Data.Model
 		HarmonizedCode,
 		///<summary>IsFBA. </summary>
 		IsFBA,
+		///<summary>MPN. </summary>
+		MPN,
 		/// <summary></summary>
 		AmountOfFields
 	}
