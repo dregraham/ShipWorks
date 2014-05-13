@@ -18,7 +18,7 @@ public partial class Triggers
                 -- NOTE: Since we are in an Order table trigger, and we are updating orders, we need to do the where
                 -- where o.ShipSenseRecognitionStatus = X below so that we don't get in a infinite recursive loop
 
-	            if EXISTS(select * from ShipSenseKnowledgeBase sskb, inserted i where sskb.[Hash] = i.ShipSenseHashKey)
+	            if EXISTS(select * from ShipSenseKnowledgeBase sskb INNER JOIN inserted i ON sskb.[Hash] = i.ShipSenseHashKey)
 	            BEGIN
                     -- The hash key is in the KB; update the status to recognized if it wasn't already
 		            update o 
