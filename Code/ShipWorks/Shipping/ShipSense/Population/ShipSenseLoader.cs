@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
             else
             {
-                progressReporter.PercentComplete = percentComplete;
+                progressReporter.PercentComplete = Math.Min(percentComplete, 100);
                 progressReporter.Detail = detail;
             }
         }
