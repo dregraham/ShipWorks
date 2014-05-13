@@ -288,12 +288,26 @@ namespace ShipWorks.Stores.Management
 
                     // Background info
                     BackgroundDeleteState backgroundState = new BackgroundDeleteState
+                    {
+                        ProgressProvider = progressProvider,
+                        Delayer = delayer,
+                        Store = SelectedStore,
+                        EstimatedObjectCount = GetEstimatedObjectCount(SelectedStore.StoreID)
+                    };
+
+                    // Check to see if we are already downloading, and if so let the user know they can wait or cancel out of deleting.
+                    // We can't wrap the whole dialog below in the ConnectionSensitiveScope because we can't start a background process
+                    // inside ConnectionSensitiveScope.
+                    // Since we'er inside the dialog, the user could wait a while before clicking, allowing a download to start before 
+                    // getting to this code, so it's checked right before queuing the delete thread.
+                    using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("delete a store", this))
+                    {
+                        if (!scope.Acquired)
                         {
-                            ProgressProvider = progressProvider,
-                            Delayer = delayer,
-                            Store = SelectedStore,
-                            EstimatedObjectCount = GetEstimatedObjectCount(SelectedStore.StoreID)
-                        };
+                            // Something already has the scope, and the user chose to abort, so just return.
+                            return;
+                        }
+                    }
 
                     // Queue the thread to actually delete the store
                     ThreadPool.QueueUserWorkItem(

@@ -9679,6 +9679,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
         }
 
         /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        public int DateAdvance
+        {
+            get
+            {
+                return this.dateAdvanceField;
+            }
+            set
+            {
+                this.dateAdvanceField = value;
+            }
+        }
+
+        /// <remarks/>
         public double WeightOz
         {
             get
@@ -9714,20 +9728,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
             set
             {
                 this.packageTypeIndicatorField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(0)]
-        public int DateAdvance
-        {
-            get
-            {
-                return this.dateAdvanceField;
-            }
-            set
-            {
-                this.dateAdvanceField = value;
             }
         }
 
