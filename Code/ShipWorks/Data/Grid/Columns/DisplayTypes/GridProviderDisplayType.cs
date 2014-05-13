@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Only allowed to be a link if shipment isn't processed.
         /// </summary>
-        bool LinkEnabled(EntityBase2 argShipment)
+        private static bool LinkEnabled(EntityBase2 argShipment)
         {
             ShipmentEntity shipment = argShipment as ShipmentEntity;
 

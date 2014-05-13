@@ -732,10 +732,8 @@ namespace ShipWorks.Shipping
         {
             BestRateShipmentType bestRateShipmentType = new BestRateShipmentType(new UspsOnlyBrokerFilter());
             
-            int originalShipmentType = shipment.ShipmentType;
             shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
             EnsureShipmentLoaded(shipment);
-            // shipment.ShipmentType = originalShipmentType;
 
             shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
             shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
@@ -743,7 +741,7 @@ namespace ShipWorks.Shipping
             shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
             shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
             shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-            shipment.BestRate.ServiceLevel = (int)PostalUtility.GetServiceLevel((PostalServiceType)shipment.Postal.Service);
+            shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
             shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
             
             return GetRates(shipment, bestRateShipmentType);

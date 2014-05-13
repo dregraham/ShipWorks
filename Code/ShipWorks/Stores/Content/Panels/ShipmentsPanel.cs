@@ -308,7 +308,7 @@ namespace ShipWorks.Stores.Content.Panels
                 enabledShipmentTypes.RemoveAll(s =>
                     s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
-                    s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
             }
 
@@ -327,7 +327,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             string carrierName;
 
-            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools && postageNotSetup)
             {
                 carrierName = "USPS";
             }
