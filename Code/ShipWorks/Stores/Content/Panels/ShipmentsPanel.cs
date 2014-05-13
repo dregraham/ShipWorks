@@ -16,6 +16,7 @@ using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -300,10 +301,9 @@ namespace ShipWorks.Stores.Content.Panels
                 enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
             }
 
-            if (!EndiciaAccountManager.EndiciaAccounts.Any() && 
-                !EndiciaAccountManager.Express1Accounts.Any() &&
-                !StampsAccountManager.StampsAccounts.Any() && 
-                !StampsAccountManager.Express1Accounts.Any())
+            bool postalNotSetup = !PostalUtility.IsPostalSetup();
+
+            if (postalNotSetup)
             {
                 enabledShipmentTypes.RemoveAll(s =>
                     s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
@@ -313,11 +313,30 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
-                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode), 
+                GetCarrierName(shipmentType, postalNotSetup), 
                 EnumHelper.GetImage(shipmentType.ShipmentTypeCode), 
                 (sender, args) => SelectProvider(shipment, shipmentType)));
             
             menu.Show(owner, displayPosition);
+        }
+
+        /// <summary>
+        /// Gets the name of the carrier.
+        /// </summary>
+        private static string GetCarrierName(ShipmentType shipmentType, bool postageNotSetup)
+        {
+            string carrierName;
+
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
+            {
+                carrierName = "USPS";
+            }
+            else
+            {
+                carrierName = EnumHelper.GetDescription(shipmentType.ShipmentTypeCode);
+            }
+
+            return carrierName;
         }
 
         /// <summary>

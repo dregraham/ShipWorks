@@ -10,6 +10,9 @@ using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
+    /// <summary>
+    /// Shows provider and allows user to choose a different provider.
+    /// </summary>
     internal class GridProviderDisplayType : GridEnumDisplayType<ShipmentTypeCode>
     {
         /// <summary>
@@ -24,6 +27,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             Decorate(gridHyperlinkDecorator);
         }
 
+        /// <summary>
+        /// Only allowed to be a link if shipment isn't processed.
+        /// </summary>
         bool LinkEnabled(EntityBase2 argShipment)
         {
             ShipmentEntity shipment = argShipment as ShipmentEntity;

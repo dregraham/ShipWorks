@@ -31,7 +31,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
-
+        private IShippingBrokerFilter shippingBrokerFilter;
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
         /// version of the constructor will use the "live" implementation of the 
@@ -54,6 +55,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.filterFactory = filterFactory;
             this.log = log;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class.
+        /// </summary>
+        public BestRateShipmentType(IShippingBrokerFilter shippingBrokerFilter)
+            : this()
+        {
+            this.shippingBrokerFilter = shippingBrokerFilter;
+        }
+
 
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
@@ -204,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : 1);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : 10);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -239,6 +250,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = brokerFactory.CreateBrokers(shipment, true).ToList();
             
+            if (shippingBrokerFilter != null)
+            {
+                bestRateShippingBrokers = shippingBrokerFilter.Filter(bestRateShippingBrokers).ToList();
+            }
+
             if (!bestRateShippingBrokers.Any())
             {
                 string message = string.Format("No accounts are configured to use with best rate.{0}Check the shipping settings to ensure " +

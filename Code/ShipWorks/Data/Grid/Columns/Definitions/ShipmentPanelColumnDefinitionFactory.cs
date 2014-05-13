@@ -51,13 +51,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridProviderDisplayType(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
                     ShipmentFields.ShipmentType),
 
-                new GridColumnDefinition("{2CAB6D1F-086E-4CBC-8D6C-9BE88CD1997C}",
-                    new GridActionDisplayType(EntityGridProviderSelector.DisplayProvider, 
-                        (new EntityGridProviderSelector()).ShowProviderOptionMenu, EntityGridProviderSelector.IsLinkEnabled), 
-                    "Provider Selector", EnumHelper.GetDescription(ShipmentTypeCode.Endicia),
-                    new GridColumnFunctionValueProvider(x => x),
-                    new GridColumnSortProvider(ShipmentFields.ShipmentType)), 
-
                 new GridColumnDefinition("{98038AB5-AA95-4778-9801-574C2B723DD4}", true,
                     new ShipmentServiceUsedDisplayType(), "Service", "First Class",
                     ShipmentFields.ShipmentType),
