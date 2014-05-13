@@ -187,12 +187,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// </summary>
         private void ReloadKnowledgebase()
         {
-            // Setup dependencies for the progress dialog
-            ProgressItem progressItem = new ProgressItem("Reloading ShipSense");
-
             ProgressProvider progressProvider = new ProgressProvider();
-            progressProvider.ProgressItems.Add(progressItem);
-
             using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
             {
                 progressDialog.Title = "Reload ShipSense";

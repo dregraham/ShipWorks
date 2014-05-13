@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     {
                         shipSenseLoaderGateway.ReleaseAppLock(AppLockName);
 
-                        UpdateProgress("Finished loading the knowledge base.", 100);
+                        UpdateProgress("Done", 100);
                         progressReporter.Completed();
                     }
                 }

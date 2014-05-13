@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.ShipSense
 
             log.InfoFormat("The ShipSense knowledge base has been reset by user {0}.", initiatedBy.Username);
 
-            progressReporter.Detail = "ShipSense data deleted";
+            progressReporter.Detail = "Done";
             progressReporter.PercentComplete = 100;
             progressReporter.Completed();
         }
