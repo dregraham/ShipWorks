@@ -465,6 +465,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             orderItem.UPC = matchingItem.UPC;
                         }
 
+                        if (!String.IsNullOrEmpty(matchingItem.MPN))
+                        {
+                            orderItem.MPN = matchingItem.MPN;
+                        }
+
                         PopulateImages(client, orderItem);
                     }
                 }

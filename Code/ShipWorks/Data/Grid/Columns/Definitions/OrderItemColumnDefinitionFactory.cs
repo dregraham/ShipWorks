@@ -163,6 +163,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 StoreTypeCode = StoreTypeCode.ChannelAdvisor
                             },
 
+                        new GridColumnDefinition("{492CD77E-61D6-48D4-B72F-2BB611313373}",
+                            new GridTextDisplayType(), "MPN", "ACME-11551-AI45",
+                            ChannelAdvisorOrderItemFields.MPN)
+                            {
+                                StoreTypeCode = StoreTypeCode.ChannelAdvisor,
+                            },  
+
                         #endregion
 
                         #region Amazon
