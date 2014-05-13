@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping
         ConcurrentQueue<ShipmentEntity> shipmentsToValidate; 
         List<ShipmentEntity> globalShipments;
         bool wasCanceled;
-        bool finishedLoading;
+        bool finishedLoadingShipments;
         Control owner;
         object tag;
 
@@ -112,10 +112,10 @@ namespace ShipWorks.Shipping
 
             invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
             {
-                finishedLoading = true;
+                finishedLoadingShipments = true;
             }, null);
 
-            validationInvoker.BeginInvoke(validationProgress, keys.Count(), ar2 =>
+            validationInvoker.BeginInvoke(validationProgress, count, ar2 =>
             {
                 owner.Invoke((Action)(progressDlg.CloseForced));
 
@@ -207,9 +207,10 @@ namespace ShipWorks.Shipping
             workProgress.Starting();
 
             AddressValidator addressValidator = new AddressValidator();
-            ShipmentEntity shipment = null;
+            ShipmentEntity shipment;
 
-            while (shipmentsToValidate.TryDequeue(out shipment) || !finishedLoading)
+            // Keep trying to validate while we have shipments queued or we're not finished loading shipments
+            while (shipmentsToValidate.TryDequeue(out shipment) || !finishedLoadingShipments)
             {
                 if (shipment == null)
                 {
@@ -218,7 +219,7 @@ namespace ShipWorks.Shipping
 
                 // Loading orders may load more than one shipment, so the actual count of shipments to
                 // validate may change during the loading process
-                total = finishedLoading ? globalShipments.Count : Math.Max(total, globalShipments.Count);
+                total = finishedLoadingShipments ? globalShipments.Count : Math.Max(total, globalShipments.Count);
 
                 if (workProgress.IsCancelRequested)
                 {

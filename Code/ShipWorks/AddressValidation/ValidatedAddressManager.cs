@@ -301,19 +301,22 @@ namespace ShipWorks.AddressValidation
                 }
                 else
                 {
-                    // Since the addresses don't match, just validate the shipment
-                    validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    if (!shipment.Processed)
                     {
-                        // Use a low priority for deadlocks, since we'll just try again
-                        using (new SqlDeadlockPriorityScope(-4))
+                        // Since the addresses don't match, just validate the shipment
+                        validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                         {
-                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                            // Use a low priority for deadlocks, since we'll just try again
+                            using (new SqlDeadlockPriorityScope(-4))
                             {
-                                SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses);
-                                sqlAdapter.Commit();
+                                using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                                {
+                                    SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses);
+                                    sqlAdapter.Commit();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
             catch (ORMConcurrencyException)
