@@ -566,13 +566,16 @@ namespace ShipWorks.Email
             mailMessage.Date = new MailDateTime(outboxItem.SentDate.ToLocalTime());
 
             // The plain text part
-            DataResourceReference plainEmailText = DataResourceManager.LoadResourceReference(outboxItem.PlainPartResourceID);
-            if (plainEmailText == null)
+            DataResourceReference plainEmailTextDataResourceReference = DataResourceManager.LoadResourceReference(outboxItem.PlainPartResourceID);
+            if (plainEmailTextDataResourceReference == null)
             {
                 log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for PlainPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.PlainPartResourceID);
                 throw new EmailException("An error has occurred retrieving the body of the email.");
             }
-            mailMessage.BodyText = plainEmailText.ReadAllText();
+
+            string plainEmailText = LoadDataResourceReferenceText(plainEmailTextDataResourceReference, outboxItem.EmailOutboundID);
+
+            mailMessage.BodyText = plainEmailText;
 
             // Apply the html part
             if (outboxItem.HtmlPartResourceID != null)
@@ -601,17 +604,19 @@ namespace ShipWorks.Email
 
             // Load the html part, ensuring that it exists.  According to the resource manager, this should only fail if the resource was
             // manually deleted, but even in that case, we can handle it more gracefully than a crash.
-            DataResourceReference htmlText = DataResourceManager.LoadResourceReference(outboxItem.HtmlPartResourceID.Value);
-            if (htmlText == null)
+            DataResourceReference htmlTextDataResourceReference = DataResourceManager.LoadResourceReference(outboxItem.HtmlPartResourceID.Value);
+            if (htmlTextDataResourceReference == null)
             {
                 log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for HtmlPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.HtmlPartResourceID);
                 throw new EmailException("An error has occurred retrieving the body of the email.");
             }
 
+            // Try to get the html text for the email
+            string htmlText = LoadDataResourceReferenceText(htmlTextDataResourceReference, outboxItem.EmailOutboundID);
+
             // We have to convert all the local image references to cid's for inline html images
             string htmlContent = imageProcessor.Process(
-                htmlText.ReadAllText(), 
-
+                htmlText, 
                 (HtmlAttribute attribute, Uri srcUri, string imageName) =>
                 {
                     // See if we can find the matching resource.  Could be more than one: If they had two images that were exactly the same, yet named different filenames, 
@@ -651,6 +656,38 @@ namespace ShipWorks.Email
 
             // Assign the html to the message
             mailMessage.BodyHtml = htmlContent;
+        }
+
+        /// <summary>
+        /// Attempts to read all text for the desired data resource reference
+        /// </summary>
+        /// <exception cref="EmailException">If an UnauthorizedAccessException or IOException (only when the file is currently being used) is thrown, 
+        /// an EmailException will be thrown with the inner exception being the originally thrown exception.  If an IOException is thrown and it is not a "being used by another process" exception,
+        /// the original IOException will be rethrown.</exception>
+        private static string LoadDataResourceReferenceText(DataResourceReference dataResourceReference, long emailOutboundID)
+        {
+            string htmlText = string.Empty;
+            try
+            {
+                htmlText = dataResourceReference.ReadAllText();
+            }
+            catch (IOException ex)
+            {
+                if (ex.Message.ToUpperInvariant().Contains("being used by another process".ToUpperInvariant()))
+                {
+                    log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for ReferenceID {1}.", emailOutboundID, dataResourceReference.ReferenceID);
+                    throw new EmailException("An error has occurred retrieving the body of the email.", ex);
+                }
+
+                throw;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for ReferenceID {1}.", emailOutboundID, dataResourceReference.ReferenceID);
+                throw new EmailException("An error has occurred retrieving the body of the email.", ex);
+            }
+
+            return htmlText;
         }
 
         /// <summary>

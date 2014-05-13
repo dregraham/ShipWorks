@@ -80,8 +80,6 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         public void Initialize(Guid gridSettingsKey, Action<GridColumnLayout> layoutInitializer)
         {
-            AuditProcessor.ProcessAudits();
-
             // Create the entity provider for caching and refreshing
             entityProvider = new EntityCacheEntityProvider(EntityType.AuditEntity);
             entityProvider.EntityChangesDetected += new EntityCacheChangeMonitoredChangedEventHandler(OnEntityProviderChangeDetected);
@@ -109,10 +107,9 @@ namespace ShipWorks.Users.Audit
             LoadDateEditor();
 
             UpdateSearchOptionsCriteria();
-            UpdateQueryFilter();
 
             // Start the refresh timer.
-            timer.Interval = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            timer.Interval = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
             timer.Start();
 
             // Create the gating event for the search thread
@@ -171,12 +168,16 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void LoadUserCombo()
         {
+            userCombo.SelectedIndexChanged -= OnSearchValueChanged;
+
             userCombo.Items.Add(new ImageComboBoxItem(SuperUser.DisplayName, SuperUser.UserID, Resources.sw_cubes_16));
 
             foreach (UserEntity user in UserManager.GetUsers(true))
             {
                 userCombo.Items.Add(new ImageComboBoxItem(user.Username + (user.IsDeleted ? " (Deleted)" : ""), user.UserID, user.IsDeleted ? Resources.user_deleted_16 : Resources.user_16));
             }
+
+            userCombo.SelectedIndexChanged += OnSearchValueChanged;
         }
 
         /// <summary>
@@ -184,10 +185,14 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void LoadComputerCombo()
         {
+            computerCombo.SelectedIndexChanged -= OnSearchValueChanged;
+
             computerCombo.DisplayMember = "Key";
             computerCombo.ValueMember = "Value";
             computerCombo.DataSource = ComputerManager.Computers.Select(c => new KeyValuePair<string, long>(c.Name, c.ComputerID)).ToList();
             computerCombo.SelectedIndex = -1;
+
+            computerCombo.SelectedIndexChanged += OnSearchValueChanged;
         }
 
         /// <summary>
@@ -195,11 +200,14 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void LoadReasonCombo()
         {
+            reasonCombo.SelectedIndexChanged -= OnSearchValueChanged;
+
             reasonCombo.DisplayMember = "Key";
             reasonCombo.ValueMember = "Value";
             reasonCombo.DataSource = EnumHelper.GetEnumList<AuditReasonType>().Where(e => e.Value != AuditReasonType.Default).ToList();
-
             reasonCombo.SelectedIndex = -1;
+
+            reasonCombo.SelectedIndexChanged += OnSearchValueChanged;
         }
 
         /// <summary>
@@ -207,11 +215,14 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void LoadActionCombo()
         {
+            actionCombo.SelectedIndexChanged -= OnSearchValueChanged;
+
             actionCombo.DisplayMember = "Key";
             actionCombo.ValueMember = "Value";
             actionCombo.DataSource = EnumHelper.GetEnumList<AuditActionType>().Where(e => e.Value != AuditActionType.Undetermined).ToList();
-
             actionCombo.SelectedIndex = -1;
+
+            actionCombo.SelectedIndexChanged += OnSearchValueChanged;
         }
 
         /// <summary>
@@ -240,7 +251,10 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void OnTimer(object sender, EventArgs e)
         {
-            AuditProcessor.ProcessAudits();
+            if (Visible)
+            {
+                AuditProcessor.ProcessAudits();
+            }
         }
 
         /// <summary>

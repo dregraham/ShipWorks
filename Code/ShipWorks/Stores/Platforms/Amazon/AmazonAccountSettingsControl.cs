@@ -235,7 +235,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg())
+            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg("US"))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

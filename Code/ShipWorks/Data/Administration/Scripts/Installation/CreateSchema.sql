@@ -370,6 +370,7 @@ CREATE TABLE [dbo].[AmazonStore]
 (
 [StoreID] [bigint] NOT NULL,
 [AmazonApi] [int] NOT NULL,
+[AmazonApiRegion] [char](2) NOT NULL,
 [SellerCentralUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellerCentralPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MerchantName] [varchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
