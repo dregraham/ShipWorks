@@ -33,7 +33,7 @@
             // 
             // storeSettingsControl
             // 
-            this.storeSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.storeSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.storeSettingsControl.Location = new System.Drawing.Point(3, 1);
             this.storeSettingsControl.Name = "storeSettingsControl";
             this.storeSettingsControl.Size = new System.Drawing.Size(446, 173);
@@ -49,6 +49,7 @@
             this.Size = new System.Drawing.Size(495, 201);
             this.Title = "Amazon MWS Credentials";
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);
 
         }

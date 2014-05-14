@@ -977,6 +977,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonApi);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.AmazonApiRegion field instance</summary>
+		public static EntityField2 AmazonApiRegion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonApiRegion);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.SellerCentralUsername field instance</summary>
 		public static EntityField2 SellerCentralUsername
 		{
@@ -2556,6 +2561,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsFBA
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.IsFBA);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.MPN field instance</summary>
+		public static EntityField2 MPN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MPN);}
 		}
 	}
 

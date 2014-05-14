@@ -213,6 +213,7 @@
       <Condition identifier="ChannelAdvisorOrderItem.SalesSourceID" />
       <Condition identifier="ChannelAdvisorOrderItem.DistributionCenter" />
       <Condition identifier="ChannelAdvisorOrderItem.IsFBA" />
+      <Condition identifier="ChannelAdvisorOrderItem.MPN" />
       <Condition identifier="EbayOrderItem.SellingManagerRecord" />
       <Condition identifier="EbayOrderItem.Feedback" />
       <Condition identifier="EbayOrderItem.PaymentMethod" />

@@ -241,6 +241,7 @@ namespace :test do
 			# We need to filter the tests based on the categories provided
 			categoryParameter = "/category:" + args.categoryFilter
 		end
+		
 		puts categoryParameter		
 		
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
@@ -393,6 +394,7 @@ namespace :db do
 			end
 			
 			instanceGuid = ""		
+			
 			
 			# Read the GUID from the registry, so we know which directory to look in; pass in 
 			# 0x100 to read from 64-bit registry otherwise the key will not be found			

@@ -34,13 +34,13 @@ namespace ShipWorks.Data.Import.Xml
 
             // Load Address info
             LoadAddressInfo(order, xpath);
+            
+            // Notes
+            LoadNotes(factory, order, xpath);
 
             // only do the remainder for new orders
             if (order.IsNew)
             {
-                // Notes
-                LoadNotes(factory, order, xpath);
-
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("Items/Item");
                 while (itemNodes.MoveNext())
