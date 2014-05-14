@@ -21,6 +21,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.informationText = informationText;
         }
 
+        /// <summary>
+        /// Gets the corresponding shipment type for the factory.
+        /// </summary>
         public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>

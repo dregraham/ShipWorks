@@ -21,13 +21,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets the Endicia account with the specified id
+        /// Gets the Endicia account with the specified id.
         /// </summary>
         /// <param name="accountID">Id of the account to retrieve</param>
         public override EndiciaAccountEntity GetAccount(long accountID)
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
+			// Return null if found account is not Express1
             return (endiciaAccountEntity==null || endiciaAccountEntity.EndiciaReseller == 1) ? endiciaAccountEntity : null;
         }
 

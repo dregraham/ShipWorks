@@ -16,7 +16,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
     /// </summary>
     public class GridHyperlinkQueryEnabledEventArgs : EventArgs
     {
-        public EntityBase2 Entity { get; set; }
+        public EntityBase2 Entity { get; private set; }
         bool enabled = true;
         object value;
 

@@ -55,8 +55,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
-        /// If the account on the shipment is no longer valid, and there is only one account available,
-        /// this method will change the account to be that one account.
+        /// If the account on the shipment is no longer valid, and there is an account available,
+        /// this method will change the account to be the first account.
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {

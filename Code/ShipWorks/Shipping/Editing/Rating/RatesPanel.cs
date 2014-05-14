@@ -52,6 +52,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [in shipments panel].
+        /// </summary>
         public bool InShipmentsPanel
         {
             get;
