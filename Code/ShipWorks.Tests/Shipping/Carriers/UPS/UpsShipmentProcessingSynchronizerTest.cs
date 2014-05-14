@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
             {
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.Ups.UpsAccountID);
+            Assert.AreEqual(123, shipment.Ups.UpsAccountID);
         }
     }
 }

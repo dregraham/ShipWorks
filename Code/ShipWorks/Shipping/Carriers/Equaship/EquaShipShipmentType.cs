@@ -347,7 +347,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">Equaship is no longer available.</exception>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             throw new InvalidOperationException("Equaship is no longer an available shipment type.");
         }

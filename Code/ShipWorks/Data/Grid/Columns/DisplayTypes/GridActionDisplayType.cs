@@ -39,6 +39,33 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public GridActionDisplayType(Func<object, string> actionTextProvider, Action<object, GridHyperlinkClickEventArgs> clickAction, Func<object, bool> linkEnabledProvider)
+            : this(clickAction, linkEnabledProvider)
+        {
+            this.actionTextProvider = actionTextProvider;
+        }
+
+        /// <summary>
+        /// Common constructor
+        /// </summary>
+        private GridActionDisplayType(object actionData, Func<object, bool> linkEnabledProvider)
+        {
+            this.actionData = actionData;
+
+            PreviewInputType = GridColumnPreviewInputType.LiteralString;
+
+            GridHyperlinkDecorator linkDecorator = new GridHyperlinkDecorator();
+            if (linkEnabledProvider != null)
+            {
+                linkDecorator.QueryEnabled += (sender, args) => args.Enabled = linkEnabledProvider(args.Value);
+            }
+
+            Decorate(linkDecorator);
+        }
+
+        /// <summary>
         /// Common constructor
         /// </summary>
         private GridActionDisplayType(object actionData)

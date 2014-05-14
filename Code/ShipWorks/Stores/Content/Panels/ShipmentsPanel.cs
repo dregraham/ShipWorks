@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -15,6 +16,11 @@ using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI;
 using System.Diagnostics;
 using ShipWorks.Data.Grid;
@@ -231,19 +237,124 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
-            long entityID = row.EntityID.Value;
-
-            GridLinkAction action = (GridLinkAction) ((GridActionDisplayType) e.Column.DisplayType).ActionData;
-
-            if (action == GridLinkAction.Delete)
+            GridActionDisplayType gridActionDisplayType = e.Column.DisplayType as GridActionDisplayType;
+            if (gridActionDisplayType != null)
             {
-                DeleteShipment(entityID);
+                // If the action data is an event handler, execute it and stop processing
+                var actionMethod = gridActionDisplayType.ActionData as Action<object, GridHyperlinkClickEventArgs>;
+                if (actionMethod != null)
+                {
+                    actionMethod(sender, e);
+                    return;
+                }
+
+                long entityID = row.EntityID.Value;
+
+                GridLinkAction action = (GridLinkAction)gridActionDisplayType.ActionData;
+
+                if (action == GridLinkAction.Delete)
+                {
+                    DeleteShipment(entityID);
+                }
+
+                if (action == GridLinkAction.Edit)
+                {
+                    EditShipments(new List<long> { entityID });
+                }
             }
 
-            if (action == GridLinkAction.Edit)
+            GridProviderDisplayType gridProviderDisplayType = e.Column.DisplayType as GridProviderDisplayType;
+            if (gridProviderDisplayType != null)
             {
-                EditShipments( new List<long> { entityID } );
+                ShipmentEntity shipment = (ShipmentEntity)e.Row.Entity;
+                if (shipment == null)
+                {
+                    return;
+                }
+
+                SandGrid grid = sender as SandGrid;
+                Debug.Assert(grid != null);
+
+                ShowProviderOptionMenu(grid, shipment, new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset));
             }
+        }
+
+        /// <summary>
+        /// Shows the provider option menu.
+        /// </summary>
+        private static void ShowProviderOptionMenu(SandGrid owner, ShipmentEntity shipment, Point displayPosition)
+        {
+            if (shipment.Processed)
+            {
+                MessageHelper.ShowInformation(Program.MainForm, "Cannot change provider after shipment has been processed.");
+            }
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+
+            var menu = new ContextMenuStrip();
+
+            List<ShipmentType> enabledShipmentTypes = ShipmentTypeManager.EnabledShipmentTypes;
+            
+            if (UpsAccountManager.Accounts.Count == 0 || !settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.UpsWorldShip))
+            {
+                enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
+            }
+
+            bool postalNotSetup = !PostalUtility.IsPostalSetup();
+
+            if (postalNotSetup)
+            {
+                enabledShipmentTypes.RemoveAll(s =>
+                    s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
+            }
+
+            enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
+                GetCarrierName(shipmentType, postalNotSetup), 
+                EnumHelper.GetImage(shipmentType.ShipmentTypeCode), 
+                (sender, args) => SelectProvider(shipment, shipmentType)));
+            
+            menu.Show(owner, displayPosition);
+        }
+
+        /// <summary>
+        /// Gets the name of the carrier.
+        /// </summary>
+        private static string GetCarrierName(ShipmentType shipmentType, bool postageNotSetup)
+        {
+            string carrierName;
+
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools && postageNotSetup)
+            {
+                carrierName = "USPS";
+            }
+            else
+            {
+                carrierName = EnumHelper.GetDescription(shipmentType.ShipmentTypeCode);
+            }
+
+            return carrierName;
+        }
+
+        /// <summary>
+        /// Selects the provider.
+        /// </summary>
+        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type)
+        {
+            shipment.ShipmentType = (int)type.ShipmentTypeCode;
+
+            shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+            type.LoadShipmentData(shipment, false);
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                sqlAdapter.SaveAndRefetch(shipment);
+            }
+
+            Program.MainForm.ForceHeartbeat();
         }
 
         /// <summary>

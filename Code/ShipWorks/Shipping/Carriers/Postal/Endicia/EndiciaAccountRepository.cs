@@ -27,7 +27,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>The matching account.</returns>
         public override EndiciaAccountEntity GetAccount(long accountID)
         {
-            return EndiciaAccountManager.GetAccount(accountID);
+            EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
+
+			// return null if found account is Express1
+            return endiciaAccountEntity == null || endiciaAccountEntity.EndiciaReseller != 1 ? endiciaAccountEntity : null;
         }
 
         /// <summary>

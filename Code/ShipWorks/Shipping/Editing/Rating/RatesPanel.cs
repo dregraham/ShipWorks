@@ -13,6 +13,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
@@ -34,6 +36,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public RatesPanel()
         {
+            InShipmentsPanel = false;
             InitializeComponent();
 
             // We want to show the configure link for all rates, so we
@@ -47,6 +50,15 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [in shipments panel].
+        /// </summary>
+        public bool InShipmentsPanel
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -143,11 +155,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
         }
 
-        private void ShipmentTypeSelected(ShipmentTypeCode obj)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Fetches the rates from the shipment type and 
         /// </summary>
@@ -183,8 +190,15 @@ namespace ShipWorks.Shipping.Editing.Rating
                             ShippingManager.RemoveShipmentFromRatesCache(shipment);
                         }
 
-                        // Fetch the rates and add them to the cache
-                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                        if (InShipmentsPanel && PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) && !PostalUtility.IsPostalSetup())
+                        {
+                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetBestUSPSRate(shipment), shipment);
+                        }
+                        else
+                        {
+                            // Fetch the rates and add them to the cache
+                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                        }
                     }
                     catch (InvalidRateGroupShippingException ex)
                     {

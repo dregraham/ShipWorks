@@ -44,11 +44,20 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             ShippingSettingsEntity shippingSettings = ShippingSettings.Fetch();
             List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
-            
-            List<IBestRateShippingBroker> brokers = shipmentTypes.Where(st => !IsShipmentTypeExcluded(shippingSettings, st.ShipmentTypeCode))
-                .Select(st => st.GetShippingBroker(shipment))
-                .Where(broker => broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
-                .ToList();
+
+            List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
+            foreach (var shipmentType in shipmentTypes)
+            {
+                if (!IsShipmentTypeExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
+                {
+                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
+
+                    if (broker.HasAccounts && (createCounterRateBrokers || !broker.IsCounterRate))
+                    {
+                        brokers.Add(broker);
+                    }
+                }
+            }
 
             foreach (IShippingBrokerFilter filter in filters)
             {

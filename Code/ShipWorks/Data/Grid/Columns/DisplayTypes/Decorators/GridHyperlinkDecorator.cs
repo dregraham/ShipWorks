@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         {
             if (QueryEnabled != null)
             {
-                GridHyperlinkQueryEnabledEventArgs args = new GridHyperlinkQueryEnabledEventArgs(formattedValue.Value);
+                GridHyperlinkQueryEnabledEventArgs args = new GridHyperlinkQueryEnabledEventArgs(formattedValue.Value, formattedValue.Entity);
                 QueryEnabled(this, args);
 
                 return args.Enabled;
@@ -113,7 +113,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                 // then we are in the middle of a cell ui activity and the row is deleted out from under.  That crashes.
                 row.Grid.SandGrid.BeginInvoke((MethodInvoker) delegate
                 {
-                    OnLinkClicked(row, column);
+                    OnLinkClicked(row, column, e);
                 });
             }
         }
@@ -121,11 +121,11 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// <summary>
         /// The link for this column and the given row has been clicked.
         /// </summary>
-        protected virtual void OnLinkClicked(EntityGridRow row, EntityGridColumn column)
+        protected virtual void OnLinkClicked(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             bool handled = false;
 
-            GridHyperlinkClickEventArgs args = new GridHyperlinkClickEventArgs(row, column);
+            GridHyperlinkClickEventArgs args = new GridHyperlinkClickEventArgs(row, column, mouseArgs);
             if (LinkClicked != null)
             {
                 LinkClicked(this, args);
@@ -136,7 +136,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             if (!handled)
             {
                 // Now tell the grid that something happened
-                ((EntityGrid) row.Grid.SandGrid).OnGridCellLinkClicked(row, column);
+                ((EntityGrid) row.Grid.SandGrid).OnGridCellLinkClicked(row, column, mouseArgs);
             }
         }
     }

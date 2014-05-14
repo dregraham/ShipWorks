@@ -571,6 +571,7 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
@@ -624,6 +625,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\UspsOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">

@@ -14,8 +14,12 @@ using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Users;
 using ShipWorks.Data.Grid;
 using System.Diagnostics;
@@ -719,6 +723,28 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
             string cacheHash = shipmentType.GetRatingHash(shipment);
             RateCache.Instance.Remove(cacheHash);
+        }
+
+        /// <summary>
+        /// Gets the best usps rate.
+        /// </summary>
+        public static RateGroup GetBestUSPSRate(ShipmentEntity shipment)
+        {
+            BestRateShipmentType bestRateShipmentType = new BestRateShipmentType(new UspsOnlyBrokerFilter());
+            
+            shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
+            EnsureShipmentLoaded(shipment);
+
+            shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
+            shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
+            shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
+            shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
+            shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
+            shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
+            shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
+            shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+            
+            return GetRates(shipment, bestRateShipmentType);
         }
 
         /// <summary>

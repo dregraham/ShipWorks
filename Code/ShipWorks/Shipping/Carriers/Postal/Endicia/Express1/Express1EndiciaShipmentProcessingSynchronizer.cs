@@ -59,12 +59,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// If the account on the shipment is no longer valid, and there is only one account available,
-        /// this method will change the account to be that one account.
+        /// If the account on the shipment is no longer valid, and there is an account available,
+        /// this method will change the account to be the first account.
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (accountRepository.Accounts.Count() == 1 && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
+            if (HasAccounts && shipment.Postal.Endicia != null && accountRepository.GetAccount(shipment.Postal.Endicia.EndiciaAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }
