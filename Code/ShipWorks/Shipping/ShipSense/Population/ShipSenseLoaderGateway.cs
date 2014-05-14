@@ -212,7 +212,10 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     {
                         if (reader.Read())
                         {
-                            startingShipmentID = reader.GetInt64(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                startingShipmentID = reader.GetInt64(0);
+                            }
                         }
                     }
                 }
@@ -238,7 +241,10 @@ namespace ShipWorks.Shipping.ShipSense.Population
                     {
                         if (reader.Read())
                         {
-                            endingShipmentID = reader.GetInt64(0);
+                            if (!reader.IsDBNull(0))
+                            {
+                                endingShipmentID = reader.GetInt64(0);
+                            }
                         }
                     }
                 }
