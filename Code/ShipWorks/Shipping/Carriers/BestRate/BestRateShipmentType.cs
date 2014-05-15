@@ -307,8 +307,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="broker">Broker for which to start getting rates</param>
         /// <param name="shipment">Shipment for which to get rates</param>
-        /// <param name="exceptionHandler">Handler for exceptions generated while getting rates</param>
-        /// <returns>A task that will contain the results</returns>
+        /// <param name="brokerExceptions">The broker exceptions.</param>
+        /// <returns>
+        /// A task that will contain the results
+        /// </returns>
         private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             return Task<RateGroup>.Factory.StartNew(() =>
@@ -509,7 +511,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="originalRateGroups">The original rate groups.</param>
         /// <param name="filteredRates">The filtered rates.</param>
-        /// <param name="counterRate">The counter rate.</param>
         /// <param name="counterRatesProcessing">The counter rates processing.</param>
         /// <returns></returns>
         /// <exception cref="ShippingException">ShipWorks could not find any rates.</exception>

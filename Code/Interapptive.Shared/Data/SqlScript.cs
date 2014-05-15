@@ -83,7 +83,7 @@ namespace Interapptive.Shared.Data
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExecuteSqlCmdMode" /> class.
+        /// Initializes a new instance of the <see cref="SqlScript" /> class.
         /// </summary>
         public SqlScript(string name, string sql)
         {

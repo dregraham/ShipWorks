@@ -61,7 +61,7 @@
             this.shipBillControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.shipBillControl.EnableShipAddressValidation = false;
+            this.shipBillControl.EnableAddressValidation = false;
             this.shipBillControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shipBillControl.Location = new System.Drawing.Point(11, 11);
             this.shipBillControl.Name = "shipBillControl";

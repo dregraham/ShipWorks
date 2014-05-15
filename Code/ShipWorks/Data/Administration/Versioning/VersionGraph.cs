@@ -17,7 +17,6 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Initializes a new instance of the <see cref="VersionGraph"/> class.
         /// </summary>
-        /// <param name="installedVersion">The installed version of the Database.</param>
         public VersionGraph()
         {
             graph = new AdjacencyGraph<string, Edge<string>>();

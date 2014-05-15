@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Content
         private void OnLoad(object sender, EventArgs e)
         {
             validatedAddressScope = new ValidatedAddressScope();
-            shipBillControl.EnableShipAddressValidation = true;
+            shipBillControl.EnableAddressValidation = true;
             shipBillControl.LoadEntity(entity);
         }
 
