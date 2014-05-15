@@ -14,9 +14,12 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -36,7 +39,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public RatesPanel()
         {
-            InShipmentsPanel = false;
+            ConsolidatePostalRates = false;
             InitializeComponent();
 
             // We want to show the configure link for all rates, so we
@@ -55,7 +58,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <summary>
         /// Gets or sets a value indicating whether [in shipments panel].
         /// </summary>
-        public bool InShipmentsPanel
+        public bool ConsolidatePostalRates
         {
             get;
             set;
@@ -190,15 +193,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                             ShippingManager.RemoveShipmentFromRatesCache(shipment);
                         }
 
-                        if (InShipmentsPanel && PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) && !PostalUtility.IsPostalSetup())
-                        {
-                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetBestUSPSRate(shipment), shipment);
-                        }
-                        else
-                        {
-                            // Fetch the rates and add them to the cache
-                            panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
-                        }
+                        // Fetch the rates and add them to the cache
+                        ShipmentType shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment, shipmentType), shipment);
                     }
                     catch (InvalidRateGroupShippingException ex)
                     {
@@ -211,7 +208,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                     }
                     catch (FedExAddressValidationException ex)
                     {
-                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex), shipment);
+                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex),
+                            shipment);
 
                         // Add the shipment ID to the exception data, so we can determine whether
                         // to update the rate control
@@ -262,6 +260,40 @@ namespace ShipWorks.Shipping.Editing.Rating
                 rateControl.ShowSpinner = true;
                 ratesWorker.RunWorkerAsync();
             }
+        }
+
+        /// <summary>
+        /// Prepares the shipment for get rates and gets shipment type.
+        /// This handles consolidating of postal rates if required.
+        /// </summary>
+        private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType;
+
+            if (ConsolidatePostalRates &&
+                PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) &&
+                !PostalUtility.IsPostalSetup())
+            {
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new Express1BrokerFilter(), new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
+
+                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
+                shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
+                shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
+                shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
+                shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
+                shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
+                shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
+                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
+                shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+            }
+            else
+            {
+                shipmentType = ShipmentTypeManager.GetType(shipment);
+            }
+
+            return shipmentType;
         }
 
         /// <summary>

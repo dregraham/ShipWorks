@@ -29,8 +29,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             EndiciaAccountEntity endiciaAccountEntity = EndiciaAccountManager.GetAccount(accountID);
 
-			// return null if found account is Express1
-            return endiciaAccountEntity == null || endiciaAccountEntity.EndiciaReseller != 1 ? endiciaAccountEntity : null;
+			// return null if found account is not Endicia
+            return endiciaAccountEntity != null && endiciaAccountEntity.EndiciaReseller == (int) EndiciaReseller.None ? endiciaAccountEntity : null;
         }
 
         /// <summary>

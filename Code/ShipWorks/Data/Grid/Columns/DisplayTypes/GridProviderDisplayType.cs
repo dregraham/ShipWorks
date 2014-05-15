@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Divelements.SandGrid;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -23,8 +32,29 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         {
             GridHyperlinkDecorator gridHyperlinkDecorator = new GridHyperlinkDecorator();
             gridHyperlinkDecorator.QueryEnabled += (sender, args) => args.Enabled = LinkEnabled(args.Entity);
-            
+            gridHyperlinkDecorator.LinkClicked += OnHyperlinkDecoratorLinkClicked;
             Decorate(gridHyperlinkDecorator);
+        }
+
+        /// <summary>
+        /// Called when [hyperlink decorator link clicked].
+        /// </summary>
+        private void OnHyperlinkDecoratorLinkClicked(object sender, GridHyperlinkClickEventArgs gridHyperlinkClickEventArgs)
+        {
+            GridProviderDisplayType gridProviderDisplayType = gridHyperlinkClickEventArgs.Column.DisplayType as GridProviderDisplayType;
+            if (gridProviderDisplayType != null)
+            {
+                ShipmentEntity shipment = (ShipmentEntity)gridHyperlinkClickEventArgs.Row.Entity;
+                if (shipment == null)
+                {
+                    return;
+                }
+
+                SandGrid grid = (SandGrid) gridHyperlinkClickEventArgs.Row.Grid.SandGrid;
+                Debug.Assert(grid != null);
+
+                ShowProviderOptionMenu(gridHyperlinkClickEventArgs.Row, shipment, new Point(gridHyperlinkClickEventArgs.MouseArgs.X - grid.HScrollOffset, gridHyperlinkClickEventArgs.MouseArgs.Y - grid.VScrollOffset));
+            }
         }
 
         /// <summary>
@@ -40,6 +70,86 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             return !shipment.Processed;
+        }
+
+        /// <summary>
+        /// Shows the provider option menu.
+        /// </summary>
+        public static void ShowProviderOptionMenu(GridRow row, ShipmentEntity shipment, Point displayPosition)
+        {
+            if (shipment.Processed)
+            {
+                MessageHelper.ShowInformation(Program.MainForm, "Cannot change provider after shipment has been processed.");
+            }
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            
+            ContextMenuStrip menu = new ContextMenuStrip();
+
+            List<ShipmentType> enabledShipmentTypes = ShipmentTypeManager.EnabledShipmentTypes;
+
+            if (UpsAccountManager.Accounts.Count == 0 || !settings.ConfiguredTypes.Contains((int)ShipmentTypeCode.UpsWorldShip))
+            {
+                enabledShipmentTypes.RemoveAll(s => s.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip);
+            }
+
+            bool postalNotSetup = !PostalUtility.IsPostalSetup();
+
+            if (postalNotSetup)
+            {
+                enabledShipmentTypes.RemoveAll(s =>
+                    s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
+            }
+
+            enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
+                GetCarrierName(shipmentType, postalNotSetup),
+                EnumHelper.GetImage(shipmentType.ShipmentTypeCode),
+                (sender, args) => SelectProvider(shipment, shipmentType, row)));
+
+            menu.Show(row.Grid.SandGrid, displayPosition);
+        }
+        
+        /// <summary>
+        /// Gets the name of the carrier.
+        /// </summary>
+        private static string GetCarrierName(ShipmentType shipmentType, bool postageNotSetup)
+        {
+            string carrierName;
+
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools && postageNotSetup)
+            {
+                carrierName = "USPS";
+            }
+            else
+            {
+                carrierName = EnumHelper.GetDescription(shipmentType.ShipmentTypeCode);
+            }
+
+            return carrierName;
+        }
+
+        /// <summary>
+        /// Selects the provider.
+        /// </summary>
+        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type, GridRow row)
+        {
+            shipment.ShipmentType = (int)type.ShipmentTypeCode;
+
+            shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+
+            type.LoadShipmentData(shipment, false);
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                sqlAdapter.SaveAndRefetch(shipment);
+            }
+
+            Program.MainForm.ForceHeartbeat();
+
+            row.Grid.SandGrid.SelectRow(row);
         }
     }
 }
