@@ -768,6 +768,12 @@ namespace ShipWorks.Data.Controls
             phone.Text = other.phone.Text;
             fax.Text = other.fax.Text;
             website.Text = other.website.Text;
+
+            lastValidatedAddress = other.lastValidatedAddress;
+            validatedAddresses = other.validatedAddresses;
+            shouldSaveAddressSuggestions = true;
+
+            UpdateValidationUI();
         }
 
         /// <summary>
