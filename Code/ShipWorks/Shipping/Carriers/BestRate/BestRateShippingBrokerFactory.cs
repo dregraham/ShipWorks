@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List <ShipmentType> shipmentTypes = ShipmentTypeManager.ShipmentTypes;
 
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
-            foreach (var shipmentType in shipmentTypes)
+            foreach (ShipmentType shipmentType in shipmentTypes)
             {
                 if (!IsShipmentTypeExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {

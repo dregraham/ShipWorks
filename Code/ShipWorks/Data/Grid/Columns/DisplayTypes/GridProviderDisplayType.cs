@@ -53,7 +53,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 SandGrid grid = (SandGrid) gridHyperlinkClickEventArgs.Row.Grid.SandGrid;
                 Debug.Assert(grid != null);
 
-                ShowProviderOptionMenu(grid, shipment, new Point(gridHyperlinkClickEventArgs.MouseArgs.X - grid.HScrollOffset, gridHyperlinkClickEventArgs.MouseArgs.Y - grid.VScrollOffset));
+                ShowProviderOptionMenu(gridHyperlinkClickEventArgs.Row, shipment, new Point(gridHyperlinkClickEventArgs.MouseArgs.X - grid.HScrollOffset, gridHyperlinkClickEventArgs.MouseArgs.Y - grid.VScrollOffset));
             }
         }
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Shows the provider option menu.
         /// </summary>
-        public static void ShowProviderOptionMenu(SandGrid owner, ShipmentEntity shipment, Point displayPosition)
+        public static void ShowProviderOptionMenu(GridRow row, ShipmentEntity shipment, Point displayPosition)
         {
             if (shipment.Processed)
             {
@@ -107,11 +107,11 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
                 GetCarrierName(shipmentType, postalNotSetup),
                 EnumHelper.GetImage(shipmentType.ShipmentTypeCode),
-                (sender, args) => SelectProvider(shipment, shipmentType)));
+                (sender, args) => SelectProvider(shipment, shipmentType, row)));
 
-            menu.Show(owner, displayPosition);
+            menu.Show(row.Grid.SandGrid, displayPosition);
         }
-
+        
         /// <summary>
         /// Gets the name of the carrier.
         /// </summary>
@@ -134,7 +134,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Selects the provider.
         /// </summary>
-        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type)
+        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type, GridRow row)
         {
             shipment.ShipmentType = (int)type.ShipmentTypeCode;
 
@@ -148,6 +148,8 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             Program.MainForm.ForceHeartbeat();
+
+            row.Grid.SandGrid.SelectRow(row);
         }
     }
 }

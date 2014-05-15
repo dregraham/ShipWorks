@@ -726,34 +726,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Gets the best usps rate.
-        /// </summary>
-        public static RateGroup GetBestUSPSRate(ShipmentEntity shipment)
-        {
-            BestRateShipmentType bestRateShipmentType = new BestRateShipmentType(new UspsOnlyBrokerFilter());
-            
-            shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
-            EnsureShipmentLoaded(shipment);
-
-            shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
-            shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
-            shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
-            shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
-            shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
-            shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
-            shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
-            shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
-            
-            return GetRates(shipment, bestRateShipmentType);
-        }
-
-        /// <summary>
         /// Get rates for the given shipment using the appropriate ShipmentType
         /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
             return GetRates(shipment, shipmentType);
         }
 

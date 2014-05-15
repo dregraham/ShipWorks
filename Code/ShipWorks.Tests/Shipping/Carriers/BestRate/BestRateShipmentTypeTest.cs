@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
 
             // Even through both brokers are setup to return two rate results, so we should only have one
-            Assert.AreEqual(4, rateGroup.Rates.Count());
+            Assert.AreEqual(1, rateGroup.Rates.Count());
         }
 
         [TestMethod]
