@@ -270,7 +270,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.clearKnowledgebase.Name = "clearKnowledgebase";
             this.clearKnowledgebase.Size = new System.Drawing.Size(92, 23);
             this.clearKnowledgebase.TabIndex = 37;
-            this.clearKnowledgebase.Text = "Clear";
+            this.clearKnowledgebase.Text = "Delete";
             this.clearKnowledgebase.UseVisualStyleBackColor = true;
             this.clearKnowledgebase.Click += new System.EventHandler(this.OnClearKnowledgebase);
             // 

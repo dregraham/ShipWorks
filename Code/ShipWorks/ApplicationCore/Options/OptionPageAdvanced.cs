@@ -96,7 +96,7 @@ namespace ShipWorks.ApplicationCore.Options
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnClearKnowledgebase(object sender, EventArgs e)
         {
-            const string ConfirmationText = @"Clearing the knowledge base will delete all of the information that ShipWorks " +
+            const string ConfirmationText = @"You are about to delete all of the information that ShipWorks " +
                 "uses to create shipments based on your shipment history.";
 
             bool isReloadRequested = false;
@@ -193,7 +193,7 @@ namespace ShipWorks.ApplicationCore.Options
                 progressDialog.Title = "Reload ShipSense";
                 progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
 
-                progressDialog.AutoCloseWhenComplete = true;
+                progressDialog.AutoCloseWhenComplete = false;
                 progressDialog.AllowCloseWhenRunning = false;
 
                 progressDialog.ActionColumnHeaderText = "ShipSense";

@@ -18,8 +18,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             // Calculate the size of the text and adjust the other controls accordingly
             using (Graphics g = CreateGraphics())
             {
+                // Add 1 to account for rounding that may cut off additional lines of text
                 SizeF size = g.MeasureString(this.descriptionText.Text, this.descriptionText.Font);
-                this.descriptionText.Height = (int)(this.descriptionText.Height * (size.Width / this.descriptionText.Width));
+                this.descriptionText.Height = (int)(this.descriptionText.Height * (size.Width / this.descriptionText.Width)) + 1;
 
                 rebuildKnowledgebase.Top = this.descriptionText.Bottom + 10;
                 labelContinue.Top = rebuildKnowledgebase.Bottom + 15;
