@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.ShipSense.Settings
                             progressDialog.Title = "Reload ShipSense";
                             progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
 
-                            progressDialog.AutoCloseWhenComplete = true;
+                            progressDialog.AutoCloseWhenComplete = false;
                             progressDialog.AllowCloseWhenRunning = false;
 
                             progressDialog.ActionColumnHeaderText = "ShipSense";
