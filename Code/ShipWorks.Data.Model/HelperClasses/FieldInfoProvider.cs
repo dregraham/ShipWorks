@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (162 + 0));
+			base.InitClass( (163 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -1675,6 +1675,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "BillFax", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillFax, 35, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "BillEmail", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillEmail, 100, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "BillWebsite", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillWebsite, 50, 0, 0);
+			base.AddElementFieldInfo("OrderEntity", "BillAddressValidationSuggestionCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillAddressValidationSuggestionCount, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "BillAddressValidationStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillAddressValidationStatus, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "BillAddressValidationError", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillAddressValidationError, 300, 0, 0);
+			base.AddElementFieldInfo("OrderEntity", "BillResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillResidentialStatus, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "BillPOBox", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillPOBox, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "BillUSTerritory", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillUSTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "BillMilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.BillMilitaryAddress, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipFirstName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipFirstName, 30, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipMiddleName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipMiddleName, 30, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipLastName", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipLastName, 30, 0, 0);
@@ -1695,7 +1702,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OrderEntity", "ShipAddressValidationError", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.ShipAddressValidationError, 300, 0, 0);
 			base.AddElementFieldInfo("OrderEntity", "ShipResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipResidentialStatus, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipPOBox", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipPOBox, 0, 0, 10);
-			base.AddElementFieldInfo("OrderEntity", "ShipInternationalTerritory", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipInternationalTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("OrderEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipUSTerritory, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "ShipMilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.ShipMilitaryAddress, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemCount", typeof(System.Int32), false, false, false, false,  (int)OrderFieldIndex.RollupItemCount, 0, 0, 10);
 			base.AddElementFieldInfo("OrderEntity", "RollupItemName", typeof(System.String), false, false, true, true,  (int)OrderFieldIndex.RollupItemName, 300, 0, 0);
@@ -2686,6 +2693,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("ValidatedAddressEntity", "ValidatedAddressID", typeof(System.Int64), true, false, true, false,  (int)ValidatedAddressFieldIndex.ValidatedAddressID, 0, 0, 19);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "ConsumerID", typeof(System.Int64), false, true, false, false,  (int)ValidatedAddressFieldIndex.ConsumerID, 0, 0, 19);
+			base.AddElementFieldInfo("ValidatedAddressEntity", "AddressPrefix", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.AddressPrefix, 10, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "IsOriginal", typeof(System.Boolean), false, false, false, false,  (int)ValidatedAddressFieldIndex.IsOriginal, 0, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "Street1", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.Street1, 60, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "Street2", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.Street2, 60, 0, 0);

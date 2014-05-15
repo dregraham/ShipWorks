@@ -135,7 +135,7 @@ namespace ShipWorks.Stores
                 ShipAddressValidationError = string.Empty,
                 ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown,
                 ShipPOBox = (int) ValidationDetailStatusType.Unknown,
-                ShipInternationalTerritory = (int) ValidationDetailStatusType.Unknown,
+                ShipUSTerritory = (int) ValidationDetailStatusType.Unknown,
                 ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown
             };
         }

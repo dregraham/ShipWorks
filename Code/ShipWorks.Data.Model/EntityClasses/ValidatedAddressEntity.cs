@@ -513,6 +513,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ConsumerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("AddressPrefix", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("IsOriginal", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -720,6 +723,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ValidatedAddressFieldIndex.ConsumerID, true); }
 			set	{ SetValue((int)ValidatedAddressFieldIndex.ConsumerID, value); }
+		}
+
+		/// <summary> The AddressPrefix property of the Entity ValidatedAddress<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."AddressPrefix"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AddressPrefix
+		{
+			get { return (System.String)GetValue((int)ValidatedAddressFieldIndex.AddressPrefix, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.AddressPrefix, value); }
 		}
 
 		/// <summary> The IsOriginal property of the Entity ValidatedAddress<br/><br/>

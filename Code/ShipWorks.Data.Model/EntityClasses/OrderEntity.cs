@@ -930,6 +930,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BillWebsite", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("BillAddressValidationSuggestionCount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillAddressValidationStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillAddressValidationError", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillPOBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillUSTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BillMilitaryAddress", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ShipFirstName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -990,7 +1011,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipPOBox", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipInternationalTerritory", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipUSTerritory", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipMilitaryAddress", fieldHashtable);
@@ -1586,6 +1607,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderFieldIndex.BillWebsite, value); }
 		}
 
+		/// <summary> The BillAddressValidationSuggestionCount property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationSuggestionCount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillAddressValidationSuggestionCount
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillAddressValidationSuggestionCount, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillAddressValidationSuggestionCount, value); }
+		}
+
+		/// <summary> The BillAddressValidationStatus property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillAddressValidationStatus
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillAddressValidationStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillAddressValidationStatus, value); }
+		}
+
+		/// <summary> The BillAddressValidationError property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillAddressValidationError"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String BillAddressValidationError
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.BillAddressValidationError, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillAddressValidationError, value); }
+		}
+
+		/// <summary> The BillResidentialStatus property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillResidentialStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillResidentialStatus, value); }
+		}
+
+		/// <summary> The BillPOBox property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillPOBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillPOBox
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillPOBox, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillPOBox, value); }
+		}
+
+		/// <summary> The BillUSTerritory property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillUSTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillUSTerritory
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillUSTerritory, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillUSTerritory, value); }
+		}
+
+		/// <summary> The BillMilitaryAddress property of the Entity Order<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Order"."BillMilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BillMilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.BillMilitaryAddress, true); }
+			set	{ SetValue((int)OrderFieldIndex.BillMilitaryAddress, value); }
+		}
+
 		/// <summary> The ShipFirstName property of the Entity Order<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Order"."ShipFirstName"<br/>
@@ -1806,15 +1904,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderFieldIndex.ShipPOBox, value); }
 		}
 
-		/// <summary> The ShipInternationalTerritory property of the Entity Order<br/><br/>
+		/// <summary> The ShipUSTerritory property of the Entity Order<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "Order"."ShipInternationalTerritory"<br/>
+		/// <remarks>Mapped on  table field: "Order"."ShipUSTerritory"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ShipInternationalTerritory
+		public virtual System.Int32 ShipUSTerritory
 		{
-			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipInternationalTerritory, true); }
-			set	{ SetValue((int)OrderFieldIndex.ShipInternationalTerritory, value); }
+			get { return (System.Int32)GetValue((int)OrderFieldIndex.ShipUSTerritory, true); }
+			set	{ SetValue((int)OrderFieldIndex.ShipUSTerritory, value); }
 		}
 
 		/// <summary> The ShipMilitaryAddress property of the Entity Order<br/><br/>

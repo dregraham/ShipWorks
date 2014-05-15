@@ -537,6 +537,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -637,10 +672,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new AmazonOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new AmazonOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new AmazonOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -2272,6 +2307,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -2372,10 +2442,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -2957,6 +3027,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -3057,10 +3162,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new ClickCartProOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new ClickCartProOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new ClickCartProOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -3292,6 +3397,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -3392,10 +3532,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -4042,6 +4182,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new EbayOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -4142,10 +4317,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new EbayOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new EbayOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -5762,6 +5937,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new EtsyOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new EtsyOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -5862,10 +6072,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new EtsyOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new EtsyOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -9182,6 +9392,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -9282,10 +9527,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new MagentoOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new MagentoOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new MagentoOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -9782,6 +10027,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -9882,10 +10162,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -10652,6 +10932,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -10752,10 +11067,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -11167,6 +11482,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new NeweggOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new NeweggOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -11267,10 +11617,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new NeweggOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new NeweggOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -12212,6 +12562,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new OrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new OrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new OrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new OrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new OrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new OrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new OrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new OrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -12312,10 +12697,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new OrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new OrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new OrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -12707,6 +13092,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new OrderMotionOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -12807,10 +13227,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new OrderMotionOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new OrderMotionOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -13297,6 +13717,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new PayPalOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new PayPalOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -13397,10 +13852,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new PayPalOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new PayPalOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new PayPalOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -14177,6 +14632,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new ProStoresOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -14277,10 +14767,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new ProStoresOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new ProStoresOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new ProStoresOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -14852,6 +15342,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new SearsOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new SearsOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -14952,10 +15477,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new SearsOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new SearsOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -16632,6 +17157,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new ShopifyOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -16732,10 +17292,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new ShopifyOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new ShopifyOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new ShopifyOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress
@@ -19257,6 +19817,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.ConsumerID);}
 		}
+		/// <summary>Creates a new ValidatedAddressEntity.AddressPrefix field instance</summary>
+		public static EntityField2 AddressPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.AddressPrefix);}
+		}
 		/// <summary>Creates a new ValidatedAddressEntity.IsOriginal field instance</summary>
 		public static EntityField2 IsOriginal
 		{
@@ -20407,6 +20972,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillWebsite);}
 		}
+		/// <summary>Creates a new YahooOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.BillMilitaryAddress);}
+		}
 		/// <summary>Creates a new YahooOrderEntity.ShipFirstName field instance</summary>
 		public static EntityField2 ShipFirstName
 		{
@@ -20507,10 +21107,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new YahooOrderEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new YahooOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress

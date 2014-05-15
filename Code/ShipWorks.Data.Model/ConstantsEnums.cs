@@ -290,6 +290,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -330,8 +344,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -1101,6 +1115,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1141,8 +1169,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -1402,6 +1430,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1442,8 +1484,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -1545,6 +1587,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1585,8 +1641,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -1908,6 +1964,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1948,8 +2018,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -2713,6 +2783,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -2753,8 +2837,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -4342,6 +4426,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -4382,8 +4480,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -4600,6 +4698,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -4640,8 +4752,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -4984,6 +5096,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5024,8 +5150,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -5208,6 +5334,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5248,8 +5388,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -5707,6 +5847,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5747,8 +5901,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -5941,6 +6095,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5981,8 +6149,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -6222,6 +6390,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6262,8 +6444,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -6628,6 +6810,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6668,8 +6864,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -6943,6 +7139,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6983,8 +7193,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -7790,6 +8000,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -7830,8 +8054,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
@@ -9083,6 +9307,8 @@ namespace ShipWorks.Data.Model
 		ValidatedAddressID,
 		///<summary>ConsumerID. </summary>
 		ConsumerID,
+		///<summary>AddressPrefix. </summary>
+		AddressPrefix,
 		///<summary>IsOriginal. </summary>
 		IsOriginal,
 		///<summary>Street1. </summary>
@@ -9606,6 +9832,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -9646,8 +9886,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>

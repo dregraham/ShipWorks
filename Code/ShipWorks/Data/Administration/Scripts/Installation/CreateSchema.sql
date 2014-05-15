@@ -2672,6 +2672,13 @@ CREATE TABLE [dbo].[Order] (
     [BillFax]                              NVARCHAR (35)  NOT NULL,
     [BillEmail]                            NVARCHAR (100) NOT NULL,
     [BillWebsite]                          NVARCHAR (50)  NOT NULL,
+    [BillAddressValidationSuggestionCount] INT            NOT NULL,
+    [BillAddressValidationStatus]          INT            NOT NULL,
+    [BillAddressValidationError]           NVARCHAR (300) NOT NULL,
+    [BillResidentialStatus]                INT            NOT NULL,
+    [BillPOBox]                            INT            NOT NULL,
+    [BillUSTerritory]                      INT            NOT NULL,
+    [BillMilitaryAddress]                  INT            NOT NULL,
     [ShipFirstName]                        NVARCHAR (30)  NOT NULL,
     [ShipMiddleName]                       NVARCHAR (30)  NOT NULL,
     [ShipLastName]                         NVARCHAR (30)  NOT NULL,
@@ -2692,7 +2699,7 @@ CREATE TABLE [dbo].[Order] (
     [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
     [ShipResidentialStatus]                INT            NOT NULL,
     [ShipPOBox]                            INT            NOT NULL,
-    [ShipInternationalTerritory]           INT            NOT NULL,
+    [ShipUSTerritory]                      INT            NOT NULL,
     [ShipMilitaryAddress]                  INT            NOT NULL,
     [RollupItemCount]                      INT            NOT NULL,
     [RollupItemName]                       NVARCHAR (300) NULL,
@@ -3952,7 +3959,7 @@ CREATE TABLE [dbo].[Shipment] (
     [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
 	[ShipResidentialStatus]                INT            NOT NULL, 
     [ShipPOBox]                            INT            NOT NULL, 
-    [ShipInternationalTerritory]           INT            NOT NULL, 
+    [ShipUSTerritory]           INT            NOT NULL, 
     [ShipMilitaryAddress]                  INT            NOT NULL, 
     [ResidentialDetermination] INT            NOT NULL,
     [ResidentialResult]        BIT            NOT NULL,
@@ -4918,6 +4925,7 @@ GO
 CREATE TABLE [dbo].[ValidatedAddress] (
     [ValidatedAddressID] BIGINT IDENTITY (1100, 1000) NOT NULL,
     [ConsumerID]         BIGINT NOT NULL,
+	[AddressPrefix]			 NVARCHAR(10)   NOT NULL,
     [IsOriginal]         BIT    NOT NULL,
     [Street1]                NVARCHAR (60) NOT NULL,
     [Street2]                NVARCHAR (60) NOT NULL,
@@ -4932,6 +4940,15 @@ CREATE TABLE [dbo].[ValidatedAddress] (
     [MilitaryAddress]        INT           NOT NULL, 
     CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED ([ValidatedAddressID] ASC)
 );
+
+
+GO
+PRINT N'Creating [dbo].[ValidatedAddress].[IX_ValidatedAddress_ConsumerIDAddressPrefix]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
+    ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
 
 
 GO

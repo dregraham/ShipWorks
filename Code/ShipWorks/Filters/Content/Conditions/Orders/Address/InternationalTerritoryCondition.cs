@@ -23,7 +23,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            return GenerateSql(context.GetColumnReference(OrderFields.ShipInternationalTerritory), context);
+            return GenerateSql(context.GetColumnReference(OrderFields.ShipUSTerritory), context);
         }
     }
 }
