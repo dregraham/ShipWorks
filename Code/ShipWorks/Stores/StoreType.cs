@@ -136,7 +136,12 @@ namespace ShipWorks.Stores
                 ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown,
                 ShipPOBox = (int) ValidationDetailStatusType.Unknown,
                 ShipUSTerritory = (int) ValidationDetailStatusType.Unknown,
-                ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown
+                ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown,
+                BillAddressValidationError = string.Empty,
+                BillResidentialStatus = (int) ValidationDetailStatusType.Unknown,
+                BillPOBox = (int) ValidationDetailStatusType.Unknown,
+                BillUSTerritory = (int) ValidationDetailStatusType.Unknown,
+                BillMilitaryAddress = (int) ValidationDetailStatusType.Unknown
             };
         }
 

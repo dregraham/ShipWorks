@@ -52,7 +52,7 @@ namespace Interapptive.Shared.Business
 
             adapter.ResidentialStatus = 0;
             adapter.POBox = 0;
-            adapter.InternationalTerritory = 0;
+            adapter.USTerritory = 0;
             adapter.MilitaryAddress = 0;
         }
 
@@ -104,7 +104,7 @@ namespace Interapptive.Shared.Business
 
             toAdapter.ResidentialStatus = fromAdapter.ResidentialStatus;
             toAdapter.POBox = fromAdapter.POBox;
-            toAdapter.InternationalTerritory = fromAdapter.InternationalTerritory;
+            toAdapter.USTerritory = fromAdapter.USTerritory;
             toAdapter.MilitaryAddress = fromAdapter.MilitaryAddress;
         }
 
@@ -387,12 +387,12 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Whether the address is an international territory
+        /// Whether the address is an US territory
         /// </summary>
-        public int InternationalTerritory
+        public int USTerritory
         {
-            get { return GetField<int>("InternationalTerritory"); }
-            set { SetField("InternationalTerritory", value); }
+            get { return GetField<int>("USTerritory"); }
+            set { SetField("USTerritory", value); }
         }
 
         /// <summary>

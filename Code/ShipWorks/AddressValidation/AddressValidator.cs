@@ -88,7 +88,7 @@ namespace ShipWorks.AddressValidation
                     {
                         adapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
                         adapter.POBox = (int) validatedAddress.POBox;
-                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
+                        adapter.USTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
                         adapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
                     }
                 }
@@ -205,7 +205,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void UpdateInternationalTerritoryAndMilitaryAddress(AddressAdapter address)
         {
-            address.InternationalTerritory = InternationalTerritoryStatus(address.StateProvCode, address.CountryCode);
+            address.USTerritory = InternationalTerritoryStatus(address.StateProvCode, address.CountryCode);
             address.MilitaryAddress = MilitaryAddressStatus(address.StateProvCode);
         }
 

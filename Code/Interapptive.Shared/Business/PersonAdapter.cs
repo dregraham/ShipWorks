@@ -538,12 +538,12 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Whether the address is an international territory
+        /// Whether the address is an US territory
         /// </summary>
-        public int InternationalTerritory
+        public int USTerritory
         {
-            get { return GetField<int>("InternationalTerritory"); }
-            set { SetField("InternationalTerritory", value); }
+            get { return GetField<int>("USTerritory"); }
+            set { SetField("USTerritory", value); }
         }
 
         /// <summary>
