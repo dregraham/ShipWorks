@@ -345,12 +345,34 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 InstantiateNote(order, WebUtility.HtmlDecode(orderFromEtsy.GetValue("message_from_buyer", "")), order.OrderDate, NoteVisibility.Public);
 
                 // Items
-                JArray transactions = (JArray) orderFromEtsy["Transactions"];
-                if (transactions != null && transactions.Count > 0)
+                int loadedItems = LoadItems(order, (JArray) orderFromEtsy["Transactions"]);
+                if (loadedItems > 0)
                 {
-                    foreach (JToken transaction in transactions)
+                    // If the order total doesn't match the sum of the transactions, then it means we've probably got more
+                    // transactions to load. Etsy doesn't currently give us pagination data for related data and I don't think
+                    // it would be a good idea to rely on the default limit to stay 25.
+                    decimal totalPrice = orderFromEtsy.GetValue("total_price", 0m);
+                    decimal itemPrice = order.OrderItems.Select(x => x.UnitPrice * Convert.ToDecimal(x.Quantity)).Sum();
+
+                    if (totalPrice != itemPrice)
                     {
-                        LoadItem(order, transaction);
+                        int offset = loadedItems;
+                        int totalTransactions = 0;
+
+                        do
+                        {
+                            // Get another batch of transactions for the current order
+                            JToken transactionToken = webClient.GetTransactionsForReceipt(orderNumber, limit, offset);
+
+                            totalTransactions = transactionToken.GetValue("count", 0);
+                            loadedItems = LoadItems(order, (JArray)transactionToken["results"]);
+
+                            offset = offset + loadedItems;
+
+                            // We want to loop until our item count matches the total transaction, but
+                            // stopping when there were no items loaded should stop an infinite loop if
+                            // something goes wrong and etsy returns no transactions before we're done
+                        } while (loadedItems > 0 && order.OrderItems.Count < totalTransactions);
                     }
                 }
 
@@ -365,7 +387,26 @@ namespace ShipWorks.Stores.Platforms.Etsy
             // Save the downloaded order
             SaveDownloadedOrder(order);
         }
-        
+
+        /// <summary>
+        /// Loads items into the order from a collection of transactions
+        /// </summary>
+        /// <returns>The number of items loaded</returns>
+        private int LoadItems(EtsyOrderEntity order, JArray transactions)
+        {
+            if (transactions == null || transactions.Count <= 0)
+            {
+                return 0;
+            }
+
+            foreach (JToken transaction in transactions)
+            {
+                LoadItem(order, transaction);
+            }
+
+            return transactions.Count;
+        }
+
         /// <summary>
         /// Load the order address information
         /// </summary>
