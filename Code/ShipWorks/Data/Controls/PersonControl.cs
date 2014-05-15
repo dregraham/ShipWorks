@@ -142,7 +142,7 @@ namespace ShipWorks.Data.Controls
 
             InitializeFieldMappings();
 
-            AddressSelector = new AddressSelector();
+            AddressSelector = new AddressSelector(string.Empty);
             EnableValidationControls = false;
         }
 

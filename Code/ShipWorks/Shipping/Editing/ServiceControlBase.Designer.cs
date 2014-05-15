@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.AddressValidation.AddressSelector entityGridAddressSelector1 = new ShipWorks.AddressValidation.AddressSelector();
             this.sectionReturns = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.returnsPanel = new System.Windows.Forms.Panel();
             this.returnShipment = new System.Windows.Forms.CheckBox();
@@ -155,7 +154,6 @@
             // 
             // personControl
             // 
-            this.personControl.AddressSelector = entityGridAddressSelector1;
             this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 

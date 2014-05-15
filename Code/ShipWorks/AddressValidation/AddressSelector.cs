@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,6 +19,8 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class AddressSelector
     {
+        private readonly string addressPrefix;
+
         /// <summary>
         /// An address has just been selected from the list of options
         /// </summary>
@@ -28,10 +31,26 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public event EventHandler AddressSelecting;
 
+        public AddressSelector(string addressPrefix)
+        {
+            this.addressPrefix = addressPrefix;
+        }
+
+        /// <summary>
+        /// Get the address prefix
+        /// </summary>
+        protected string AddressPrefix
+        {
+            get
+            {
+                return addressPrefix;
+            }
+        }
+
         /// <summary>
         /// Checks whether the validation suggestion hyperlink should be enabled
         /// </summary>
-        public static bool IsValidationSuggestionLinkEnabled(object arg)
+        public bool IsValidationSuggestionLinkEnabled(object arg)
         {
             AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
@@ -58,7 +77,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Displays the validation suggestion link text
         /// </summary>
-        public static string DisplayValidationSuggestionLabel(object arg)
+        public string DisplayValidationSuggestionLabel(object arg)
         {
             AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
@@ -89,7 +108,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets an address adapter from an object, if possible.
         /// </summary>
-        private static AddressAdapter GetAddressAdapterFromObject(object arg)
+        private AddressAdapter GetAddressAdapterFromObject(object arg)
         {
             AddressAdapter addressAdapter = arg as AddressAdapter;
 
@@ -98,7 +117,7 @@ namespace ShipWorks.AddressValidation
                 IEntity2 entity = arg as IEntity2;
                 if (entity != null)
                 {
-                    addressAdapter = new AddressAdapter(entity, "Ship");
+                    addressAdapter = new AddressAdapter(entity, addressPrefix);
                 }
             }
 
@@ -163,20 +182,6 @@ namespace ShipWorks.AddressValidation
 
             return new MenuItem(title, (sender, args) => SelectAddress(entityAdapter, validatedAddress));
         }
-
-        ///// <summary>
-        ///// Get a list of addresses associated with the specified entity
-        ///// </summary>
-        //protected static List<ValidatedAddressEntity> GetEntityAddresses(long entityId)
-        //{   
-        //    using (SqlAdapter adapter = new SqlAdapter())
-        //    {
-        //        LinqMetaData metaData = new LinqMetaData(adapter);
-        //        return metaData.ValidatedAddress
-        //            .Where(x => x.ConsumerID == entityId)
-        //            .ToList();
-        //    }
-        //}
 
         /// <summary>
         /// Select an address to copy into the entity's shipping address

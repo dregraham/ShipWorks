@@ -33,6 +33,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
+            EntityGridAddressSelector addressSelector = new EntityGridAddressSelector("Ship");
+
             return new GridColumnDefinitionCollection
             {
                 new GridColumnDefinition("{ACA5305A-DB99-414e-8705-5E2CF8B00509}",
@@ -126,8 +128,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     { DefaultWidth = 100 },
 
                 new GridColumnDefinition("{A0015494-C387-44D9-9A1F-466A9341B634}",
-                    new GridActionDisplayType(AddressSelector.DisplayValidationSuggestionLabel, 
-                        (new EntityGridAddressSelector()).ShowAddressOptionMenu, AddressSelector.IsValidationSuggestionLinkEnabled), 
+                    new GridActionDisplayType(addressSelector.DisplayValidationSuggestionLabel, 
+                        addressSelector.ShowAddressOptionMenu, addressSelector.IsValidationSuggestionLinkEnabled), 
                     "S: Validation Suggestions", "2 Suggestions",
                     new GridColumnFunctionValueProvider(x => x),
                     new GridColumnSortProvider(ShipmentFields.ShipAddressValidationSuggestionCount, ShipmentFields.ShipAddressValidationStatus))

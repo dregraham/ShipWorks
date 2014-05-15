@@ -20,6 +20,12 @@ namespace ShipWorks.AddressValidation
         IEntity2 selectedEntity;
         SandGrid grid;
 
+        public EntityGridAddressSelector(string fieldPrefix) :
+            base(fieldPrefix)
+        {
+            
+        }
+
         /// <summary>
         /// Display the list of available addresses
         /// </summary>
@@ -35,8 +41,8 @@ namespace ShipWorks.AddressValidation
 
             grid = sender as SandGrid;
             Debug.Assert(grid != null);
-            
-            ShowAddressOptionMenu(grid, new AddressAdapter(entity, "Ship"),
+
+            ShowAddressOptionMenu(grid, new AddressAdapter(entity, AddressPrefix),
                 new Point(e.MouseArgs.X - grid.HScrollOffset, e.MouseArgs.Y - grid.VScrollOffset),
                 () =>
                 {
