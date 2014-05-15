@@ -59,6 +59,17 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Get the prefix used for the address
+        /// </summary>
+        public string FieldPrefix
+        {
+            get
+            {
+                return fieldPrefix;
+            }
+        }
+
+        /// <summary>
         /// Get the value of the field with the given field name.  If no field exists then the default of the type is returned
         /// </summary>
         protected T GetField<T>(string fieldName)
