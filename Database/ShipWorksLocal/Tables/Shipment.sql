@@ -37,7 +37,7 @@
 	[ShipAddressValidationError] NVARCHAR(300) NOT NULL,
 	[ShipResidentialStatus] INT NOT NULL, 
     [ShipPOBox] INT NOT NULL, 
-    [ShipInternationalTerritory] INT NOT NULL, 
+    [ShipUSTerritory] INT NOT NULL, 
     [ShipMilitaryAddress] INT NOT NULL, 
     [ResidentialDetermination] INT            NOT NULL,
     [ResidentialResult]        BIT            NOT NULL,

@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[ValidatedAddress] (
     [ValidatedAddressID]     BIGINT IDENTITY (1100, 1000) NOT NULL,
     [ConsumerID]             BIGINT NOT NULL,
+	[AddressPrefix]			 NVARCHAR(10)   NOT NULL,
     [IsOriginal]             BIT    NOT NULL,
 	[Street1]                NVARCHAR (60)  NOT NULL,
     [Street2]                NVARCHAR (60)  NOT NULL,
@@ -22,4 +23,4 @@
 
 GO
 
-CREATE INDEX [IX_ValidatedAddress_ConsumerID] ON [dbo].[ValidatedAddress] ([ConsumerID])
+CREATE INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix] ON [dbo].[ValidatedAddress] ([ConsumerID], [AddressPrefix])
