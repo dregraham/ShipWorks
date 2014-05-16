@@ -936,6 +936,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                         PostalServiceType serviceType = serviceResult.Value;
 
+                        // If the person has selected Parcel Select as their shipment type, don't include Parcel Select rates here
+                        // We'll pick it up below by getting individual rates so we can include the Parcel Select specific fields 
+                        // and therefore get a more accurate rate
+                        if (serviceType == PostalServiceType.ParcelSelect && shipment.Postal.Service == (int) PostalServiceType.ParcelSelect)
+                        {
+                            continue;
+                        }
+
                         // Don't confuse people by showing them Standard Post - almost no one will qualify for it.  If they do qualify, they can still manually select it.
                         if (serviceType == PostalServiceType.StandardPost)
                         {
@@ -1314,6 +1322,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Postage vs. Pricing
             request.ResponseOptions = new ResponseOptions();
             request.ResponseOptions.PostagePrice = "TRUE";
+
+            // Parcel Select, or DHL
+            if (PostalUtility.IsEntryFacilityRequired(serviceType))
+            {
+                request.SortType = GetSortTypeCode((PostalSortType) shipment.Postal.SortType);
+                request.EntryFacility = GetEntryFacilityCode((PostalEntryFacility) shipment.Postal.EntryFacility);
+            }
 
             try
             {
