@@ -191,7 +191,10 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static ValidatedAddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult, string fieldPrefix)
         {
-            ValidatedAddressEntity address = new ValidatedAddressEntity();
+            ValidatedAddressEntity address = new ValidatedAddressEntity
+            {
+                AddressPrefix = string.Empty
+            };
             AddressAdapter adapter = new AddressAdapter(address, "");
             
             validationResult.CopyTo(adapter);
