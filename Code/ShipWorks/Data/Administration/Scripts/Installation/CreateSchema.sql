@@ -913,7 +913,11 @@ PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
 GO
-PRINT N'Creating index [IX_Shipment_ShipmentID_HashKey] on [dbo].[Shipment]'
+PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID]) WITH (FILLFACTOR = 75)
+GO
+PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] 
 (

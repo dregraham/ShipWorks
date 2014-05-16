@@ -564,6 +564,10 @@ PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
 GO
 ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
+PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID]) WITH (FILLFACTOR = 75)
+GO
 PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
@@ -806,14 +810,26 @@ GO
 
 -- Determine the shipment id from which to start
 DECLARE @shipSenseProcessedShipmentID bigint
+DECLARE @shipSenseEndShipmentID bigint
 WITH Shipments AS(	SELECT TOP 25000 ShipmentID FROM Shipment WHERE Processed = 1 ORDER BY ShipmentID DESC)SELECT @shipSenseProcessedShipmentID = min(ShipmentID) FROM Shipments
+
+if @shipSenseProcessedShipmentID is null
+begin
+	set @shipSenseProcessedShipmentID = 0
+end
+
+select @shipSenseEndShipmentID = max(ShipmentID) from Shipment where Processed = 1
+if @shipSenseEndShipmentID is null
+begin
+	set @shipSenseEndShipmentID = 0
+end
 
 UPDATE [ShippingSettings] 
 SET 
 	[ShipSenseEnabled] = 1,
 	[ShipSenseUniquenessXml] = '<ShipSenseUniqueness><ItemProperty><Name>SKU</Name><Name>Code</Name></ItemProperty><ItemAttribute /></ShipSenseUniqueness>',
 	[ShipSenseProcessedShipmentID] = @shipSenseProcessedShipmentID, 
-	[ShipSenseEndShipmentID] = (select max(ShipmentID) from Shipment where Processed = 1)
+	[ShipSenseEndShipmentID] = @shipSenseEndShipmentID
 GO
 
 PRINT N'Altering [dbo].[ShippingSettings][ShipSenseEnabled]'
