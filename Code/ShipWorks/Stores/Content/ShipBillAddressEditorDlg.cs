@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Content
                 {
                     ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
                     adapter.SaveAndRefetch(entity);
-                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity));
+                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Ship");
                 }
             }
             catch (ORMConcurrencyException ex)

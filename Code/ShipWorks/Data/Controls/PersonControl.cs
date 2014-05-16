@@ -1023,7 +1023,7 @@ namespace ShipWorks.Data.Controls
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), "Ship");
             }
         }
 

@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
 
-                ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, shipment.ShipmentID);
+                ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
                 adapter.Commit();
             }
@@ -525,7 +525,7 @@ namespace ShipWorks.Shipping
                 {
                     adapter.DeleteEntity(shipment);
 
-                    ValidatedAddressManager.DeleteExistingAddresses(adapter, shipmentID);
+                    ValidatedAddressManager.DeleteExistingAddresses(adapter, shipmentID, "Ship");
 
                     adapter.Commit();
                 }

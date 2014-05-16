@@ -48,7 +48,7 @@ namespace ShipWorks.AddressValidation
                 {
                     using (SqlAdapter sqlAdapter = new SqlAdapter())
                     {
-                        return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(entity));
+                        return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(entity), "Ship");
                     }
                 });
         }

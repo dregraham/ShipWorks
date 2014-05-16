@@ -1316,7 +1316,7 @@ namespace ShipWorks.Shipping
 
                     using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                     {
-                        validatedAddressScope.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID);
+                        validatedAddressScope.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
                         sqlAdapter.Commit();
                     }
                 }

@@ -63,22 +63,22 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save the stored validated addresses to the database
         /// </summary>
-        public void FlushAddressesToDatabase(SqlAdapter sqlAdapter, long entityId)
+        public void FlushAddressesToDatabase(SqlAdapter sqlAdapter, long entityId, string prefix)
         {
-            FlushAddressesToDatabase(new AdapterAddressValidationDataAccess(sqlAdapter), entityId);
+            FlushAddressesToDatabase(new AdapterAddressValidationDataAccess(sqlAdapter), entityId, prefix);
         }
 
         /// <summary>
         /// Save the stored validated addresses to the database
         /// </summary>
-        public void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId)
+        public void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId, string prefix)
         {
             if (!valueMap.ContainsKey(entityId))
             {
                 return;
             }
 
-            ValidatedAddressManager.DeleteExistingAddresses(dataAccess, entityId);
+            ValidatedAddressManager.DeleteExistingAddresses(dataAccess, entityId, prefix);
 
             foreach (ValidatedAddressEntity address in valueMap[entityId])
             {
