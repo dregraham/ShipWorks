@@ -77,7 +77,6 @@
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
-        <Condition identifier="Order.AddressValidationStatus" />
         <Separator />
         <Condition identifier="Order.Emailed" displayAs="Emailed With" />
         <Condition identifier="Order.Printed" displayAs="Printed With" />
@@ -129,10 +128,11 @@
           <Condition identifier="Order.Address.StateProvince" displayAs="State\Province" />
           <Condition identifier="Order.Address.PostalCode" displayAs="Postal Code" />
           <Condition identifier="Order.Address.Country" displayAs="Country" />
-          <Condition identifier="Order.Address.ResidentialStatus" displayAs="Shipping Residential Status" />
-          <Condition identifier="Order.Address.POBox" displayAs="Shipping PO Box" />
-          <Condition identifier="Order.Address.USTerritory" displayAs="Shipping US Territory" />
-          <Condition identifier="Order.Address.MilitaryAddress" displayAs="Shipping Military Address" />
+          <Condition identifier="Order.Address.ValidationStatus" displayAs="Validation Status" />
+          <Condition identifier="Order.Address.ResidentialStatus" displayAs="Residential Status" />
+          <Condition identifier="Order.Address.POBox" displayAs="PO Box" />
+          <Condition identifier="Order.Address.USTerritory" displayAs="US Territory" />
+          <Condition identifier="Order.Address.MilitaryAddress" displayAs="Military Address" />
         </Group>
         <Condition identifier="Order.CompanyName" displayAs="Company" />
         <Condition identifier="Order.EmailAddress" displayAs="Email" />
@@ -282,7 +282,7 @@
           <Condition identifier="Shipment.ShipTo.AddressValidationStatus" />
           <Condition identifier="Shipment.ShipTo.ResidentialStatus" displayAs="Shipping Residential Status" />
           <Condition identifier="Shipment.ShipTo.POBox" displayAs="Shipping PO Box" />
-          <Condition identifier="Shipment.ShipTo.InternationalTerritory" displayAs="Shipping International Territory" />
+          <Condition identifier="Shipment.ShipTo.USTerritory" displayAs="Shipping US Territory" />
           <Condition identifier="Shipment.ShipTo.MilitaryAddress" displayAs="Shipping Military Address" />
         </Group>
         <Condition identifier="Shipment.ShipTo.Company" displayAs="Company"/>

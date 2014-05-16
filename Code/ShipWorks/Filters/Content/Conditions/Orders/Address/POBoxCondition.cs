@@ -8,7 +8,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the PO Box field of an order's shipping address
     /// </summary>
     [ConditionElement("PO Box", "Order.Address.POBox")]
-    public class POBoxCondition : EnumCondition<ValidationDetailStatusType>
+    public class POBoxCondition : BillShipAddressEnumValueCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
@@ -23,7 +23,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            return GenerateSql(context.GetColumnReference(OrderFields.ShipPOBox), context);
+            return GenerateSql(context.GetColumnReference(OrderFields.BillPOBox), context.GetColumnReference(OrderFields.ShipPOBox), context);
         }
     }
 }

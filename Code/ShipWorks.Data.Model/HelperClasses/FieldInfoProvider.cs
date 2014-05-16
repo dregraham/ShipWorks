@@ -2066,7 +2066,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ShipAddressValidationError", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipAddressValidationError, 300, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipResidentialStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipPOBox", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipPOBox, 0, 0, 10);
-			base.AddElementFieldInfo("ShipmentEntity", "ShipInternationalTerritory", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipInternationalTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("ShipmentEntity", "ShipUSTerritory", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipUSTerritory, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipMilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipMilitaryAddress, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ResidentialDetermination", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ResidentialDetermination, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ResidentialResult", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.ResidentialResult, 0, 0, 0);

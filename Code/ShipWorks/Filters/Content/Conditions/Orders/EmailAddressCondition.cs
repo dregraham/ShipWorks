@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// Condition that compares against the email address of an order
     /// </summary>
     [ConditionElement("Email Address", "Order.EmailAddress")]
-    public class OrderEmailAddressCondition : BillShipAddressCondition
+    public class OrderEmailAddressCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

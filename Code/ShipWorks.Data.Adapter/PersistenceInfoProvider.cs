@@ -2182,7 +2182,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipAddressValidationError", "ShipAddressValidationError", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 35 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipResidentialStatus", "ShipResidentialStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 36 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipPOBox", "ShipPOBox", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 37 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipInternationalTerritory", "ShipUSTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 38 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipUSTerritory", "ShipUSTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 38 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipMilitaryAddress", "ShipMilitaryAddress", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 39 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialDetermination", "ResidentialDetermination", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 40 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialResult", "ResidentialResult", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 41 );

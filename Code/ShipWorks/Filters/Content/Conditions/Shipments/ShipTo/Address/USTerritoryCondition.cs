@@ -7,13 +7,13 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
     /// <summary>
     /// Condition that compares against the international territory field of an shipment's ShipTo address
     /// </summary>
-    [ConditionElement("International Territory", "Shipment.ShipTo.InternationalTerritory")]
-    public class InternationalTerritoryCondition : EnumCondition<ValidationDetailStatusType>
+    [ConditionElement("US Territory", "Shipment.ShipTo.USTerritory")]
+    public class USTerritoryCondition : EnumCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public InternationalTerritoryCondition()
+        public USTerritoryCondition()
         {
             Value = ValidationDetailStatusType.Unknown;
         }
@@ -23,7 +23,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            return GenerateSql(context.GetColumnReference(ShipmentFields.ShipInternationalTerritory), context);
+            return GenerateSql(context.GetColumnReference(ShipmentFields.ShipUSTerritory), context);
         }
     }
 }

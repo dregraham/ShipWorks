@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the PostalCode of an order.
     /// </summary>
     [ConditionElement("Postal Code", "Order.Address.PostalCode")]
-    public class OrderAddressPostalCodeCondition : BillShipAddressCondition
+    public class OrderAddressPostalCodeCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

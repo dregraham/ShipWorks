@@ -1091,7 +1091,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipPOBox", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipInternationalTerritory", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipUSTerritory", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipMilitaryAddress", fieldHashtable);
@@ -2100,15 +2100,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.ShipPOBox, value); }
 		}
 
-		/// <summary> The ShipInternationalTerritory property of the Entity Shipment<br/><br/>
+		/// <summary> The ShipUSTerritory property of the Entity Shipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Shipment"."ShipUSTerritory"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 ShipInternationalTerritory
+		public virtual System.Int32 ShipUSTerritory
 		{
-			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipInternationalTerritory, true); }
-			set	{ SetValue((int)ShipmentFieldIndex.ShipInternationalTerritory, value); }
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipUSTerritory, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipUSTerritory, value); }
 		}
 
 		/// <summary> The ShipMilitaryAddress property of the Entity Shipment<br/><br/>

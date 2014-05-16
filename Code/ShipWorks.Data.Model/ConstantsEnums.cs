@@ -7551,8 +7551,8 @@ namespace ShipWorks.Data.Model
 		ShipResidentialStatus,
 		///<summary>ShipPOBox. </summary>
 		ShipPOBox,
-		///<summary>ShipInternationalTerritory. </summary>
-		ShipInternationalTerritory,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
 		///<summary>ShipMilitaryAddress. </summary>
 		ShipMilitaryAddress,
 		///<summary>ResidentialDetermination. </summary>

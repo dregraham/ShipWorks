@@ -166,7 +166,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{679D1C53-0826-4827-8CF0-9E153F51398B}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: International Territory", string.Empty,
-                    ShipmentFields.ShipInternationalTerritory) 
+                    ShipmentFields.ShipUSTerritory) 
                     { DefaultWidth = 145 }, 
 
                 new GridColumnDefinition("{68565201-49E4-45BB-80C2-E2D8343253F9}",

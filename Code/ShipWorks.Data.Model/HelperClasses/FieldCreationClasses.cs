@@ -16237,10 +16237,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipPOBox);}
 		}
-		/// <summary>Creates a new ShipmentEntity.ShipInternationalTerritory field instance</summary>
-		public static EntityField2 ShipInternationalTerritory
+		/// <summary>Creates a new ShipmentEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipInternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipUSTerritory);}
 		}
 		/// <summary>Creates a new ShipmentEntity.ShipMilitaryAddress field instance</summary>
 		public static EntityField2 ShipMilitaryAddress

@@ -8,7 +8,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the residential status of an order's shipping address
     /// </summary>
     [ConditionElement("Residential Status", "Order.Address.ResidentialStatus")]
-    public class ResidentialStatusCondition : EnumCondition<ValidationDetailStatusType>
+    public class ResidentialStatusCondition : BillShipAddressEnumValueCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
@@ -23,7 +23,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            return GenerateSql(context.GetColumnReference(OrderFields.ShipResidentialStatus), context);
+            return GenerateSql(context.GetColumnReference(OrderFields.BillResidentialStatus), context.GetColumnReference(OrderFields.ShipResidentialStatus), context);
         }
     }
 }

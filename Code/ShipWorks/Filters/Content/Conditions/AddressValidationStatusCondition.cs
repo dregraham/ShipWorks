@@ -10,6 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions
     /// <summary>
     /// Filter on the address validation status of an entity
     /// </summary>
+    [ConditionElement("Validation Status", "Order.Address.ValidationStatus")]
     public abstract class AddressValidationStatusCondition : Condition
     {
         /// <summary>

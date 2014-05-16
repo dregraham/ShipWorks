@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers
     /// Condition that compares against the company name of a customer
     /// </summary>
     [ConditionElement("Company Name", "Customer.CompanyName")]
-    public class CustomerCompanyNameCondition : BillShipAddressCondition
+    public class CustomerCompanyNameCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

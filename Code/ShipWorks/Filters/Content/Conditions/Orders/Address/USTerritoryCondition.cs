@@ -5,15 +5,15 @@ using ShipWorks.Filters.Content.SqlGeneration;
 namespace ShipWorks.Filters.Content.Conditions.Orders.Address
 {
     /// <summary>
-    /// Condition that compares against the military address field of an order's shipping address
+    /// Condition that compares against the US territory field of an order's shipping address
     /// </summary>
-    [ConditionElement("Military Address", "Order.Address.MilitaryAddress")]
-    public class MilitaryAddressCondition : BillShipAddressEnumValueCondition<ValidationDetailStatusType>
+    [ConditionElement("US Territory", "Order.Address.USTerritory")]
+    public class USTerritoryCondition : BillShipAddressEnumValueCondition<ValidationDetailStatusType>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MilitaryAddressCondition()
+        public USTerritoryCondition()
         {
             Value = ValidationDetailStatusType.Unknown;
         }
@@ -23,7 +23,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
-            return GenerateSql(context.GetColumnReference(OrderFields.BillMilitaryAddress), context.GetColumnReference(OrderFields.ShipMilitaryAddress), context);
+            return GenerateSql(context.GetColumnReference(OrderFields.BillUSTerritory), context.GetColumnReference(OrderFields.ShipUSTerritory), context);
         }
     }
 }
