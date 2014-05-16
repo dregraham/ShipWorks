@@ -131,7 +131,7 @@
           <Condition identifier="Order.Address.Country" displayAs="Country" />
           <Condition identifier="Order.Address.ResidentialStatus" displayAs="Shipping Residential Status" />
           <Condition identifier="Order.Address.POBox" displayAs="Shipping PO Box" />
-          <Condition identifier="Order.Address.InternationalTerritory" displayAs="Shipping International Territory" />
+          <Condition identifier="Order.Address.USTerritory" displayAs="Shipping US Territory" />
           <Condition identifier="Order.Address.MilitaryAddress" displayAs="Shipping Military Address" />
         </Group>
         <Condition identifier="Order.CompanyName" displayAs="Company" />
