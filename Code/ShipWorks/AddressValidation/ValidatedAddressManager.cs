@@ -386,9 +386,9 @@ namespace ShipWorks.AddressValidation
 
             DeleteExistingAddresses(dataAccess, toEntityId, toPrefix);
 
-            addresses.ForEach(x =>
+            foreach (var address in addresses)
             {
-                ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(x);
+                ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(address);
                 clonedAddress.IsNew = true;
                 clonedAddress.ConsumerID = toEntityId;
                 clonedAddress.AddressPrefix = toPrefix;
@@ -399,7 +399,7 @@ namespace ShipWorks.AddressValidation
                 }
 
                 dataAccess.SaveEntity(clonedAddress);
-            });
+            }
         }
 
         /// <summary>

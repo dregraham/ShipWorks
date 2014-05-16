@@ -98,7 +98,7 @@ namespace ShipWorks.AddressValidation
 
                 if (suggestedAddresses.Count > 0)
                 {
-                    saveAction(originalAddress, suggestedAddresses.Select(address => CreateEntityFromValidationResult(address, addressAdapter.FieldPrefix)));
+                    saveAction(originalAddress, suggestedAddresses.Select(address => CreateEntityFromValidationResult(address, "Ship")));
                 }
                 else
                 {
@@ -192,11 +192,12 @@ namespace ShipWorks.AddressValidation
         private static ValidatedAddressEntity CreateEntityFromValidationResult(AddressValidationResult validationResult, string fieldPrefix)
         {
             ValidatedAddressEntity address = new ValidatedAddressEntity();
-            AddressAdapter adapter = new AddressAdapter(address, fieldPrefix);
+            AddressAdapter adapter = new AddressAdapter(address, "");
             
             validationResult.CopyTo(adapter);
             UpdateInternationalTerritoryAndMilitaryAddress(adapter);
             address.IsOriginal = false;
+            address.AddressPrefix = fieldPrefix;
 
             return address;
         }
