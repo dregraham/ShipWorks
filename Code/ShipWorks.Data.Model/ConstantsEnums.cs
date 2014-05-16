@@ -9329,8 +9329,8 @@ namespace ShipWorks.Data.Model
 		ResidentialStatus,
 		///<summary>POBox. </summary>
 		POBox,
-		///<summary>InternationalTerritory. </summary>
-		InternationalTerritory,
+		///<summary>USTerritory. </summary>
+		USTerritory,
 		///<summary>MilitaryAddress. </summary>
 		MilitaryAddress,
 		/// <summary></summary>

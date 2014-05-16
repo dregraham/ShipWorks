@@ -2704,7 +2704,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ValidatedAddressEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)ValidatedAddressFieldIndex.CountryCode, 50, 0, 0);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "ResidentialStatus", typeof(System.Int32), false, false, false, false,  (int)ValidatedAddressFieldIndex.ResidentialStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "POBox", typeof(System.Int32), false, false, false, false,  (int)ValidatedAddressFieldIndex.POBox, 0, 0, 10);
-			base.AddElementFieldInfo("ValidatedAddressEntity", "InternationalTerritory", typeof(System.Int32), false, false, false, false,  (int)ValidatedAddressFieldIndex.InternationalTerritory, 0, 0, 10);
+			base.AddElementFieldInfo("ValidatedAddressEntity", "USTerritory", typeof(System.Int32), false, false, false, false,  (int)ValidatedAddressFieldIndex.USTerritory, 0, 0, 10);
 			base.AddElementFieldInfo("ValidatedAddressEntity", "MilitaryAddress", typeof(System.Int32), false, false, false, false,  (int)ValidatedAddressFieldIndex.MilitaryAddress, 0, 0, 10);
 		}
 		/// <summary>Inits VersionSignoffEntity's FieldInfo objects</summary>

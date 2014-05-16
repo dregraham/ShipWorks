@@ -21,4 +21,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AddressValidationSetting" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c95c3ab0-ff3e-487e-a29d-cebaf160fb6d" ChangeDateTime="05/16/2014 14:58:32">
+    <Property Name="ElementName" Value="[dbo].[ValidatedAddress].[InternationalTerritory]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ValidatedAddress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="USTerritory" />
+  </Operation>
 </Operations>

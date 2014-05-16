@@ -546,7 +546,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("POBox", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("InternationalTerritory", fieldHashtable);
+			_fieldsCustomProperties.Add("USTerritory", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("MilitaryAddress", fieldHashtable);
@@ -846,15 +846,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ValidatedAddressFieldIndex.POBox, value); }
 		}
 
-		/// <summary> The InternationalTerritory property of the Entity ValidatedAddress<br/><br/>
+		/// <summary> The USTerritory property of the Entity ValidatedAddress<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ValidatedAddress"."InternationalTerritory"<br/>
+		/// <remarks>Mapped on  table field: "ValidatedAddress"."USTerritory"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 InternationalTerritory
+		public virtual System.Int32 USTerritory
 		{
-			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.InternationalTerritory, true); }
-			set	{ SetValue((int)ValidatedAddressFieldIndex.InternationalTerritory, value); }
+			get { return (System.Int32)GetValue((int)ValidatedAddressFieldIndex.USTerritory, true); }
+			set	{ SetValue((int)ValidatedAddressFieldIndex.USTerritory, value); }
 		}
 
 		/// <summary> The MilitaryAddress property of the Entity ValidatedAddress<br/><br/>

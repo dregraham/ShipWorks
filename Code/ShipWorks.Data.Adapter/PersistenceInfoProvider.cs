@@ -2856,7 +2856,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 10 );
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "ResidentialStatus", "ResidentialStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "POBox", "POBox", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
-			base.AddElementFieldMapping( "ValidatedAddressEntity", "InternationalTerritory", "InternationalTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
+			base.AddElementFieldMapping( "ValidatedAddressEntity", "USTerritory", "USTerritory", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
 			base.AddElementFieldMapping( "ValidatedAddressEntity", "MilitaryAddress", "MilitaryAddress", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
 		}
 		/// <summary>Inits VersionSignoffEntity's mappings</summary>

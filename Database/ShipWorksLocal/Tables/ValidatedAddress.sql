@@ -12,7 +12,7 @@
     [CountryCode]            NVARCHAR (50)  NOT NULL,
 	[ResidentialStatus]      INT            NOT NULL, 
     [POBox]                  INT            NOT NULL, 
-    [InternationalTerritory] INT            NOT NULL, 
+    [USTerritory] INT            NOT NULL, 
     [MilitaryAddress]        INT            NOT NULL, 
     CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED ([ValidatedAddressID] ASC)
 );

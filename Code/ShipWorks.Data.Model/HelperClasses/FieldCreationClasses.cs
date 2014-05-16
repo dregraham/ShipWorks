@@ -19872,10 +19872,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.POBox);}
 		}
-		/// <summary>Creates a new ValidatedAddressEntity.InternationalTerritory field instance</summary>
-		public static EntityField2 InternationalTerritory
+		/// <summary>Creates a new ValidatedAddressEntity.USTerritory field instance</summary>
+		public static EntityField2 USTerritory
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.InternationalTerritory);}
+			get { return (EntityField2)EntityFieldFactory.Create(ValidatedAddressFieldIndex.USTerritory);}
 		}
 		/// <summary>Creates a new ValidatedAddressEntity.MilitaryAddress field instance</summary>
 		public static EntityField2 MilitaryAddress
