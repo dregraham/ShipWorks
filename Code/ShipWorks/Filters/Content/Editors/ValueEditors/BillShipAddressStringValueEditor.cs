@@ -79,7 +79,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// <summary>
         /// Indicates if the operator is a comparison between the billing and shipping and not an external value
         /// </summary>
-        private bool IsBillShipComparison(BillShipAddressOperator addressOp)
+        private static bool IsBillShipComparison(BillShipAddressOperator addressOp)
         {
             return (addressOp == BillShipAddressOperator.ShipBillEqual || addressOp == BillShipAddressOperator.ShipBillNotEqual);
         }

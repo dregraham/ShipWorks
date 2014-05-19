@@ -65,9 +65,13 @@ namespace ShipWorks.Stores.Content
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
                     adapter.SaveAndRefetch(entity);
+
                     validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Ship");
+                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Bill");
+                    
+                    // Propagate address changes to shipments after we've saved all the order details
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
                 }
             }
             catch (ORMConcurrencyException ex)

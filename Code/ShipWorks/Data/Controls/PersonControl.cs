@@ -57,13 +57,14 @@ namespace ShipWorks.Data.Controls
         // Maps a control to the label that labels it on the form
         Dictionary<Control, Label> labelMap;
 
-        private AddressSelector addressSelector;
-        private bool isLoadingEntities;
+        AddressSelector addressSelector;
+        bool isLoadingEntities;
         bool shouldSaveAddressSuggestions = false;
 
-        private AddressAdapter lastValidatedAddress;
-        private List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
-        private StoreEntity store;
+        AddressAdapter lastValidatedAddress;
+        string AddressPrefix;
+        List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+        StoreEntity store;
 
         class ControlFieldMap
         {
@@ -142,7 +143,6 @@ namespace ShipWorks.Data.Controls
 
             InitializeFieldMappings();
 
-            AddressSelector = new AddressSelector(string.Empty);
             EnableValidationControls = false;
         }
 
@@ -583,13 +583,14 @@ namespace ShipWorks.Data.Controls
                 AddressAdapter loadedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
                 lastValidatedAddress = new AddressAdapter();
                 loadedAddress.CopyTo(lastValidatedAddress);
-
                 CopyValidationData(loadedAddress, lastValidatedAddress);
 
+                AddressPrefix = loadedAddress.FieldPrefix;
+
                 validatedAddresses = new List<ValidatedAddressEntity>();
+                AddressSelector = new AddressSelector(AddressPrefix);
 
                 store = StoreManager.GetRelatedStore(EntityUtility.GetEntityId(loadedPeople.Single().Entity));
-
             }
 
             using (MultiValueScope scope = new MultiValueScope())
@@ -662,7 +663,7 @@ namespace ShipWorks.Data.Controls
 
                 if (shouldSaveAddressSuggestions)
                 {
-                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses);   
+                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);   
                 }
             }
         }
@@ -1023,7 +1024,7 @@ namespace ShipWorks.Data.Controls
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), "Ship");
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix);
             }
         }
 

@@ -35,7 +35,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propogates the address change to billing.
         /// </summary>
-        private static void PropogateAddressChangeToBilling(IAddressValidationDataAccess dataAccess, OrderEntity order,
+        private static void PropagateAddressChangeToBilling(IAddressValidationDataAccess dataAccess, OrderEntity order,
             AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
@@ -171,7 +171,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
 
             PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalAddress, newShippingAddress);
-            PropogateAddressChangeToBilling(dataAccess, order, originalAddress, newShippingAddress);
+            PropagateAddressChangeToBilling(dataAccess, order, originalAddress, newShippingAddress);
         }
 
         /// <summary>
@@ -197,6 +197,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="shipment">Shipment that was validated</param>
         /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        /// <param name="prefix">Address prefix for the entity</param>
         public static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
             ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses,
             string prefix)
@@ -211,6 +212,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="entity">Entity that was validated</param>
         /// <param name="enteredAddress">The address entered into the entity, either manually or from a download</param>
         /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
+        /// <param name="prefix">Address prefix for the entity</param>
         public static void SaveValidatedEntity(IAddressValidationDataAccess dataAccess, IEntity2 entity,
             ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses,
             string prefix)

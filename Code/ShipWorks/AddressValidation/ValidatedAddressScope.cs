@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Interapptive.Shared.Business;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -15,8 +12,9 @@ namespace ShipWorks.AddressValidation
     public class ValidatedAddressScope : IDisposable
     {
         // Maps the controls to their current value set in scope
-        readonly Dictionary<long, List<ValidatedAddressEntity>> valueMap = new Dictionary<long, List<ValidatedAddressEntity>>();
-
+        readonly Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>> valueMap = 
+            new Dictionary<long, Dictionary<string, List<ValidatedAddressEntity>>>();
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -42,7 +40,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Store a collection of addresses that should be saved
         /// </summary>
-        public static void StoreAddresses(long entityId, IEnumerable<ValidatedAddressEntity> addresses)
+        public static void StoreAddresses(long entityId, IEnumerable<ValidatedAddressEntity> addresses, string fieldPrefix)
         {
             ValidatedAddressScope scope = Current;
             if (scope == null)
@@ -50,13 +48,24 @@ namespace ShipWorks.AddressValidation
                 throw new InvalidOperationException("Cannot be used when there is no ValidatedAddressScope in scope.");
             }
 
+            // Set the prefix on the addresses
+            List<ValidatedAddressEntity> addressList = addresses.ToList();
+            addressList.ForEach(x => x.AddressPrefix = fieldPrefix);
+            
             if (scope.valueMap.ContainsKey(entityId))
             {
-                scope.valueMap[entityId] = addresses.ToList();
+                if (scope.valueMap[entityId].ContainsKey(fieldPrefix))
+                {
+                    scope.valueMap[entityId][fieldPrefix] = addressList;
+                }
+                else
+                {
+                    scope.valueMap[entityId].Add(fieldPrefix, addressList);
+                }
             }
             else
             {
-                scope.valueMap.Add(entityId, addresses.ToList());
+                scope.valueMap.Add(entityId, new Dictionary<string, List<ValidatedAddressEntity>>{ { fieldPrefix, addressList } });
             }
         }
 
@@ -73,19 +82,24 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public void FlushAddressesToDatabase(IAddressValidationDataAccess dataAccess, long entityId, string prefix)
         {
-            if (!valueMap.ContainsKey(entityId))
+            if (!valueMap.ContainsKey(entityId) || !valueMap[entityId].ContainsKey(prefix))
             {
                 return;
             }
 
             ValidatedAddressManager.DeleteExistingAddresses(dataAccess, entityId, prefix);
 
-            foreach (ValidatedAddressEntity address in valueMap[entityId])
+            foreach (ValidatedAddressEntity address in valueMap[entityId][prefix])
             {
                 ValidatedAddressManager.SaveEntityAddress(dataAccess, entityId, address);
             }
 
-            valueMap.Remove(entityId);
+            valueMap[entityId].Remove(prefix);
+
+            if (!valueMap[entityId].Any())
+            {
+                valueMap.Remove(entityId);
+            }
         }
 
         /// <summary>
