@@ -159,6 +159,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// Clears the rates.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public void ClearRates(string message)
+        {
+            selectedShipmentID = null;
+            rateControl.ClearRates(message);
+        }
+
+        /// <summary>
         /// Fetches the rates from the shipment type and 
         /// </summary>
         /// <param name="shipment">The shipment.</param>
