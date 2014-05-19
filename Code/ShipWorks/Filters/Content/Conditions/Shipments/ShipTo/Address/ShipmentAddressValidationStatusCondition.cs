@@ -1,5 +1,6 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
+﻿using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Editors.ValueEditors;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
 {
@@ -10,14 +11,20 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments.ShipTo.Address
     public class ShipmentAddressValidationStatusCondition : AddressValidationStatusCondition
     {
         /// <summary>
-        /// Get the validation field that should be filtered on
+        /// Generate the SQL required for the filter
         /// </summary>
-        protected override EntityField2 ValidationField
+        public override string GenerateSql(SqlGenerationContext context)
         {
-            get
-            {
-                return ShipmentFields.ShipAddressValidationStatus;
-            }
+            return GenerateSql(context.GetColumnReference(ShipmentFields.ShipAddressValidationStatus), context);
+        }
+
+        /// <summary>
+        /// Create the editor for this filter
+        /// </summary>
+        /// <returns></returns>
+        public override ValueEditor CreateEditor()
+        {
+            return new AddressValidationStatusValueEditor(this);
         }
     }
 }

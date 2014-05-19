@@ -11,23 +11,26 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
     /// </summary>
     public partial class BillShipAddressEnumValueEditor<T> : ValueEditor where T : struct
     {
-        BillShipAddressEnumValueCondition<T> condition;
+        EnumCondition<T> condition;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BillShipAddressEnumValueEditor(BillShipAddressEnumValueCondition<T> condition)
+        public BillShipAddressEnumValueEditor(EnumCondition<T> condition)
         {
             InitializeComponent();
 
-            this.condition = condition;
+            IBillShipAddressCondition billShipCondition = condition as IBillShipAddressCondition;
+            if (billShipCondition == null)
+            {
+                throw new InvalidOperationException("Cannot create a BillShipAddressEnumValueEditor with a condition that does not implement IBillShipAddressCondition");
+            }
 
-            //targetValue.SelectedItem = condition.Value;
-            //condition.ValueChoices
+            this.condition = condition;
 
             // Fill the addrestype combo
             addressOperator.InitializeFromEnumType(typeof(BillShipAddressOperator));
-            addressOperator.SelectedValue = condition.AddressOperator;
+            addressOperator.SelectedValue = billShipCondition.AddressOperator;
 
             // Fill the value combo
             equalityOperator.InitializeFromEnumType(typeof(EqualityOperator));
@@ -124,7 +127,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             condition.Operator = op;
 
             BillShipAddressOperator addressOp = (BillShipAddressOperator) addressOperator.SelectedValue;
-            condition.AddressOperator = addressOp;
+            ((IBillShipAddressCondition) condition).AddressOperator = addressOp;
 
             UpdateValueVisibility();
 

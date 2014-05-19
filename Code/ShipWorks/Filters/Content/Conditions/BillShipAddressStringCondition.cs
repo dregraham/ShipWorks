@@ -30,32 +30,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         protected string GenerateSql(string billExpression, string shipExpression, SqlGenerationContext context)
         {
-            if (addressOperator == BillShipAddressOperator.Bill)
-            {
-                return GenerateSql(billExpression, context);
-            }
-
-            if (addressOperator == BillShipAddressOperator.Ship)
-            {
-                return GenerateSql(shipExpression, context);
-            }
-
-            if (addressOperator == BillShipAddressOperator.ShipBillEqual)
-            {
-                return string.Format("{0} = {1}", billExpression, shipExpression);
-            }
-
-            if (addressOperator == BillShipAddressOperator.ShipBillNotEqual)
-            {
-                return string.Format("{0} != {1}", billExpression, shipExpression);
-            }
-
-            string join = (addressOperator == BillShipAddressOperator.ShipAndBill) ? "AND" : "OR";
-
-            return string.Format("({0}) {1} ({2})",
-                GenerateSql(billExpression, context),
-                join,
-                GenerateSql(shipExpression, context));
+            return BillShipAddressConditionUtility.GenerateSqlInternal(context, addressOperator, billExpression, shipExpression, GenerateSql);
         }
 
         /// <summary>
