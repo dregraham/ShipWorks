@@ -49,55 +49,53 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates an address with no prefix on the specified entity
         /// </summary>
-        /// <param name="adapter">Address that should be validated</param>
+        /// <param name="addressAdapter">Address that should be validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(AddressAdapter adapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public void Validate(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
-            if (!ShouldValidateAddress(adapter))
+            if (!ShouldValidateAddress(addressAdapter))
             {
                 return;
             }
 
             try
             {
-                string addressValidationError;
-                List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(adapter.Street1, adapter.Street2, adapter.City, adapter.StateProvCode, adapter.PostalCode, out addressValidationError) ??
-                                                                   new List<AddressValidationResult>();
+                var validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
-                adapter.CopyTo(originalAddress, string.Empty);
+                addressAdapter.CopyTo(originalAddress, string.Empty);
                 originalAddress.IsOriginal = true;
 
-                adapter.AddressValidationError = addressValidationError;
+                addressAdapter.AddressValidationError = validationResult.AddressValidationError;
 
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
                 {
-                    SetValidationStatus(suggestedAddresses, adapter);
-                    UpdateAddressIfAdjusted(adapter, suggestedAddresses);
+                    SetValidationStatus(validationResult.AddressValidationResults, addressAdapter);
+                    UpdateAddressIfAdjusted(addressAdapter, validationResult.AddressValidationResults);
                 }
                 else
                 {
-                    SetValidationStatusForNotify(suggestedAddresses, adapter);
+                    SetValidationStatusForNotify(validationResult.AddressValidationResults, addressAdapter);
 
-                    AddressValidationResult validatedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
+                    AddressValidationResult validatedAddress = validationResult.AddressValidationResults.FirstOrDefault(x => x.IsValid);
                     if (validatedAddress != null)
                     {
-                        adapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
-                        adapter.POBox = (int) validatedAddress.POBox;
-                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
-                        adapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
+                        addressAdapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
+                        addressAdapter.POBox = (int) validatedAddress.POBox;
+                        addressAdapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
+                        addressAdapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
                     }
                 }
 
-                adapter.AddressValidationSuggestionCount = suggestedAddresses.Count;
+                addressAdapter.AddressValidationSuggestionCount = validationResult.AddressValidationResults.Count;
 
-                if (suggestedAddresses.Count > 0)
+                if (validationResult.AddressValidationResults.Count > 0)
                 {
-                    saveAction(originalAddress, suggestedAddresses.Select(CreateEntityFromValidationResult));
+                    saveAction(originalAddress, validationResult.AddressValidationResults.Select(CreateEntityFromValidationResult));
                 }
                 else
                 {
@@ -108,8 +106,8 @@ namespace ShipWorks.AddressValidation
             catch (AddressValidationException ex)
             {
                 log.Warn("Error communicating with Address Validation Server.", ex);
-                adapter.AddressValidationError = "Error communicating with Address Validation Server.";
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
+                addressAdapter.AddressValidationError = "Error communicating with Address Validation Server.";
+                addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
         }
@@ -165,7 +163,7 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Update the adapter's address to the first valid address if its status is adjusted
+        /// Update the addressAdapter's address to the first valid address if its status is adjusted
         /// </summary>
         private static void UpdateAddressIfAdjusted(AddressAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
         {
