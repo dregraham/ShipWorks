@@ -175,13 +175,27 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (entityGrid.Selection.Count == 1)
+            RefreshSelectedShipments();
+        }
+
+        /// <summary>
+        /// Refreshes the selected shipments - Updates the rate control
+        /// </summary>
+        private void RefreshSelectedShipments()
+        {
+            int shipmentSelectionCount = entityGrid.Selection.Count;
+
+            if (shipmentSelectionCount == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
             }
+            else if (shipmentSelectionCount > 1)
+            {
+                ratesControl.ClearRates("Multiple shipments selected.");
+            }
             else
             {
-                ratesControl.ChangeShipment(null);
+                ratesControl.ClearRates("No shipments are selected.");
             }
         }
 
@@ -371,10 +385,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             base.ReloadContent();
 
-            if (entityGrid.Selection.Count == 1)
-            {
-                ratesControl.ChangeShipment(entityGrid.Selection.Keys.First()); 
-            }
+            RefreshSelectedShipments();
         }
 
         /// <summary>
