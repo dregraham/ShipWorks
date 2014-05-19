@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.IO.Text.Sgml;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -198,7 +199,7 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
-
+                
                 using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
                 {
                     dlg.ShowDialog(this);
@@ -360,6 +361,20 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             ReloadContent();
+        }
+
+        /// <summary>
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// list with up-to-date displayed entity content.
+        /// </summary>
+        public override void ReloadContent()
+        {
+            base.ReloadContent();
+
+            if (entityGrid.Selection.Count == 1)
+            {
+                ratesControl.ChangeShipment(entityGrid.Selection.Keys.First()); 
+            }
         }
 
         /// <summary>

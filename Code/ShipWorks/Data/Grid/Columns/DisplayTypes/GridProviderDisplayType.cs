@@ -149,6 +149,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
             Program.MainForm.ForceHeartbeat();
 
+            row.Grid.SandGrid.SelectedElements.Clear();
             row.Grid.SandGrid.SelectRow(row);
         }
     }
