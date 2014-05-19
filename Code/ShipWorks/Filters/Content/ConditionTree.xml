@@ -279,11 +279,11 @@
           <Condition identifier="Shipment.ShipTo.StateProvince" displayAs="State\Province"/>
           <Condition identifier="Shipment.ShipTo.PostalCode" displayAs="Postal Code"/>
           <Condition identifier="Shipment.ShipTo.Country" displayAs="Country"/>
-          <Condition identifier="Shipment.ShipTo.AddressValidationStatus" />
-          <Condition identifier="Shipment.ShipTo.ResidentialStatus" displayAs="Shipping Residential Status" />
-          <Condition identifier="Shipment.ShipTo.POBox" displayAs="Shipping PO Box" />
-          <Condition identifier="Shipment.ShipTo.USTerritory" displayAs="Shipping US Territory" />
-          <Condition identifier="Shipment.ShipTo.MilitaryAddress" displayAs="Shipping Military Address" />
+          <Condition identifier="Shipment.ShipTo.AddressValidationStatus" displayAs="Validation Status" />
+          <Condition identifier="Shipment.ShipTo.ResidentialStatus" displayAs="Residential Status" />
+          <Condition identifier="Shipment.ShipTo.POBox" displayAs="PO Box" />
+          <Condition identifier="Shipment.ShipTo.USTerritory" displayAs="US Territory" />
+          <Condition identifier="Shipment.ShipTo.MilitaryAddress" displayAs="Military Address" />
         </Group>
         <Condition identifier="Shipment.ShipTo.Company" displayAs="Company"/>
         <Condition identifier="Shipment.ShipTo.EmailAddress"  displayAs="Email Address"/>
