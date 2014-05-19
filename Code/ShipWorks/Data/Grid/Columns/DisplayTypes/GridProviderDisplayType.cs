@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
                 GetCarrierName(shipmentType, postalNotSetup),
                 EnumHelper.GetImage(shipmentType.ShipmentTypeCode),
-                (sender, args) => SelectProvider(shipment, shipmentType, row)));
+                (sender, args) => SelectProvider(shipment, shipmentType)));
 
             menu.Show(row.Grid.SandGrid, displayPosition);
         }
@@ -134,7 +134,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Selects the provider.
         /// </summary>
-        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type, GridRow row)
+        private static void SelectProvider(ShipmentEntity shipment, ShipmentType type)
         {
             shipment.ShipmentType = (int)type.ShipmentTypeCode;
 
@@ -148,9 +148,6 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             Program.MainForm.ForceHeartbeat();
-
-            row.Grid.SandGrid.SelectedElements.Clear();
-            row.Grid.SandGrid.SelectRow(row);
         }
     }
 }

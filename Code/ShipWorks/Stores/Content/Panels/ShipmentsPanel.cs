@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             base.UpdateContent();
 
-            ratesControl.ReloadRates();
+            RefreshSelectedShipments();
         }
         /// <summary>
         /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Content.Panels
             }
             else if (entityGrid.Rows.Count > 1)
             {
-                ratesControl.ChangeShipment(null);
+                RefreshSelectedShipments();
             }
             else
             {
