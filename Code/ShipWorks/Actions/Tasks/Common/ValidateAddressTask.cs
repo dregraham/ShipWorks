@@ -56,13 +56,13 @@ namespace ShipWorks.Actions.Tasks.Common
                 // If the address has already been validated, don't bother validating it again
                 if (order == null || !AddressValidator.ShouldValidateAddress(new AddressAdapter(order, "Ship")))
                 {
-                    return;
+                    continue;
                 }
 
                 StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
                 if (store == null || store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidationDisabled)
                 {
-                    return;
+                    continue;
                 }
 
                 AddressAdapter originalShippingAddress = new AddressAdapter();
