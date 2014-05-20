@@ -48,6 +48,11 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Xml.Linq;
+using ShipWorks.Stores.Content;
+using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Shipping
 {
@@ -184,6 +189,9 @@ namespace ShipWorks.Shipping
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
+            shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
+            shipment.ShipSenseEntry = new byte[0];
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -192,7 +200,7 @@ namespace ShipWorks.Shipping
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
-            // Content items arent generated until they are needed
+            // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;
 
@@ -201,7 +209,7 @@ namespace ShipWorks.Shipping
 
             shipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 
-            // The from address will be dependant on the specific service type, but we'll default it to that of the store
+            // The from address will be dependent on the specific service type, but we'll default it to that of the store
             StoreEntity store = StoreManager.GetStore(order.StoreID);
             PersonAdapter.Copy(store, "", shipment, "Origin");
             shipment.OriginFirstName = store.StoreName;
@@ -217,27 +225,30 @@ namespace ShipWorks.Shipping
                 // Save the shipment
                 adapter.SaveAndRefetch(shipment);
 
-                // If the type is not none, apply defaults
-                if (shipmentTypeCode != ShipmentTypeCode.None)
-                {
-                    // If it's activated they can create new shipments of the type - even though it hasn't been configured yet.  Kind of weird, but
-                    // our best option given you can upgrade from 2x and have FedEx\UPS shipments - but opt not to go through the configuration migration.
-                    // You can't actually process though until you go through configuration.
-                    if (IsShipmentTypeActivated(shipmentTypeCode))
-                    {
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                        shipmentType.LoadShipmentData(shipment, false);
-                        shipmentType.UpdateDynamicShipmentData(shipment);
+                // Apply the default values to the shipment
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                shipmentType.LoadShipmentData(shipment, false);
+                shipmentType.UpdateDynamicShipmentData(shipment);
 
-                        adapter.SaveAndRefetch(shipment);
-                    }
-                }
+                adapter.SaveAndRefetch(shipment);
 
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
 
                 adapter.Commit();
             }
+
+            if (shipment.ShipSenseStatus != (int)ShipSenseStatus.NotApplied)
+            {
+                // Make sure the status is correct in case a rule/profile changed a shipment after ShipSense was applied
+                KnowledgebaseEntry entry = new Knowledgebase().GetEntry(shipment.Order);
+                shipment.ShipSenseStatus = entry.Matches(shipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+            }
+
+            // Explicitly save the shipment here to delete any entities in the Removed buckets of the 
+            // entity collections; after applying ShipSense (where customs items are first loaded in 
+            // this path), and entities were removed, they were still being persisted to the database.
+            SaveShipment(shipment);
 
             lock (siblingData)
             {
@@ -422,6 +433,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static void SaveShipment(ShipmentEntity shipment)
         {
+            // Ensure the latest ShipSense data is recorded for this shipment before saving
+            SaveShipSenseFieldsToShipment(shipment);
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 bool rootDirty = shipment.IsDirty;
@@ -499,6 +513,31 @@ namespace ShipWorks.Shipping
                 }
 
                 adapter.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Saves the ShipSense fields to shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        private static void SaveShipSenseFieldsToShipment(ShipmentEntity shipment)
+        {
+            if (!shipment.Processed)
+            {
+                // Ensure the order details are populated, so we get the correct hash key
+                OrderUtility.PopulateOrderDetails(shipment);
+
+                IEnumerable<IPackageAdapter> packageAdapters = ShipmentTypeManager.GetType(shipment).GetPackageAdapters(shipment);
+
+                // Create a knowledge base entry that represents the current shipment/package and customs configuration
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+
+                // Now compress the entry so we can record the ShipSense data for this shipment; this will be used
+                // for quickly comparing/updating the ShipSense status of unprocessed shipments as new shipments
+                // get processed.
+                Knowledgebase knowledgebase = new Knowledgebase();
+                shipment.ShipSenseEntry = knowledgebase.CompressEntry(entry);
             }
         }
 
@@ -1085,6 +1124,15 @@ namespace ShipWorks.Shipping
                 StoreType storeType = StoreTypeManager.GetType(storeEntity);
                 List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(shipment);
 
+                if (shipment.ShipSenseStatus == (int)ShipSenseStatus.Applied)
+                {
+                    Knowledgebase knowledgebase = new Knowledgebase();
+                    if (knowledgebase.IsOverwritten(shipment))
+                    {
+                        shipment.ShipSenseStatus = (int)ShipSenseStatus.Overwritten;
+                    }
+                }
+
                 // Transacted
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -1119,7 +1167,7 @@ namespace ShipWorks.Shipping
                         // Dispatch the shipment processed event
                         ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
                         log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                    }
+                    }                    
 
                     adapter.Commit();
                 }
@@ -1133,6 +1181,10 @@ namespace ShipWorks.Shipping
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
+
+                // Log to the knowledge base after everything else has been successful, so an error logging
+                // to the knowledge base does not prevent the shipment from being actually processed.
+                LogToShipSenseKnowledgebase(shipmentType, shipment);
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -1145,6 +1197,40 @@ namespace ShipWorks.Shipping
             catch (TemplateTokenException ex)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+        
+        /// <summary>
+        /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
+        /// and logged and wrapped in a ShippingException.
+        /// </summary>
+        private static void LogToShipSenseKnowledgebase(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            try
+            {
+                IEnumerable<IPackageAdapter> packageAdapters = shipmentType.GetPackageAdapters(shipment);
+
+                // Make sure we have all of the order information
+                OrderEntity order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+                }
+
+                // Apply the data from the package adapters and the customs items to the knowledge base 
+                // entry, so the shipment data will get saved to the knowledge base; the knowledge base
+                // is smart enough to know when to save the customs items associated with an entry.
+                KnowledgebaseEntry entry = new KnowledgebaseEntry();
+                entry.ApplyFrom(packageAdapters, shipment.CustomsItems);
+
+                Knowledgebase knowledgebase = new Knowledgebase();
+                knowledgebase.Save(entry, order);
+            }
+            catch (Exception ex)
+            {
+                // We may want to eat this exception entirely, so the user isn't impacted 
+                log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
+                throw new ShippingException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
             }
         }
 

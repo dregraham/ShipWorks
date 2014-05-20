@@ -24,7 +24,9 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
@@ -84,6 +86,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new OnTracProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new OnTracPackageAdapter(shipment)
+            };
         }
 
         /// <summary>

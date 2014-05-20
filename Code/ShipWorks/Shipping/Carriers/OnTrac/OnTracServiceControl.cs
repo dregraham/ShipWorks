@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.RecipientDestinationChanged -= OnRecipientDestinationChanged;
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
@@ -81,6 +82,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -235,6 +237,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -270,6 +273,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -316,6 +320,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
         /// Called when the service type has changed.
         /// </summary>
         private void OnServiceChanged(object sender, EventArgs e)
@@ -348,6 +360,26 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 RateControl.ClearSelection();
             }
+        }
+
+        /// <summary>
+        /// Refresh the weight box with the latest weight information from the loaded shipments
+        /// </summary>
+        public override void RefreshContentWeight()
+        {
+            // Stop the dimensions control from listening to weight changes
+            dimensionsControl.ShipmentWeightBox = null;
+
+            using (new MultiValueScope())
+            {
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    weight.ApplyMultiWeight(shipment.ContentWeight);
+                }
+            }
+
+            // Start the dimensions control listening to weight changes
+            dimensionsControl.ShipmentWeightBox = weight;
         }
     }
 }

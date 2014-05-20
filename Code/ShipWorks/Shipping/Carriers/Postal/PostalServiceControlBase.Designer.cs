@@ -108,6 +108,7 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 12;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // nonMachinable
             // 
@@ -208,6 +209,7 @@
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // labelWeight
             // 

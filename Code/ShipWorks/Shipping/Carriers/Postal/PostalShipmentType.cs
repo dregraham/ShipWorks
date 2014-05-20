@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Insurance;
@@ -38,6 +39,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public override CustomsControlBase CreateCustomsControl()
         {
             return new PostalCustomsControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new PostalPackageAdapter(shipment)
+            };
         }
 
         /// <summary>

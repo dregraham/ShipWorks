@@ -63,6 +63,8 @@ namespace ShipWorks.Data.Administration
                         EntityType.YahooOrderItemEntity
                     };
 
+        private static List<EntityType> shipSenseList = new List<EntityType> { EntityType.ShipSenseKnowledgebaseEntity };
+
         /// <summary>
         /// Indicates how much space the order/order item tables use
         /// </summary>
@@ -88,6 +90,14 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Indicates how much space ShipSense takes
+        /// </summary>
+        public static long ShipSenseUsage
+        {
+            get { return GetTableSpaceUsed(shipSenseList); }
+        }
+
+        /// <summary>
         /// Indicates the total space used by the database
         /// </summary>
         public static long TotalUsage
@@ -100,7 +110,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static long OtherUsage
         {
-            get { return TotalUsage - OrdersUsage - AuditUsage - ResourceUsage; }
+            get { return TotalUsage - OrdersUsage - AuditUsage - ResourceUsage - ShipSenseUsage; }
         }
 
         /// <summary>

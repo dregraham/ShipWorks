@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
 
@@ -53,7 +47,7 @@ namespace ShipWorks.Shipping.Settings
             radioBlankPhoneUseShipper.Checked = (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.ShipperPhone);
             radioBlankPhoneUseSpecified.Checked = !radioBlankPhoneUseShipper.Checked;
             blankPhone.Text = settings.BlankPhoneNumber;
-
+            
             originControl.Initialize();
 
             LoadShipmentTypePages();

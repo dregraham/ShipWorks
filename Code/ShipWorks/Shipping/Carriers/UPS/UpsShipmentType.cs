@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -128,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             return new UpsProfileControl();
         }
-
+        
         /// <summary>
         /// Create the UPS specific customs control
         /// </summary>
@@ -226,6 +227,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
             package.Weight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);
+        }
+
+
+        /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+
+            while (shipment.Ups.Packages.Count < knowledgebaseEntry.Packages.Count())
+            {
+                UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
+                shipment.Ups.Packages.Add(package);
+            }
         }
 
         /// <summary>
@@ -1162,6 +1182,40 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     }
                     return ServiceLevelType.Anytime;
             }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether multiple packages are supported by this shipment type.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (!shipment.Ups.Packages.Any())
+            {
+                throw new UpsException("There must be at least one package to create the UPS package adapter.");
+            }
+
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (UpsPackageEntity packageEntity in shipment.Ups.Packages)
+            {
+                adapters.Add(new UpsPackageAdapter(shipment, packageEntity));
+            }
+
+            return adapters;
         }
     }
 }

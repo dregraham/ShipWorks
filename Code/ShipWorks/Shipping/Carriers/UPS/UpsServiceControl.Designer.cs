@@ -361,6 +361,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.packageControl.TabIndex = 3;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.PackageCountChanged += new System.EventHandler(this.OnPackageCountChanged);
+            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
             // 
             // service

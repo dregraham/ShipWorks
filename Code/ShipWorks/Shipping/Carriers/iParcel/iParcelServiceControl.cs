@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
@@ -105,6 +106,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             packageControl.LoadShipments(LoadedShipments, enableEditing);
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -152,6 +154,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
             originControl.SaveToEntities();
@@ -178,6 +181,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
         
 		/// <summary>
@@ -251,6 +255,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 service.SelectedIndex = oldIndex;
             }
+        }
+
+        /// <summary>
+        /// One of the values that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
         }
 
         /// <summary>

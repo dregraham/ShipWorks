@@ -32,8 +32,11 @@ namespace ShipWorks.Shipping.Editing
         List<ShipmentEntity> loadedShipments;
         bool enableEditing;
 
-        // Counter for rate criteria change even suspension
+        // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
+
+        // Counter for ShipSense criteria change event suspension
+        int suspendShipSenseFieldChangedEvent = 0;
 
         // control for configuring returns
         ReturnsControlBase returnsControl;
@@ -57,6 +60,11 @@ namespace ShipWorks.Shipping.Editing
         /// Raised when a shipment value that affects rate data has changed, so that the shipping window can know to invalidate rate data.
         /// </summary>
         public event EventHandler RateCriteriaChanged;
+
+        /// <summary>
+        /// Raised when a shipment value that affects ShipSense data has changed, so that the shipping window can synchronize ShipSense data with other shipments.
+        /// </summary>
+        public event EventHandler ShipSenseFieldChanged;
 
         /// <summary>
         /// Raised when something occurs that causes the service control to change the shipment type. For example, this was created to support 
@@ -152,6 +160,7 @@ namespace ShipWorks.Shipping.Editing
             }
 
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             this.loadedShipments = shipments.ToList();
             this.enableEditing = enableEditing;
@@ -223,6 +232,7 @@ namespace ShipWorks.Shipping.Editing
             UpdateExtraText();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -381,6 +391,7 @@ namespace ShipWorks.Shipping.Editing
         public virtual void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             personControl.SaveToEntity();
 
@@ -409,12 +420,13 @@ namespace ShipWorks.Shipping.Editing
             SaveReturnsToShipments();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
         /// Suspend raising the event that rate criteria has changed
         /// </summary>
-        protected void SuspendRateCriteriaChangeEvent()
+        public void SuspendRateCriteriaChangeEvent()
         {
             suspendRateEvent++;
         }
@@ -441,6 +453,36 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
+        /// <summary>
+        /// Suspend raising the event that ShipSense criteria has changed
+        /// </summary>
+        protected void SuspendShipSenseFieldChangeEvent()
+        {
+            suspendShipSenseFieldChangedEvent++;
+        }
+
+        /// <summary>
+        /// Resume raising the event that the rate ShipSense has changed.  This function does not raise the event
+        /// </summary>
+        protected void ResumeShipSenseFieldChangeEvent()
+        {
+            suspendShipSenseFieldChangedEvent--;
+        }
+
+        /// <summary>
+        /// Raise the event to notify listeners that data that affects ShipSense has changed
+        /// </summary>
+        protected void RaiseShipSenseFieldChanged()
+        {
+            if (suspendShipSenseFieldChangedEvent == 0)
+            {
+                if (ShipSenseFieldChanged != null)
+                {
+                    ShipSenseFieldChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+        
         /// <summary>
         /// Laying out controls
         /// </summary>

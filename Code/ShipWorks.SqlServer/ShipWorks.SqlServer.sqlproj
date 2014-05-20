@@ -112,6 +112,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionQueueStepDeleteTrigger.cs" />
@@ -220,6 +221,11 @@
     <Compile Include="Common\Data\SqlLockException.cs" />
     <Compile Include="Purge\PurgeAbandonedResources.cs" />
     <Compile Include="Data\Auditing\AuditState.cs" />
+    <Compile Include="Shipping\ResetShipSenseProcedure.cs" />
+    <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
+    <Compile Include="Shipping\OrderShipmentShipSenseStatusTrigger.cs" />
+    <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
+    <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

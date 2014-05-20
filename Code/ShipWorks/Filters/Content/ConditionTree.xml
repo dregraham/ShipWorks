@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ConditionTree>
 
   <!--
@@ -86,6 +86,7 @@
           <Condition identifier="Order.Manual" displayAs="Manually Entered" />
         </Group>
         <Separator />
+        <Condition identifier="Order.ShipSenseRecognitionStatus" />
         <Condition identifier="Amazon.OrderID" />
         <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
@@ -261,6 +262,8 @@
     <Category name="Shipment">
       <Condition identifier="Shipment.ShipmentType" />
       <!--<Condition identifier="Shipment.BestRateProcessed" />-->
+      <Condition identifier="Shipment.ShipSenseStatus" />
+
       <Group name="Ship To">
         <Group name="Name">
           <Condition identifier="Shipment.ShipTo.FirstName" displayAs="First Name"/>

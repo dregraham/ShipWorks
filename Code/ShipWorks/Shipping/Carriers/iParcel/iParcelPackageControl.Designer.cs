@@ -124,6 +124,7 @@
             this.skuAndQuantity.TabIndex = 78;
             this.skuAndQuantity.TokenUsage = ShipWorks.Templates.Tokens.TokenUsage.ShippingReference;
             this.skuAndQuantity.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.skuAndQuantity.TextChanged += OnShipSenseFieldChanged;
             // 
             // labelSkuAndQuantity
             // 
@@ -157,6 +158,7 @@
             this.weight.TabIndex = 2;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // dimensionsControl
             // 
@@ -168,6 +170,7 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 4;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // packageCountCombo
             // 

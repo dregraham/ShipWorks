@@ -5,10 +5,13 @@ using System.Text;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
@@ -31,6 +34,8 @@ using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
+using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Xml.Linq;
 
 namespace ShipWorks.Shipping
 {
@@ -84,7 +89,7 @@ namespace ShipWorks.Shipping
 		}
 
 		/// <summary>
-		/// Indicates if the shiopment service type supports return shipments
+		/// Indicates if the shipment service type supports return shipments
 		/// </summary>
 		public virtual bool SupportsReturns
 		{
@@ -103,6 +108,17 @@ namespace ShipWorks.Shipping
         /// Supports getting counter rates.
         /// </summary>
 	    public virtual bool SupportsCounterRates
+	    {
+            get { return false; }
+	    }
+
+        /// <summary>
+        /// Gets a value indicating whether the shipment type [supports multiple packages].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+	    public virtual bool SupportsMultiplePackages
 	    {
             get { return false; }
 	    }
@@ -191,6 +207,11 @@ namespace ShipWorks.Shipping
 			return null;
 		}
 
+	    /// <summary>
+	    /// Gets the package adapter for the shipment.
+	    /// </summary>
+	    public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment);
+
 		/// <summary>
 		/// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
 		/// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
@@ -205,9 +226,13 @@ namespace ShipWorks.Shipping
 		public virtual void ConfigureNewShipment(ShipmentEntity shipment)
 		{
 			shipment.ThermalType = null;
+		    shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
 			// First apply the base profile
 			ApplyProfile(shipment, GetPrimaryProfile());
+
+            // Now apply ShipSense
+		    ApplyShipSense(shipment);
 
 			// Go through each additional profile and apply it as well
 			foreach (ShippingDefaultsRuleEntity rule in ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode))
@@ -228,6 +253,119 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Attempts to apply ShipSense values to the given shipment.
+        /// </summary>
+	    protected void ApplyShipSense(ShipmentEntity shipment)
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            if (settings.ShipSenseEnabled)
+            {
+                // Populate the order items so we can compute the hash
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(shipment.Order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == shipment.Order.OrderID));
+
+                    foreach (OrderItemEntity orderItemEntity in shipment.Order.OrderItems)
+                    {
+                        adapter.FetchEntityCollection(orderItemEntity.OrderItemAttributes, new RelationPredicateBucket(OrderItemAttributeFields.OrderItemID == orderItemEntity.OrderItemID));
+                    }
+                }
+
+                // Get our knowledge base entry for this shipment
+                Knowledgebase knowledgebase = new Knowledgebase();
+
+                KnowledgebaseEntry knowledgebaseEntry = knowledgebase.GetEntry(shipment.Order);
+                knowledgebaseEntry.ConsolidateMultiplePackagesIntoSinglePackage = !SupportsMultiplePackages;
+
+                if (!knowledgebaseEntry.IsNew)
+                {
+                    // We have a valid knowledge base entry for this order, so we need to check to 
+                    // see if we can apply ShipSense
+                    bool applyShipSense = true;
+                    if (knowledgebaseEntry.Packages.Count() > 1)
+                    {
+                        // Don't want to apply ShipSense when the entry is configured for multiple 
+                        // packages and the shipment type does not support multiple packages
+                        applyShipSense = SupportsMultiplePackages;
+                    }
+
+                    if (applyShipSense)
+                    {
+                        // Do any shipment type specific to get the shipment in sync with the knowledge base
+                        // entry (e.g. setting up the shipment to have the same number of packages as the 
+                        // KB entry for carriers that support multiple package shipments)
+                        SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+                        List<IPackageAdapter> packageAdapters = GetPackageAdapters(shipment).ToList();
+
+                        if (IsCustomsRequired(shipment))
+                        {
+                            // Make sure the customs items are loaded before applying the knowledge base entry
+                            // data to the shipment/packages and customs info otherwise the customs data of 
+                            // the "before" data will be empty in the first change set
+                            CustomsManager.LoadCustomsItems(shipment, false);
+                            knowledgebaseEntry.ApplyTo(packageAdapters, shipment.CustomsItems);
+
+                            if (shipment.CustomsItems.Any())
+                            {
+                                shipment.CustomsGenerated = true;
+
+                                if (shipment.CustomsItems.RemovedEntitiesTracker == null)
+                                {
+                                    // Set the removed tracker for tracking deletions in the UI until saved
+                                    shipment.CustomsItems.RemovedEntitiesTracker = new ShipmentCustomsItemCollection();
+                                }
+
+                                // Consider them loaded.  This is an in-memory field
+                                shipment.CustomsItemsLoaded = true;
+
+                                decimal customsValue = shipment.CustomsItems.Sum(ci => (decimal)ci.Quantity*ci.UnitValue);
+                                shipment.CustomsValue = customsValue;
+                            }
+                        }
+                        else
+                        {
+                            // We don't need to do anything with customs and only need to apply the package adapters
+                            knowledgebaseEntry.ApplyTo(packageAdapters);
+                        }
+
+                        shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
+                        
+                        // Update the status of the shipment and record the changes that were applied to the shipment's packages
+                        shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
+                        XElement changeSets = XElement.Parse(shipment.ShipSenseChangeSets);
+
+                        KnowledgebaseEntryChangeSetXmlWriter changeSetWriter = new KnowledgebaseEntryChangeSetXmlWriter(knowledgebaseEntry);
+                        changeSetWriter.WriteTo(changeSets);
+
+                        shipment.ShipSenseChangeSets = changeSets.ToString();
+                    }
+                }
+                else
+                {
+                    // Note that ShipSense was not applied for the case where the shipment type
+                    // was changed after the shipment type was already created (i.e. going from
+                    // a multi-package carrier to a single package carrier when entry is configured
+                    // for multiple packages)
+                    shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected virtual void SyncNewShipmentWithShipSense(KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            // Nothing to do here
+        }
+
+		/// <summary>
 		/// Ensures that the carrier specific data for the given profile exists and is loaded
 		/// </summary>
 		public virtual void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
@@ -579,7 +717,7 @@ namespace ShipWorks.Shipping
 				throw new ArgumentNullException("shipmentEntity");
 			}
 
-            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant(); // || IsPuertoRicoShipment(shipmentEntity);
+			return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
 		}
 
 		/// <summary>

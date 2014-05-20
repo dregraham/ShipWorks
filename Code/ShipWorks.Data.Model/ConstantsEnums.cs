@@ -344,6 +344,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -1135,6 +1139,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1422,6 +1430,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -1551,6 +1563,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -1900,6 +1916,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2689,6 +2709,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -4296,6 +4320,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
@@ -4538,6 +4566,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -4904,6 +4936,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -5112,6 +5148,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -5595,6 +5635,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5815,6 +5859,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -6080,6 +6128,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -6470,6 +6522,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -6769,6 +6825,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -7139,6 +7199,12 @@ namespace ShipWorks.Data.Model
 		OriginUnparsedName,
 		///<summary>BestRateEvents. </summary>
 		BestRateEvents,
+		///<summary>ShipSenseStatus. </summary>
+		ShipSenseStatus,
+		///<summary>ShipSenseChangeSets. </summary>
+		ShipSenseChangeSets,
+		///<summary>ShipSenseEntry. </summary>
+		ShipSenseEntry,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7461,6 +7527,29 @@ namespace ShipWorks.Data.Model
 		WorldShipMailInnovationsEnabled,
 		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
 		InternalBestRateExcludedShipmentTypes,
+		///<summary>ShipSenseEnabled. </summary>
+		ShipSenseEnabled,
+		///<summary>ShipSenseUniquenessXml. </summary>
+		ShipSenseUniquenessXml,
+		///<summary>ShipSenseProcessedShipmentID. </summary>
+		ShipSenseProcessedShipmentID,
+		///<summary>ShipSenseEndShipmentID. </summary>
+		ShipSenseEndShipmentID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipSenseKnowledgebase.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ShipSenseKnowledgebaseFieldIndex:int
+	{
+		///<summary>Hash. </summary>
+		Hash,
+		///<summary>Entry. </summary>
+		Entry,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7586,6 +7675,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -9324,6 +9417,10 @@ namespace ShipWorks.Data.Model
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
 		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -9735,6 +9832,8 @@ namespace ShipWorks.Data.Model
 		ShippingProviderRuleEntity,
 		///<summary>ShippingSettings</summary>
 		ShippingSettingsEntity,
+		///<summary>ShipSenseKnowledgebase</summary>
+		ShipSenseKnowledgebaseEntity,
 		///<summary>ShopifyOrder</summary>
 		ShopifyOrderEntity,
 		///<summary>ShopifyOrderItem</summary>

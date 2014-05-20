@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }
-
+        
         /// <summary>
         /// Create the settings control for stamps.com
         /// </summary>

@@ -93,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -112,6 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -157,6 +159,14 @@ namespace ShipWorks.Shipping.Carriers.Other
             }
 
             sectionShipment.ExtraText = text;
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
         }
     }
 }

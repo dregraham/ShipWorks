@@ -14,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Users;
+using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -61,10 +62,13 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
             AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
+            // Add the ShipSense outline with package and customs info
+            AddElement("ShipSense", new ShipSenseOutline(context), () => Shipment);
+
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
             {
-                // We need to "hoist" this as its own variable - otherwise the same typeCode variable intance would get captured for each iteration.
+                // We need to "hoist" this as its own variable - otherwise the same typeCode variable instance would get captured for each iteration.
                 ShipmentTypeCode typeCode = shipmentType.ShipmentTypeCode;
 
                 // Add a package node for each package in the shipment.  For shipment types that don't support true "Packages" there will always be a single Package node that represents
@@ -118,6 +122,15 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             // Now that we have the latest event, we can just return the description for it
             return new BestRateEventsDescription(latestEvent).ToString().Trim();
+        }
+
+        /// <summary>
+        /// Get text describing the ShipSense status of the shipment.
+        /// </summary>
+        private static string GetShipSenseStatusDescription(ShipmentEntity shipment)
+        {
+            ShipSenseStatus status = (ShipSenseStatus)shipment.ShipSenseStatus;
+            return EnumHelper.GetDescription(status);
         }
 
         /// <summary>

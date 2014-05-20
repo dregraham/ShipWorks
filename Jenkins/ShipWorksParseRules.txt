@@ -1,0 +1,19 @@
+####################################################################################
+# Configuration for Jenkins/log parser
+####################################################################################
+
+# Divide into sections based on project compile start
+start /Build started/
+
+# Compiler Error
+error /(?i)error [A-Z]+[0-9]+:/
+error /MSBUILD : (?i)error :/
+error /\(\d+(,\d+)?\): (?i)error [A-Za-z]*:/
+
+# Compiler Warning
+warning /(?i)warning [A-Z]+[0-9]+:/
+
+# Section for MSTest output
+start /Test Execution Command Line Tool/
+
+error /Failed[\s]*.*_[Tt]est.*/

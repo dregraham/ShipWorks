@@ -290,6 +290,8 @@ namespace ShipWorks.Shipping.Editing
 
             bool removed = false;
 
+            List<ShipmentEntity> shipmentsDeleted = new List<ShipmentEntity>();
+
             // Go through each one and remove the grid row for any shipment that is now deleted
             foreach (ShipmentGridRow row in AllRows.ToList())
             {
@@ -297,6 +299,7 @@ namespace ShipWorks.Shipping.Editing
                 {
                     RemoveShipmentRow(row.Shipment.ShipmentID);
                     removed = true;
+                    shipmentsDeleted.Add(row.Shipment);
                 }
             }
 
@@ -308,29 +311,30 @@ namespace ShipWorks.Shipping.Editing
 
             if (removed)
             {
-                RaiseShipmentsRemoved();
+                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipmentsDeleted);
+                RaiseShipmentsRemoved(eventArgs);
             }
         }
 
         /// <summary>
         /// Raise the ShipmentsAdded event
         /// </summary>
-        private void RaiseShipmentsAdded()
+        private void RaiseShipmentsAdded(ShipmentGridShipmentsChangedEventArgs eventArgs)
         {
             if (ShipmentsAdded != null)
             {
-                ShipmentsAdded(this, EventArgs.Empty);
+                ShipmentsAdded(this, eventArgs);
             }
         }
 
         /// <summary>
         /// Raise the ShipmentsRemoved event
         /// </summary>
-        private void RaiseShipmentsRemoved()
+        private void RaiseShipmentsRemoved(ShipmentGridShipmentsChangedEventArgs eventArgs)
         {
             if (ShipmentsRemoved != null)
             {
-                ShipmentsRemoved(this, EventArgs.Empty);
+                ShipmentsRemoved(this, eventArgs);
             }
         }
 
@@ -456,14 +460,15 @@ namespace ShipWorks.Shipping.Editing
 
             try
             {
-                ShipmentEntity shipment = ShippingManager.CreateShipment(selectedShipment);
+                ShipmentEntity shipment = ShippingManager.CreateShipment(order.OrderID);
                 ShipmentGridRow row = AddShipment(shipment, selectedRow.SortIndex);
 
                 SelectShipments(new List<ShipmentEntity>() { shipment });
 
                 Resort();
 
-                RaiseShipmentsAdded();
+                ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(new List<ShipmentEntity>() {shipment}, null);
+                RaiseShipmentsAdded(eventArgs);
             }
             catch (SqlForeignKeyException)
             {
@@ -489,7 +494,8 @@ namespace ShipWorks.Shipping.Editing
 
                 if (toRemove.Count > 0)
                 {
-                    RaiseShipmentsRemoved();
+                    ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, toRemove.Select(row => row.Shipment).ToList());
+                    RaiseShipmentsRemoved(eventArgs);
                 }
             }
         }
@@ -553,7 +559,9 @@ namespace ShipWorks.Shipping.Editing
             ResumeSelectionProcessing();
 
             UpdateStatusBar();
-            RaiseShipmentsAdded();
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(shipments, null);
+            RaiseShipmentsAdded(eventArgs);
         }
 
         /// <summary>
@@ -589,7 +597,8 @@ namespace ShipWorks.Shipping.Editing
 
             UpdateStatusBar();
 
-            RaiseShipmentsAdded();
+            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(e.Shipments, null);
+            RaiseShipmentsAdded(eventArgs);
         }
 
         /// <summary>
@@ -665,7 +674,8 @@ namespace ShipWorks.Shipping.Editing
                         issueAdder.Add(gridRow);
                     }
                 },
-                shipmentRows);
+                shipmentRows,
+                shipmentRows.Select(row => row.Shipment).ToList());
             }
         }
 
@@ -682,7 +692,10 @@ namespace ShipWorks.Shipping.Editing
             Resort();
             ResumeSelectionProcessing();
 
-            RaiseShipmentsRemoved();
+            List<ShipmentEntity> shipments = (List<ShipmentEntity>) e.UserState;
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipments);
+            RaiseShipmentsRemoved(eventArgs);
         }
 
         /// <summary>
@@ -692,14 +705,17 @@ namespace ShipWorks.Shipping.Editing
         {
             SuspendSelectionProcessing();
 
+            List<ShipmentEntity> shipmentsDeleted = new List<ShipmentEntity>();
             foreach (ShipmentGridRow selected in entityGrid.SelectedElements.ToArray())
             {
                 RemoveShipmentRow(selected.Shipment.ShipmentID);
+                shipmentsDeleted.Add(selected.Shipment);
             }
 
             ResumeSelectionProcessing();
 
-            RaiseShipmentsRemoved();
+            ShipmentGridShipmentsChangedEventArgs eventArgs = new ShipmentGridShipmentsChangedEventArgs(null, shipmentsDeleted);
+            RaiseShipmentsRemoved(eventArgs);
         }
 
         /// <summary>

@@ -29,13 +29,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
-        // Indiciates if the event shouldnt currently be raised
+        // Indiciates if the event shouldn't currently be raised
         int suspendRateCriteriaEvent = 0;
+
+        // Indiciates if the event shouldn't currently be raised
+        int suspendShipSenseFieldChangedEvent = 0;
 
         /// <summary>
         /// Some part of the packaging has changed the rate criteria
         /// </summary>
         public event EventHandler RateCriteriaChanged;
+
+        /// <summary>
+        /// Some part of the packaging has changed the ShipSense criteria
+        /// </summary>
+        public event EventHandler ShipSenseFieldChanged;
 
         /// <summary>
         /// Constructor
@@ -84,6 +92,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             suspendRateCriteriaEvent++;
+            suspendShipSenseFieldChangedEvent++;
 
             packageCountCombo.SelectedIndexChanged -= this.OnChangePackageCount;
             packagesGrid.SelectionChanged -= this.OnChangeSelectedPackages;
@@ -148,6 +157,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             UpdateLayout();
 
             suspendRateCriteriaEvent--;
+            suspendShipSenseFieldChangedEvent--;
         }
 
         /// <summary>
@@ -227,6 +237,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Raise the rate critiera changed event
             RaiseRateCriteriaChanged();
+
+            // Raise the ShipSense critiera changed event
+            RaiseShipSenseFieldChanged();
         }
 
         /// <summary>
@@ -235,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         private void OnChangeSelectedPackages(object sender, SelectionChangedEventArgs e)
         {
             suspendRateCriteriaEvent++;
+            suspendShipSenseFieldChangedEvent++;
 
             // Save the existing stuff before loading the new stuff
             SaveToEntities();
@@ -280,6 +294,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             dimensionsControl.ShipmentWeightBox = weight;
 
             suspendRateCriteriaEvent--;
+            suspendShipSenseFieldChangedEvent--;
         }
 
         /// <summary>
@@ -336,6 +351,30 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             if (RateCriteriaChanged != null)
             {
                 RateCriteriaChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Something affecting ShipSense critiera has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Raises the ShipSenseFieldChanged event
+        /// </summary>
+        private void RaiseShipSenseFieldChanged()
+        {
+            if (suspendShipSenseFieldChangedEvent > 0)
+            {
+                return;
+            }
+
+            if (ShipSenseFieldChanged != null)
+            {
+                ShipSenseFieldChanged(this, EventArgs.Empty);
             }
         }
     }
