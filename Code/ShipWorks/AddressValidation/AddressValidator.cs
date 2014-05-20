@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using log4net;
+using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -68,6 +69,7 @@ namespace ShipWorks.AddressValidation
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
                 addressAdapter.CopyTo(originalAddress, string.Empty);
                 originalAddress.IsOriginal = true;
+                originalAddress.AddressPrefix = addressAdapter.FieldPrefix;
 
                 addressAdapter.AddressValidationError = validationResult.AddressValidationError;
 
