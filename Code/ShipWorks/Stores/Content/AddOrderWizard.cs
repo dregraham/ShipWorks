@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Stores.Communication;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -444,7 +445,16 @@ namespace ShipWorks.Stores.Content
                     }
                     else
                     {
-                        order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        try
+                        {
+                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        }
+                        catch (CustomerAcquisitionLockException)
+                        {
+                            MessageHelper.ShowError(this, string.Format("ShipWorks was unable to find the customer in the time allotted.  Please try saving again."));
+                            e.NextPage = wizardPageDetails;
+                            return;
+                        }
                     }
 
                     // Save the order so we can get its OrderID
@@ -498,7 +508,7 @@ namespace ShipWorks.Stores.Content
             {
                 log.Error("Error adding order", ex);
 
-                MessageHelper.ShowError(this, "The selected customer has or store has been deleted.");
+                MessageHelper.ShowError(this, "The selected customer or store has been deleted.");
 
                 e.NextPage = wizardPageStoreCustomer;
             }

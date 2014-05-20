@@ -509,7 +509,14 @@ namespace ShipWorks.Stores.Communication
                     // Get the customer
                     if (order.IsNew)
                     {
-                        order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        try
+                        {
+                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        }
+                        catch (CustomerAcquisitionLockException)
+                        {
+                            throw new DownloadException("ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
+                        }
                     }
 
                     // Protect payment details

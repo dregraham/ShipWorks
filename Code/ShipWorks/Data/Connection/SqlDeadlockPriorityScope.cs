@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Connection
         {
             if (SqlDeadlockPriorityScope.activeScope != null)
             {
-                throw new InvalidOperationException("Only one SqlSessionScope may be active at a time.");
+                throw new InvalidOperationException("Only one SqlSessionScope in SqlDeadlockPriorityScope may be active at a time.");
             }
 
             log.InfoFormat("Entering SqlDeadlockPriorityScope ({0})", priority);
