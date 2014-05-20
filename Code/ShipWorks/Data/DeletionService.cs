@@ -87,8 +87,6 @@ namespace ShipWorks.Data
 
             try
             {
-                //ExecuteWithDeadlockRetry((SqlAdapter adapter) => { DeleteStore(store, adapter); }, 3);
-
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteStore for store {0}", store.StoreName));
                 sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteStore(store, adapter));
             }
@@ -104,8 +102,6 @@ namespace ShipWorks.Data
         public static void DeleteOrder(long orderID)
         {
             UserSession.Security.DemandPermission(PermissionType.OrdersModify, orderID);
-
-            //DeleteWithCascade(EntityType.OrderEntity, orderID);
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
@@ -137,8 +133,6 @@ namespace ShipWorks.Data
 
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
-                //DeleteWithCascade(EntityType.CustomerEntity, customerID);
-
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteCustomer for CustomerID {0}", customerID));
                 sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter));
             }
@@ -304,8 +298,6 @@ namespace ShipWorks.Data
                 // Add this relation
                 RelationPredicateBucket bucket = EntityUtility.ClonePredicateBucket(baseFilter);
                 bucket.Relations.Add(relation);
-
-                // log.InfoFormat("Deleting inherited subtype {0}", subTypeEntityName);
 
                 adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(subTypeEntityName), bucket);
             }
