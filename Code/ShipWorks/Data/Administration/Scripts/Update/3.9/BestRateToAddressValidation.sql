@@ -1852,52 +1852,8 @@ GO
 ALTER TABLE [dbo].[YahooStore] WITH NOCHECK
     ADD CONSTRAINT [FK_YahooStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
 
-
 GO
-PRINT N'Creating [dbo].[FilterDirtyShipment]...';
 
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyShipment]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyShipment]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentAuditTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentAuditTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentAuditTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentDeleteTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentDeleteTrigger]
-    ON [dbo].[Shipment]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentDeleteTrigger]
-
-
-GO
-PRINT N'Creating [dbo].[ShipmentLabelTrigger]...';
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentLabelTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentLabelTrigger]
-
-
-GO
 PRINT N'Creating [dbo].[Order].[StoreID].[AuditFormat]...';
 
 

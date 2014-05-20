@@ -503,6 +503,7 @@
     <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
     <Compile Include="AddressValidation\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\AddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\AddressValidationWebClientValidateAddressResult.cs" />
     <Compile Include="AddressValidation\ContextAddressValidationDataAccess.cs" />
     <Compile Include="AddressValidation\IAddressValidationDataAccess.cs" />
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />

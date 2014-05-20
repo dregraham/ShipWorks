@@ -33,50 +33,52 @@ namespace ShipWorks.AddressValidation
         /// or
         /// Unknown error validating address.
         /// </exception>
-        public List<AddressValidationResult> ValidateAddress(string street1, string street2, string city, string state, String zip, out string addressValidationError)
+        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip)
         {
-            List<AddressValidationResult> validationResults = null;
+            AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult()
+            {
+                AddressValidationResults = new List<AddressValidationResult>(),
+                AddressValidationError = string.Empty
+            };
 
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
             int returnCode = XPathUtility.Evaluate(zip1Result, "Dial-A-ZIP_Response/ReturnCode", 0);
             
-            addressValidationError = string.Empty;
-
             switch (returnCode)
             {
                 case 11:
-                    addressValidationError = "Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present.";
+                    validationResult.AddressValidationError = "Address could not be found because neither a valid City, State, nor valid 5-digit Zip Code was present.";
                     break;
 
                 case 12:
-                    addressValidationError = "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.";
+                    validationResult.AddressValidationError = "The State in the address is invalid. Note that only US State and U.S. Territories and possession abbreviations are valid.";
                     break;
 
                 case 13:
-                    addressValidationError = "The City in the address submitted is invalid. Remember, city names cannot begin with numbers.";
+                    validationResult.AddressValidationError = "The City in the address submitted is invalid. Remember, city names cannot begin with numbers.";
                     break;
 
                 case 21:
-                    addressValidationError = "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
+                    validationResult.AddressValidationError = "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
                     break;
 
                 case 25:
-                    addressValidationError = "City, State and ZIP Code are valid, but street address is not a match.";
+                    validationResult.AddressValidationError = "City, State and ZIP Code are valid, but street address is not a match.";
                     break;
 
                     // Multiple options
                 case 22:
                 case 32:
                     XPathNavigator zipMResult = QueryDialAZip("ZIPM", street1, street2, city, state, zip);
-                    validationResults = ParseZipM(zipMResult);
+                    validationResult.AddressValidationResults = ParseZipM(zipMResult);
                     break;
 
                 case 31:
 
                     if (!DoesAddressExist(zip1Result))
                     {
-                        addressValidationError = "Address is not a deliverable address, might be a parking lot or vacant lot";
+                        validationResult.AddressValidationError = "Address is not a deliverable address, might be a parking lot or vacant lot";
                     }
                     else
                     {
@@ -98,7 +100,7 @@ namespace ShipWorks.AddressValidation
 
                         ParseStreet1(addressValidationResult);
 
-                        validationResults = new List<AddressValidationResult>() { addressValidationResult };
+                        validationResult.AddressValidationResults = new List<AddressValidationResult>() { addressValidationResult };
                     }
                     break;
 
@@ -106,9 +108,9 @@ namespace ShipWorks.AddressValidation
                     throw new AddressValidationException("Address Validation failed to return a known Return Code");
             }
 
-            ApplyAddressCasing(validationResults);
+            ApplyAddressCasing(validationResult.AddressValidationResults);
 
-            return validationResults;
+            return validationResult;
         }
 
         /// <summary>
@@ -281,24 +283,24 @@ namespace ShipWorks.AddressValidation
                 // Low is the same as high, or high is 0 and doesn't matter
                 if (string.IsNullOrEmpty(pHigh) || pHigh == pLow)
                 {
-                    validatedStreet1.Append(addSpaceIfNotEmpty(pLow));
+                    validatedStreet1.Append(AddSpaceIfNotEmpty(pLow));
                 }
                 else
                 {
                     validatedStreet1.AppendFormat(GetRangeText(pCode, pLow, pHigh));
                 }
 
-                validatedStreet1.Append(addSpaceIfNotEmpty(preDir));
-                validatedStreet1.Append(addSpaceIfNotEmpty(street));
-                validatedStreet1.Append(addSpaceIfNotEmpty(suff));
-                validatedStreet1.Append(addSpaceIfNotEmpty(postDir));
+                validatedStreet1.Append(AddSpaceIfNotEmpty(preDir));
+                validatedStreet1.Append(AddSpaceIfNotEmpty(street));
+                validatedStreet1.Append(AddSpaceIfNotEmpty(suff));
+                validatedStreet1.Append(AddSpaceIfNotEmpty(postDir));
 
                 StringBuilder validatedStreet2 = new StringBuilder();
-                validatedStreet2.Append(addSpaceIfNotEmpty(unit));
+                validatedStreet2.Append(AddSpaceIfNotEmpty(unit));
 
                 if (string.IsNullOrEmpty(sHigh) || sHigh == sLow)
                 {
-                    validatedStreet2.Append(addSpaceIfNotEmpty(sLow));
+                    validatedStreet2.Append(AddSpaceIfNotEmpty(sLow));
                 }
                 else
                 {
@@ -349,7 +351,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Adds the space if not empty.
         /// </summary>
-        private static string addSpaceIfNotEmpty(string myString)
+        private static string AddSpaceIfNotEmpty(string myString)
         {
             if (!string.IsNullOrEmpty(myString))
             {
@@ -387,16 +389,16 @@ namespace ShipWorks.AddressValidation
             try
             {
                 string zip1Query = string.Format(
-                    "<VERIFYADDRESS>" +
-                    "<COMMAND>{0}</COMMAND>" +
-                    "<SERIALNO>{1}</SERIALNO>" +
-                    "<PASSWORD>{2}</PASSWORD>" +
-                    "<USER>{1}</USER>" +
-                    "<ADDRESS0 />" +
-                    "<ADDRESS1>{3}</ADDRESS1>" +
-                    "<ADDRESS2>{4}</ADDRESS2>" +
-                    "<ADDRESS3>{5}, {6} {7}</ADDRESS3>" +
-                    "</VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
+                    @"<VERIFYADDRESS>
+                    <COMMAND>{0}</COMMAND>
+                    <SERIALNO>{1}</SERIALNO>
+                    <PASSWORD>{2}</PASSWORD>
+                    <USER>{1}</USER>
+                    <ADDRESS0 />
+                    <ADDRESS1>{3}</ADDRESS1>
+                    <ADDRESS2>{4}</ADDRESS2>
+                    <ADDRESS3>{5}, {6} {7}</ADDRESS3>
+                    </VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
 
                 string url =
                     string.Format(
@@ -405,14 +407,17 @@ namespace ShipWorks.AddressValidation
 
                 WebRequest request = WebRequest.Create(url);
 
-                Stream responseStream = request.GetResponse().GetResponseStream();
+                XPathDocument xPathZip1Result;
 
-                if (responseStream == null)
+                using (Stream responseStream = request.GetResponse().GetResponseStream())
                 {
-                    throw new AddressValidationException("Error validating address.");
-                }
+                    if (responseStream == null)
+                    {
+                        throw new AddressValidationException("Error validating address.");
+                    }
 
-                XPathDocument xPathZip1Result = new XPathDocument(responseStream);
+                    xPathZip1Result = new XPathDocument(responseStream);
+                }
 
                 return xPathZip1Result.CreateNavigator();
             }

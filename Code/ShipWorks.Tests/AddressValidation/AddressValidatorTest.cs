@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.AddressValidation
     {
         private AddressValidationResult result1;
         private AddressValidationResult result2;
-        private List<AddressValidationResult> results; 
+        private AddressValidationWebClientValidateAddressResult results;
         private OrderEntity sampleOrder;
         private Mock<IAddressValidationWebClient> webClient;
         private AddressValidator testObject;
@@ -45,7 +45,11 @@ namespace ShipWorks.Tests.AddressValidation
                 PostalCode = "63102"
             };
 
-            results = new List<AddressValidationResult> {result1, result2};
+            results = new AddressValidationWebClientValidateAddressResult()
+            {
+                AddressValidationError = string.Empty,
+                AddressValidationResults = new List<AddressValidationResult> { result1, result2 }
+            };
 
             sampleOrder = new OrderEntity
             {
@@ -62,7 +66,7 @@ namespace ShipWorks.Tests.AddressValidation
             errorMessage = string.Empty;
 
             webClient = new Mock<IAddressValidationWebClient>();
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(results);
             testObject = new AddressValidator(webClient.Object);
         }
@@ -71,31 +75,31 @@ namespace ShipWorks.Tests.AddressValidation
         public void Validate_DoesNotCallWebClient_WhenAddressHasBeenValidated()
         {
             EnumHelper.GetEnumList<AddressValidationStatusType>()
-                .Where(x => x.Value != AddressValidationStatusType.NotChecked && 
-                    x.Value != AddressValidationStatusType.Pending &&
-                    x.Value != AddressValidationStatusType.Error)
+                .Where(x => x.Value != AddressValidationStatusType.NotChecked &&
+                            x.Value != AddressValidationStatusType.Pending &&
+                            x.Value != AddressValidationStatusType.Error)
                 .ToList()
                 .ForEach(status =>
-            {
-                sampleOrder.ShipAddressValidationStatus = (int) status.Value;
-                testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
-                webClient.Verify(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage), Times.Never);
-            });
+                {
+                    sampleOrder.ShipAddressValidationStatus = (int)status.Value;
+                    testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
+                    webClient.Verify(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                });
         }
 
         [TestMethod]
         public void Validate_CallsWebClient_IfValidationIsNeeded()
         {
-            webClient.Setup(x => x.ValidateAddress("Street 1", "Street 2", "City", "MO", "63102", out errorMessage))
-                .Returns(new List<AddressValidationResult>());
+            webClient.Setup(x => x.ValidateAddress("Street 1", "Street 2", "City", "MO", "63102"))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>() });
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
-            webClient.Verify(x => x.ValidateAddress("Street 1", "Street 2", "City", "MO", "63102", out errorMessage));
+            webClient.Verify(x => x.ValidateAddress("Street 1", "Street 2", "City", "MO", "63102"));
         }
 
         [TestMethod]
         public void Validate_CallsSave_WithOriginalAddress()
         {
-             ValidatedAddressEntity originalAddress = null;
+            ValidatedAddressEntity originalAddress = null;
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => originalAddress = x);
 
             Assert.AreEqual("Street 1", originalAddress.Street1);
@@ -111,7 +115,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_CallsSave_WithSuggestedAddresses()
         {
-            List< ValidatedAddressEntity> suggestedAddresses = null;
+            List<ValidatedAddressEntity> suggestedAddresses = null;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => suggestedAddresses = y.OrderBy(z => z.Street1).ToList());
 
@@ -149,17 +153,17 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_SetsValidationStatusToNotValid_WhenNoResultsAreReturned()
         {
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
-                .Returns((List<AddressValidationResult>)null);
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>() });
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType) sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
         public void Validate_SetsValidationStatusToValid_WhenOneValidIdenticalAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
@@ -170,7 +174,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_DoesNotChangeAddress_WhenOneValidIdenticalAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = sampleOrder.ShipStreet1;
             result1.Street2 = sampleOrder.ShipStreet2;
@@ -194,7 +198,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_DoesNotChangeAddress_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -218,7 +222,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_SetsStatusToNeedsAttention_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -230,13 +234,13 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NeedsAttention, (AddressValidationStatusType) sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.NeedsAttention, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
         public void Validate_SetsAddressDetails_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -259,7 +263,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_SetsValidationStatusToAdjusted_WhenOneValidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.Street1 = "Foo";
             result1.IsValid = true;
 
@@ -271,7 +275,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_ChangesAddress_WhenOneValidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -295,7 +299,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_SetsAddressDetails_WhenOneValidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -318,7 +322,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_DoesNotChangeOriginalAddress_WhenOneValidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.IsValid = true;
             result1.Street1 = "Foo 1";
             result1.Street2 = "Foo 2";
@@ -328,7 +332,7 @@ namespace ShipWorks.Tests.AddressValidation
             result1.CountryCode = "BA";
             result1.PostalCode = "12345";
 
-             ValidatedAddressEntity originalAddress = null;
+            ValidatedAddressEntity originalAddress = null;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { originalAddress = x; });
 
@@ -344,7 +348,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenOneInvalidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.Street1 = "Foo";
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
@@ -355,7 +359,7 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_DoesNotChangeAddress_WhenOneInvalidAddressIsReturned()
         {
-            results.Remove(result2);
+            results.AddressValidationResults.Remove(result2);
             result1.Street1 = "Foo";
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
@@ -400,10 +404,10 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_OrderStatusIsError_WhenWebClientThrowsAddressValidationException()
         {
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<AddressValidationException>();
 
-            testObject.Validate(sampleOrder, "Ship", true, ( ValidatedAddressEntity, addressList) =>
+            testObject.Validate(sampleOrder, "Ship", true, (ValidatedAddressEntity, addressList) =>
             {
             });
 
@@ -413,10 +417,10 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void Validate_StoresValidationError_WhenWebClientThrowsAddressValidationException()
         {
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage))
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<AddressValidationException>();
 
-            testObject.Validate(sampleOrder, "Ship", true, ( ValidatedAddressEntity, addressList) =>
+            testObject.Validate(sampleOrder, "Ship", true, (ValidatedAddressEntity, addressList) =>
             {
             });
 
@@ -428,7 +432,8 @@ namespace ShipWorks.Tests.AddressValidation
         {
             errorMessage = "blah";
 
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage));
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>(), AddressValidationError = errorMessage });
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
@@ -440,7 +445,8 @@ namespace ShipWorks.Tests.AddressValidation
         {
             errorMessage = "blah";
 
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage));
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>() });
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
@@ -451,14 +457,19 @@ namespace ShipWorks.Tests.AddressValidation
         public void Validate_UnsetsValidationError_WhenWebClientReturnsErrorMessageThenReturnsNoErrorMessage()
         {
             errorMessage = "blah";
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage));
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>(), AddressValidationError = errorMessage });
+
+
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
             Assert.AreEqual(errorMessage, sampleOrder.ShipAddressValidationError);
 
             errorMessage = string.Empty;
-            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), out errorMessage));
-            sampleOrder.ShipAddressValidationStatus = (int) AddressValidationStatusType.Pending;
+            webClient.Setup(x => x.ValidateAddress(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>(), AddressValidationError = string.Empty});
+
+            sampleOrder.ShipAddressValidationStatus = (int)AddressValidationStatusType.Pending;
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 

@@ -62,43 +62,40 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                string addressValidationError;
-                List<AddressValidationResult> suggestedAddresses = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode, out addressValidationError) ??
-                                                                   new List<AddressValidationResult>();
+                AddressValidationResult validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
                 addressAdapter.CopyTo(originalAddress, string.Empty);
                 originalAddress.IsOriginal = true;
-                originalAddress.AddressPrefix = addressAdapter.FieldPrefix;
 
-                addressAdapter.AddressValidationError = addressValidationError;
+                addressAdapter.AddressValidationError = validationResult.AddressValidationError;
 
                 // Set the validation status based on the settings of the store
                 if (canAdjustAddress)
                 {
-                    SetValidationStatus(suggestedAddresses, addressAdapter);
-                    UpdateAddressIfAdjusted(addressAdapter, suggestedAddresses);
+                    SetValidationStatus(validationResult.AddressValidationResults, addressAdapter);
+                    UpdateAddressIfAdjusted(addressAdapter, validationResult.AddressValidationResults);
                 }
                 else
                 {
-                    SetValidationStatusForNotify(suggestedAddresses, addressAdapter);
+                    SetValidationStatusForNotify(validationResult.AddressValidationResults, addressAdapter);
 
-                    AddressValidationResult validatedAddress = suggestedAddresses.FirstOrDefault(x => x.IsValid);
+                    AddressValidationResult validatedAddress = validationResult.AddressValidationResults.FirstOrDefault(x => x.IsValid);
                     if (validatedAddress != null)
                     {
                         addressAdapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
                         addressAdapter.POBox = (int) validatedAddress.POBox;
-                        addressAdapter.USTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
+                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
                         addressAdapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
                     }
                 }
 
-                addressAdapter.AddressValidationSuggestionCount = suggestedAddresses.Count;
+                addressAdapter.AddressValidationSuggestionCount = validationResult.AddressValidationResults.Count;
 
-                if (suggestedAddresses.Count > 0)
+                if (validationResult.AddressValidationResults.Count > 0)
                 {
-                    saveAction(originalAddress, suggestedAddresses.Select(address => CreateEntityFromValidationResult(address, "Ship")));
+                    saveAction(originalAddress, validationResult.AddressValidationResults.Select(CreateEntityFromValidationResult));
                 }
                 else
                 {
@@ -166,7 +163,7 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Update the adapter's address to the first valid address if its status is adjusted
+        /// Update the addressAdapter's address to the first valid address if its status is adjusted
         /// </summary>
         private static void UpdateAddressIfAdjusted(AddressAdapter adapter, IEnumerable<AddressValidationResult> suggestedAddresses)
         {

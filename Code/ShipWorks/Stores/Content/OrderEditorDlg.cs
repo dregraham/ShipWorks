@@ -322,7 +322,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnEditAddress(object sender, EventArgs e)
         {
-            using (ShipBillAddressEditorDlg dlg = new ShipBillAddressEditorDlg(order))
+            using (ShipBillAddressEditorDlg dlg = new ShipBillAddressEditorDlg(order, true))
             {
                 dlg.ShowDialog(this);
             }

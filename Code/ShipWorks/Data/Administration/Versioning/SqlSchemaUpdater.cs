@@ -78,14 +78,14 @@ namespace ShipWorks.Data.Administration.Versioning
             progressScripts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressScripts);
 
-            ProgressItem progressProcesses = new ProgressItem("Programatic Updates");
-            progressProcesses.CanCancel = false;
-            progressProvider.ProgressItems.Add(progressProcesses);
-
             // Create the functionality item
             ProgressItem progressFunctionality = new ProgressItem("Update Functionality");
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
+
+            ProgressItem progressProcesses = new ProgressItem("Programatic Updates");
+            progressProcesses.CanCancel = false;
+            progressProvider.ProgressItems.Add(progressProcesses);
 
             // Start by disconnecting all users.
             using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope())
@@ -100,14 +100,14 @@ namespace ShipWorks.Data.Administration.Versioning
                             // Update the tables
                             UpdateScripts(fromVersion, toVersion, progressScripts);
 
-                            // Run Update Processes
-                            UpdateProcesses(progressProcesses);
-
                             // Functionality starting
                             progressFunctionality.Starting();
 
                             // Update the assemblies
                             UpdateAssemblies(progressFunctionality);
+
+                            // Run Update Processes
+                            UpdateProcesses(progressProcesses);
 
                             // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
                             // So the following stuff only runs when we are in a "regular" 3x update.
