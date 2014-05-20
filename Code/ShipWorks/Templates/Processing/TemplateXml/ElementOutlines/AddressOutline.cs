@@ -61,7 +61,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("AddressValidationStatus", () => ((AddressValidationStatusType)person.AddressValidationStatus).ToString());
             AddElement("ResidentialStatus", () => ((ValidationDetailStatusType)person.ResidentialStatus).ToString());
             AddElement("POBox", () => ((ValidationDetailStatusType)person.POBox).ToString());
-            AddElement("InternationalTerritory", () => ((ValidationDetailStatusType)person.USTerritory).ToString());
+            AddElement("USTerritory", () => ((ValidationDetailStatusType)person.USTerritory).ToString());
             AddElement("MilitaryAddress", () => ((ValidationDetailStatusType)person.MilitaryAddress).ToString());
         }
 
