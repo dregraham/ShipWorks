@@ -187,7 +187,12 @@ namespace ShipWorks.AddressValidation
 
             // We can't guarantee that the suggested addresses we need to copy have been stored in the database yet.  For example,
             // Action Tasks do everything in a unit of work so they don't get written until the end
-            List<ValidatedAddressEntity> addressSuggestions = new List<ValidatedAddressEntity> { enteredAddress };
+            List<ValidatedAddressEntity> addressSuggestions = new List<ValidatedAddressEntity>();
+            
+            if (enteredAddress != null)
+            {
+                addressSuggestions.Add(enteredAddress);
+            }
             addressSuggestions.AddRange(suggestedAddresses);
 
             PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalAddress, newShippingAddress, addressSuggestions);
