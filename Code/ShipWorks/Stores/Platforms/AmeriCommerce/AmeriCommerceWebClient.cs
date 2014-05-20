@@ -181,6 +181,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     // retrieve the orders, request using Local time so that timezone information is included in the request.  AmeriCommerce doesn't handle UTC times right.
                     List<OrderTrans> orders = service.Order_GetByEditDateRangeAndStoreID(lastModified.Value.ToLocalTime(), DateTime.UtcNow, store.StoreCode).ToList();
 
+                    // AmeriCommerce sometimes returns orders from other stores, so filter the list down to those for the requested store.
+                    orders = orders.Where(o => o.StoreID.Value == store.StoreCode).ToList();
+
                     // Very important to sort by EditDate so we don't get gaps in the download
                     orders.Sort((a, b) => a.EditDate.GetValue(DateTime.MinValue).CompareTo(b.EditDate.GetValue(DateTime.MinValue)));
 

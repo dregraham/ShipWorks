@@ -338,6 +338,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("AmazonStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)AmazonStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("AmazonStoreEntity", "AmazonApi", typeof(System.Int32), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonApi, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "SellerCentralUsername", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.SellerCentralUsername, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "SellerCentralPassword", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.SellerCentralPassword, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantName, 64, 0, 0);
@@ -490,6 +491,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "DistributionCenter", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, 80, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.HarmonizedCode, 10, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.IsFBA, 0, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MPN, 50, 0, 0);
 		}
 		/// <summary>Inits ChannelAdvisorStoreEntity's FieldInfo objects</summary>
 		private void InitChannelAdvisorStoreEntityInfos()

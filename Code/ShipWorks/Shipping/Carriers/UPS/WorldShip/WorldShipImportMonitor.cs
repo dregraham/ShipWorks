@@ -484,7 +484,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                 if (store != null)
                 {
-                    TangoWebClient.LogShipment(store, shipmentForTango);
+                    try
+                    {
+                        TangoWebClient.LogShipment(store, shipmentForTango);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        throw new ShippingException(ex.Message, ex);
+                    }
+                    catch (TangoException ex)
+                    {
+                        throw new ShippingException(ex.Message, ex);
+                    }
                 }
             }
         }

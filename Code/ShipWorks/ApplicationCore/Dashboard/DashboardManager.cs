@@ -574,7 +574,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
             // Unsent messages - but only ones that should have been sent by now
             int unsent = EmailOutboundCollection.GetCount(SqlAdapter.Default, 
                 EmailOutboundFields.SendStatus != (int) EmailOutboundStatus.Sent &
-                (EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow));
+                (EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow) & 
+                EmailOutboundFields.ComposedDate < DateTime.UtcNow.AddMinutes(-1));
 
             int errors = 0;
 

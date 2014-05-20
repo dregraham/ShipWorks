@@ -144,7 +144,13 @@ namespace ShipWorks.Templates.Processing
             {
                 htmlBuilder.AppendFormat("<div style='height: {0}in;'>&nbsp;</div>", pages.Count * labelSheet.PaperSizeHeight);
             }
-
+            else if (usage == TemplateResultUsage.Copy)
+            {
+                // This is to make it easier for zooming when interacting in a preview.
+                // It also is necessary when doing copy with template so that we don't get an exception when trying to determine
+                // ideal height.
+                htmlBuilder.Append(HtmlControl.ZoomDivStartTag);
+            }
             // Add in all the pages
             for (int i = 0; i < pages.Count; i++)
             {

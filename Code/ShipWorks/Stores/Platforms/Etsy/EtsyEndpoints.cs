@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
         public const string DefaultScope = "email_r transactions_r transactions_w";
         public const string OrderIncludes = "Transactions/MainImage(url_75x75,url_570xN),Country(iso_country_code),Coupon";
+        public const string TransactionIncludes = "MainImage(url_75x75,url_570xN)";
 
         public const string EncryptedConsumerKey = "5AVztl792QcPgu30EuKXgtLQ5ibg+IPXQYGcdauzAIc=";
         public const string EncryptedConsumerSecretKey = "wwdcLcTS/Le60r6W91KnNA==";
@@ -60,6 +61,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public static Uri GetFindAllShopReceiptsUrl(long shopID)
         {
             return new Uri(string.Format("{0}shops/{1}/receipts", etsyURL, shopID));
+        }
+
+        /// <summary>
+        /// Given the receipt ID, get a list of transactions associated with it
+        /// </summary>
+        public static Uri GetTransactionsForReceipt(long receiptID)
+        {
+            return new Uri(string.Format("{0}receipts/{1}/transactions", etsyURL, receiptID));
         }
 
         /// <summary>

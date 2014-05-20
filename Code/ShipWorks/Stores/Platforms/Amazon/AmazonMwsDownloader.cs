@@ -52,15 +52,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 Progress.Detail = "Connecting to Amazon...";
 
-                // test the local system clock
-                if (!AmazonMwsClient.ClockInSyncWithMWS())
-                {
-                    throw new AmazonException("Your system time is out of sync with the Amazon servers.  Ensure your clock is accurate, including the time zone.", null);
-                }
-
                 // declare upfront which api calls we are going to be using so they will be throttled
                 using (AmazonMwsClient client = new AmazonMwsClient((AmazonStoreEntity)Store, Progress))
                 {
+                    // test the local system clock
+                    if (!client.ClockInSyncWithMWS())
+                    {
+                        throw new AmazonException("Your system time is out of sync with the Amazon servers.  Ensure your clock is accurate, including the time zone.", null);
+                    }
+
                     // BN: There was some customer confusion over downloads just refusing to happen - this will make it more clear.
                     /*if (client.QuotaExceeded())
                     {

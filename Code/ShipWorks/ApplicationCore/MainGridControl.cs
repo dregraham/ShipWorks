@@ -157,12 +157,12 @@ namespace ShipWorks.ApplicationCore
         {
             if (disposing)
             {
+                Reset();
+
                 if (components != null)
                 {
                     components.Dispose();
                 }
-
-                Reset();
             }
 
             base.Dispose(disposing);
@@ -522,7 +522,7 @@ namespace ShipWorks.ApplicationCore
                 kryptonHeader.Values.Image = FilterHelper.GetFilterImage(activeFilterTarget);
             }
 
-            UpateHeaderColors();
+            UpdateHeaderColors();
             UpdateSearchBox();
 
             selectedStoreKeys = null;
@@ -531,7 +531,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Update the coloring of the header background.  Used to help indicate if search is active.
         /// </summary>
-        private void UpateHeaderColors()
+        private void UpdateHeaderColors()
         {
             List<PaletteBack> backgrounds = new List<PaletteBack> { kryptonHeader.StateCommon.Back, kryptonGroup.StateCommon.Back, kryptonHeaderSearchContainer.StateCommon.Back };
 
@@ -796,11 +796,21 @@ namespace ShipWorks.ApplicationCore
 
             if (InvokeRequired)
             {
-                Invoke(new EventHandler(OnSearchStatusChanged), sender, e);
+                try
+                {
+                    Invoke(new EventHandler(OnSearchStatusChanged), sender, e);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // If the user is typing as they close the containing window, 
+                    // it's possible that we pass the check above and then get disposed
+                    log.Debug("Search was trying to access a disposed main grid control");
+                }
+                
                 return;
             }
 
-            // If null then EndSearch was called in the middle of the even being raised. Rare race-condition, but not a big
+            // If null then EndSearch was called in the middle of the event being raised. Rare race-condition, but not a big
             // deal, we just ignore the event.
             if (searchProvider == null)
             {
@@ -918,7 +928,7 @@ namespace ShipWorks.ApplicationCore
 
                 buttonAdvancedSearch.Type = value ? PaletteButtonSpecStyle.ArrowUp : PaletteButtonSpecStyle.ArrowDown;
 
-                UpateHeaderColors();
+                UpdateHeaderColors();
             }
         }
 
@@ -945,7 +955,7 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnSearchBoxFocusChange(object sender, EventArgs e)
         {
-            UpateHeaderColors();
+            UpdateHeaderColors();
         }
 
         /// <summary>

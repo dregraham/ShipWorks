@@ -39,5 +39,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
             // this store is using the new API now
             amazonStore.AmazonApi = (int) AmazonApi.MarketplaceWebService;
         }
+
+        /// <summary>
+        /// Load the store when the wizard steps into this page
+        /// </summary>
+        private void OnSteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
+        {
+            storeSettingsControl.LoadStore(GetStore<AmazonStoreEntity>());
+        }
     }
 }

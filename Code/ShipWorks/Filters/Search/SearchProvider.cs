@@ -325,9 +325,18 @@ namespace ShipWorks.Filters.Search
                         }
                         catch (ORMConcurrencyException ex)
                         {
-                            // This shouldn't happen due to our ping - but rethrow with a descriptive message just in case so its easier
-                            // to read a crash log.
-                            throw new InvalidOperationException("The Search must have been considered abandoned by another instance.", ex);
+                            // Even with the added ping, this was still happening as of 3.7.5.5512. We'll just create a new
+                            // filter node and associate the content with it instead.
+                            log.Debug("The Search must have been considered abandoned by another instance.  Creating a new filter node", ex);
+
+                            clone.IsNew = true;
+
+                            foreach (IEntityField2 field in clone.Fields)
+                            {
+                                field.IsChanged = true;
+                            }
+
+                            adapter.SaveEntity(clone, true, false);
                         }
 
                         // We didn't refetch, so we have to manually set the sync state
