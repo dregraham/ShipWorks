@@ -397,13 +397,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 OrderUtility.CopyShipments(order.OrderID, newOrder);
 
                 DeletionService.DeleteOrder(order.OrderID, adapter);
-
-                    // Everything has been set on the order, so calculate the hash key
-                    OrderUtility.PopulateOrderDetails(newOrder, adapter);
-                    OrderUtility.UpdateShipSenseHashKey(newOrder);
-
-                    adapter.SaveAndRefetch(newOrder);
             }
+
+            // Everything has been set on the order, so calculate the hash key
+            OrderUtility.PopulateOrderDetails(newOrder, adapter);
+            OrderUtility.UpdateShipSenseHashKey(newOrder);
+
+            adapter.SaveAndRefetch(newOrder);
 
             return true;
         }
