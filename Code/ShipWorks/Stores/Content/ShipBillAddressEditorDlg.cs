@@ -28,16 +28,24 @@ namespace ShipWorks.Stores.Content
         static readonly ILog log = LogManager.GetLogger(typeof(ShipBillAddressEditorDlg));
 
         EntityBase2 entity;
+        private readonly bool enableShipAddressValidation;
         private ValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipBillAddressEditorDlg(EntityBase2 entity)
+        public ShipBillAddressEditorDlg(EntityBase2 entity) : this(entity, false)
+        {}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipBillAddressEditorDlg(EntityBase2 entity, bool enableShipAddressValidation)
         {
             InitializeComponent();
 
             this.entity = entity;
+            this.enableShipAddressValidation = enableShipAddressValidation;
         }
 
         /// <summary>
@@ -46,7 +54,7 @@ namespace ShipWorks.Stores.Content
         private void OnLoad(object sender, EventArgs e)
         {
             validatedAddressScope = new ValidatedAddressScope();
-            shipBillControl.EnableShipAddressValidation = true;
+            shipBillControl.EnableShipAddressValidation = enableShipAddressValidation;
             shipBillControl.LoadEntity(entity);
         }
 
