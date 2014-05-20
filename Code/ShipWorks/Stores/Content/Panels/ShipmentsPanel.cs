@@ -85,6 +85,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             EntityType type = EntityUtility.GetEntityType(entityID);
 
+            
             RelatedKeysEntityGateway gateway = new RelatedKeysEntityGateway(entityID, EntityType.ShipmentEntity);
 
             if (type == EntityType.OrderEntity)
@@ -124,6 +125,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             ratesControl.ReloadRates();
         }
+
         /// <summary>
         /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
         /// </summary>
