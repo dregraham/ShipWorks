@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
+using SpreadsheetGear.Windows.Forms;
 
 namespace ShipWorks.AddressValidation
 {
@@ -68,7 +69,7 @@ namespace ShipWorks.AddressValidation
                     OrderEntity order = selectedEntity as OrderEntity;
                     if (order != null)
                     {
-                        ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);
+                        PropagateOrderAddressChange(entityAdapter, originalAddress, order, sqlAdapter);
                     }
 
                     sqlAdapter.SaveAndRefetch(selectedEntity);
@@ -82,6 +83,39 @@ namespace ShipWorks.AddressValidation
             catch (ORMConcurrencyException)
             {
                 MessageHelper.ShowError(grid, "The address could not be updated because the item has recently changed.  Please try again.");
+            }
+        }
+
+        /// <summary>
+        /// Propagate shipping to billing or vice versa, if necessary
+        /// </summary>
+        /// <param name="entityAdapter"></param>
+        /// <param name="originalAddress"></param>
+        /// <param name="order"></param>
+        /// <param name="sqlAdapter"></param>
+        private void PropagateOrderAddressChange(AddressAdapter entityAdapter, AddressAdapter originalAddress, OrderEntity order, SqlAdapter sqlAdapter)
+        {
+            bool shouldPropagateToShipments = true;
+
+            string sourcePrefix = AddressPrefix;
+            string destinationPrefix = AddressPrefix == "Ship" ? "Bill" : "Ship";
+
+            AddressAdapter shippingAdapter = new AddressAdapter(order, destinationPrefix);
+            if (shippingAdapter == originalAddress)
+            {
+                entityAdapter.CopyTo(shippingAdapter);
+                entityAdapter.CopyValidationDataTo(shippingAdapter);
+                ValidatedAddressManager.CopyValidatedAddresses(sqlAdapter, order.OrderID, sourcePrefix, order.OrderID, destinationPrefix);
+            }
+            else if (sourcePrefix == "Bill")
+            {
+                // Don't propagate billing address changes to shipments unless the original matched the shipping address
+                shouldPropagateToShipments = false;
+            }
+
+            if (shouldPropagateToShipments)
+            {
+                ValidatedAddressManager.PropagateAddressChangesToShipments(sqlAdapter, order.OrderID, originalAddress, entityAdapter);
             }
         }
     }

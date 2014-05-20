@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
@@ -583,7 +584,7 @@ namespace ShipWorks.Data.Controls
                 AddressAdapter loadedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
                 lastValidatedAddress = new AddressAdapter();
                 loadedAddress.CopyTo(lastValidatedAddress);
-                CopyValidationData(loadedAddress, lastValidatedAddress);
+                loadedAddress.CopyValidationDataTo(lastValidatedAddress);
 
                 AddressPrefix = loadedAddress.FieldPrefix;
 
@@ -658,7 +659,7 @@ namespace ShipWorks.Data.Controls
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);
-                    CopyValidationData(lastValidatedAddress, personAddress);
+                    lastValidatedAddress.CopyValidationDataTo(personAddress);
                 }
 
                 if (shouldSaveAddressSuggestions)
@@ -771,9 +772,21 @@ namespace ShipWorks.Data.Controls
             website.Text = other.website.Text;
 
             lastValidatedAddress = other.lastValidatedAddress;
-            validatedAddresses = other.validatedAddresses;
-            shouldSaveAddressSuggestions = true;
+            validatedAddresses = other.LoadValidatedAddresses().Select(EntityUtility.CloneEntity).ToList();
 
+            validatedAddresses.ForEach(x =>
+            {
+                x.AddressPrefix = AddressPrefix;
+                x.IsNew = true;
+
+                foreach (EntityField2 field in x.Fields)
+                {
+                    field.IsChanged = true;
+                }
+            });
+
+            shouldSaveAddressSuggestions = true;
+            
             UpdateValidationUI();
         }
 
@@ -1200,18 +1213,8 @@ namespace ShipWorks.Data.Controls
             PopulatePersonFromUI(dummyPerson);
 
             AddressAdapter clonedAddress = dummyPerson.ConvertTo<AddressAdapter>();
-            CopyValidationData(lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>(), clonedAddress);
+            AddressAdapter.CopyValidationData(lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>(), clonedAddress);
             return clonedAddress;
-        }
-
-        /// <summary>
-        /// Copies validation data from one address to another
-        /// </summary>
-        private static void CopyValidationData(AddressAdapter fromAddress, AddressAdapter toAddress)
-        {
-            toAddress.AddressValidationError = fromAddress.AddressValidationError;
-            toAddress.AddressValidationStatus = fromAddress.AddressValidationStatus;
-            toAddress.AddressValidationSuggestionCount = fromAddress.AddressValidationSuggestionCount;
         }
     }
 }

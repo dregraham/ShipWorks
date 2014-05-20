@@ -126,6 +126,25 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Copies validation data from one address to another
+        /// </summary>
+        public static void CopyValidationData(AddressAdapter fromAddress, AddressAdapter toAddress)
+        {
+            toAddress.AddressValidationError = fromAddress.AddressValidationError;
+            toAddress.AddressValidationStatus = fromAddress.AddressValidationStatus;
+            toAddress.AddressValidationSuggestionCount = fromAddress.AddressValidationSuggestionCount;
+        }
+
+        /// <summary>
+        /// Copy the validation details from this adapter to another
+        /// </summary>
+        /// <param name="destinationAddress"></param>
+        public void CopyValidationDataTo(AddressAdapter destinationAddress)
+        {
+            CopyValidationData(this, destinationAddress);
+        }
+
+        /// <summary>
         /// Equals
         /// </summary>
         public override bool Equals(object obj)
