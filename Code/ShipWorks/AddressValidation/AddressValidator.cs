@@ -62,7 +62,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                AddressValidationResult validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode);
+                AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
@@ -86,7 +86,7 @@ namespace ShipWorks.AddressValidation
                     {
                         addressAdapter.ResidentialStatus = (int) validatedAddress.ResidentialStatus;
                         addressAdapter.POBox = (int) validatedAddress.POBox;
-                        adapter.InternationalTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
+                        addressAdapter.USTerritory = InternationalTerritoryStatus(validatedAddress.StateProvCode, validatedAddress.CountryCode);
                         addressAdapter.MilitaryAddress = MilitaryAddressStatus(validatedAddress.StateProvCode);
                     }
                 }
@@ -95,7 +95,7 @@ namespace ShipWorks.AddressValidation
 
                 if (validationResult.AddressValidationResults.Count > 0)
                 {
-                    saveAction(originalAddress, validationResult.AddressValidationResults.Select(CreateEntityFromValidationResult));
+                    saveAction(originalAddress, validationResult.AddressValidationResults.Select(address => CreateEntityFromValidationResult(address, "Ship")));
                 }
                 else
                 {
