@@ -35,8 +35,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Propogates the address change to billing.
         /// </summary>
-        private static void PropagateAddressChangeToBilling(IAddressValidationDataAccess dataAccess, OrderEntity order,
-            AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
+        private static void PropagateAddressChangeToBilling(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress, List<ValidatedAddressEntity> addressSuggestions)
         {
             // If the order shipment address hasn't changed, we don't need to do anything
             if (originalShippingAddress == newShippingAddress &&
@@ -54,7 +53,7 @@ namespace ShipWorks.AddressValidation
                 billingAddress.AddressValidationSuggestionCount = newShippingAddress.AddressValidationSuggestionCount;
                 billingAddress.AddressValidationError = newShippingAddress.AddressValidationError;
 
-                CopyValidatedAddresses(dataAccess, order.OrderID, "Ship", order.OrderID, "Bill");
+                CopyValidatedAddresses(dataAccess, addressSuggestions, order.OrderID, "Bill");
 
                 dataAccess.SaveEntity(order);
             }
@@ -65,8 +64,17 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress, AddressAdapter newShippingAddress)
         {
+            PropagateAddressChangesToShipments(dataAccess, orderID, originalShippingAddress, newShippingAddress, null);
+        }
+
+        /// <summary>
+        /// Propagate order address changes to unprocessed shipments if necessary
+        /// </summary>
+        private static void PropagateAddressChangesToShipments(IAddressValidationDataAccess dataAccess, long orderID, AddressAdapter originalShippingAddress, 
+            AddressAdapter newShippingAddress, List<ValidatedAddressEntity> addressSuggestions)
+        {
             // If the order shipment address hasn't changed, we don't need to do anything
-            if (originalShippingAddress == newShippingAddress && 
+            if (originalShippingAddress == newShippingAddress &&
                 originalShippingAddress.AddressValidationStatus == newShippingAddress.AddressValidationStatus)
             {
                 return;
@@ -86,7 +94,14 @@ namespace ShipWorks.AddressValidation
                     shipmentAddress.AddressValidationSuggestionCount = newShippingAddress.AddressValidationSuggestionCount;
                     shipmentAddress.AddressValidationError = newShippingAddress.AddressValidationError;
 
-                    CopyValidatedAddresses(dataAccess, orderID, "Ship", shipment.ShipmentID, "Ship");
+                    if (addressSuggestions == null)
+                    {
+                        CopyValidatedAddresses(dataAccess, orderID, "Ship", shipment.ShipmentID, "Ship");    
+                    }
+                    else
+                    {
+                        CopyValidatedAddresses(dataAccess, addressSuggestions, shipment.ShipmentID, "Ship");
+                    }
 
                     dataAccess.SaveEntity(shipment);
                 }
@@ -170,8 +185,13 @@ namespace ShipWorks.AddressValidation
 
             AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
 
-            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalAddress, newShippingAddress);
-            PropagateAddressChangeToBilling(dataAccess, order, originalAddress, newShippingAddress);
+            // We can't guarantee that the suggested addresses we need to copy have been stored in the database yet.  For example,
+            // Action Tasks do everything in a unit of work so they don't get written until the end
+            List<ValidatedAddressEntity> addressSuggestions = new List<ValidatedAddressEntity> { enteredAddress };
+            addressSuggestions.AddRange(suggestedAddresses);
+
+            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalAddress, newShippingAddress, addressSuggestions);
+            PropagateAddressChangeToBilling(dataAccess, order, originalAddress, newShippingAddress, addressSuggestions);
         }
 
         /// <summary>
@@ -386,15 +406,23 @@ namespace ShipWorks.AddressValidation
         {
             List<ValidatedAddressEntity> addresses = GetSuggestedAddresses(dataAccess, fromEntityId, fromPrefix);
 
+            CopyValidatedAddresses(dataAccess, addresses, toEntityId, toPrefix);
+        }
+
+        /// <summary>
+        /// Copy address suggestions into an entity
+        /// </summary>
+        private static void CopyValidatedAddresses(IAddressValidationDataAccess dataAccess, IEnumerable<ValidatedAddressEntity> sourceSuggestions, long toEntityId, string toPrefix)
+        {
             DeleteExistingAddresses(dataAccess, toEntityId, toPrefix);
 
-            foreach (var address in addresses)
+            foreach (var address in sourceSuggestions)
             {
                 ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(address);
                 clonedAddress.IsNew = true;
                 clonedAddress.ConsumerID = toEntityId;
                 clonedAddress.AddressPrefix = toPrefix;
-                
+
                 foreach (IEntityField2 field in clonedAddress.Fields)
                 {
                     field.IsChanged = true;

@@ -662,7 +662,7 @@ namespace ShipWorks.Data.Controls
                     lastValidatedAddress.CopyValidationDataTo(personAddress);
                 }
 
-                if (shouldSaveAddressSuggestions)
+                if (shouldSaveAddressSuggestions && EnableValidationControls)
                 {
                     ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);   
                 }
