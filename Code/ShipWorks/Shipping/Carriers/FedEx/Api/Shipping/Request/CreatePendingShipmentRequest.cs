@@ -1,8 +1,8 @@
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
+//using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
-{
-    public partial class CreatePendingShipmentRequest : IFedExNativeShipmentRequest
-    {
-    }
-}
+//namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip
+//{
+//    public partial class CreatePendingShipmentRequest : IFedExNativeShipmentRequest
+//    {
+//    }
+//}

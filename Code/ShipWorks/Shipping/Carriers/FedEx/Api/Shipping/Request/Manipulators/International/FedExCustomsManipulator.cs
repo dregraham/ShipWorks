@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 Commodity commodity = new Commodity
                 {
                     Description = customsItem.Description,
-                    Quantity = Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
+                    Quantity = (decimal)customsItem.Quantity, //Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
                     QuantityUnits = "EA",
                     NumberOfPieces = customsItem.NumberOfPieces.ToString(CultureInfo.InvariantCulture),
                     Weight = new Weight { Value = (decimal) customsItem.Weight, Units = GetApiWeightUnits(shipment) },

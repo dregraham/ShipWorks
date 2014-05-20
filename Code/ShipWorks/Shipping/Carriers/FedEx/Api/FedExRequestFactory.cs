@@ -115,14 +115,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             IFedExNativeShipmentRequest nativeShipmentRequest;
 
-            if (shipmentEntity.ReturnShipment && ((FedExReturnType)shipmentEntity.FedEx.ReturnType) == FedExReturnType.EmailReturnLabel)
-            {
-                nativeShipmentRequest = new CreatePendingShipmentRequest();
-            }
-            else
-            {
+            //if (shipmentEntity.ReturnShipment && ((FedExReturnType)shipmentEntity.FedEx.ReturnType) == FedExReturnType.EmailReturnLabel)
+            //{
+            //    nativeShipmentRequest = new CreatePendingShipmentRequest();
+            //}
+            //else
+            //{
                 nativeShipmentRequest = new ProcessShipmentRequest();
-            }
+            //}
 
             return new FedExShipRequest(manipulators, shipmentEntity, fedExService, responseFactory, settingsRepository, nativeShipmentRequest);
         }

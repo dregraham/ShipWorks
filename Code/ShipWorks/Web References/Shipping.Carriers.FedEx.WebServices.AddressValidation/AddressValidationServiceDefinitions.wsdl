@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns="http://fedex.com/ws/addressvalidation/v2" name="AddressValidationServiceDefinitions" targetNamespace="http://fedex.com/ws/addressvalidation/v2" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/addressvalidation/v2" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="AddressValidationServiceDefinitions" targetNamespace="http://fedex.com/ws/addressvalidation/v2" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/addressvalidation/v2" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="AddressValidationRequest" type="ns:AddressValidationRequest" />

@@ -40,10 +40,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         [TestMethod]
         [ExpectedException(typeof(CarrierException))]
-        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsCancelPendingShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsObject_Test()
         {
-            // Setup to pass a CancelPendingShipmentRequest as the native request
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CancelPendingShipmentRequest());
+            // Setup to pass a object as the native request
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
         }
@@ -70,16 +70,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest));
         }
 
-        [TestMethod]
-        public void FedExGetShipServiceRequestedShipment_ReturnsCreatePendingShipmentRequest_Test()
-        {
-            // Setup to pass a CreatePendingShipmentRequest as the native request
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest());
+        //[TestMethod]
+        //public void FedExGetShipServiceRequestedShipment_ReturnsCreatePendingShipmentRequest_Test()
+        //{
+        //    // Setup to pass a CreatePendingShipmentRequest as the native request
+        //    carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest());
 
-            FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
+        //    FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest));
-        }
+        //    Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest));
+        //}
 
         [TestMethod]
         public void FedExGetShipServiceRequestedShipment_ReturnsCreateValidateShipmentRequest_Test()

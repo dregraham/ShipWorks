@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new CancelPendingShipmentRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             testObject.Manipulate(carrierRequest.Object);
         }
@@ -401,7 +401,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
-            Assert.AreEqual(HazardousCommodityOptionType.LITHIUM_BATTERY_EXCEPTION, dangerousGoods.Options[0]);
+            Assert.AreEqual(HazardousCommodityOptionType.BATTERY, dangerousGoods.Options[0]);
         }
 
         [TestMethod]

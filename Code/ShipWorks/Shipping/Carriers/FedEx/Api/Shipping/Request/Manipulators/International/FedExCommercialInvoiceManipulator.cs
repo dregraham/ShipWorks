@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         {
             CommercialInvoice invoice = new CommercialInvoice();
             invoice.TermsOfSale = GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale);
-            invoice.TermsOfSaleSpecified = true;
+            //invoice.TermsOfSaleSpecified = true;
 
             invoice.Purpose = GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose);
             invoice.PurposeSpecified = true;
@@ -138,16 +138,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private TermsOfSaleType GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
+        private string GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
         {
             switch (termsOfSale)
             {
-                case FedExTermsOfSale.FOB_or_FCA: return TermsOfSaleType.FOB_OR_FCA;
-                case FedExTermsOfSale.CFR_or_CPT: return TermsOfSaleType.CFR_OR_CPT;
-                case FedExTermsOfSale.CIF_or_CIP: return TermsOfSaleType.CIF_OR_CIP;
-                case FedExTermsOfSale.EXW: return TermsOfSaleType.EXW;
-                case FedExTermsOfSale.DDP: return TermsOfSaleType.DDP;
-                case FedExTermsOfSale.DDU: return TermsOfSaleType.DDU;
+                case FedExTermsOfSale.FOB_or_FCA: return "FOB_OR_FCA";
+                case FedExTermsOfSale.CFR_or_CPT: return "CFR_OR_CPT";
+                case FedExTermsOfSale.CIF_or_CIP: return "CIF_OR_CIP";
+                case FedExTermsOfSale.EXW: return "EXW";
+                case FedExTermsOfSale.DDP: return "DDP";
+                case FedExTermsOfSale.DDU: return "DDU";
             }
 
             throw new InvalidOperationException("Invalid FedEx TermsOfSale: " + termsOfSale);

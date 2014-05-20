@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             switch (materialType)
             {
-                case FedExDangerousGoodsMaterialType.LithiumBatteries: return HazardousCommodityOptionType.LITHIUM_BATTERY_EXCEPTION;
+                case FedExDangerousGoodsMaterialType.LithiumBatteries: return HazardousCommodityOptionType.BATTERY;
                 case FedExDangerousGoodsMaterialType.HazardousMaterials: return HazardousCommodityOptionType.HAZARDOUS_MATERIALS;
                 case FedExDangerousGoodsMaterialType.OrmD: return HazardousCommodityOptionType.ORM_D;
             }

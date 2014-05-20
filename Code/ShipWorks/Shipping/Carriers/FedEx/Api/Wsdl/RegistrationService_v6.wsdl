@@ -1,6 +1,6 @@
-<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/registration/v3" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/registration/v3" name="RegistrationServiceDefinitions">
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://fedex.com/ws/registration/v6" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://fedex.com/ws/registration/v6" name="RegistrationServiceDefinitions">
   <types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/registration/v3">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/registration/v6">
       <xs:element name="RegisterWebCspUserReply" type="ns:RegisterWebCspUserReply"/>
       <xs:element name="RegisterWebCspUserRequest" type="ns:RegisterWebCspUserRequest"/>
       <xs:element name="SubscriptionReply" type="ns:SubscriptionReply"/>
@@ -104,6 +104,11 @@
           <xs:element name="PhoneNumber" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Identifies the phone number associated with this contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PhoneExtension" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the phone extension associated with this contact.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="TollFreePhoneNumber" type="xs:string" minOccurs="0">
@@ -264,9 +269,14 @@
               <xs:documentation>Name of the company where this User is working in.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Department" type="xs:string" minOccurs="0">
+          <xs:element name="PhoneNumberCountryCode" type="xs:string" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>Name of the department where this User belongs to</xs:documentation>
+              <xs:documentation>Specifies the country code to be dialled when calling the phone number listed as a part of the contact.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PhoneNumberAreaCode" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Specifies the area code of the phone number listed as a part of the contact.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="PhoneNumber" type="xs:string" minOccurs="0">
@@ -274,6 +284,7 @@
               <xs:documentation>Contact Number of this User</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="PhoneExtension" type="xs:string" minOccurs="0"/>
           <xs:element name="PagerNumber" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Pager Number of this User</xs:documentation>
@@ -313,14 +324,30 @@
           <xs:documentation>Middle name added to support credit card fraud detection.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
+          <xs:element name="Prefix" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Specifies the salutation part of the name, if any is specified. Examples of prefix: Sir, Madam, Monsieur.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Title" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Specifies the professional title in the person name, if any is specified.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element name="FirstName" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Contact first name.</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element name="MiddleName" type="xs:string" minOccurs="0"/>
           <xs:element name="LastName" type="xs:string" minOccurs="0">
             <xs:annotation>
               <xs:documentation>Contact last name.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="Suffix" type="xs:string" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>Identifies the contact person's name suffix.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -405,6 +432,11 @@
           <xs:element name="Version" type="ns:VersionId" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the version/level of a service operation expected by a caller (in each request) and performed by the callee (in each reply).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="CspCredential" type="ns:WebAuthenticationCredential" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>This field is the CSP's authentication credential, to which the new user-level credential will be linked.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="Categories" type="ns:WebServiceCategoryType" minOccurs="0" maxOccurs="unbounded">
@@ -655,12 +687,12 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Major" type="xs:int" fixed="3" minOccurs="1">
+          <xs:element name="Major" type="xs:int" fixed="6" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element name="Intermediate" type="xs:int" fixed="1" minOccurs="1">
+          <xs:element name="Intermediate" type="xs:int" fixed="0" minOccurs="1">
             <xs:annotation>
               <xs:documentation>Identifies the service interface level.</xs:documentation>
             </xs:annotation>
@@ -674,32 +706,32 @@
       </xs:complexType>
     </xs:schema>
   </types>
-  <message name="RegisterWebCspUserRequest">
-    <part name="RegisterWebCspUserRequest" element="ns:RegisterWebCspUserRequest"/>
-  </message>
   <message name="SubscriptionRequest">
     <part name="SubscriptionRequest" element="ns:SubscriptionRequest"/>
+  </message>
+  <message name="RegisterWebCspUserRequest">
+    <part name="RegisterWebCspUserRequest" element="ns:RegisterWebCspUserRequest"/>
   </message>
   <message name="VersionCaptureRequest">
     <part name="VersionCaptureRequest" element="ns:VersionCaptureRequest"/>
   </message>
-  <message name="RegisterWebCspUserReply">
-    <part name="RegisterWebCspUserReply" element="ns:RegisterWebCspUserReply"/>
-  </message>
   <message name="SubscriptionReply">
     <part name="SubscriptionReply" element="ns:SubscriptionReply"/>
+  </message>
+  <message name="RegisterWebCspUserReply">
+    <part name="RegisterWebCspUserReply" element="ns:RegisterWebCspUserReply"/>
   </message>
   <message name="VersionCaptureReply">
     <part name="VersionCaptureReply" element="ns:VersionCaptureReply"/>
   </message>
   <portType name="RegistrationPortType">
-    <operation name="registerWebCSPUser" parameterOrder="RegisterWebCspUserRequest">
-      <input message="ns:RegisterWebCspUserRequest"/>
-      <output message="ns:RegisterWebCspUserReply"/>
-    </operation>
     <operation name="versionCapture" parameterOrder="VersionCaptureRequest">
       <input message="ns:VersionCaptureRequest"/>
       <output message="ns:VersionCaptureReply"/>
+    </operation>
+    <operation name="registerWebCspUser" parameterOrder="RegisterWebCspUserRequest">
+      <input message="ns:RegisterWebCspUserRequest"/>
+      <output message="ns:RegisterWebCspUserReply"/>
     </operation>
     <operation name="subscription" parameterOrder="SubscriptionRequest">
       <input message="ns:SubscriptionRequest"/>
@@ -708,8 +740,8 @@
   </portType>
   <binding name="RegistrationServiceSoapBinding" type="ns:RegistrationPortType">
     <s1:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <operation name="registerWebCSPUser">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v3/registerWebCSPUser" style="document"/>
+    <operation name="versionCapture">
+      <s1:operation soapAction="http://fedex.com/ws/registration/v6/versionCapture" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -717,8 +749,8 @@
         <s1:body use="literal"/>
       </output>
     </operation>
-    <operation name="versionCapture">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v3/versionCapture" style="document"/>
+    <operation name="registerWebCspUser">
+      <s1:operation soapAction="http://fedex.com/ws/registration/v6/registerWebCspUser" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
@@ -727,7 +759,7 @@
       </output>
     </operation>
     <operation name="subscription">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v3/subscription" style="document"/>
+      <s1:operation soapAction="http://fedex.com/ws/registration/v6/subscription" style="document"/>
       <input>
         <s1:body use="literal"/>
       </input>
