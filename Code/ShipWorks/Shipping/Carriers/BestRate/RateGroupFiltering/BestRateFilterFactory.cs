@@ -22,12 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             return new List<IRateGroupFilter>
             {
                 new BestRateServiceLevelFilter((ServiceLevelType)shipment.BestRate.ServiceLevel),
-                
-                // This filter is only necessary if we're showing the user multiple rates for the
-                // best rate shipment type; otherwise, a potentially cheaper rate is filtered out
-                // and not presented on the counter rate processing wizard for an existing account
-                //new BestRateServiceTypeFilter(), 
-                
+                new BestRateServiceTypeFilter(), 
                 new BestRateNonExistentShipmentTypeFootnoteFilter(),
                 new BestRateExpress1PromotionFootnoteFilter(),
                 new CounterRatesInvalidStoreAddressFootnoteFilter()

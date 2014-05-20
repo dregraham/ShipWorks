@@ -571,6 +571,7 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
@@ -614,6 +615,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
@@ -623,6 +625,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
@@ -664,6 +667,13 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.Designer.cs">
+      <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\RatesPanel.cs">
       <SubType>UserControl</SubType>
@@ -7089,6 +7099,9 @@
     <EmbeddedResource Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.resx">
       <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\InformationFootnoteControl.resx">
+      <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -7405,6 +7418,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">

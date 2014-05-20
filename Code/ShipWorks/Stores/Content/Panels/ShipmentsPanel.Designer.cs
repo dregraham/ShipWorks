@@ -131,6 +131,7 @@
             this.ratesControl.Name = "ratesControl";
             this.ratesControl.Size = new System.Drawing.Size(659, 184);
             this.ratesControl.TabIndex = 5;
+            this.ratesControl.ConsolidatePostalRates = true;
             // 
             // ShipmentsPanel
             // 

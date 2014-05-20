@@ -52,6 +52,12 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
+                    // Ups Jerks
+                    if (typeCode == ShipmentTypeCode.BestRate)
+                    {
+                        continue;
+                    }
+
                     if (typeCode == ShipmentTypeCode.Express1Stamps)
                     {
                         // We have an Express1 for Stamps shipment type which should be excluded if Stamps has never been setup

@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<StampsAccountEntity> accounts = new List<StampsAccountEntity>()
             {
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.Postal.Stamps.StampsAccountID);
+            Assert.AreEqual(123, shipment.Postal.Stamps.StampsAccountID);
         }
     }
 }

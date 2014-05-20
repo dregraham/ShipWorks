@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<IParcelAccountEntity> accounts = new List<IParcelAccountEntity>()
             {
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.IParcel.IParcelAccountID);
+            Assert.AreEqual(123, shipment.IParcel.IParcelAccountID);
         }
 
     }

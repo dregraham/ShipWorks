@@ -304,6 +304,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             return confirmationTypes;
         }
 
+        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        {
+            return base.IsDomestic(shipmentEntity) || IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
+        }
+		
         /// <summary>
         /// Gets an instance to the best rate shipping broker for the USPS web tools shipment type based on the shipment configuration.
         /// </summary>

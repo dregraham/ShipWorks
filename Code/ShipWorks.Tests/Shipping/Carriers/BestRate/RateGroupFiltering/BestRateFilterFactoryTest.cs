@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(4, filters.Count());
+            Assert.AreEqual(5, filters.Count());
         }
         
         [TestMethod]

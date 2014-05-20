@@ -20,9 +20,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
     /// </summary>
     public class GridStoreSpecificHyperlinkDecorator : GridHyperlinkDecorator
     {
-        static readonly bool skipManual = true;
+        private static readonly bool skipManual = true;
 
-        class RollupInfo
+        private class RollupInfo
         {
             public int ChildCount { get; set; }
             public EntityField2 ChildField { get; set; }
@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             StoreType storeType = GetStoreType(formattedValue);
             EntityField2 field = formattedValue.PrimaryField;
 
-            if (storeType == null || (object) field == null)
+            if (storeType == null || (object)field == null)
             {
                 return false;
             }
@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     }
 
                     // Try to get the order from cache
-                    order = (OrderEntity) DataProvider.GetEntity(item.OrderID);
+                    order = (OrderEntity)DataProvider.GetEntity(item.OrderID);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 
             return StoreTypeManager.GetType(store);
         }
-        
+
         /// <summary>
         /// If the given field represents a rollup field, then the get the corresponding child field
         /// </summary>
@@ -128,18 +128,18 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             // TODO
             // Add more as more rollup column support is wanted
 
-            if ((object) childField == null)
+            if ((object)childField == null)
             {
                 return null;
             }
 
-            return new RollupInfo { ChildCount = (int) entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
+            return new RollupInfo { ChildCount = (int)entity.GetCurrentFieldValue(countField.FieldIndex), ChildField = childField };
         }
 
         /// <summary>
         /// A hyperlink has been clicked
         /// </summary>
-        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column)
+        protected override void OnLinkClicked(EntityGridRow row, EntityGridColumn column, MouseEventArgs mouseArgs)
         {
             GridColumnFormattedValue formattedValue = row.GetFormattedValue(column);
 
@@ -153,7 +153,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                     Cursor.Current = Cursors.WaitCursor;
 
                     List<EntityBase2> children = DataProvider.GetRelatedEntities(
-                        (long) formattedValue.Entity.GetCurrentFieldValue(0),
+                        (long)formattedValue.Entity.GetCurrentFieldValue(0),
                         EntityTypeProvider.GetEntityType(rollupInfo.ChildField.ContainingObjectName));
 
                     if (children.Count == 1)
@@ -208,7 +208,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
             var manualField = entity.Fields["IsManual"];
             if (manualField != null)
             {
-                return (bool) manualField.CurrentValue;
+                return (bool)manualField.CurrentValue;
             }
             else
             {

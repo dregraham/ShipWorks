@@ -99,6 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void GetRates_OnlyReturnsOneRateResult_FromAllBrokers_Test()
         {
+            // We are now returning 4 rates again. This is because we are using BestRate functionality for USPS only.
             rates = new List<RateResult>
             {
                 CreateRateResult("Rate xyz", "5", 4.23M, "SomeRateResult3"),
@@ -108,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             // Setup the factory to return two brokers - the one already defined at the class level 
             // and another one for this test
             Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
-            secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup( rates));
+            secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(rates));
 
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
 

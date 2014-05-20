@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<OnTracAccountEntity> accounts = new List<OnTracAccountEntity>()
             {
@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.OnTrac.OnTracAccountID);
+            Assert.AreEqual(123, shipment.OnTrac.OnTracAccountID);
         }
     }
 }

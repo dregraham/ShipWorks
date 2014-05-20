@@ -2,20 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.IO.Text.Sgml;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
 using System.Diagnostics;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -121,7 +116,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             base.UpdateContent();
 
-            ratesControl.ReloadRates();
+            RefreshSelectedShipments();
         }
         /// <summary>
         /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
@@ -167,7 +162,7 @@ namespace ShipWorks.Stores.Content.Panels
             }
             else if (entityGrid.Rows.Count > 1)
             {
-                ratesControl.ChangeShipment(null);
+                RefreshSelectedShipments();
             }
             else
             {
@@ -180,13 +175,27 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnShipmentSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (entityGrid.Selection.Count == 1)
+            RefreshSelectedShipments();
+        }
+
+        /// <summary>
+        /// Refreshes the selected shipments - Updates the rate control
+        /// </summary>
+        private void RefreshSelectedShipments()
+        {
+            int shipmentSelectionCount = entityGrid.Selection.Count;
+
+            if (shipmentSelectionCount == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
             }
+            else if (shipmentSelectionCount > 1)
+            {
+                ratesControl.ClearRates("Multiple shipments selected.");
+            }
             else
             {
-                ratesControl.ChangeShipment(null);
+                ratesControl.ClearRates("No shipments are selected.");
             }
         }
 
@@ -204,7 +213,7 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
-
+                
                 using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
                 {
                     dlg.ShowDialog(this);
@@ -366,6 +375,17 @@ namespace ShipWorks.Stores.Content.Panels
             }
 
             ReloadContent();
+        }
+
+        /// <summary>
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// list with up-to-date displayed entity content.
+        /// </summary>
+        public override void ReloadContent()
+        {
+            base.ReloadContent();
+
+            RefreshSelectedShipments();
         }
 
         /// <summary>

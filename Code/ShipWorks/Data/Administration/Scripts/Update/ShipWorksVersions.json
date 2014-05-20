@@ -92,4 +92,5 @@
 {"ToVersion":"3.7.6.0","FromVersion":["3.7.4.1"]},
 {"ToVersion":"3.7.7.0","FromVersion":["3.7.6.0"]},
 {"ToVersion":"3.8.0.0","FromVersion":["3.7.7.0"]},
+{"ToVersion":"3.8.0.1","FromVersion":["3.8.0.0"]},
 {"ToVersion":"3.8.0.1","FromVersion":["3.8.0.0"]}]
