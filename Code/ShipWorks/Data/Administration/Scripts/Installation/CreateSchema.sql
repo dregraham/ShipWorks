@@ -9,14 +9,16 @@ the code is regenerated.
 GO
 SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL, QUOTED_IDENTIFIER ON;
 
-PRINT N'Creating [dbo].[WorldShipPackage]'
+SET NUMERIC_ROUNDABORT OFF;
 
 
-PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
+GO
+:setvar DatabaseName "InitialDatabase"
 :setvar DefaultFilePrefix "InitialDatabase"
 :setvar DefaultDataPath ""
 :setvar DefaultLogPath ""
 
+GO
 :on error exit
 GO
 /*
@@ -27,23 +29,34 @@ SET NOEXEC OFF;
 :setvar __IsSqlCmdEnabled "True"
 GO
 IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
-GO
-PRINT N'Creating [dbo].[ActionQueue]'
+    BEGIN
+        PRINT N'SQLCMD mode must be enabled to successfully execute this script.';
         SET NOEXEC ON;
+    END
+
+
 GO
+USE [$(DatabaseName)];
 
 
-PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
+GO
+PRINT N'Rename refactoring operation with key 0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e58 is skipped, element [dbo].[ValidatedAddress].[Id] (SqlSimpleColumn) will not be renamed to ValidatedAddressID';
 
 
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
-
-
-ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Rename refactoring operation with key 4ed1e7a8-6e41-4a51-864b-f9934613b641 is skipped, element [dbo].[ValidatedAddress].[OrderID] (SqlSimpleColumn) will not be renamed to ConsumerID';
 
 
 GO
 PRINT N'Rename refactoring operation with key 5a268481-3a79-4e4e-b7cf-d190c55d8f7d is skipped, element [dbo].[Store].[AutoAddressValidation] (SqlSimpleColumn) will not be renamed to AddressValidationSetting';
+
+
+GO
+PRINT N'Rename refactoring operation with key c95c3ab0-ff3e-487e-a29d-cebaf160fb6d is skipped, element [dbo].[ValidatedAddress].[InternationalTerritory] (SqlSimpleColumn) will not be renamed to USTerritory';
+
+
+GO
+PRINT N'Rename refactoring operation with key e0c39848-5f14-4871-a471-3679e6bc61f4 is skipped, element [dbo].[ShipSenseKnowledgebase].[Id] (SqlSimpleColumn) will not be renamed to Hash';
 
 
 GO
@@ -87,60 +100,6 @@ CREATE TABLE [dbo].[ActionFilterTrigger] (
 );
 
 
-GO
-PRINT N'Creating [dbo].[WorldShipPackage]'
-GO
-CREATE TABLE [dbo].[WorldShipPackage]
-(
-[UpsPackageID] [bigint] NOT NULL,
-[ShipmentID] [bigint] NOT NULL,
-[PackageType] [varchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Weight] [float] NOT NULL,
-[ReferenceNumber] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ReferenceNumber2] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CodOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CodAmount] [money] NOT NULL,
-[CodCashOnly] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DeliveryConfirmation] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DeliveryConfirmationSignature] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DeliveryConfirmationAdult] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Length] [int] NOT NULL CONSTRAINT [DF_WorldShipPackage_Length] DEFAULT (''),
-[Width] [int] NOT NULL,
-[Height] [int] NOT NULL,
-[DeclaredValueAmount] [float] NULL,
-[DeclaredValueOption] [nchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CN22GoodsType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CN22Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[PostalSubClass] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[MIDeliveryConfirmation] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[QvnOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[QvnFrom] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[QvnSubjectLine] [nvarchar] (18) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[QvnMemo] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn1ShipNotify] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn1ContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn1Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn2ShipNotify] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn2ContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn2Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn3ShipNotify] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn3ContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Qvn3Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShipperRelease] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[AdditionalHandlingEnabled] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationContactName] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VerbalConfirmationTelephone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceRegulationSet] [nvarchar] (5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceWeight] [float] NULL,
-[DryIceMedicalPurpose] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceOption] [char] (1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DryIceWeightUnitOfMeasure] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-)
-GO
-PRINT N'Creating primary key [PK_WorldShipPackage] on [dbo].[WorldShipPackage]'
-GO
-ALTER TABLE [dbo].[WorldShipPackage] ADD CONSTRAINT [PK_WorldShipPackage] PRIMARY KEY CLUSTERED  ([UpsPackageID])
 GO
 PRINT N'Creating [dbo].[ActionQueue]...';
 
@@ -285,7 +244,6 @@ CREATE TABLE [dbo].[AmazonOrder] (
     [OrderID]            BIGINT       NOT NULL,
     [AmazonOrderID]      VARCHAR (32) NOT NULL,
     [AmazonCommission]   MONEY        NOT NULL,
-[AmazonApiRegion] [char](2) NOT NULL,
     [FulfillmentChannel] INT          NOT NULL,
     CONSTRAINT [PK_AmazonOrder] PRIMARY KEY CLUSTERED ([OrderID] ASC)
 );
@@ -313,6 +271,7 @@ GO
 CREATE TABLE [dbo].[AmazonStore] (
     [StoreID]               BIGINT           NOT NULL,
     [AmazonApi]             INT              NOT NULL,
+    [AmazonApiRegion]       CHAR (2)         COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
     [SellerCentralUsername] NVARCHAR (50)    NOT NULL,
     [SellerCentralPassword] NVARCHAR (50)    NOT NULL,
     [MerchantName]          VARCHAR (64)     NOT NULL,
@@ -365,9 +324,6 @@ CREATE TABLE [dbo].[Audit] (
     [ObjectID]      BIGINT        NULL,
     [HasEvents]     BIT           NOT NULL,
     CONSTRAINT [PK_Audit] PRIMARY KEY CLUSTERED ([AuditID] ASC)
-[ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseRecognitionStatus] int NOT NULL
 );
 
 
@@ -509,14 +465,6 @@ CREATE TABLE [dbo].[BigCommerceOrderItem] (
 );
 
 
-PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
-GO
-PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
-GO
 GO
 PRINT N'Creating [dbo].[BigCommerceStore]...';
 
@@ -598,6 +546,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem] (
     [DistributionCenter] NVARCHAR (80) NOT NULL,
     [HarmonizedCode]     NVARCHAR (10) NOT NULL,
     [IsFBA]              BIT           NOT NULL,
+    [MPN]                NVARCHAR (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
     CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED ([OrderItemID] ASC)
 );
 
@@ -788,7 +737,6 @@ CREATE NONCLUSTERED INDEX [IX_Auto_ShipLastName]
 
 
 GO
-
 PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipCompany]...';
 
 
@@ -796,10 +744,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipCompany]
     ON [dbo].[Customer]([ShipCompany] ASC);
 
-[BestRateEvents] [tinyint] NOT NULL
-[ShipSenseStatus] [int] NOT NULL,
-[ShipSenseChangeSets] [xml] NOT NULL,
-[ShipSenseEntry] [varbinary] (max) NOT NULL
 
 GO
 PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipStateProvCode]...';
@@ -807,18 +751,7 @@ PRINT N'Creating [dbo].[Customer].[IX_Auto_ShipStateProvCode]...';
 
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipStateProvCode]
-PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
-GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID]) WITH (FILLFACTOR = 75)
-GO
-PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
-GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] 
-(
-	[OrderID] ASC,
-	[Processed] ASC,
-	[ShipSenseStatus] ASC
-)
+    ON [dbo].[Customer]([ShipStateProvCode] ASC);
 
 
 GO
@@ -874,8 +807,6 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
     ON [dbo].[Customer]([RollupNoteCount] ASC);
 
-[IsFBA] [bit] NOT NULL
-[MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 
 GO
 ALTER TABLE [dbo].[Customer] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
@@ -1858,16 +1789,16 @@ PRINT N'Creating [dbo].[FilterNodeContent]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeContent] (
-    [FilterNodeContentID] BIGINT         IDENTITY (1014, 1000) NOT NULL,
-    [RowVersion]          ROWVERSION     NOT NULL,
-    [CountVersion]        BIGINT         NOT NULL,
-    [Status]              SMALLINT       NOT NULL,
-    [InitialCalculation]  NVARCHAR (MAX) NOT NULL,
-    [UpdateCalculation]   NVARCHAR (MAX) NOT NULL,
-    [ColumnMask]          VARBINARY (75) NOT NULL,
-    [JoinMask]            INT            NOT NULL,
-    [Cost]                INT            NOT NULL,
-    [Count]               INT            NOT NULL,
+    [FilterNodeContentID] BIGINT          IDENTITY (1014, 1000) NOT NULL,
+    [RowVersion]          ROWVERSION      NOT NULL,
+    [CountVersion]        BIGINT          NOT NULL,
+    [Status]              SMALLINT        NOT NULL,
+    [InitialCalculation]  NVARCHAR (MAX)  NOT NULL,
+    [UpdateCalculation]   NVARCHAR (MAX)  NOT NULL,
+    [ColumnMask]          VARBINARY (100) NOT NULL,
+    [JoinMask]            INT             NOT NULL,
+    [Cost]                INT             NOT NULL,
+    [Count]               INT             NOT NULL,
     CONSTRAINT [PK_FilterNodeContent] PRIMARY KEY CLUSTERED ([FilterNodeContentID] ASC)
 );
 
@@ -1898,13 +1829,13 @@ PRINT N'Creating [dbo].[FilterNodeContentDirty]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeContentDirty] (
-    [FilterNodeContentDirtyID] BIGINT         IDENTITY (1, 1) NOT NULL,
-    [RowVersion]               ROWVERSION     NOT NULL,
-    [ObjectID]                 BIGINT         NOT NULL,
-    [ParentID]                 BIGINT         NULL,
-    [ObjectType]               INT            NOT NULL,
-    [ComputerID]               BIGINT         NOT NULL,
-    [ColumnsUpdated]           VARBINARY (75) NOT NULL,
+    [FilterNodeContentDirtyID] BIGINT          IDENTITY (1, 1) NOT NULL,
+    [RowVersion]               ROWVERSION      NOT NULL,
+    [ObjectID]                 BIGINT          NOT NULL,
+    [ParentID]                 BIGINT          NULL,
+    [ObjectType]               INT             NOT NULL,
+    [ComputerID]               BIGINT          NOT NULL,
+    [ColumnsUpdated]           VARBINARY (100) NOT NULL,
     CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED ([FilterNodeContentDirtyID] ASC)
 );
 
@@ -1950,9 +1881,9 @@ PRINT N'Creating [dbo].[FilterNodeUpdateCustomer]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeUpdateCustomer] (
-    [ObjectID]       BIGINT         NOT NULL,
-    [ComputerID]     BIGINT         NOT NULL,
-    [ColumnsUpdated] VARBINARY (75) NOT NULL
+    [ObjectID]       BIGINT          NOT NULL,
+    [ComputerID]     BIGINT          NOT NULL,
+    [ColumnsUpdated] VARBINARY (100) NOT NULL
 );
 
 
@@ -1972,9 +1903,9 @@ PRINT N'Creating [dbo].[FilterNodeUpdateItem]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeUpdateItem] (
-    [ObjectID]       BIGINT         NOT NULL,
-    [ComputerID]     BIGINT         NOT NULL,
-    [ColumnsUpdated] VARBINARY (75) NOT NULL
+    [ObjectID]       BIGINT          NOT NULL,
+    [ComputerID]     BIGINT          NOT NULL,
+    [ColumnsUpdated] VARBINARY (100) NOT NULL
 );
 
 
@@ -1994,9 +1925,9 @@ PRINT N'Creating [dbo].[FilterNodeUpdateOrder]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeUpdateOrder] (
-    [ObjectID]       BIGINT         NOT NULL,
-    [ComputerID]     BIGINT         NOT NULL,
-    [ColumnsUpdated] VARBINARY (75) NOT NULL
+    [ObjectID]       BIGINT          NOT NULL,
+    [ComputerID]     BIGINT          NOT NULL,
+    [ColumnsUpdated] VARBINARY (100) NOT NULL
 );
 
 
@@ -2030,9 +1961,9 @@ PRINT N'Creating [dbo].[FilterNodeUpdateShipment]...';
 
 GO
 CREATE TABLE [dbo].[FilterNodeUpdateShipment] (
-    [ObjectID]       BIGINT         NOT NULL,
-    [ComputerID]     BIGINT         NOT NULL,
-    [ColumnsUpdated] VARBINARY (75) NOT NULL
+    [ObjectID]       BIGINT          NOT NULL,
+    [ComputerID]     BIGINT          NOT NULL,
+    [ColumnsUpdated] VARBINARY (100) NOT NULL
 );
 
 
@@ -2792,6 +2723,8 @@ CREATE TABLE [dbo].[Order] (
     [BillUnparsedName]                     NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]                  INT            NOT NULL,
     [ShipUnparsedName]                     NVARCHAR (100) NOT NULL,
+    [ShipSenseHashKey]                     NVARCHAR (64)  COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [ShipSenseRecognitionStatus]           INT            NOT NULL,
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC)
 );
 
@@ -3047,6 +2980,24 @@ PRINT N'Creating [dbo].[Order].[IX_Auto_RollupNoteCount]...';
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
     ON [dbo].[Order]([RollupNoteCount] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipSenseHashKey]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey]
+    ON [dbo].[Order]([ShipSenseHashKey] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipSenseRecognitionStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus]
+    ON [dbo].[Order]([ShipSenseRecognitionStatus] ASC);
 
 
 GO
@@ -3600,42 +3551,6 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_T_G]
 
 
 GO
-PRINT N'Creating [dbo].[ActionQueue]'
-GO
-CREATE TABLE [dbo].[ActionQueue]
-(
-[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[ActionID] [bigint] NOT NULL,
-[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
-[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
-[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
-[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
-[TriggerComputerID] [bigint] NOT NULL,
-[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ObjectID] [bigint] NULL,
-[Status] [int] NOT NULL,
-[NextStep] [int] NOT NULL,
-[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-)
-GO
-PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
-GO
-ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
-GO
-PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
-GO
-PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
-GO
-ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[ActionQueue]'
-GO
 PRINT N'Creating [dbo].[Scheduling_JOB_DETAILS]...';
 
 
@@ -3733,6 +3648,7 @@ CREATE TABLE [dbo].[Scheduling_SIMPROP_TRIGGERS] (
 );
 
 
+GO
 PRINT N'Creating [dbo].[Scheduling_TRIGGERS]...';
 
 
@@ -3768,9 +3684,10 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_C]
 
 
 GO
-PRINT N'Altering [dbo].[EndiciaAccount]'
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_JG]...';
 
 
+GO
 CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_JG]
     ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [JOB_GROUP] ASC);
 
@@ -3794,9 +3711,10 @@ CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_MISFIRE]
 
 
 GO
-PRINT N'Altering [dbo].[EquaShipAccount]'
+PRINT N'Creating [dbo].[Scheduling_TRIGGERS].[IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]...';
 
 
+GO
 CREATE NONCLUSTERED INDEX [IDX_Scheduling_T_NFT_ST_MISFIRE_GRP]
     ON [dbo].[Scheduling_TRIGGERS]([SCHED_NAME] ASC, [MISFIRE_INSTR] ASC, [NEXT_FIRE_TIME] ASC, [TRIGGER_GROUP] ASC, [TRIGGER_STATE] ASC);
 
@@ -4027,77 +3945,81 @@ GO
 ALTER TABLE [dbo].[ServiceStatus] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 
+GO
 PRINT N'Creating [dbo].[Shipment]...';
 
 
 GO
 CREATE TABLE [dbo].[Shipment] (
-    [ShipmentID]               BIGINT         IDENTITY (1031, 1000) NOT NULL,
-    [RowVersion]               ROWVERSION     NOT NULL,
-    [OrderID]                  BIGINT         NOT NULL,
-    [ShipmentType]             INT            NOT NULL,
-    [ContentWeight]            FLOAT (53)     NOT NULL,
-    [TotalWeight]              FLOAT (53)     NOT NULL,
-    [Processed]                BIT            NOT NULL,
-    [ProcessedDate]            DATETIME       NULL,
-    [ProcessedUserID]          BIGINT         NULL,
-    [ProcessedComputerID]      BIGINT         NULL,
-    [ShipDate]                 DATETIME       NOT NULL,
-    [ShipmentCost]             MONEY          NOT NULL,
-    [Voided]                   BIT            NOT NULL,
-    [VoidedDate]               DATETIME       NULL,
-    [VoidedUserID]             BIGINT         NULL,
-    [VoidedComputerID]         BIGINT         NULL,
-    [TrackingNumber]           NVARCHAR (50)  NOT NULL,
-    [CustomsGenerated]         BIT            NOT NULL,
-    [CustomsValue]             MONEY          NOT NULL,
-    [ThermalType]              INT            NULL,
-    [ShipFirstName]            NVARCHAR (30)  NOT NULL,
-    [ShipMiddleName]           NVARCHAR (30)  NOT NULL,
-    [ShipLastName]             NVARCHAR (30)  NOT NULL,
-    [ShipCompany]              NVARCHAR (60)  NOT NULL,
-    [ShipStreet1]              NVARCHAR (60)  NOT NULL,
-    [ShipStreet2]              NVARCHAR (60)  NOT NULL,
-    [ShipStreet3]              NVARCHAR (60)  NOT NULL,
-    [ShipCity]                 NVARCHAR (50)  NOT NULL,
-    [ShipStateProvCode]        NVARCHAR (50)  NOT NULL,
-    [ShipPostalCode]           NVARCHAR (20)  NOT NULL,
-    [ShipCountryCode]          NVARCHAR (50)  NOT NULL,
-    [ShipPhone]                NVARCHAR (25)  NOT NULL,
-    [ShipEmail]                NVARCHAR (100) NOT NULL,
-    [ShipAddressValidationSuggestionCount] INT            NOT NULL,
-    [ShipAddressValidationStatus]          INT            NOT NULL,
-    [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
-	[ShipResidentialStatus]                INT            NOT NULL, 
-    [ShipPOBox]                            INT            NOT NULL, 
-    [ShipUSTerritory]           INT            NOT NULL, 
-    [ShipMilitaryAddress]                  INT            NOT NULL, 
-    [ResidentialDetermination] INT            NOT NULL,
-    [ResidentialResult]        BIT            NOT NULL,
-    [OriginOriginID]           BIGINT         NOT NULL,
-    [OriginFirstName]          NVARCHAR (30)  NOT NULL,
-    [OriginMiddleName]         NVARCHAR (30)  NOT NULL,
-    [OriginLastName]           NVARCHAR (30)  NOT NULL,
-    [OriginCompany]            NVARCHAR (60)  NOT NULL,
-    [OriginStreet1]            NVARCHAR (60)  NOT NULL,
-    [OriginStreet2]            NVARCHAR (60)  NOT NULL,
-    [OriginStreet3]            NVARCHAR (60)  NOT NULL,
-    [OriginCity]               NVARCHAR (50)  NOT NULL,
-    [OriginStateProvCode]      NVARCHAR (50)  NOT NULL,
-    [OriginPostalCode]         NVARCHAR (20)  NOT NULL,
-    [OriginCountryCode]        NVARCHAR (50)  NOT NULL,
-    [OriginPhone]              NVARCHAR (25)  NOT NULL,
-    [OriginFax]                NVARCHAR (35)  NOT NULL,
-    [OriginEmail]              NVARCHAR (100) NOT NULL,
-    [OriginWebsite]            NVARCHAR (50)  NOT NULL,
-    [ReturnShipment]           BIT            NOT NULL,
-    [Insurance]                BIT            NOT NULL,
-    [InsuranceProvider]        INT            NOT NULL,
-    [ShipNameParseStatus]      INT            NOT NULL,
-    [ShipUnparsedName]         NVARCHAR (100) NOT NULL,
-    [OriginNameParseStatus]    INT            NOT NULL,
-    [OriginUnparsedName]       NVARCHAR (100) NOT NULL,
-    [BestRateEvents]           TINYINT        NOT NULL,
+    [ShipmentID]                           BIGINT          IDENTITY (1031, 1000) NOT NULL,
+    [RowVersion]                           ROWVERSION      NOT NULL,
+    [OrderID]                              BIGINT          NOT NULL,
+    [ShipmentType]                         INT             NOT NULL,
+    [ContentWeight]                        FLOAT (53)      NOT NULL,
+    [TotalWeight]                          FLOAT (53)      NOT NULL,
+    [Processed]                            BIT             NOT NULL,
+    [ProcessedDate]                        DATETIME        NULL,
+    [ProcessedUserID]                      BIGINT          NULL,
+    [ProcessedComputerID]                  BIGINT          NULL,
+    [ShipDate]                             DATETIME        NOT NULL,
+    [ShipmentCost]                         MONEY           NOT NULL,
+    [Voided]                               BIT             NOT NULL,
+    [VoidedDate]                           DATETIME        NULL,
+    [VoidedUserID]                         BIGINT          NULL,
+    [VoidedComputerID]                     BIGINT          NULL,
+    [TrackingNumber]                       NVARCHAR (50)   NOT NULL,
+    [CustomsGenerated]                     BIT             NOT NULL,
+    [CustomsValue]                         MONEY           NOT NULL,
+    [ThermalType]                          INT             NULL,
+    [ShipFirstName]                        NVARCHAR (30)   NOT NULL,
+    [ShipMiddleName]                       NVARCHAR (30)   NOT NULL,
+    [ShipLastName]                         NVARCHAR (30)   NOT NULL,
+    [ShipCompany]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet1]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet2]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet3]                          NVARCHAR (60)   NOT NULL,
+    [ShipCity]                             NVARCHAR (50)   NOT NULL,
+    [ShipStateProvCode]                    NVARCHAR (50)   NOT NULL,
+    [ShipPostalCode]                       NVARCHAR (20)   NOT NULL,
+    [ShipCountryCode]                      NVARCHAR (50)   NOT NULL,
+    [ShipPhone]                            NVARCHAR (25)   NOT NULL,
+    [ShipEmail]                            NVARCHAR (100)  NOT NULL,
+    [ShipAddressValidationSuggestionCount] INT             NOT NULL,
+    [ShipAddressValidationStatus]          INT             NOT NULL,
+    [ShipAddressValidationError]           NVARCHAR (300)  NOT NULL,
+    [ShipResidentialStatus]                INT             NOT NULL,
+    [ShipPOBox]                            INT             NOT NULL,
+    [ShipUSTerritory]                      INT             NOT NULL,
+    [ShipMilitaryAddress]                  INT             NOT NULL,
+    [ResidentialDetermination]             INT             NOT NULL,
+    [ResidentialResult]                    BIT             NOT NULL,
+    [OriginOriginID]                       BIGINT          NOT NULL,
+    [OriginFirstName]                      NVARCHAR (30)   NOT NULL,
+    [OriginMiddleName]                     NVARCHAR (30)   NOT NULL,
+    [OriginLastName]                       NVARCHAR (30)   NOT NULL,
+    [OriginCompany]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet1]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet2]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet3]                        NVARCHAR (60)   NOT NULL,
+    [OriginCity]                           NVARCHAR (50)   NOT NULL,
+    [OriginStateProvCode]                  NVARCHAR (50)   NOT NULL,
+    [OriginPostalCode]                     NVARCHAR (20)   NOT NULL,
+    [OriginCountryCode]                    NVARCHAR (50)   NOT NULL,
+    [OriginPhone]                          NVARCHAR (25)   NOT NULL,
+    [OriginFax]                            NVARCHAR (35)   NOT NULL,
+    [OriginEmail]                          NVARCHAR (100)  NOT NULL,
+    [OriginWebsite]                        NVARCHAR (50)   NOT NULL,
+    [ReturnShipment]                       BIT             NOT NULL,
+    [Insurance]                            BIT             NOT NULL,
+    [InsuranceProvider]                    INT             NOT NULL,
+    [ShipNameParseStatus]                  INT             NOT NULL,
+    [ShipUnparsedName]                     NVARCHAR (100)  NOT NULL,
+    [OriginNameParseStatus]                INT             NOT NULL,
+    [OriginUnparsedName]                   NVARCHAR (100)  NOT NULL,
+    [BestRateEvents]                       TINYINT         NOT NULL,
+    [ShipSenseStatus]                      INT             NOT NULL,
+    [ShipSenseChangeSets]                  XML             NOT NULL,
+    [ShipSenseEntry]                       VARBINARY (MAX) NOT NULL,
     CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED ([ShipmentID] ASC),
     CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED ([ShipmentID] ASC)
 );
@@ -4113,9 +4035,29 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID]
 
 
 GO
+PRINT N'Creating [dbo].[Shipment].[IX_Shipment_OrderID_ShipSenseStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus]
+    ON [dbo].[Shipment]([OrderID] ASC, [Processed] ASC, [ShipSenseStatus] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Shipment].[IX_Shipment_ProcessedOrderID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID]
+    ON [dbo].[Shipment]([Processed] DESC)
+    INCLUDE([OrderID]);
+
+
+GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 
+GO
 PRINT N'Creating [dbo].[ShipmentCustomsItem]...';
 
 
@@ -4140,7 +4082,8 @@ GO
 ALTER TABLE [dbo].[ShipmentCustomsItem] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 
-PRINT N'Altering [dbo].[LabelSheet]'
+GO
+PRINT N'Creating [dbo].[ShippingDefaultsRule]...';
 
 
 GO
@@ -4256,6 +4199,7 @@ GO
 ALTER TABLE [dbo].[ShippingProfile] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 
+GO
 PRINT N'Creating [dbo].[ShippingProviderRule]...';
 
 
@@ -4338,25 +4282,35 @@ CREATE TABLE [dbo].[ShippingSettings] (
     [Express1StampsSingleSource]       BIT            NOT NULL,
     [UpsMailInnovationsEnabled]        BIT            NOT NULL,
     [WorldShipMailInnovationsEnabled]  BIT            NOT NULL,
-[BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-[ShipSenseUniquenessXml] [xml] NOT NULL,
-[ShipSenseProcessedShipmentID] [bigint] NOT NULL,
-[ShipSenseEndShipmentID] [bigint] NOT NULL
+    [BestRateExcludedShipmentTypes]    NVARCHAR (30)  NOT NULL,
+    [ShipSenseEnabled]                 BIT            NOT NULL,
+    [ShipSenseUniquenessXml]           XML            NOT NULL,
+    [ShipSenseProcessedShipmentID]     BIGINT         NOT NULL,
+    [ShipSenseEndShipmentID]           BIGINT         NOT NULL,
+    CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED ([ShippingSettingsID] ASC)
 );
 
 
 GO
-PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
+PRINT N'Creating [dbo].[ShipSenseKnowledgebase]...';
+
+
 GO
-CREATE TABLE [dbo].[ShipSenseKnowledgebase]
-(
-[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Entry] [varbinary] (max) NOT NULL
-)
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
 GO
-PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
+CREATE TABLE [dbo].[ShipSenseKnowledgebase] (
+    [Hash]  NVARCHAR (64) NOT NULL,
+    [Entry] NCHAR (10)    NOT NULL,
+    CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED ([Hash] ASC)
+);
+
+
 GO
-ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
+
+
 GO
 PRINT N'Creating [dbo].[ShopifyOrder]...';
 
@@ -4375,7 +4329,8 @@ GO
 PRINT N'Creating [dbo].[ShopifyOrderItem]...';
 
 
-PRINT N'Altering [dbo].[StampsAccount]'
+GO
+CREATE TABLE [dbo].[ShopifyOrderItem] (
     [OrderItemID]        BIGINT NOT NULL,
     [ShopifyOrderItemID] BIGINT NOT NULL,
     [ShopifyProductID]   BIGINT NOT NULL,
@@ -4449,6 +4404,7 @@ GO
 ALTER TABLE [dbo].[StampsAccount] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
 
+GO
 PRINT N'Creating [dbo].[StampsProfile]...';
 
 
@@ -4463,34 +4419,6 @@ CREATE TABLE [dbo].[StampsProfile] (
 );
 
 
-GO
-PRINT N'Altering [dbo].[DimensionsProfile]'
-GO
-PRINT N'Altering [dbo].[EmailAccount]'
-GO
-PRINT N'Altering [dbo].[EndiciaAccount]'
-GO
-PRINT N'Altering [dbo].[EquaShipAccount]'
-GO
-PRINT N'Altering [dbo].[FedExAccount]'
-GO
-PRINT N'Altering [dbo].[FtpAccount]'
-GO
-PRINT N'Altering [dbo].[iParcelAccount]'
-GO
-PRINT N'Altering [dbo].[LabelSheet]'
-GO
-PRINT N'Altering [dbo].[OnTracAccount]'
-GO
-PRINT N'Altering [dbo].[ShippingDefaultsRule]'
-GO
-PRINT N'Altering [dbo].[ShippingOrigin]'
-GO
-PRINT N'Altering [dbo].[ShippingProviderRule]'
-GO
-PRINT N'Altering [dbo].[StampsAccount]'
-GO
-PRINT N'Altering [dbo].[UpsAccount]'
 GO
 PRINT N'Creating [dbo].[StampsScanForm]...';
 
@@ -5071,23 +4999,27 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[ValidatedAddress] (
-    [ValidatedAddressID] BIGINT IDENTITY (1100, 1000) NOT NULL,
-    [ConsumerID]         BIGINT NOT NULL,
-	[AddressPrefix]			 NVARCHAR(10)   NOT NULL,
-    [IsOriginal]         BIT    NOT NULL,
-    [Street1]                NVARCHAR (60) NOT NULL,
-    [Street2]                NVARCHAR (60) NOT NULL,
-    [Street3]                NVARCHAR (60) NOT NULL,
-    [City]                   NVARCHAR (50) NOT NULL,
-    [StateProvCode]          NVARCHAR (50) NOT NULL,
-    [PostalCode]             NVARCHAR (20) NOT NULL,
-    [CountryCode]            NVARCHAR (50) NOT NULL,
-	[ResidentialStatus]      INT           NOT NULL, 
-    [POBox]                  INT           NOT NULL, 
-    [USTerritory]            INT           NOT NULL, 
-    [MilitaryAddress]        INT           NOT NULL, 
+    [ValidatedAddressID] BIGINT        IDENTITY (1100, 1000) NOT NULL,
+    [ConsumerID]         BIGINT        NOT NULL,
+    [AddressPrefix]      NVARCHAR (10) NOT NULL,
+    [IsOriginal]         BIT           NOT NULL,
+    [Street1]            NVARCHAR (60) NOT NULL,
+    [Street2]            NVARCHAR (60) NOT NULL,
+    [Street3]            NVARCHAR (60) NOT NULL,
+    [City]               NVARCHAR (50) NOT NULL,
+    [StateProvCode]      NVARCHAR (50) NOT NULL,
+    [PostalCode]         NVARCHAR (20) NOT NULL,
+    [CountryCode]        NVARCHAR (50) NOT NULL,
+    [ResidentialStatus]  INT           NOT NULL,
+    [POBox]              INT           NOT NULL,
+    [USTerritory]        INT           NOT NULL,
+    [MilitaryAddress]    INT           NOT NULL,
     CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED ([ValidatedAddressID] ASC)
 );
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
@@ -5097,10 +5029,6 @@ PRINT N'Creating [dbo].[ValidatedAddress].[IX_ValidatedAddress_ConsumerIDAddress
 GO
 CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
     ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
@@ -9189,6 +9117,10 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('4ed1e7a8-6e41-4a51-864b-f9934613b641')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'c95c3ab0-ff3e-487e-a29d-cebaf160fb6d')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('c95c3ab0-ff3e-487e-a29d-cebaf160fb6d')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'e0c39848-5f14-4871-a471-3679e6bc61f4')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('e0c39848-5f14-4871-a471-3679e6bc61f4')
 
 GO
 
