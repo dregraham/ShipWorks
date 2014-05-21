@@ -347,22 +347,24 @@ namespace ShipWorks.Data.Administration.Versioning
         private static string GetReseedScript(SqlConnection con)
         {
             StringBuilder reseedScript = new StringBuilder();
-            using (SqlDataReader sqlDataReader = SqlCommandProvider.ExecuteReader(new SqlCommand(@"
+            using (SqlCommand command = new SqlCommand(@"
                     SELECT IDENT_CURRENT(TABLE_NAME) AS Current_Identity,
                     TABLE_NAME
                     FROM INFORMATION_SCHEMA.TABLES
                     WHERE OBJECTPROPERTY(OBJECT_ID(TABLE_NAME), 'TableHasIdentity') = 1
-                    AND TABLE_TYPE = 'BASE TABLE'", con)))
+                    AND TABLE_TYPE = 'BASE TABLE'", con))
             {
-                while (sqlDataReader.Read())
+                using (SqlDataReader sqlDataReader = SqlCommandProvider.ExecuteReader(command))
                 {
-                    string tableName = sqlDataReader.GetString(1);
-                    SqlDecimal seed = sqlDataReader.GetSqlDecimal(0);
-                    reseedScript.AppendLine(string.Format("DBCC CHECKIDENT(N'[{0}]', RESEED, {1})", tableName, seed.ToString()));
-                    reseedScript.AppendLine("GO");
+                    while (sqlDataReader.Read())
+                    {
+                        string tableName = sqlDataReader.GetString(1);
+                        SqlDecimal seed = sqlDataReader.GetSqlDecimal(0);
+                        reseedScript.AppendLine(string.Format("DBCC CHECKIDENT(N'[{0}]', RESEED, {1})", tableName, seed.ToString()));
+                        reseedScript.AppendLine("GO");
+                    }
                 }
             }
-
             return reseedScript.ToString();
         }
 
