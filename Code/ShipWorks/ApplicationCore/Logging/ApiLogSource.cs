@@ -48,6 +48,9 @@ namespace ShipWorks.ApplicationCore.Logging
         WebRequestTask,
 
         [ApiPrivateLogSource]
+        DialAZip,
+
+        [ApiPrivateLogSource]
         UspsNoPostage,
 
         [ApiPrivateLogSource]

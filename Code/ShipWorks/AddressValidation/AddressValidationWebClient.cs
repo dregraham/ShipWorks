@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.AddressValidation
 {
@@ -405,7 +406,11 @@ namespace ShipWorks.AddressValidation
                         "http://www.dial-a-zip.com/XML-Dial-A-ZIP/DAZService.asmx/MethodZIPValidate?input={0}",
                         HttpUtility.UrlEncode(zip1Query));
 
+                ApiLogEntry apiLogEntry = new ApiLogEntry(ApiLogSource.DialAZip, command);
+
                 WebRequest request = WebRequest.Create(url);
+                
+                apiLogEntry.LogRequest(url);
 
                 XPathDocument xPathZip1Result;
 
@@ -417,6 +422,7 @@ namespace ShipWorks.AddressValidation
                     }
 
                     xPathZip1Result = new XPathDocument(responseStream);
+                    apiLogEntry.LogResponse(xPathZip1Result);
                 }
 
                 return xPathZip1Result.CreateNavigator();
