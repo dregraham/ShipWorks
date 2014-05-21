@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Transactions;
+using Divelements.SandGrid;
 using Interapptive.Shared.Data;
 using NDesk.Options;
 using ShipWorks.ApplicationCore.Interaction;
@@ -106,9 +109,6 @@ namespace ShipWorks.Data.Administration.Versioning
                             // Update the assemblies
                             UpdateAssemblies(progressFunctionality);
 
-                            // Run Update Processes
-                            UpdateProcesses(progressProcesses);
-
                             // We could be running in the middle of a 2x migration, in which case there are no filters yet and certain other things.
                             // So the following stuff only runs when we are in a "regular" 3x update.
                             if (!MigrationController.IsMigrationInProgress())
@@ -127,6 +127,9 @@ namespace ShipWorks.Data.Administration.Versioning
                             progressFunctionality.PercentComplete = 100;
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
+
+                            // Run Update Processes
+                            UpdateProcesses(progressProcesses);
 
                             transaction.Complete();
                         }
@@ -292,6 +295,8 @@ namespace ShipWorks.Data.Administration.Versioning
                 // Determine the percent-value of each update script
                 double scriptProgressValue = 100.0/(double)updateScripts.Count;
 
+                string reseedScript = GetReseedScript(con);
+
                 // Go through each update script (they are already sorted in version order)
                 foreach (SqlUpdateScript script in updateScripts)
                 {
@@ -323,6 +328,11 @@ namespace ShipWorks.Data.Administration.Versioning
                     executor.Execute(con);
                 }
 
+                progress.PercentComplete = 99;
+                progress.Detail = "Reseeding Database";
+                SqlScript reseedExecutor = new SqlScript("Reseed", reseedScript);
+                reseedExecutor.Execute(con);
+
                 progress.PercentComplete = 100;
                 progress.Detail = "Done";
                 progress.Completed();
@@ -330,11 +340,35 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
+        /// Gets the reseed script.
+        /// </summary>
+        /// <param name="con"></param>
+        /// <returns></returns>
+        private static string GetReseedScript(SqlConnection con)
+        {
+            StringBuilder reseedScript = new StringBuilder();
+            using (SqlDataReader sqlDataReader = SqlCommandProvider.ExecuteReader(new SqlCommand(@"
+                    SELECT IDENT_CURRENT(TABLE_NAME) AS Current_Identity,
+                    TABLE_NAME
+                    FROM INFORMATION_SCHEMA.TABLES
+                    WHERE OBJECTPROPERTY(OBJECT_ID(TABLE_NAME), 'TableHasIdentity') = 1
+                    AND TABLE_TYPE = 'BASE TABLE'", con)))
+            {
+                while (sqlDataReader.Read())
+                {
+                    string tableName = sqlDataReader.GetString(1);
+                    SqlDecimal seed = sqlDataReader.GetSqlDecimal(0);
+                    reseedScript.AppendLine(string.Format("DBCC CHECKIDENT(N'[{0}]', RESEED, {1})", tableName, seed.ToString()));
+                    reseedScript.AppendLine("GO");
+                }
+            }
+
+            return reseedScript.ToString();
+        }
+
+        /// <summary>
         /// Gets the update process SQL script.
         /// </summary>
-        /// <param name="updateProcessName">Name of the update process.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         private static string GetUpdateProcessSqlScript(string updateProcessName)
         {
             if (string.IsNullOrEmpty(updateProcessName))
