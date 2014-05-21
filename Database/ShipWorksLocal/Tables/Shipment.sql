@@ -78,41 +78,12 @@
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
 
-
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID]
     ON [dbo].[Shipment]([OrderID] ASC);
 
-
 GO
-CREATE TRIGGER [dbo].[FilterDirtyShipment]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyShipment]
 
-
-GO
-CREATE TRIGGER [dbo].[ShipmentAuditTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentAuditTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentDeleteTrigger]
-    ON [dbo].[Shipment]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentDeleteTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentLabelTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentLabelTrigger]
-
-
-GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'103', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Shipment', @level2type = N'COLUMN', @level2name = N'ShipmentType';
 
 
