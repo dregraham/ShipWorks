@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[FilterNodeUpdateCustomer] (
     [ObjectID]       BIGINT         NOT NULL,
     [ComputerID]     BIGINT         NOT NULL,
-    [ColumnsUpdated] VARBINARY (75) NOT NULL
+    [ColumnsUpdated] VARBINARY (100) NOT NULL
 );
 
 

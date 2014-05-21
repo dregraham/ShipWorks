@@ -5,7 +5,7 @@
     [ParentID]                 BIGINT         NULL,
     [ObjectType]               INT            NOT NULL,
     [ComputerID]               BIGINT         NOT NULL,
-    [ColumnsUpdated]           VARBINARY (75) NOT NULL,
+    [ColumnsUpdated]           VARBINARY (100) NOT NULL,
     CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED ([FilterNodeContentDirtyID] ASC)
 );
 

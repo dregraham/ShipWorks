@@ -52,6 +52,30 @@ PRINT N'Rename refactoring operation with key 5a268481-3a79-4e4e-b7cf-d190c55d8f
 
 
 GO
+PRINT N'Rename refactoring operation with key c95c3ab0-ff3e-487e-a29d-cebaf160fb6d is skipped, element [dbo].[ValidatedAddress].[InternationalTerritory] (SqlSimpleColumn) will not be renamed to USTerritory';
+
+
+GO
+PRINT N'Rename refactoring operation with key e0c39848-5f14-4871-a471-3679e6bc61f4 is skipped, element [dbo].[ShipSenseKnowledgebase].[Id] (SqlSimpleColumn) will not be renamed to Hash';
+
+
+GO
+PRINT N'Dropping FK_AmazonASIN_AmazonStore...';
+
+
+GO
+ALTER TABLE [dbo].[AmazonASIN] DROP CONSTRAINT [FK_AmazonASIN_AmazonStore];
+
+
+GO
+PRINT N'Dropping FK_AmazonStore_Store...';
+
+
+GO
+ALTER TABLE [dbo].[AmazonStore] DROP CONSTRAINT [FK_AmazonStore_Store];
+
+
+GO
 PRINT N'Dropping FK_AmazonOrder_Order...';
 
 
@@ -332,14 +356,6 @@ ALTER TABLE [dbo].[UpsShipment] DROP CONSTRAINT [FK_UpsShipment_Shipment];
 
 
 GO
-PRINT N'Dropping FK_AmazonStore_Store...';
-
-
-GO
-ALTER TABLE [dbo].[AmazonStore] DROP CONSTRAINT [FK_AmazonStore_Store];
-
-
-GO
 PRINT N'Dropping FK_AmeriCommerceStore_Store...';
 
 
@@ -524,6 +540,100 @@ ALTER TABLE [dbo].[YahooStore] DROP CONSTRAINT [FK_YahooStore_Store];
 
 
 GO
+PRINT N'Starting rebuilding table [dbo].[AmazonStore]...';
+
+
+GO
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SET XACT_ABORT ON;
+
+CREATE TABLE [dbo].[tmp_ms_xx_AmazonStore] (
+    [StoreID]               BIGINT           NOT NULL,
+    [AmazonApi]             INT              NOT NULL,
+    [AmazonApiRegion]       CHAR (2)         COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [SellerCentralUsername] NVARCHAR (50)    NOT NULL,
+    [SellerCentralPassword] NVARCHAR (50)    NOT NULL,
+    [MerchantName]          VARCHAR (64)     NOT NULL,
+    [MerchantToken]         VARCHAR (32)     NOT NULL,
+    [AccessKeyID]           VARCHAR (32)     NOT NULL,
+    [Cookie]                TEXT             NOT NULL,
+    [CookieExpires]         DATETIME         NOT NULL,
+    [CookieWaitUntil]       DATETIME         NOT NULL,
+    [Certificate]           VARBINARY (2048) NULL,
+    [WeightDownloads]       TEXT             NOT NULL,
+    [MerchantID]            NVARCHAR (50)    NOT NULL,
+    [MarketplaceID]         NVARCHAR (50)    NOT NULL,
+    [ExcludeFBA]            BIT              NOT NULL,
+    [DomainName]            NVARCHAR (50)    NOT NULL,
+    CONSTRAINT [tmp_ms_xx_constraint_PK_AmazonStore] PRIMARY KEY CLUSTERED ([StoreID] ASC)
+);
+
+ALTER TABLE [dbo].[tmp_ms_xx_AmazonStore]
+    ADD CONSTRAINT [SD_AmazonStore_52caa35974c04be2a7886993aec21cb0] DEFAULT '' FOR [AmazonApiRegion];
+
+IF EXISTS (SELECT TOP 1 1 
+           FROM   [dbo].[AmazonStore])
+    BEGIN
+        INSERT INTO [dbo].[tmp_ms_xx_AmazonStore] ([StoreID], [AmazonApi], [SellerCentralUsername], [SellerCentralPassword], [MerchantName], [MerchantToken], [AccessKeyID], [Cookie], [CookieExpires], [CookieWaitUntil], [Certificate], [WeightDownloads], [MerchantID], [MarketplaceID], [ExcludeFBA], [DomainName])
+        SELECT   [StoreID],
+                 [AmazonApi],
+                 [SellerCentralUsername],
+                 [SellerCentralPassword],
+                 [MerchantName],
+                 [MerchantToken],
+                 [AccessKeyID],
+                 [Cookie],
+                 [CookieExpires],
+                 [CookieWaitUntil],
+                 [Certificate],
+                 [WeightDownloads],
+                 [MerchantID],
+                 [MarketplaceID],
+                 [ExcludeFBA],
+                 [DomainName]
+        FROM     [dbo].[AmazonStore]
+        ORDER BY [StoreID] ASC;
+    END
+
+ALTER TABLE [dbo].[tmp_ms_xx_AmazonStore] DROP CONSTRAINT [SD_AmazonStore_52caa35974c04be2a7886993aec21cb0];
+
+DROP TABLE [dbo].[AmazonStore];
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_AmazonStore]', N'AmazonStore';
+
+EXECUTE sp_rename N'[dbo].[tmp_ms_xx_constraint_PK_AmazonStore]', N'PK_AmazonStore', N'OBJECT';
+
+COMMIT TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+
+GO
+PRINT N'Altering [dbo].[ChannelAdvisorOrderItem]...';
+
+
+GO
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SET XACT_ABORT ON;
+
+ALTER TABLE [dbo].[ChannelAdvisorOrderItem]
+    ADD [MPN] NVARCHAR (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, 
+        CONSTRAINT [SD_ChannelAdvisorOrderItem_89dc4757f90e4fc1a6512e4d974dd6d3] DEFAULT N'' FOR [MPN];
+
+ALTER TABLE [dbo].[ChannelAdvisorOrderItem] DROP CONSTRAINT [SD_ChannelAdvisorOrderItem_89dc4757f90e4fc1a6512e4d974dd6d3];
+
+COMMIT TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+
+GO
 PRINT N'Starting rebuilding table [dbo].[Order]...';
 
 
@@ -606,24 +716,28 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
     [BillUnparsedName]                     NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]                  INT            NOT NULL,
     [ShipUnparsedName]                     NVARCHAR (100) NOT NULL,
+    [ShipSenseHashKey]                     NVARCHAR (64)  COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [ShipSenseRecognitionStatus]           INT            NOT NULL,
     CONSTRAINT [tmp_ms_xx_constraint_PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC)
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_0151619f85f7408f9f4d62c7554ff68c] DEFAULT 0 FOR [BillAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_40ee3038a849431b8267e03008b10763] DEFAULT 0 FOR [BillAddressValidationStatus],
-        CONSTRAINT [SD_Order_d933e717bf194f389377496ae5ee0727] DEFAULT N'' FOR [BillAddressValidationError],
-        CONSTRAINT [SD_Order_b267e73173e34841ae88e3316b860de1] DEFAULT 0 FOR [BillResidentialStatus],
-        CONSTRAINT [SD_Order_9a892ac14b8143718dfb28291a039d36] DEFAULT 0 FOR [BillPOBox],
-        CONSTRAINT [SD_Order_3f25d39fa5a6438fb0c0398eb6645175] DEFAULT 0 FOR [BillUSTerritory],
-        CONSTRAINT [SD_Order_ccefb3f8c5564500b3f3aa7bc3234548] DEFAULT 0 FOR [BillMilitaryAddress],
-        CONSTRAINT [SD_Order_a34f4ae975924e739b13f412c945052e] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_104340358d714e6c85175dc8ec7c6d6d] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Order_fec9c85a00284819bb977a025cf4415f] DEFAULT N'' FOR [ShipAddressValidationError],
-        CONSTRAINT [SD_Order_2b258ff0645542d2a20106dfcc549d72] DEFAULT 0 FOR [ShipResidentialStatus],
-        CONSTRAINT [SD_Order_c6fe7cdaadd2450db68856d66bc0337a] DEFAULT 0 FOR [ShipPOBox],
-        CONSTRAINT [SD_Order_f7c6a319b8574b8082f4c398584f05dc] DEFAULT 0 FOR [ShipUSTerritory],
-        CONSTRAINT [SD_Order_8cfe7a69e46d4b60ac5a5c1ef09ef39a] DEFAULT 0 FOR [ShipMilitaryAddress];
+    ADD CONSTRAINT [SD_Order_129994de68cf41f8bdd910151c55f050] DEFAULT 0 FOR [BillAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_ed8100a0b2fe4f05b3a4970bd7d22ab9] DEFAULT 0 FOR [BillAddressValidationStatus],
+        CONSTRAINT [SD_Order_4dff2c88ffc743c8a1b038618edec7bc] DEFAULT N'' FOR [BillAddressValidationError],
+        CONSTRAINT [SD_Order_2c6681620d024dee8ea2cc9fb26a7341] DEFAULT 0 FOR [BillResidentialStatus],
+        CONSTRAINT [SD_Order_1022410c9fdb4aae85741b0b936cfb87] DEFAULT 0 FOR [BillPOBox],
+        CONSTRAINT [SD_Order_6aa5512840204836a458444e61d1acc9] DEFAULT 0 FOR [BillUSTerritory],
+        CONSTRAINT [SD_Order_c11c5d32d7d547938fb565860714738f] DEFAULT 0 FOR [BillMilitaryAddress],
+        CONSTRAINT [SD_Order_9c68c3557aec43c981a3f3df3816e4d2] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_fde53c4f613f41f4b2b66a9e62f66598] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Order_0a58640140ac4c09b64375ad9d7ebb3a] DEFAULT N'' FOR [ShipAddressValidationError],
+        CONSTRAINT [SD_Order_b411f6d349af42599a8a9be493376416] DEFAULT 0 FOR [ShipResidentialStatus],
+        CONSTRAINT [SD_Order_684312f9a1524a6f8f643b06ece9506d] DEFAULT 0 FOR [ShipPOBox],
+        CONSTRAINT [SD_Order_5b474ec8e391481ebe70f27e8e91065e] DEFAULT 0 FOR [ShipUSTerritory],
+        CONSTRAINT [SD_Order_45638eed27304e68a789bbf24ddab828] DEFAULT 0 FOR [ShipMilitaryAddress],
+        CONSTRAINT [SD_Order_4b9dad0627cd45d9b3c8813107e4be15] DEFAULT N'' FOR [ShipSenseHashKey],
+        CONSTRAINT [SD_Order_dcdd7240656a469cb43a0e91885fb0b5] DEFAULT 0 FOR [ShipSenseRecognitionStatus];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -690,8 +804,10 @@ IF EXISTS (SELECT TOP 1 1
         ORDER BY [OrderID] ASC;
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
+GO
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_0151619f85f7408f9f4d62c7554ff68c], CONSTRAINT [SD_Order_40ee3038a849431b8267e03008b10763], CONSTRAINT [SD_Order_d933e717bf194f389377496ae5ee0727], CONSTRAINT [SD_Order_b267e73173e34841ae88e3316b860de1], CONSTRAINT [SD_Order_9a892ac14b8143718dfb28291a039d36], CONSTRAINT [SD_Order_3f25d39fa5a6438fb0c0398eb6645175], CONSTRAINT [SD_Order_ccefb3f8c5564500b3f3aa7bc3234548], CONSTRAINT [SD_Order_a34f4ae975924e739b13f412c945052e], CONSTRAINT [SD_Order_104340358d714e6c85175dc8ec7c6d6d], CONSTRAINT [SD_Order_fec9c85a00284819bb977a025cf4415f], CONSTRAINT [SD_Order_2b258ff0645542d2a20106dfcc549d72], CONSTRAINT [SD_Order_c6fe7cdaadd2450db68856d66bc0337a], CONSTRAINT [SD_Order_f7c6a319b8574b8082f4c398584f05dc], CONSTRAINT [SD_Order_8cfe7a69e46d4b60ac5a5c1ef09ef39a];
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_129994de68cf41f8bdd910151c55f050], CONSTRAINT [SD_Order_ed8100a0b2fe4f05b3a4970bd7d22ab9], CONSTRAINT [SD_Order_4dff2c88ffc743c8a1b038618edec7bc], CONSTRAINT [SD_Order_2c6681620d024dee8ea2cc9fb26a7341], CONSTRAINT [SD_Order_1022410c9fdb4aae85741b0b936cfb87], CONSTRAINT [SD_Order_6aa5512840204836a458444e61d1acc9], CONSTRAINT [SD_Order_c11c5d32d7d547938fb565860714738f], CONSTRAINT [SD_Order_9c68c3557aec43c981a3f3df3816e4d2], CONSTRAINT [SD_Order_fde53c4f613f41f4b2b66a9e62f66598], CONSTRAINT [SD_Order_0a58640140ac4c09b64375ad9d7ebb3a], CONSTRAINT [SD_Order_b411f6d349af42599a8a9be493376416], CONSTRAINT [SD_Order_684312f9a1524a6f8f643b06ece9506d], CONSTRAINT [SD_Order_5b474ec8e391481ebe70f27e8e91065e], CONSTRAINT [SD_Order_45638eed27304e68a789bbf24ddab828], CONSTRAINT [SD_Order_4b9dad0627cd45d9b3c8813107e4be15], CONSTRAINT [SD_Order_dcdd7240656a469cb43a0e91885fb0b5];
+GO
 
 DECLARE @idVal BIGINT
 SELECT @idVal = IDENT_CURRENT(N'[dbo].[Order]')
@@ -928,6 +1044,24 @@ CREATE NONCLUSTERED INDEX [IX_Auto_ShipPostalCode]
 
 
 GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipSenseHashKey]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey]
+    ON [dbo].[Order]([ShipSenseHashKey] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Order].[IX_Auto_ShipSenseRecognitionStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus]
+    ON [dbo].[Order]([ShipSenseRecognitionStatus] ASC);
+
+
+GO
 PRINT N'Creating [dbo].[Order].[IX_Auto_ShipStateProvCode]...';
 
 
@@ -980,84 +1114,90 @@ SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 SET XACT_ABORT ON;
 
 CREATE TABLE [dbo].[tmp_ms_xx_Shipment] (
-    [ShipmentID]                           BIGINT         IDENTITY (1031, 1000) NOT NULL,
-    [RowVersion]                           ROWVERSION     NOT NULL,
-    [OrderID]                              BIGINT         NOT NULL,
-    [ShipmentType]                         INT            NOT NULL,
-    [ContentWeight]                        FLOAT (53)     NOT NULL,
-    [TotalWeight]                          FLOAT (53)     NOT NULL,
-    [Processed]                            BIT            NOT NULL,
-    [ProcessedDate]                        DATETIME       NULL,
-    [ProcessedUserID]                      BIGINT         NULL,
-    [ProcessedComputerID]                  BIGINT         NULL,
-    [ShipDate]                             DATETIME       NOT NULL,
-    [ShipmentCost]                         MONEY          NOT NULL,
-    [Voided]                               BIT            NOT NULL,
-    [VoidedDate]                           DATETIME       NULL,
-    [VoidedUserID]                         BIGINT         NULL,
-    [VoidedComputerID]                     BIGINT         NULL,
-    [TrackingNumber]                       NVARCHAR (50)  NOT NULL,
-    [CustomsGenerated]                     BIT            NOT NULL,
-    [CustomsValue]                         MONEY          NOT NULL,
-    [ThermalType]                          INT            NULL,
-    [ShipFirstName]                        NVARCHAR (30)  NOT NULL,
-    [ShipMiddleName]                       NVARCHAR (30)  NOT NULL,
-    [ShipLastName]                         NVARCHAR (30)  NOT NULL,
-    [ShipCompany]                          NVARCHAR (60)  NOT NULL,
-    [ShipStreet1]                          NVARCHAR (60)  NOT NULL,
-    [ShipStreet2]                          NVARCHAR (60)  NOT NULL,
-    [ShipStreet3]                          NVARCHAR (60)  NOT NULL,
-    [ShipCity]                             NVARCHAR (50)  NOT NULL,
-    [ShipStateProvCode]                    NVARCHAR (50)  NOT NULL,
-    [ShipPostalCode]                       NVARCHAR (20)  NOT NULL,
-    [ShipCountryCode]                      NVARCHAR (50)  NOT NULL,
-    [ShipPhone]                            NVARCHAR (25)  NOT NULL,
-    [ShipEmail]                            NVARCHAR (100) NOT NULL,
-    [ShipAddressValidationSuggestionCount] INT            NOT NULL,
-    [ShipAddressValidationStatus]          INT            NOT NULL,
-    [ShipAddressValidationError]           NVARCHAR (300) NOT NULL,
-    [ShipResidentialStatus]                INT            NOT NULL,
-    [ShipPOBox]                            INT            NOT NULL,
-    [ShipUSTerritory]                      INT            NOT NULL,
-    [ShipMilitaryAddress]                  INT            NOT NULL,
-    [ResidentialDetermination]             INT            NOT NULL,
-    [ResidentialResult]                    BIT            NOT NULL,
-    [OriginOriginID]                       BIGINT         NOT NULL,
-    [OriginFirstName]                      NVARCHAR (30)  NOT NULL,
-    [OriginMiddleName]                     NVARCHAR (30)  NOT NULL,
-    [OriginLastName]                       NVARCHAR (30)  NOT NULL,
-    [OriginCompany]                        NVARCHAR (60)  NOT NULL,
-    [OriginStreet1]                        NVARCHAR (60)  NOT NULL,
-    [OriginStreet2]                        NVARCHAR (60)  NOT NULL,
-    [OriginStreet3]                        NVARCHAR (60)  NOT NULL,
-    [OriginCity]                           NVARCHAR (50)  NOT NULL,
-    [OriginStateProvCode]                  NVARCHAR (50)  NOT NULL,
-    [OriginPostalCode]                     NVARCHAR (20)  NOT NULL,
-    [OriginCountryCode]                    NVARCHAR (50)  NOT NULL,
-    [OriginPhone]                          NVARCHAR (25)  NOT NULL,
-    [OriginFax]                            NVARCHAR (35)  NOT NULL,
-    [OriginEmail]                          NVARCHAR (100) NOT NULL,
-    [OriginWebsite]                        NVARCHAR (50)  NOT NULL,
-    [ReturnShipment]                       BIT            NOT NULL,
-    [Insurance]                            BIT            NOT NULL,
-    [InsuranceProvider]                    INT            NOT NULL,
-    [ShipNameParseStatus]                  INT            NOT NULL,
-    [ShipUnparsedName]                     NVARCHAR (100) NOT NULL,
-    [OriginNameParseStatus]                INT            NOT NULL,
-    [OriginUnparsedName]                   NVARCHAR (100) NOT NULL,
-    [BestRateEvents]                       TINYINT        NOT NULL,
+    [ShipmentID]                           BIGINT          IDENTITY (1031, 1000) NOT NULL,
+    [RowVersion]                           ROWVERSION      NOT NULL,
+    [OrderID]                              BIGINT          NOT NULL,
+    [ShipmentType]                         INT             NOT NULL,
+    [ContentWeight]                        FLOAT (53)      NOT NULL,
+    [TotalWeight]                          FLOAT (53)      NOT NULL,
+    [Processed]                            BIT             NOT NULL,
+    [ProcessedDate]                        DATETIME        NULL,
+    [ProcessedUserID]                      BIGINT          NULL,
+    [ProcessedComputerID]                  BIGINT          NULL,
+    [ShipDate]                             DATETIME        NOT NULL,
+    [ShipmentCost]                         MONEY           NOT NULL,
+    [Voided]                               BIT             NOT NULL,
+    [VoidedDate]                           DATETIME        NULL,
+    [VoidedUserID]                         BIGINT          NULL,
+    [VoidedComputerID]                     BIGINT          NULL,
+    [TrackingNumber]                       NVARCHAR (50)   NOT NULL,
+    [CustomsGenerated]                     BIT             NOT NULL,
+    [CustomsValue]                         MONEY           NOT NULL,
+    [ThermalType]                          INT             NULL,
+    [ShipFirstName]                        NVARCHAR (30)   NOT NULL,
+    [ShipMiddleName]                       NVARCHAR (30)   NOT NULL,
+    [ShipLastName]                         NVARCHAR (30)   NOT NULL,
+    [ShipCompany]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet1]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet2]                          NVARCHAR (60)   NOT NULL,
+    [ShipStreet3]                          NVARCHAR (60)   NOT NULL,
+    [ShipCity]                             NVARCHAR (50)   NOT NULL,
+    [ShipStateProvCode]                    NVARCHAR (50)   NOT NULL,
+    [ShipPostalCode]                       NVARCHAR (20)   NOT NULL,
+    [ShipCountryCode]                      NVARCHAR (50)   NOT NULL,
+    [ShipPhone]                            NVARCHAR (25)   NOT NULL,
+    [ShipEmail]                            NVARCHAR (100)  NOT NULL,
+    [ShipAddressValidationSuggestionCount] INT             NOT NULL,
+    [ShipAddressValidationStatus]          INT             NOT NULL,
+    [ShipAddressValidationError]           NVARCHAR (300)  NOT NULL,
+    [ShipResidentialStatus]                INT             NOT NULL,
+    [ShipPOBox]                            INT             NOT NULL,
+    [ShipUSTerritory]                      INT             NOT NULL,
+    [ShipMilitaryAddress]                  INT             NOT NULL,
+    [ResidentialDetermination]             INT             NOT NULL,
+    [ResidentialResult]                    BIT             NOT NULL,
+    [OriginOriginID]                       BIGINT          NOT NULL,
+    [OriginFirstName]                      NVARCHAR (30)   NOT NULL,
+    [OriginMiddleName]                     NVARCHAR (30)   NOT NULL,
+    [OriginLastName]                       NVARCHAR (30)   NOT NULL,
+    [OriginCompany]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet1]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet2]                        NVARCHAR (60)   NOT NULL,
+    [OriginStreet3]                        NVARCHAR (60)   NOT NULL,
+    [OriginCity]                           NVARCHAR (50)   NOT NULL,
+    [OriginStateProvCode]                  NVARCHAR (50)   NOT NULL,
+    [OriginPostalCode]                     NVARCHAR (20)   NOT NULL,
+    [OriginCountryCode]                    NVARCHAR (50)   NOT NULL,
+    [OriginPhone]                          NVARCHAR (25)   NOT NULL,
+    [OriginFax]                            NVARCHAR (35)   NOT NULL,
+    [OriginEmail]                          NVARCHAR (100)  NOT NULL,
+    [OriginWebsite]                        NVARCHAR (50)   NOT NULL,
+    [ReturnShipment]                       BIT             NOT NULL,
+    [Insurance]                            BIT             NOT NULL,
+    [InsuranceProvider]                    INT             NOT NULL,
+    [ShipNameParseStatus]                  INT             NOT NULL,
+    [ShipUnparsedName]                     NVARCHAR (100)  NOT NULL,
+    [OriginNameParseStatus]                INT             NOT NULL,
+    [OriginUnparsedName]                   NVARCHAR (100)  NOT NULL,
+    [BestRateEvents]                       TINYINT         NOT NULL,
+    [ShipSenseStatus]                      INT             NOT NULL,
+    [ShipSenseChangeSets]                  XML             NOT NULL,
+    [ShipSenseEntry]                       VARBINARY (MAX) NOT NULL,
     CONSTRAINT [tmp_ms_xx_constraint_IX_Shipment_Other] UNIQUE NONCLUSTERED ([ShipmentID] ASC),
     CONSTRAINT [tmp_ms_xx_constraint_PK_Shipment] PRIMARY KEY CLUSTERED ([ShipmentID] ASC)
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Shipment]
-    ADD CONSTRAINT [SD_Shipment_1c10aed9206a457cadab606033623e71] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Shipment_8f37506276a04bad947c24fe5d9bcb92] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Shipment_4eaa111f8e794c0d9be1acebef8f72c3] DEFAULT N'' FOR [ShipAddressValidationError],
-        CONSTRAINT [SD_Shipment_dcb8f7f5fc30461c9ceabc1e163e94f1] DEFAULT 0 FOR [ShipResidentialStatus],
-        CONSTRAINT [SD_Shipment_e95c3ac6b763467aa8746873779f209e] DEFAULT 0 FOR [ShipPOBox],
-        CONSTRAINT [SD_Shipment_8fc2ef5550214f73a2db7df845e9bf09] DEFAULT 0 FOR [ShipUSTerritory],
-        CONSTRAINT [SD_Shipment_0e53cdb2b4bb4699a20fc80bdfa91a2b] DEFAULT 0 FOR [ShipMilitaryAddress];
+    ADD CONSTRAINT [SD_Shipment_3134a3cef8f043dba821da6c2cd219f5] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Shipment_548ce71e09bc4b1b82248d4fbffa9a29] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Shipment_0c7c865600cc4ac8a83b4fd3719cf6eb] DEFAULT N'' FOR [ShipAddressValidationError],
+        CONSTRAINT [SD_Shipment_f2f5b1a2d6334f44b3bda914e757c643] DEFAULT 0 FOR [ShipResidentialStatus],
+        CONSTRAINT [SD_Shipment_933b1a71b37d45fbb1a01bba8cd1f2ff] DEFAULT 0 FOR [ShipPOBox],
+        CONSTRAINT [SD_Shipment_f474a7ff29a644329b993602454124b2] DEFAULT 0 FOR [ShipUSTerritory],
+        CONSTRAINT [SD_Shipment_5c0144729e9145beb40dfd532824963d] DEFAULT 0 FOR [ShipMilitaryAddress],
+        CONSTRAINT [SD_Shipment_83e783acbd03439197aec19806816281] DEFAULT 0 FOR [ShipSenseStatus],
+        CONSTRAINT [SD_Shipment_e2a5d6c3637f4677abcfd51740540175] DEFAULT N'' FOR [ShipSenseChangeSets],
+        CONSTRAINT [SD_Shipment_a888ef4d5f7a40afaf8e7ae725eff961] DEFAULT CONVERT(VarBinary, '') FOR [ShipSenseEntry];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Shipment])
@@ -1126,8 +1266,10 @@ IF EXISTS (SELECT TOP 1 1
         ORDER BY [ShipmentID] ASC;
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Shipment] OFF;
     END
+GO
 
-ALTER TABLE [dbo].[tmp_ms_xx_Shipment] DROP CONSTRAINT [SD_Shipment_1c10aed9206a457cadab606033623e71], CONSTRAINT [SD_Shipment_8f37506276a04bad947c24fe5d9bcb92], CONSTRAINT [SD_Shipment_4eaa111f8e794c0d9be1acebef8f72c3], CONSTRAINT [SD_Shipment_dcb8f7f5fc30461c9ceabc1e163e94f1], CONSTRAINT [SD_Shipment_e95c3ac6b763467aa8746873779f209e], CONSTRAINT [SD_Shipment_8fc2ef5550214f73a2db7df845e9bf09], CONSTRAINT [SD_Shipment_0e53cdb2b4bb4699a20fc80bdfa91a2b];
+ALTER TABLE [dbo].[tmp_ms_xx_Shipment] DROP CONSTRAINT [SD_Shipment_3134a3cef8f043dba821da6c2cd219f5], CONSTRAINT [SD_Shipment_548ce71e09bc4b1b82248d4fbffa9a29], CONSTRAINT [SD_Shipment_0c7c865600cc4ac8a83b4fd3719cf6eb], CONSTRAINT [SD_Shipment_f2f5b1a2d6334f44b3bda914e757c643], CONSTRAINT [SD_Shipment_933b1a71b37d45fbb1a01bba8cd1f2ff], CONSTRAINT [SD_Shipment_f474a7ff29a644329b993602454124b2], CONSTRAINT [SD_Shipment_5c0144729e9145beb40dfd532824963d], CONSTRAINT [SD_Shipment_83e783acbd03439197aec19806816281], CONSTRAINT [SD_Shipment_e2a5d6c3637f4677abcfd51740540175], CONSTRAINT [SD_Shipment_a888ef4d5f7a40afaf8e7ae725eff961];
+GO
 
 DECLARE @idVal BIGINT
 SELECT @idVal = IDENT_CURRENT(N'[dbo].[Shipment]')
@@ -1159,7 +1301,54 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID]
 
 
 GO
+PRINT N'Creating [dbo].[Shipment].[IX_Shipment_OrderID_ShipSenseStatus]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus]
+    ON [dbo].[Shipment]([OrderID] ASC, [Processed] ASC, [ShipSenseStatus] ASC);
+
+
+GO
+PRINT N'Creating [dbo].[Shipment].[IX_Shipment_ProcessedOrderID]...';
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID]
+    ON [dbo].[Shipment]([Processed] DESC)
+    INCLUDE([OrderID]);
+
+
+GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
+
+
+GO
+PRINT N'Altering [dbo].[ShippingSettings]...';
+
+
+GO
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SET XACT_ABORT ON;
+
+ALTER TABLE [dbo].[ShippingSettings]
+    ADD [ShipSenseEnabled]             BIT    NOT NULL,
+        [ShipSenseUniquenessXml]       XML    NOT NULL,
+        [ShipSenseProcessedShipmentID] BIGINT NOT NULL,
+        [ShipSenseEndShipmentID]       BIGINT NOT NULL, 
+        CONSTRAINT [SD_ShippingSettings_d0083daf2aec440e89972c634e924b1b] DEFAULT 0 FOR [ShipSenseEnabled],
+        CONSTRAINT [SD_ShippingSettings_33e7ac04374a4d26862680e7abbd9a6d] DEFAULT N'' FOR [ShipSenseUniquenessXml],
+        CONSTRAINT [SD_ShippingSettings_96d9865855784c7aabe257c96607298b] DEFAULT 0 FOR [ShipSenseProcessedShipmentID],
+        CONSTRAINT [SD_ShippingSettings_73920c50982e431d97f12ec0f2b90646] DEFAULT 0 FOR [ShipSenseEndShipmentID];
+
+ALTER TABLE [dbo].[ShippingSettings] DROP CONSTRAINT [SD_ShippingSettings_d0083daf2aec440e89972c634e924b1b], CONSTRAINT [SD_ShippingSettings_33e7ac04374a4d26862680e7abbd9a6d], CONSTRAINT [SD_ShippingSettings_96d9865855784c7aabe257c96607298b], CONSTRAINT [SD_ShippingSettings_73920c50982e431d97f12ec0f2b90646];
+
+COMMIT TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 
 GO
@@ -1208,7 +1397,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_b82662124b69400082e0b961fec8257e] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_6ccf366a849a446aa439d40d00779546] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -1248,7 +1437,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_b82662124b69400082e0b961fec8257e];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_6ccf366a849a446aa439d40d00779546];
 
 DROP TABLE [dbo].[Store];
 
@@ -1272,6 +1461,26 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_StoreName]
 
 GO
 ALTER TABLE [dbo].[Store] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = OFF);
+
+
+GO
+PRINT N'Creating [dbo].[ShipSenseKnowledgebase]...';
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
+
+
+GO
+CREATE TABLE [dbo].[ShipSenseKnowledgebase] (
+    [Hash]  NVARCHAR (64) NOT NULL,
+    [Entry] NCHAR (10)    NOT NULL,
+    CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED ([Hash] ASC)
+);
+
+
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
 
 
 GO
@@ -1304,21 +1513,21 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[ValidatedAddress] (
-    [ValidatedAddressID]     BIGINT        IDENTITY (1100, 1000) NOT NULL,
-    [ConsumerID]             BIGINT        NOT NULL,
-    [AddressPrefix]          NVARCHAR (10) NOT NULL,
-    [IsOriginal]             BIT           NOT NULL,
-    [Street1]                NVARCHAR (60) NOT NULL,
-    [Street2]                NVARCHAR (60) NOT NULL,
-    [Street3]                NVARCHAR (60) NOT NULL,
-    [City]                   NVARCHAR (50) NOT NULL,
-    [StateProvCode]          NVARCHAR (50) NOT NULL,
-    [PostalCode]             NVARCHAR (20) NOT NULL,
-    [CountryCode]            NVARCHAR (50) NOT NULL,
-    [ResidentialStatus]      INT           NOT NULL,
-    [POBox]                  INT           NOT NULL,
-    [USTerritory] INT           NOT NULL,
-    [MilitaryAddress]        INT           NOT NULL,
+    [ValidatedAddressID] BIGINT        IDENTITY (1100, 1000) NOT NULL,
+    [ConsumerID]         BIGINT        NOT NULL,
+    [AddressPrefix]      NVARCHAR (10) NOT NULL,
+    [IsOriginal]         BIT           NOT NULL,
+    [Street1]            NVARCHAR (60) NOT NULL,
+    [Street2]            NVARCHAR (60) NOT NULL,
+    [Street3]            NVARCHAR (60) NOT NULL,
+    [City]               NVARCHAR (50) NOT NULL,
+    [StateProvCode]      NVARCHAR (50) NOT NULL,
+    [PostalCode]         NVARCHAR (20) NOT NULL,
+    [CountryCode]        NVARCHAR (50) NOT NULL,
+    [ResidentialStatus]  INT           NOT NULL,
+    [POBox]              INT           NOT NULL,
+    [USTerritory]        INT           NOT NULL,
+    [MilitaryAddress]    INT           NOT NULL,
     CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED ([ValidatedAddressID] ASC)
 );
 
@@ -1334,6 +1543,24 @@ PRINT N'Creating [dbo].[ValidatedAddress].[IX_ValidatedAddress_ConsumerIDAddress
 GO
 CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
     ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
+
+
+GO
+PRINT N'Creating FK_AmazonASIN_AmazonStore...';
+
+
+GO
+ALTER TABLE [dbo].[AmazonASIN] WITH NOCHECK
+    ADD CONSTRAINT [FK_AmazonASIN_AmazonStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[AmazonStore] ([StoreID]) ON DELETE CASCADE;
+
+
+GO
+PRINT N'Creating FK_AmazonStore_Store...';
+
+
+GO
+ALTER TABLE [dbo].[AmazonStore] WITH NOCHECK
+    ADD CONSTRAINT [FK_AmazonStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
 
 
 GO
@@ -1652,15 +1879,6 @@ ALTER TABLE [dbo].[UpsShipment] WITH NOCHECK
 
 
 GO
-PRINT N'Creating FK_AmazonStore_Store...';
-
-
-GO
-ALTER TABLE [dbo].[AmazonStore] WITH NOCHECK
-    ADD CONSTRAINT [FK_AmazonStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
-
-
-GO
 PRINT N'Creating FK_AmeriCommerceStore_Store...';
 
 
@@ -1866,8 +2084,8 @@ GO
 ALTER TABLE [dbo].[YahooStore] WITH NOCHECK
     ADD CONSTRAINT [FK_YahooStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
 
-GO
 
+GO
 PRINT N'Creating [dbo].[Order].[StoreID].[AuditFormat]...';
 
 
@@ -2218,6 +2436,10 @@ IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('4ed1e7a8-6e41-4a51-864b-f9934613b641')
 IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
 INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('5a268481-3a79-4e4e-b7cf-d190c55d8f7d')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'c95c3ab0-ff3e-487e-a29d-cebaf160fb6d')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('c95c3ab0-ff3e-487e-a29d-cebaf160fb6d')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'e0c39848-5f14-4871-a471-3679e6bc61f4')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('e0c39848-5f14-4871-a471-3679e6bc61f4')
 
 GO
 
@@ -2230,6 +2452,10 @@ USE [$(DatabaseName)];
 
 
 GO
+ALTER TABLE [dbo].[AmazonASIN] WITH CHECK CHECK CONSTRAINT [FK_AmazonASIN_AmazonStore];
+
+ALTER TABLE [dbo].[AmazonStore] WITH CHECK CHECK CONSTRAINT [FK_AmazonStore_Store];
+
 ALTER TABLE [dbo].[AmazonOrder] WITH CHECK CHECK CONSTRAINT [FK_AmazonOrder_Order];
 
 ALTER TABLE [dbo].[ChannelAdvisorOrder] WITH CHECK CHECK CONSTRAINT [FK_ChannelAdvisorOrder_Order];
@@ -2299,8 +2525,6 @@ ALTER TABLE [dbo].[Shipment] WITH CHECK CHECK CONSTRAINT [FK_Shipment_VoidedUser
 ALTER TABLE [dbo].[ShipmentCustomsItem] WITH CHECK CHECK CONSTRAINT [FK_ShipmentCustomsItem_Shipment];
 
 ALTER TABLE [dbo].[UpsShipment] WITH CHECK CHECK CONSTRAINT [FK_UpsShipment_Shipment];
-
-ALTER TABLE [dbo].[AmazonStore] WITH CHECK CHECK CONSTRAINT [FK_AmazonStore_Store];
 
 ALTER TABLE [dbo].[AmeriCommerceStore] WITH CHECK CHECK CONSTRAINT [FK_AmeriCommerceStore_Store];
 
