@@ -34,10 +34,58 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
 
-        // HTTP endpiont of the Amazon service
-        private static string endpoint = "https://mws.amazonservices.com";
-        private static string interapptiveAccessKeyID = "FMrhIncQWseTBwglDs00lVdXyPVgObvu";
-        private static string interapptiveSecretKey = "JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5";
+        // Default base namespace for Amazon requests and responses
+        private static string endpointNamespace = "https://mws.amazonservices.com";
+
+        /// <summary>
+        /// HTTP endpoint of the Amazon service
+        /// </summary>
+        private string Endpoint
+        {
+            get 
+            {
+                return IsNorthAmericanStore ? 
+                    "https://mws.amazonservices.com" : 
+                    "https://mws.amazonservices.co.uk";
+            }
+        }
+
+        /// <summary>
+        /// Gets the access key id that should be used for the current store
+        /// </summary>
+        private string InterapptiveAccessKeyID
+        {
+            get
+            {
+                return IsNorthAmericanStore ? 
+                    "FMrhIncQWseTBwglDs00lVdXyPVgObvu" : 
+                    "6bFMt0mymaWE0aWiaWT3SGs9LjvI//db";
+            }
+        }
+
+        /// <summary>
+        /// Gets the secret key that should be used for the current store
+        /// </summary>
+        private string InterapptiveSecretKey
+        {
+            get
+            {
+                return IsNorthAmericanStore ? 
+                    "JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5" : 
+                    "JjHvzq+MGZuxJu9EkjDv0QGSNQC/FYFg4lSe5PP5HMHRinkOWJhMLPeRH2057Ohd";
+            }
+        }
+
+        /// <summary>
+        /// Is the current store in North America?
+        /// </summary>
+        private bool IsNorthAmericanStore
+        {
+            get 
+            { 
+                return Store.AmazonApiRegion == "US" || Store.AmazonApiRegion == "CA"; 
+            }
+        }
 
         public const int MaxItemsPerProductDetailsRequest = 5;
 
@@ -564,13 +612,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Determines if the local system clock is in sync with Amazon's servers.
         /// ONLY fails if we receive a time from Amazon and we are for sure out of sync.
         /// </summary>
-        public static bool ClockInSyncWithMWS()
+        public bool ClockInSyncWithMWS()
         {
             try
             {
                 // a simple GET against the MWS url provides xml containing the server time
                 HttpRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-                submitter.Uri = new Uri(endpoint);
+                submitter.Uri = new Uri(Endpoint);
                 submitter.Verb = HttpVerb.Get;
 
                 using (IHttpResponseReader reader = submitter.GetResponse())
@@ -628,7 +676,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 string endpointPath = GetApiEndpointPath(amazonMwsApiCall);
 
-                request.Uri = new Uri(endpoint + endpointPath);
+                request.Uri = new Uri(Endpoint + endpointPath);
                 request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
 
                 request.Variables.Add("Action", GetActionName(amazonMwsApiCall));
@@ -649,7 +697,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 request.Variables.Sort(v => v.Name);
 
                 // AWS Access Key ID needs to be the first parameter or Amazon rejects the signature
-                request.Variables.Insert(0, new HttpVariable("AWSAccessKeyId", Decrypt(interapptiveAccessKeyID)));
+                request.Variables.Insert(0, new HttpVariable("AWSAccessKeyId", Decrypt(InterapptiveAccessKeyID)));
 
                 // now construct the signature parameter
                 string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
@@ -657,7 +705,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 parameterString += QueryStringUtility.GetQueryString(request.Variables, QueryStringEncodingCasing.Upper);
 
                 // sign the string and add it to the request
-                string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(interapptiveSecretKey), SigningAlgorithm.SHA256);
+                string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(InterapptiveSecretKey), SigningAlgorithm.SHA256);
                 request.Variables.Add("Signature", signature);
 
                 // add a User Agent header
@@ -854,7 +902,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             else
             {
-                apiNamespace = endpoint + GetApiEndpointPath(api);
+                apiNamespace = endpointNamespace + GetApiEndpointPath(api);
             }
 
             

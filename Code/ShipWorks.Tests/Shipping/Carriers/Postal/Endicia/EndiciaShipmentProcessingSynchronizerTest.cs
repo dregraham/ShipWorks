@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [TestMethod]
-        public void ReplaceInvalidAccount_DoesNotSetAccountID_WhenTwoAccounts_Test()
+        public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<EndiciaAccountEntity> accounts = new List<EndiciaAccountEntity>()
             {
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(0, shipment.Postal.Endicia.EndiciaAccountID);
+            Assert.AreEqual(123, shipment.Postal.Endicia.EndiciaAccountID);
         }
     }
 }

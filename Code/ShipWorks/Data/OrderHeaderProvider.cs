@@ -13,6 +13,7 @@ using System.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Data
 {
@@ -31,6 +32,7 @@ namespace ShipWorks.Data
 
         // Can be used to grab header info from cached entity if we don't know about the header yet
         EntityCache entityCache;
+        private readonly ExecutionMode executionMode;
 
         // non-null when we are busy fetching headers
         object asyncBusyLock = new object();
@@ -40,6 +42,13 @@ namespace ShipWorks.Data
         /// Constructor
         /// </summary>
         public OrderHeaderProvider(EntityCache entityCache)
+            : this(entityCache, Program.ExecutionMode)
+        { }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderHeaderProvider(EntityCache entityCache, ExecutionMode executionMode)
         {
             if (entityCache == null)
             {
@@ -47,6 +56,7 @@ namespace ShipWorks.Data
             }
 
             this.entityCache = entityCache;
+            this.executionMode = executionMode;
         }
 
         /// <summary>
@@ -90,7 +100,7 @@ namespace ShipWorks.Data
             }
 
             // If we're on the UI, show the wait cursor, in case this is going to take a while
-            if (Program.ExecutionMode.IsUIDisplayed && !Program.MainForm.InvokeRequired)
+            if (executionMode.IsUIDisplayed && !Program.MainForm.InvokeRequired)
             {
                 Cursor.Current = Cursors.WaitCursor;
             }

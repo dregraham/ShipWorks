@@ -149,6 +149,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         // Don't hold up the download if data for product data that could not be downloaded.
                         log.WarnFormat("ShipWorks could not download product details (item weight and thumbnail image) for an ASIN. {0}", ex.Message);
                     }
+                    else if (ex.Code == "InternalError" && ex.Message.Contains("Please contact the MWS team if this problem persists"))
+                    {
+                        // A few stores reported this error with Amazon - log the error and continue, so downloads aren't stuck
+                        log.WarnFormat("Amazon's server/API encountered an internal error: {0}. ShipWorks could not download product details (item weight and thumbnail image) for an ASIN.", ex.Message);
+                    }
                     else
                     {
                         throw;

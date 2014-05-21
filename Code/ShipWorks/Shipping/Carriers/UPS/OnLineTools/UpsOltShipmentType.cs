@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Processing;
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override SettingsControlBase CreateSettingsControl()
         {
             return new UpsOltSettingsControl();
-        }
+        }        
 
         /// <summary>
         /// Creates the Returns control

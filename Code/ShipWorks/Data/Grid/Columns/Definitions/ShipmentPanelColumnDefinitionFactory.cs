@@ -20,6 +20,7 @@ using ShipWorks.Stores.Content.Panels.CoreExtensions.Grid;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -51,7 +52,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ShipmentFields.ShipmentID ) { DefaultWidth = 40 },
 
                 new GridColumnDefinition("{DB9C8EC1-1289-48df-A29B-B67D3D391A9C}", true,
-                    new GridEnumDisplayType<ShipmentTypeCode>(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
+                    new GridProviderDisplayType(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
                     ShipmentFields.ShipmentType),
 
                 new GridColumnDefinition("{98038AB5-AA95-4778-9801-574C2B723DD4}", true,
@@ -108,6 +109,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{C83A0678-5375-4ead-A439-47193425CE11}",
                     new GridMoneyDisplayType(), "Cost", 4.18m,
                     ShipmentFields.ShipmentCost),
+
+                new GridColumnDefinition("{30BC16E8-19B1-4D9D-90D5-AD81E29BD1DA}", false,
+                    new GridEnumDisplayType<ShipSenseStatus>(EnumSortMethod.Value), "ShipSense", ShipSenseStatus.Applied,
+                    ShipmentFields.ShipSenseStatus),
 
                 new GridColumnDefinition("{7712114B-5E84-4ad0-9E49-5CA6EAC34B73}", true,
                     new GridShipmentEditViewDisplayType(), "Edit", "Edit",

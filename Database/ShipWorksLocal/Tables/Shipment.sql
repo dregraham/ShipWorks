@@ -65,6 +65,9 @@
     [OriginNameParseStatus]    INT            NOT NULL,
     [OriginUnparsedName]       NVARCHAR (100) NOT NULL,
     [BestRateEvents]           TINYINT        NOT NULL,
+	[ShipSenseStatus] [int] NOT NULL,
+	[ShipSenseChangeSets] [xml] NOT NULL,
+	[ShipSenseEntry] [varbinary] (max) NOT NULL,
     CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED ([ShipmentID] ASC),
     CONSTRAINT [FK_Shipment_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID]),
     CONSTRAINT [FK_Shipment_ProcessedComputer] FOREIGN KEY ([ProcessedComputerID]) REFERENCES [dbo].[Computer] ([ComputerID]),
@@ -85,33 +88,9 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID]
 
 
 GO
-CREATE TRIGGER [dbo].[FilterDirtyShipment]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyShipment]
-
-
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] ([OrderID], [Processed], [ShipSenseStatus])
 GO
-CREATE TRIGGER [dbo].[ShipmentAuditTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentAuditTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentDeleteTrigger]
-    ON [dbo].[Shipment]
-    AFTER DELETE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentDeleteTrigger]
-
-
-GO
-CREATE TRIGGER [dbo].[ShipmentLabelTrigger]
-    ON [dbo].[Shipment]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[ShipmentLabelTrigger]
-
-
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID])
 GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'103', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Shipment', @level2type = N'COLUMN', @level2name = N'ShipmentType';
 

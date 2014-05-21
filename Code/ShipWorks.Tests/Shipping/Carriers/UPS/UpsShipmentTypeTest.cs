@@ -26,6 +26,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         [TestMethod]
+        public void SupportsMultiplePackages_ReturnsTrue_Test()
+        {
+            Assert.IsTrue(testObject.SupportsMultiplePackages);
+        }
+
+        [TestMethod]
         public void GetServiceLevel_ReturnsAnytime_WhenPassedUpsGroundAndNegativeOneDays_Test()
         {
             ServiceLevelType serviceLevel = UpsShipmentType.GetServiceLevel(UpsServiceType.UpsGround, -1);

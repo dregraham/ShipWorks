@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Processing;
@@ -33,6 +34,17 @@ namespace ShipWorks.Shipping.Carriers.None
         public override ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
             return new NoneServiceControl(rateControl);
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new NullPackageAdapter()
+            };
         }
 
         /// <summary>
@@ -70,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             // PreProcess is overridden to do nothing, so there is nothing to synchronize
             return null;

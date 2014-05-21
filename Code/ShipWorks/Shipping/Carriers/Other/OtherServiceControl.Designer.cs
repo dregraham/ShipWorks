@@ -105,6 +105,7 @@
             this.weight.Size = new System.Drawing.Size(218, 21);
             this.weight.TabIndex = 7;
             this.weight.Weight = 0D;
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // label1
             // 

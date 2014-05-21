@@ -246,6 +246,162 @@ namespace ShipWorks.Data.Adapter
 	
 
 		/// <summary>
+		/// Delegate definition for stored procedure 'ResetShipSense' to be used in combination of a UnitOfWork2 object. 
+		/// </summary>
+		public delegate int ResetShipSenseCallBack(DataAccessAdapter adapter);
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense()
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ResetShipSense( adapter);
+			}
+		}
+
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(DataAccessAdapter adapter)
+		{
+			SqlParameter[] parameters = new SqlParameter[0];
+
+
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
+
+			return toReturn;
+		}
+		
+
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(ref System.Int32 returnValue)
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ResetShipSense(ref returnValue, adapter);
+			}
+		}
+
+		
+		/// <summary>
+		/// Calls stored procedure 'ResetShipSense'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ResetShipSense(ref System.Int32 returnValue, DataAccessAdapter adapter)
+		{
+			// create parameters. Add 1 to make room for the return value parameter.
+			SqlParameter[] parameters = new SqlParameter[0 + 1];
+
+
+			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
+
+			
+			returnValue = (int)parameters[0].Value;
+			return toReturn;
+		}
+	
+
+		/// <summary>
+		/// Delegate definition for stored procedure 'ShipmentShipSenseProcedure' to be used in combination of a UnitOfWork2 object. 
+		/// </summary>
+		public delegate int ShipmentShipSenseProcedureCallBack(System.String hashKey, System.String excludedShipmentXml, DataAccessAdapter adapter);
+
+		/// <summary>
+		/// Calls stored procedure 'ShipmentShipSenseProcedure'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="hashKey">Input parameter of stored procedure</param>
+		/// <param name="excludedShipmentXml">Input parameter of stored procedure</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ShipmentShipSenseProcedure(System.String hashKey, System.String excludedShipmentXml)
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ShipmentShipSenseProcedure(hashKey, excludedShipmentXml,  adapter);
+			}
+		}
+
+
+		/// <summary>
+		/// Calls stored procedure 'ShipmentShipSenseProcedure'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="hashKey">Input parameter of stored procedure</param>
+		/// <param name="excludedShipmentXml">Input parameter of stored procedure</param>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ShipmentShipSenseProcedure(System.String hashKey, System.String excludedShipmentXml, DataAccessAdapter adapter)
+		{
+			SqlParameter[] parameters = new SqlParameter[2];
+			parameters[0] = new SqlParameter("@hashKey", SqlDbType.NVarChar, 4000, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, hashKey);
+			parameters[1] = new SqlParameter("@excludedShipmentXml", SqlDbType.Xml, 2147483647, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, excludedShipmentXml);
+
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
+
+			return toReturn;
+		}
+		
+
+		/// <summary>
+		/// Calls stored procedure 'ShipmentShipSenseProcedure'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="hashKey">Input parameter of stored procedure</param>
+		/// <param name="excludedShipmentXml">Input parameter of stored procedure</param>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ShipmentShipSenseProcedure(System.String hashKey, System.String excludedShipmentXml, ref System.Int32 returnValue)
+		{
+			using(DataAccessAdapter adapter = new DataAccessAdapter())
+			{
+				return ShipmentShipSenseProcedure(hashKey, excludedShipmentXml, ref returnValue, adapter);
+			}
+		}
+
+		
+		/// <summary>
+		/// Calls stored procedure 'ShipmentShipSenseProcedure'.<br/><br/>
+		/// 
+		/// </summary>
+		/// <param name="hashKey">Input parameter of stored procedure</param>
+		/// <param name="excludedShipmentXml">Input parameter of stored procedure</param>
+		/// <param name="returnValue">Return value of the stored procedure</param>
+		/// <param name="adapter">The DataAccessAdapter object to use for the call</param>
+		/// <returns>Amount of rows affected, if the database / routine doesn't surpress rowcounting.</returns>
+		public static int ShipmentShipSenseProcedure(System.String hashKey, System.String excludedShipmentXml, ref System.Int32 returnValue, DataAccessAdapter adapter)
+		{
+			// create parameters. Add 1 to make room for the return value parameter.
+			SqlParameter[] parameters = new SqlParameter[2 + 1];
+			parameters[0] = new SqlParameter("@hashKey", SqlDbType.NVarChar, 4000, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, hashKey);
+			parameters[1] = new SqlParameter("@excludedShipmentXml", SqlDbType.Xml, 2147483647, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, excludedShipmentXml);
+
+			parameters[2] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
+
+			
+			returnValue = (int)parameters[2].Value;
+			return toReturn;
+		}
+	
+
+		/// <summary>
 		/// Delegate definition for stored procedure 'ValidateFilterLayouts' to be used in combination of a UnitOfWork2 object. 
 		/// </summary>
 		public delegate int ValidateFilterLayoutsCallBack(DataAccessAdapter adapter);

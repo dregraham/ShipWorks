@@ -373,7 +373,10 @@ namespace ShipWorks.Shipping.Editing.Rating
                 else
                 {
                     // Make sure the grid has updated its row layout, and knows where they all are
-                    sandGrid.PerformElementLayout();
+                    if (sandGrid.IsHandleCreated)
+                    {
+                        sandGrid.PerformElementLayout();
+                    }
 
                     height += sandGrid.Rows[sandGrid.Rows.Count - 1].Bounds.Bottom;
                 }

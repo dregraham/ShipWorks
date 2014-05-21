@@ -7,6 +7,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
@@ -325,6 +326,9 @@ namespace ShipWorks.Stores.Communication
                 order.RollupNoteCount = 0;
                 order.RollupItemCount = 0;
                 order.RollupItemTotalWeight = 0;
+                
+                order.ShipSenseHashKey = string.Empty;
+                order.ShipSenseRecognitionStatus = (int)ShipSenseOrderRecognitionStatus.NotRecognized;
             }
 
             return order;
@@ -522,7 +526,14 @@ namespace ShipWorks.Stores.Communication
                     // Get the customer
                     if (order.IsNew)
                     {
-                        order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        try
+                        {
+                            order.CustomerID = CustomerProvider.AcquireCustomer(order, storeType, adapter);
+                        }
+                        catch (CustomerAcquisitionLockException)
+                        {
+                            throw new DownloadException("ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.");
+                        }
                     }
 
                     // Protect payment details
@@ -590,7 +601,12 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
 
-                    // Update unprocessed shipment addresses if the order address has changed
+                    // Everything has been set on the order, so calculate the hash key
+                    OrderUtility.PopulateOrderDetails(order, adapter);
+                    OrderUtility.UpdateShipSenseHashKey(order);
+                    adapter.SaveAndRefetch(order);
+					
+					// Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");

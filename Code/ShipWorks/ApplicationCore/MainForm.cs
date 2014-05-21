@@ -32,6 +32,7 @@ using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Management;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.ShipSense.Population;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Templates;
@@ -282,6 +283,9 @@ namespace ShipWorks
 
             // Initiate the logon sequence
             InitiateLogon();
+
+            ShipSenseLoader.LoadDataAsync();
+
         }
 
         /// <summary>
@@ -814,6 +818,9 @@ namespace ShipWorks
                         {
                             return false;
                         }
+
+                        // Kick off the loader for loading data into ShipSense as needed
+                        ShipSenseLoader.LoadDataAsync();
                     }
                     else
                     {

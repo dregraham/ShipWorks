@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         {
             if (QueryEnabled != null)
             {
-                GridHyperlinkQueryEnabledEventArgs args = new GridHyperlinkQueryEnabledEventArgs(formattedValue.Value);
+                GridHyperlinkQueryEnabledEventArgs args = new GridHyperlinkQueryEnabledEventArgs(formattedValue.Value, formattedValue.Entity);
                 QueryEnabled(this, args);
 
                 return args.Enabled;

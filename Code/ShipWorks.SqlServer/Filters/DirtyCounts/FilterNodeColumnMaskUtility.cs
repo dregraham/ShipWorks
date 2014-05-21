@@ -22,11 +22,11 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         {
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
-            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 71;
+            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 73;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 19;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
-            tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 66;
+            tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 69;
             tableBitCount[(int) FilterNodeColumnMaskTable.PrintResult] = 23;
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutbound] = 21;
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutboundRelation] = 4;
@@ -34,7 +34,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.DownloadDetail] = 9;
             tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 10;
-            tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 8;
+            tableBitCount[(int)FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 9;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 24;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 18;
             tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrder] = 5;

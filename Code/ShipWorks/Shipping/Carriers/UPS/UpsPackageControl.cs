@@ -39,6 +39,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public event EventHandler RateCriteriaChanged;
 
+        // Indiciates if the event shouldnt currently be raised
+        int suspendShipSenseFieldEvent = 0;
+
+        /// <summary>
+        /// Some part of the packaging has changed the ShipSense criteria
+        /// </summary>
+        public event EventHandler ShipSenseFieldChanged;
+
         /// <summary>
         /// The number of packages for the shipment has changed
         /// </summary>
@@ -252,6 +260,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnChangeSelectedPackages(object sender, SelectionChangedEventArgs e)
         {
+            suspendShipSenseFieldEvent++;
             suspendRateCriteriaEvent++;
 
             // Save the existing stuff before loading the new stuff
@@ -297,6 +306,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             dimensionsControl.ShipmentWeightBox = weight;
 
             suspendRateCriteriaEvent--;
+            suspendShipSenseFieldEvent--;
         }
 
         /// <summary>
@@ -353,6 +363,30 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (RateCriteriaChanged != null)
             {
                 RateCriteriaChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Raises the ShipSenseFieldChanged event
+        /// </summary>
+        private void RaiseShipSenseFieldChanged()
+        {
+            if (suspendShipSenseFieldEvent > 0)
+            {
+                return;
+            }
+
+            if (ShipSenseFieldChanged != null)
+            {
+                ShipSenseFieldChanged(this, EventArgs.Empty);
             }
         }
     }

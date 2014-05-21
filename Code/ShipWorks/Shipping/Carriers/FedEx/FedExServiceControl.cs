@@ -104,6 +104,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             // Load the base
             base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
@@ -147,6 +148,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ResizePackageDetails();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -508,6 +510,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -575,6 +578,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -686,6 +690,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void UpdatePackagingChoices(FedExServiceType? serviceType)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             bool previousMulti = packagingType.MultiValued;
             FedExPackagingType? previousValue = (FedExPackagingType?) packagingType.SelectedValue;
@@ -717,6 +722,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -878,6 +884,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+        
         /// <summary>
         /// Changing the payor transport account
         /// </summary>

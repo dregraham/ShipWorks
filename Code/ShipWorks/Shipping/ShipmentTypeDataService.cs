@@ -68,6 +68,12 @@ namespace ShipWorks.Shipping
                         property.SetValue(parent, childEntity, null);
                     }
 
+                    IShipmentProcessingSynchronizer shipmentProcessingSynchronizer = shipmentType.GetProcessingSynchronizer();
+                    if (shipmentProcessingSynchronizer != null)
+                    {
+                        shipmentProcessingSynchronizer.ReplaceInvalidAccount(shipment);
+                    }
+
                     adapter.Commit();
                 }
            }

@@ -28,7 +28,9 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
@@ -85,6 +87,12 @@ namespace ShipWorks.Shipping
         private RateSelectedEventArgs preSelectedRateEventArgs;
         private ValidatedAddressScope validatedAddressScope;
 
+        private readonly ShipSenseSynchronizer shipSenseSynchronizer;
+
+        private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
+        private const int shipSenseChangedDebounceTime = 500;
+        private bool shipSenseNeedsUpdated = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -122,6 +130,9 @@ namespace ShipWorks.Shipping
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
 
+            shipSenseChangedTimer.Tick += OnShipSenseChangedTimerTick;
+            shipSenseChangedTimer.Interval = shipSenseChangedDebounceTime;
+
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
 
@@ -139,6 +150,11 @@ namespace ShipWorks.Shipping
 
             ResizeBegin += (sender, args) => ratesSplitContainer.Panel1MinSize = 0;
             ResizeEnd += (sender, args) => SetServiceControlMinimumHeight();
+
+            //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+            shipments.ForEach(OrderUtility.PopulateOrderDetails);
+            shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
+            shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
         }
 
         /// <summary>
@@ -273,13 +289,39 @@ namespace ShipWorks.Shipping
             // in the shipment grid real fast.
             if (!loadingSelectedShipments)
             {
+                // Detach from the ShipSense events, so we aren't handling events as the shipments get loaded
+                if (ServiceControl != null)
+                {
+                    ServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                }
+
+                if (CustomsControl != null)
+                {
+                    CustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                }
+
                 // Save all changes from the UI to the previous entity selection
                 SaveUIDisplayedShipments();
+
+                // The user could have changed something and clicked a different shipment before the timer fired, so apply any ShipSense
+                // if needed.
+                SynchronizeWithShipSense();
 
                 UpdateSelectedShipmentCount();
 
                 // Load the newly selected shipments
                 LoadSelectedShipments(false);
+
+                // Re-attach to the ShipSense changed event now that the shipments have been loaded
+                if (ServiceControl != null)
+                {
+                    ServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                }
+
+                if (CustomsControl != null)
+                {
+                    CustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                }
 
                 ClearRates(string.Empty);
                 GetRates();
@@ -704,6 +746,8 @@ namespace ShipWorks.Shipping
                 ClearRates(string.Empty);
                 GetRates();
             }
+
+            shipSenseSynchronizer.Add(loadedShipmentEntities);
         }
         
         /// <summary>
@@ -852,6 +896,7 @@ namespace ShipWorks.Shipping
                     newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
                     newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
                     newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+                    newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
                     newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
                     newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
                     newServiceControl.ClearRatesAction = ClearRates;
@@ -868,6 +913,7 @@ namespace ShipWorks.Shipping
                     oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
                     oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
                     oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                    oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
                     oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
                     oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
                     oldServiceControl.ClearRatesAction = x => { };
@@ -1064,6 +1110,61 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// The selected shipment(s) has been edited in a such a way that ShipSense values may no longer valid.
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            // Stop the timer
+            shipSenseChangedTimer.Stop();
+
+            // Make a note that something changed and we still need to apply ShipSense.  This is for the race condition with the user
+            // making changes and clicking a different shipment before the timer fires.
+            shipSenseNeedsUpdated = true;
+
+            // Restart the timer
+            shipSenseChangedTimer.Start();
+        }
+
+        /// <summary>
+        /// Synchronize the shipment with other matching shipments
+        /// </summary>
+        private void SynchronizeWithShipSense()
+        {
+            if (uiDisplayedShipments.Count > 0 && shipSenseNeedsUpdated)
+            {
+                // Check for null in case the ShipSense timer fires as the window is closing and the customs
+                // control is no longer available
+                if (CustomsControl != null)
+                {
+                    // The UI hasn't updated the shipment properties, so we need to force an update to the entities
+                    CustomsControl.SaveToShipments();
+                }
+
+                ShipmentEntity shipment = uiDisplayedShipments.FirstOrDefault(s => !s.Processed);
+
+                if (shipment != null)
+                {
+                    //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+                    OrderUtility.PopulateOrderDetails(shipment);
+
+                    shipSenseSynchronizer.Add(loadedShipmentEntities);
+                    shipSenseSynchronizer.SynchronizeWith(shipment);
+
+                    // Set shipSenseNeedsUpdated to false, so that we don't get in an infinite refresh loop
+                    shipSenseNeedsUpdated = false;
+
+                    // Check for the handle, so we don't crash if the shipping dialog is closed
+                    // in the middle of the synchronization
+                    if (IsHandleCreated)
+                    {
+                        // Refresh the shipment control, so any status changes are reflected
+                        shipmentControl.RefreshAndResort();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Update the display of our insurance rates for the given shipments
         /// </summary>
         private void UpdateInsuranceDisplay()
@@ -1109,6 +1210,7 @@ namespace ShipWorks.Shipping
             if (newCustomsControl != null)
             {
                 newCustomsControl.LoadShipments(shipments, enableEditing);
+                newCustomsControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             }
 
             // See if the customs control has changed
@@ -1136,6 +1238,7 @@ namespace ShipWorks.Shipping
                 // Finally, remove the old service control, or the blank panel we created
                 if (oldCustomsControl != null)
                 {
+                    oldCustomsControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
                     oldCustomsControl.Dispose();
                 }
                 else
@@ -1233,7 +1336,7 @@ namespace ShipWorks.Shipping
                     if (ServiceControl != null)
                     {
                         ServiceControl.RefreshContentWeight();
-                    }
+                    }                    
                 }
             }
         }
@@ -1517,6 +1620,16 @@ namespace ShipWorks.Shipping
         private void OnShipmentsAdded(object sender, EventArgs e)
         {
             UpdateEditControlsSecurity();
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs) e;
+            foreach (ShipmentEntity shipment in eventArgs.ShipmentsAdded)
+            {
+                //TODO: Delete this line in the next story, use the hash that's stored on the shipment so that we don't have to populate the order!!!
+                OrderUtility.PopulateOrderDetails(shipment);
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                
+                shipSenseSynchronizer.Add(shipment);
+            }
         }
 
         /// <summary>
@@ -1525,6 +1638,12 @@ namespace ShipWorks.Shipping
         private void OnShipmentsRemoved(object sender, EventArgs e)
         {
             UpdateEditControlsSecurity();
+
+            ShipmentGridShipmentsChangedEventArgs eventArgs = (ShipmentGridShipmentsChangedEventArgs)e;
+            foreach (ShipmentEntity shipment in eventArgs.ShipmentsRemoved)
+            {
+                shipSenseSynchronizer.Remove(shipment);
+            }
         }
 
         /// <summary>
@@ -1787,6 +1906,15 @@ namespace ShipWorks.Shipping
             rateControl.ShowSpinner = true;
             getRatesBackgroundWorker.RunWorkerAsync(clonedShipment);
         }
+
+        /// <summary>
+        /// Actually makes the ShipSense changed call when the debounce timer has elapsed
+        /// </summary>
+        private void OnShipSenseChangedTimerTick(object sender, EventArgs e)
+        {
+            shipSenseChangedTimer.Stop();
+            SynchronizeWithShipSense();
+        }
         
         /// <summary>
         /// Void the selected shipments that are processed, and have not yet been already voided.
@@ -1982,6 +2110,10 @@ namespace ShipWorks.Shipping
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
+
+            List<string> orderHashes = new List<string>();
+            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = shipmentControl.AllRows.Select(r => r.Shipment);
+
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
             {
@@ -2047,6 +2179,18 @@ namespace ShipWorks.Shipping
                 }
                 
                 LoadSelectedShipments(true);
+
+                // We want to update the synchronizer with the KB entry of the latest processed
+                // shipment, so the status of any remaining unprocessed shipments are reflected correctly
+                shipSenseSynchronizer.RefreshKnowledgebaseEntries();
+                shipSenseSynchronizer.MonitoredShipments.ToList().ForEach(shipSenseSynchronizer.SynchronizeWith);
+
+                // Refresh/update the ShipSense status of any unprocessed shipments that are outside of the shipping dialog
+                Knowledgebase knowledgebase = new Knowledgebase();
+                foreach (string hash in orderHashes.Distinct())
+                {
+                    knowledgebase.RefreshShipSenseStatus(hash, exludedShipmentsFromShipSenseRefresh.Select(s => s.ShipmentID));
+                }
             };
 
             // Code to execute for each shipment
@@ -2070,7 +2214,9 @@ namespace ShipWorks.Shipping
                     {
                         throw concurrencyEx;
                     }
-                    
+
+                    orderHashes.Add(shipment.Order.ShipSenseHashKey);
+
                     // Process it       
                     if (shipment.ShipmentType == (int)ShipmentTypeCode.BestRate)
                     {
@@ -2335,7 +2481,18 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            // Disable the ShipSense timer and make one final call to synchronize to make sure we have
+            // everything matching that should be matching; otherwise changing a value and closing
+            // the dialog before the timer kicks would result in shipments being out of sync
+            shipSenseChangedTimer.Enabled = false;
+            SynchronizeWithShipSense();
+
             Cursor.Current = Cursors.WaitCursor;
+
+            if (ServiceControl != null)
+            {
+                ServiceControl.SuspendRateCriteriaChangeEvent();
+            }
 
             // Save changes to the current selection to in memory.  Anything not selected
             // will already be saved in memory.
@@ -2345,8 +2502,8 @@ namespace ShipWorks.Shipping
             if (SaveShipmentsToDatabase(shipmentControl.AllRows.Select(r => r.Shipment), false).Count > 0)
             {
                 MessageHelper.ShowWarning(this,
-                    "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
-                    "Your changes to those shipments were not saved.");
+                                          "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
+                                          "Your changes to those shipments were not saved.");
             }
 
             processingErrors.Clear();

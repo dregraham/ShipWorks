@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
@@ -60,6 +61,17 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new OtherProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new OtherPackageAdapter(shipment)
+            };
         }
 
         /// <summary>
@@ -172,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new OtherShipmentProcessingSynchronizer();
         }

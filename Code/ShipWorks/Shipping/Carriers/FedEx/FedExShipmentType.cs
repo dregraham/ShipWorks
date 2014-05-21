@@ -27,6 +27,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -97,6 +98,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets a value indicating whether the shipment type [supports multiple packages].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
         /// to obtain FedEx related settings and account information. This provides
         /// the ability to use different FedEx settings depending on how the shipment
@@ -159,6 +171,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new FedExProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (!shipment.FedEx.Packages.Any())
+            {
+                throw new FedExException("There must be at least one package to create the FedEx package adapter.");
+            }
+
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (FedExPackageEntity packageEntity in shipment.FedEx.Packages)
+            {
+                adapters.Add(new FedExPackageAdapter(shipment, packageEntity));
+            }
+
+            return adapters;
         }
 
         /// <summary>
@@ -340,6 +372,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.Weight = shipment.ContentWeight;
 
             base.ConfigureNewShipment(shipment);
+        }
+
+        /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+
+            while (shipment.FedEx.Packages.Count < knowledgebaseEntry.Packages.Count())
+            {
+                FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
+                shipment.FedEx.Packages.Add(package);
+            }
         }
 
         /// <summary>
@@ -917,31 +967,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
         }
 
-        ///// <summary>
-        ///// Gets the FedEx counter rates for a shipment
-        ///// </summary>
-        ///// <param name="shipment">The shipment for which to retrieve rates.</param>
-        ///// <returns>A RateGroup containing the counter rate results.</returns>
-        //private RateGroup GetCounterRates(ShipmentEntity shipment)
-        //{
-        //    // We need to swap out the SettingsRepository and certificate inspector 
-        //    // to get FedEx counter rates
-        //    ICarrierSettingsRepository originalSettings = SettingsRepository;
-        //    ICertificateInspector originalInspector = CertificateInspector;
-
-        //    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-        //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
-
-        //    // Get the rates from the API as usual now that we've switched over to the counter rates configuration
-        //    RateGroup rateGroup = GetRatesFromApi(shipment);
-
-        //    // Switch the settings repository back to the original now that we have counter rates
-        //    SettingsRepository = originalSettings;
-        //    CertificateInspector = originalInspector;
-
-        //    return rateGroup;
-        //}
-
         /// <summary>
         /// Provide FedEx tracking results for the given shipment
         /// </summary>
@@ -970,7 +995,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new FedExShipmentProcessingSynchronizer();
         }

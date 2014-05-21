@@ -199,8 +199,11 @@ namespace ShipWorks.Common.Threading
                 // in the TemplateManager very quickly.
                 ActivateKeyboardBlocking(owner);
 
-                // Simulate modal by disabling the owner
-                NativeMethods.EnableWindow(owner.Handle, false);
+                if (owner != null && owner.IsHandleCreated)
+                {
+                    // Simulate modal by disabling the owner
+                    NativeMethods.EnableWindow(owner.Handle, false);
+                }
             }
 
             // Show the window after 

@@ -8,6 +8,7 @@ using System.Drawing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Shipping.CoreExtensions.Grid
 {
@@ -67,6 +68,11 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
             if (shipment.Processed)
             {
                 return Resources.check16;
+            }
+
+            if (!shipment.Processed && shipment.ShipSenseStatus == (int)ShipSenseStatus.Applied)
+            {
+                return Resources.sw_cubes_16;
             }
 
             if (ShippingDlg.ProcessingErrors.ContainsKey(shipment.ShipmentID))

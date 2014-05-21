@@ -25,6 +25,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -125,6 +126,44 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new iParcelProfileControl();
+        }
+
+        /// <summary>
+        /// Configures the shipment for ShipSense. This is useful for carriers that support
+        /// multiple package shipments, allowing the shipment type a chance to add new packages
+        /// to coincide with the ShipSense knowledge base entry.
+        /// </summary>
+        /// <param name="knowledgebaseEntry">The knowledge base entry.</param>
+        /// <param name="shipment">The shipment.</param>
+        protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
+        {
+            base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
+
+            while (shipment.IParcel.Packages.Count < knowledgebaseEntry.Packages.Count())
+            {
+                IParcelPackageEntity package = CreateDefaultPackage();
+                shipment.IParcel.Packages.Add(package);
+            }
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            if (!shipment.IParcel.Packages.Any())
+            {
+                throw new iParcelException("There must be at least one package to create the i-parcel package adapter.");
+            }
+
+            // Return an adapter per package
+            List<IPackageAdapter> adapters = new List<IPackageAdapter>();
+            foreach (IParcelPackageEntity packageEntity in shipment.IParcel.Packages)
+            {
+                adapters.Add(new iParcelPackageAdapter(shipment, packageEntity));
+            }
+
+            return adapters;
         }
 
         /// <summary>
@@ -504,7 +543,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new iParcelShipmentProcessingSynchronizer();
         }
@@ -1039,6 +1078,20 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             return fields;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether multiple packages are supported by this shipment type.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

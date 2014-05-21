@@ -54,12 +54,14 @@ namespace ShipWorks.Shipping.Carriers
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>

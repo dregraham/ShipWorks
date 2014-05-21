@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                     swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
                     break;
                 case "john-pc":
-                    swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
+                    swInstance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
                     break;
                 case "kevin-pc":
                     swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                     swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
                     break;
                 default:
-                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in iParcelPrototypeFixture()");
+                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in ShipWorksInitializer()");
             }
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)

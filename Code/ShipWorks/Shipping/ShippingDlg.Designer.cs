@@ -531,8 +531,8 @@ namespace ShipWorks.Shipping
             this.shipmentControl.Size = new System.Drawing.Size(291, 489);
             this.shipmentControl.TabIndex = 0;
             this.shipmentControl.SelectionChanged += new ShipWorks.Shipping.Editing.ShipmentSelectionChangedEventHandler(this.OnChangeSelectedShipments);
-            this.shipmentControl.ShipmentsAdded += new System.EventHandler(this.OnShipmentsAdded);
-            this.shipmentControl.ShipmentsRemoved += new System.EventHandler(this.OnShipmentsRemoved);
+            this.shipmentControl.ShipmentsAdded += this.OnShipmentsAdded;
+            this.shipmentControl.ShipmentsRemoved += this.OnShipmentsRemoved;
             // 
             // comboShipmentType
             // 

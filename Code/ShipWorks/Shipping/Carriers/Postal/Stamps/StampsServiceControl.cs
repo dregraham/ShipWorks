@@ -84,6 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
@@ -101,6 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
             }
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -109,6 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -125,6 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>

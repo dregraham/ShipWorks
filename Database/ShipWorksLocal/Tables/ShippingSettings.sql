@@ -59,6 +59,10 @@
     [UpsMailInnovationsEnabled]        BIT            NOT NULL,
     [WorldShipMailInnovationsEnabled]  BIT            NOT NULL,
     [BestRateExcludedShipmentTypes]    NVARCHAR (30)  NOT NULL,
+	[ShipSenseEnabled]				   [bit] NOT NULL,
+	[ShipSenseUniquenessXml]		   [xml] NOT NULL,
+	[ShipSenseProcessedShipmentID]	   [bigint] NOT NULL,
+	[ShipSenseEndShipmentID]	       [bigint] NOT NULL,
     CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED ([ShippingSettingsID] ASC)
 );
 

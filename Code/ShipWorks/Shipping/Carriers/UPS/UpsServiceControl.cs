@@ -104,6 +104,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             // Load the base
             base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
@@ -142,6 +143,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageDetailsControl.LoadShipments(LoadedShipments, enableEditing);
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -284,6 +286,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -337,6 +340,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -816,6 +820,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
         /// A rate has been selected
         /// </summary>
         public override void OnRateSelected(object sender, RateSelectedEventArgs e)
@@ -840,6 +852,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnPackageCountChanged(object sender, EventArgs e)
         {
             //LoadInsuranceValueUI(true);
+            RaiseShipSenseFieldChanged();
         }
 
         private void OnPayorDutiesFeesChanged(object sender, EventArgs e)

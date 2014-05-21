@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[AmazonStore] (
     [StoreID]               BIGINT           NOT NULL,
     [AmazonApi]             INT              NOT NULL,
+	[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
     [SellerCentralUsername] NVARCHAR (50)    NOT NULL,
     [SellerCentralPassword] NVARCHAR (50)    NOT NULL,
     [MerchantName]          VARCHAR (64)     NOT NULL,

@@ -63,6 +63,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
@@ -129,6 +133,7 @@
     <Compile Include="AddressValidation\AddressValidationResultTest.cs" />
     <Compile Include="AddressValidation\AddressValidatorTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
+    <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
@@ -364,6 +369,15 @@
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
     <Compile Include="Shipping\ShipmentTypeTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
+    <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriterTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactoryTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyTest.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\StringHashTest.cs" />
+    <Compile Include="Shipping\ShipSense\KnowledgebaseEntryChangeSetXmlWriterTest.cs" />
+    <Compile Include="Shipping\ShipSense\KnowledgebaseEntryTest.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />

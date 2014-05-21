@@ -37,6 +37,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public event EventHandler RateCriteriaChanged;
 
+        // Indiciates if the event shouldnt currently be raised
+        int suspendShipSenseFieldEvent = 0;
+
+        /// <summary>
+        /// Some part of the packaging has changed the ShipSense criteria
+        /// </summary>
+        public event EventHandler ShipSenseFieldChanged;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -93,6 +101,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             suspendRateCriteriaEvent++;
+            suspendShipSenseFieldEvent++;
 
             packageCountCombo.SelectedIndexChanged -= this.OnChangePackageCount;
             packagesGrid.SelectionChanged -= this.OnChangeSelectedPackages;
@@ -127,8 +136,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         // Next bucket next time
                         index++;
                     }
-
-
                 }
             }
 
@@ -156,6 +163,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             UpdateLayout();
 
             suspendRateCriteriaEvent--;
+            suspendShipSenseFieldEvent--;
         }
 
         
@@ -184,7 +192,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Be just tall enough to hold the package content
             this.Height = panelPackage.Bottom;
         }
-
     
         /// <summary>
         /// Update the display t ext of the given GridRow, which is dependant on how many packages it has
@@ -238,6 +245,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Raise the rate critiera changed event
             RaiseRateCriteriaChanged();
 
+            // Raise the ShipSense changed event
+            RaiseShipSenseFieldChanged();
+
             // Raise the package count changed event
             if (PackageCountChanged != null)
             {
@@ -251,6 +261,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnChangeSelectedPackages(object sender, SelectionChangedEventArgs e)
         {
             suspendRateCriteriaEvent++;
+            suspendShipSenseFieldEvent++;
 
             // Save the existing stuff before loading the new stuff
             SaveToEntities();
@@ -298,6 +309,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             insuranceControl.LoadInsuranceChoices(insuranceToLoad);
 
             suspendRateCriteriaEvent--;
+            suspendShipSenseFieldEvent--;
         }
 
         /// <summary>
@@ -353,6 +365,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (RateCriteriaChanged != null)
             {
                 RateCriteriaChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
+        }
+
+        /// <summary>
+        /// Raises the ShipSenseFieldChanged event
+        /// </summary>
+        private void RaiseShipSenseFieldChanged()
+        {
+            if (suspendShipSenseFieldEvent > 0)
+            {
+                return;
+            }
+
+            if (ShipSenseFieldChanged != null)
+            {
+                ShipSenseFieldChanged(this, EventArgs.Empty);
             }
         }
     }

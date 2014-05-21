@@ -235,7 +235,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Uploads payment, shipment and comments to Esy.
+        /// Gets a list of transactions associated with the given receipt
+        /// </summary>
+        public JToken GetTransactionsForReceipt(long receiptID, int limit, int offset)
+        {
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetTransactionsForReceipt(receiptID));
+
+            oAuth.OtherParameters.Add("includes", EtsyEndpoints.TransactionIncludes);
+            oAuth.OtherParameters.Add("limit", limit.ToString());
+            oAuth.OtherParameters.Add("offset", offset.ToString());
+
+            string response = ProcessRequest(oAuth, "GetTransactions");
+            return JObject.Parse(response);
+        }
+
+        /// <summary>
+        /// Uploads payment, shipment and comments to Etsy.
         /// </summary>
         /// <param name="orderNumber"></param>
         /// <param name="comment">Only upload comment if not empty</param>

@@ -47,6 +47,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
+
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
@@ -57,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             UpdateInsuranceDisplay();
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -91,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
+
             base.SaveToShipments();
 
             // Save the origin
@@ -111,6 +116,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -148,6 +154,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private void OnRateCriteriaChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Some aspect of the shipment that affects ShipSense has changed
+        /// </summary>
+        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        {
+            RaiseShipSenseFieldChanged();
         }
         
         /// <summary>

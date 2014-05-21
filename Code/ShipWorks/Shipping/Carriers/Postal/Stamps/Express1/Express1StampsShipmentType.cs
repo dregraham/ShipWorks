@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -95,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             return new StampsProfileControl(ShipmentTypeCode);
         }
-
+        
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
@@ -131,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new Express1StampsShipmentProcessingSynchronizer();
         }

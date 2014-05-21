@@ -13,6 +13,7 @@ using ShipWorks.Data.Grid.Columns.ValueProviders;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.CoreExtensions.Grid;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -71,6 +72,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridEnumDisplayType<ShipmentTypeCode>(EnumSortMethod.Value), "Provider", ShipmentTypeCode.FedEx,
                     new GridColumnFieldValueProvider(ShipmentFields.ShipmentType),
                     new GridColumnSortProvider(e => ShipmentTypeManager.GetSortValue((ShipmentTypeCode) ((ShipmentEntity) e).ShipmentType))) { DefaultWidth = 46 },
+
+                    new GridColumnDefinition("{4DF5DC1D-AC7E-4AF5-AEA5-17AA7D103037}", false,
+                    new GridEnumDisplayType<ShipSenseStatus>(EnumSortMethod.Value), "ShipSense", ShipSenseStatus.Applied,
+                    ShipmentFields.ShipSenseStatus),
 
                     new GridColumnDefinition("{422716BA-0CD2-4c8d-ADB8-C3BC7AB60019}", 
                     new GridTextDisplayType().Decorate(new GridRollupDecorator(OrderFields.RollupItemCount)), "Item Code", "DS-1065",

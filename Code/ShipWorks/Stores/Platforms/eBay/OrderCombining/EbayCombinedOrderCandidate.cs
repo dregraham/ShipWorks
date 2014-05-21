@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading;
 using ShipWorks.Data.Connection;
@@ -280,14 +282,51 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             }
 
             // create the local combined order
-            return CombineLocalOrders(toCombine, ebayOrderID);
+            bool result = false;
+            try
+            {
+                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
+                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) =>
+                {
+                    result = CombineLocalOrders(adapter, toCombine, ebayOrderID);
+
+                    // Don't commit because sqlDeadlockRetry will do the commit
+                });
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                // An ORM query exception could occur if one of the mapped tables no longer exists or cannot be found
+                // in the database
+                // Log the details of the original exception
+                log.Error(string.Format("An ORM exception occurred: {0}. {1}", ex.Message, ex.QueryExecuted));
+
+                // Now construct a more user-friendly error message in the form of an eBay exception
+                string errorMessage = "An error occurred while saving a combined order. ";
+                long? orderNumberBeingDeleted = GetOrderNumberFromORMQueryExecutionException(ex);
+
+                if (orderNumberBeingDeleted.HasValue)
+                {
+                    errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderNumberBeingDeleted.Value);
+                }
+
+                throw new EbayException(errorMessage, ex);
+            }
+            catch (SqlDeadlockException ex)
+            {
+                // Log the details of the original exception
+                log.Error(string.Format("A SqlDeadlockException exception occurred: {0}", ex.Message));
+
+                throw new EbayException("An error occurred while saving a combined order. ", ex);
+            }
+
+            return result;
         }
 
         /// <summary>
         /// Creates a new order with the order items of the provided orders.  If this new order
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
-        private bool CombineLocalOrders(List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
+        private bool CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
             // Do nothing
             if (toCombine.Count == 0)
@@ -347,57 +386,24 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             // the order total needs to be redone
             newOrder.OrderTotal = OrderUtility.CalculateTotal(newOrder);
 
-            try
+            // Save the order, which will include all moved items, payments, and charges
+            adapter.SaveAndRefetch(newOrder);
+
+            // Now we need to go through each old order, copy over the notes and shipments, and delete the original order
+            foreach (OrderEntity order in toCombine.Select(c => c.Order))
             {
-                // save the new order
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    // Save the order, which will include all moved items, payments, and charges
-                    adapter.SaveAndRefetch(newOrder);
+                OrderUtility.CopyNotes(order.OrderID, newOrder);
 
-                    // Now we need to go through each old order, copy over the notes and shipments, and delete the original order
-                    foreach (OrderEntity order in toCombine.Select(c => c.Order))
-                    {
-                        OrderUtility.CopyNotes(order.OrderID, newOrder);
+                OrderUtility.CopyShipments(order.OrderID, newOrder);
 
-                        OrderUtility.CopyShipments(order.OrderID, newOrder);
-
-                        DeletionService.DeleteOrder(order.OrderID, adapter);
-                    }
-
-                    // commit the transaction
-                    adapter.Commit();
-                }
+                DeletionService.DeleteOrder(order.OrderID, adapter);
             }
-            catch (ORMQueryExecutionException ex)
-            {
-                // An ORM query exception could occur if one of the mapped tables no longer exists or cannot be found
-                // in the database
-                
-                // Log the details of the original exception
-                log.Error(string.Format("An ORM exception occurred: {0}. {1}", ex.Message, ex.QueryExecuted));
 
-                // Now construct a more user-friendly error message in the form of an eBay exception
-                string orderParameterName = "@OrderID1";
-                string errorMessage = "An error occurred while saving a combined order. ";
+            // Everything has been set on the order, so calculate the hash key
+            OrderUtility.PopulateOrderDetails(newOrder, adapter);
+            OrderUtility.UpdateShipSenseHashKey(newOrder);
 
-                if (ex.Parameters.Count > 0)
-                {
-                    // Use the value in the order ID parameter to look up the order number being deleted so we can 
-                    // indicate which order the error occurred on
-                    System.Data.SqlClient.SqlParameter parameter = ex.Parameters[0] as System.Data.SqlClient.SqlParameter;
-                    if (parameter != null && parameter.ParameterName == orderParameterName)
-                    {
-                        OrderEntity orderBeingDeleted = DataProvider.GetEntity(long.Parse(parameter.Value.ToString())) as OrderEntity;
-                        if (orderBeingDeleted != null)
-                        {
-                            errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderBeingDeleted.OrderNumber);
-                        }
-                    }
-                }
-
-                throw new EbayException(errorMessage, ex);
-            }
+            adapter.SaveAndRefetch(newOrder);
 
             return true;
         }
@@ -572,6 +578,34 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     newOrder.SetNewFieldValue(field.FieldIndex, field.CurrentValue);
                 }
             }
+        }
+
+        /// <summary>
+        /// Helper method to try and extract an order number from an ORMQueryExecutionException
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        private long? GetOrderNumberFromORMQueryExecutionException(ORMQueryExecutionException ex)
+        {
+            // Now construct a more user-friendly error message in the form of an eBay exception
+            string orderParameterName = "@OrderID1";
+
+            if (ex.Parameters.Count > 0)
+            {
+                // Use the value in the order ID parameter to look up the order number being deleted so we can 
+                // indicate which order the error occurred on
+                System.Data.SqlClient.SqlParameter parameter = ex.Parameters[0] as System.Data.SqlClient.SqlParameter;
+                if (parameter != null && parameter.ParameterName == orderParameterName)
+                {
+                    OrderEntity orderBeingDeleted = DataProvider.GetEntity(long.Parse(parameter.Value.ToString())) as OrderEntity;
+                    if (orderBeingDeleted != null)
+                    {
+                        return orderBeingDeleted.OrderNumber;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

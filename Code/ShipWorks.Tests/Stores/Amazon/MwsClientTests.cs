@@ -15,7 +15,10 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void ClockSyncTest()
         {
-            Assert.IsTrue(AmazonMwsClient.ClockInSyncWithMWS());
+            using (AmazonMwsClient client = new AmazonMwsClient(new AmazonStoreEntity {AmazonApiRegion = "US"}))
+            {
+                Assert.IsTrue(client.ClockInSyncWithMWS());   
+            }
         }
 
         [TestMethod]

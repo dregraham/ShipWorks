@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -469,6 +471,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             // If the country is Puerto Rico, return PR regardless of what was entered
             return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : state;
+        }
+
+        /// <summary>
+        /// Determines whether any postal account exists.
+        /// </summary>
+        public static bool IsPostalSetup()
+        {
+            return EndiciaAccountManager.EndiciaAccounts.Any() ||
+                     EndiciaAccountManager.Express1Accounts.Any() ||
+                     StampsAccountManager.StampsAccounts.Any() ||
+                     StampsAccountManager.Express1Accounts.Any();
         }
     }
 }

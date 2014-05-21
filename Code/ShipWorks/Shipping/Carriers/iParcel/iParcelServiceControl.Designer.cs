@@ -309,6 +309,7 @@
             this.packageControl.Size = new System.Drawing.Size(412, 292);
             this.packageControl.TabIndex = 4;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             this.packageControl.Resize += new System.EventHandler(this.OnPackageControlSizeChanged);
             // 
             // iParcelServiceControl

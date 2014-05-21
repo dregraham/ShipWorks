@@ -106,6 +106,7 @@
             this.weight.TabIndex = 3;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // labelWeight
             // 
@@ -137,6 +138,7 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 5;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // packagesGrid
             // 

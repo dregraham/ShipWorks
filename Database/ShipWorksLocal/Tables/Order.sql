@@ -70,6 +70,8 @@
     [BillUnparsedName]      NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]   INT            NOT NULL,
     [ShipUnparsedName]      NVARCHAR (100) NOT NULL,
+	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ShipSenseRecognitionStatus] [int] NOT NULL,
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC),
     CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID]),
     CONSTRAINT [FK_Order_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
@@ -221,6 +223,10 @@ CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount]
     ON [dbo].[Order]([RollupNoteCount] ASC);
 
 
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
 GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'4', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Order', @level2type = N'COLUMN', @level2name = N'StoreID';
 

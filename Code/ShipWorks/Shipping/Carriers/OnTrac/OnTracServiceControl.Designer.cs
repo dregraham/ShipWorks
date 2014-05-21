@@ -450,6 +450,7 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 73;
             this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             // 
             // label3
             // 
@@ -483,6 +484,7 @@
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
+            this.weight.WeightChanged += OnShipSenseFieldChanged;
             // 
             // packagingType
             // 

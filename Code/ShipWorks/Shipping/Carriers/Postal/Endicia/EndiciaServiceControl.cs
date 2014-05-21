@@ -90,6 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             bool anyRequireEntryFacility = false;
 
@@ -135,6 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             service.SelectedIndexChanged += new EventHandler(OnChangeServiceType);
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -143,6 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
 
@@ -168,6 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>

@@ -28,4 +28,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="USTerritory" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e0c39848-5f14-4871-a471-3679e6bc61f4" ChangeDateTime="05/21/2014 21:59:15">
+    <Property Name="ElementName" Value="[dbo].[ShipSenseKnowledgebase].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ShipSenseKnowledgebase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Hash" />
+  </Operation>
 </Operations>

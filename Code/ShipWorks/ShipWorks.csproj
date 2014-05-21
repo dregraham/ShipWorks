@@ -608,6 +608,8 @@
     <Compile Include="Data\Administration\Versioning\UpdateProcessManager.cs" />
     <Compile Include="Data\Administration\Versioning\VersionUpgradeStep.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
+    <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\BillShipAddressConditionUtility.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Data\Administration\Versioning\FindVersionUpgradePathException.cs" />
@@ -627,6 +629,8 @@
     <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\MilitaryAddressCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\POBoxCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\ResidentialStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
@@ -667,6 +671,7 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.Designer.cs">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\BestRatePackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Setup\CounterRateProcessingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -700,13 +705,18 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
@@ -722,6 +732,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesBroker.cs" />
@@ -735,6 +746,7 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
@@ -748,6 +760,13 @@
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\RateCache.cs" />
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteControl.Designer.cs">
+      <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InformationFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\RatesPanel.cs">
       <SubType>UserControl</SubType>
@@ -755,6 +774,7 @@
     <Compile Include="Shipping\Editing\Rating\RatesPanel.Designer.cs">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
@@ -2062,6 +2082,62 @@
     </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
+    <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\IShipSenseOrderItemKeyFactory.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\IKnowledgebaseHash.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHash.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKey.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\ShipSenseOrderItemKeyFactory.cs" />
+    <Compile Include="Shipping\ShipSense\Hashing\StringHash.cs" />
+    <Compile Include="Shipping\ShipSense\IChangeSetXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\IKnowledgebase.cs" />
+    <Compile Include="Shipping\ShipSense\Knowledgebase.cs" />
+    <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItem.cs" />
+    <Compile Include="Shipping\ShipSense\KnowledgebaseEntry.cs" />
+    <Compile Include="Shipping\ShipSense\KnowledgebaseEntryChangeSetXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\IPackageAdapter.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackage.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriter.cs" />
+    <Compile Include="Shipping\ShipSense\Packaging\NullPackageAdapter.cs" />
+    <Compile Include="Shipping\ShipSense\Population\IShipSenseLoaderGateway.cs" />
+    <Compile Include="Shipping\ShipSense\Population\ShipSenseLoader.cs" />
+    <Compile Include="Shipping\ShipSense\Population\ShipSenseLoaderGateway.cs" />
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseConfirmationDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseConfirmationDlg.Designer.cs">
+      <DependentUpon>ShipSenseConfirmationDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
+      <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
+      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.Designer.cs">
+      <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.Designer.cs">
+      <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\ShipSense\ShipSenseException.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseStatus.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseSynchronizer.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseUniquenessXmlParser.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseOrderRecognitionStatus.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottle.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottleParameters.cs" />
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
@@ -2088,6 +2164,12 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.Designer.cs">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.Designer.cs">
+      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsDownloader.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonFulfillmentChannelCondition.cs" />
@@ -2123,6 +2205,12 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\RequestSignature.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\SigningAlgorithm.cs" />
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.Designer.cs">
+      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2224,6 +2312,7 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\Constants\PaymentStatusCodes.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\Constants\ShippingStatusCodes.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorIsFBACondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorMPNCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorFlagTypeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Grid\GridChannelAdvisorFlagDisplayType.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Grid\GridChannelAdvisorFlagDisplayEditor.cs">
@@ -2512,6 +2601,7 @@
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\DimensionsOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\InsuranceOutline.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\PackageOutline.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ShipSenseOutline.cs" />
     <Compile Include="Templates\Tokens\ITokenSuggestionFactory.cs" />
     <Compile Include="Templates\Tokens\TokenSelectionMode.cs" />
     <Compile Include="UI\Controls\DecimalTextBox.cs">
@@ -7172,6 +7262,9 @@
     <EmbeddedResource Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.resx">
       <DependentUpon>ExceptionsRateFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\InformationFootnoteControl.resx">
+      <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -7202,6 +7295,21 @@
     <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
       <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseConfirmationDlg.resx">
+      <DependentUpon>ShipSenseConfirmationDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
+      <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
+      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
+      <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.resx">
+      <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -7229,6 +7337,9 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.resx">
       <DependentUpon>AmazonMwsAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonMwsCountryControl.resx">
+      <DependentUpon>AmazonMwsCountryControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsMarketplaceSelectionDlg.resx">
       <DependentUpon>AmazonMwsMarketplaceSelectionDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -7237,6 +7348,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.resx">
       <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.resx">
+      <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsPage.resx">
       <DependentUpon>AmazonMwsPage.cs</DependentUpon>
@@ -7481,8 +7595,9 @@
     <None Include="App.Ups.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />    
     <Content Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
+    <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -10337,8 +10452,11 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.6.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.7.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.data.sql" />

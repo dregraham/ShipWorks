@@ -138,6 +138,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 return new List<WizardPage> () 
                 { 
+                    new AmazonMwsCountryPage(),
                     new AmazonMwsPage(),
                     new AmazonMwsDownloadCriteriaPage()
                 };

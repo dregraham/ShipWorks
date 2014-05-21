@@ -12,10 +12,12 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Stores;
@@ -484,7 +486,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
                 if (store != null)
                 {
-                    TangoWebClient.LogShipment(store, shipmentForTango);
+                    try
+                    {
+                        TangoWebClient.LogShipment(store, shipmentForTango);
+                    }
+                    catch (ShipWorksLicenseException ex)
+                    {
+                        throw new ShippingException(ex.Message, ex);
+                    }
+                    catch (TangoException ex)
+                    {
+                        throw new ShippingException(ex.Message, ex);
+                    }
                 }
             }
         }
@@ -564,7 +577,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         adapter.Commit();
                     }
 
-                    ShippingManager.VoidShipment(shipment.ShipmentID);
+                    // ShippingManager.VoidShipment(shipment.ShipmentID);
+                    try
+                    {
+                        SqlAdapterRetry<SqlAppResourceLockException> sqlAppResourceLockExceptionRetry =
+                            new SqlAdapterRetry<SqlAppResourceLockException>(5, -5, string.Format("WorldShipImportMonitor.ProcessVoidEntry for ShipmentID {0}", shipment.ShipmentID));
+
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ShippingManager.VoidShipment(shipment.ShipmentID));
+                    }
+                    catch (ShippingException ex)
+                    {
+                        // ShippingManager.VoidShipment translates a SqlAppResourceLockException to a ShippingException, so we check for that type.
+                        if (!(ex.InnerException is SqlAppResourceLockException))
+                        {
+                            // It wasn't a SqlAppResourceLockException, so re-throw 
+                            throw;
+                        }
+                    }
                 }
             }
 

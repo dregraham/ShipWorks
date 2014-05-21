@@ -98,15 +98,14 @@ namespace ShipWorks.ApplicationCore.Crashes
                 assemblyVersion.Revision);
             desc.AppendFormat("V{0} ", version);
 
-            // We first want the class name of the exception that occured
+            // Get the class name of the exception that occured
             desc.Append(ex.GetType().Name);
 
-            // Get the first method that is in our code out of the stack trace
-            string method = GetFirstShipWorksMethod(ex.StackTrace);
-            if (!string.IsNullOrWhiteSpace(method))
-            {
-                desc.AppendFormat(" ({0})", method);
-            }
+            // Now add exception message and inner exception message (if there is one)
+            desc.AppendFormat("{0},{1}", ex.Message, ex.InnerException != null ? ex.InnerException.Message : "None");
+
+            // Now add the stack trace for exception location uniqueness
+            desc.AppendFormat("{0}", ex.StackTrace);
 
             // Return result
             return desc.ToString();

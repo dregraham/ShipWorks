@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -107,6 +108,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IntegrationTestBase.cs" />
     <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
+    <Compile Include="ShipSense\ShipSenseLoaderTest.cs" />
     <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

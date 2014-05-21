@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
@@ -31,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
+        private readonly int numberOfRatesToReturn = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -53,6 +55,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             this.brokerFactory = brokerFactory;
             this.filterFactory = filterFactory;
             this.log = log;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class.
+        /// </summary>
+        public BestRateShipmentType(BestRateShippingBrokerFactory bestRateShippingBrokerFactory, int numberOfRatesToReturn)
+            : this(bestRateShippingBrokerFactory, new BestRateFilterFactory(), LogManager.GetLogger(typeof(BestRateShipmentType)))
+        {
+            this.numberOfRatesToReturn = numberOfRatesToReturn;
         }
 
         /// <summary>
@@ -147,6 +158,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         }
 
         /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new BestRatePackageAdapter(shipment)
+            };
+        }
+
+        /// <summary>
         /// Allows bases classes to apply the default settings to the given profile
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -204,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : 1);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : numberOfRatesToReturn);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
@@ -307,10 +329,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="broker">Broker for which to start getting rates</param>
         /// <param name="shipment">Shipment for which to get rates</param>
-        /// <param name="brokerExceptions">The broker exceptions.</param>
-        /// <returns>
-        /// A task that will contain the results
-        /// </returns>
+        /// <param name="brokerExceptions">Handler for exceptions generated while getting rates</param>
+        /// <returns>A task that will contain the results</returns>
         private static Task<RateGroup> StartGetRatesTask(IBestRateShippingBroker broker, ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
             return Task<RateGroup>.Factory.StartNew(() =>
@@ -366,7 +386,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             // The synchronizer isn't used in overridden PreProcess method for this shipment type
             return null;

@@ -1,5 +1,6 @@
 require 'albacore'
-
+require 'win32/registry'
+require "securerandom"
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
@@ -19,7 +20,8 @@ end
 @revisionFilePath = "\\\\INTFS01\\Development\\CruiseControl\\Configuration\\Versioning\\ShipWorks\\NextRevision.txt"
 
 desc "Cleans and builds the solution with the debug config"
-task :rebuild => ["build:clean", "build:debug"]
+task :rebuild, [:forCI] => ["build:clean", "build:debug"] do |t, args|
+end
 
 ########################################################################
 ## Tasks to build in debug and release modes (using Albacore library)
@@ -32,7 +34,44 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
-	msbuild :debug do |msb|
+	msbuild :debug, :forCI do |msb, args|
+		
+		if args != nil and args.forCI != nil and args.forCI == 'true'			
+			puts 'Updating config file for integration tests to run on CI server...'
+			# We are going to adjust the ShipWorks instance used in the config file
+			# based on the registry key value of our current directory path. This is
+			# so that it does not matter where the integration tests are run from, they
+			# will always connect to the appropriate database instance
+			instanceGuid = ""
+			
+			# Assume we're in the directory containing the ShipWorks solution - we need to get
+			# the registry key name based on the directory to the ShipWorks.exe to figure out
+			# which GUID to use in our path to the the SQL session file.
+			appDirectory = Dir.pwd + "/Artifacts/Application"
+			appDirectory = appDirectory.gsub('/', '\\')
+			
+			# Read the GUID from the registry, so we know which directory to look in; pass in 
+			# 0x100 to read from 64-bit registry otherwise the key will not be found			
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+				instanceGuid = reg[appDirectory]				
+				puts 'Found instance GUID: ' + instanceGuid
+			end
+			
+			# Read in the app settings for the integration test project
+			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration.MSTest/App.config"
+			originalAppSettings = File.read(appConfigFilePath)
+			match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
+			puts match
+			updatedAppSettings = originalAppSettings.gsub(/#{match}/, '<add key="ShipWorksInstanceGuid" value="' + instanceGuid + '"/>')
+			
+			# Write the updated app.config settings back to disk, so we connect to the 
+			# correct database in our integration tests
+			File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }	
+			
+			puts 'Updated configuration file: ' + updatedAppSettings
+			puts 'config file has been updated'
+		end 
 		print "Building solution with the debug config...\r\n\r\n"
 
 		msb.properties :configuration => :Debug
@@ -51,7 +90,7 @@ namespace :build do
 	msbuild :analyze do |msb|
 		print "Running code analysis...\r\n\r\n"
 		
-		msb.verbosity = "normal"
+		msb.verbosity = "quiet"
 		msb.properties :configuration => :Debug, :RunCodeAnalysis => true
 		msb.parameters = "/p:warn=0"
 		msb.targets :Build
@@ -158,7 +197,7 @@ namespace :build do
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
-	end
+	end	
 end
 
 ########################################################################
@@ -192,13 +231,21 @@ namespace :test do
 	end	
 	
 	desc "Execute integration tests"
-	mstest :integration do |mstest|
+	mstest :integration, :categoryFilter do |mstest, args|
 		print "Deleting previous result...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		File.delete("TestResults/integration-results.trx") if File.exist?("TestResults/integration-results.trx")
 		
+		categoryParameter = ""
+		if args != nil and args.categoryFilter != nil and args.categoryFilter != ""
+			# We need to filter the tests based on the categories provided
+			categoryParameter = "/category:" + args.categoryFilter
+		end
+		
+		puts categoryParameter		
+		
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
-		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", "/resultsfile:TestResults/integration-results.trx"
+		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
 	end
 end
 
@@ -209,7 +256,8 @@ end
 namespace :db do
 
 	desc "Create and populate a new ShipWorks database with seed data"
-	task :rebuild => [:create, :schema, :seed]	
+	task :rebuild, [:schemaVersion, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy] do |t, args|
+	end
 
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create do
@@ -261,8 +309,15 @@ namespace :db do
 	end
 
 	desc "Build the ShipWorks_SeedData database schema from scratch"
-	task :schema do
+	task :schema, :schemaVersion do |t, args|
 		puts "Creating the database schema..."
+				
+		versionForProcedure = "3.0.0.0"
+		
+		if args != nil and args[:schemaVersion] != nil and args[:schemaVersion] != ""
+			# A schema version was passed in, so use it for the schema version procedure
+			versionForProcedure = args[:schemaVersion]
+		end
 				
 		# Clean up any remnants of the temporary script that may exist from a previous run
 		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
@@ -277,6 +332,15 @@ namespace :db do
 		# Concatenate the schema script to our string
 		sqlText.concat(File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateSchema.sql"))
 
+		sqlText.concat("
+		        CREATE PROCEDURE [dbo].[GetSchemaVersion] 
+                
+                AS 
+                SELECT '{SCHEMA_VERSION_VALUE}' AS 'SchemaVersion'
+				GO
+		")
+		sqlText = sqlText.sub(/{SCHEMA_VERSION_VALUE}/, versionForProcedure)
+		
 		# Write our script to a temporary file and execute the SQL
 		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
 		sh "sqlcmd -S (local) -i CreateSeedSchema.sql"
@@ -308,5 +372,121 @@ namespace :db do
 
 		# Clean up the temporary script
 		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
+	end
+	
+	desc "Switch the ShipWorks settings to point to a given database"
+	task :switch, :targetDatabase, :instanceName do |t, args|
+		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""			
+			# A target database was passed in, so update the sql session file
+			
+			# Assume we're in the directory containing the ShipWorks solution - we need to get
+			# the registry key name based on the directory to the ShipWorks.exe to figure out
+			# which GUID to use in our path to the the SQL session file.
+			appDirectory = Dir.pwd + "/Artifacts/Application"
+			appDirectory = appDirectory.gsub('/', '\\')
+			
+			instanceName = "(local)\\Development"
+			
+			if args[:instanceName] != nil and args[:instanceName] != ""
+				# Default the instance name to run on the local machine's Development instance if 
+				# none is provided
+				instanceName = args[:instanceName]
+			end
+			
+			instanceGuid = ""		
+			
+			
+			# Read the GUID from the registry, so we know which directory to look in; pass in 
+			# 0x100 to read from 64-bit registry otherwise the key will not be found			
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+				instanceGuid = reg[appDirectory]				
+			end
+			
+			if instanceGuid != ""
+				puts "Found an instance GUID: " + instanceGuid
+				fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"
+				
+				puts "Updating SQL session file..."			
+				
+				# Replace the current instance and database name with that of the info provided
+				contents = File.read(fileName)				
+				contents = contents.gsub(/<Instance>.*<\/Instance>/, '<Instance>' + instanceName + '</Instance>')
+				contents = contents.gsub(/<Database>[\w]*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
+				
+				# Write the updated SQL session XML back to the file
+				File.open(fileName, 'w') { |file| file.write(contents) }
+				
+				puts "Updated SQL session file is now..."			
+				puts contents
+			end
+		else
+			puts "Did not switch database used by ShipWorks: a target database was not specified."
+		end
+	end
+	
+	desc "Deploy assemblies to the given database"
+	task :deploy do |t, args|
+		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:redeployassemblies"
+		sh command
+	end
+end
+
+namespace :setup do
+
+	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
+	task :registry, :instancePath do |t, args|
+	
+		instanceGuid = SecureRandom.uuid
+		puts instanceGuid
+		
+		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""
+			
+			# Create the ShipWorks instance value based on the registryKey name provided
+			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
+				reg[args.instancePath] = '{' + instanceGuid + '}'
+			end
+		end		
+	end
+	
+	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
+	task :sqlSession, :instancePath, :targetDatabase do |t, args|
+	
+		instanceGuid = ""
+		
+		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
+		# registry otherwise the key will not be found
+		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			# Read the instance GUID from the registry
+			instanceGuid = reg[args.instancePath]				
+		end
+			
+		
+		# Write out some boiler plate XML that will contain the database name provided
+		boilerPlateXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<SqlSession>
+  <Server>
+    <Instance>(local)\\DEVELOPMENT</Instance>
+    <Database>@@DATABASE_NAME@@</Database>
+  </Server>
+  <Credentials>
+    <Username />
+    <Password>dgPE4WpwFQg=</Password>
+    <WindowsAuth>True</WindowsAuth>
+  </Credentials>
+</SqlSession>"
+		boilerPlateXml = boilerPlateXml.gsub(/<Database>@@DATABASE_NAME@@<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
+		
+		# Make sure the directories are created before writing to the sqlsession file
+		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid) if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid)
+		Dir.mkdir("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings") if !Dir.exist?("C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings")
+		
+		# Create/write the SQL Session file
+		fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + instanceGuid + "\\Settings\\sqlsession.xml"	
+		sessionFile = File.new(fileName, 'w')
+		sessionFile.puts(boilerPlateXml)
+		sessionFile.close
 	end
 end

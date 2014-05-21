@@ -26,6 +26,7 @@ using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Stores.Platforms;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.ShipSense;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -613,7 +614,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
                         new GridMoneyDisplayType(), "Total", 1024.18m,
-                        OrderFields.OrderTotal)
+                        OrderFields.OrderTotal), 
+
+                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}", false,
+                        new GridEnumDisplayType<ShipSenseOrderRecognitionStatus>(EnumSortMethod.Description),
+                        "ShipSense Status", "Recognized by ShipSense",
+                        OrderFields.ShipSenseRecognitionStatus)
                 };
 
             return definitions;

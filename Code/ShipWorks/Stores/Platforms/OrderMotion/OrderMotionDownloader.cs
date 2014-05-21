@@ -105,11 +105,14 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             {
                 throw new DownloadException(ex.Message, ex);
             }
+            catch (TlsException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
             catch (SqlForeignKeyException ex)
             {
                 throw new DownloadException(ex.Message, ex);
             }
-
         }
 
         /// <summary>

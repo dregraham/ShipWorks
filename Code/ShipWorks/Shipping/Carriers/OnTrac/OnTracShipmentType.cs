@@ -24,7 +24,9 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Shipping.Tracking;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
@@ -84,6 +86,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new OnTracProfileControl();
+        }
+
+        /// <summary>
+        /// Gets the package adapter for the shipment.
+        /// </summary>
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
+        {
+            return new List<IPackageAdapter>()
+            {
+                new OnTracPackageAdapter(shipment)
+            };
         }
 
         /// <summary>
@@ -151,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new OnTracShipmentProcessingSynchronizer();
         }
@@ -529,8 +542,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
         {
             List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
