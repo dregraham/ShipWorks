@@ -7,15 +7,9 @@
     [DistributionCenter] NVARCHAR (80) NOT NULL,
     [HarmonizedCode]     NVARCHAR (10) NOT NULL,
     [IsFBA]              BIT           NOT NULL,
-	[MPN]				 [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [MPN]                NVARCHAR (50) NOT NULL,
     CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED ([OrderItemID] ASC),
     CONSTRAINT [FK_ChannelAdvisorOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
 );
 
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyChannelAdvisorOrderItem]
-    ON [dbo].[ChannelAdvisorOrderItem]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyChannelAdvisorOrderItem]
 

@@ -2723,7 +2723,7 @@ CREATE TABLE [dbo].[Order] (
     [BillUnparsedName]                     NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]                  INT            NOT NULL,
     [ShipUnparsedName]                     NVARCHAR (100) NOT NULL,
-    [ShipSenseHashKey]                     NVARCHAR (64)  COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    [ShipSenseHashKey]                     NVARCHAR (64)  COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
     [ShipSenseRecognitionStatus]           INT            NOT NULL,
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC)
 );
@@ -4301,7 +4301,7 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
 
 GO
 CREATE TABLE [dbo].[ShipSenseKnowledgebase] (
-    [Hash]  NVARCHAR (64)   NOT NULL,
+    [Hash]  NVARCHAR (64)   COLLATE SQL_Latin1_General_CP1_CS_AS   NOT NULL,
     [Entry] VARBINARY (MAX) NOT NULL,
     CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED ([Hash] ASC)
 );

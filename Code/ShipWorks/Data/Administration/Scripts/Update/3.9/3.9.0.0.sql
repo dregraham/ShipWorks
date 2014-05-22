@@ -322,7 +322,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_Order]
 [BillUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL
 )
 GO
@@ -339,6 +339,7 @@ GO
 DECLARE @idVal BIGINT
 SELECT @idVal = IDENT_CURRENT(N'[dbo].[Order]')
 IF @idVal IS NOT NULL
+    SELECT @idVal = @idVal + 1000
     DBCC CHECKIDENT(N'[dbo].[tmp_rg_xx_Order]', RESEED, @idVal)
 GO
 DROP TABLE [dbo].[Order]
@@ -554,6 +555,7 @@ GO
 DECLARE @idVal BIGINT
 SELECT @idVal = IDENT_CURRENT(N'[dbo].[Shipment]')
 IF @idVal IS NOT NULL
+    SELECT @idVal = @idVal + 1000
     DBCC CHECKIDENT(N'[dbo].[tmp_rg_xx_Shipment]', RESEED, @idVal)
 GO
 DROP TABLE [dbo].[Shipment]
@@ -860,7 +862,7 @@ PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
 GO
 CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
 (
-[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
