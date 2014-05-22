@@ -7,7 +7,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
     [TestClass]
     public class FedExUSIntegrationTests : IntegrationTestBase
     {
-        private const string fedExTestAccountNumber = "603103343";
+        private string fedExTestAccountNumber = "603103343";
         private const string ecodAccountNumber = "222326460";
 
         private bool justLabels = true;
@@ -51,6 +51,8 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
+            fedExTestAccountNumber = "510158040";
+
             var testObject = new FedExUSGroundAlcoholFixture();
             try
             {
@@ -81,6 +83,8 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExExpressInternationalAlcohol()
         {
+            fedExTestAccountNumber = "510158040";
+
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(testObject, FedExUsExpressInternationalAlcoholMapping.Mapping) &&
@@ -122,6 +126,8 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExExpressDomesticAlcohol()
         {
+            fedExTestAccountNumber = "510158040";
+
             var testObject = new FedExPrototypeFixture();
 
             if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) &&
