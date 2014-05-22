@@ -89,6 +89,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] ([OrderID], [Processed], [ShipSenseStatus])
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID])
+GO
 EXECUTE sp_addextendedproperty @name = N'AuditFormat', @value = N'103', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Shipment', @level2type = N'COLUMN', @level2name = N'ShipmentType';
 
 

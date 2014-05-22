@@ -7302,7 +7302,6 @@
     <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
       <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
