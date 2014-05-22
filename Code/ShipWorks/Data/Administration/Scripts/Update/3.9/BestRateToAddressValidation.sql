@@ -176,22 +176,6 @@ ALTER TABLE [dbo].[OrderMotionOrder] DROP CONSTRAINT [FK_OrderMotionOrder_Order]
 
 
 GO
-PRINT N'Dropping FK_Order_Store...';
-
-
-GO
-ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Store];
-
-
-GO
-PRINT N'Dropping FK_Order_Customer...';
-
-
-GO
-ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Customer];
-
-
-GO
 PRINT N'Dropping FK_OrderPaymentDetail_Order...';
 
 
@@ -269,6 +253,22 @@ PRINT N'Dropping FK_ShopifyOrder_Order...';
 
 GO
 ALTER TABLE [dbo].[ShopifyOrder] DROP CONSTRAINT [FK_ShopifyOrder_Order];
+
+
+GO
+PRINT N'Dropping FK_Order_Store...';
+
+
+GO
+ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Store];
+
+
+GO
+PRINT N'Dropping FK_Order_Customer...';
+
+
+GO
+ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Customer];
 
 
 GO
@@ -738,26 +738,26 @@ CREATE TABLE [dbo].[tmp_ms_xx_Order] (
     [BillUnparsedName]                     NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]                  INT            NOT NULL,
     [ShipUnparsedName]                     NVARCHAR (100) NOT NULL,
-    [ShipSenseHashKey]                     NVARCHAR (64)  NOT NULL,
+    [ShipSenseHashKey]                     NVARCHAR (64)  COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
     [ShipSenseRecognitionStatus]           INT            NOT NULL,
     CONSTRAINT [tmp_ms_xx_constraint_PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC)
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Order]
-    ADD CONSTRAINT [SD_Order_82346d37bea144d99c3d9d9d4285ca7b] DEFAULT 0 FOR [BillAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_c5cbdb3a862d4a1ba42da4b51914a077] DEFAULT 0 FOR [BillAddressValidationStatus],
-        CONSTRAINT [SD_Order_c6c35eb8189e42e697ece7a6db382a1c] DEFAULT N'' FOR [BillAddressValidationError],
-        CONSTRAINT [SD_Order_a49c302b9540419fa75e8eca47abd3fb] DEFAULT 0 FOR [BillResidentialStatus],
-        CONSTRAINT [SD_Order_4630a8d0798e45a6940bc15ceab69304] DEFAULT 0 FOR [BillPOBox],
-        CONSTRAINT [SD_Order_6ccfe2ec7b094a7ebcf57749de6849e0] DEFAULT 0 FOR [BillUSTerritory],
-        CONSTRAINT [SD_Order_2c82e070e1454f22b4d17a799935d001] DEFAULT 0 FOR [BillMilitaryAddress],
-        CONSTRAINT [SD_Order_3c5e85d7e55f494790984b70b5eb95b0] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Order_2838737254244699b64d05a89a564908] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Order_00bd03fbba104d13a9a86d4675630849] DEFAULT N'' FOR [ShipAddressValidationError],
-        CONSTRAINT [SD_Order_963ffa7dcc3c48d88e768d42f0368093] DEFAULT 0 FOR [ShipResidentialStatus],
-        CONSTRAINT [SD_Order_17b0710356fe47e695d18c92f85215a4] DEFAULT 0 FOR [ShipPOBox],
-        CONSTRAINT [SD_Order_2d32419907714c28a51389c68b3744b8] DEFAULT 0 FOR [ShipUSTerritory],
-        CONSTRAINT [SD_Order_75cb626a3a3d448e8510e2b84a5aec55] DEFAULT 0 FOR [ShipMilitaryAddress];
+    ADD CONSTRAINT [SD_Order_f682140fdfa74d2f99bd6cf300877a05] DEFAULT 0 FOR [BillAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_1d93a755eb2b44e186b782eb7e93ec00] DEFAULT 0 FOR [BillAddressValidationStatus],
+        CONSTRAINT [SD_Order_f6ab02d0e7e34ef59bbcb0fba4246cf1] DEFAULT N'' FOR [BillAddressValidationError],
+        CONSTRAINT [SD_Order_5815dd72eeb3428c90d550030c57fac6] DEFAULT 0 FOR [BillResidentialStatus],
+        CONSTRAINT [SD_Order_ed5c9c23f56d447e90ec34ae6e22bcb9] DEFAULT 0 FOR [BillPOBox],
+        CONSTRAINT [SD_Order_671dbeca4b554e24b60d71b8762a56bb] DEFAULT 0 FOR [BillUSTerritory],
+        CONSTRAINT [SD_Order_9334a1a613dc400aa451a8d4f4271ba6] DEFAULT 0 FOR [BillMilitaryAddress],
+        CONSTRAINT [SD_Order_ce7aa32720a048ec811f3fc232dfd1e8] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Order_84415d9f844d46648a4edcd9c5833a68] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Order_3113ba1bb54b4733a2b2914c6ceb0ac5] DEFAULT N'' FOR [ShipAddressValidationError],
+        CONSTRAINT [SD_Order_2a4c2e00bdc14edba2285fbb67046eec] DEFAULT 0 FOR [ShipResidentialStatus],
+        CONSTRAINT [SD_Order_37a55f312de2403ca47331df9aeff843] DEFAULT 0 FOR [ShipPOBox],
+        CONSTRAINT [SD_Order_8377977105734714864452885ba15f0d] DEFAULT 0 FOR [ShipUSTerritory],
+        CONSTRAINT [SD_Order_932f71d39e514deb8c26769f9e12958c] DEFAULT 0 FOR [ShipMilitaryAddress];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Order])
@@ -827,14 +827,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Order] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_82346d37bea144d99c3d9d9d4285ca7b], CONSTRAINT [SD_Order_c5cbdb3a862d4a1ba42da4b51914a077], CONSTRAINT [SD_Order_c6c35eb8189e42e697ece7a6db382a1c], CONSTRAINT [SD_Order_a49c302b9540419fa75e8eca47abd3fb], CONSTRAINT [SD_Order_4630a8d0798e45a6940bc15ceab69304], CONSTRAINT [SD_Order_6ccfe2ec7b094a7ebcf57749de6849e0], CONSTRAINT [SD_Order_2c82e070e1454f22b4d17a799935d001], CONSTRAINT [SD_Order_3c5e85d7e55f494790984b70b5eb95b0], CONSTRAINT [SD_Order_2838737254244699b64d05a89a564908], CONSTRAINT [SD_Order_00bd03fbba104d13a9a86d4675630849], CONSTRAINT [SD_Order_963ffa7dcc3c48d88e768d42f0368093], CONSTRAINT [SD_Order_17b0710356fe47e695d18c92f85215a4], CONSTRAINT [SD_Order_2d32419907714c28a51389c68b3744b8], CONSTRAINT [SD_Order_75cb626a3a3d448e8510e2b84a5aec55];
-
-DECLARE @idVal BIGINT
-SELECT @idVal = IDENT_CURRENT(N'[dbo].[Order]')
-IF @idVal IS NOT NULL
-    SELECT @idVal = @idVal + 1000
-    DBCC CHECKIDENT(N'[dbo].[tmp_ms_xx_Order]', RESEED, @idVal)
-GO
+ALTER TABLE [dbo].[tmp_ms_xx_Order] DROP CONSTRAINT [SD_Order_f682140fdfa74d2f99bd6cf300877a05], CONSTRAINT [SD_Order_1d93a755eb2b44e186b782eb7e93ec00], CONSTRAINT [SD_Order_f6ab02d0e7e34ef59bbcb0fba4246cf1], CONSTRAINT [SD_Order_5815dd72eeb3428c90d550030c57fac6], CONSTRAINT [SD_Order_ed5c9c23f56d447e90ec34ae6e22bcb9], CONSTRAINT [SD_Order_671dbeca4b554e24b60d71b8762a56bb], CONSTRAINT [SD_Order_9334a1a613dc400aa451a8d4f4271ba6], CONSTRAINT [SD_Order_ce7aa32720a048ec811f3fc232dfd1e8], CONSTRAINT [SD_Order_84415d9f844d46648a4edcd9c5833a68], CONSTRAINT [SD_Order_3113ba1bb54b4733a2b2914c6ceb0ac5], CONSTRAINT [SD_Order_2a4c2e00bdc14edba2285fbb67046eec], CONSTRAINT [SD_Order_37a55f312de2403ca47331df9aeff843], CONSTRAINT [SD_Order_8377977105734714864452885ba15f0d], CONSTRAINT [SD_Order_932f71d39e514deb8c26769f9e12958c];
 
 DROP TABLE [dbo].[Order];
 
@@ -1208,13 +1201,13 @@ CREATE TABLE [dbo].[tmp_ms_xx_Shipment] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Shipment]
-    ADD CONSTRAINT [SD_Shipment_eb986317e4404128b3d123caf3ee412c] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
-        CONSTRAINT [SD_Shipment_7c364df777b14c1a80e642e90cb3e316] DEFAULT 0 FOR [ShipAddressValidationStatus],
-        CONSTRAINT [SD_Shipment_a6b158241b28413d9cb09590f1b01af7] DEFAULT N'' FOR [ShipAddressValidationError],
-        CONSTRAINT [SD_Shipment_c542f19fbd4f4c6b906471d2ad588fb4] DEFAULT 0 FOR [ShipResidentialStatus],
-        CONSTRAINT [SD_Shipment_702d2592fc9746b0ab38e4e400515158] DEFAULT 0 FOR [ShipPOBox],
-        CONSTRAINT [SD_Shipment_330835cd4690427e9df7287489136eb6] DEFAULT 0 FOR [ShipUSTerritory],
-        CONSTRAINT [SD_Shipment_e0148e59ed6b499aa1bf30f3dc3995ee] DEFAULT 0 FOR [ShipMilitaryAddress];
+    ADD CONSTRAINT [SD_Shipment_180778bbb6f5412581bec884fe2718ed] DEFAULT 0 FOR [ShipAddressValidationSuggestionCount],
+        CONSTRAINT [SD_Shipment_8f20b9d6591842629010199e21ec19ab] DEFAULT 0 FOR [ShipAddressValidationStatus],
+        CONSTRAINT [SD_Shipment_1450ca8dba9b4b7481f2f5d07fcadc87] DEFAULT N'' FOR [ShipAddressValidationError],
+        CONSTRAINT [SD_Shipment_8eb9d8f2b60343129f370a99edf835ee] DEFAULT 0 FOR [ShipResidentialStatus],
+        CONSTRAINT [SD_Shipment_ab7d618203d045a9954d31594a5e39eb] DEFAULT 0 FOR [ShipPOBox],
+        CONSTRAINT [SD_Shipment_a969c4e9df00459a94ae0cf2935eae63] DEFAULT 0 FOR [ShipUSTerritory],
+        CONSTRAINT [SD_Shipment_fa192e5afcd44c00aae88ccadee19f30] DEFAULT 0 FOR [ShipMilitaryAddress];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Shipment])
@@ -1287,14 +1280,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Shipment] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Shipment] DROP CONSTRAINT [SD_Shipment_eb986317e4404128b3d123caf3ee412c], CONSTRAINT [SD_Shipment_7c364df777b14c1a80e642e90cb3e316], CONSTRAINT [SD_Shipment_a6b158241b28413d9cb09590f1b01af7], CONSTRAINT [SD_Shipment_c542f19fbd4f4c6b906471d2ad588fb4], CONSTRAINT [SD_Shipment_702d2592fc9746b0ab38e4e400515158], CONSTRAINT [SD_Shipment_330835cd4690427e9df7287489136eb6], CONSTRAINT [SD_Shipment_e0148e59ed6b499aa1bf30f3dc3995ee];
-
-DECLARE @idVal BIGINT
-SELECT @idVal = IDENT_CURRENT(N'[dbo].[Shipment]')
-IF @idVal IS NOT NULL
-    SELECT @idVal = @idVal + 1000
-    DBCC CHECKIDENT(N'[dbo].[tmp_ms_xx_Shipment]', RESEED, @idVal)
-GO
+ALTER TABLE [dbo].[tmp_ms_xx_Shipment] DROP CONSTRAINT [SD_Shipment_180778bbb6f5412581bec884fe2718ed], CONSTRAINT [SD_Shipment_8f20b9d6591842629010199e21ec19ab], CONSTRAINT [SD_Shipment_1450ca8dba9b4b7481f2f5d07fcadc87], CONSTRAINT [SD_Shipment_8eb9d8f2b60343129f370a99edf835ee], CONSTRAINT [SD_Shipment_ab7d618203d045a9954d31594a5e39eb], CONSTRAINT [SD_Shipment_a969c4e9df00459a94ae0cf2935eae63], CONSTRAINT [SD_Shipment_fa192e5afcd44c00aae88ccadee19f30];
 
 DROP TABLE [dbo].[Shipment];
 
@@ -1387,7 +1373,7 @@ CREATE TABLE [dbo].[tmp_ms_xx_Store] (
 );
 
 ALTER TABLE [dbo].[tmp_ms_xx_Store]
-    ADD CONSTRAINT [SD_Store_d50588624bc54cb69dd79ee6ae807302] DEFAULT 0 FOR [AddressValidationSetting];
+    ADD CONSTRAINT [SD_Store_787cc49739e14f988a05023d18ff0e5a] DEFAULT 0 FOR [AddressValidationSetting];
 
 IF EXISTS (SELECT TOP 1 1 
            FROM   [dbo].[Store])
@@ -1427,7 +1413,7 @@ IF EXISTS (SELECT TOP 1 1
         SET IDENTITY_INSERT [dbo].[tmp_ms_xx_Store] OFF;
     END
 
-ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_d50588624bc54cb69dd79ee6ae807302];
+ALTER TABLE [dbo].[tmp_ms_xx_Store] DROP CONSTRAINT [SD_Store_787cc49739e14f988a05023d18ff0e5a];
 
 DROP TABLE [dbo].[Store];
 
@@ -1606,24 +1592,6 @@ ALTER TABLE [dbo].[OrderMotionOrder] WITH NOCHECK
 
 
 GO
-PRINT N'Creating FK_Order_Store...';
-
-
-GO
-ALTER TABLE [dbo].[Order] WITH NOCHECK
-    ADD CONSTRAINT [FK_Order_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
-
-
-GO
-PRINT N'Creating FK_Order_Customer...';
-
-
-GO
-ALTER TABLE [dbo].[Order] WITH NOCHECK
-    ADD CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID]);
-
-
-GO
 PRINT N'Creating FK_OrderPaymentDetail_Order...';
 
 
@@ -1711,6 +1679,24 @@ PRINT N'Creating FK_ShopifyOrder_Order...';
 GO
 ALTER TABLE [dbo].[ShopifyOrder] WITH NOCHECK
     ADD CONSTRAINT [FK_ShopifyOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID]);
+
+
+GO
+PRINT N'Creating FK_Order_Store...';
+
+
+GO
+ALTER TABLE [dbo].[Order] WITH NOCHECK
+    ADD CONSTRAINT [FK_Order_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]);
+
+
+GO
+PRINT N'Creating FK_Order_Customer...';
+
+
+GO
+ALTER TABLE [dbo].[Order] WITH NOCHECK
+    ADD CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID]);
 
 
 GO
@@ -2433,10 +2419,6 @@ ALTER TABLE [dbo].[OrderCharge] WITH CHECK CHECK CONSTRAINT [FK_OrderCharge_Orde
 
 ALTER TABLE [dbo].[OrderMotionOrder] WITH CHECK CHECK CONSTRAINT [FK_OrderMotionOrder_Order];
 
-ALTER TABLE [dbo].[Order] WITH CHECK CHECK CONSTRAINT [FK_Order_Store];
-
-ALTER TABLE [dbo].[Order] WITH CHECK CHECK CONSTRAINT [FK_Order_Customer];
-
 ALTER TABLE [dbo].[OrderPaymentDetail] WITH CHECK CHECK CONSTRAINT [FK_OrderPaymentDetail_Order];
 
 ALTER TABLE [dbo].[Shipment] WITH CHECK CHECK CONSTRAINT [FK_Shipment_Order];
@@ -2456,6 +2438,10 @@ ALTER TABLE [dbo].[SearsOrder] WITH CHECK CHECK CONSTRAINT [FK_SearsOrder_Order]
 ALTER TABLE [dbo].[EtsyOrder] WITH CHECK CHECK CONSTRAINT [FK_EtsyOrder_Order];
 
 ALTER TABLE [dbo].[ShopifyOrder] WITH CHECK CHECK CONSTRAINT [FK_ShopifyOrder_Order];
+
+ALTER TABLE [dbo].[Order] WITH CHECK CHECK CONSTRAINT [FK_Order_Store];
+
+ALTER TABLE [dbo].[Order] WITH CHECK CHECK CONSTRAINT [FK_Order_Customer];
 
 ALTER TABLE [dbo].[UpsShipment] WITH CHECK CHECK CONSTRAINT [FK_UpsShipment_Shipment];
 
