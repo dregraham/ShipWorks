@@ -119,6 +119,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             RefreshSelectedShipments();
         }
+
         /// <summary>
         /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
         /// </summary>

@@ -2013,6 +2013,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap googleMapsFav16 {
+            get {
+                object obj = ResourceManager.GetObject("googleMapsFav16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap graphics_tablet {
             get {
                 object obj = ResourceManager.GetObject("graphics-tablet", resourceCulture);
