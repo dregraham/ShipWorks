@@ -35,6 +35,27 @@ WHERE ResidentialDetermination = 0
 
 GO
 
+-- Mark the address validation status to pending for all orders in the past 30 days
+-- that have either no shipments or at least one unprocessed shipment
+UPDATE [Order]
+SET ShipAddressValidationStatus = 1
+FROM [Order]
+	LEFT JOIN Shipment
+		ON [Order].OrderId = Shipment.OrderID
+WHERE DATEDIFF(d, [Order].OrderDate, GETDATE()) <= 30 
+	AND (Shipment.ShipmentID IS NULL OR Shipment.Processed = 0)
+GO
+
+-- Mark the address validation status to pending for all unprocessed shipments that belong
+-- to orders that have had their status updated
+UPDATE Shipment
+SET ShipAddressValidationStatus = 1
+FROM [Order]
+WHERE [Order].OrderId = Shipment.OrderId
+	AND [Order].ShipAddressValidationStatus = 1
+	AND Shipment.Processed = 0
+GO
+
 PRINT N'Update data complete.';
 
 GO
