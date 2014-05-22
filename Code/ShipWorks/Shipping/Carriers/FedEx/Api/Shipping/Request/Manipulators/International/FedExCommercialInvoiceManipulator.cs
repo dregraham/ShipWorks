@@ -140,14 +140,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         private string GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
         {
+            // TODO: We need to determine if the "or" types need to be split into individual types.
+            // TODO: We need to determine the actual values for the rest.
+            // TODO: May need to verify the DAP and DAT get added to the drop down, and determine if there's other info they need.
             switch (termsOfSale)
             {
-                case FedExTermsOfSale.FOB_or_FCA: return "FOB_OR_FCA";
-                case FedExTermsOfSale.CFR_or_CPT: return "CFR_OR_CPT";
-                case FedExTermsOfSale.CIF_or_CIP: return "CIF_OR_CIP";
+                case FedExTermsOfSale.FOB_or_FCA: return "FCA";
+                case FedExTermsOfSale.CFR_or_CPT: return "CPT/C&F";
+                case FedExTermsOfSale.CIF_or_CIP: return "CIP/CIF";
                 case FedExTermsOfSale.EXW: return "EXW";
                 case FedExTermsOfSale.DDP: return "DDP";
                 case FedExTermsOfSale.DDU: return "DDU";
+                case FedExTermsOfSale.DAP: return "DAP";
+                case FedExTermsOfSale.DAT: return "DAT";
             }
 
             throw new InvalidOperationException("Invalid FedEx TermsOfSale: " + termsOfSale);
