@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[AmazonStore] (
     [StoreID]               BIGINT           NOT NULL,
     [AmazonApi]             INT              NOT NULL,
+    [AmazonApiRegion]       CHAR (2)         NOT NULL,
     [SellerCentralUsername] NVARCHAR (50)    NOT NULL,
     [SellerCentralPassword] NVARCHAR (50)    NOT NULL,
     [MerchantName]          VARCHAR (64)     NOT NULL,
@@ -18,4 +19,6 @@
     CONSTRAINT [PK_AmazonStore] PRIMARY KEY CLUSTERED ([StoreID] ASC),
     CONSTRAINT [FK_AmazonStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 );
+
+
 

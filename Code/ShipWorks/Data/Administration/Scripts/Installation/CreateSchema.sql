@@ -429,7 +429,7 @@ CREATE TABLE [dbo].[Order]
 [BillUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [ShipSenseRecognitionStatus] int NOT NULL
 )
 GO
@@ -4389,7 +4389,7 @@ PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
 GO
 CREATE TABLE [dbo].[ShipSenseKnowledgebase]
 (
-[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
