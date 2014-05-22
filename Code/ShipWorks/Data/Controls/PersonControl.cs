@@ -137,7 +137,7 @@ namespace ShipWorks.Data.Controls
         {
             InitializeComponent();
 
-            country.TextChanged += this.OnComboBoxTextChanged;
+            country.SelectedValueChanged += this.OnComboBoxTextChanged;
             state.TextChanged += this.OnComboBoxTextChanged;
 
             state.TextChanged += this.OnDestinationChanged;

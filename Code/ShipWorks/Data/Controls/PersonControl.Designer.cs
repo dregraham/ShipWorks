@@ -336,7 +336,7 @@ namespace ShipWorks.Data.Controls
             this.country.Size = new System.Drawing.Size(266, 21);
             this.country.TabIndex = 6;
             this.country.SelectedIndexChanged += new System.EventHandler(this.OnDestinationChanged);
-            this.country.TextChanged += new System.EventHandler(this.OnValueChanged);
+            this.country.SelectedValueChanged += new System.EventHandler(this.OnValueChanged);
             // 
             // postalCode
             // 
