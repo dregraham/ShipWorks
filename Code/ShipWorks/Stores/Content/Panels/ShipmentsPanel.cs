@@ -85,7 +85,6 @@ namespace ShipWorks.Stores.Content.Panels
         {
             EntityType type = EntityUtility.GetEntityType(entityID);
 
-            
             RelatedKeysEntityGateway gateway = new RelatedKeysEntityGateway(entityID, EntityType.ShipmentEntity);
 
             if (type == EntityType.OrderEntity)

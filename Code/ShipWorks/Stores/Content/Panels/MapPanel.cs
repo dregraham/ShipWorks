@@ -23,6 +23,9 @@ using ShipWorks.Filters;
 
 namespace ShipWorks.Stores.Content.Panels
 {
+    /// <summary>
+    /// Map Panel - holds a google map or streetview image
+    /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
         static readonly ILog log = LogManager.GetLogger(typeof(MapPanel));
@@ -44,17 +47,24 @@ namespace ShipWorks.Stores.Content.Panels
             get; 
             set; 
         }
-       
+
+        /// <summary>
+        /// Load the state of the panel.
+        /// </summary>
         public void LoadState()
         {
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Save the state of the panel.
+        /// </summary>
         public void SaveState()
         {
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Indicates if the panel can handle multiple selected items at one time.
+        /// </summary>
         public bool SupportsMultiSelect
         {
             get
@@ -63,6 +73,10 @@ namespace ShipWorks.Stores.Content.Panels
             }
         }
 
+        /// <summary>
+        /// Change the content of the panel based on the given keys.
+        /// </summary>
+        /// <param name="selection"></param>
         public void ChangeContent(Data.Grid.IGridSelection selection)
         {
             long selectedID = selection.Keys.FirstOrDefault();
@@ -70,6 +84,9 @@ namespace ShipWorks.Stores.Content.Panels
             GetMap();
         }
 
+        /// <summary>
+        /// Gets the map.
+        /// </summary>
         private void GetMap()
         {
             if (selectedEntity != null)
@@ -96,6 +113,9 @@ namespace ShipWorks.Stores.Content.Panels
             }
         }
 
+        /// <summary>
+        /// Gets the size of the picture - Since max size is 640, panelSize is over 640, the largest possible size of the same aspect ratio is returned.
+        /// </summary>
         public static Size GetPictureSize(Size panelSize)
         {
             if (panelSize.Width <= 640 && panelSize.Height <= 640)
@@ -132,12 +152,17 @@ namespace ShipWorks.Stores.Content.Panels
             }
         }
 
+        /// <summary>
+        /// Update the content to reflect changes to the loaded stores
+        /// </summary>
         public void UpdateStoreDependentUI()
         {
-            //throw new NotImplementedException();
         }
 
 
+        /// <summary>
+        /// The EntityType displayed by the panel grid
+        /// </summary>
         public EntityType EntityType
         {
             get
@@ -146,6 +171,9 @@ namespace ShipWorks.Stores.Content.Panels
             }
         }
 
+        /// <summary>
+        /// The supported filter targets that the panel can display for.
+        /// </summary>
         public FilterTarget[] SupportedTargets
         {
             get
@@ -155,16 +183,27 @@ namespace ShipWorks.Stores.Content.Panels
 
         }
 
+        /// <summary>
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// list with up-to-date displayed entity content.
+        /// </summary>
         public void ReloadContent()
         {
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
+        /// the known existing rows and their known corresponding entities.
+        /// </summary>
         public void UpdateContent()
         {
-            //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Called when [size changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnSizeChanged(object sender, EventArgs e)
         {
             pictureBox1.Size = new Size(Size.Width, Size.Height);
