@@ -70,7 +70,7 @@
     [BillUnparsedName]      NVARCHAR (100) NOT NULL,
     [ShipNameParseStatus]   INT            NOT NULL,
     [ShipUnparsedName]      NVARCHAR (100) NOT NULL,
-	[ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[ShipSenseHashKey]		NVARCHAR (64)  NOT NULL,
 	[ShipSenseRecognitionStatus] [int] NOT NULL,
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([OrderID] ASC),
     CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID]),
