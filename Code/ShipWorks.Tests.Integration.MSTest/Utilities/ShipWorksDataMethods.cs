@@ -14,6 +14,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -82,6 +83,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Utilities
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
+            shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
+            shipment.ShipSenseEntry = new byte[] {};
+            shipment.ShipSenseChangeSets = "<ChangeSets/>";
 
             List<EntityBase2> orderItems = new List<EntityBase2>();
             for (int i = 0; i < numberOfItems; i++)
