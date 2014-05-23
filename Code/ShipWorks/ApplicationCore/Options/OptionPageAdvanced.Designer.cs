@@ -54,6 +54,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.labelShipSenseInfo = new System.Windows.Forms.Label();
             this.editShipSenseSettings = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -266,42 +268,42 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.clearKnowledgebase.Image = global::ShipWorks.Properties.Resources.delete16;
             this.clearKnowledgebase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clearKnowledgebase.Location = new System.Drawing.Point(376, 602);
+            this.clearKnowledgebase.Location = new System.Drawing.Point(32, 764);
             this.clearKnowledgebase.Name = "clearKnowledgebase";
-            this.clearKnowledgebase.Size = new System.Drawing.Size(92, 23);
+            this.clearKnowledgebase.Size = new System.Drawing.Size(168, 23);
             this.clearKnowledgebase.TabIndex = 37;
-            this.clearKnowledgebase.Text = "Delete";
+            this.clearKnowledgebase.Text = "Reset all learning";
             this.clearKnowledgebase.UseVisualStyleBackColor = true;
             this.clearKnowledgebase.Click += new System.EventHandler(this.OnClearKnowledgebase);
             // 
             // enableShipSense
             // 
             this.enableShipSense.AutoSize = true;
-            this.enableShipSense.Location = new System.Drawing.Point(34, 648);
+            this.enableShipSense.Location = new System.Drawing.Point(35, 637);
             this.enableShipSense.Name = "enableShipSense";
-            this.enableShipSense.Size = new System.Drawing.Size(281, 17);
+            this.enableShipSense.Size = new System.Drawing.Size(348, 17);
             this.enableShipSense.TabIndex = 35;
-            this.enableShipSense.Text = "Populate shipment info based on my shipment history";
+            this.enableShipSense.Text = "Automatically configure my shipments based on my shipping history";
             this.enableShipSense.UseVisualStyleBackColor = true;
             // 
             // labelShipSenseInfo
             // 
             this.labelShipSenseInfo.Location = new System.Drawing.Point(17, 602);
             this.labelShipSenseInfo.Name = "labelShipSenseInfo";
-            this.labelShipSenseInfo.Size = new System.Drawing.Size(352, 40);
+            this.labelShipSenseInfo.Size = new System.Drawing.Size(423, 40);
             this.labelShipSenseInfo.TabIndex = 36;
-            this.labelShipSenseInfo.Text = "ShipWorks can inspect your shipment history and use this data to automatically se" +
+            this.labelShipSenseInfo.Text = "ShipWorks monitors your shipping, remember what you do, and then automatically se" +
     "t the weights, dimensions, and customs information of future shipments.";
             // 
             // editShipSenseSettings
             // 
             this.editShipSenseSettings.Image = global::ShipWorks.Properties.Resources.edit16;
             this.editShipSenseSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.editShipSenseSettings.Location = new System.Drawing.Point(376, 631);
+            this.editShipSenseSettings.Location = new System.Drawing.Point(33, 704);
             this.editShipSenseSettings.Name = "editShipSenseSettings";
-            this.editShipSenseSettings.Size = new System.Drawing.Size(92, 23);
+            this.editShipSenseSettings.Size = new System.Drawing.Size(167, 23);
             this.editShipSenseSettings.TabIndex = 38;
-            this.editShipSenseSettings.Text = "Edit...";
+            this.editShipSenseSettings.Text = "Configure ShipSense...";
             this.editShipSenseSettings.UseVisualStyleBackColor = true;
             this.editShipSenseSettings.Click += new System.EventHandler(this.OnEditShipSenseClick);
             // 
@@ -309,13 +311,30 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.button1.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(376, 660);
+            this.button1.Location = new System.Drawing.Point(32, 794);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 23);
+            this.button1.Size = new System.Drawing.Size(168, 23);
             this.button1.TabIndex = 39;
-            this.button1.Text = "Reload";
+            this.button1.Text = "Relearn from history";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.OnReloadKnowledgebase);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(17, 668);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(352, 32);
+            this.label2.TabIndex = 40;
+            this.label2.Text = "ShipWorks learns by comparing similar orders.  You can control what order informa" +
+    "tion ShipSense uses to consider to orders as similar.";
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(17, 742);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(423, 20);
+            this.label3.TabIndex = 41;
+            this.label3.Text = "If you want to start over (we\'re not sure why you would), here you go.";
             // 
             // OptionPageAdvanced
             // 
@@ -323,6 +342,8 @@ namespace ShipWorks.ApplicationCore.Options
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.editShipSenseSettings);
             this.Controls.Add(this.clearKnowledgebase);
@@ -351,7 +372,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.logOnMethod);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OptionPageAdvanced";
-            this.Size = new System.Drawing.Size(505, 695);
+            this.Size = new System.Drawing.Size(505, 862);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -386,6 +407,8 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Label labelShipSenseInfo;
         private System.Windows.Forms.Button editShipSenseSettings;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
 
     }
 }
