@@ -163,5 +163,26 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
                 testObject.Ship();
             }
         }
+
+        [DataSource("DataSource_Ship_FedExOneRate")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
+        [Ignore]
+        public void Ship_FedExOneRate_Test()
+        {
+            FedExPrototypeFixture testObject = new FedExUSGroundFixture();
+
+            if (PopulateTestObject(testObject, FedExUsExpressDomesticMapping.UsExpDomesticMapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+
+                testObject.FedExAccountNumber = fedExTestAccountNumber;
+
+                testObject.Ship();
+            }
+        }
     }
 }
