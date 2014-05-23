@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 FedExServiceType serviceType;
 
-                serviceType = GetFedExServiceType(rateDetail.ServiceType);
+                serviceType = GetFedExServiceType(rateDetail);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
@@ -829,17 +829,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Get our own FedExServiceType value for the given rate ServiceType
+        /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        private static FedExServiceType GetFedExServiceType(ServiceType serviceType)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail)
         {
-            switch (serviceType)
+            switch (rateDetail.ServiceType)
             {
-                case ServiceType.PRIORITY_OVERNIGHT: return FedExServiceType.PriorityOvernight;
-                case ServiceType.STANDARD_OVERNIGHT: return FedExServiceType.StandardOvernight;
-                case ServiceType.FIRST_OVERNIGHT: return FedExServiceType.FirstOvernight;
-                case ServiceType.FEDEX_2_DAY: return FedExServiceType.FedEx2Day;
-                case ServiceType.FEDEX_EXPRESS_SAVER: return FedExServiceType.FedExExpressSaver;
+                case ServiceType.PRIORITY_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRatePriorityOvernight : FedExServiceType.PriorityOvernight;
+                }
+
+                case ServiceType.STANDARD_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateStandardOvernight : FedExServiceType.StandardOvernight;
+                }
+
+                case ServiceType.FIRST_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateFirstOvernight : FedExServiceType.FirstOvernight;
+                }
+
+                case ServiceType.FEDEX_2_DAY:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2Day : FedExServiceType.FedEx2Day;
+                }
+
+                case ServiceType.FEDEX_2_DAY_AM:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2DayAM : FedExServiceType.FedEx2DayAM;
+                }
+
+                case ServiceType.FEDEX_EXPRESS_SAVER:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
+                }
+
                 case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
                 case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
                 case ServiceType.INTERNATIONAL_FIRST: return FedExServiceType.InternationalFirst;
@@ -851,12 +876,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
                 case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
                 case ServiceType.SMART_POST: return FedExServiceType.SmartPost;
-                case ServiceType.FEDEX_2_DAY_AM: return FedExServiceType.FedEx2DayAM;
+                
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
                 case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
             }
 
-            throw new CarrierException("Invalid FedEx Service Type " + serviceType);
+            throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);
+        }
+
+        /// <summary>
+        /// Determines whether the rate result is for FedEx One Rate
+        /// </summary>
+        private static bool IsOneRateResult(RateReplyDetail rateDetail)
+        {
+            bool isOneRate = false;
+
+            if (rateDetail != null && rateDetail.RatedShipmentDetails != null)
+            {
+                // Consider this a One Rate result if the detail has FEDEX_ONE_RATE applied
+                isOneRate = rateDetail.RatedShipmentDetails.Where(detail => detail.ShipmentRateDetail != null)
+                                                           .Any(d => d.ShipmentRateDetail != null && d.ShipmentRateDetail.SpecialRatingApplied != null && d.ShipmentRateDetail.SpecialRatingApplied.Any(r => r == SpecialRatingAppliedType.FEDEX_ONE_RATE));
+            }
+
+            return isOneRate;
         }
 
         /// <summary>
