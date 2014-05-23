@@ -211,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].Quantity.ToString(), nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
+                Assert.AreEqual(shipmentEntity.CustomsItems[i].Quantity, (double)nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
             }
         }
 

@@ -148,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsFobOrFca_Test()
+        public void Manipulate_TermsOfSaleIsFca_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
@@ -156,11 +156,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual("FOB_OR_FCA", customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("FCA", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsCfrOrCpt_Test()
+        public void Manipulate_TermsOfSaleIsCptOrCf_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.CFR_or_CPT;
@@ -168,11 +168,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual("CFR_OR_CPT", customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("CPT/C&F", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsCifOrCip_Test()
+        public void Manipulate_TermsOfSaleIsCipOrCif_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CIF_or_CIP;
@@ -180,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual("CIF_OR_CIP", customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("CIP/CIF", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
