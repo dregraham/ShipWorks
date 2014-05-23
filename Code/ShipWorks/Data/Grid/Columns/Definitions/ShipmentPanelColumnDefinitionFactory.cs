@@ -109,10 +109,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{30BC16E8-19B1-4D9D-90D5-AD81E29BD1DA}", false,
                     new GridEnumDisplayType<ShipSenseStatus>(EnumSortMethod.Value), "ShipSense", ShipSenseStatus.Applied,
-                    ShipmentFields.ShipSenseStatus),
+                    ShipmentFields.ShipSenseStatus)  { DefaultWidth = 120 },
 
                 new GridColumnDefinition("{7712114B-5E84-4ad0-9E49-5CA6EAC34B73}", true,
-                    new GridShipmentEditViewDisplayType(), "Edit", "Edit",
+                    new GridShipmentEditViewDisplayType(), "Ship", "Ship",
                     ShipmentFields.ShipmentID) { DefaultWidth = 31 },
 
                 new GridColumnDefinition("{E735E64D-9F31-4244-B803-7B4C68B31B34}", true,

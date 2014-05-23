@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Content.Panels.CoreExtensions.Grid
                 return "View";
             }
 
-            return (entity.Processed || entity.Voided) ? "View" : "Edit";
+            return (entity.Processed || entity.Voided) ? "View" : "Ship";
         }
     }
 }
