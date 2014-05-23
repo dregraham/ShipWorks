@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Paging;
+using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 
 namespace ShipWorks.Stores.Content.Panels
@@ -28,7 +17,6 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(MapPanel));
         private EntityBase2 selectedEntity;
        
         /// <summary>
@@ -77,7 +65,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Change the content of the panel based on the given keys.
         /// </summary>
         /// <param name="selection"></param>
-        public void ChangeContent(Data.Grid.IGridSelection selection)
+        public void ChangeContent(IGridSelection selection)
         {
             long selectedID = selection.Keys.FirstOrDefault();
             selectedEntity = selectedID == 0 ? null : DataProvider.GetEntity(selection.Keys.FirstOrDefault());
@@ -178,9 +166,8 @@ namespace ShipWorks.Stores.Content.Panels
         {
             get
             {
-                return new FilterTarget[] { FilterTarget.Orders, FilterTarget.Customers };
+                return new[] { FilterTarget.Orders, FilterTarget.Customers };
             }
-
         }
 
         /// <summary>

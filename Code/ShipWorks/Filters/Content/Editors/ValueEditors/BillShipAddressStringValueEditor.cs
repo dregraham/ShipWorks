@@ -121,7 +121,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             {
                 try
                 {
-                    Regex regex = new Regex(targetValue.Text);
+                    new Regex(targetValue.Text);
                 }
                 catch (ArgumentException ex)
                 {
