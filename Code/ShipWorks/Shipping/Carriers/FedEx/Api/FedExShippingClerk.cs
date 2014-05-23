@@ -563,6 +563,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Retrieve the rates from FedEx
                 overallResults.AddRange(GetBasicRates(shipment));
                 overallResults.AddRange(GetSmartPostRates(shipment));
+                overallResults.AddRange(GetOneRateRates(shipment));
 
                 return new RateGroup(overallResults);
             }
@@ -577,7 +578,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> GetBasicRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetBasicRates(ShipmentEntity shipment)
         {
             List<RateResult> rates = new List<RateResult>();
 
@@ -606,7 +607,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> GetSmartPostRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetSmartPostRates(ShipmentEntity shipment)
         {
             List<RateResult> rates = new List<RateResult>();
 
@@ -641,6 +642,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 // Just eat the FedEx API exception, so we can still display the basic rates
                 log.Warn("Error getting SmartPost rates: " + ex.Message);
+            }
+
+            return rates;
+        }
+
+        /// <summary>
+        /// Gets the one rate rates for the given shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>A List of RateResult objects.</returns>
+        private IEnumerable<RateResult> GetOneRateRates(ShipmentEntity shipment)
+        {
+            List<RateResult> rates = new List<RateResult>();
+
+            try
+            {
+                // Create a request that will retrieve one rate rates by supplying a one rate manipulator
+                CarrierRequest oneRateRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> { new FedExRateOneRateManipulator() });
+                ICarrierResponse oneRateResponse = oneRateRequest.Submit();
+                oneRateResponse.Process();
+
+                RateReply oneRateNativeResponse = oneRateResponse.NativeResponse as RateReply;
+                if (oneRateNativeResponse == null)
+                {
+                    // We don't have the correct response type to continue processing
+                    log.Info(string.Format("An unexpected response type was received when trying to get results for One Rate: {0} type was received.", oneRateResponse.GetType().FullName));
+                }
+                else
+                {
+                    // We have the appropriate response type, so we can build the list of rate results
+                    rates = BuildRateResults(shipment, new List<RateReplyDetail>(oneRateNativeResponse.RateReplyDetails));
+                }
+            }
+            catch (FedExException ex)
+            {
+                // Just eat any FedEx exception, so we can still display the basic rates
+                log.Warn("Error getting One Rate rates: " + ex.Message);
+            }
+            catch (FedExApiCarrierException ex)
+            {
+                // Just eat the FedEx API exception, so we can still display the basic rates
+                log.Warn("Error getting One Rate rates: " + ex.Message);
             }
 
             return rates;
