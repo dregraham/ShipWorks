@@ -631,7 +631,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.service.Location = new System.Drawing.Point(95, 8);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
-            this.service.Size = new System.Drawing.Size(175, 21);
+            this.service.Size = new System.Drawing.Size(200, 21);
             this.service.TabIndex = 1;
             // 
             // labelService

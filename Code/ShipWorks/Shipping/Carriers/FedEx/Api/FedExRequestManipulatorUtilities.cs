@@ -181,11 +181,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             switch (serviceType)
             {
-                case FedExServiceType.PriorityOvernight: return WebServices.Ship.ServiceType.PRIORITY_OVERNIGHT;
-                case FedExServiceType.StandardOvernight: return WebServices.Ship.ServiceType.STANDARD_OVERNIGHT;
-                case FedExServiceType.FirstOvernight: return WebServices.Ship.ServiceType.FIRST_OVERNIGHT;
-                case FedExServiceType.FedEx2Day: return WebServices.Ship.ServiceType.FEDEX_2_DAY;
-                case FedExServiceType.FedExExpressSaver: return WebServices.Ship.ServiceType.FEDEX_EXPRESS_SAVER;
+                case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.OneRatePriorityOvernight:
+                    return WebServices.Ship.ServiceType.PRIORITY_OVERNIGHT;
+
+                case FedExServiceType.StandardOvernight:
+                case FedExServiceType.OneRateStandardOvernight: 
+                    return WebServices.Ship.ServiceType.STANDARD_OVERNIGHT;
+
+                case FedExServiceType.FirstOvernight:
+                case FedExServiceType.OneRateFirstOvernight:
+                    return WebServices.Ship.ServiceType.FIRST_OVERNIGHT;
+
+                case FedExServiceType.FedEx2Day:
+                case FedExServiceType.OneRate2Day: 
+                    return WebServices.Ship.ServiceType.FEDEX_2_DAY;
+
+                case FedExServiceType.FedEx2DayAM:
+                case FedExServiceType.OneRate2DayAM: 
+                    return WebServices.Ship.ServiceType.FEDEX_2_DAY_AM;
+
+                case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.OneRateExpressSaver: 
+                    return WebServices.Ship.ServiceType.FEDEX_EXPRESS_SAVER;
+
                 case FedExServiceType.InternationalPriority: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY;
                 case FedExServiceType.InternationalEconomy: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY;
                 case FedExServiceType.InternationalFirst: return WebServices.Ship.ServiceType.INTERNATIONAL_FIRST;
@@ -197,8 +216,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalPriorityFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
                 case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
                 case FedExServiceType.SmartPost: return WebServices.Ship.ServiceType.SMART_POST;
-                case FedExServiceType.FedEx2DayAM: return WebServices.Ship.ServiceType.FEDEX_2_DAY_AM;
-                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
+                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;                    
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);
