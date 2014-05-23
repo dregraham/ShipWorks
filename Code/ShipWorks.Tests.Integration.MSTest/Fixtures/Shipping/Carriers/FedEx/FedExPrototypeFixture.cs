@@ -1320,6 +1320,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 case "FEDEX_ENVELOPE": return FedExPackagingType.Envelope;
                 case "FEDEX_PAK": return FedExPackagingType.Pak;
                 case "FEDEX_TUBE": return FedExPackagingType.Tube;
+                case "FEDEX_SMALL_BOX": return FedExPackagingType.SmallBox;
+                case "FEDEX_MEDIUM_BOX": return FedExPackagingType.MediumBox;
+                case "FEDEX_LARGE_BOX": return FedExPackagingType.LargeBox;
+                case "FEDEX_EXTRA_LARGE_BOX": return FedExPackagingType.ExtraLargeBox;
             }
 
             throw new Exception("Unrecognized packaging type");

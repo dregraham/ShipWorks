@@ -41,6 +41,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         SPPresortedBPM = 9,
 
         [Description("SmartPost Presorted Standard")]
-        SPPresortedStandard = 10
+        SPPresortedStandard = 10,
+
+        [Description("FedEx Small Box")]
+        SmallBox = 11,
+
+        [Description("FedEx Medium Box")]
+        MediumBox = 12,
+
+        [Description("FedEx Large Box")]
+        LargeBox = 13,
+
+        [Description("FedEx Extra Large Box")]
+        ExtraLargeBox = 14
     }
 }

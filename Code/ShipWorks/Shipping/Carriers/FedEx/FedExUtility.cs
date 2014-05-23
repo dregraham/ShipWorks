@@ -155,6 +155,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             types.Add(FedExPackagingType.Custom);
+            types.Add(FedExPackagingType.SmallBox);
+            types.Add(FedExPackagingType.MediumBox);
+            types.Add(FedExPackagingType.LargeBox);
+            types.Add(FedExPackagingType.ExtraLargeBox);
 
             return types;
         }
