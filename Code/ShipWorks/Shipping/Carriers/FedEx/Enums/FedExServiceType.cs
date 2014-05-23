@@ -79,10 +79,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx One Rate Standard Overnight")]
         OneRateStandardOvernight = 22,
 
-        [Description("FedEx OneRate 2Day")]
+        [Description("FedEx One Rate 2Day")]
         OneRate2Day = 23,
 
-        [Description("FedEx OneRate 2Day A.M.")]
+        [Description("FedEx One Rate 2Day A.M.")]
         OneRate2DayAM = 24,
 
         [Description("FedEx One Rate Express Saver")]
