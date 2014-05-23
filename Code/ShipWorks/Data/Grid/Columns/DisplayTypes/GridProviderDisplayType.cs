@@ -100,18 +100,37 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 enabledShipmentTypes.RemoveAll(s =>
                     s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
-                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
             }
 
             enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
                 GetCarrierName(shipmentType, postalNotSetup),
-                EnumHelper.GetImage(shipmentType.ShipmentTypeCode),
+                GetCarrierImage(shipmentType.ShipmentTypeCode, postalNotSetup),
                 (sender, args) => SelectProvider(shipment, shipmentType)));
 
             menu.Show(row.Grid.SandGrid, displayPosition);
         }
-        
+
+        /// <summary>
+        /// Gets the carrier image.
+        /// </summary>
+        private static Image GetCarrierImage(ShipmentTypeCode shipmentTypeCode, bool postageNotSetup)
+        {
+            Image carrierImage;
+
+            if (shipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
+            {
+                carrierImage = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
+            }
+            else
+            {
+                carrierImage = EnumHelper.GetImage(shipmentTypeCode);
+            }
+
+            return carrierImage;
+        }
+
         /// <summary>
         /// Gets the name of the carrier.
         /// </summary>
@@ -119,7 +138,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         {
             string carrierName;
 
-            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools && postageNotSetup)
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
             {
                 carrierName = "USPS";
             }
