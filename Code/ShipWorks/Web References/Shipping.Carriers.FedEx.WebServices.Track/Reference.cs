@@ -432,7 +432,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         private Address destinationField;
         
-        private EMailNotificationEventType[][] recipientDetailsField;
+        private EMailNotificationEventType[] recipientDetailsField;
         
         /// <remarks/>
         public string TrackingNumber {
@@ -509,7 +509,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("NotificationEventsAvailable", typeof(EMailNotificationEventType), IsNullable=false)]
-        public EMailNotificationEventType[][] RecipientDetails {
+        public EMailNotificationEventType[] RecipientDetails {
             get {
                 return this.recipientDetailsField;
             }
