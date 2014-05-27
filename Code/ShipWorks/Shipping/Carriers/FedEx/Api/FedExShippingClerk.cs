@@ -156,17 +156,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             switch (serviceType)
             {
                 case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.OneRatePriorityOvernight:
                 case FedExServiceType.StandardOvernight:
+                case FedExServiceType.OneRateStandardOvernight:
                 case FedExServiceType.FirstOvernight:
+                case FedExServiceType.OneRateFirstOvernight:
                 case FedExServiceType.FedEx2Day:
+                case FedExServiceType.OneRate2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.OneRateExpressSaver:
+                case FedExServiceType.FedEx2DayAM:
+                case FedExServiceType.OneRate2DayAM:
                 case FedExServiceType.InternationalPriority:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
-                case FedExServiceType.FedEx2DayAM:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
