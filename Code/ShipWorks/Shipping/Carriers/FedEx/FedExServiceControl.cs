@@ -642,6 +642,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
 
+                RaiseRateCriteriaChanged();
                 SyncSelectedRate();
             }
             else
@@ -654,8 +655,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
-
-            
         }
 
         /// <summary>
