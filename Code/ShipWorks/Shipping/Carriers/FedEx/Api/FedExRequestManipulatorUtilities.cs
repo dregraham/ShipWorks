@@ -29,11 +29,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 throw new CarrierException("The native request is not allowed to be Null.");
             }
-
-            //if (request.NativeRequest is WebServices.Ship.CancelPendingShipmentRequest)
-            //{
-            //    throw new CarrierException("CancelPendingShipmentRequest is not a valid request type.");
-            //}
             
             if (request.NativeRequest is WebServices.Ship.DeleteShipmentRequest)
             {
@@ -41,7 +36,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
             
             if (!(nativeRequest is ProcessShipmentRequest) && 
-                //!(nativeRequest is CreatePendingShipmentRequest) && 
                 !(nativeRequest is WebServices.Ship.ValidateShipmentRequest))
             {
                 throw new CarrierException(request.NativeRequest.ToString() + " is not a valid request type.");

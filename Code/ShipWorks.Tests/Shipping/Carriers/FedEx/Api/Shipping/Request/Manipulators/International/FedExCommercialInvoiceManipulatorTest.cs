@@ -229,18 +229,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        //[TestMethod]
-        //public void Manipulate_TermsOfSaleSpecifiedIsTrue_WhenCommercialInvoiceIsTrue_Test()
-        //{
-        //    shipmentEntity.FedEx.CommercialInvoice = true;
-
-        //    testObject.Manipulate(carrierRequest.Object);
-
-        //    CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-        //    Assert.IsTrue(customsDetail.CommercialInvoice.TermsOfSaleSpecified);
-        //}
-
-
         [TestMethod]
         public void Manipulate_PurposeIsSold_Test()
         {

@@ -16,7 +16,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
-//using CreatePendingShipmentRequest = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest;
 using ProcessShipmentRequest = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
@@ -74,22 +73,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     // it across the wire to FedEx
                     ProcessShipmentRequest processShipmentRequest = nativeShipmentRequest as ProcessShipmentRequest;
                     processReply = service.processShipment(processShipmentRequest);     
- 
-                    //if (processShipmentRequest != null)
-                    //{
-                    //    processReply = service.processShipment(processShipmentRequest);                        
-                    //}
-                    //else
-                    //{
-                    //    CreatePendingShipmentRequest createPendingShipmentRequest = nativeShipmentRequest as CreatePendingShipmentRequest;
-
-                    //    if (createPendingShipmentRequest == null)
-                    //    {
-                    //        throw new ArgumentException("nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.");
-                    //    }
-
-                    //    processReply = service.processShipment(processShipmentRequest);
-                    //}
 
                     // If we are an Interapptive user, save for certification
                     if (InterapptiveOnly.IsInterapptiveUser)

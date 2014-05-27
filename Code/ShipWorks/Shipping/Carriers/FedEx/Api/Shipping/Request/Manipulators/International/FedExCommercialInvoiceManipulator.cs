@@ -94,7 +94,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         {
             CommercialInvoice invoice = new CommercialInvoice();
             invoice.TermsOfSale = GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale);
-            //invoice.TermsOfSaleSpecified = true;
 
             invoice.Purpose = GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose);
             invoice.PurposeSpecified = true;
