@@ -110,7 +110,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExSmartPostManipulator(),
                 new FedExReturnsManipulator(),
                 new FedExTrafficInArmsManipulator(),
-                new FedExInternationalControlledExportManipulator()
+                new FedExInternationalControlledExportManipulator(),
+                new FedExOneRateManipulator()
             };
 
             IFedExNativeShipmentRequest nativeShipmentRequest;
