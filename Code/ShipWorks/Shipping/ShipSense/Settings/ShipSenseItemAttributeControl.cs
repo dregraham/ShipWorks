@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.ShipSense.Settings
 {
@@ -22,6 +23,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             InitializeComponent();
 
             attribute.Text = attributeName;
+
+            // Get rid of the ugly bottom border on the toolstrip control
+            toolStripDelete.Renderer = new NoBorderToolStripRenderer();
         }
 
         /// <summary>

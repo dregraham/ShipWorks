@@ -423,7 +423,7 @@ namespace ShipWorks.Stores.Content.Panels
             menuCopyTracking.Enabled = entityGrid.Selection.Count == 1;
             menuCopy.Enabled = entityGrid.Selection.Count >= 1;
 
-            string editText = "Edit";
+            string editText = "Ship";
             Image editImage = Resources.edit16;
 
             if (EntityID != null && !UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, EntityID.Value))

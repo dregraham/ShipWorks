@@ -4541,10 +4541,6 @@ PRINT N'Adding constraints to [dbo].[ServiceStatus]'
 GO
 ALTER TABLE [dbo].[ServiceStatus] ADD CONSTRAINT [IX_ServiceStatus] UNIQUE NONCLUSTERED  ([ComputerID], [ServiceType])
 GO
-PRINT N'Adding constraints to [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED  ([ShipmentID])
-GO
 PRINT N'Adding foreign keys to [dbo].[ActionFilterTrigger]'
 GO
 ALTER TABLE [dbo].[ActionFilterTrigger] ADD CONSTRAINT [FK_ActionFilterTrigger_Action] FOREIGN KEY ([ActionID]) REFERENCES [dbo].[Action] ([ActionID])
