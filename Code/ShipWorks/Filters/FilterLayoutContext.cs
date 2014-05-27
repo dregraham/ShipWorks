@@ -21,6 +21,7 @@ using ShipWorks.Filters.Content.SqlGeneration;
 using System.Linq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.Utility;
@@ -132,13 +133,11 @@ namespace ShipWorks.Filters
 
             // Do the fetch
             DataTable result = new DataTable();
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchTypedList(resultFields, result, null);
-            }
+
+            ExistingConnectionScope.ExecuteWithAdapter(sqlAdapter => sqlAdapter.FetchTypedList(resultFields, result, null));
 
             // Load all the layouts
-            foreach (long layoutID in result.Rows.Cast<DataRow>().Select(r => (long) r[0]))
+            foreach (long layoutID in result.Rows.Cast<DataRow>().Select(r => (long)r[0]))
             {
                 LoadLayout(layoutID);
             }
@@ -152,7 +151,7 @@ namespace ShipWorks.Filters
             FilterLayoutEntity layout = new FilterLayoutEntity(layoutID);
             context.Add(layout);
 
-            SqlAdapter.Default.FetchEntity(layout, BuildLayoutPrefetchPath(layoutID));
+            ExistingConnectionScope.ExecuteWithAdapter(sqlAdapter => sqlAdapter.FetchEntity(layout, BuildLayoutPrefetchPath(layoutID)));
 
             // Ensure we got it
             if (layout.Fields.State != EntityState.Fetched)
@@ -250,14 +249,13 @@ namespace ShipWorks.Filters
         /// </summary>
         private int GetFilterNodeLevels(long layoutID)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
                 cmd.CommandText = "SELECT dbo.GetFilterNodeLevels(@FilterLayoutID)";
                 cmd.Parameters.AddWithValue("@FilterLayoutID", layoutID);
 
-                return (int) SqlCommandProvider.ExecuteScalar(cmd);
-            }
+                return (int)SqlCommandProvider.ExecuteScalar(cmd);
+            });
         }
 
         #endregion

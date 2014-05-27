@@ -257,8 +257,8 @@ namespace ShipWorks.Data.Connection
                             Stopwatch timer = Stopwatch.StartNew();
 
                             // Since SingleUserModeScope is active, we are here b\c another connection stole it from us.  We'll try to steal it back as soon as we can.
-                            // Basically we'll try as hard as we can for up to 30 seconds
-                            while (timer.Elapsed < TimeSpan.FromSeconds(30))
+                            // Basically we'll try as hard as we can for up to 30 seconds by default, or an overridden amount of time
+                            while (timer.Elapsed < SingleUserModeScope.ReconnectTimeout)
                             {
                                 try
                                 {

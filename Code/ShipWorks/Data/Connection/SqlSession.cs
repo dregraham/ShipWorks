@@ -466,25 +466,23 @@ namespace ShipWorks.Data.Connection
                 return;
             }
 
-            using (SqlConnection con = OpenConnection())
+            // Get the server times if our cache is stale
+            ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
-                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
+
+                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
                 {
-                    cmd.CommandText = "SELECT GETDATE() AS [ServerDateLocal], GETUTCDATE() AS [ServerDateUtc]";
+                    reader.Read();
 
-                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
-                    {
-                        reader.Read();
+                    serverDateLocal = (DateTime)reader["ServerDateLocal"];
+                    serverDateUtc = (DateTime)reader["ServerDateUtc"];
 
-                        serverDateLocal = (DateTime)reader["ServerDateLocal"];
-                        serverDateUtc = (DateTime)reader["ServerDateUtc"];
+                    log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverDateLocal, serverDateUtc);
 
-                        log.InfoFormat("Server LocalDate ({0}), Utc ({1})", serverDateLocal, serverDateUtc);
-
-                        timeSinceTimeTaken = Stopwatch.StartNew();
-                    }
+                    timeSinceTimeTaken = Stopwatch.StartNew();
                 }
-            }
+            });
         }
 
         /// <summary>
