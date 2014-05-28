@@ -69,14 +69,16 @@ namespace ShipWorks.Stores.Content.Panels
         {
             long selectedID = selection.Keys.FirstOrDefault();
             selectedEntity = selectedID == 0 ? null : DataProvider.GetEntity(selection.Keys.FirstOrDefault());
-            GetMap();
+            GetImage();
         }
 
         /// <summary>
-        /// Gets the map.
+        /// Gets the image from Google.
         /// </summary>
-        private void GetMap()
+        private void GetImage()
         {
+            errorLabel.Text = string.Empty;
+
             if (selectedEntity != null)
             {
                 AddressAdapter addressAdapter = new AddressAdapter();
@@ -84,20 +86,27 @@ namespace ShipWorks.Stores.Content.Panels
                 AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
 
                 Size size = GetPictureSize(Size);
+                try
+                {
+                    googleImage.Load(
+                        string.Format(GetUrl(),
+                            addressAdapter.Street1,
+                            addressAdapter.City,
+                            addressAdapter.StateProvCode,
+                            size.Width,
+                            size.Height));
 
-                pictureBox1.Load(
-                    string.Format(GetUrl(),
-                        addressAdapter.Street1,
-                        addressAdapter.City,
-                        addressAdapter.StateProvCode,
-                        size.Width,
-                        size.Height));
-
-                pictureBox1.Visible = true;
+                    googleImage.Visible = true;
+                }
+                catch (Exception)
+                {
+                    googleImage.Visible = false;
+                    errorLabel.Text = "Cannot get image from Google.";
+                }
             }
             else
             {
-                pictureBox1.Visible = false;
+                googleImage.Visible = false;
             }
         }
 
@@ -193,9 +202,9 @@ namespace ShipWorks.Stores.Content.Panels
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnSizeChanged(object sender, EventArgs e)
         {
-            pictureBox1.Size = new Size(Size.Width, Size.Height);
-            pictureBox1.Location = new Point(0, 0);
-            GetMap();
+            googleImage.Size = new Size(Size.Width, Size.Height);
+            googleImage.Location = new Point(0, 0);
+            GetImage();
         }
     }
 }

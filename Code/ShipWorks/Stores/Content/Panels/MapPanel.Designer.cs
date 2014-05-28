@@ -28,35 +28,48 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.googleImage = new System.Windows.Forms.PictureBox();
+            this.errorLabel = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.googleImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // googleImage
             // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(326, 174);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.googleImage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.googleImage.Location = new System.Drawing.Point(0, 0);
+            this.googleImage.Name = "googleImage";
+            this.googleImage.Size = new System.Drawing.Size(326, 174);
+            this.googleImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.googleImage.TabIndex = 4;
+            this.googleImage.TabStop = false;
+            // 
+            // errorLabel
+            // 
+            this.errorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.errorLabel.Location = new System.Drawing.Point(4, 4);
+            this.errorLabel.Name = "errorLabel";
+            this.errorLabel.Size = new System.Drawing.Size(322, 170);
+            this.errorLabel.TabIndex = 5;
             // 
             // MapPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.googleImage);
+            this.Controls.Add(this.errorLabel);
             this.Name = "MapPanel";
             this.Size = new System.Drawing.Size(326, 174);
             this.SizeChanged += new System.EventHandler(this.OnSizeChanged);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.googleImage)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox googleImage;
+        private System.Windows.Forms.Label errorLabel;
     }
 }
