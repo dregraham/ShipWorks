@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.TrackingNumber = "";
 
             package.DangerousGoodsEnabled = false;
-            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;            
+            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;            
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
             package.DangerousGoodsCargoAircraftOnly = false;
             package.DangerousGoodsEmergencyContactPhone = string.Empty;

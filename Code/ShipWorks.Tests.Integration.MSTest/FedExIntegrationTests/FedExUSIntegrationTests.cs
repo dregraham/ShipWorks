@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         private string fedExTestAccountNumber = "603103343";
         private const string ecodAccountNumber = "222326460";
 
-        private bool justLabels = true;
+        private bool justLabels = false;
 
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
@@ -29,7 +29,6 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
                     testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605733" ? ecodAccountNumber : fedExTestAccountNumber;
 
                     testObject.Ship();
-
                 }
             }
             catch (Exception ex)

@@ -717,7 +717,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             package.Insurance = false;
             package.InsuranceValue = 0M;
 
-            package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries;
+            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsPackagingCount = 0;
             package.DangerousGoodsOfferor = string.Empty;
             package.DangerousGoodsEnabled = false;
