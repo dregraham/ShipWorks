@@ -54,17 +54,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private const string standardEndiciaPartnerID = "lswk";
         private const string freemiumEndiciaPartnerID = "lseb";
 
+
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EndiciaApiClient"/> class.
         /// </summary>
-        public EndiciaApiClient() : this(new EndiciaAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
+        public EndiciaApiClient()
+            : this(new EndiciaAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         {
-            
+
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EndiciaApiClient"/> class.
         /// </summary>
+        /// <param name="accountRepository">The account repository.</param>
+        /// <param name="logEntryFactory">The log entry factory.</param>
+        /// <param name="certificateInspector">The certificate inspector.</param>
         public EndiciaApiClient(ICarrierAccountRepository<EndiciaAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;

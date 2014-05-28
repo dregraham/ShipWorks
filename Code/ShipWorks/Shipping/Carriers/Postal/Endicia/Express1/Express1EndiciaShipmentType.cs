@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
             try
             {
-                (new EndiciaApiClient()).ProcessShipment(shipment, this);
+                (new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector)).ProcessShipment(shipment, this);
             }
             catch (EndiciaException ex)
             {

@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             StampsAccountEntity stampsAccount = StampsAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
 
-            if(stampsAccount == null)
+            if (stampsAccount == null)
             {
                 stampsAccount = Express1Accounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
             }
