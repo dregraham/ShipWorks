@@ -538,7 +538,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             {
                 case ("hazardous_materials"): return FedExDangerousGoodsMaterialType.HazardousMaterials;
                 case ("orm_d"): return FedExDangerousGoodsMaterialType.OrmD;
-                case ("lithium_batteries"): return FedExDangerousGoodsMaterialType.LithiumBatteries;
+                case ("lithium_batteries"): return FedExDangerousGoodsMaterialType.Batteries;
                 default: return FedExDangerousGoodsMaterialType.NotApplicable;
             }
         }

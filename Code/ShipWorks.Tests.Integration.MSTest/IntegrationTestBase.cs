@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
-using Moq;
 
 
 namespace ShipWorks.Tests.Integration.MSTest
@@ -46,6 +44,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             {
                 // Build the translation map using the column headers in the first row
                 PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
+
                 return false;
             }
             
@@ -185,6 +184,10 @@ namespace ShipWorks.Tests.Integration.MSTest
                             item.SetValue(testObject, Convert.ChangeType(value, item.PropertyType), null);
                         }
                     }
+                    else
+                    {
+                        missingProperties += item.Name + System.Environment.NewLine;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -192,6 +195,64 @@ namespace ShipWorks.Tests.Integration.MSTest
                     throw;
                 }
             }
+
+            Debug.WriteLine(missingProperties);
+        }
+
+        /// <summary>
+        /// Iterates through each property, in our ShipWorks MSTest objects, verifying there's a matching column
+        /// </summary>
+        protected void DetermineMissingProperties<T>(T testObject, DataRow testDataRow, List<ColumnPropertyMapDefinition> columnPropertyMap)
+        {
+            PropertyInfo[] properties = (from c in testObject.GetType().GetProperties()
+                                         where c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
+                                            && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
+                                            && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
+                                         select c).ToArray();
+
+            string missingProperties = string.Empty;
+            //string format = "SpreadsheetColumn: {0},  Property: {1}";
+            string format = "{0}\t{1}";
+
+            Debug.WriteLine("ColumnPropertyMapDefinition with GOOD indexes");
+            Debug.WriteLine("SpreadsheetColumnName\tPropertyName");
+            columnPropertyMap.Where(x => x.SpreadsheetColumnIndex != -1).ToList().ForEach(x => Debug.WriteLine(format, x.SpreadsheetColumnName, x.PropertyName));
+
+            Debug.WriteLine("ColumnPropertyMapDefinition with -1 indexes");
+            Debug.WriteLine("SpreadsheetColumnName\tPropertyName");
+            columnPropertyMap.Where(x => x.SpreadsheetColumnIndex == -1).ToList().ForEach(x => Debug.WriteLine(format, x.SpreadsheetColumnName, x.PropertyName));
+
+            Debug.WriteLine("ColumnPropertyMapDefinition matches Properties");
+            Debug.WriteLine("SpreadsheetColumnName\tPropertyName");
+            var qry = from cpm in columnPropertyMap
+                join prop in properties on cpm.PropertyName equals prop.Name
+                select cpm;
+            qry.ToList().ForEach(x => Debug.WriteLine(format, x.SpreadsheetColumnName, x.PropertyName));
+
+
+
+            foreach (PropertyInfo item in properties)
+            {
+                try
+                {
+                    ColumnPropertyMapDefinition cpm = columnPropertyMap.FirstOrDefault(x => x.PropertyName == item.Name);
+
+                    if (cpm != null)
+                    {
+                        if (cpm.SpreadsheetColumnIndex == -1)
+                        {
+                            missingProperties += string.Format("{0}{1}", cpm.SpreadsheetColumnName, System.Environment.NewLine);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    throw;
+                }
+            }
+
+            Debug.Write(missingProperties);
         }
     }
 }

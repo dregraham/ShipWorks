@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible,
                 DangerousGoodsEmergencyContactPhone = "555-555-5555",
                 DangerousGoodsOfferor = "some offeror",
-                DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries,
+                DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries,
                 DangerousGoodsCargoAircraftOnly = false,                
             };
 
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -262,7 +262,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -396,7 +396,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_OptionIsLithiumBattery_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -610,7 +610,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_ContainerIsNull_WhenOptionIsNotHazardousMaterials_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -839,7 +839,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_PackagingIsNull_WhenOptionIsNotHazardousMaterials_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 
