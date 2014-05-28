@@ -313,7 +313,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             // Consider the shipment insured of any package is insured
-            shipment.Insurance = shipment.IParcel.Packages.Any(p => p.InsuranceValue > 0);
+            shipment.Insurance = shipment.IParcel.Packages.Any(p => p.Insurance);
 
             // Set the provider type based on i-Parcel settings
             shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
