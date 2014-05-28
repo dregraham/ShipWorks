@@ -171,7 +171,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(testObject, FedExUsExpressDomesticMapping.UsExpDomesticMapping) &&
+            if (PopulateTestObject(testObject, FedExUsOneRateMapping.UsOneRateMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

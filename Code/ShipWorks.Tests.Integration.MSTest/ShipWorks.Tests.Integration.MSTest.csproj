@@ -103,6 +103,7 @@
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUsExpressDomesticMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSExpressInternationalFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundFixture.cs" />
+    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUsOneRateMapping.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsMIFixture.cs" />
     <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsFixture.cs" />
     <Compile Include="GlobalSuppressions.cs" />

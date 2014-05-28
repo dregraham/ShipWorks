@@ -1051,6 +1051,30 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                         // so that Saturday pickup/delivery doesn't factor in
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
                         break;
+                    case "fedex_one_rate":
+                        switch ((FedExServiceType)shipment.FedEx.Service)
+                        {
+                            case FedExServiceType.FedEx2Day:
+                                shipment.FedEx.Service = (int) FedExServiceType.OneRate2Day;
+                                break;
+                            case FedExServiceType.FedEx2DayAM:
+                                shipment.FedEx.Service = (int)FedExServiceType.OneRate2DayAM;
+                                break;
+                            case FedExServiceType.FedExExpressSaver:
+                                shipment.FedEx.Service = (int)FedExServiceType.OneRateExpressSaver;
+                                break;
+                            case FedExServiceType.FirstOvernight:
+                                shipment.FedEx.Service = (int)FedExServiceType.OneRateFirstOvernight;
+                                break;
+                            case FedExServiceType.PriorityOvernight:
+                                shipment.FedEx.Service = (int)FedExServiceType.OneRatePriorityOvernight;
+                                break;
+                            case FedExServiceType.StandardOvernight:
+                                shipment.FedEx.Service = (int)FedExServiceType.OneRateStandardOvernight;
+                                break;
+                        }
+
+                        break;
                 }
 
                 if (shipment.FedEx.SaturdayDelivery)
