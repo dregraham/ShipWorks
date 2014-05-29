@@ -318,6 +318,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     referenceCustomer.ApplyMultiText(shipment.FedEx.ReferenceCustomer);
                     referenceInvoice.ApplyMultiText(shipment.FedEx.ReferenceInvoice);
                     referencePO.ApplyMultiText(shipment.FedEx.ReferencePO);
+                    referenceShipmentIntegrity.ApplyMultiText(shipment.FedEx.ReferenceShipmentIntegrity);
 
                     payorTransport.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorTransportType);
                     transportAccount.ApplyMultiText(shipment.FedEx.PayorTransportAccount);
@@ -541,6 +542,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 referenceCustomer.ReadMultiText(t => shipment.FedEx.ReferenceCustomer = t);
                 referenceInvoice.ReadMultiText(t => shipment.FedEx.ReferenceInvoice = t);
                 referencePO.ReadMultiText(t => shipment.FedEx.ReferencePO = t);
+                referenceShipmentIntegrity.ReadMultiText(t => shipment.FedEx.ReferenceShipmentIntegrity = t);
 
                 payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
                 transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);

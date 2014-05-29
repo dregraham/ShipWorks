@@ -137,6 +137,7 @@ namespace ShipWorks.Data.Utility
         FedExReferenceCustomer,
         FedExReferenceInvoice,
         FedExReferencePO,
+        FedExReferenceShipmentIntegrity,
         FedExHomeDeliveryInstructions,
         FedExHomeDeliveryPhone,
         FedExFreightBookingNumber,
