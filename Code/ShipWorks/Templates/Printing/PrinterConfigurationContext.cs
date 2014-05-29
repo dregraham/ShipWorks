@@ -76,6 +76,7 @@ namespace ShipWorks.Templates.Printing
             PageSettings pageSettings;
             PaperSize paperSize;
             bool? landscape;
+            PaperSource paperSource;
 
             /// <summary>
             /// Constructor
@@ -114,6 +115,22 @@ namespace ShipWorks.Templates.Printing
                     }
 
                     return paperSize;
+                }
+            }
+
+            /// <summary>
+            /// The default PaperSource of the printer
+            /// </summary>
+            public PaperSource PaperSource
+            {
+                get
+                {
+                    if (paperSource==null)
+                    {
+                        paperSource = InternalPageSettings.PaperSource;
+                    }
+
+                    return paperSource;
                 }
             }
 
@@ -331,7 +348,7 @@ namespace ShipWorks.Templates.Printing
             }
 
             // See if we need to change any settings
-            if (paperSource != printerSettings.PaperSize.RawKind ||
+            if (paperSource != printerSettings.PaperSource.RawKind ||
                 isLandscape != printerSettings.Landscape ||
                 needSetPaperSize)
             {
@@ -347,7 +364,7 @@ namespace ShipWorks.Templates.Printing
                 // Update the context to know its paper settings need restored
                 context.needRestorePaper = true;
 
-                context.paperSource = printerSettings.PaperSize.RawKind;
+                context.paperSource = printerSettings.PaperSource.RawKind;
                 context.paperOrientation = printerSettings.Landscape ? 2 : 1;
 
                 context.paperSizeValue = oldSettings.PaperSize;
