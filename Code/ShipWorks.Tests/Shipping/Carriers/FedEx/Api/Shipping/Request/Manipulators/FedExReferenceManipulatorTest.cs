@@ -401,6 +401,70 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
         #endregion PO Number Tests
 
+        #region Shipment Integrity Tests
+        
+        [TestMethod]
+        public void Manipulate_AssignsReferenceShipmentIntegrityToFedExShipment_WhenReferenceValueIsNotBlank_Test()
+        {
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Our token processor is setup in the initialize method to always return a value, so there should 
+            // be a value on the reference customer
+            Assert.IsFalse(string.IsNullOrEmpty(shipmentEntity.FedEx.ReferenceShipmentIntegrity));
+        }
+
+        [TestMethod]
+        public void Manipulate_DoesNotAddShipmentIntegrityToRequest_WhenReferenceValueIsEmptyString_Test()
+        {
+            // Setup the token processor to return an empty string
+            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Our token processor is setup to return an empty string, so there should not be a customer reference
+            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            Assert.AreEqual(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.SHIPMENT_INTEGRITY));
+        }
+
+        [TestMethod]
+        public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenReferenceValueIsEmptyString_Test()
+        {
+            // Setup the token processor to return an empty string
+            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Our token processor is setup to return an empty string, so there should not be a value on the reference customer
+            Assert.AreEqual(string.Empty, shipmentEntity.FedEx.ReferenceShipmentIntegrity);
+        }
+
+        [TestMethod]
+        public void Manipulate_DoesNotAddShipmentIntegrityReferenceToRequest_WhenReferenceValueIsNull_Test()
+        {
+            // Setup the token processor to return null
+            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Our token processor is setup to return null, so there should not be a customer reference
+            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            Assert.AreEqual(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.SHIPMENT_INTEGRITY));
+        }
+
+        [TestMethod]
+        public void Manipulate_AssignsReferenceShipmentIntegrityToFedExShipment_WhenReferenceValueIsNull_Test()
+        {
+            // Setup the token processor to return null
+            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Our token processor is setup to return null, so there should not be a value on the reference customer
+            Assert.AreEqual(null, shipmentEntity.FedEx.ReferenceShipmentIntegrity);
+        }
+
+        #endregion Shipment Integrity Tests
+
         [TestMethod]
         [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenReferenceExceedsThirtyCharacters_Test()
