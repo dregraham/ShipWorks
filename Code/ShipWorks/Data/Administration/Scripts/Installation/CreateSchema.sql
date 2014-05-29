@@ -1632,6 +1632,7 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReferenceCustomer] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferenceInvoice] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferencePO] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceShipmentIntegrity] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportType] [int] NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorDutiesType] [int] NULL,
@@ -1655,8 +1656,7 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReturnType] [int] NULL,
 [RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ReturnSaturdayPickup] [bit] NULL,
-[Reference4] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ReturnSaturdayPickup] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
