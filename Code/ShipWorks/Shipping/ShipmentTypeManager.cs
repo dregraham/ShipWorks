@@ -262,6 +262,8 @@ namespace ShipWorks.Shipping
                 case PostalServiceType.DhlCatalogStandard:
                 case PostalServiceType.DhlCatalogExpedited:
                 case PostalServiceType.DhlMediaMailStandard:
+                case PostalServiceType.DhlMarketingStandard:
+                case PostalServiceType.DhlMarketingExpedited:
                     return true;
             }
 
