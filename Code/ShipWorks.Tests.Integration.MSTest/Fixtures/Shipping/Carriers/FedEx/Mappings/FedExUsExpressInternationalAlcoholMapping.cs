@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings
 {
     class FedExUsExpressInternationalAlcoholMapping
     {

@@ -1,13 +1,14 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
+using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings;
 
 namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 {
     [TestClass]
     public class FedExUSIntegrationTests : IntegrationTestBase
     {
-        private string fedExTestAccountNumber = "603103343";
+        private string fedExTestAccountNumber = "604589967"; // "603103343";
         private const string ecodAccountNumber = "222326460";
 
         private bool justLabels = false;
@@ -15,6 +16,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
@@ -47,6 +49,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
@@ -79,6 +82,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExExpressInternationalAlcohol()
         {
@@ -101,6 +105,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExExpressInternational")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExExpressInternational()
         {
@@ -122,6 +127,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExExpressDomesticAlcohol()
         {
@@ -145,6 +151,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
+        [TestCategory("FedEx")]
         [Ignore]
         public void Ship_FedExExpressDomestic()
         {
@@ -166,7 +173,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExOneRate")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        [Ignore]
+        [TestCategory("FedEx")]
         public void Ship_FedExOneRate_Test()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();

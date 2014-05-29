@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings
 {
     public static class FedExCaExpressInternationalMapping
     {

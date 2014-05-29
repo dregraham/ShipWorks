@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
+using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings;
 
 namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 {
@@ -52,10 +53,10 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
-            var testObject = new FedExCAGroundDomesticInternational();
+            var testObject = new FedExCAGroundDomesticInternationalFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternational.FedExCAGroundDomesticInternationalMapping) &&
+                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternationalFixture.FedExCAGroundDomesticInternationalMapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
