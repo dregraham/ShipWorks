@@ -473,6 +473,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ReferenceCustomer = "Order {//Order/Number}";
             profile.FedEx.ReferenceInvoice = "";
             profile.FedEx.ReferencePO = "";
+            profile.FedEx.ReferenceShipmentIntegrity = string.Empty;
             profile.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
             profile.FedEx.PayorTransportType = (int) FedExPayorType.Sender;
@@ -619,6 +620,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceCustomer, fedex, FedExShipmentFields.ReferenceCustomer);
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceInvoice, fedex, FedExShipmentFields.ReferenceInvoice);
             ShippingProfileUtility.ApplyProfileValue(source.ReferencePO, fedex, FedExShipmentFields.ReferencePO);
+            ShippingProfileUtility.ApplyProfileValue(source.ReferenceShipmentIntegrity, fedex, FedExShipmentFields.ReferenceShipmentIntegrity);
 
             ShippingProfileUtility.ApplyProfileValue(source.PayorTransportType, fedex, FedExShipmentFields.PayorTransportType);
             ShippingProfileUtility.ApplyProfileValue(source.PayorTransportAccount, fedex, FedExShipmentFields.PayorTransportAccount);
@@ -1053,9 +1055,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ElementOutline outline = container.AddElement("FedEx", ElementOutline.If(() => shipment().Processed));
             outline.AddAttributeLegacy2x();
             outline.AddElement("Voided", () => shipment().Voided);
+            
             outline.AddElement("LabelCODReturn",
                 () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
                 ElementOutline.If(() => shipment().ThermalType == null && codReturn.Value != null));
+            
             outline.AddElement("Package",
                 new FedExLegacyPackageTemplateOutline(container.Context),
                 () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),

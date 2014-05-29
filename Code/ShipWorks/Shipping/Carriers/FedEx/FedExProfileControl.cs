@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.ReferenceCustomer, referenceCustomerState, referenceCustomer, labelReference);
             AddValueMapping(fedex, FedExProfileFields.ReferenceInvoice, referenceInvoiceState, referenceInvoice, labelInvoice);
             AddValueMapping(fedex, FedExProfileFields.ReferencePO, referencePoState, referencePO, labelPO);
+            AddValueMapping(fedex, FedExProfileFields.ReferenceShipmentIntegrity, referenceShipmentIntegrityState, referenceShipmentIntegrity, labelShipmentIntegrity);
 
             AddValueMapping(fedex, FedExProfileFields.SmartPostHubID, smartHubIDState, smartHubID, labelSmartHubID);
             AddValueMapping(fedex, FedExProfileFields.SmartPostIndicia, smartIndiciaState, smartIndicia, labelSmartEndicia);
