@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_FedExShipment]
 [ReferenceCustomer] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ReferenceInvoice] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ReferencePO] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ReferenceShipmentIntegrity] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportType] [int] NOT NULL,
 [PayorTransportName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -162,14 +163,13 @@ CREATE TABLE [dbo].[tmp_rg_xx_FedExShipment]
 [IntlExportDetailLicenseOrPermitNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IntlExportDetailLicenseOrPermitExpirationDate] [datetime] NULL,
 [WeightUnitType] [int] NOT NULL,
-[LinearUnitType] [int] NOT NULL,
-[Reference4] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[LinearUnitType] [int] NOT NULL
 )
 GO
 INSERT INTO [dbo].[tmp_rg_xx_FedExShipment]([ShipmentID], [FedExAccountID], [MasterFormID], [Service], [Signature], [PackagingType], [NonStandardContainer], [ReferenceCustomer], [ReferenceInvoice], [ReferencePO], [PayorTransportType], [PayorTransportName], [PayorTransportAccount], [PayorDutiesType], [PayorDutiesAccount], [PayorDutiesName], [PayorDutiesCountryCode], [SaturdayDelivery], [HomeDeliveryType], [HomeDeliveryInstructions], [HomeDeliveryDate], [HomeDeliveryPhone], [FreightInsidePickup], [FreightInsideDelivery], [FreightBookingNumber], [FreightLoadAndCount], [EmailNotifyBroker], [EmailNotifySender], [EmailNotifyRecipient], [EmailNotifyOther], [EmailNotifyOtherAddress], [EmailNotifyMessage], [CodEnabled], [CodAmount], [CodPaymentType], [CodAddFreight], [CodOriginID], [CodFirstName], [CodLastName], [CodCompany], [CodStreet1], [CodStreet2], [CodStreet3], [CodCity], [CodStateProvCode], [CodPostalCode], [CodCountryCode], [CodPhone], [CodTrackingNumber], [CodTrackingFormID], [CodTIN], [CodChargeBasis], [CodAccountNumber], [BrokerEnabled], [BrokerAccount], [BrokerFirstName], [BrokerLastName], [BrokerCompany], [BrokerStreet1], [BrokerStreet2], [BrokerStreet3], [BrokerCity], [BrokerStateProvCode], [BrokerPostalCode], [BrokerCountryCode], [BrokerPhone], [BrokerPhoneExtension], [BrokerEmail], [CustomsAdmissibilityPackaging], [CustomsRecipientTIN], [CustomsDocumentsOnly], [CustomsDocumentsDescription], [CustomsExportFilingOption], [CustomsAESEEI], [CustomsRecipientIdentificationType], [CustomsRecipientIdentificationValue], [CustomsOptionsType], [CustomsOptionsDesription], [CommercialInvoice], [CommercialInvoiceTermsOfSale], [CommercialInvoicePurpose], [CommercialInvoiceComments], [CommercialInvoiceFreight], [CommercialInvoiceInsurance], [CommercialInvoiceOther], [CommercialInvoiceReference], [ImporterOfRecord], [ImporterAccount], [ImporterTIN], [ImporterFirstName], [ImporterLastName], [ImporterCompany], [ImporterStreet1], [ImporterStreet2], [ImporterStreet3], [ImporterCity], [ImporterStateProvCode], [ImporterPostalCode], [ImporterCountryCode], [ImporterPhone], [SmartPostIndicia], [SmartPostEndorsement], [SmartPostConfirmation], [SmartPostCustomerManifest], [SmartPostHubID], [DropoffType], [OriginResidentialDetermination], [FedExHoldAtLocationEnabled], [HoldLocationId], [HoldLocationType], [HoldContactId], [HoldPersonName], [HoldTitle], [HoldCompanyName], [HoldPhoneNumber], [HoldPhoneExtension], [HoldPagerNumber], [HoldFaxNumber], [HoldEmailAddress], [HoldStreet1], [HoldStreet2], [HoldStreet3], [HoldCity], [HoldStateOrProvinceCode], [HoldPostalCode], [HoldUrbanizationCode], [HoldCountryCode], [HoldResidential], [CustomsNaftaEnabled], [CustomsNaftaPreferenceType], [CustomsNaftaDeterminationCode], [CustomsNaftaProducerId], [CustomsNaftaNetCostMethod], [ReturnType], [RmaNumber], [RmaReason], [ReturnSaturdayPickup], [TrafficInArmsLicenseNumber], [IntlExportDetailType], [IntlExportDetailForeignTradeZoneCode], [IntlExportDetailEntryNumber], [IntlExportDetailLicenseOrPermitNumber], [IntlExportDetailLicenseOrPermitExpirationDate], 
-		[WeightUnitType], [LinearUnitType], [Reference4]) 
+		[WeightUnitType], [LinearUnitType], [ReferenceShipmentIntegrity]) 
 	SELECT [ShipmentID], [FedExAccountID], [MasterFormID], [Service], [Signature], [PackagingType], [NonStandardContainer], [ReferenceCustomer], [ReferenceInvoice], [ReferencePO], [PayorTransportType], [PayorTransportName], [PayorTransportAccount], [PayorDutiesType], [PayorDutiesAccount], [PayorDutiesName], [PayorDutiesCountryCode], [SaturdayDelivery], [HomeDeliveryType], [HomeDeliveryInstructions], [HomeDeliveryDate], [HomeDeliveryPhone], [FreightInsidePickup], [FreightInsideDelivery], [FreightBookingNumber], [FreightLoadAndCount], [EmailNotifyBroker], [EmailNotifySender], [EmailNotifyRecipient], [EmailNotifyOther], [EmailNotifyOtherAddress], [EmailNotifyMessage], [CodEnabled], [CodAmount], [CodPaymentType], [CodAddFreight], [CodOriginID], [CodFirstName], [CodLastName], [CodCompany], [CodStreet1], [CodStreet2], [CodStreet3], [CodCity], [CodStateProvCode], [CodPostalCode], [CodCountryCode], [CodPhone], [CodTrackingNumber], [CodTrackingFormID], [CodTIN], [CodChargeBasis], [CodAccountNumber], [BrokerEnabled], [BrokerAccount], [BrokerFirstName], [BrokerLastName], [BrokerCompany], [BrokerStreet1], [BrokerStreet2], [BrokerStreet3], [BrokerCity], [BrokerStateProvCode], [BrokerPostalCode], [BrokerCountryCode], [BrokerPhone], [BrokerPhoneExtension], [BrokerEmail], [CustomsAdmissibilityPackaging], [CustomsRecipientTIN], [CustomsDocumentsOnly], [CustomsDocumentsDescription], [CustomsExportFilingOption], [CustomsAESEEI], [CustomsRecipientIdentificationType], [CustomsRecipientIdentificationValue], [CustomsOptionsType], [CustomsOptionsDesription], [CommercialInvoice], [CommercialInvoiceTermsOfSale], [CommercialInvoicePurpose], [CommercialInvoiceComments], [CommercialInvoiceFreight], [CommercialInvoiceInsurance], [CommercialInvoiceOther], [CommercialInvoiceReference], [ImporterOfRecord], [ImporterAccount], [ImporterTIN], [ImporterFirstName], [ImporterLastName], [ImporterCompany], [ImporterStreet1], [ImporterStreet2], [ImporterStreet3], [ImporterCity], [ImporterStateProvCode], [ImporterPostalCode], [ImporterCountryCode], [ImporterPhone], [SmartPostIndicia], [SmartPostEndorsement], [SmartPostConfirmation], [SmartPostCustomerManifest], [SmartPostHubID], [DropoffType], [OriginResidentialDetermination], [FedExHoldAtLocationEnabled], [HoldLocationId], [HoldLocationType], [HoldContactId], [HoldPersonName], [HoldTitle], [HoldCompanyName], [HoldPhoneNumber], [HoldPhoneExtension], [HoldPagerNumber], [HoldFaxNumber], [HoldEmailAddress], [HoldStreet1], [HoldStreet2], [HoldStreet3], [HoldCity], [HoldStateOrProvinceCode], [HoldPostalCode], [HoldUrbanizationCode], [HoldCountryCode], [HoldResidential], [CustomsNaftaEnabled], [CustomsNaftaPreferenceType], [CustomsNaftaDeterminationCode], [CustomsNaftaProducerId], [CustomsNaftaNetCostMethod], [ReturnType], [RmaNumber], [RmaReason], [ReturnSaturdayPickup], [TrafficInArmsLicenseNumber], [IntlExportDetailType], [IntlExportDetailForeignTradeZoneCode], [IntlExportDetailEntryNumber], [IntlExportDetailLicenseOrPermitNumber], [IntlExportDetailLicenseOrPermitExpirationDate], 
-		[WeightUnitType], [LinearUnitType], '' 
+		[WeightUnitType], [LinearUnitType], ''
 	FROM [dbo].[FedExShipment]
 GO
 DROP TABLE [dbo].[FedExShipment]
@@ -183,14 +183,14 @@ GO
 PRINT N'Altering [dbo].[FedExProfile]'
 GO
 ALTER TABLE [dbo].[FedExProfile] ADD
-[Reference4] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ReferenceShipmentIntegrity] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 GO
 
 PRINT N'Updating primary FedEx Profile'
 GO
 UPDATE [dbo].[FedExProfile]
 SET 
-	[Reference4] = ''
+	[ReferenceShipmentIntegrity] = ''
 WHERE ShippingProfileID in (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentType IN (6) AND ShipmentTypePrimary = 1)
 
 

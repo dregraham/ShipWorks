@@ -6312,6 +6312,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferencePO);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceShipmentIntegrity);}
+		}
 		/// <summary>Creates a new FedExProfileEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
 		{
@@ -6431,11 +6436,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReturnSaturdayPickup
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReturnSaturdayPickup);}
-		}
-		/// <summary>Creates a new FedExProfileEntity.Reference4 field instance</summary>
-		public static EntityField2 Reference4
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.Reference4);}
 		}
 	}
 
@@ -6631,6 +6631,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferencePO
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferencePO);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceShipmentIntegrity);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
@@ -7306,11 +7311,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 LinearUnitType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.LinearUnitType);}
-		}
-		/// <summary>Creates a new FedExShipmentEntity.Reference4 field instance</summary>
-		public static EntityField2 Reference4
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.Reference4);}
 		}
 	}
 
