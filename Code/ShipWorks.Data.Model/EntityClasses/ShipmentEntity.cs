@@ -597,6 +597,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			base.GetObjectData(info, context);
 		}
 
+		/// <summary> Method which will construct a filter (predicate expression) for the unique constraint defined on the fields:
+		/// ShipmentID .</summary>
+		/// <returns>true if succeeded and the contents is read, false otherwise</returns>
+		public IPredicateExpression ConstructFilterForUCShipmentID()
+		{
+			IPredicateExpression filter = new PredicateExpression();
+			filter.Add(new FieldCompareValuePredicate(base.Fields[(int)ShipmentFieldIndex.ShipmentID], null, ComparisonOperator.Equal)); 
+			return filter;
+		}
+
 		/// <summary>Returns true if the original value for the field with the fieldIndex passed in, read from the persistent storage was NULL, false otherwise.
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>

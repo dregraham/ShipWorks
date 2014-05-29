@@ -2,6 +2,90 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
+
+
+UPDATE [dbo].[FedExProfile]
+SET 
+	[ReferenceCustomer] = SUBSTRING([ReferenceCustomer], 0, 30),
+	[ReferenceInvoice] = SUBSTRING([ReferenceInvoice], 0, 30),
+	[ReferencePO] = SUBSTRING([ReferencePO], 0, 30)
+GO
+
+
+
+
+PRINT N'Dropping foreign keys from [dbo].[FedExProfile]'
+GO
+ALTER TABLE [dbo].[FedExProfile] DROP CONSTRAINT[FK_FedExProfile_ShippingProfile]
+GO
+PRINT N'Dropping foreign keys from [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] DROP CONSTRAINT[FK_FedExProfilePackage_FedExProfile]
+GO
+PRINT N'Dropping constraints from [dbo].[FedExProfile]'
+GO
+ALTER TABLE [dbo].[FedExProfile] DROP CONSTRAINT [PK_FedExProfile]
+GO
+PRINT N'Rebuilding [dbo].[FedExProfile]'
+GO
+CREATE TABLE [dbo].[tmp_rg_xx_FedExProfile]
+(
+[ShippingProfileID] [bigint] NOT NULL,
+[FedExAccountID] [bigint] NULL,
+[Service] [int] NULL,
+[Signature] [int] NULL,
+[PackagingType] [int] NULL,
+[NonStandardContainer] [bit] NULL,
+[ReferenceCustomer] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceInvoice] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferencePO] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceShipmentIntegrity] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorTransportType] [int] NULL,
+[PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PayorDutiesType] [int] NULL,
+[PayorDutiesAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SaturdayDelivery] [bit] NULL,
+[EmailNotifySender] [int] NULL,
+[EmailNotifyRecipient] [int] NULL,
+[EmailNotifyOther] [int] NULL,
+[EmailNotifyOtherAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[EmailNotifyMessage] [varchar] (120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ResidentialDetermination] [int] NULL,
+[SmartPostIndicia] [int] NULL,
+[SmartPostEndorsement] [int] NULL,
+[SmartPostConfirmation] [bit] NULL,
+[SmartPostCustomerManifest] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SmartPostHubID] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[EmailNotifyBroker] [int] NULL,
+[DropoffType] [int] NULL,
+[OriginResidentialDetermination] [int] NULL,
+[PayorTransportName] [nchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReturnType] [int] NULL,
+[RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReturnSaturdayPickup] [bit] NULL
+)
+GO
+INSERT INTO [dbo].[tmp_rg_xx_FedExProfile]([ShippingProfileID], [FedExAccountID], [Service], [Signature], [PackagingType], [NonStandardContainer], [ReferenceCustomer], [ReferenceInvoice], [ReferencePO], [ReferenceShipmentIntegrity], [PayorTransportType], [PayorTransportAccount], [PayorDutiesType], [PayorDutiesAccount], [SaturdayDelivery], [EmailNotifySender], [EmailNotifyRecipient], [EmailNotifyOther], [EmailNotifyOtherAddress], [EmailNotifyMessage], [ResidentialDetermination], [SmartPostIndicia], [SmartPostEndorsement], [SmartPostConfirmation], [SmartPostCustomerManifest], [SmartPostHubID], [EmailNotifyBroker], [DropoffType], [OriginResidentialDetermination], [PayorTransportName], [ReturnType], [RmaNumber], [RmaReason], [ReturnSaturdayPickup]) SELECT [ShippingProfileID], [FedExAccountID], [Service], [Signature], [PackagingType], [NonStandardContainer], [ReferenceCustomer], [ReferenceInvoice], [ReferencePO], '', [PayorTransportType], [PayorTransportAccount], [PayorDutiesType], [PayorDutiesAccount], [SaturdayDelivery], [EmailNotifySender], [EmailNotifyRecipient], [EmailNotifyOther], [EmailNotifyOtherAddress], [EmailNotifyMessage], [ResidentialDetermination], [SmartPostIndicia], [SmartPostEndorsement], [SmartPostConfirmation], [SmartPostCustomerManifest], [SmartPostHubID], [EmailNotifyBroker], [DropoffType], [OriginResidentialDetermination], [PayorTransportName], [ReturnType], [RmaNumber], [RmaReason], [ReturnSaturdayPickup] FROM [dbo].[FedExProfile]
+GO
+DROP TABLE [dbo].[FedExProfile]
+GO
+EXEC sp_rename N'[dbo].[tmp_rg_xx_FedExProfile]', N'FedExProfile'
+GO
+PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
+GO
+ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [PK_FedExProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[FedExProfile]'
+GO
+ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [FK_FedExProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[FedExProfilePackage]'
+GO
+ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [FK_FedExProfilePackage_FedExProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[FedExProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+
+
 PRINT N'Dropping foreign keys from [dbo].[FedExPackage]'
 GO
 ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT[FK_FedExPackage_FedExShipment]
@@ -180,19 +264,6 @@ PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [PK_FedExShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Altering [dbo].[FedExProfile]'
-GO
-ALTER TABLE [dbo].[FedExProfile] ADD
-[ReferenceShipmentIntegrity] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-GO
-
-PRINT N'Updating primary FedEx Profile'
-GO
-UPDATE [dbo].[FedExProfile]
-SET 
-	[ReferenceShipmentIntegrity] = ''
-WHERE ShippingProfileID in (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentType IN (6) AND ShipmentTypePrimary = 1)
-
 
 PRINT N'Adding foreign keys to [dbo].[FedExPackage]'
 GO
