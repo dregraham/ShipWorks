@@ -872,9 +872,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelShipmentIntegrity.AutoSize = true;
             this.labelShipmentIntegrity.BackColor = System.Drawing.Color.Transparent;
-            this.labelShipmentIntegrity.Location = new System.Drawing.Point(36, 118);
+            this.labelShipmentIntegrity.Location = new System.Drawing.Point(27, 118);
             this.labelShipmentIntegrity.Name = "labelShipmentIntegrity";
-            this.labelShipmentIntegrity.Size = new System.Drawing.Size(44, 13);
+            this.labelShipmentIntegrity.Size = new System.Drawing.Size(53, 13);
             this.labelShipmentIntegrity.TabIndex = 8;
             this.labelShipmentIntegrity.Text = "Integrity:";
             // 
