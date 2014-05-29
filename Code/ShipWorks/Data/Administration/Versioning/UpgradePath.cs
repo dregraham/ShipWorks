@@ -52,10 +52,10 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <exception cref="System.NotImplementedException"></exception>
         internal string GetScriptName(string FromVersion)
         {
-            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.ToVersion == FromVersion);
 
             return String.IsNullOrEmpty(selectedFromVersion.Script) ? 
-                String.Format("{0}To{1}", selectedFromVersion.Version, To) : 
+                String.Format("{0}To{1}", selectedFromVersion.ToVersion, To) : 
                 selectedFromVersion.Script;
         }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         public string GetUpdateProcessName(string FromVersion)
         {
-            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.Version == FromVersion);
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.ToVersion == FromVersion);
 
             return selectedFromVersion.Process;
         }

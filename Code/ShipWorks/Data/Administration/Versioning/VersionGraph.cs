@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <value>
         /// The adjacency graph.
         /// </value>
-        [CLSCompliant(false)]
+        [CLSCompliant(false)]  // For some reason, Edge<string> is not CLS Complient.
         public AdjacencyGraph<string, Edge<string>> VersionAdjacencyGraph
         {
             get
@@ -71,12 +71,7 @@ namespace ShipWorks.Data.Administration.Versioning
 
             if (tryGetPaths(fromVersion.VersionName, out path))
             {
-                return path.Reverse().Select(version => new VersionUpgradeStep()
-                {
-                    Version = version.Source, 
-                    Script = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetScriptName(version.Target),
-                    Process = shipWorksVersions.First(upgradePath => upgradePath.To == version.Source).GetUpdateProcessName(version.Target)
-                })
+                return path.Reverse().Select(version => new VersionUpgradeStep(version, shipWorksVersions.First(upgradePath => upgradePath.To == version.Source)))
                 .ToList();
             }
 
@@ -87,7 +82,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// Adds the version. The target version is listed first. 
         /// In versionsToUpgrade, the first version passed in is the preferred version.
         /// </summary>
-        /// <param name="targetVersion">Version to upgrade to.</param>
+        /// <param name="targetVersion">ToVersion to upgrade to.</param>
         /// <param name="versionsToUpgrade">The first version passed in is the preferred version.</param>
         private void AddVersion(string targetVersion, IEnumerable<VersionUpgradeStep> versionsToUpgrade)
         {
@@ -97,7 +92,7 @@ namespace ShipWorks.Data.Administration.Versioning
 
             foreach (VersionUpgradeStep versionToUpgrade in versionsToUpgrade)
             {
-                Edge<string> edge = new Edge<string>(targetVersion, versionToUpgrade.Version);
+                Edge<string> edge = new Edge<string>(targetVersion, versionToUpgrade.ToVersion);
 
                 graph.AddEdge(edge);
                 edgeCosts.Add(edge, edgeCost);

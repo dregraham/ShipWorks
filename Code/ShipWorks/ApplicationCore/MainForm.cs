@@ -801,8 +801,7 @@ namespace ShipWorks
 
             if (softwareSchemaComparedToDatabaseSchema == SchemaVersionComparisonResult.Newer || 
                 !SqlSession.Current.IsSqlServer2008OrLater() || 
-                MigrationController.IsMigrationInProgress() || 
-                UpdateProcessManager.DequeueUpdateProcess() != null)
+                MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {

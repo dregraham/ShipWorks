@@ -13,10 +13,10 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Constructor
         /// </summary>
-        public SqlUpdateScript(string resourcePath, string resourceName)
+        public SqlUpdateScript(string resourcePath, string resourceName, string updateProcessName)
         {
             // We have to extract out the path part
-            int updateIndex = resourcePath.IndexOf("Update");
+            int updateIndex = resourcePath.IndexOf("Update", StringComparison.OrdinalIgnoreCase);
             if (updateIndex < 0)
             {
                 throw new InvalidOperationException("Unexpected sql update script path.");
@@ -26,15 +26,8 @@ namespace ShipWorks.Data.Administration.Versioning
             scriptName = resourcePath.Substring(updateIndex + "Update.".Length);
 
             schemaVersion = resourceName;
-        }
 
-        /// <summary>
-        /// Copies existing SqlUpdateScript into a new one. This helps with a linq join.
-        /// </summary>
-        public SqlUpdateScript(SqlUpdateScript script)
-        {
-            schemaVersion = script.schemaVersion;
-            scriptName = script.scriptName;
+            UpdateProcessName = updateProcessName;
         }
 
         /// <summary>
@@ -57,6 +50,5 @@ namespace ShipWorks.Data.Administration.Versioning
         /// Gets the name of the update process.
         /// </summary>
         public string UpdateProcessName { get; set; }
-
     }
 }

@@ -37,8 +37,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
-            return GetDatabaseSchemaVersion().Compare((new SchemaVersionManager()).GetRequiredSchemaVersion()) == SchemaVersionComparisonResult.Equal
-                && UpdateProcessManager.GetUpdateProcessCount() == 0;
+            return GetDatabaseSchemaVersion().Compare((new SchemaVersionManager()).GetRequiredSchemaVersion()) == SchemaVersionComparisonResult.Equal;
         }
 
         /// <summary>
@@ -100,8 +99,13 @@ namespace ShipWorks.Data.Administration.Versioning
                     {
                         using (TransactionScope transaction = new TransactionScope(debuggingMode ? TransactionScopeOption.Suppress : TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
                         {
+                            SchemaVersionManager schemaVersionManager = new SchemaVersionManager();
+                            // Get all the update scripts
+                            List<SqlUpdateScript> updateScripts = schemaVersionManager.GetUpdateScripts(fromVersion, toVersion).ToList();
+
+
                             // Update the tables
-                            UpdateScripts(fromVersion, toVersion, progressScripts);
+                            UpdateScripts(updateScripts, progressScripts);
 
                             // Functionality starting
                             progressFunctionality.Starting();
@@ -129,7 +133,7 @@ namespace ShipWorks.Data.Administration.Versioning
                             progressFunctionality.Completed();
 
                             // Run Update Processes
-                            UpdateProcesses(progressProcesses);
+                            UpdateProcesses(updateScripts, progressProcesses);
 
                             transaction.Complete();
                         }
@@ -158,24 +162,27 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Run the update processes in the UpdateQueue
         /// </summary>
-        private static void UpdateProcesses(ProgressItem progress)
+        private static void UpdateProcesses(List<SqlUpdateScript> updateScripts, ProgressItem progress)
         {
+            IEnumerable<string> updateProcessNames = updateScripts
+                .Where(script => !string.IsNullOrEmpty(script.UpdateProcessName))
+                .Select(script => script.UpdateProcessName);
+
             progress.Starting();
             progress.Detail = "Processing updates from Update Queue...";
 
-            int queueCount = UpdateProcessManager.GetUpdateProcessCount();
+            int queueCount = updateProcessNames.Count();
+            int currentItem = 0;
 
-            for (int i = 1; i <= queueCount; i++)
+            foreach (string processName in updateProcessNames)
             {
-                progress.Detail = string.Format("Processing {0} of {1}", i, queueCount);
-                progress.PercentComplete = Math.Min(100,i/queueCount*100);
-                UpdateQueueEntity updateQueueEntity = UpdateProcessManager.DequeueUpdateProcess();
+                progress.Detail = string.Format("Processing {0} of {1}", currentItem, queueCount);
+                progress.PercentComplete = Math.Min(100, currentItem/queueCount*100);
+                
                 using (TransactionScope transactionScope = new TransactionScope())
                 {
-
-                    IUpdateDatabaseProcess updateDatabaseProcess = UpdateProcessManager.GetUpdateProcess(updateQueueEntity);
+                    IUpdateDatabaseProcess updateDatabaseProcess = GetUpdateProcess(processName);
                     updateDatabaseProcess.Process();
-                    UpdateProcessManager.DeleteUpdateProcessFromQueue(updateQueueEntity);
                     transactionScope.Complete();
                 }
             }
@@ -183,6 +190,20 @@ namespace ShipWorks.Data.Administration.Versioning
             progress.PercentComplete = 100;
             progress.Detail = "Done";
             progress.Completed();
+        }
+
+        /// <summary>
+        /// Gets the update process.
+        /// </summary>
+        private static IUpdateDatabaseProcess GetUpdateProcess(string processName)
+        {
+            Type updateDatabaseProcessType = Type.GetType(processName);
+            if (updateDatabaseProcessType == null)
+            {
+                throw new InvalidOperationException(string.Format("Unknown ProcessType {0}.", processName));                
+            }
+
+            return (IUpdateDatabaseProcess)Activator.CreateInstance(updateDatabaseProcessType, false);
         }
 
         /// <summary>
@@ -260,20 +281,9 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Upgrade a 3.x database to the current version.
         /// </summary>
-        private static void UpdateScripts(SchemaVersion fromVersion, SchemaVersion toVersion, ProgressItem progress)
+        private static void UpdateScripts(List<SqlUpdateScript> updateScripts, ProgressItem progress)
         {
-            if (fromVersion.Compare(toVersion) == SchemaVersionComparisonResult.Equal)
-            {
-                return;
-            }
-
             progress.Starting();
-            progress.Detail = "Preparing...";
-
-            SchemaVersionManager schemaVersionManager = new SchemaVersionManager();
-
-            // Get all the update scripts
-            List<SqlUpdateScript> updateScripts = schemaVersionManager.GetUpdateScripts(fromVersion, toVersion).ToList();
 
             // Start with generic progress msg
             progress.Detail = "Updating...";

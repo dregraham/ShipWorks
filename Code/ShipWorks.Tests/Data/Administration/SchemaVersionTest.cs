@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Data.Administration
 
             mockSchemaVersionManager
                 .Setup(s => s.GetUpdateScripts(OlderVersionThree, NewerVersionThree))
-                .Returns(new List<SqlUpdateScript>() { new SqlUpdateScript("UpdatePath", "name") });
+                .Returns(new List<SqlUpdateScript>() { new SqlUpdateScript("UpdatePath", "name", string.Empty) });
         }
 
         [TestMethod]

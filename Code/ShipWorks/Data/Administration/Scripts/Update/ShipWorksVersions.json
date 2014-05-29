@@ -97,5 +97,5 @@
 {"To":"3.9.0.0","From":[{"Version":"3.8.0.1","Script":"3.9.0.0"}]},
 {"To":"AddressValidation", 
 	"From":[
-		{"Version":"3.9.0.0","Script":"BestRateToAddressValidation","Process":"BestRateToAddressValidation"} ]}  /* upgrade beta to Address validation, upgrade non-beta users */
+		{"Version":"3.9.0.0","Script":"BestRateToAddressValidation","Process":"ShipWorks.Data.Administration.Scripts.Update.BestRateToAddressValidation"} ]}  /* upgrade beta to Address validation, upgrade non-beta users */
 ]
