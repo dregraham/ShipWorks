@@ -1009,6 +1009,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExProfileEntity", "RmaNumber", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.RmaNumber, 30, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "RmaReason", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.RmaReason, 60, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReturnSaturdayPickup", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnSaturdayPickup, 0, 0, 0);
+			base.AddElementFieldInfo("FedExProfileEntity", "Reference4", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.Reference4, 35, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -1189,6 +1190,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "IntlExportDetailLicenseOrPermitExpirationDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)FedExShipmentFieldIndex.IntlExportDetailLicenseOrPermitExpirationDate, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "WeightUnitType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.WeightUnitType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "LinearUnitType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.LinearUnitType, 0, 0, 10);
+			base.AddElementFieldInfo("FedExShipmentEntity", "Reference4", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.Reference4, 35, 0, 0);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

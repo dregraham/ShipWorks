@@ -587,6 +587,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnSaturdayPickup", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Reference4", fieldHashtable);
 		}
 		#endregion
 
@@ -1067,6 +1070,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, value); }
+		}
+
+		/// <summary> The Reference4 property of the Entity FedExProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."Reference4"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Reference4
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.Reference4, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.Reference4, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

@@ -1611,7 +1611,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [IntlExportDetailLicenseOrPermitNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IntlExportDetailLicenseOrPermitExpirationDate] [datetime] NULL,
 [WeightUnitType] [int] NOT NULL,
-[LinearUnitType] [int] NOT NULL
+[LinearUnitType] [int] NOT NULL,
+[Reference4] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -1654,7 +1655,8 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReturnType] [int] NULL,
 [RmaNumber] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RmaReason] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ReturnSaturdayPickup] [bit] NULL
+[ReturnSaturdayPickup] [bit] NULL,
+[Reference4] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'

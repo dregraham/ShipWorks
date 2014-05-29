@@ -923,6 +923,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("LinearUnitType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Reference4", fieldHashtable);
 		}
 		#endregion
 
@@ -2635,6 +2638,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FedExShipmentFieldIndex.LinearUnitType, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.LinearUnitType, value); }
+		}
+
+		/// <summary> The Reference4 property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."Reference4"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Reference4
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.Reference4, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.Reference4, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'.

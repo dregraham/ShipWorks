@@ -3026,6 +3026,8 @@ namespace ShipWorks.Data.Model
 		RmaReason,
 		///<summary>ReturnSaturdayPickup. </summary>
 		ReturnSaturdayPickup,
+		///<summary>Reference4. </summary>
+		Reference4,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3392,6 +3394,8 @@ namespace ShipWorks.Data.Model
 		WeightUnitType,
 		///<summary>LinearUnitType. </summary>
 		LinearUnitType,
+		///<summary>Reference4. </summary>
+		Reference4,
 		/// <summary></summary>
 		AmountOfFields
 	}
