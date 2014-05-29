@@ -244,8 +244,6 @@ Global
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Win32.ActiveCfg = Debug|Any CPU
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
 		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
