@@ -1018,9 +1018,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                     shipment.FedEx.ReferencePO = CustomerReferenceValue ?? string.Empty;
                 }
 
-                else if (CustomerReferenceType.ToLower() == "invoice_number")
+                if (CustomerReferenceType.ToLower() == "invoice_number")
                 {
                     shipment.FedEx.ReferenceInvoice = CustomerReferenceValue ?? string.Empty;
+                }
+
+                else if (CustomerReferenceType.ToLower() == "shipment_integrity")
+                {
+                    shipment.FedEx.ReferenceShipmentIntegrity = CustomerReferenceValue ?? string.Empty;
                 }
             }
         }
