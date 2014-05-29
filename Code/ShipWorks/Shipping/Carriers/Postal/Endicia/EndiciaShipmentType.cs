@@ -637,8 +637,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     shipment.Postal.Endicia.OriginalEndiciaAccountID = shipment.Postal.Endicia.EndiciaAccountID;
                     shipment.Postal.Endicia.EndiciaAccountID = express1Account.EndiciaAccountID;
 
-                    List<RateResult> express1Rates = endiciaApiClient.GetRatesFast(shipment, this);
-                    RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
+                    // Instantiate the Express1 shipment type, so the correct account repository is used when getting rates
+                    ShipmentType express1Type = ShipmentTypeManager.GetType(shipment);
+                    RateGroup express1Rates = express1Type.GetRates(shipment); 
+                    RateResult express1Rate = express1Rates.Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                       ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                       && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
 
