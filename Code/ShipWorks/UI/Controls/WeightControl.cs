@@ -462,8 +462,8 @@ namespace ShipWorks.UI.Controls
         public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
         {
             string result;
-
-            if (displayFormat == WeightDisplayFormat.FractionalPounds)
+            
+            if ((WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat == WeightDisplayFormat.FractionalPounds)
             {
                 result = string.Format("{0:0.0#} lbs", weight);
             }
