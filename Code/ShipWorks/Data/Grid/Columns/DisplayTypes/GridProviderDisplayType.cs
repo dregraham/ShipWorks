@@ -156,15 +156,17 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         private static void SelectProvider(ShipmentEntity shipment, ShipmentType type)
         {
             shipment.ShipmentType = (int)type.ShipmentTypeCode;
-
             shipment.Order = (OrderEntity)DataProvider.GetEntity(shipment.OrderID);
-
-            type.LoadShipmentData(shipment, false);
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
                 sqlAdapter.SaveAndRefetch(shipment);
             }
+
+            // Perform this after the save otherwise customs items will be duplicated on 
+            // international shipments
+            ShippingManager.EnsureShipmentLoaded(shipment);
+            CustomsManager.LoadCustomsItems(shipment, false);
 
             Program.MainForm.ForceHeartbeat();
         }
