@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using QuickGraph;
 using QuickGraph.Algorithms;
 
@@ -24,54 +25,41 @@ namespace ShipWorks.Data.Administration.Versioning
         }
 
         /// <summary>
-        /// Gets the adjacency graph.
-        /// </summary>
-        /// <value>
-        /// The adjacency graph.
-        /// </value>
-        [CLSCompliant(false)]  // For some reason, Edge<string> is not CLS Complient.
-        public AdjacencyGraph<string, Edge<string>> VersionAdjacencyGraph
-        {
-            get
-            {
-                return graph;
-            }
-        }
-
-        /// <summary>
         /// Gets the upgrade path.
         /// </summary>
         /// <param name="fromVersion">The installed version.</param>
         /// <param name="toVersion">The target version.</param>
-        public List<VersionUpgradeStep> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> shipWorksVersions)
+        /// <param name="schemaVersions">All the ShipWorks schema versions.</param>
+        /// <exception cref="FindVersionUpgradePathException">
+        /// </exception>
+        public List<VersionUpgradeStep> GetUpgradePath(SchemaVersion fromVersion, SchemaVersion toVersion, IEnumerable<UpgradePath> schemaVersions)
         {
             if (toVersion == fromVersion)
             {
                 return new List<VersionUpgradeStep>();
             }
 
-            foreach (var shipWorksVersion in shipWorksVersions)
+            foreach (UpgradePath schemaVersion in schemaVersions)
             {
-                AddVersion(shipWorksVersion.To, shipWorksVersion.From);
+                AddVersion(schemaVersion);
             }
 
             TryFunc<string, IEnumerable<Edge<string>>> tryGetPaths;
 
             try
             {
-
                 tryGetPaths = graph.ShortestPathsDijkstra(edge => edgeCosts[edge], toVersion.VersionName);
             }
             catch (KeyNotFoundException ex)
             {
-                throw new FindVersionUpgradePathException("Couldn't find version in version file.", ex);
+                throw new FindVersionUpgradePathException(string.Format("Couldn't find version '{0}' in version file.", toVersion.VersionName), ex);
             }
 
             IEnumerable<Edge<string>> path;
 
             if (tryGetPaths(fromVersion.VersionName, out path))
             {
-                return path.Reverse().Select(version => new VersionUpgradeStep(version, shipWorksVersions.First(upgradePath => upgradePath.To == version.Source)))
+                return path.Reverse().Select(version => new VersionUpgradeStep(version, schemaVersions.First(upgradePath => upgradePath.To == version.Source)))
                 .ToList();
             }
 
@@ -80,24 +68,20 @@ namespace ShipWorks.Data.Administration.Versioning
 
         /// <summary>
         /// Adds the version. The target version is listed first. 
-        /// In versionsToUpgrade, the first version passed in is the preferred version.
+        /// In fromVersions, the first version passed in is the preferred version.
         /// </summary>
-        /// <param name="targetVersion">ToVersion to upgrade to.</param>
-        /// <param name="versionsToUpgrade">The first version passed in is the preferred version.</param>
-        private void AddVersion(string targetVersion, IEnumerable<VersionUpgradeStep> versionsToUpgrade)
+        private void AddVersion(UpgradePath upgradePath)
         {
-            graph.AddVertex(targetVersion);
+            graph.AddVertex(upgradePath.To);
 
-            int edgeCost = 0;
+            int edgeCost = upgradePath.PreferredVersion ? 1 : 10000;
 
-            foreach (VersionUpgradeStep versionToUpgrade in versionsToUpgrade)
+            foreach (VersionUpgradeStep versionToUpgrade in upgradePath.From)
             {
-                Edge<string> edge = new Edge<string>(targetVersion, versionToUpgrade.ToVersion);
+                Edge<string> edge = new Edge<string>(upgradePath.To, versionToUpgrade.FromVersion);
 
                 graph.AddEdge(edge);
                 edgeCosts.Add(edge, edgeCost);
-
-                edgeCost = 10000;
             }
         }
     }

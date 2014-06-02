@@ -450,7 +450,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <summary>
         /// Handle command line requests
         /// </summary>
-        private class CommandLineHandler : ICommandLineCommandHandler
+        private class CommandLineHandlerNeedsUpgrade : ICommandLineCommandHandler
         {
             /// <summary>
             /// Name of the command
@@ -511,6 +511,101 @@ namespace ShipWorks.Data.Administration.Versioning
                     Environment.ExitCode = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Handle command line requests
+        /// </summary>
+        private class LegacyGetDbSchemaVersion : ICommandLineCommandHandler
+        {
+            /// <summary>
+            /// Name of the command
+            /// </summary>
+            public string CommandName
+            {
+                get { return "getdbschemaversion"; }
+            }
+
+            /// <summary>
+            /// Run the command with the given arguments
+            /// </summary>
+            public void Execute(List<string> args)
+            {
+                string type = null;
+
+                // Need to extract the type
+                OptionSet optionSet = new OptionSet()
+                    {
+                        { "t|type=", v =>  type = v  },
+                        { "<>", v => { throw new CommandLineCommandArgumentException(CommandName, v, "Invalid arguments passed to command."); } }
+                    };
+
+                optionSet.Parse(args);
+
+                if (string.IsNullOrEmpty(type))
+                {
+                    throw new CommandLineCommandArgumentException(CommandName, "type", "The required 'type' parameter was not specified.");
+                }
+
+                switch (type)
+                {
+                    case "database":
+                        {
+                            // At the point in which this is called, SqlSession has not been setup
+                            SqlSession.Initialize();
+
+                            try
+                            {
+                                if (SqlSession.IsConfigured && SqlSession.Current.CanConnect())
+                                {
+                                    // To make things easy we return the result in the ExitCode.  This means we are restricted to integers. So we build
+                                    // a new int from the schema id
+                                    Version dbVersion = new Version(
+                                        SqlDatabaseDetail.GetSchemaVersion(SqlSession.Current.OpenConnection(),
+                                            false).VersionName);
+
+                                    log.InfoFormat("Database schema version  {0}", dbVersion);
+
+                                    int schemaID = GetSchemaId(dbVersion);
+
+                                    log.InfoFormat("Database schema version ID  {0}", schemaID);
+                                    Environment.ExitCode = schemaID;
+                                }
+                                else
+                                {
+                                    log.Warn("Could not determine database schema ID since SqlSession is not configured.");
+
+                                    // We don't know
+                                    Environment.ExitCode = 0;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error("Could not determine database schema ID", ex);
+                                Environment.ExitCode = 0;
+                            }
+
+                            break;
+                        }
+
+                    default:
+                        {
+                            throw new CommandLineCommandArgumentException(CommandName, "type", string.Format("Invalid value passed to 'type' parameter: {0}", type));
+                        }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the SchemaID representation of the given version number
+        /// </summary>
+        private static int GetSchemaId(Version version)
+        {
+            return
+                (version.Major << 24) +
+                (version.Minor << 16) +
+                (version.Build << 8) +
+                (version.Revision);
         }
     }
 }

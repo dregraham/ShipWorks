@@ -328,6 +328,7 @@ var
 	VersionFound: string;
 	NeedsUpgrade: Integer;
 	VersionInstalling: string;
+	OldSchemaFound: Integer;
 begin
 
 	Result := True;
@@ -357,23 +358,29 @@ begin
 		// Existing 3x version
 		else if (Pos('3.', VersionFound) = 1)
 		then begin
-
-			// See if a DB upgrade will be required.
-		    if Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
-		    then begin
-
-				if (NeedsUpgrade = 1)
+			OldSchemaFound := False;
+			if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+			then begin
+				if((SchemaFound > 0) and (SchemaFound < 56822025))
 				then begin
+					// The DB is using "the old way" and the version is less than 3.99.9.9
+					NeedsUpgrade = 1
+				end;
+				else begin
+					Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
+				end;
+			end;	
+						
+			if (NeedsUpgrade = 1)
+			then begin
 
-					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
-							   '' + #13 +
-							   'Continue with installation?',
-						mbConfirmation,
-						MB_OKCANCEL) = IDCANCEL)
-					then begin
-						Result := False;
-					end;
-
+				if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
+							'' + #13 +
+							'Continue with installation?',
+					mbConfirmation,
+					MB_OKCANCEL) = IDCANCEL)
+				then begin
+					Result := False;
 				end;
 
 			end;

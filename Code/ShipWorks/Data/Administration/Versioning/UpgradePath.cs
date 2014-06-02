@@ -33,9 +33,18 @@ namespace ShipWorks.Data.Administration.Versioning
         public List<VersionUpgradeStep> From
         {
             get;
-            private set;
+            set;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [non preferred path].
+        /// </summary>
+        public bool PreferredVersion 
+        { 
+            get; 
+            set; 
+        }
+        
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -52,10 +61,10 @@ namespace ShipWorks.Data.Administration.Versioning
         /// <exception cref="System.NotImplementedException"></exception>
         internal string GetScriptName(string FromVersion)
         {
-            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.ToVersion == FromVersion);
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.FromVersion == FromVersion);
 
             return String.IsNullOrEmpty(selectedFromVersion.Script) ? 
-                String.Format("{0}To{1}", selectedFromVersion.ToVersion, To) : 
+                String.Format("{0}To{1}", selectedFromVersion.FromVersion, To) : 
                 selectedFromVersion.Script;
         }
 
@@ -64,7 +73,7 @@ namespace ShipWorks.Data.Administration.Versioning
         /// </summary>
         public string GetUpdateProcessName(string FromVersion)
         {
-            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.ToVersion == FromVersion);
+            VersionUpgradeStep selectedFromVersion = From.SingleOrDefault(f => f.FromVersion == FromVersion);
 
             return selectedFromVersion.Process;
         }
