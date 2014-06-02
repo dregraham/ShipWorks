@@ -55,31 +55,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
                 Debugger.Launch();
             }
 
-
             // Need to comment out Debug.Assert statements in ShipWorks.Data.Caching.EntityCacheChangeMonitor
             // to avoid errors resulting from an assertion that the MainForm is running
 
-            Guid swInstance;
-            switch (Environment.MachineName.ToLower())
-            {
-                case "tim-pc":
-                    swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
-                    break;
-                case "john-pc":
-                    swInstance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
-                    break;
-                case "kevin-pc":
-                    swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
-                    break;
-                case "MSTest-vm":
-                    swInstance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
-                    break;
-                case "benz-pc":
-                    swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
-                    break;
-                default:
-                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in FedExPrototypeFixture()");
-            }
+            Guid swInstance = ShipWorksInitializer.GetShipWorksInstance();
 
             // Mock an execution mode for the various dependencies that use the execution
             // mode to determine at whether the UI is running

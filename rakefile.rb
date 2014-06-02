@@ -245,7 +245,7 @@ namespace :test do
 		puts categoryParameter		
 		
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
-		mstest.parameters = "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
+		mstest.parameters = "/detail:errorstacktrace", "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
 	end
 end
 

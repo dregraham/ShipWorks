@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
 
             progressReporter = new Mock<IProgressReporter>();
 
-            Guid swInstance = GetShipWorksInstance();
+            Guid swInstance = ShipWorksInitializer.GetShipWorksInstance();
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
@@ -72,43 +72,6 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
             }
         }
 
-        private Guid GetShipWorksInstance()
-        {
-            Guid instance;
-
-            string instanceFromConfig = System.Configuration.ConfigurationManager.AppSettings["ShipWorksInstanceGuid"];
-            if (!string.IsNullOrWhiteSpace(instanceFromConfig))
-            {
-                instance = Guid.Parse(instanceFromConfig);
-            }
-            else
-            {
-                // Fall back to the hard-coded values in the case where the instance value is not found in the
-                // configuration file
-                switch (Environment.MachineName.ToLower())
-                {
-                    case "tim-pc":
-                        instance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
-                        break;
-                    case "john-pc":
-                        instance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
-                        break;
-                    case "kevin-pc":
-                        instance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
-                        break;
-                    case "MSTest-vm":
-                        instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
-                        break;
-                    case "benz-pc":
-                        instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
-                        break;
-                    default:
-                        throw new ApplicationException("Enter your machine and ShipWorks instance guid in ShipSenseLoaderTest()");
-                }
-            }
-
-            return instance;
-        }
 
         [TestMethod]
         [TestCategory("ShipSense")]

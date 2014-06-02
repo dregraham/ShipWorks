@@ -31,27 +31,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
             // Need to comment out Debug.Assert statements in ShipWorks.Data.Caching.EntityCacheChangeMonitor
             // to avoid errors resulting from an assertion that the MainForm is running
 
-            Guid swInstance;
-            switch (Environment.MachineName.ToLower())
-            {
-                case "tim-pc":
-                    swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
-                    break;
-                case "john-pc":
-                    swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
-                    break;
-                case "kevin-pc":
-                    swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
-                    break;
-                case "MSTest-vm":
-                    swInstance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
-                    break;
-                case "benz-pc":
-                    swInstance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
-                    break;
-                default:
-                    throw new ApplicationException("Enter your machine and ShipWorks instance guid in iParcelPrototypeFixture()");
-            }
+            Guid swInstance = ShipWorksInitializer.GetShipWorksInstance();
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
