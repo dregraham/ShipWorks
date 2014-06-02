@@ -94,27 +94,32 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 throw new InvalidOperationException("The control has not been initialized with a store");
             }
 
-            using (ShopifyCreateTokenWizard wizard = new ShopifyCreateTokenWizard())
+            // Wrap the token wizard in a WebBrowserControlEmulation object so that we emulate the latest IE version
+            // so that Shopify doesn't give version errors.
+            using (new WebBrowserControlEmulation())
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
+                using (ShopifyCreateTokenWizard wizard = new ShopifyCreateTokenWizard())
                 {
-                    store.SaveFields("");
-
-                    store.ShopifyShopUrlName = wizard.ShopUrlName;
-                    store.ShopifyAccessToken = wizard.ShopAccessToken;
-
-                    try
+                    if (wizard.ShowDialog(this) == DialogResult.OK)
                     {
-                        ShopifyWebClient webClient = new ShopifyWebClient(store, null);
-                        webClient.RetrieveShopInformation();
+                        store.SaveFields("");
 
-                        OnTokenCreate();
-                    }
-                    catch (Exception ex)
-                    {
-                        store.RollbackFields("");
+                        store.ShopifyShopUrlName = wizard.ShopUrlName;
+                        store.ShopifyAccessToken = wizard.ShopAccessToken;
 
-                        throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
+                        try
+                        {
+                            ShopifyWebClient webClient = new ShopifyWebClient(store, null);
+                            webClient.RetrieveShopInformation();
+
+                            OnTokenCreate();
+                        }
+                        catch (Exception ex)
+                        {
+                            store.RollbackFields("");
+
+                            throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
+                        }
                     }
                 }
             }
