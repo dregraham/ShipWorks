@@ -236,7 +236,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     {
                         LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, 
                         LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER, 
-                        LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER
+                        LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER,
+                        LabelMaskableDataType.CUSTOMS_VALUE
                     };
                 }
                 else
