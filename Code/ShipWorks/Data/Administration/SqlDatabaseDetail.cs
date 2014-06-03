@@ -79,7 +79,15 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static SchemaVersion GetSchemaVersion(SqlConnection con)
         {
-            string getSchemaVersionToCall = DoesGetNamedSchemaVersionExist(con) ? "GetNamedSchemaVersion" : "GetSchemaVersion";
+            return GetSchemaVersion(con, DoesGetNamedSchemaVersionExist(con));
+        }
+        
+        /// <summary>
+        /// Gets the schema version.
+        /// </summary>
+        public static SchemaVersion GetSchemaVersion(SqlConnection con, bool useGetNamedSchemaVersion)
+        {
+            string getSchemaVersionToCall = useGetNamedSchemaVersion ? "GetNamedSchemaVersion" : "GetSchemaVersion";
 
             using (SqlCommand cmd = SqlCommandProvider.Create(con))
             {

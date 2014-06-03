@@ -24,30 +24,37 @@ namespace ShipWorks.Data.Administration.Versioning
         [CLSCompliant(false)]  // For some reason, Edge<string> is not CLS Complient.        
         public VersionUpgradeStep(QuickGraph.Edge<string> versionEdge, UpgradePath upgradePath)
         {
-            ToVersion = versionEdge.Source;
+            FromVersion = versionEdge.Source;
             FromVersion = versionEdge.Target;
             Script = upgradePath.GetScriptName(versionEdge.Target);
             Process = upgradePath.GetUpdateProcessName(versionEdge.Target);
         }
 
         /// <summary>
-        /// Gets from version.
+        /// Gets from version to upgrade from.
         /// </summary>
-        public string FromVersion { get; private set; }
+        public string FromVersion
+        {
+            get; 
+            set;
+        }
 
         /// <summary>
-        /// Gets to version.
+        /// Gets the script that upgrades the schema from "from" to "to"
         /// </summary>
-        public string ToVersion { get; private set; }
+        public string Script
+        {
+            get; 
+            set;
+        }
 
         /// <summary>
-        /// Gets the script.
+        /// Gets the fully qualified class name that will be ran to upgrade the schema from "from" to "to"
         /// </summary>
-        public string Script { get; private set; }
-
-        /// <summary>
-        /// Gets the process.
-        /// </summary>
-        public string Process { get; private set; }
+        public string Process
+        {
+            get; 
+            set;
+        }
     }
 }
