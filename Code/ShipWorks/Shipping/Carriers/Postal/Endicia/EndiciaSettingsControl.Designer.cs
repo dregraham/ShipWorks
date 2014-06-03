@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.Location = new System.Drawing.Point(15, 21);
+            this.accountControl.Location = new System.Drawing.Point(11, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(449, 113);
             this.accountControl.TabIndex = 2;
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.labelAccountType.AutoSize = true;
             this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAccountType.Location = new System.Drawing.Point(12, 5);
+            this.labelAccountType.Location = new System.Drawing.Point(8, 5);
             this.labelAccountType.Name = "labelAccountType";
             this.labelAccountType.Size = new System.Drawing.Size(101, 13);
             this.labelAccountType.TabIndex = 1;
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // express1Options
             // 
             this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1Options.Location = new System.Drawing.Point(5, 160);
+            this.express1Options.Location = new System.Drawing.Point(4, 160);
             this.express1Options.Name = "express1Options";
             this.express1Options.Size = new System.Drawing.Size(421, 49);
             this.express1Options.TabIndex = 4;
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.panelInsurance.Controls.Add(this.insuranceProviderChooser);
             this.panelInsurance.Controls.Add(this.labelShipmentProtection);
-            this.panelInsurance.Location = new System.Drawing.Point(10, 139);
+            this.panelInsurance.Location = new System.Drawing.Point(6, 139);
             this.panelInsurance.Name = "panelInsurance";
             this.panelInsurance.Size = new System.Drawing.Size(265, 56);
             this.panelInsurance.TabIndex = 6;
@@ -117,11 +117,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.labelShipmentProtection.TabIndex = 9;
             this.labelShipmentProtection.Text = "Shipment Protection";
             // 
-            // express1SettingsControl
+            // express1PostageDiscountSettingsControl
             // 
             this.express1PostageDiscountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.express1PostageDiscountSettingsControl.Location = new System.Drawing.Point(5, 215);
-            this.express1PostageDiscountSettingsControl.Name = "express1SettingsControl";
+            this.express1PostageDiscountSettingsControl.Name = "express1PostageDiscountSettingsControl";
             this.express1PostageDiscountSettingsControl.Size = new System.Drawing.Size(454, 160);
             this.express1PostageDiscountSettingsControl.TabIndex = 6;
             // 
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
             this.Name = "EndiciaSettingsControl";
-            this.Size = new System.Drawing.Size(473, 719);
+            this.Size = new System.Drawing.Size(473, 674);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelInsurance.ResumeLayout(false);

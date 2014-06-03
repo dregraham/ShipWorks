@@ -711,12 +711,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new InvalidOperationException("Unknown Stamps.com shipment type.");
             }
 
-            // However, Stamps.com doesn't currently support thermal internationals
-            if (CustomsManager.IsCustomsRequired(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
-            {
-                thermalType = null;
-            }
-
             // Each request needs to get a new requestID.  If Stamps.com sees a duplicate, it thinks its the same request.  
             // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still 
             // be in error if you used the same ID again.
@@ -856,12 +850,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // International services require some trickdickery
             else
             {
-                // As of now Stamps.com doesn't handle international thermals - so we aren't setup to handle it. Safeguard for if we ever add it..
-                if (shipment.ThermalType != null)
-                {
-                    throw new NotImplementedException();
-                }
-
                 // First-class labels are always a single label
                 if (serviceType == PostalServiceType.InternationalFirst ||
 
