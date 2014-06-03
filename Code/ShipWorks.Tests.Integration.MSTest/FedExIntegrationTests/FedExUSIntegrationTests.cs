@@ -17,7 +17,6 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             var testObject = new FedExUSGroundFixture();
@@ -27,8 +26,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
                 if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
-                    // TransactionID 605733 should use ECOD account.
-                    testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605733" ? ecodAccountNumber : fedExTestAccountNumber;
+                    testObject.FedExAccountNumber = fedExTestAccountNumber;
 
                     testObject.Ship();
                 }

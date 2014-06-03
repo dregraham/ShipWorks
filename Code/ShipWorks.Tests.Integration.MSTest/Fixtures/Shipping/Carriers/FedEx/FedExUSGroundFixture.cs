@@ -52,6 +52,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 
             shipment.FedEx.ReferenceCustomer = string.Empty;
             shipment.FedEx.ReferenceInvoice = string.Empty;
+            shipment.FedEx.ReferenceShipmentIntegrity = string.Empty;
 
             ApplyDangerousGoods(shipment);
 
