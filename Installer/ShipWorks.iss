@@ -22,6 +22,10 @@
 	#define EditionAppConfig 'App.Ups.config'
 #endif
 
+#define Version = 'Address Validation'
+#define AppArtifacts  'C:\shipworks3x\Artifacts\Application'
+#define RequiredSchemaID 'blah'
+
 [Setup]
 AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
@@ -53,7 +57,6 @@ UsePreviousGroup=true
 AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
-VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
@@ -358,15 +361,15 @@ begin
 		// Existing 3x version
 		else if (Pos('3.', VersionFound) = 1)
 		then begin
-			OldSchemaFound := False;
-			if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+			if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, OldSchemaFound)
 			then begin
-				if((SchemaFound > 0) and (SchemaFound < 56822025))
+				if((OldSchemaFound > 0) and (OldSchemaFound < 56822025))
 				then begin
 					// The DB is using "the old way" and the version is less than 3.99.9.9
-					NeedsUpgrade = 1
-				end;
-				else begin
+					NeedsUpgrade := 1;
+				end
+				else
+        begin
 					Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
 				end;
 			end;	
