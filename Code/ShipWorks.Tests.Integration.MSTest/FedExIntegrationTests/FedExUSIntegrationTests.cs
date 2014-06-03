@@ -48,7 +48,6 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
             fedExTestAccountNumber = "510158040";
