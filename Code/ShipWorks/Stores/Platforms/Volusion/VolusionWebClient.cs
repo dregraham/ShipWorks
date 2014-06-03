@@ -180,7 +180,18 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     xmlWriter.WriteElementString("OrderID", order.OrderNumber.ToString());
                     xmlWriter.WriteElementString("ShipDate", shipment.ShipDate.ToShortDateString());
                     xmlWriter.WriteElementString("Shipment_Cost", shipment.ShipmentCost.ToString());
-                    xmlWriter.WriteElementString("TrackingNumber", trackingNumber.Length > 0 ? trackingNumber : order.OrderNumber + "NoTrack");
+                    
+                    if (trackingNumber.Length > 0)
+                    {
+                        // Volusion's XSD only allows tracking numbers up to 30 characters; anything over 30 will cause Volusion to
+                        // fail silently and the order won't get marked as shipped
+                        xmlWriter.WriteElementString("TrackingNumber", trackingNumber.Length > 30 ? trackingNumber.Substring(0, 30) : trackingNumber);
+                    }
+                    else
+                    {
+                        xmlWriter.WriteElementString("TrackingNumber", order.OrderNumber + "NoTrack");
+                    }
+
                     xmlWriter.WriteElementString("MarkOrderShipped", "true");
                     xmlWriter.WriteElementString("SendShippedEmail", sendEmail.ToString().ToLower(CultureInfo.InvariantCulture));
 

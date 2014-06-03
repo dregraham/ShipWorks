@@ -96,29 +96,28 @@
             // 
             // labelDescription
             // 
-            this.labelDescription.Location = new System.Drawing.Point(22, 20);
+            this.labelDescription.Location = new System.Drawing.Point(28, 27);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(493, 33);
             this.labelDescription.TabIndex = 2;
-            this.labelDescription.Text = "You can customize how ShipSense learns about the way you ship by telling ShipSens" +
-    "e which properties and attributes of items have an impact on how orders get ship" +
-    "ped.";
+            this.labelDescription.Text = "You can customize how ShipSense learns.  ShipSense will use the selected properti" +
+    "es to match similar orders and automatically apply shipping settings.";
             // 
             // labelTitle
             // 
             this.labelTitle.AutoSize = true;
             this.labelTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.labelTitle.Location = new System.Drawing.Point(4, 4);
+            this.labelTitle.Location = new System.Drawing.Point(10, 8);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(175, 13);
+            this.labelTitle.Size = new System.Drawing.Size(117, 13);
             this.labelTitle.TabIndex = 1;
-            this.labelTitle.Text = "Teach ShipSense how to learn";
+            this.labelTitle.Text = "ShipSense Learning";
             // 
             // configurationControl
             // 
             this.configurationControl.BackColor = System.Drawing.Color.White;
             this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.configurationControl.Location = new System.Drawing.Point(7, 58);
+            this.configurationControl.Location = new System.Drawing.Point(13, 65);
             this.configurationControl.Name = "configurationControl";
             this.configurationControl.Size = new System.Drawing.Size(524, 382);
             this.configurationControl.TabIndex = 0;
@@ -140,7 +139,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ShipSense Settings Editor";
+            this.Text = "ShipSense Settings";
             this.panelBottom.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
             this.panelConfiguration.ResumeLayout(false);

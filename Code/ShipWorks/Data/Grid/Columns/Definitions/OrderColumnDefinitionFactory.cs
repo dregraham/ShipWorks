@@ -148,7 +148,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                                 return StoreManager.GetStoreTypeInstances().Any(st => st.GridOnlineColumnSupported(OnlineGridColumnSupport.LastModified));
                             } 
                         },
-                    
+
+                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}", true,
+                        new GridEnumDisplayType<ShipSenseOrderRecognitionStatus>(EnumSortMethod.Description),
+                        "ShipSense", ShipSenseOrderRecognitionStatus.Recognized,
+                        OrderFields.ShipSenseRecognitionStatus),
+
                     new GridColumnDefinition("{00B66937-CB98-4FE5-B916-8DA5BACC06B1}",
                         new GridEnumDisplayType<ChannelAdvisorCheckoutStatus>(EnumSortMethod.Description), "Checkout Status", ChannelAdvisorCheckoutStatus.Completed,
                         ChannelAdvisorOrderFields.OnlineCheckoutStatus)
@@ -616,10 +621,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridMoneyDisplayType(), "Total", 1024.18m,
                         OrderFields.OrderTotal), 
 
-                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}", false,
-                        new GridEnumDisplayType<ShipSenseOrderRecognitionStatus>(EnumSortMethod.Description),
-                        "ShipSense Status", "Recognized by ShipSense",
-                        OrderFields.ShipSenseRecognitionStatus)
                 };
 
             return definitions;

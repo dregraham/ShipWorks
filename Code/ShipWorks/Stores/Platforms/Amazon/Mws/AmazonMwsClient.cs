@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -521,7 +522,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     // Per an email on 9/11/07, Amazon will only respond correctly if the code is in upper case, and if its also apart of the method.
                     ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
                     string trackingNumber = shipment.TrackingNumber;
+
+                    // Get the service used and strip out any non-ascii characters
                     string serviceUsed = ShippingManager.GetServiceUsed(shipment);
+                    serviceUsed = Regex.Replace(serviceUsed, @"[^\u001F-\u007F]", string.Empty);
 
                     // Get the carrier based on what we currently know, we'll check it in the DetermineAlternateTracking below
                     string carrier = GetCarrierName(shipment, shipmentType);

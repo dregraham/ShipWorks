@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         private string GetMessageXmlContent(MailMessage message)
         {
             // Find the first text/xml attachment.  There should only be one anyway.
-            Attachment xmlAttachment = message.Attachments.FirstOrDefault(a => a.MediaType == "text/xml");
+            Attachment xmlAttachment = message.Attachments.FirstOrDefault(a => a.MediaType == "text/xml" || a.MediaType == "application/xml");
 
             // If we found that, use it.
             if (xmlAttachment != null)
@@ -171,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
 
             // Next check alternate views
-            AlternateView xmlView = message.AlternateViews.FirstOrDefault(v => v.MediaType == "text/xml");
+            AlternateView xmlView = message.AlternateViews.FirstOrDefault(v => v.MediaType == "text/xml" || v.MediaType == "application/xml");
 
             // If we found it, use it.
             if (xmlView != null)

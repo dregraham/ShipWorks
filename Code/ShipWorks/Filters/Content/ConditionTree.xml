@@ -74,6 +74,7 @@
         <Condition identifier="Order.RequestedShipping" />
         <Condition identifier="Order.TotalWeight" />
         <Condition identifier="Order.OnlineLastModified" />
+        <Condition identifier="Order.ShipSenseRecognitionStatus" displayAs="ShipSense Status" />
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
@@ -86,7 +87,6 @@
           <Condition identifier="Order.Manual" displayAs="Manually Entered" />
         </Group>
         <Separator />
-        <Condition identifier="Order.ShipSenseRecognitionStatus" />
         <Condition identifier="Amazon.OrderID" />
         <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />

@@ -580,12 +580,6 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipme
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Altering [dbo].[Shipment]'
-GO
-PRINT N'Adding constraints to [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED  ([ShipmentID])
-GO
 PRINT N'Adding foreign keys to [dbo].[AmazonOrder]'
 GO
 ALTER TABLE [dbo].[AmazonOrder] ADD CONSTRAINT [FK_AmazonOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])

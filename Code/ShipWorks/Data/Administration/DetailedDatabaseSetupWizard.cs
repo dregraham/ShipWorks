@@ -46,6 +46,7 @@ using Divelements.SandGrid;
 using ShipWorks.UI.Controls;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Stores.Management;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data.Administration
 {
@@ -1943,6 +1944,28 @@ namespace ShipWorks.Data.Administration
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Clicking the forgot username link
+        /// </summary>
+        private void OnForgotUsername(object sender, EventArgs e)
+        {
+            using (ForgotUsernameDlg dlg = new ForgotUsernameDlg())
+            {
+                dlg.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Clicking the forgot password link
+        /// </summary>
+        private void OnForgotPassword(object sender, EventArgs e)
+        {
+            using (ForgotPasswordDlg dlg = new ForgotPasswordDlg())
+            {
+                dlg.ShowDialog();
             }
         }
 

@@ -42,6 +42,7 @@ using ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.St
 using System.IO;
 using Interapptive.Shared.Win32;
 using System.Diagnostics;
+using ShipWorks.Users.Logon;
 
 namespace ShipWorks.Data.Administration
 {
@@ -391,6 +392,28 @@ namespace ShipWorks.Data.Administration
                 }
 
                 labelNeedUpgradeRights.Text = loggedInNeedRights;
+            }
+        }
+
+        /// <summary>
+        /// Clicking the forgot username link
+        /// </summary>
+        private void OnForgotUsername(object sender, EventArgs e)
+        {
+            using (ForgotUsernameDlg dlg = new ForgotUsernameDlg())
+            {
+                dlg.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Clicking the forgot password link
+        /// </summary>
+        private void OnForgotPassword(object sender, EventArgs e)
+        {
+            using (ForgotPasswordDlg dlg = new ForgotPasswordDlg())
+            {
+                dlg.ShowDialog();
             }
         }
 

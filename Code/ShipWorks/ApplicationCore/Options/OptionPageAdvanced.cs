@@ -122,7 +122,7 @@ namespace ShipWorks.ApplicationCore.Options
                 using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
                 {
                     progressDialog.Title = "Reload ShipSense";
-                    progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
+                    progressDialog.Description = "ShipSense is learning from your shipment history.";
 
                     progressDialog.AutoCloseWhenComplete = false;
                     progressDialog.AllowCloseWhenRunning = false;
@@ -191,7 +191,7 @@ namespace ShipWorks.ApplicationCore.Options
             using (ProgressDlg progressDialog = new ProgressDlg(progressProvider))
             {
                 progressDialog.Title = "Reload ShipSense";
-                progressDialog.Description = "Your shipment history is being used to reload the ShipSense knowledge base.";
+                progressDialog.Description = "ShipSense is learning from your shipment history.";
 
                 progressDialog.AutoCloseWhenComplete = false;
                 progressDialog.AllowCloseWhenRunning = false;

@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// <summary>
     /// Filter for ShipSenseOrderRecognitionStatus
     /// </summary>
-    [ConditionElement("ShipSense Status", "Order.ShipSenseRecognitionStatus")]
+    [ConditionElement("ShipSense", "Order.ShipSenseRecognitionStatus")]
     public class OrderShipSenseStatusCondition : EnumCondition<ShipSenseOrderRecognitionStatus>
     {
         /// <summary>

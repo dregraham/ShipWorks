@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.ShipSense.Settings
 {
@@ -22,6 +23,9 @@ namespace ShipWorks.Shipping.ShipSense.Settings
             // Call update layout, so the add attribute button is up snug against the 
             // instructional text if there aren't any items
             UpdateLayout();
+
+            // Get rid of the ugly bottom border on the toolstrip control
+            toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
         }
 
         /// <summary>

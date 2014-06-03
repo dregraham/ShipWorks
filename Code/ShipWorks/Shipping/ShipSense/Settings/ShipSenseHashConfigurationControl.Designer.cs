@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ShipSenseHashConfigurationControl));
             this.panelProperties = new System.Windows.Forms.Panel();
             this.itemProperties = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseItemPropertyControl();
             this.panelBottom = new System.Windows.Forms.Panel();
@@ -47,7 +48,7 @@
             // 
             this.panelProperties.BackColor = System.Drawing.Color.White;
             this.panelProperties.Controls.Add(this.itemProperties);
-            this.panelProperties.Location = new System.Drawing.Point(5, 45);
+            this.panelProperties.Location = new System.Drawing.Point(5, 47);
             this.panelProperties.Name = "panelProperties";
             this.panelProperties.Size = new System.Drawing.Size(479, 231);
             this.panelProperties.TabIndex = 2;
@@ -62,7 +63,7 @@
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.toolStripAddRule);
-            this.panelBottom.Location = new System.Drawing.Point(13, 356);
+            this.panelBottom.Location = new System.Drawing.Point(13, 373);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(471, 35);
             this.panelBottom.TabIndex = 3;
@@ -95,26 +96,25 @@
             // 
             // labelAttributeInstructions
             // 
-            this.labelAttributeInstructions.Location = new System.Drawing.Point(16, 304);
+            this.labelAttributeInstructions.Location = new System.Drawing.Point(16, 310);
             this.labelAttributeInstructions.Name = "labelAttributeInstructions";
-            this.labelAttributeInstructions.Size = new System.Drawing.Size(474, 32);
+            this.labelAttributeInstructions.Size = new System.Drawing.Size(474, 42);
             this.labelAttributeInstructions.TabIndex = 5;
-            this.labelAttributeInstructions.Text = "ShipSense only uses the item attributes that match the attributes below. Any attr" +
-    "ibutes that are not applicable to an item will be ignored.";
+            this.labelAttributeInstructions.Text = resources.GetString("labelAttributeInstructions.Text");
             // 
             // labelItemPropertiesInstructions
             // 
             this.labelItemPropertiesInstructions.AutoSize = true;
-            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(18, 28);
+            this.labelItemPropertiesInstructions.Location = new System.Drawing.Point(18, 30);
             this.labelItemPropertiesInstructions.Name = "labelItemPropertiesInstructions";
-            this.labelItemPropertiesInstructions.Size = new System.Drawing.Size(441, 13);
+            this.labelItemPropertiesInstructions.Size = new System.Drawing.Size(386, 13);
             this.labelItemPropertiesInstructions.TabIndex = 7;
-            this.labelItemPropertiesInstructions.Text = "Select the properties of an order item that ShipSense should use as it learns how" +
-    " you ship.";
+            this.labelItemPropertiesInstructions.Text = "Select the properties of your items that ShipSense will use to match like orders." +
+    "";
             // 
             // panelAttributes
             // 
-            this.panelAttributes.Location = new System.Drawing.Point(19, 340);
+            this.panelAttributes.Location = new System.Drawing.Point(19, 357);
             this.panelAttributes.Name = "panelAttributes";
             this.panelAttributes.Size = new System.Drawing.Size(466, 10);
             this.panelAttributes.TabIndex = 8;
@@ -123,7 +123,7 @@
             // 
             this.sectionAddressCasing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionAddressCasing.Location = new System.Drawing.Point(3, 280);
+            this.sectionAddressCasing.Location = new System.Drawing.Point(3, 282);
             this.sectionAddressCasing.Name = "sectionAddressCasing";
             this.sectionAddressCasing.Size = new System.Drawing.Size(487, 22);
             this.sectionAddressCasing.TabIndex = 10;
@@ -153,7 +153,7 @@
             this.Controls.Add(this.panelProperties);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "ShipSenseHashConfigurationControl";
-            this.Size = new System.Drawing.Size(493, 405);
+            this.Size = new System.Drawing.Size(493, 420);
             this.panelProperties.ResumeLayout(false);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();

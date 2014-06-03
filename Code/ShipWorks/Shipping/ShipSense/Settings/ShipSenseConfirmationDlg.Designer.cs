@@ -47,12 +47,13 @@
             // 
             // rebuildKnowledgebase
             // 
-            this.rebuildKnowledgebase.AutoSize = true;
-            this.rebuildKnowledgebase.Location = new System.Drawing.Point(56, 31);
+            this.rebuildKnowledgebase.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.rebuildKnowledgebase.Location = new System.Drawing.Point(56, 38);
             this.rebuildKnowledgebase.Name = "rebuildKnowledgebase";
-            this.rebuildKnowledgebase.Size = new System.Drawing.Size(248, 17);
+            this.rebuildKnowledgebase.Size = new System.Drawing.Size(333, 33);
             this.rebuildKnowledgebase.TabIndex = 1;
-            this.rebuildKnowledgebase.Text = "Reload recent shipment history into ShipSense";
+            this.rebuildKnowledgebase.Text = "Automatically reload ShipSense with my existing shipment history after this compl" +
+    "etes.\r\n";
             this.rebuildKnowledgebase.UseVisualStyleBackColor = true;
             // 
             // noButton
@@ -87,7 +88,7 @@
             // 
             // labelContinue
             // 
-            this.labelContinue.Location = new System.Drawing.Point(56, 61);
+            this.labelContinue.Location = new System.Drawing.Point(53, 78);
             this.labelContinue.Name = "labelContinue";
             this.labelContinue.Size = new System.Drawing.Size(336, 18);
             this.labelContinue.TabIndex = 6;
@@ -99,7 +100,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.noButton;
-            this.ClientSize = new System.Drawing.Size(424, 143);
+            this.ClientSize = new System.Drawing.Size(430, 143);
             this.Controls.Add(this.labelContinue);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.yesButton);
@@ -114,10 +115,9 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Modify ShipSense knowledge base";
+            this.Text = "ShipSense";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

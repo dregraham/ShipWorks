@@ -448,7 +448,7 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            string result = FormatWeight(currentWeight, displayFormat);
+            string result = FormatWeight(currentWeight, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
 
             lastDisplay = result;
 
@@ -462,7 +462,7 @@ namespace ShipWorks.UI.Controls
         public static string FormatWeight(double weight, WeightDisplayFormat displayFormat)
         {
             string result;
-
+            
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
             {
                 result = string.Format("{0:0.0#} lbs", weight);
@@ -626,7 +626,7 @@ namespace ShipWorks.UI.Controls
             {
                 if (weight != null)
                 {
-                    liveWeight.Text = string.Format("({0})", FormatWeight(weight.Value, displayFormat));
+                    liveWeight.Text = string.Format("({0})", FormatWeight(weight.Value, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat));
                     liveWeight.Visible = true;
 
                     // Make sure the error is clear

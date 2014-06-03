@@ -47,6 +47,8 @@ namespace ShipWorks.Data.Administration
             this.labelSetupComplete = new System.Windows.Forms.Label();
             this.iconSetupComplete = new System.Windows.Forms.PictureBox();
             this.wizardPageLogin = new ShipWorks.UI.Wizard.WizardPage();
+            this.forgotPassword = new System.Windows.Forms.Label();
+            this.forgotUsername = new System.Windows.Forms.Label();
             this.labelNeedUpgradeRights = new System.Windows.Forms.Label();
             this.headerImage = new System.Windows.Forms.PictureBox();
             this.password = new System.Windows.Forms.TextBox();
@@ -96,6 +98,7 @@ namespace ShipWorks.Data.Administration
             this.label3 = new System.Windows.Forms.Label();
             this.wizardPageIntro = new ShipWorks.UI.Wizard.WizardPage();
             this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
+            this.noSingleUserMode = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -109,7 +112,6 @@ namespace ShipWorks.Data.Administration
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.wizardPagePrerequisitePlaceholder = new ShipWorks.UI.Wizard.WizardPage();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.noSingleUserMode = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -155,7 +157,7 @@ namespace ShipWorks.Data.Administration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPageLogin);
             this.mainPanel.Size = new System.Drawing.Size(507, 234);
             // 
             // etchBottom
@@ -353,6 +355,8 @@ namespace ShipWorks.Data.Administration
             // 
             // wizardPageLogin
             // 
+            this.wizardPageLogin.Controls.Add(this.forgotPassword);
+            this.wizardPageLogin.Controls.Add(this.forgotUsername);
             this.wizardPageLogin.Controls.Add(this.labelNeedUpgradeRights);
             this.wizardPageLogin.Controls.Add(this.headerImage);
             this.wizardPageLogin.Controls.Add(this.password);
@@ -370,6 +374,32 @@ namespace ShipWorks.Data.Administration
             this.wizardPageLogin.Title = "Log On Required";
             this.wizardPageLogin.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextLogin);
             this.wizardPageLogin.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoLogin);
+            // 
+            // forgotPassword
+            // 
+            this.forgotPassword.AutoSize = true;
+            this.forgotPassword.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.forgotPassword.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forgotPassword.ForeColor = System.Drawing.Color.Blue;
+            this.forgotPassword.Location = new System.Drawing.Point(231, 123);
+            this.forgotPassword.Name = "forgotPassword";
+            this.forgotPassword.Size = new System.Drawing.Size(88, 13);
+            this.forgotPassword.TabIndex = 171;
+            this.forgotPassword.Text = "Forgot Password";
+            this.forgotPassword.Click += new System.EventHandler(this.OnForgotPassword);
+            // 
+            // forgotUsername
+            // 
+            this.forgotUsername.AutoSize = true;
+            this.forgotUsername.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.forgotUsername.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.forgotUsername.ForeColor = System.Drawing.Color.Blue;
+            this.forgotUsername.Location = new System.Drawing.Point(143, 123);
+            this.forgotUsername.Name = "forgotUsername";
+            this.forgotUsername.Size = new System.Drawing.Size(90, 13);
+            this.forgotUsername.TabIndex = 170;
+            this.forgotUsername.Text = "Forgot Username";
+            this.forgotUsername.Click += new System.EventHandler(this.OnForgotUsername);
             // 
             // labelNeedUpgradeRights
             // 
@@ -870,6 +900,17 @@ namespace ShipWorks.Data.Administration
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Database Update Required";
             // 
+            // noSingleUserMode
+            // 
+            this.noSingleUserMode.AutoSize = true;
+            this.noSingleUserMode.Location = new System.Drawing.Point(81, 203);
+            this.noSingleUserMode.Name = "noSingleUserMode";
+            this.noSingleUserMode.Size = new System.Drawing.Size(314, 17);
+            this.noSingleUserMode.TabIndex = 4;
+            this.noSingleUserMode.Text = "Do not use SINGLE_USER mode (Interapptive Internal Only)";
+            this.noSingleUserMode.UseVisualStyleBackColor = true;
+            this.noSingleUserMode.Visible = false;
+            // 
             // pictureBox5
             // 
             this.pictureBox5.Image = global::ShipWorks.Properties.Resources.data_information;
@@ -993,17 +1034,6 @@ namespace ShipWorks.Data.Administration
             this.wizardPagePrerequisitePlaceholder.Size = new System.Drawing.Size(507, 234);
             this.wizardPagePrerequisitePlaceholder.TabIndex = 0;
             this.wizardPagePrerequisitePlaceholder.Title = "Prerequisite Placeholder";
-            // 
-            // noSingleUserMode
-            // 
-            this.noSingleUserMode.AutoSize = true;
-            this.noSingleUserMode.Location = new System.Drawing.Point(81, 203);
-            this.noSingleUserMode.Name = "noSingleUserMode";
-            this.noSingleUserMode.Size = new System.Drawing.Size(314, 17);
-            this.noSingleUserMode.TabIndex = 4;
-            this.noSingleUserMode.Text = "Do not use SINGLE_USER mode (Interapptive Internal Only)";
-            this.noSingleUserMode.UseVisualStyleBackColor = true;
-            this.noSingleUserMode.Visible = false;
             // 
             // DatabaseUpdateWizard
             // 
@@ -1157,5 +1187,7 @@ namespace ShipWorks.Data.Administration
         private UI.Controls.InfoTip helpAutomaticLogon;
         private UI.Controls.InfoTip helpUserEmail;
         private System.Windows.Forms.CheckBox noSingleUserMode;
+        private System.Windows.Forms.Label forgotPassword;
+        private System.Windows.Forms.Label forgotUsername;
     }
 }
