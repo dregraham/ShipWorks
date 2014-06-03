@@ -153,12 +153,9 @@ namespace ShipWorks.Tests.Integration.MSTest
         /// </summary>
         private void PopulateValues<T>(T testObject, DataRow testDataRow, List<ColumnPropertyMapDefinition> columnPropertyMap)
         {
-            PropertyInfo[] properties = (from c in testObject.GetType().GetProperties()
-                                         where c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
-                                            && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
-                                            && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant()
-                                         select c).ToArray();
-            
+            PropertyInfo[] properties = (testObject.GetType().GetProperties().Where(c => c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
+                                                                                         && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
+                                                                                         && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant())).ToArray();
             string missingProperties = string.Empty;
 
             foreach (PropertyInfo item in properties)
@@ -173,6 +170,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                         {
                             throw new Exception(cpm.SpreadsheetColumnName + " has an invalid column index.");
                         }
+
                         string value = testDataRow[cpm.SpreadsheetColumnIndex].ToString().Trim();
                         value = value.Replace("Each Package", "");
                         value = value.Replace("each package", "");
@@ -181,7 +179,16 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                         if (!string.IsNullOrWhiteSpace(value))
                         {
-                            item.SetValue(testObject, Convert.ChangeType(value, item.PropertyType), null);
+                            try
+                            {
+                                item.SetValue(testObject, Convert.ChangeType(value, item.PropertyType), null);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Error encountered while populating property {0}: {1}", item.Name, e.Message);
+                                throw;
+                            }
+
                         }
                     }
                     else
@@ -191,7 +198,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 }
                 catch (Exception ex)
                 {
-                    string msg = ex.Message;
+                    Console.WriteLine(ex.Message);
                     throw;
                 }
             }

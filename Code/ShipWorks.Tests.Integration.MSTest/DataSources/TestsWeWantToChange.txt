@@ -46,6 +46,12 @@ Grn Alcohol
 
 
 
+=================================================================================
+CHANGES (US Exp Dom - Alcohol)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+		323396			 14		  J					LB				500										6/3/2014			500 and LB values were need to be swapped
+		323396			 14		  K					500				LB										6/3/2014			500 and LB values were need to be swapped
 
 	
 
