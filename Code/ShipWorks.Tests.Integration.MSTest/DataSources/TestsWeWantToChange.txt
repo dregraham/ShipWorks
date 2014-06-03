@@ -9,8 +9,8 @@
 =================================================================================
 CHANGES (US Exp Dom)
 =================================================================================
-[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]		[Date Of Change]		[Reason]
-       323390			 82			AF		    394568201		150067600			6/3/2014			FedEx service indicated original value was an invalid account number
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+       323201			 7			AF		    96802030		Please use shipper account number			6/3/2014			FedEx service indicated original value was an invalid account number
 
 
 In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.
