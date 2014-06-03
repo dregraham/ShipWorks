@@ -4,6 +4,15 @@
 	323402 added a length/width/height
 	323201 account number was missing a 0 in the front.
 
+
+
+=================================================================================
+CHANGES (US Exp Dom)
+=================================================================================
+[Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]		[Date Of Change]		[Reason]
+       323390			 82			AF		    394568201		150067600			6/3/2014			FedEx service indicated original value was an invalid account number
+
+
 In CA Exp Intl, RequestedShipment.ShipTimestamp (column BJ) had invalid dates. I blanked them out.
 
 =================================================================================
@@ -38,6 +47,7 @@ Grn Alcohol
 
 
 
+	
 
 
 
@@ -49,3 +59,7 @@ CHANGES (US Exp Intl)
  413139                  22      G           Friday            Wednesday        FedEx: Saturday shipment is not available for friday
  413235                  59      AO          42080             3/6/2015         Date was in an invalid format
  413236                  60      AO          42080             3/6/2015         Date was in an invalid format
+
+
+
+

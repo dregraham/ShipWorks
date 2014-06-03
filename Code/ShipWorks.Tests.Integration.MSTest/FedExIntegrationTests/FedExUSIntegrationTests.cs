@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
+        //[Ignore]
         public void Ship_FedExExpressDomestic()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
