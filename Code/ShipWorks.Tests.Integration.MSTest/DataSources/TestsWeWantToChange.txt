@@ -69,3 +69,7 @@ CHANGES (US Exp Intl)
 
 
 
+ =================================================================================
+CHANGES (CA Exp Dom)
+=================================================================================
+All rows - changed ShipTimestamp from YYYY-MM-DDTHH:MM:SS-SS:SS to empty cell

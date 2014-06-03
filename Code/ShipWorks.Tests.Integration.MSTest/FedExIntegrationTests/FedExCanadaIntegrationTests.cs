@@ -8,21 +8,20 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
     [TestClass]
     public class FedExCanadaIntegrationTests : IntegrationTestBase
     {
-        private const string fedExTestAccountNumber = "603153529";
+        private const string fedExTestAccountNumber = "604601185";
 
         private const bool justLabels = true;
 
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaExpressDomestic()
         {
             try
             {
-                var testObject = new FedExCanadaExpressDomesticFixture();
-
-                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticFixture.Mapping) &&
+                FedExCanadaExpressDomesticMapping testObject = new FedExCanadaExpressDomesticMapping();
+                
+                if (PopulateTestObject(testObject, FedExCanadaExpressDomesticMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
-            var testObject = new FedExCAGroundDomesticInternationalFixture();
+            FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
             try
             {
                 if (PopulateTestObject(testObject, FedExCAGroundDomesticInternationalFixture.FedExCAGroundDomesticInternationalMapping) &&
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
-            var testObject = new FedExUSExpressInternationalFixture();
+            FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             try
             {

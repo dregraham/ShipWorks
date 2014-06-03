@@ -1202,6 +1202,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
             {
                 // shipment.FedEx.FreightPackingListEnclosed = FreightDetailPackingListEnclosed == "1";
             }
+
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace ShipWorks.Tests.Integration.MSTest
     public class IntegrationTestBase
     {
         private TestContext testContextInstance;
+        private bool isTranslationMapPopulated = false;
 
         public TestContext TestContext
         {
@@ -28,7 +29,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 testContextInstance = value;
             }
         }
-
+        
         /// <summary>
         /// Populates the test object based on the mapping of a spreadsheet columns to the test object's properties.
         /// </summary>
@@ -40,16 +41,21 @@ namespace ShipWorks.Tests.Integration.MSTest
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
             Debug.WriteLine(rowIndex);
 
-            if (rowIndex == 0)
+            if (string.IsNullOrWhiteSpace(testDataRow[0].ToString()))
+            {
+                return false;
+            }
+
+            if (!isTranslationMapPopulated)
+            {
+                PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
+            }
+
+            if (rowIndex == 0 && !isTranslationMapPopulated)
             {
                 // Build the translation map using the column headers in the first row
                 PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
 
-                return false;
-            }
-            
-            if (string.IsNullOrWhiteSpace(testDataRow[0].ToString()))
-            {
                 return false;
             }
 
@@ -112,6 +118,8 @@ namespace ShipWorks.Tests.Integration.MSTest
                         });
                 }
             }
+
+            isTranslationMapPopulated = true;
         }
 
         public void GenerateColumnPropertyListCode()
