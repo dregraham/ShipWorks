@@ -595,8 +595,7 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
-    <Compile Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.cs" />
-    <Compile Include="Data\Administration\Scripts\Update\IUpdateDatabaseProcess.cs" />
+    <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />

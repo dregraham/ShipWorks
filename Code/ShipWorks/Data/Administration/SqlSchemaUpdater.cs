@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Interapptive.Shared.IO.Zip;
 using System.Reflection;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using Interapptive.Shared.Utility;
@@ -168,6 +169,12 @@ namespace ShipWorks.Data.Administration
                                 });
                             }
 
+                            if (installed < new Version(3, 9, 0, 1))
+                            {
+                                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
+                                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
+                            }
+
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
 
@@ -175,7 +182,7 @@ namespace ShipWorks.Data.Administration
                             // database upgrade can take time and cause a timeout.
                             if (singleUserScope != null)
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);   
+                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
                         }
                     }
