@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExCAGroundDomesticInternationalFixture.FedExCAGroundDomesticInternationalMapping) &&
+                if (PopulateTestObject(testObject, FedExCanadaGroundDomesticInternationalMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
