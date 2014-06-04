@@ -62,6 +62,9 @@ namespace ShipWorks.Data.Connection
         // Needed to keep LLBLgen from trying to create its own trans for a recursive save
         private static System.Reflection.FieldInfo fieldIsTransactionInProgress;
 
+        // Needed to allow SqlAdapter to use an existing SqlTransaction
+        private static System.Reflection.FieldInfo fieldPhysicalTransaction;
+
         /// <summary>
         /// Static constructor
         /// </summary>
@@ -77,6 +80,12 @@ namespace ShipWorks.Data.Connection
             {
                 throw new InvalidOperationException("Could not get _isTransactionInProgress field");
             }
+
+            fieldPhysicalTransaction = typeof(DataAccessAdapterBase).GetField("_physicalTransaction", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (fieldPhysicalTransaction == null)
+            {
+                throw new InvalidOperationException("Could not get _physicalTransaction field");
+            }
         }
 
         /// <summary>
@@ -84,7 +93,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlAdapter() : this(false)
         {
-
+            
         }
 
         /// <summary>
@@ -94,6 +103,23 @@ namespace ShipWorks.Data.Connection
             : base("", true, catalogNameOverwrites, null)
         {
             this.overrideConnection = connectionToUse;
+
+            InitializeCommon();
+        }
+
+        /// <summary>
+        /// Constructor that specifies the connection that the adapter should use
+        /// </summary>
+        public SqlAdapter(SqlConnection connectionToUse, SqlTransaction transactionToUse)
+            : base("", true, catalogNameOverwrites, null)
+        {
+            overrideConnection = connectionToUse;
+
+            if (transactionToUse != null)
+            {
+                fieldPhysicalTransaction.SetValue(this, transactionToUse);
+                fieldIsTransactionInProgress.SetValue(this, true);   
+            }
 
             InitializeCommon();
         }
@@ -173,6 +199,7 @@ namespace ShipWorks.Data.Connection
         protected override void Dispose(bool isDisposing)
         {
             bool ensureOverrideOpenAfterDispose = false;
+            SqlConnection existingConnection = overrideConnection;
 
             // If a connection was passed in, we have to prevent the base implementation from
             // closing it.
@@ -189,15 +216,23 @@ namespace ShipWorks.Data.Connection
                     throw new InvalidOperationException("Coult not find DataAccessAdapterBase._activeConnection.");
                 }
 
-                // Clear it, so it doesnt get disposed by base
+                // Clear it, so it doesnt get disposed by base. OverrideConnection will be used when activeConnection is
+                // null, so we need to clear it, too
                 activeConnection.SetValue(this, null);
+                overrideConnection = null;
             }
 
             base.Dispose(isDisposing);
 
-            if (ensureOverrideOpenAfterDispose && overrideConnection.State != ConnectionState.Open)
+            if (ensureOverrideOpenAfterDispose)
             {
-                throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");
+                // Restore the overridden connection if we expect it to still be open
+                overrideConnection = existingConnection;
+
+                if (overrideConnection.State != ConnectionState.Open)
+                {
+                    throw new InvalidOperationException("The OverrideConnection was not kept open through disposal.");   
+                }
             }
 
             if (transactionScope != null)
@@ -243,7 +278,7 @@ namespace ShipWorks.Data.Connection
             {
                 con = (SqlConnection) base.CreateNewPhysicalConnection(connectionString);
             }
-
+            
             if (logInfoMessages)
             {
                 con.InfoMessage += new SqlInfoMessageEventHandler(OnInfoMessage);

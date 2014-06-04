@@ -14,20 +14,36 @@ namespace ShipWorks.Data.Connection
     public class SingleUserModeScope : IDisposable
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlSessionScope));
+        static readonly ILog log = LogManager.GetLogger(typeof(SingleUserModeScope));
 
         [ThreadStatic]
         static bool active = false;
 
+        [ThreadStatic]
+        static TimeSpan reconnectTimeout;
+
         /// <summary>
         /// Constructor - initiates the scope
         /// </summary>
-        public SingleUserModeScope()
+        public SingleUserModeScope() :
+            this(TimeSpan.FromSeconds(30))
+        {
+            
+        }
+
+        /// <summary>
+        /// Constructor - initiates the scope
+        /// </summary>
+        public SingleUserModeScope(TimeSpan reconnectTimeout)
         {
             if (active)
             {
                 throw new InvalidOperationException("Can only have one active scope at a time.");
             }
+
+            SingleUserModeScope.reconnectTimeout = reconnectTimeout;
+
+            log.Info("Entering SingleUserModeScope");
 
             // Start by disconnecting all users. We don't use this same connection the whole time, so its possible that
             // someone could sneak in and take the single connection in between us releasing and getting it.  But if that happened, 
@@ -44,11 +60,35 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Timeout used for reconnecting when someone else steals the connection
+        /// </summary>
+        public static TimeSpan ReconnectTimeout
+        {
+            get
+            {
+                return reconnectTimeout; 
+            }
+        }
+
+        /// <summary>
         /// Indicates if a SingleUserModeScope is active on the current thread
         /// </summary>
         public static bool IsActive
         {
             get { return active; }
+        }
+
+        /// <summary>
+        /// Return the database to multi user mode using the specified connection
+        /// </summary>
+        public static void RestoreMultiUserMode(SqlConnection con)
+        {
+            if (!active)
+            {
+                return;
+            }
+
+            RestoreMultiUserMode(con, false);
         }
 
         /// <summary>
@@ -61,18 +101,27 @@ namespace ShipWorks.Data.Connection
                 return;
             }
 
-            active = false;
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                RestoreMultiUserMode(con, true);
+            }
+        }
 
+        /// <summary>
+        /// Return the database to multi user mode using the specified connection
+        /// </summary>
+        private static void RestoreMultiUserMode(SqlConnection con, bool clearConnectionPool)
+        {
             try
             {
                 // Clear out the pool so any connection holding onto SINGLE_USER gets released
-                SqlConnection.ClearAllPools();
+                if (clearConnectionPool)
+                {
+                    SqlConnection.ClearAllPools();   
+                }
 
                 // Allow multiple connections again
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    SqlUtility.SetMultiUser(con);
-                }
+                SqlUtility.SetMultiUser(con);
             }
             catch (SingleUserModeException ex)
             {
@@ -82,6 +131,12 @@ namespace ShipWorks.Data.Connection
             {
                 log.Error("Failed to set database back to multi-user mode.", ex);
             }
+
+            // Deactivate the scope after we try to go back to multi-user mode in case someone else steals the connection
+            // or we can't immediately re-connect
+            active = false;
+
+            log.Info("Leaving SingleUserModeScope");
         }
     }
 }

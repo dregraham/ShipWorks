@@ -36,8 +36,16 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public static SqlCommand Create(SqlConnection con, string commandText)
         {
+            return Create(con, commandText, null);
+        }
+
+        /// <summary>
+        /// Creates a new SqlCommand initialized with the given connection and command text
+        /// </summary>
+        public static SqlCommand Create(SqlConnection con, string commandText, SqlTransaction transaction)
+        {
             SqlCommand cmd = new SqlCommand();
-            
+
             if (con != null)
             {
                 cmd.Connection = con;
@@ -48,7 +56,8 @@ namespace Interapptive.Shared.Data
                 cmd.CommandText = commandText;
             }
 
-            cmd.CommandTimeout = (int) DefaultTimeout.TotalSeconds;
+            cmd.CommandTimeout = (int)DefaultTimeout.TotalSeconds;
+            cmd.Transaction = transaction;
 
             return cmd;
         }
@@ -75,6 +84,14 @@ namespace Interapptive.Shared.Data
         public static int ExecuteNonQuery(SqlConnection con, string commandText)
         {
             return ExecuteNonQuery(Create(con, commandText));
+        }
+
+        /// <summary>
+        /// Executes a non-query on the given connection and sql command text.  The number of affected rows is returned.
+        /// </summary>
+        public static int ExecuteNonQuery(SqlConnection con, string commandText, SqlTransaction transaction)
+        {
+            return ExecuteNonQuery(Create(con, commandText, transaction));
         }
 
         /// <summary>

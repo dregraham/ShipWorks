@@ -34,6 +34,7 @@ using NDesk.Options;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 using System.Collections;
+using IsolationLevel = System.Data.IsolationLevel;
 
 namespace ShipWorks.Data.Administration
 {
@@ -107,15 +108,16 @@ namespace ShipWorks.Data.Administration
             progressFunctionality.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFunctionality);
            
-            // Start by disconnecting all users.
-            using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope())
+            // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
+            // because reconnection to a very large database seems to take some time after running a big upgrade
+            using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
             {
                 try
                 {
                     // Put the SuperUser in scope, and don't audit
                     using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                     {
-                        using (TransactionScope transaction = new TransactionScope(debuggingMode ? TransactionScopeOption.Suppress : TransactionScopeOption.Required, TimeSpan.FromMinutes(20)))
+                        using (new ExistingConnectionScope())
                         {
                             // Update the tables
                             UpdateScripts(installed, progressScripts);
@@ -131,54 +133,51 @@ namespace ShipWorks.Data.Administration
                             if (!MigrationController.IsMigrationInProgress())
                             {
                                 // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality);
+                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedTransaction);
                             }
 
                             // Now we need to update the database to return the correct schema version that is now installed
-                            using (SqlConnection con = SqlSession.Current.OpenConnection())
-                            {
-                                UpdateSchemaVersionStoredProcedure(con);
-                            }
+                            UpdateSchemaVersionStoredProcedure();
 
                             // Functionality is done
                             progressFunctionality.PercentComplete = 100;
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
 
-                            transaction.Complete();
+                            ExistingConnectionScope.Commit();
+
+                            // If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
+                            if (installed < new Version(3, 1, 21, 0))
+                            {
+                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
+                                {
+                                    cmd.CommandText = @"
+
+                                        DECLARE @dbName nvarchar(100)
+                                        DECLARE @dataName nvarchar(100)
+                                        DECLARE @logName nvarchar(100)
+
+                                        SET @dbName = DB_NAME()
+                                        SELECT @dataName = name FROM sys.database_files WHERE type = 0
+                                        SELECT @logName = name FROM sys.database_files WHERE type = 1
+
+                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 100MB)' )
+                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 100MB)' )";
+
+                                    cmd.ExecuteNonQuery();
+                                });
+                            }
+
+                            // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
+                            SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
+
+                            // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                            // database upgrade can take time and cause a timeout.
+                            if (singleUserScope != null)
+                            {
+                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);   
+                            }
                         }
-                    }
-
-                    // Clear out the pool so any connection holding onto SINGLE_USER gets released
-                    SqlConnection.ClearAllPools();
-
-                    // If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                    if (installed < new Version(3, 1, 21, 0))
-                    {
-                        using (SqlConnection con = SqlSession.Current.OpenConnection())
-                        {
-                            SqlCommand cmd = SqlCommandProvider.Create(con);
-                            cmd.CommandText = @"
-
-                                DECLARE @dbName nvarchar(100)
-                                DECLARE @dataName nvarchar(100)
-                                DECLARE @logName nvarchar(100)
-
-                                SET @dbName = DB_NAME()
-                                SELECT @dataName = name FROM sys.database_files WHERE type = 0
-                                SELECT @logName = name FROM sys.database_files WHERE type = 1
-
-                                EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 100MB)' )
-                                EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 100MB)' )";
-
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        SqlUtility.SetChangeTrackingRetention(con, 1);
                     }
                 }
                 catch (Exception ex)
@@ -218,12 +217,29 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlConnection con, Version version)
         {
+            using (SqlCommand cmd = SqlCommandProvider.Create(con))
+            {
+                UpdateSchemaVersionStoredProcedure(cmd, version);   
+            }
+        }
+
+        /// <summary>
+        /// Update the schema version store procuedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
+        /// </summary>
+        public static void UpdateSchemaVersionStoredProcedure()
+        {
+            ExistingConnectionScope.ExecuteWithCommand(cmd => UpdateSchemaVersionStoredProcedure(cmd, GetRequiredSchemaVersion()));
+        }
+
+        /// <summary>
+        /// Update the schema version stored procedure to say the current schema is the given version
+        /// </summary>
+        public static void UpdateSchemaVersionStoredProcedure(SqlCommand cmd, Version version)
+        {
             if (version == null)
             {
                 throw new ArgumentNullException("version");
             }
-
-            SqlCommand cmd = SqlCommandProvider.Create(con);
 
             cmd.CommandText = @"
                 IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[GetSchemaVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
@@ -258,49 +274,53 @@ namespace ShipWorks.Data.Administration
             // Start with generic progress msg
             progress.Detail = "Updating...";
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            // Store the event handler in a variable so it can be removed easily later
+            SqlInfoMessageEventHandler infoMessageHandler = (sender, e) =>
             {
-                // Listen for script messages to display to the user
-                con.InfoMessage += delegate(object sender, SqlInfoMessageEventArgs e)
+                if (progress.Status == ProgressItemStatus.Running)
                 {
-                    if (progress.Status == ProgressItemStatus.Running)
+                    if (!e.Message.StartsWith("Caution"))
                     {
-                        if (!e.Message.StartsWith("Caution"))
-                        {
-                            progress.Detail = e.Message;
-                        }
+                        progress.Detail = e.Message;
                     }
+                }
+            };
+
+            // Listen for script messages to display to the user
+            ExistingConnectionScope.ScopedConnection.InfoMessage += infoMessageHandler;
+
+            // Determine the percent-value of each update script
+            double scriptProgressValue = 100.0 / (double) updateScripts.Count;
+
+            // Go through each update script (they are already sorted in version order)
+            foreach (SqlUpdateScript script in updateScripts)
+            {
+                log.InfoFormat("Updating to {0}", script.SchemaVersion);
+
+                // How many scripts we've finished with so far
+                int scriptsCompleted = updateScripts.IndexOf(script);
+
+                // Execute the script
+                SqlScript executor = sqlLoader[script.ScriptName];
+
+                // Update the progress as we complete each bactch in the script
+                executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
+                {
+                    // Update the progress
+                    progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
                 };
 
-                // Determine the percent-value of each update script
-                double scriptProgressValue = 100.0 / (double) updateScripts.Count;
-
-                // Go through each update script (they are already sorted in version order)
-                foreach (SqlUpdateScript script in updateScripts)
-                {
-                    log.InfoFormat("Updating to {0}", script.SchemaVersion);
-
-                    // How many scripts we've finished with so far
-                    int scriptsCompleted = updateScripts.IndexOf(script);
-
-                    // Execute the script
-                    SqlScript executor = sqlLoader[script.ScriptName];
-
-                    // Update the progress as we complete each bactch in the script
-                    executor.BatchCompleted += delegate(object sender, SqlScriptBatchCompletedEventArgs args)
-                    {
-                        // Update the progress
-                        progress.PercentComplete = Math.Min(100, ((int) (scriptsCompleted * scriptProgressValue)) + (int) ((args.Batch + 1) * (scriptProgressValue / executor.Batches.Count)));
-                    };
-
-                    // Run all the batches in the script
-                    executor.Execute(con);
-                }
-
-                progress.PercentComplete = 100;
-                progress.Detail = "Done";
-                progress.Completed();
+                // Run all the batches in the script
+                ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
             }
+
+            // Since we have a single, long-lived connection, we want to remove the message handler so future messages
+            // get handled normally
+            ExistingConnectionScope.ScopedConnection.InfoMessage -= infoMessageHandler;
+
+            progress.PercentComplete = 100;
+            progress.Detail = "Done";
+            progress.Completed();
         }
 
         /// <summary>
@@ -310,18 +330,14 @@ namespace ShipWorks.Data.Administration
         {
             progress.Detail = "Deploying assemblies...";
 
-            // Update the SQL Assemblies
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                SqlAssemblyDeployer.DeployAssemblies(con);
-            }
+            SqlAssemblyDeployer.DeployAssemblies(ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
         }
 
         /// <summary>
         /// Since our filters use column masks that are exactly dependant on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
-        private static void UpdateFilters(ProgressItem progress)
+        private static void UpdateFilters(ProgressItem progress, SqlTransaction transaction)
         {
             progress.Detail = "Updating filters...";
 
@@ -332,14 +348,11 @@ namespace ShipWorks.Data.Administration
                 FilterLayoutContext.PushScope();
 
                 // Regenerate the filters
-                FilterLayoutContext.Current.RegenerateAllFilters(SqlAdapter.Default);
+                ExistingConnectionScope.ExecuteWithAdapter(FilterLayoutContext.Current.RegenerateAllFilters);
 
                 // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    SqlUtility.TruncateTable("FilterNodeContentDirty", con);
-                    SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", con);
-                }
+                SqlUtility.TruncateTable("FilterNodeContentDirty", transaction.Connection, transaction);
+                SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", transaction.Connection, transaction);
             }
             finally
             {
