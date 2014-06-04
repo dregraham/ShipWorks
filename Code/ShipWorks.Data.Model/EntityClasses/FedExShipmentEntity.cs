@@ -1125,7 +1125,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ReferenceCustomer property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceCustomer"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ReferenceCustomer
 		{
@@ -1136,7 +1136,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ReferenceInvoice property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceInvoice"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ReferenceInvoice
 		{
@@ -1147,7 +1147,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ReferencePO property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."ReferencePO"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ReferencePO
 		{
@@ -1158,7 +1158,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ReferenceShipmentIntegrity property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceShipmentIntegrity"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ReferenceShipmentIntegrity
 		{
