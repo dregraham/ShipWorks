@@ -444,13 +444,12 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database
         /// </summary>
         public static bool IsMigrationInProgress()
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
                 cmd.CommandText = @"SELECT COALESCE(OBJECT_ID('dbo.v2m_MigrationPlan'), 0)";
 
-                return (int) SqlCommandProvider.ExecuteScalar(cmd) > 0;
-            }
+                return (int)SqlCommandProvider.ExecuteScalar(cmd) > 0;
+            });
         }
 
         #region Task Management

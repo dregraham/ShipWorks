@@ -32,13 +32,26 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public static void ExecuteScriptSql(string name, string sql, SqlConnection con)
         {
+            ExecuteScriptSql(name, sql, con, null);
+        }
+
+        /// <summary>
+        /// Executes each batch in the SQL, as separated by the GO keyword, using the given connection.
+        /// </summary>
+        public static void ExecuteScriptSql(string name, string sql, SqlConnection con, SqlTransaction transaction)
+        {
             if (con == null)
             {
                 throw new ArgumentNullException("con");
             }
 
             SqlScript script = new SqlScript(name, sql);
-            script.Execute(con);
+
+            using (SqlCommand command = SqlCommandProvider.Create(con))
+            {
+                command.Transaction = transaction;
+                script.Execute(command);   
+            }
         }
 
         /// <summary>
@@ -277,7 +290,15 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Truncate the given table contents
         /// </summary>
-        public static void TruncateTable(string table, SqlConnection con)
+        public static void TruncateTable(string filterNodeContentDirty, SqlConnection sqlConnection)
+        {
+            TruncateTable(filterNodeContentDirty, sqlConnection, null);
+        }
+
+        /// <summary>
+        /// Truncate the given table contents
+        /// </summary>
+        public static void TruncateTable(string table, SqlConnection con, SqlTransaction transaction)
         {
             if (!truncateWithDelete)
             {
@@ -285,6 +306,7 @@ namespace Interapptive.Shared.Data
                 try
                 {
                     SqlCommand truncateCmd = con.CreateCommand();
+                    truncateCmd.Transaction = transaction;
                     truncateCmd.CommandText = "TRUNCATE TABLE [" + table + "]";
                     truncateCmd.ExecuteNonQuery();
 
@@ -298,6 +320,7 @@ namespace Interapptive.Shared.Data
 
             // Fallback to DELETE in case user doesn't have permission
             SqlCommand deleteCmd = con.CreateCommand();
+            deleteCmd.Transaction = transaction;
             deleteCmd.CommandText = "DELETE " + table;
             deleteCmd.ExecuteNonQuery();
 

@@ -73,11 +73,22 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public void Execute(SqlConnection con)
         {
+            using (SqlCommand command = SqlCommandProvider.Create(con))
+            {
+                Execute(command);   
+            }
+        }
+
+        /// <summary>
+        /// Executes the script on the given connection with the given transaction
+        /// </summary>
+        public void Execute(SqlCommand cmd)
+        {
             log.InfoFormat("Running script {0}", name);
 
-            // Create the command to use
-            SqlCommand cmd = SqlCommandProvider.Create(con);
-            cmd.CommandTimeout = 1200; // 20 minutes
+            // Because this is primarily used for schema modifications, set the timeout to a very large amount
+            // since not completing execution means an upgrade or install failed.
+            cmd.CommandTimeout = (int)TimeSpan.FromHours(12).TotalSeconds;
 
             // Execute each batch
             for (int i = 0; i < batches.Count; i++)
