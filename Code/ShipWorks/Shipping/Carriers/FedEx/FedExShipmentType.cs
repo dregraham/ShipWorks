@@ -825,7 +825,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
         {
-            return IsDomestic(shipment); // shipment.ShipCountryCode == "US";
+            return true;
         }
 
         /// <summary>

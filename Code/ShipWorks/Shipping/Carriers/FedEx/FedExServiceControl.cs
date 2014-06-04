@@ -110,7 +110,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
             base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
-
+            
+            
             // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
 

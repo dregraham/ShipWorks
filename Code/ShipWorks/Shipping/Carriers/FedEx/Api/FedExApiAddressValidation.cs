@@ -80,8 +80,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             { 
                 new AddressToValidate()
                 {
+                    // The validation service has a hard time matching addresses outside of the US when 
+                    // there is a company name
                     Address = CreateAddress(new PersonAdapter(shipment, "Ship")),
-                    CompanyName = shipment.ShipCompany.Length > 0 ? shipment.ShipCompany : null
+                    CompanyName = shipment.ShipCountryCode == "US" && shipment.ShipCompany.Length > 0 ? shipment.ShipCompany : null
                 }
             };
 

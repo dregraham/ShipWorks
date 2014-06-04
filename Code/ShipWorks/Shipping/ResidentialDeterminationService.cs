@@ -44,14 +44,21 @@ namespace ShipWorks.Shipping
                         try
                         {
                             bool result = FedExApiAddressValidation.IsResidentialAddress(shipment);
-
                             log.InfoFormat("Shipment {0}  - FedEx address lookup ({1})", shipment.ShipmentID, result);
 
                             return result;
                         }
                         catch (FedExException ex)
                         {
-                            throw new FedExAddressValidationException(ex.Message, ex);
+                            string additionalInfo = string.Empty;
+
+                            if (shipment.ShipCountryCode != "US")
+                            {
+                                additionalInfo = string.Format("An error while looking up the residential/commercial status. FedEx is very strict about address formats when looking up residential status for non-US addresses. Be sure " +
+                                                 "that standard address abbreviations are used.{0}{0}", Environment.NewLine);
+                            }
+
+                            throw new FedExAddressValidationException(string.Format("{0}{1}", additionalInfo, ex.Message), ex);
                         }
                     }
             }
