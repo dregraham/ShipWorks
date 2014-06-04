@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ShipWorks.ApplicationCore;
@@ -63,8 +65,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     // Save all the additional labels
                     if (packageReply.PackageDocuments != null)
                     {
+                        IEnumerable<ShippingDocument> shippingDocs = packageReply.PackageDocuments
+                                                                          .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS);
+
+                        // Save off any alcohol stickers
+                        foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL" ))
+                        {
+                            SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
+                        }
+
+                        // Save off non alcohol labels
                         foreach (ShippingDocument document in packageReply.PackageDocuments
-                                                                          .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS))
+                                                                          .Where(d => d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
                         {
                             SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                         }

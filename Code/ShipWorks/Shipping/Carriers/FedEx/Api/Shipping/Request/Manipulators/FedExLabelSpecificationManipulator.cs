@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -7,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -59,6 +63,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             LabelSpecification labelSpecification = new LabelSpecification();            
             MaskAccountData(shippingSettings, labelSpecification, request.ShipmentEntity);
             ConfigureLabelType(request.ShipmentEntity, shippingSettings, labelSpecification);
+
+            // Add alcohol label request if needed
+            AddAlcoholRegulatoryLabels(labelSpecification, request.ShipmentEntity);
 
             // Everything is ready to go
             nativeRequest.RequestedShipment.LabelSpecification = labelSpecification;
@@ -246,6 +253,43 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     detailDetail.MaskedData = new LabelMaskableDataType[] { LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER };
                 }
                 
+
+                labelSpecification.CustomerSpecifiedDetail = detailDetail;
+            }
+        }
+
+        /// <summary>
+        /// Adds alcohol regulatory label if needed.
+        /// </summary>
+        /// <param name="labelSpecification">The label specification.</param>
+        /// <param name="shipment">The shipment.</param>
+        private static void AddAlcoholRegulatoryLabels(LabelSpecification labelSpecification, ShipmentEntity shipment)
+        {
+            bool hasAlcohol = shipment.FedEx.Packages.Any(p => p.ContainsAlcohol);
+
+            if (hasAlcohol)
+            {
+                CustomerSpecifiedLabelDetail detailDetail = new CustomerSpecifiedLabelDetail();
+
+                if (labelSpecification.CustomerSpecifiedDetail != null)
+                {
+                    detailDetail = labelSpecification.CustomerSpecifiedDetail;
+                }
+
+                List<CustomerSpecifiedLabelGenerationOptionType> generalOptions = new List<CustomerSpecifiedLabelGenerationOptionType>()
+                {
+                    CustomerSpecifiedLabelGenerationOptionType.CONTENT_ON_SUPPLEMENTAL_LABEL_ONLY
+                };
+
+                RegulatoryLabelContentDetail regulatoryLabelContentDetail = new RegulatoryLabelContentDetail()
+                {
+                    Type = RegulatoryLabelType.ALCOHOL_SHIPMENT_LABEL,
+                    TypeSpecified = true,
+                    GenerationOptions = generalOptions.ToArray()
+                };
+
+                List<RegulatoryLabelContentDetail> regulatoryLabelContentDetails = new List<RegulatoryLabelContentDetail>() { regulatoryLabelContentDetail };
+                detailDetail.RegulatoryLabels = regulatoryLabelContentDetails.ToArray();
 
                 labelSpecification.CustomerSpecifiedDetail = detailDetail;
             }
