@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Diagnostics;
 using System.Xml.XPath;
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Core
 
                 SqlAssemblyDeployer.DeployAssemblies(con);
 
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, (new SchemaVersionManager()).GetRequiredSchemaVersion());
+                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
             }
         }
     }

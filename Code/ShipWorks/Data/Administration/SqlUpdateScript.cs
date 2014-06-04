@@ -1,22 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
-namespace ShipWorks.Data.Administration.Versioning
+namespace ShipWorks.Data.Administration
 {
     /// <summary>
     /// Represents a single update script found in ShipWorks embedded resources
     /// </summary>
     public class SqlUpdateScript
     {
-        string schemaVersion;
+        Version schemaVersion;
         string scriptName;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SqlUpdateScript(string resourcePath, string resourceName, string updateProcessName)
+        public SqlUpdateScript(string resourcePath)
         {
             // We have to extract out the path part
-            int updateIndex = resourcePath.IndexOf("Update", StringComparison.OrdinalIgnoreCase);
+            int updateIndex = resourcePath.IndexOf("Update");
             if (updateIndex < 0)
             {
                 throw new InvalidOperationException("Unexpected sql update script path.");
@@ -25,15 +29,20 @@ namespace ShipWorks.Data.Administration.Versioning
             // Set the script name
             scriptName = resourcePath.Substring(updateIndex + "Update.".Length);
 
-            schemaVersion = resourceName;
+            Match versionMatch = Regex.Match(resourcePath, @"\d+\.\d+\.\d+\.\d+\.sql$");
+            if (!versionMatch.Success)
+            {
+                throw new InvalidOperationException("Could not extract script name from path " + resourcePath);
+            }
 
-            UpdateProcessName = updateProcessName;
+            // Create the version from that
+            schemaVersion = new Version(versionMatch.Value.Replace(".sql", ""));
         }
 
         /// <summary>
         /// The ShipWorks database schema version number
         /// </summary>
-        public string SchemaVersion
+        public Version SchemaVersion
         {
             get { return schemaVersion; }
         }
@@ -45,10 +54,5 @@ namespace ShipWorks.Data.Administration.Versioning
         {
             get { return scriptName; }
         }
-
-        /// <summary>
-        /// Gets the name of the update process.
-        /// </summary>
-        public string UpdateProcessName { get; set; }
     }
 }

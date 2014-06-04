@@ -493,9 +493,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ThreeDCartStoreEntity:
 					toReturn = this.ThreeDCartStore;
 					break;
-				case ShipWorks.Data.Model.EntityType.UpdateQueueEntity:
-					toReturn = this.UpdateQueue;
-					break;
 				case ShipWorks.Data.Model.EntityType.UpsAccountEntity:
 					toReturn = this.UpsAccount;
 					break;
@@ -1422,12 +1419,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ThreeDCartStoreEntity> ThreeDCartStore
 		{
 			get { return new DataSource2<ThreeDCartStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting UpdateQueueEntity instances in the database.</summary>
-		public DataSource2<UpdateQueueEntity> UpdateQueue
-		{
-			get { return new DataSource2<UpdateQueueEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting UpsAccountEntity instances in the database.</summary>

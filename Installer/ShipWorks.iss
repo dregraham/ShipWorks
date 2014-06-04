@@ -22,10 +22,6 @@
 	#define EditionAppConfig 'App.Ups.config'
 #endif
 
-#define Version = 'Address Validation'
-#define AppArtifacts  'C:\shipworks3x\Artifacts\Application'
-#define RequiredSchemaID 'blah'
-
 [Setup]
 AppName=ShipWorks®
 AppVersion={#= Version} {#= EditionName}
@@ -57,6 +53,7 @@ UsePreviousGroup=true
 AlwaysRestart=false
 ShowLanguageDialog=no
 AllowUNCPath=false
+VersionInfoVersion={#= Version}
 VersionInfoCompany=Interapptive®, Inc.
 VersionInfoDescription=Interapptive® ShipWorks®
 VersionInfoTextVersion=ShipWorks® {#= Version}
@@ -329,16 +326,12 @@ function CheckUpgradeIssues() : Boolean;
 var
 	TargetExe: string;
 	VersionFound: string;
-	NeedsUpgrade: Integer;
-	VersionInstalling: string;
-	OldSchemaFound: Integer;
+	SchemaFound: Integer;
 begin
 
 	Result := True;
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-
-	VersionInstalling := '' + '{#= RequiredSchemaID}' + '';
 
 	if (FileExists(TargetExe))
 	then begin
@@ -361,29 +354,23 @@ begin
 		// Existing 3x version
 		else if (Pos('3.', VersionFound) = 1)
 		then begin
-			if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, OldSchemaFound)
-			then begin
-				if((OldSchemaFound > 0) and (OldSchemaFound < 56822025))
-				then begin
-					// The DB is using "the old way" and the version is less than 3.99.9.9
-					NeedsUpgrade := 1;
-				end
-				else
-        begin
-					Exec(ExpandConstant(TargetExe), '/command:checkneedsupgrade -dbschema:' + VersionInstalling, '', SW_SHOW, ewWaitUntilTerminated, NeedsUpgrade)
-				end;
-			end;	
-						
-			if (NeedsUpgrade = 1)
-			then begin
 
-				if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
-							'' + #13 +
-							'Continue with installation?',
-					mbConfirmation,
-					MB_OKCANCEL) = IDCANCEL)
+			// See if a DB upgrade will be required.
+		    if Exec(ExpandConstant(TargetExe), '/command:getdbschemaversion -type:database', '', SW_SHOW, ewWaitUntilTerminated, SchemaFound)
+		    then begin
+
+				if ((SchemaFound > 0) and ({#RequiredSchemaID} > SchemaFound))
 				then begin
-					Result := False;
+
+					if (MsgBox('The version of ShipWorks being installed will require your database to be updated.' + #13 +
+							   '' + #13 +
+							   'Continue with installation?',
+						mbConfirmation,
+						MB_OKCANCEL) = IDCANCEL)
+					then begin
+						Result := False;
+					end;
+
 				end;
 
 			end;

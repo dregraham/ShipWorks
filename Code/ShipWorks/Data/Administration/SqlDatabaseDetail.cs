@@ -5,7 +5,6 @@ using System.Text;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using System.Data;
-using ShipWorks.Data.Administration.Versioning;
 using log4net;
 
 namespace ShipWorks.Data.Administration
@@ -20,7 +19,7 @@ namespace ShipWorks.Data.Administration
         string name;
         SqlDatabaseStatus status;
 
-        string schemaVersion;
+        Version schemaVersion;
 
         string lastUsedBy;
         DateTime lastUsedOn;
@@ -67,50 +66,13 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void LoadSchemaVersion(SqlDatabaseDetail detail, SqlConnection con)
         {
-            SchemaVersion version = GetSchemaVersion(con);
+            SqlCommand cmd = SqlCommandProvider.Create(con);
+            cmd.CommandText = "GetSchemaVersion";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            detail.schemaVersion = version.VersionName;
+            detail.schemaVersion = new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
 
-            detail.status = version.DatabaseStatus;
-        }
-
-        /// <summary>
-        /// Gets the schema version name
-        /// </summary>
-        public static SchemaVersion GetSchemaVersion(SqlConnection con)
-        {
-            return GetSchemaVersion(con, DoesGetNamedSchemaVersionExist(con));
-        }
-        
-        /// <summary>
-        /// Gets the schema version.
-        /// </summary>
-        public static SchemaVersion GetSchemaVersion(SqlConnection con, bool useGetNamedSchemaVersion)
-        {
-            string getSchemaVersionToCall = useGetNamedSchemaVersion ? "GetNamedSchemaVersion" : "GetSchemaVersion";
-
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
-            {
-                cmd.CommandText = getSchemaVersionToCall;
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                return new SchemaVersion((string)SqlCommandProvider.ExecuteScalar(cmd));
-            }
-        }
-
-        /// <summary>
-        /// Determines if GetNamedSchemaVersion exists.
-        /// </summary>
-        private static bool DoesGetNamedSchemaVersionExist(SqlConnection con)
-        {
-            using (SqlCommand cmd = SqlCommandProvider.Create(con))
-            {
-                cmd.CommandText = "SELECT count(*) FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[GetNamedSchemaVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1";
-
-                int count = (int)cmd.ExecuteScalar();
-
-                return count > 0;
-            }
+            detail.status = detail.schemaVersion.Major < 3 ? SqlDatabaseStatus.ShipWorks2x : SqlDatabaseStatus.ShipWorks;
         }
 
         /// <summary>
@@ -194,7 +156,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// ShipWorks schema version of the database
         /// </summary>
-        public string SchemaVersion
+        public Version SchemaVersion
         {
             get { return schemaVersion; }
         }

@@ -69,23 +69,6 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public virtual SqlScript LoadScript(string name)
         {
-            return new SqlScript(name, GetScript(name, true));
-        }
-
-        /// <summary>
-        /// Get the sql script of the given name from the configured location.
-        /// </summary>
-        /// <param name="name">Script Name.</param>
-        /// <param name="throwIfNotFound">
-        ///     If script not found, this determines if an error is thrown 
-        ///     or an empty string is returned.
-        /// </param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException">name</exception>
-        /// <exception cref="SqlScriptException"></exception>
-        /// <exception cref="System.InvalidOperationException">SqlScriptLoader not configured with location.</exception>
-        public string GetScript(string name, bool throwIfNotFound)
-        {
             if (name == null)
             {
                 throw new ArgumentNullException("name");
@@ -107,18 +90,13 @@ namespace Interapptive.Shared.Data
                 {
                     if (stream == null)
                     {
-                        if (throwIfNotFound)
-                        {
-                            throw new SqlScriptException(String.Format("SqlScriptLoader cannot locate resource '{0}'", resourceToLoad));                            
-                        }
-
-                        return string.Empty;
+                        throw new SqlScriptException(String.Format("SqlScriptLoader cannot locate resource '{0}'", resourceToLoad));
                     }
 
                     // Return the contents
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        return reader.ReadToEnd();
+                        return new SqlScript(name, reader.ReadToEnd());
                     }
                 }
             }
@@ -126,7 +104,7 @@ namespace Interapptive.Shared.Data
             // Load from directory
             if (folder != null)
             {
-                return File.ReadAllText(Path.Combine(folder.FullName, name));
+                return new SqlScript(name, File.ReadAllText(Path.Combine(folder.FullName, name)));
             }
 
             throw new InvalidOperationException("SqlScriptLoader not configured with location.");

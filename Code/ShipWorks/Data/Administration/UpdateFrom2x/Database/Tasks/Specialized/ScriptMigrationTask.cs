@@ -93,9 +93,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 return 1;
             }
 
-            if (script.BatchCount > 1)
+            if (script.Batches.Count > 1)
             {
-                return script.BatchCount;
+                return script.Batches.Count;
             }
             else
             {
@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                         cmd.CommandText = script.Content;
 
                         object result = SqlCommandProvider.ExecuteScalar(cmd);
-                        if (result != null && result is int)
+                        if (result != null && result.GetType() == typeof(int))
                         {
                             return (int)result;
                         }
@@ -120,7 +120,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 }
                 catch (SqlException ex)
                 {
-                    throw new MigrationException(string.Format("Failure executing script '{0}", script.Name), ex);
+                    throw new MigrationException(string.Format("Failure executing script '{0}", script.Name), ex); ;
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 {
                     try
                     {
-                        if (script.BatchCount > 1)
+                        if (script.Batches.Count > 1)
                         {
                             // treat each batch as a unit of work, don't need to actually run the script
                             script.BatchCompleted += (o, e) => ReportWorkProgress();
@@ -196,7 +196,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                     catch (SqlException ex)
                     {
                         log.ErrorFormat("Failure executing migration script '{0}:{1}' for task instance {2}: {3}", script.Name, ex.LineNumber, ExecutionPlanIdentifier, ex.Message);
-                        throw new MigrationException(string.Format("Failure executing script '{0}':\n\n{1}: {2}", script.Name, ex.LineNumber, ex.Message), ex);
+                        throw new MigrationException(string.Format("Failure executing script '{0}':\n\n{1}: {2}", script.Name, ex.LineNumber, ex.Message), ex); ;
                     }
                 }
             }

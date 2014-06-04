@@ -137,10 +137,6 @@
       <HintPath>..\..\Components\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft SQL Server\100\SDK\Assemblies\Microsoft.SqlServer.Smo.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
@@ -155,10 +151,6 @@
     <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\QuickGraph.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -605,19 +597,11 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.cs" />
     <Compile Include="Data\Administration\Scripts\Update\IUpdateDatabaseProcess.cs" />
-    <Compile Include="Data\Administration\Versioning\VersionUpgradeStep.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\BillShipAddressConditionUtility.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
-    <Compile Include="Data\Administration\Versioning\FindVersionUpgradePathException.cs" />
-    <Compile Include="Data\Administration\Versioning\ISchemaVersionManager.cs" />
-    <Compile Include="Data\Administration\Versioning\SchemaVersion.cs" />
-    <Compile Include="Data\Administration\Versioning\SchemaVersionManager.cs" />
-    <Compile Include="Data\Administration\Versioning\UpgradePath.cs" />
-    <Compile Include="Data\Administration\Versioning\VersionGraph.cs" />
-    <Compile Include="Data\Administration\Versioning\SchemaVersionComparisonResult.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\OrderAddressValidationStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\USTerritoryCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\MilitaryAddressCondition.cs" />
@@ -3047,7 +3031,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Data\Utility\SqlTableSeed.cs" />
-    <Compile Include="Data\Administration\Versioning\SqlUpdateScript.cs" />
+    <Compile Include="Data\Administration\SqlUpdateScript.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xConfigurationMigrator.cs" />
     <Compile Include="Data\Administration\UpdateFrom2x\Configuration\ShipWorks2xApplicationDataSourceType.cs" />
     <Compile Include="Data\Connection\SqlDeadlockPriorityScope.cs" />
@@ -6094,7 +6078,7 @@
     <Compile Include="Data\Administration\SqlServerSetup\SqlServerInstaller.cs" />
     <Compile Include="Data\Grid\Paging\PagedEntityGateway.cs" />
     <Compile Include="Data\Connection\SqlSessionScope.cs" />
-    <Compile Include="Data\Administration\Versioning\SqlSchemaUpdater.cs" />
+    <Compile Include="Data\Administration\SqlSchemaUpdater.cs" />
     <Compile Include="Data\Connection\SqlSession.cs" />
     <Compile Include="Data\Utility\ValueComparisonValidator.cs" />
     <Compile Include="Email\Accounts\AddEmailAccountWizard.cs">
@@ -10129,9 +10113,7 @@
     <None Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
-    <EmbeddedResource Include="Filters\Content\ConditionTree.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
     <None Include="Resources\Progress\indicator_blue.gif" />
     <None Include="Resources\Progress\circling_ball.gif" />
     <None Include="Resources\Progress\arrows_blue.gif" />
@@ -10460,11 +10442,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.6.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.7.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\BestRateToAddressValidation.data.sql" />
-    <Content Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10586,7 +10567,6 @@
     <None Include="Resources\check3.png" />
     <None Include="Resources\dashed_outline.png" />
     <None Include="Resources\EndiciaLogo.png" />
-    <None Include="Resources\GoogleMapsFav.bmp" />
     <None Include="Resources\GoogleMapsFav.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
@@ -12323,7 +12303,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

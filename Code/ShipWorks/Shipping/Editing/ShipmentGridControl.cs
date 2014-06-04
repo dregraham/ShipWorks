@@ -858,21 +858,6 @@ namespace ShipWorks.Shipping.Editing
                     using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                     {
                         ValidatedAddressManager.CopyValidatedAddresses(sqlAdapter, shipment.ShipmentID, "Ship", copy.ShipmentID, "Ship");
-                        //List<ValidatedAddressEntity> addresses = ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, shipment.ShipmentID);
-
-                        //addresses.ForEach(x =>
-                        //{
-                        //    ValidatedAddressEntity clonedAddress = EntityUtility.CloneEntity(x);
-                        //    clonedAddress.IsNew = true;
-                        //    clonedAddress.ConsumerID = copy.ShipmentID;
-
-                        //    foreach (IEntityField2 field in clonedAddress.Fields)
-                        //    {
-                        //        field.IsChanged = true;
-                        //    }
-
-                        //    sqlAdapter.SaveEntity(clonedAddress);
-                        //});
 
                         sqlAdapter.Commit();
                     }

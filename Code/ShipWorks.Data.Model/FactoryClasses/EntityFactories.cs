@@ -5965,45 +5965,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
-	/// <summary>Factory to create new, empty UpdateQueueEntity objects.</summary>
-	[Serializable]
-	public partial class UpdateQueueEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public UpdateQueueEntityFactory() : base("UpdateQueueEntity", ShipWorks.Data.Model.EntityType.UpdateQueueEntity) { }
-
-		/// <summary>Creates a new, empty UpdateQueueEntity object.</summary>
-		/// <returns>A new, empty UpdateQueueEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new UpdateQueueEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpdateQueue
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new UpdateQueueEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new UpdateQueueEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUpdateQueueUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<UpdateQueueEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
 	/// <summary>Factory to create new, empty UpsAccountEntity objects.</summary>
 	[Serializable]
 	public partial class UpsAccountEntityFactory : EntityFactoryBase2 {
@@ -7209,9 +7170,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ThreeDCartStoreEntity:
 					factoryToUse = new ThreeDCartStoreEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.UpdateQueueEntity:
-					factoryToUse = new UpdateQueueEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.UpsAccountEntity:
 					factoryToUse = new UpsAccountEntityFactory();

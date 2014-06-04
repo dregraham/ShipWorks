@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using log4net;
@@ -54,6 +53,9 @@ namespace ShipWorks.Data.Administration
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(DatabaseUpdateWizard));
 
+        // Version of the database installed
+        Version installed;
+
         // If its a 3.x database, this is the user we are running the upgrade as.
         // Note: We can't use the UserEntity, b\c if we are upgrading, it could be different
         // now than it is in the db schema.
@@ -76,10 +78,6 @@ namespace ShipWorks.Data.Administration
 
         // Handles V2 to V3 data migration
         MigrationController v2migrationController;
-
-        // Version of the database installed
-        bool versionUnderThree = false;
-        bool versionUnderOneTwo = false;
 
         /// <summary>
         /// Open the upgrade window and returns true if the wizard completed with an OK result.
@@ -111,21 +109,9 @@ namespace ShipWorks.Data.Administration
         private DatabaseUpdateWizard()
         {
             InitializeComponent();
-            
-            SchemaVersion databaseSchemaVersion = SqlSchemaUpdater.GetDatabaseSchemaVersion();
 
-            if (SqlServerInstaller.IsMsdeMigrationInProgress)
-            {
-                versionUnderThree = true;
-                versionUnderOneTwo = true;
-            }
-            else
-            {
-                versionUnderOneTwo = databaseSchemaVersion.IsVersionLessThanOneTwo;
-                versionUnderThree = databaseSchemaVersion.IsVersionLessThanThree;
-            }
-
-            showFirewallPage = versionUnderThree;
+            installed = SqlServerInstaller.IsMsdeMigrationInProgress ? new Version(0,0,0,0) : SqlSchemaUpdater.GetInstalledSchemaVersion();
+            showFirewallPage = installed < new Version(3, 0);
 
             sqlInstaller = new SqlServerInstaller();
             sqlInstaller.InitializeForCurrentSqlSession();
@@ -159,9 +145,9 @@ namespace ShipWorks.Data.Administration
                     Pages.Insert(placeholderIndex, windowsInstallerPage);
                 }
 
-                if (versionUnderThree)
+                if (installed.Major < 3)
                 {
-                    v2migrationController = MigrationController.CreateV2ToV3Controller(databaseSchemaVersion.GetVersion());
+                    v2migrationController = MigrationController.CreateV2ToV3Controller(installed);
 
                     log.InfoFormat("Created V2 migration controller: {0}", v2migrationController.MigrationState);
                 }
@@ -298,7 +284,7 @@ namespace ShipWorks.Data.Administration
 
             // Below db version 1.2.0 (ShipWorks 2.4), there were no users.  So to be logged
             // in at all is to be an admin.
-            if (versionUnderOneTwo)
+            if (installed < new Version(1, 2))
             {
                 log.Debug("Pre 2.4 database, no need for admin logon.");
 
@@ -306,7 +292,7 @@ namespace ShipWorks.Data.Administration
                 return;
             }
             // See if we need to login 2.x style
-            else if (versionUnderThree)
+            else if (installed < new Version(3, 0))
             {
                 // If there are no admin users, it would be impossible to go on
                 if (!UserUtility.Has2xAdminUsers())
@@ -435,7 +421,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // See if we need to login 2.x style
-            if (versionUnderThree)
+            if (installed < new Version(3, 0))
             {
                 if (!UserUtility.IsShipWorks2xAdmin(username.Text, password.Text))
                 {
@@ -518,7 +504,7 @@ namespace ShipWorks.Data.Administration
                 backup.Enabled = false;
             }
             // Skip if running an internal version - internal debug versions are 0.0.0.0
-            else if (versionUnderThree && !InterapptiveOnly.MagicKeysDown && Assembly.GetExecutingAssembly().GetName().Version.Major == 3)
+            else if (installed < new Version(3, 0) && !InterapptiveOnly.MagicKeysDown && Assembly.GetExecutingAssembly().GetName().Version.Major == 3)
             {
                 labelBackupInfo.Text = "You must create a backup before updating your ShipWorks 2 database.  We don't expect anything to go wrong, but it doesn't hurt to be safe.";
                 labelBackupNoPermission.Visible = false;
@@ -546,7 +532,7 @@ namespace ShipWorks.Data.Administration
                     MarkBackupCompleted();
 
                     // We require a backup for sw2 upgrades - so enable it if the backup completed
-                    if (versionUnderThree)
+                    if (installed < new Version(3, 0))
                     {
                         NextEnabled = true;
                     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Administration.Versioning;
 using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
@@ -61,9 +60,13 @@ namespace ShipWorks.Data.Administration
                 path += "\\";
             }
 
-            SqlScript script = new SqlScript("Create Database", createDbSql);
+            // Set the path to Program Files
+            createDbSql = createDbSql.Replace("{DBNAME}", name);
+            createDbSql = createDbSql.Replace("{FILEPATH}", path);
+            createDbSql = createDbSql.Replace("{FILENAME}", DetermineAvailableFileName(path, name));
 
-            script.Execute(con, name,  DetermineAvailableFileName(path, name), path);
+            // Create the database
+            SqlUtility.ExecuteScriptSql("Create Database", createDbSql, con);
         }
 
         /// <summary>
@@ -107,10 +110,8 @@ namespace ShipWorks.Data.Administration
                 // Add any initial data via script
                 sqlLoader["InitialData"].Execute(con);
 
-                SchemaVersion requiredSchemaVersion = (new SchemaVersionManager()).GetRequiredSchemaVersion();
-                
                 // Update the database to be marked with the correct db version
-                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con, requiredSchemaVersion);
+                SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
             }
 
             // Create the ShipWorks "SuperUser"

@@ -9240,63 +9240,6 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of UpdateQueueEntity
-	/// </summary>
-	public class UpdateQueueCollection : EntityCollection<UpdateQueueEntity>
-	{
-        /// <summary>
-        /// Gets the count of all UpdateQueueEntity rows
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter)
-        {
-            return GetCount(adapter, null);
-        }
-
-        /// <summary>
-        /// Gets the count of all UpdateQueueEntity rows filtered by the given predicate
-        /// </summary>
-        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-            RelationPredicateBucket bucket = null;
-            
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            return adapter.GetDbCount(new UpdateQueueEntityFactory().CreateFields(), bucket);
-        }
-		
-        /// <summary>
-        /// Fetch a new collection object that matches the specified filter.
-        /// </summary>
-        public static UpdateQueueCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
-        {
-			return Fetch(adapter, filter, null);
-        }
-        
-		/// <summary>
-        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
-        /// </summary>
-        public static UpdateQueueCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
-        {
-            UpdateQueueCollection collection = new UpdateQueueCollection();
-
-            RelationPredicateBucket bucket = null;
-
-            if (filter != null)
-            {
-                bucket = new RelationPredicateBucket(filter);
-            }
-
-            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
-
-            return collection;
-        }
-	}
-	
-	
-	/// <summary>
 	/// Strongly typed collection of ShipSenseKnowledgebaseEntity
 	/// </summary>
 	public class ShipSenseKnowledgebaseCollection : EntityCollection<ShipSenseKnowledgebaseEntity>

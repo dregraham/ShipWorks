@@ -145,7 +145,6 @@
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
     <Compile Include="DatabaseManager.cs" />
-    <Compile Include="Data\Administration\SchemaVersionTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
@@ -381,7 +380,6 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
-    <Compile Include="Stores\Content\Panels\MapPanelTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
