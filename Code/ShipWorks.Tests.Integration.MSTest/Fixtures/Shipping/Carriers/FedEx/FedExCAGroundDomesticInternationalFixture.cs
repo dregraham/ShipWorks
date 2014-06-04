@@ -5,14 +5,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
 {
     public class FedExCAGroundDomesticInternationalFixture : FedExUSExpressInternationalFixture
     {
+        public string CodDetailRateTypeBasis { get; set; }
+
         /// <summary>
         /// Creates the shipment.
         /// </summary>
         /// <returns></returns>
         public override ShipmentEntity CreateShipment()
         {
-            DropoffType = "regular_pickup";
-
             if (string.IsNullOrWhiteSpace(CustomsClearanceDocumentContent))
             {
                 CustomsClearanceDocumentContent = string.Empty;

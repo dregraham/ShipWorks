@@ -49,7 +49,6 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
