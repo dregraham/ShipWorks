@@ -257,9 +257,9 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             int joinMasks = 0;
 
             // Do the fetch
-            using (SqlAdapter adapter = new SqlAdapter())
+            ExistingConnectionScope.ExecuteWithAdapter(adapter =>
             {
-                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+                using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, true))
                 {
                     while (reader.Read())
                     {
@@ -267,7 +267,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                         joinMasks |= reader.GetInt32(1);
                     }
                 }
-            }
+            });
 
             return Tuple.Create(FilterNodeColumnMaskUtility.CreateUnionedBitmask(childMasks), joinMasks);
         }

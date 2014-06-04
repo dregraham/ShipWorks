@@ -284,14 +284,13 @@ namespace ShipWorks.Filters.Content.Conditions
         /// </summary>
         public DateTime ConvertToUniversalTime(DateTime dateTime)
         {
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
                 cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
                 cmd.Parameters.AddWithValue("@dateTime", dateTime);
 
-                return (DateTime) SqlCommandProvider.ExecuteScalar(cmd);
-            }
+                return (DateTime)SqlCommandProvider.ExecuteScalar(cmd);
+            });
         }
 
         /// <summary>

@@ -572,6 +572,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
@@ -2396,6 +2397,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientRequestThrottle.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyWebClientThrottleWaitCancelException.cs" />
+    <Compile Include="Stores\Platforms\Shopify\WebBrowserControlEmulation.cs" />
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

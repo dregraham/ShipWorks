@@ -15,7 +15,11 @@ namespace ShipWorks.Shipping.ShipSense.Customs
         /// Initializes a new instance of the <see cref="KnowledgebaseCustomsItem"/> class.
         /// </summary>
         public KnowledgebaseCustomsItem()
-        { }
+        {
+            Description = string.Empty;
+            CountryOfOrigin = string.Empty;
+            HarmonizedCode = string.Empty;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgebaseCustomsItem"/> class
@@ -24,12 +28,12 @@ namespace ShipWorks.Shipping.ShipSense.Customs
         /// <param name="customsItemEntity">The customs item entity.</param>
         public KnowledgebaseCustomsItem(ShipmentCustomsItemEntity customsItemEntity)
         {
-            Description = customsItemEntity.Description;
+            Description = customsItemEntity.Description ?? string.Empty;
             Quantity = customsItemEntity.Quantity;
             Weight = customsItemEntity.Weight;
             UnitValue = customsItemEntity.UnitValue;
-            CountryOfOrigin = customsItemEntity.CountryOfOrigin;
-            HarmonizedCode = customsItemEntity.HarmonizedCode;
+            CountryOfOrigin = customsItemEntity.CountryOfOrigin ?? string.Empty;
+            HarmonizedCode = customsItemEntity.HarmonizedCode ?? string.Empty;
             NumberOfPieces = customsItemEntity.NumberOfPieces;
             UnitPriceAmount = customsItemEntity.UnitPriceAmount;
         }

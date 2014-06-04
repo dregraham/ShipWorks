@@ -57,7 +57,6 @@ namespace ShipWorks.Shipping.ShipSense.Population
             }
         }
 
-
         /// <summary>
         /// Gets the total shipments to analyze when building the knowledge base.
         /// </summary>

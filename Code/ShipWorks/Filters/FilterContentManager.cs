@@ -403,7 +403,7 @@ namespace ShipWorks.Filters
                 {
                     using (SqlAppResourceLock dateLock = new SqlAppResourceLock("UpdateDateFilters"))
                     {
-                        using (SqlAdapter adapter = new SqlAdapter(true))
+                        ExistingConnectionScope.ExecuteWithAdapter(adapter =>
                         {
                             // Set the new date to the current date
                             SystemDataEntity systemData = new SystemDataEntity(true) { IsNew = false };
@@ -417,7 +417,7 @@ namespace ShipWorks.Filters
 
                             // Update our local value
                             dateFiltersLastUpdated = serverDate;
-                        }
+                        });
                     }
                 }
                 catch (SqlAppResourceLockException)
