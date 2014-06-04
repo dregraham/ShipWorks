@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
-using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
 
-namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
     [TestClass]
-    public class FedExUSIntegrationTests : IntegrationTestBase
+    public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string fedExTestAccountNumber = "604589967"; // "603103343";
         private const string ecodAccountNumber = "222326460";
@@ -88,7 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
             {
                 var testObject = new FedExUSExpressInternationalFixture();
 
-                if (PopulateTestObject(testObject, FedExUsExpressInternationalAlcoholMapping.Mapping) &&
+                if (PopulateTestObject(testObject, FedExUSExpressInternationalAlcoholMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -178,7 +179,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(testObject, FedExUsExpressDomesticMapping.UsExpDomesticMapping) &&
+            if (PopulateTestObject(testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -199,7 +200,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(testObject, FedExUsOneRateMapping.UsOneRateMapping) &&
+            if (PopulateTestObject(testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

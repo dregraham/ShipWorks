@@ -1,11 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
 
-namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
 {
     [TestClass]
-    public class FedExSmartPostIntegrationTest : IntegrationTestBase
+    public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
 
         //note: smartpost gets it account number from the spreadsheet.

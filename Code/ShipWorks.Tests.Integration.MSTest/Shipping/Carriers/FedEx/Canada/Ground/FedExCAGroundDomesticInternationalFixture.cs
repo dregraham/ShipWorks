@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 
-namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground
 {
     public class FedExCAGroundDomesticInternationalFixture : FedExUSExpressInternationalFixture
     {

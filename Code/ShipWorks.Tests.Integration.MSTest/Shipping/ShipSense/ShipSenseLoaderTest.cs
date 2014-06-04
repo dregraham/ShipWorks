@@ -18,7 +18,7 @@ using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 
-namespace ShipWorks.Tests.Integration.MSTest.ShipSense
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 {
     [TestClass]
     public class ShipSenseLoaderTest
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipSense
         private ShipSenseLoader testObject;
 
         private readonly Mock<ExecutionMode> executionMode;
-        private Mock<IProgressReporter> progressReporter;
+        private readonly Mock<IProgressReporter> progressReporter;
 
         public ShipSenseLoaderTest()
         {

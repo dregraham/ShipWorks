@@ -1,12 +1,14 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx;
-using ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx.Mappings;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
+using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 
-namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 {
     [TestClass]
-    public class FedExCanadaIntegrationTests : IntegrationTestBase
+    public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
         private const string fedExTestAccountNumber = "604601185";
 
@@ -84,7 +86,7 @@ namespace ShipWorks.Tests.Integration.MSTest.FedExIntegrationTests
 
             try
             {
-                if (PopulateTestObject(testObject, FedExCaExpressInternationalMapping.CaExpressInternationalMapping) &&
+                if (PopulateTestObject(testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

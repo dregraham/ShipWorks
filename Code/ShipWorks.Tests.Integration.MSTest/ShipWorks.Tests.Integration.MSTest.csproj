@@ -88,36 +88,37 @@
     <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
-    <Compile Include="FedExIntegrationTests\FedExCanadaIntegrationTests.cs" />
-    <Compile Include="FedExIntegrationTests\FedExUSIntegrationTests.cs" />
-    <Compile Include="FedExIntegrationTests\FedExSmartPostIntegrationTest.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExCaExpressInternationalMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExCanadaExpressDomesticMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExCanadaGroundDomesticInternationalMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExUSExpressDomesticAlcoholMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExUsExpressInternationalAlcoholMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundAlcoholFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExCAGroundDomesticInternationalFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExInternationalPrototypeFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExSmartPostFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExUsExpressDomesticMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSExpressInternationalFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\FedExUSGroundFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\FedEx\Mappings\FedExUsOneRateMapping.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsMIFixture.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\Ups\UpsFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Express\International\FedExCanadaExpressInternationalMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Express\Domestic\FedExCanadaExpressDomesticMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Ground\FedExCanadaGroundDomesticInternationalMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\Domestic\FedExUSExpressDomesticAlcoholMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalAlcoholMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Ground\FedExUSGroundAlcoholFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Ground\FedExCAGroundDomesticInternationalFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExInternationalPrototypeFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExPrototypeFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\Domestic\FedExUSExpressDomesticMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Ground\FedExUSGroundFixture.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Express\Domestic\FedExUSOneRateMapping.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\Ups\UpsIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\Ups\UpsMIFixture.cs" />
+    <Compile Include="Shipping\Carriers\Ups\UpsFixture.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IntegrationTestBase.cs" />
+    <Compile Include="DataDrivenIntegrationTestBase.cs" />
     <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
-    <Compile Include="ShipSense\ShipSenseLoaderTest.cs" />
+    <Compile Include="Shipping\ShipSense\ShipSenseLoaderTest.cs" />
     <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Fixtures\Shipping\Carriers\iParcel\iParcelFixture.cs" />
+    <Compile Include="Shipping\Carriers\iParcel\iParcelFixture.cs" />
     <Compile Include="Utilities\ShipWorksDataMethods.cs" />
-    <Compile Include="Fixtures\ShipWorksFixtureBase.cs" />
-    <Compile Include="IntegrationTests.cs" />
+    <Compile Include="ShipWorksFixtureBase.cs" />
     <Compile Include="Utilities\SystemTimeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

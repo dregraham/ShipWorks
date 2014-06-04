@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
-namespace ShipWorks.Tests.Integration.MSTest.Fixtures.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
 {
     public class FedExUSGroundAlcoholFixture : FedExPrototypeFixture
     {
