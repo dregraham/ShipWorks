@@ -186,6 +186,7 @@ namespace ShipWorks.Data.Controls
             EnsureCountryInitialized();
 
             UpdateAvailableFieldsUI();
+            UpdateValidationUI();
         }
 
         /// <summary>
@@ -1076,7 +1077,7 @@ namespace ShipWorks.Data.Controls
         private void UpdateValidationUI()
         {
 
-            if (loadedPeople.Count != 1 || !EnableValidationControls)
+            if (!EnableValidationControls || (loadedPeople != null && loadedPeople.Count > 1))
             {
                 addressValidationPanel.Visible = false;
             }
