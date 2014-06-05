@@ -169,7 +169,7 @@ namespace ShipWorks.Data.Administration
                                 });
                             }
 
-                            if (installed < new Version(3, 9, 0, 1))
+                            if (installed < new Version(3, 9, 0, 3))
                             {
                                 AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
