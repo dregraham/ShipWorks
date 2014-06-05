@@ -176,10 +176,10 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Pull certificate verification data from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCredentialStore.FedExCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCredentialStore.UpsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
 
             return results;
         }

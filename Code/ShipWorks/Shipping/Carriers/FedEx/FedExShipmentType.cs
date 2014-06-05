@@ -938,8 +938,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get FedEx counter rates
-                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
                 }
 
                 return GetCachedRates<FedExException>(shipment, GetRatesFromApi);

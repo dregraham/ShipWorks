@@ -110,8 +110,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.Express1StampsCertificateVerificationData);
 
                 // This call to GetRates won't be recursive since the counter rate account repository will return an account
                 return GetRates(shipment);

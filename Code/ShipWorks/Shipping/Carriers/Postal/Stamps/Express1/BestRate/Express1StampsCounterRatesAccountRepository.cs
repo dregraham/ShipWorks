@@ -11,14 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
     /// </summary>
     public class Express1StampsCounterRatesAccountRepository : ICarrierAccountRepository<StampsAccountEntity>
     {
-        private readonly ICounterRatesCredentialStore credentialStore;
+        private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<StampsAccountEntity>> accounts;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="credentialStore"></param>
-        public Express1StampsCounterRatesAccountRepository(ICounterRatesCredentialStore credentialStore)
+        public Express1StampsCounterRatesAccountRepository(ICredentialStore credentialStore)
         {
             this.credentialStore = credentialStore;
             accounts = new Lazy<List<StampsAccountEntity>>(ConvertCredentialsToStampsAccountEntities);

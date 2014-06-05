@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// Initializes a new instance of the <see cref="Express1StampsCounterRatesBroker"/> class.
         /// </summary>
         public Express1StampsCounterRatesBroker()
-            : base(new Express1StampsShipmentType(), new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance))
+            : base(new Express1StampsShipmentType(), new Express1StampsCounterRatesAccountRepository(TangoCredentialStore.Instance))
         { }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <returns>A RateGroup containing the counter rates for an Express1Stamps account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData;
+            string certificateVerificationData = TangoCredentialStore.Instance.Express1StampsCertificateVerificationData;
             ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
 
             RateGroup bestRates = new RateGroup(new List<RateResult>());
