@@ -437,7 +437,7 @@ namespace ShipWorks.UI.Controls
         }
 
         /// <summary>
-        /// Format the weight value
+        /// Format the current weight value and insert it into the text box
         /// </summary>
         private void FormatWeightText()
         {
@@ -448,7 +448,15 @@ namespace ShipWorks.UI.Controls
                 return;
             }
 
-            string result = FormatWeight(currentWeight, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+            FormatWeightText(currentWeight);
+        }
+
+        /// <summary>
+        /// Format the specified weight value and insert it into the text box
+        /// </summary>
+        private void FormatWeightText(double weight)
+        {
+            string result = FormatWeight(weight, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
 
             lastDisplay = result;
 
@@ -492,14 +500,17 @@ namespace ShipWorks.UI.Controls
 
                 if (ValidateRange(newWeight))
                 {
-                    SetCurrentWeight(newWeight);
-                    ClearError();
-
                     MultiValued = false;
                     cleared = false;
-                }
 
-                FormatWeightText();
+                    FormatWeightText(newWeight);
+                    SetCurrentWeight(newWeight);
+                    ClearError();
+                }
+                else
+                {
+                    FormatWeightText();   
+                }
             }
             else
             {

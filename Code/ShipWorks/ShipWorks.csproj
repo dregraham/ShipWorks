@@ -10439,8 +10439,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.4.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.6.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.7\3.7.7.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
