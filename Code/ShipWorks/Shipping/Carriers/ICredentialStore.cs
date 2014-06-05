@@ -91,5 +91,10 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets the endicia API user password used to validate an address
         /// </summary>
         string EndiciaApiUserPassword { get; }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
+        /// </summary>
+        string EndiciaCertificateVerificationData { get; }
     }
 }

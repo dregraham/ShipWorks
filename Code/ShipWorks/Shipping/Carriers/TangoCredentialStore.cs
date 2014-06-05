@@ -79,6 +79,8 @@ namespace ShipWorks.Shipping.Carriers
 
         private const string EndiciaAccountNumberKeyName = "EndiciaAccountNumber";
         private const string EndiciaApiUserPasswordKeyName = "EndiciaApiUserPassword";
+        public const string EndiciaCertificateVerificationDataKeyName = "EndiciaCertificateVerificationData";
+
         
         
         /// <summary>
@@ -301,6 +303,17 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return GetCredentialValue(EndiciaApiUserPasswordKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
+        /// </summary>
+        public string EndiciaCertificateVerificationData
+        {
+            get
+            {
+                return GetCertificateVerificationDataValue(EndiciaCertificateVerificationDataKeyName);
             }
         }
 

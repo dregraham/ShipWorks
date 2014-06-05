@@ -7,7 +7,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// <summary>
     /// Filter on the validation status of the order's shipping address
     /// </summary>
-    [ConditionElement("Ship Address Validation Status", "Order.Address.ValidationStatus")]
+    [ConditionElement("Address Validation Status", "Order.Address.ValidationStatus")]
     public class OrderAddressValidationStatusCondition : AddressValidationStatusCondition
     {
         /// <summary>
