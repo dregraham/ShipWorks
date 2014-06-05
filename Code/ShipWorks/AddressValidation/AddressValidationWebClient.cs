@@ -9,6 +9,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.AddressValidation
 {
@@ -389,6 +390,9 @@ namespace ShipWorks.AddressValidation
         {
             try
             {
+                string endiciaAccountNumber = TangoCredentialStore.Instance.EndiciaAccountNumber;
+                string endiciaApiUserPassword = TangoCredentialStore.Instance.EndiciaApiUserPassword;
+
                 string zip1Query = string.Format(
                     @"<VERIFYADDRESS>
                     <COMMAND>{0}</COMMAND>
@@ -399,7 +403,7 @@ namespace ShipWorks.AddressValidation
                     <ADDRESS1>{3}</ADDRESS1>
                     <ADDRESS2>{4}</ADDRESS2>
                     <ADDRESS3>{5}, {6} {7}</ADDRESS3>
-                    </VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
+                    </VERIFYADDRESS>", command, endiciaAccountNumber, endiciaApiUserPassword, street2, street1, city, state, zip);
 
                 string url =
                     string.Format(
