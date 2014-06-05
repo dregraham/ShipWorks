@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 
                         // Save off non alcohol labels
                         foreach (ShippingDocument document in packageReply.PackageDocuments
-                                                                          .Where(d => d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
+                                                                          .Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
                         {
                             SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                         }
