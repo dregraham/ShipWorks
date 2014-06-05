@@ -402,6 +402,13 @@ CREATE TABLE [dbo].[Order]
 [BillFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BillAddressValidationSuggestionCount] [int] NOT NULL,
+[BillAddressValidationStatus] [int] NOT NULL,
+[BillAddressValidationError] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BillResidentialStatus] [int] NOT NULL,
+[BillPOBox] [int] NOT NULL,
+[BillUSTerritory] [int] NOT NULL,
+[BillMilitaryAddress] [int] NOT NULL,  
 [ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -417,6 +424,13 @@ CREATE TABLE [dbo].[Order]
 [ShipFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipAddressValidationSuggestionCount] [int] NOT NULL,
+[ShipAddressValidationStatus] [int] NOT NULL,
+[ShipAddressValidationError] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipResidentialStatus] [int] NOT NULL,
+[ShipPOBox] [int] NOT NULL,
+[ShipUSTerritory] [int] NOT NULL,
+[ShipMilitaryAddress] [int] NOT NULL,  
 [RollupItemCount] [int] NOT NULL,
 [RollupItemName] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupItemCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -653,6 +667,7 @@ CREATE TABLE [dbo].[Store]
 [AutoDownload] [bit] NOT NULL,
 [AutoDownloadMinutes] [int] NOT NULL,
 [AutoDownloadOnlyAway] [bit] NOT NULL,
+[AddressValidationSetting] [int] NOT NULL,
 [ComputerDownloadPolicy] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultEmailAccountID] [bigint] NOT NULL,
 [ManualOrderPrefix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -874,6 +889,13 @@ CREATE TABLE [dbo].[Shipment]
 [ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipAddressValidationSuggestionCount] [int] NOT NULL,
+[ShipAddressValidationStatus] [int] NOT NULL,
+[ShipAddressValidationError] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipResidentialStatus] [int] NOT NULL,
+[ShipPOBox] [int] NOT NULL,
+[ShipUSTerritory] [int] NOT NULL,
+[ShipMilitaryAddress] [int] NOT NULL, 
 [ResidentialDetermination] [int] NOT NULL,
 [ResidentialResult] [bit] NOT NULL,
 [OriginOriginID] [bigint] NOT NULL,
@@ -903,11 +925,15 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+ CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED 
+(
+	[ShipmentID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
+ CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED 
+(
+	[ShipmentID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
 GO
 PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
@@ -1748,7 +1774,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL
@@ -3873,7 +3899,7 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 [ParentID] [bigint] NULL,
 [ObjectType] [int] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
@@ -3913,7 +3939,7 @@ CREATE TABLE [dbo].[FilterNodeUpdateCustomer]
 (
 [ObjectID] [bigint] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating index [IX_FilterNodeUpdateCustomer] on [dbo].[FilterNodeUpdateCustomer]'
@@ -3926,7 +3952,7 @@ CREATE TABLE [dbo].[FilterNodeUpdateItem]
 (
 [ObjectID] [bigint] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating index [IX_FilterNodeUpdateItem] on [dbo].[FilterNodeUpdateItem]'
@@ -3939,7 +3965,7 @@ CREATE TABLE [dbo].[FilterNodeUpdateOrder]
 (
 [ObjectID] [bigint] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating index [IX_FilterNodeUpdateOrder] on [dbo].[FilterNodeUpdateOrder]'
@@ -3963,7 +3989,7 @@ CREATE TABLE [dbo].[FilterNodeUpdateShipment]
 (
 [ObjectID] [bigint] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating index [IX_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
@@ -4501,6 +4527,39 @@ CREATE TABLE [dbo].[WorldShipProcessed]
 [ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
 )
 GO
+PRINT N'Creating [dbo].[ValidatedAddress]'
+GO
+CREATE TABLE [dbo].[ValidatedAddress](
+	[ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
+	[ConsumerID] [bigint] NOT NULL,
+	[AddressPrefix] [nvarchar](10) NOT NULL,
+	[IsOriginal] [bit] NOT NULL,
+	[Street1] [nvarchar](60) NOT NULL,
+	[Street2] [nvarchar](60) NOT NULL,
+	[Street3] [nvarchar](60) NOT NULL,
+	[City] [nvarchar](50) NOT NULL,
+	[StateProvCode] [nvarchar](50) NOT NULL,
+	[PostalCode] [nvarchar](20) NOT NULL,
+	[CountryCode] [nvarchar](50) NOT NULL,
+	[ResidentialStatus] [int] NOT NULL,
+	[POBox] [int] NOT NULL,
+	[USTerritory] [int] NOT NULL,
+	[MilitaryAddress] [int] NOT NULL,
+ CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED 
+(
+	[ValidatedAddressID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+Print N'Creating [IX_ValidatedAddress_ConsumerIDAddressPrefix]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
+    ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
+GO
+
+
+GO
 PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
 GO
 ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
@@ -4665,6 +4724,7 @@ ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_VoidedComputer] FOREIGN
 ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_ProcessedUser] FOREIGN KEY ([ProcessedUserID]) REFERENCES [dbo].[User] ([UserID])
 ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [FK_Shipment_VoidedUser] FOREIGN KEY ([VoidedUserID]) REFERENCES [dbo].[User] ([UserID])
+
 GO
 PRINT N'Adding foreign keys to [dbo].[TemplateComputerSettings]'
 GO
