@@ -388,7 +388,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{70DDFF53-64AB-406F-A48A-F91A7FEBC402}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "S: Residential status", string.Empty,
+                        "S: Residential Status", string.Empty,
                         OrderFields.ShipResidentialStatus) 
                         { DefaultWidth = 100 }, 
 
@@ -487,7 +487,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{8FC356A6-3682-4B93-9046-DE3D3947AC69}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "B: Residential status", string.Empty,
+                        "B: Residential Status", string.Empty,
                         OrderFields.BillResidentialStatus) 
                         { DefaultWidth = 100 }, 
 
