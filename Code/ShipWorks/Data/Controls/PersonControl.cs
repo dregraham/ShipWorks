@@ -1108,13 +1108,13 @@ namespace ShipWorks.Data.Controls
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
 
+            addressValidationPanel.Visible = true;
+
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
 
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
                 validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
                 validateAddress.Right - addressValidationSuggestionLink.Width;
-
-            addressValidationPanel.Visible = true;
         }
 
         /// <summary>
