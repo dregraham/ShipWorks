@@ -8,6 +8,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.AddressValidation
@@ -387,10 +388,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static XPathNavigator QueryDialAZip(string command, string street1, string street2, string city, string state, String zip)
         {
-            try
-            {
-                string zip1Query = string.Format(
-                    @"<VERIFYADDRESS>
+            string zip1Query = string.Format(
+                @"<VERIFYADDRESS>
                     <COMMAND>{0}</COMMAND>
                     <SERIALNO>{1}</SERIALNO>
                     <PASSWORD>{2}</PASSWORD>
@@ -401,35 +400,54 @@ namespace ShipWorks.AddressValidation
                     <ADDRESS3>{5}, {6} {7}</ADDRESS3>
                     </VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
 
-                string url =
-                    string.Format(
-                        "http://www.dial-a-zip.com/XML-Dial-A-ZIP/DAZService.asmx/MethodZIPValidate?input={0}",
-                        HttpUtility.UrlEncode(zip1Query));
+            string url =
+                string.Format(
+                    "http://www.dial-a-zip.com/XML-Dial-A-ZIP/DAZService.asmx/MethodZIPValidate?input={0}",
+                    HttpUtility.UrlEncode(zip1Query));
 
-                ApiLogEntry apiLogEntry = new ApiLogEntry(ApiLogSource.DialAZip, command);
-
+            try
+            {
                 WebRequest request = WebRequest.Create(url);
                 
-                apiLogEntry.LogRequest(url);
-
                 XPathDocument xPathZip1Result;
 
                 using (Stream responseStream = request.GetResponse().GetResponseStream())
                 {
                     if (responseStream == null)
                     {
+                        LogValidationAttempt(command, url, null);
                         throw new AddressValidationException("Error validating address.");
                     }
 
                     xPathZip1Result = new XPathDocument(responseStream);
-                    apiLogEntry.LogResponse(xPathZip1Result);
+                }
+
+                // Log successful validations only when requested
+                if (InterapptiveOnly.MagicKeysDown)
+                {
+                    LogValidationAttempt(command, url, xPathZip1Result);
                 }
 
                 return xPathZip1Result.CreateNavigator();
             }
             catch (Exception ex)
             {
+                LogValidationAttempt(command, url, null);
                 throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+            }
+        }
+
+        /// <summary>
+        /// Log the validation look up
+        /// </summary>
+        private static void LogValidationAttempt(string command, string url, XPathDocument xPathZipResult)
+        {
+            ApiLogEntry apiLogEntry = new ApiLogEntry(ApiLogSource.DialAZip, command);
+            apiLogEntry.LogRequest(url);
+
+            if (xPathZipResult != null)
+            {
+                apiLogEntry.LogResponse(xPathZipResult);
             }
         }
     }
