@@ -1,14 +1,22 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using Image = System.Drawing.Image;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -17,8 +25,11 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        private EntityBase2 selectedEntity;
-       
+        EntityBase2 selectedEntity;
+        LruCache<string, Image> imageCache = new LruCache<string, Image>(100);
+        readonly ConcurrentQueue<long> requestQueue = new ConcurrentQueue<long>();
+        readonly object lockObj = new object();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MapPanel"/> class.
         /// </summary>
@@ -67,9 +78,49 @@ namespace ShipWorks.Stores.Content.Panels
         /// <param name="selection"></param>
         public void ChangeContent(IGridSelection selection)
         {
-            long selectedID = selection.Keys.FirstOrDefault();
-            selectedEntity = selectedID == 0 ? null : DataProvider.GetEntity(selection.Keys.FirstOrDefault());
-            GetImage();
+            requestQueue.Enqueue(selection.Keys.FirstOrDefault());
+
+            LoadSelection();
+        }
+
+        private void LoadSelection()
+        {
+            if (!googleImage.IsHandleCreated)
+            {
+                return;
+            }
+
+            Task.Factory.StartNew(() =>
+            {
+                // If we can't get the lock, don't worry
+                if (!Monitor.TryEnter(lockObj, 0))
+                {
+                    return;
+                }
+                
+                try
+                {
+                    long requestId = 0;
+
+                    while (requestQueue.TryDequeue(out requestId))
+                    {
+                        long selectionID = requestId;
+
+                        // Get the last item in the queue, since we don't really care about any requests that were queued up in between
+                        while (requestQueue.TryDequeue(out requestId))
+                        {
+                            selectionID = requestId;
+                        }
+
+                        selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
+                        GetImage();
+                    }
+                }
+                finally
+                {
+                    Monitor.Exit(lockObj);
+                }
+            });
         }
 
         /// <summary>
@@ -88,25 +139,39 @@ namespace ShipWorks.Stores.Content.Panels
                 Size size = GetPictureSize(Size);
                 try
                 {
-                    googleImage.Load(
-                        string.Format(GetUrl(),
-                            addressAdapter.Street1,
-                            addressAdapter.City,
-                            addressAdapter.StateProvCode,
-                            size.Width,
-                            size.Height));
+                    WebClient imageDownloader = new WebClient();
+                    byte[] image = imageDownloader.DownloadData(string.Format(GetUrl(),
+                        addressAdapter.Street1,
+                        addressAdapter.City,
+                        addressAdapter.StateProvCode,
+                        size.Width,
+                        size.Height));
 
-                    googleImage.Visible = true;
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        using (MemoryStream stream = new MemoryStream(image))
+                        {
+                            googleImage.Image = Image.FromStream(stream);
+                        }
+
+                        googleImage.Visible = true;
+                    }));
                 }
                 catch (Exception)
                 {
-                    googleImage.Visible = false;
-                    errorLabel.Text = "Cannot get image from Google.";
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        googleImage.Visible = false;
+                        errorLabel.Text = "Cannot get image from Google.";
+                    }));
                 }
             }
             else
             {
-                googleImage.Visible = false;
+                googleImage.Invoke(new MethodInvoker(delegate
+                {
+                    googleImage.Visible = false;
+                }));
             }
         }
 
@@ -204,7 +269,12 @@ namespace ShipWorks.Stores.Content.Panels
         {
             googleImage.Size = new Size(Size.Width, Size.Height);
             googleImage.Location = new Point(0, 0);
-            GetImage();
+
+
+            requestQueue.Enqueue(selectedEntity != null ? EntityUtility.GetEntityId(selectedEntity) : 0);
+
+            LoadSelection();
+            //GetImage();
         }
     }
 }
