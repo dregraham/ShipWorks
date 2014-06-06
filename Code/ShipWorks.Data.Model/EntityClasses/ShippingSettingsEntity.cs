@@ -623,6 +623,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseEndShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("AutoCreateShipments", fieldHashtable);
 		}
 		#endregion
 
@@ -1390,6 +1393,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, value); }
+		}
+
+		/// <summary> The AutoCreateShipments property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."AutoCreateShipments"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AutoCreateShipments
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, value); }
 		}
 
 
