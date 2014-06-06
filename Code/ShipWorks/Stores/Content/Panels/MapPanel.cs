@@ -15,6 +15,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Image = System.Drawing.Image;
 
@@ -101,6 +102,13 @@ namespace ShipWorks.Stores.Content.Panels
                 try
                 {
                     long requestId = 0;
+                    Image image = null;
+
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        googleImage.Visible = false;
+                        errorLabel.Text = "Loading";
+                    }));
 
                     while (requestQueue.TryDequeue(out requestId))
                     {
@@ -113,8 +121,28 @@ namespace ShipWorks.Stores.Content.Panels
                         }
 
                         selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
-                        GetImage();
+                        image = GetImage();
                     }
+                    
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        if (selectedEntity == null)
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = string.Empty;
+                        }
+                        else if (image != null)
+                        {
+                            googleImage.Image = image;
+                            googleImage.Visible = true;
+                            errorLabel.Text = string.Empty;
+                        }
+                        else
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = "Cannot get image from Google.";
+                        }
+                    }));
                 }
                 finally
                 {
@@ -126,52 +154,58 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Gets the image from Google.
         /// </summary>
-        private void GetImage()
+        private Image GetImage()
         {
-            errorLabel.Text = string.Empty;
-
-            if (selectedEntity != null)
+            if (selectedEntity == null)
             {
-                AddressAdapter addressAdapter = new AddressAdapter();
+                return null;
+            }
+
+            AddressAdapter addressAdapter = new AddressAdapter();
                     
-                AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
+            AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
 
-                Size size = GetPictureSize(Size);
-                try
-                {
-                    WebClient imageDownloader = new WebClient();
-                    byte[] image = imageDownloader.DownloadData(string.Format(GetUrl(),
-                        addressAdapter.Street1,
-                        addressAdapter.City,
-                        addressAdapter.StateProvCode,
-                        size.Width,
-                        size.Height));
+            Size size = GetPictureSize(Size);
 
-                    googleImage.Invoke(new MethodInvoker(delegate
-                    {
-                        using (MemoryStream stream = new MemoryStream(image))
-                        {
-                            googleImage.Image = Image.FromStream(stream);
-                        }
+            StringHash hasher = new StringHash();
+            string hashValue = string.Join("|", addressAdapter.Street1, addressAdapter.City, addressAdapter.StateProvCode, size.Width.ToString(), size.Height.ToString());
+            string hash = hasher.Hash(hashValue, "somesalt");
 
-                        googleImage.Visible = true;
-                    }));
-                }
-                catch (Exception)
-                {
-                    googleImage.Invoke(new MethodInvoker(delegate
-                    {
-                        googleImage.Visible = false;
-                        errorLabel.Text = "Cannot get image from Google.";
-                    }));
-                }
+            Image image;
+
+            if (imageCache.Contains(hash))
+            {
+                image = imageCache[hash];
             }
             else
             {
-                googleImage.Invoke(new MethodInvoker(delegate
+                image = LoadImageFromGoogle(addressAdapter, size);
+                imageCache[hash] = image;
+            }
+
+            return image;
+        }
+
+        private Image LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
+        {
+            try
+            {
+                WebClient imageDownloader = new WebClient();
+                byte[] image = imageDownloader.DownloadData(string.Format(GetUrl(),
+                    addressAdapter.Street1,
+                    addressAdapter.City,
+                    addressAdapter.StateProvCode,
+                    size.Width,
+                    size.Height));
+
+                using (MemoryStream stream = new MemoryStream(image))
                 {
-                    googleImage.Visible = false;
-                }));
+                    return Image.FromStream(stream);
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
