@@ -151,6 +151,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.IParcel == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.IParcel.Packages.Any())
             {
                 throw new iParcelException("There must be at least one package to create the i-parcel package adapter.");

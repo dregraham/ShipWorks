@@ -46,6 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.Postal == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             return new List<IPackageAdapter>()
             {
                 new PostalPackageAdapter(shipment)

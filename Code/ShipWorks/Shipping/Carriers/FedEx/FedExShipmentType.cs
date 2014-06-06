@@ -178,6 +178,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.FedEx == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.FedEx.Packages.Any())
             {
                 throw new FedExException("There must be at least one package to create the FedEx package adapter.");
