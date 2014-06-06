@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -173,7 +174,51 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-		public abstract ServiceControlBase CreateServiceControl(RateControl rateControl);
+        public ServiceControlBase CreateServiceControl(RateControl rateControl)
+        {
+            ServiceControlBase serviceControlBase = null;
+            int retries = 0;
+
+            // Sometimes the krypton tools will crash when trying to get font heights.  This code will try to create 
+            // the specific shipment type service control, and if an ArgumentException is encountered and it has GetHeight
+            // in it's stack or source, will attempt to create the service control a number of times, sleeping between tries.
+            while (retries < 5)
+            {
+                try
+                {
+                    serviceControlBase = InternalCreateServiceControl(rateControl);
+                    break;
+                }
+                catch (ArgumentException ex)
+                {
+                    if (ex.StackTrace.ToUpperInvariant().Contains("GetHeight(".ToUpperInvariant()) ||
+                        ex.Source.ToUpperInvariant().Contains("GetHeight(".ToUpperInvariant()))
+                    {
+                        retries++;
+
+                        if (retries == 5)
+                        {
+                            throw;
+                        }
+
+                        Thread.Sleep(1000);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return serviceControlBase;
+        }
+
+        /// <summary>
+        /// Creates the UserControl that is used to edit service options for the shipment type
+        /// </summary>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        protected abstract ServiceControlBase InternalCreateServiceControl(RateControl rateControl);
 
 		/// <summary>
 		/// Creates the UserControl taht is used to edit customs options

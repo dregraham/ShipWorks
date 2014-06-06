@@ -494,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         /// <returns>An iParcelServiceControl object.</returns>
-        public override ServiceControlBase CreateServiceControl(RateControl rateControl)
+        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
             return new iParcelServiceControl(rateControl);
         }
