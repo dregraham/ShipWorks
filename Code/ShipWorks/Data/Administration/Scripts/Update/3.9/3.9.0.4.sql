@@ -1,18 +1,4 @@
-﻿/*
-Run this script on:
-
-        INTSQL01\DEVELOPMENT.ShipWorksSchema_Master    -  This database will be modified
-
-to synchronize it with:
-
-        (local)\DEVELOPMENT.ShipWorksLocal
-
-You are recommended to back up your database before running this script
-
-Script created by SQL Compare version 10.4.8 from Red Gate Software Ltd at 6/6/2014 4:26:52 PM
-
-*/
-SET NUMERIC_ROUNDABORT OFF
+﻿SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
