@@ -132,6 +132,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
+            AddCounterRateDictionaryEntry(responseXmlDocument, "EndiciaAccountNumber", "/CounterRateCredentials/Endicia/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "EndiciaApiUserPassword", "/CounterRateCredentials/Endicia/ApiUserPassword", results);
+            
             return results;
         }
 
@@ -176,10 +179,11 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Pull certificate verification data from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCredentialStore.FedExCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCredentialStore.UpsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Endicia", TangoCredentialStore.EndiciaCertificateVerificationDataKeyName, results);
 
             return results;
         }
@@ -784,6 +788,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     try
                     {
                         string resultXml = postResponse.ReadResult().Trim();
+                        
                         logEntry.LogResponse(resultXml);
 
                         xmlResponse.LoadXml(resultXml);

@@ -10,14 +10,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
     /// </summary>
     public class Express1EndiciaCounterAccountRepository : ICarrierAccountRepository<EndiciaAccountEntity>
     {
-        private readonly ICounterRatesCredentialStore credentialStore;
+        private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<EndiciaAccountEntity>> accounts; 
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="credentialStore"></param>
-        public Express1EndiciaCounterAccountRepository(ICounterRatesCredentialStore credentialStore)
+        public Express1EndiciaCounterAccountRepository(ICredentialStore credentialStore)
         {
             this.credentialStore = credentialStore;
             accounts = new Lazy<List<EndiciaAccountEntity>>(ConvertCredentialsToEndiciaAccountEntities);

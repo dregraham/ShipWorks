@@ -186,6 +186,7 @@ namespace ShipWorks.Data.Controls
             EnsureCountryInitialized();
 
             UpdateAvailableFieldsUI();
+            UpdateValidationUI();
         }
 
         /// <summary>
@@ -1076,7 +1077,7 @@ namespace ShipWorks.Data.Controls
         private void UpdateValidationUI()
         {
 
-            if (loadedPeople.Count != 1 || !EnableValidationControls)
+            if (!EnableValidationControls || (loadedPeople != null && loadedPeople.Count > 1))
             {
                 addressValidationPanel.Visible = false;
             }
@@ -1107,13 +1108,13 @@ namespace ShipWorks.Data.Controls
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
 
+            addressValidationPanel.Visible = true;
+
             validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
 
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
                 validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
                 validateAddress.Right - addressValidationSuggestionLink.Width;
-
-            addressValidationPanel.Visible = true;
         }
 
         /// <summary>

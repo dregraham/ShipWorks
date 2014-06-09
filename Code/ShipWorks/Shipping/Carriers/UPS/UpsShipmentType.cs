@@ -779,9 +779,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get UPS counter rates
-                    SettingsRepository = new UpsCounterRateSettingsRepository(TangoCounterRatesCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.UpsCertificateVerificationData);
-                    AccountRepository = new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                    SettingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                    AccountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
                 }
 
                 return GetCachedRates<UpsException>(shipment, GetRatesFromApi);

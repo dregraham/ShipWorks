@@ -15,17 +15,17 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Singleton counter credential store that holds ShipWorks accounts for shipping carriers used to get counter rates.
     /// </summary>
-    public class TangoCounterRatesCredentialStore : ICounterRatesCredentialStore
+    public class TangoCredentialStore : ICredentialStore
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(TangoCounterRatesCredentialStore));
+        private static readonly ILog log = LogManager.GetLogger(typeof(TangoCredentialStore));
 
         private static readonly FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
         
         private static DateTime lastFailure;
 
         // The lazy loaded singleton instance variable.
-        private static readonly Lazy<TangoCounterRatesCredentialStore> lazyInstance =
-            new Lazy<TangoCounterRatesCredentialStore>(() => new TangoCounterRatesCredentialStore());
+        private static readonly Lazy<TangoCredentialStore> lazyInstance =
+            new Lazy<TangoCredentialStore>(() => new TangoCredentialStore());
 
         // The lock used when populating our credential dictionary
         private static readonly object lockObject = new object();
@@ -76,12 +76,17 @@ namespace ShipWorks.Shipping.Carriers
         private const string Express1StampsUsernameKeyName = "Express1StampsUsername";
         private const string Express1StampsPasswordKeyName = "Express1StampsPassword";
         public const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
+
+        private const string EndiciaAccountNumberKeyName = "EndiciaAccountNumber";
+        private const string EndiciaApiUserPasswordKeyName = "EndiciaApiUserPassword";
+        public const string EndiciaCertificateVerificationDataKeyName = "EndiciaCertificateVerificationData";
+
         
         
         /// <summary>
         /// Private constructor.
         /// </summary>
-        private TangoCounterRatesCredentialStore()
+        private TangoCredentialStore()
         {
             lastFailure = DateTime.MinValue;
             productionCredentials = new Dictionary<string, string>();
@@ -91,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// The instance of this Tangle Credential store singleton.
         /// </summary>
-        public static TangoCounterRatesCredentialStore Instance
+        public static TangoCredentialStore Instance
         {
             get
             {
@@ -276,6 +281,39 @@ namespace ShipWorks.Shipping.Carriers
             {
                 return Express1StampsConnectionDetails.UseTestServer ?
                     TestCredentialExpress1StampsCertificateVerificationData : GetCertificateVerificationDataValue(Express1StampsCertificateVerificationDataKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the endicia account number used to validate an address
+        /// </summary>
+        public string EndiciaAccountNumber
+        {
+            get
+            {
+                return GetCredentialValue(EndiciaAccountNumberKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the endicia API user password used to validate an address
+        /// </summary>
+        public string EndiciaApiUserPassword
+        {
+            get
+            {
+                return GetCredentialValue(EndiciaApiUserPasswordKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
+        /// </summary>
+        public string EndiciaCertificateVerificationData
+        {
+            get
+            {
+                return GetCertificateVerificationDataValue(EndiciaCertificateVerificationDataKeyName);
             }
         }
 

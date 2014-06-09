@@ -1,14 +1,24 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
+using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using Image = System.Drawing.Image;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -17,8 +27,11 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        private EntityBase2 selectedEntity;
-       
+        EntityBase2 selectedEntity;
+        LruCache<string, Image> imageCache = new LruCache<string, Image>(100);
+        readonly ConcurrentQueue<long> requestQueue = new ConcurrentQueue<long>();
+        readonly object lockObj = new object();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MapPanel"/> class.
         /// </summary>
@@ -67,46 +80,155 @@ namespace ShipWorks.Stores.Content.Panels
         /// <param name="selection"></param>
         public void ChangeContent(IGridSelection selection)
         {
-            long selectedID = selection.Keys.FirstOrDefault();
-            selectedEntity = selectedID == 0 ? null : DataProvider.GetEntity(selection.Keys.FirstOrDefault());
-            GetImage();
+            requestQueue.Enqueue(selection.Keys.FirstOrDefault());
+
+            LoadSelection();
+        }
+
+        private void LoadSelection()
+        {
+            if (!googleImage.IsHandleCreated)
+            {
+                return;
+            }
+
+            Task.Factory.StartNew(() =>
+            {
+                // If we can't get the lock, don't worry
+                if (!Monitor.TryEnter(lockObj, 0))
+                {
+                    return;
+                }
+                
+                try
+                {
+                    long requestId = 0;
+                    GoogleResponse googleResponse = null;
+
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        googleImage.Visible = false;
+                        errorLabel.Text = "Loading";
+                    }));
+
+                    while (requestQueue.TryDequeue(out requestId))
+                    {
+                        long selectionID = requestId;
+
+                        // Get the last item in the queue, since we don't really care about any requests that were queued up in between
+                        while (requestQueue.TryDequeue(out requestId))
+                        {
+                            selectionID = requestId;
+                        }
+
+                        selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
+                        googleResponse = GetImage();
+
+                    }
+
+                    googleImage.Invoke(new MethodInvoker(delegate
+                    {
+                        if (selectedEntity == null)
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = string.Empty;
+                        }
+                        else if (googleResponse.ReturnedImage != null)
+                        {
+                            googleImage.Image = googleResponse.ReturnedImage;
+                            googleImage.Visible = true;
+                            errorLabel.Text = string.Empty;
+                        }
+                        else if (googleResponse.IsThrottled)
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = @"Google has received too many requests from this location. Please try again later.";
+                        }
+                        else
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = @"Cannot get image from Google.";
+                        }
+                    }));
+                }
+                finally
+                {
+                    Monitor.Exit(lockObj);
+                }
+            });
         }
 
         /// <summary>
         /// Gets the image from Google.
         /// </summary>
-        private void GetImage()
+        private GoogleResponse GetImage()
         {
-            errorLabel.Text = string.Empty;
-
-            if (selectedEntity != null)
+            if (selectedEntity == null)
             {
-                AddressAdapter addressAdapter = new AddressAdapter();
+                return null;
+            }
+
+            AddressAdapter addressAdapter = new AddressAdapter();
                     
-                AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
+            AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
 
-                Size size = GetPictureSize(Size);
-                try
-                {
-                    googleImage.Load(
-                        string.Format(GetUrl(),
-                            addressAdapter.Street1,
-                            addressAdapter.City,
-                            addressAdapter.StateProvCode,
-                            size.Width,
-                            size.Height));
+            Size size = GetPictureSize(Size);
 
-                    googleImage.Visible = true;
-                }
-                catch (Exception)
-                {
-                    googleImage.Visible = false;
-                    errorLabel.Text = "Cannot get image from Google.";
-                }
+            StringHash hasher = new StringHash();
+            string hashValue = string.Join("|", addressAdapter.Street1, addressAdapter.City, addressAdapter.StateProvCode, size.Width.ToString(), size.Height.ToString());
+            string hash = hasher.Hash(hashValue, "somesalt");
+
+            GoogleResponse response;
+
+            if (imageCache.Contains(hash))
+            {
+                response = new GoogleResponse() {ReturnedImage = imageCache[hash]};
             }
             else
             {
-                googleImage.Visible = false;
+                response = LoadImageFromGoogle(addressAdapter, size);
+
+                if (!response.IsThrottled)
+                {
+                    imageCache[hash] = response.ReturnedImage;   
+                }
+            }
+
+            return response;
+        }
+
+        private GoogleResponse LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
+        {
+            try
+            {
+                byte[] image;
+
+                using (WebClient imageDownloader = new WebClient())
+                {
+
+                    image = imageDownloader.DownloadData(string.Format(GetUrl(),
+                        addressAdapter.Street1,
+                        addressAdapter.City,
+                        addressAdapter.StateProvCode,
+                        size.Width,
+                        size.Height));
+                }
+
+                using (MemoryStream stream = new MemoryStream(image))
+                {
+                    return new GoogleResponse() {ReturnedImage = Image.FromStream(stream)};
+                }
+            }
+            catch (WebException ex)
+            {
+                GoogleResponse googleResponse = new GoogleResponse();
+
+                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Forbidden)
+                {
+                    googleResponse.IsThrottled = true;
+                }
+
+                return googleResponse;
             }
         }
 
@@ -204,7 +326,43 @@ namespace ShipWorks.Stores.Content.Panels
         {
             googleImage.Size = new Size(Size.Width, Size.Height);
             googleImage.Location = new Point(0, 0);
-            GetImage();
+
+
+            requestQueue.Enqueue(selectedEntity != null ? EntityUtility.GetEntityId(selectedEntity) : 0);
+
+            LoadSelection();
+            //GetImage();
+        }
+
+        /// <summary>
+        /// The resposne we get back from Google.
+        /// </summary>
+        private class GoogleResponse
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="GoogleResponse"/> class.
+            /// </summary>
+            public GoogleResponse()
+            {
+                ReturnedImage = null;
+                IsThrottled = false;
+            }
+
+            /// <summary>
+            /// Gets or sets the returned image.
+            /// </summary>
+            public Image ReturnedImage
+            {
+                get; set;
+            }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this instance is throttled.
+            /// </summary>
+            public bool IsThrottled
+            {
+                get; set;
+            }
         }
     }
 }

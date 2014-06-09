@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         /// Constructor
         /// </summary>
         public Express1EndiciaCounterRatesBroker() 
-            : base(new Express1EndiciaShipmentType(), new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance))
+            : base(new Express1EndiciaShipmentType(), new Express1EndiciaCounterAccountRepository(TangoCredentialStore.Instance))
         { }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
         {
             RateGroup bestRates = new RateGroup(new List<RateResult>());
 
-            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData;
+            string certificateVerificationData = TangoCredentialStore.Instance.Express1EndiciaCertificateVerificationData;
             ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
             ((EndiciaShipmentType)ShipmentType).AccountRepository = AccountRepository;
 

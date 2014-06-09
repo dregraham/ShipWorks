@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers
     /// An interface for the credentials needed for accessing counter rates that allows 
     /// for the abstracting the underlying storage container.
     /// </summary>
-    public interface ICounterRatesCredentialStore
+    public interface ICredentialStore
     {
         /// <summary>
         /// Gets the FedEx account number used for obtaining counter rates.
@@ -81,5 +81,20 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets data to verify the SSL certificate from Express1Stamps
         /// </summary>
         string Express1StampsCertificateVerificationData { get; }
+
+        /// <summary>
+        /// Gets the endicia account number used to validate an address
+        /// </summary>
+        string EndiciaAccountNumber { get; }
+
+        /// <summary>
+        /// Gets the endicia API user password used to validate an address
+        /// </summary>
+        string EndiciaApiUserPassword { get; }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
+        /// </summary>
+        string EndiciaCertificateVerificationData { get; }
     }
 }

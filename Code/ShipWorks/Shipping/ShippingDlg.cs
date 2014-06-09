@@ -1090,6 +1090,9 @@ namespace ShipWorks.Shipping
             // Shipping rate changes will also affect insurance rates
             UpdateInsuranceDisplay();
 
+            // Update the grid so that changes to the destination appear immediately (especially validation status)
+            shipmentControl.RefreshAndResort();
+
             GetRates();
         }
 

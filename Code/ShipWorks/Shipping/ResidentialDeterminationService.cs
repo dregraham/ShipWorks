@@ -56,24 +56,16 @@ namespace ShipWorks.Shipping
                     }
 
                 case ResidentialDeterminationType.FromAddressValidation:
-                    OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
-
-                    // If we found an order and the address matches the shipment, try using the ShipResidentialStatus field
-                    if (order != null && new AddressAdapter(shipment, "Ship") == new AddressAdapter(order, "Ship"))
+                    switch (shipment.ShipResidentialStatus)
                     {
-                        if (order.ShipResidentialStatus == (int)ValidationDetailStatusType.True)
-                        {
+                        case (int) ValidationDetailStatusType.True:
                             return true;
-                        }
-
-                        if (order.ShipResidentialStatus == (int) ValidationDetailStatusType.False)
-                        {
+                        case (int) ValidationDetailStatusType.False:
                             return false;
-                        }
+                        default:
+                            // Just fall back on testing whether the company is set to determine if the address is commercial
+                            return string.IsNullOrEmpty(shipment.ShipCompany);
                     }
-
-                    // Just fall back on testing whether the company is set to determine if the address is commercial
-                    return string.IsNullOrEmpty(shipment.ShipCompany);
             }
 
             throw new InvalidOperationException("Invalid residential determination type: " + type);
