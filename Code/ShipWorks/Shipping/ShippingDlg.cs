@@ -2246,8 +2246,11 @@ namespace ShipWorks.Shipping
                     errorMessage = ex.Message;
                     processingErrors[shipmentID] = ex;
 
-                    // Special case
-                    endiciaOutOfFundsEx = endiciaOutOfFundsEx ?? (ex.InnerException as EndiciaInsufficientFundsException);
+                    // Special case for Endicia out of funds
+                    if (ex.InnerException != null)
+                    {
+                        endiciaOutOfFundsEx = endiciaOutOfFundsEx ?? (ex.InnerException.InnerException as EndiciaInsufficientFundsException);
+                    }
                 }
 
                 try

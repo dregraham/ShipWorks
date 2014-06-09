@@ -17,6 +17,7 @@ using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Connection;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
@@ -133,7 +134,7 @@ namespace ShipWorks.Stores.Content.Panels
                 ratesControl.ChangeShipment(null);
 
                 // Don't auto create for a customer, only for an order
-                if (EntityUtility.GetEntityType(EntityID.Value) == EntityType.OrderEntity)
+                if (EntityUtility.GetEntityType(EntityID.Value) == EntityType.OrderEntity && ShippingSettings.Fetch().AutoCreateShipments)
                 {                    
                     long orderID = EntityID.Value;
 
