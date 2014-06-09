@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.AddressValidation
 {
@@ -388,21 +389,19 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static XPathNavigator QueryDialAZip(string command, string street1, string street2, string city, string state, String zip)
         {
+                EnsureSecureConnection("https://www.dial-a-zip.com/");
+
+                string endiciaAccountNumber = TangoCredentialStore.Instance.EndiciaAccountNumber;
+                string endiciaApiUserPassword = TangoCredentialStore.Instance.EndiciaApiUserPassword;
+
             string zip1Query = string.Format(
-                @"<VERIFYADDRESS>
-                    <COMMAND>{0}</COMMAND>
-                    <SERIALNO>{1}</SERIALNO>
-                    <PASSWORD>{2}</PASSWORD>
-                    <USER>{1}</USER>
-                    <ADDRESS0 />
-                    <ADDRESS1>{3}</ADDRESS1>
-                    <ADDRESS2>{4}</ADDRESS2>
-                    <ADDRESS3>{5}, {6} {7}</ADDRESS3>
-                    </VERIFYADDRESS>", command, "512251", "endicia7458", street2, street1, city, state, zip);
+                    "<VERIFYADDRESS><COMMAND>{0}</COMMAND><SERIALNO>{1}</SERIALNO><PASSWORD>{2}</PASSWORD><USER>{1}</USER>"+
+                    "<ADDRESS0 /><ADDRESS1>{3}</ADDRESS1><ADDRESS2>{4}</ADDRESS2><ADDRESS3>{5}, {6} {7}</ADDRESS3></VERIFYADDRESS>", 
+                    command, endiciaAccountNumber, endiciaApiUserPassword, street2, street1, city, state, zip);
 
             string url =
                 string.Format(
-                    "http://www.dial-a-zip.com/XML-Dial-A-ZIP/DAZService.asmx/MethodZIPValidate?input={0}",
+                        "https://www.dial-a-zip.com/XML-Dial-A-ZIP/DAZService.asmx/MethodZIPValidate?input={0}",
                     HttpUtility.UrlEncode(zip1Query));
 
             try
@@ -437,7 +436,21 @@ namespace ShipWorks.AddressValidation
             }
         }
 
-        /// <summary>
+        private static void EnsureSecureConnection(string url)
+        {
+            CertificateInspector certificateInspector =
+                new CertificateInspector(TangoCredentialStore.Instance.EndiciaCertificateVerificationData);
+            CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+
+            if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
+            {
+                throw new AddressValidationException(
+                    "ShipWorks is unable to make a secure connection to the Address Validation Server.");
+            }
+        }
+		
+		/// <summary>
         /// Log the validation look up
         /// </summary>
         private static void LogValidationAttempt(string command, string url, XPathDocument xPathZipResult)

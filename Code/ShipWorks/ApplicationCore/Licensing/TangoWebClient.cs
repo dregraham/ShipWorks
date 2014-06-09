@@ -132,6 +132,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
+            AddCounterRateDictionaryEntry(responseXmlDocument, "EndiciaAccountNumber", "/CounterRateCredentials/Endicia/AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "EndiciaApiUserPassword", "/CounterRateCredentials/Endicia/ApiUserPassword", results);
+            
             return results;
         }
 
@@ -180,6 +183,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Endicia", TangoCredentialStore.EndiciaCertificateVerificationDataKeyName, results);
 
             return results;
         }
@@ -784,6 +788,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                     try
                     {
                         string resultXml = postResponse.ReadResult().Trim();
+                        
                         logEntry.LogResponse(resultXml);
 
                         xmlResponse.LoadXml(resultXml);
