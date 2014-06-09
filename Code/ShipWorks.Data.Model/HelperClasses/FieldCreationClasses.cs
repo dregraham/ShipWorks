@@ -16027,6 +16027,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipSenseEndShipmentID);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.AutoCreateShipments field instance</summary>
+		public static EntityField2 AutoCreateShipments
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.AutoCreateShipments);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

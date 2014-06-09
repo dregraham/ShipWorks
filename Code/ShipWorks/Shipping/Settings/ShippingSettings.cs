@@ -211,6 +211,8 @@ namespace ShipWorks.Shipping.Settings
             settings.ShipSenseProcessedShipmentID = 0;
             settings.ShipSenseEndShipmentID = 0;
 
+            settings.AutoCreateShipments = true;
+
             adapter.SaveAndRefetch(settings);
         }
     }

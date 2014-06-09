@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1
 {
@@ -42,11 +44,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 return;
             }
 
-            var settings = ShippingSettings.Fetch();
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
             express1Settings.SaveSettings(settings);
 
             ShippingSettings.Save(settings);
-            
+            RateCache.Instance.Clear();
+
             DialogResult = express1Settings.UseExpress1 ? DialogResult.OK : DialogResult.Cancel;
         }
     }

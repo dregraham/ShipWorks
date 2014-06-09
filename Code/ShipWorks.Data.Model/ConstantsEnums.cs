@@ -7539,6 +7539,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseProcessedShipmentID,
 		///<summary>ShipSenseEndShipmentID. </summary>
 		ShipSenseEndShipmentID,
+		///<summary>AutoCreateShipments. </summary>
+		AutoCreateShipments,
 		/// <summary></summary>
 		AmountOfFields
 	}

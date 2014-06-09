@@ -63,6 +63,8 @@ namespace ShipWorks.ApplicationCore.Options
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             enableShipSense.Checked = settings.ShipSenseEnabled;
             clearKnowledgebase.Visible = UserSession.User.IsAdmin;
+
+            autoCreateShipments.Checked = settings.AutoCreateShipments;
         }
 
         /// <summary>
@@ -84,6 +86,7 @@ namespace ShipWorks.ApplicationCore.Options
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             settings.ShipSenseEnabled = enableShipSense.Checked;
+            settings.AutoCreateShipments = autoCreateShipments.Checked;
             ShippingSettings.Save(settings);
 
             ConfigurationData.Save(config);
