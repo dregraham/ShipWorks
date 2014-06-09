@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
@@ -102,7 +103,7 @@ namespace ShipWorks.Stores.Content.Panels
                 try
                 {
                     long requestId = 0;
-                    Image image = null;
+                    GoogleResponse googleResponse = null;
 
                     googleImage.Invoke(new MethodInvoker(delegate
                     {
@@ -121,9 +122,10 @@ namespace ShipWorks.Stores.Content.Panels
                         }
 
                         selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
-                        image = GetImage();
+                        googleResponse = GetImage();
+
                     }
-                    
+
                     googleImage.Invoke(new MethodInvoker(delegate
                     {
                         if (selectedEntity == null)
@@ -131,16 +133,21 @@ namespace ShipWorks.Stores.Content.Panels
                             googleImage.Visible = false;
                             errorLabel.Text = string.Empty;
                         }
-                        else if (image != null)
+                        else if (googleResponse.ReturnedImage != null)
                         {
-                            googleImage.Image = image;
+                            googleImage.Image = googleResponse.ReturnedImage;
                             googleImage.Visible = true;
                             errorLabel.Text = string.Empty;
+                        }
+                        else if (googleResponse.IsThrottled)
+                        {
+                            googleImage.Visible = false;
+                            errorLabel.Text = @"Google has received too many requests from this location. Please try again later.";
                         }
                         else
                         {
                             googleImage.Visible = false;
-                            errorLabel.Text = "Cannot get image from Google.";
+                            errorLabel.Text = @"Cannot get image from Google.";
                         }
                     }));
                 }
@@ -154,7 +161,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Gets the image from Google.
         /// </summary>
-        private Image GetImage()
+        private GoogleResponse GetImage()
         {
             if (selectedEntity == null)
             {
@@ -171,41 +178,57 @@ namespace ShipWorks.Stores.Content.Panels
             string hashValue = string.Join("|", addressAdapter.Street1, addressAdapter.City, addressAdapter.StateProvCode, size.Width.ToString(), size.Height.ToString());
             string hash = hasher.Hash(hashValue, "somesalt");
 
-            Image image;
+            GoogleResponse response;
 
             if (imageCache.Contains(hash))
             {
-                image = imageCache[hash];
+                response = new GoogleResponse() {ReturnedImage = imageCache[hash]};
             }
             else
             {
-                image = LoadImageFromGoogle(addressAdapter, size);
-                imageCache[hash] = image;
+                response = LoadImageFromGoogle(addressAdapter, size);
+
+                if (!response.IsThrottled)
+                {
+                    imageCache[hash] = response.ReturnedImage;   
+                }
             }
 
-            return image;
+            return response;
         }
 
-        private Image LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
+        private GoogleResponse LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
         {
             try
             {
-                WebClient imageDownloader = new WebClient();
-                byte[] image = imageDownloader.DownloadData(string.Format(GetUrl(),
-                    addressAdapter.Street1,
-                    addressAdapter.City,
-                    addressAdapter.StateProvCode,
-                    size.Width,
-                    size.Height));
+                byte[] image;
+
+                using (WebClient imageDownloader = new WebClient())
+                {
+
+                    image = imageDownloader.DownloadData(string.Format(GetUrl(),
+                        addressAdapter.Street1,
+                        addressAdapter.City,
+                        addressAdapter.StateProvCode,
+                        size.Width,
+                        size.Height));
+                }
 
                 using (MemoryStream stream = new MemoryStream(image))
                 {
-                    return Image.FromStream(stream);
+                    return new GoogleResponse() {ReturnedImage = Image.FromStream(stream)};
                 }
             }
-            catch (Exception)
+            catch (WebException ex)
             {
-                return null;
+                GoogleResponse googleResponse = new GoogleResponse();
+
+                if (((HttpWebResponse)ex.Response).StatusCode == HttpStatusCode.Forbidden)
+                {
+                    googleResponse.IsThrottled = true;
+                }
+
+                return googleResponse;
             }
         }
 
@@ -309,6 +332,37 @@ namespace ShipWorks.Stores.Content.Panels
 
             LoadSelection();
             //GetImage();
+        }
+
+        /// <summary>
+        /// The resposne we get back from Google.
+        /// </summary>
+        private class GoogleResponse
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="GoogleResponse"/> class.
+            /// </summary>
+            public GoogleResponse()
+            {
+                ReturnedImage = null;
+                IsThrottled = false;
+            }
+
+            /// <summary>
+            /// Gets or sets the returned image.
+            /// </summary>
+            public Image ReturnedImage
+            {
+                get; set;
+            }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this instance is throttled.
+            /// </summary>
+            public bool IsThrottled
+            {
+                get; set;
+            }
         }
     }
 }
