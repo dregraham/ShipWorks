@@ -2254,6 +2254,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseUniquenessXml", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseUniquenessXml, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseEndShipmentID", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "AutoCreateShipments", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.AutoCreateShipments, 0, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

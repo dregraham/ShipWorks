@@ -7587,6 +7587,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -10444,6 +10445,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.6.sql" />
     <Content Include="Resources\add.png" />
