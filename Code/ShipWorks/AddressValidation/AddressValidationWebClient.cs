@@ -436,6 +436,10 @@ namespace ShipWorks.AddressValidation
             }
         }
 
+        /// <summary>
+        /// Ensures the secure connection.
+        /// </summary>
+        /// <exception cref="AddressValidationException">ShipWorks is unable to make a secure connection to the Address Validation Server.</exception>
         private static void EnsureSecureConnection(string url)
         {
             CertificateInspector certificateInspector =
