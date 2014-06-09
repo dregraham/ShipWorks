@@ -768,7 +768,7 @@ namespace ShipWorks.Data
                 throw new ArgumentNullException("entity");
             }
 
-            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "GridAddressSelector cannot be used with entities that have compound primary keys");
+            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "GetEntityId cannot be used with entities that have compound primary keys");
             return (long)entity.PrimaryKeyFields.Single().CurrentValue;
         }
     }

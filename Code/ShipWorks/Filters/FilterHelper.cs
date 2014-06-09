@@ -238,7 +238,7 @@ namespace ShipWorks.Filters
             if (name.Length > filter.Fields[(int)FilterFieldIndex.Name].MaxLength)
             {
                 throw new FilterException(
-                    String.Format(
+                    string.Format(
                         "Filter names may only be {0} characters or less.  Please shorten the requested filter name '{1}'.",
                         filter.Fields[(int)FilterFieldIndex.Name].MaxLength, name));
             }
@@ -527,7 +527,7 @@ namespace ShipWorks.Filters
 
             if (EntityUtility.GetEntitySeed(filterContentID) != 14)
             {
-                throw new InvalidOperationException(String.Format("{0} is not a valid FilterNodeContentID", filterContentID));
+                throw new InvalidOperationException(string.Format("{0} is not a valid FilterNodeContentID", filterContentID));
             }
 
             // If we are within a transaction right now, we don't want the FilterNodeContent table locked into that

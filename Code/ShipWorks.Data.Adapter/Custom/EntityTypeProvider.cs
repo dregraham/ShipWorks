@@ -182,7 +182,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "BestRateShipmentEntity": return EntityType.BestRateShipmentEntity;
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
 				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
-				case "UpdateQueueEntity": return EntityType.UpdateQueueEntity;
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				}
 			

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ShipWorks.Data.Administration.Versioning;
 using log4net;
 using ShipWorks.UI;
 using System.IO;
@@ -285,7 +284,7 @@ namespace ShipWorks.Data.Administration
 
             xmlWriter.WriteStartElement("ShipWorks");
             xmlWriter.WriteElementString("AppVersion", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            xmlWriter.WriteElementString("SchemaVersion", SqlSchemaUpdater.GetDatabaseSchemaVersion().ToString());
+            xmlWriter.WriteElementString("SchemaVersion", SqlSchemaUpdater.GetInstalledSchemaVersion().ToString());
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteEndElement();
@@ -815,7 +814,7 @@ namespace ShipWorks.Data.Administration
                     return;
                 }
 
-                if (SqlSchemaUpdater.GetDatabaseSchemaVersion().IsVersionLessThanThree)
+                if (SqlSchemaUpdater.GetInstalledSchemaVersion() < new Version(3, 0))
                 {
                     log.Info("Access granted to null user due to 2x schema.");
                     return;

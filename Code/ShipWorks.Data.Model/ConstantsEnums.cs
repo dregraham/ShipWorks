@@ -8938,21 +8938,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpdateQueue.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum UpdateQueueFieldIndex:int
-	{
-		///<summary>UpdateQueueID. </summary>
-		UpdateQueueID,
-		///<summary>UpdateDatabaseProcessType. </summary>
-		UpdateDatabaseProcessType,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UpsAccount.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -10466,8 +10451,6 @@ namespace ShipWorks.Data.Model
 		ThreeDCartOrderItemEntity,
 		///<summary>ThreeDCartStore</summary>
 		ThreeDCartStoreEntity,
-		///<summary>UpdateQueue</summary>
-		UpdateQueueEntity,
 		///<summary>UpsAccount</summary>
 		UpsAccountEntity,
 		///<summary>UpsPackage</summary>

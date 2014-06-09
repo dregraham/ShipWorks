@@ -162,14 +162,11 @@ namespace ShipWorks.Stores.Content.Panels
                     }
                 }
             }
-            else if (entityGrid.Rows.Count > 1)
+            else
             {
                 RefreshSelectedShipments();
             }
-            else
-            {
-                ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
-            }
+
         }
 
         /// <summary>
@@ -187,7 +184,11 @@ namespace ShipWorks.Stores.Content.Panels
         {
             int shipmentSelectionCount = entityGrid.Selection.Count;
 
-            if (shipmentSelectionCount == 1)
+            if (entityGrid.Rows.Count == 1)
+            {
+                ratesControl.ChangeShipment(entityGrid.EntityGateway.GetKeyFromRow(0));
+
+            } else if (shipmentSelectionCount == 1)
             {
                 ratesControl.ChangeShipment(entityGrid.Selection.Keys.First());
             }

@@ -11,34 +11,6 @@ SET ANSI_NULLS, ANSI_PADDING, ANSI_WARNINGS, ARITHABORT, CONCAT_NULL_YIELDS_NULL
 
 SET NUMERIC_ROUNDABORT OFF;
 
-
-GO
-:setvar DatabaseName "ShipWorksSchema_integration"
-:setvar DefaultFilePrefix "ShipWorksSchema_integration"
-:setvar DefaultDataPath "E:\databases\development\"
-:setvar DefaultLogPath "E:\databases\development\"
-
-GO
-:on error exit
-GO
-/*
-Detect SQLCMD mode and disable script execution if SQLCMD mode is not supported.
-To re-enable the script after enabling SQLCMD mode, execute the following:
-SET NOEXEC OFF; 
-*/
-:setvar __IsSqlCmdEnabled "True"
-GO
-IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
-    BEGIN
-        PRINT N'SQLCMD mode must be enabled to successfully execute this script.';
-        SET NOEXEC ON;
-    END
-
-
-GO
-USE [$(DatabaseName)];
-
-
 GO
 PRINT N'Rename refactoring operation with key 0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e58 is skipped, element [dbo].[ValidatedAddress].[Id] (SqlSimpleColumn) will not be renamed to ValidatedAddressID';
 
@@ -1440,26 +1412,6 @@ ALTER TABLE [dbo].[Store] ENABLE CHANGE_TRACKING WITH (TRACK_COLUMNS_UPDATED = O
 
 
 GO
-PRINT N'Creating [dbo].[UpdateQueue]...';
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER OFF;
-
-
-GO
-CREATE TABLE [dbo].[UpdateQueue] (
-    [UpdateQueueID]             INT           IDENTITY (1, 1) NOT NULL,
-    [UpdateDatabaseProcessType] VARCHAR (200) NOT NULL,
-    PRIMARY KEY CLUSTERED ([UpdateQueueID] ASC)
-);
-
-
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON;
-
-
-GO
 PRINT N'Creating [dbo].[ValidatedAddress]...';
 
 
@@ -2392,10 +2344,6 @@ GO
 
 GO
 PRINT N'Checking existing data against newly created constraints';
-
-
-GO
-USE [$(DatabaseName)];
 
 
 GO

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Web.Services3.Addressing;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.UI;
 using System.Threading;
