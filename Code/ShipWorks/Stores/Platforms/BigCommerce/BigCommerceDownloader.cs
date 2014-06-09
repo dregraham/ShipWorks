@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Business;
@@ -8,6 +9,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -348,8 +350,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 totalCount++;
             }
 
-            //Save the downloaded order
-            SaveDownloadedOrder(orderEntity);
+            // Save the downloaded order
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "BigCommerceDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(orderEntity));
         }
   
         private void PopulateNewOrder(BigCommerceOrder order, BigCommerceAddress shipToAddress, bool isSubOrder, OrderEntity orderEntity, bool hasSubOrders)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
@@ -83,7 +85,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             GenericXmlOrderLoader.LoadOrder(order, this, null, xpath);
 
             // Save the downloaded order
-            SaveDownloadedOrder(order);
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericFileXmlDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
