@@ -395,6 +395,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() {(UpsServiceType)service.SelectedValue});
 
             RaiseShipmentServiceChanged();
+            RaiseRateCriteriaChanged();
 
             if (!service.MultiValued && service.SelectedValue != null)
             {

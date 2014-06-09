@@ -1089,7 +1089,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         shipment.Ups.Fields[UpsShipmentFields.SaturdayDelivery.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex]
+                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex]
                     }
                 );
 
