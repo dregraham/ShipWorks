@@ -101,10 +101,7 @@ namespace ShipWorks.Data.Connection
                 return;
             }
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
-            {
-                RestoreMultiUserMode(con, true);
-            }
+            RestoreMultiUserMode(null, true);
         }
 
         /// <summary>
@@ -112,15 +109,23 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         private static void RestoreMultiUserMode(SqlConnection con, bool clearConnectionPool)
         {
+            bool shouldDisposeConnection = false;
+
             try
             {
                 // Clear out the pool so any connection holding onto SINGLE_USER gets released
                 if (clearConnectionPool)
                 {
-                    SqlConnection.ClearAllPools();   
+                    SqlConnection.ClearAllPools();
                 }
 
                 // Allow multiple connections again
+                if (con == null)
+                {
+                    shouldDisposeConnection = true;
+                    con = SqlSession.Current.OpenConnection();
+                }
+
                 SqlUtility.SetMultiUser(con);
             }
             catch (SingleUserModeException ex)
@@ -130,6 +135,14 @@ namespace ShipWorks.Data.Connection
             catch (SqlException ex)
             {
                 log.Error("Failed to set database back to multi-user mode.", ex);
+            }
+            finally
+            {
+                // Dispose the connection if this function created it
+                if (shouldDisposeConnection && con != null)
+                {
+                    con.Dispose();
+                }
             }
 
             // Deactivate the scope after we try to go back to multi-user mode in case someone else steals the connection

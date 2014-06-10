@@ -1230,7 +1230,7 @@ namespace ShipWorks.Shipping
             {
                 // We may want to eat this exception entirely, so the user isn't impacted 
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
-                throw new ShippingException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
+                throw new ShippingException("The shipment was processed successfully, but the data was not logged to ShipSense.", ex);
             }
         }
 
