@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
@@ -210,8 +212,9 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     // assign an order number
                     order.OrderNumber = GetNextOrderNumber();
                 }
-                
-                SaveDownloadedOrder(order);
+
+                SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "PayPalDownloader.LoadOrder");
+                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
 
                 // update the last valid transaction date field
                 if (PayPalStore.LastValidTransactionDate < transaction.PaymentInfo.PaymentDate.ToUniversalTime())

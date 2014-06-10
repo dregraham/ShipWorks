@@ -1782,6 +1782,14 @@ namespace ShipWorks
             WebHelper.OpenUrl("http://supplies.shipworks.com/", this);
         }
 
+        /// <summary>
+        /// Open the landing page for our uShip partnership
+        /// </summary>
+        private void OnUShip(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://www.uship.com/shipworks/", this);
+        }
+
         #endregion
 
         #region Core

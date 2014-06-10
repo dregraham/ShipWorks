@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Business;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -218,7 +220,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
             }
 
-            SaveDownloadedOrder(order);
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ChannelAdvisorDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
@@ -359,7 +361,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             // Save the downloaded order
-            SaveDownloadedOrder(order);
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>

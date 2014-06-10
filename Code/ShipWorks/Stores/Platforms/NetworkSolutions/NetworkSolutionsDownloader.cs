@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
@@ -136,7 +138,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             }
 
             // save the order
-            SaveDownloadedOrder(order);
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "NetworkSolutionsDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
         /// <summary>
