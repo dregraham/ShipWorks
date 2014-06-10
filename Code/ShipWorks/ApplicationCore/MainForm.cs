@@ -1817,6 +1817,14 @@ namespace ShipWorks
                 }
             }
 
+            // Because of a bug in the SandRibbon controls, we need to make sure that LParam is
+            // an Int32. It calls ToInt32 on the LParam, which will throw if the value is 64-bits,
+            // even if the value could fit in 32-bits without any data loss.
+            if (msg.Msg == NativeMethods.WM_NCHITTEST)
+            {
+                msg.LParam = new IntPtr((int)msg.LParam.ToInt64());
+            }
+
             base.WndProc(ref msg);
         }
 
