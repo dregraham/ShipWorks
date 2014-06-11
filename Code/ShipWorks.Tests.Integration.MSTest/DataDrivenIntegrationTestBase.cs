@@ -39,7 +39,6 @@ namespace ShipWorks.Tests.Integration.MSTest
             DataRow testDataRow = TestContext.DataRow;
 
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
-            Debug.WriteLine(rowIndex);
 
             if (string.IsNullOrWhiteSpace(testDataRow[0].ToString()))
             {
@@ -152,8 +151,6 @@ namespace ShipWorks.Tests.Integration.MSTest
             
             StringBuilder propertyNames = new StringBuilder();
             properties.ForEach(pi => propertyNames.AppendLine(pi.Name));
-
-            Debug.Write(propertyNames.ToString());
         }
 
         /// <summary>
@@ -210,8 +207,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                     throw;
                 }
             }
-
-            Debug.WriteLine(missingProperties);
         }
 
         /// <summary>

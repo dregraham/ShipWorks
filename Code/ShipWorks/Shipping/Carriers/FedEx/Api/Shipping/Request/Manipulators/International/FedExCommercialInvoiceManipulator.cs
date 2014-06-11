@@ -63,15 +63,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 };
                 nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
 
-                ConfigureEtd(nativeRequest);
+                // TODO: un comment this when FedEx tells us why we can't request PNGs
+                //ConfigureEtd(fedExShipment, nativeRequest);
             }
         }
 
         /// <summary>
         /// Add Etd fields
         /// </summary>
-        private static void ConfigureEtd(IFedExNativeShipmentRequest nativeRequest)
+        private static void ConfigureEtd(FedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest nativeRequest)
         {
+            // Only set the shipping document specification if we are not SmartPost
+            if ((FedExServiceType) fedExShipment.Service == FedExServiceType.SmartPost)
+            {
+                return;
+            }
+
             List<RequestedShippingDocumentType> requestedEtdDocTypes = new List<RequestedShippingDocumentType>() { RequestedShippingDocumentType.COMMERCIAL_INVOICE };
 
             EtdDetail etdDetail = new EtdDetail();
@@ -84,8 +91,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             }
             shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.ELECTRONIC_TRADE_DOCUMENTS);
 
-            ShippingDocumentSpecification shippingDocumentSpecification = nativeRequest.RequestedShipment.ShippingDocumentSpecification;
-            ConfigureCustomsShippingDocumentSpecs(shippingDocumentSpecification);
+            ConfigureCustomsShippingDocumentSpecs(nativeRequest);
 
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes.ToArray();
             nativeRequest.RequestedShipment.SpecialServicesRequested.EtdDetail = etdDetail;
@@ -94,8 +100,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Add ShippingDocumentSpecification if needed
         /// </summary>
-        private static void ConfigureCustomsShippingDocumentSpecs(ShippingDocumentSpecification shippingDocumentSpecification)
+        private static void ConfigureCustomsShippingDocumentSpecs(IFedExNativeShipmentRequest nativeRequest)
         {
+            ShippingDocumentSpecification shippingDocumentSpecification = nativeRequest.RequestedShipment.ShippingDocumentSpecification;
+
+            // Make sure the ShippingDocumentSpecification is there
+            if (shippingDocumentSpecification == null)
+            {
+                shippingDocumentSpecification = new ShippingDocumentSpecification();
+            }
+
+            // Make sure the ShippingDocumentTypes is there
+            if (shippingDocumentSpecification.ShippingDocumentTypes == null)
+            {
+                shippingDocumentSpecification.ShippingDocumentTypes = new RequestedShippingDocumentType[0];
+            }
+
             List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>(shippingDocumentSpecification.ShippingDocumentTypes);
             shippingDocumentTypes.Add(RequestedShippingDocumentType.COMMERCIAL_INVOICE);
             shippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
@@ -130,6 +150,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shippingDocumentSpecification.CertificateOfOrigin = certificateOfOriginDetail;
             shippingDocumentSpecification.CommercialInvoiceDetail = commercialInvoiceDetail;
+
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification = shippingDocumentSpecification;
         }
 
         /// <summary>
@@ -270,7 +292,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 // We'll be manipulating properties of the requested shipment, so make sure it's been created
                 nativeRequest.RequestedShipment = new RequestedShipment();
             }
-
             // Make sure the RequestedShipment is there
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
             {
@@ -278,22 +299,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
             }
 
-            // Only set the shipping document specification if we are not SmartPost
-            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
-            if ((FedExServiceType)fedExShipment.Service != FedExServiceType.SmartPost)
-            {
-                // Make sure the ShippingDocumentSpecification is there
-                if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
-                {
-                    nativeRequest.RequestedShipment.ShippingDocumentSpecification = new ShippingDocumentSpecification();
-                }
-
-                // Make sure the ShippingDocumentTypes is there
-                if (nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes == null)
-                {
-                    nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = new RequestedShippingDocumentType[0];
-                }
-            }
         }
     }
 }
