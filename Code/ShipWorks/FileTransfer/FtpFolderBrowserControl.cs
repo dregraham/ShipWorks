@@ -20,6 +20,7 @@ namespace ShipWorks.FileTransfer
     /// </summary>
     public partial class FtpFolderBrowserControl : UserControl
     {
+        const string rootName = "<home>";
         Ftp ftp;
 
         class FtpFolderNode
@@ -80,11 +81,21 @@ namespace ShipWorks.FileTransfer
             {
                 ftp = FtpUtility.LogonToFtp(account);
 
-                var rootFolders = GetFolderList("/");
+                // Since we get folders below root, we need to create a "fake" node so that
+                // a user can select the root of an FTP site, if they want
+                List<FtpFolderNode> rootFolders = new List<FtpFolderNode>
+                {
+                    new FtpFolderNode
+                    {
+                        Name = rootName,
+                        Path = "/",
+                        Children = GetFolderList("/")
+                    }
+                };
 
                 if (!string.IsNullOrWhiteSpace(initialFolder))
                 {
-                    FetchNecessaryDecendants(rootFolders, initialFolder);
+                    FetchNecessaryDecendants(rootFolders, rootName + initialFolder);
                 }
 
                 return rootFolders;
@@ -145,9 +156,12 @@ namespace ShipWorks.FileTransfer
                 desiredSelection.EnsureVisible();
             }
 
-            // Select the default
             if (sandGrid.Rows.Count > 0)
             {
+                // Ensure the root row is expanded and not selected by default
+                sandGrid.Rows[0].Expanded = true;
+
+                // Select the default
                 if (sandGrid.SelectedElements.Count == 0)
                 {
                     sandGrid.Rows[0].Selected = true;
