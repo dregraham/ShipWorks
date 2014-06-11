@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -66,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelComments = new System.Windows.Forms.Label();
             this.labelTermsOfSale = new System.Windows.Forms.Label();
             this.commercialInvoice = new System.Windows.Forms.CheckBox();
+            this.electronicTradeDocuments = new CheckBox();
             this.filingOptionLabel = new System.Windows.Forms.Label();
             this.filingOption = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.electronicExportInfoLabel = new System.Windows.Forms.Label();
@@ -327,6 +329,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.ciComments);
             this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.labelComments);
             this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.labelTermsOfSale);
+            this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.electronicTradeDocuments);
             this.sectionCommercialInvoice.ContentPanel.Controls.Add(this.commercialInvoice);
             this.sectionCommercialInvoice.ExpandedHeight = 683;
             this.sectionCommercialInvoice.ExtraText = "";
@@ -339,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // commercialInvoiceReference
             // 
-            this.commercialInvoiceReference.Location = new System.Drawing.Point(115, 194);
+            this.commercialInvoiceReference.Location = new System.Drawing.Point(115, 220);
             this.fieldLengthProvider.SetMaxLengthSource(this.commercialInvoiceReference, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCommercialInvoiceReference);
             this.commercialInvoiceReference.Name = "commercialInvoiceReference";
             this.commercialInvoiceReference.Size = new System.Drawing.Size(161, 21);
@@ -349,7 +352,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.commercialInvoiceReferenceLabel.AutoSize = true;
             this.commercialInvoiceReferenceLabel.BackColor = System.Drawing.Color.White;
-            this.commercialInvoiceReferenceLabel.Location = new System.Drawing.Point(35, 197);
+            this.commercialInvoiceReferenceLabel.Location = new System.Drawing.Point(35, 223);
             this.commercialInvoiceReferenceLabel.Name = "commercialInvoiceReferenceLabel";
             this.commercialInvoiceReferenceLabel.Size = new System.Drawing.Size(72, 13);
             this.commercialInvoiceReferenceLabel.TabIndex = 20;
@@ -358,7 +361,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // iorFedExAccount
             // 
-            this.iorFedExAccount.Location = new System.Drawing.Point(129, 300);
+            this.iorFedExAccount.Location = new System.Drawing.Point(129, 326);
             this.fieldLengthProvider.SetMaxLengthSource(this.iorFedExAccount, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExAccountNumber);
             this.iorFedExAccount.Name = "iorFedExAccount";
             this.iorFedExAccount.Size = new System.Drawing.Size(161, 21);
@@ -368,7 +371,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelIorTaxID.AutoSize = true;
             this.labelIorTaxID.BackColor = System.Drawing.Color.White;
-            this.labelIorTaxID.Location = new System.Drawing.Point(80, 275);
+            this.labelIorTaxID.Location = new System.Drawing.Point(80, 301);
             this.labelIorTaxID.Name = "labelIorTaxID";
             this.labelIorTaxID.Size = new System.Drawing.Size(43, 13);
             this.labelIorTaxID.TabIndex = 16;
@@ -376,7 +379,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // iorTaxID
             // 
-            this.iorTaxID.Location = new System.Drawing.Point(129, 272);
+            this.iorTaxID.Location = new System.Drawing.Point(129, 298);
             this.fieldLengthProvider.SetMaxLengthSource(this.iorTaxID, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCustomsTin);
             this.iorTaxID.Name = "iorTaxID";
             this.iorTaxID.Size = new System.Drawing.Size(161, 21);
@@ -386,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelIorFedexAccount.AutoSize = true;
             this.labelIorFedexAccount.BackColor = System.Drawing.Color.White;
-            this.labelIorFedexAccount.Location = new System.Drawing.Point(41, 302);
+            this.labelIorFedexAccount.Location = new System.Drawing.Point(41, 328);
             this.labelIorFedexAccount.Name = "labelIorFedexAccount";
             this.labelIorFedexAccount.Size = new System.Drawing.Size(83, 13);
             this.labelIorFedexAccount.TabIndex = 18;
@@ -397,7 +400,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelIorAccount.AutoSize = true;
             this.labelIorAccount.BackColor = System.Drawing.Color.White;
             this.labelIorAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelIorAccount.Location = new System.Drawing.Point(57, 255);
+            this.labelIorAccount.Location = new System.Drawing.Point(57, 281);
             this.labelIorAccount.Name = "labelIorAccount";
             this.labelIorAccount.Size = new System.Drawing.Size(53, 13);
             this.labelIorAccount.TabIndex = 15;
@@ -414,7 +417,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.iorPersonControl.BackColor = System.Drawing.Color.White;
             this.iorPersonControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.iorPersonControl.Location = new System.Drawing.Point(54, 320);
+            this.iorPersonControl.Location = new System.Drawing.Point(54, 346);
             this.iorPersonControl.Name = "iorPersonControl";
             this.iorPersonControl.Size = new System.Drawing.Size(358, 308);
             this.iorPersonControl.TabIndex = 20;
@@ -423,7 +426,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.importerOfRecord.AutoSize = true;
             this.importerOfRecord.BackColor = System.Drawing.Color.White;
-            this.importerOfRecord.Location = new System.Drawing.Point(36, 231);
+            this.importerOfRecord.Location = new System.Drawing.Point(36, 257);
             this.importerOfRecord.Name = "importerOfRecord";
             this.importerOfRecord.Size = new System.Drawing.Size(245, 17);
             this.importerOfRecord.TabIndex = 14;
@@ -434,7 +437,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(23, 143);
+            this.label7.Location = new System.Drawing.Point(23, 169);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(87, 13);
             this.label7.TabIndex = 9;
@@ -454,7 +457,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(37, 119);
+            this.label5.Location = new System.Drawing.Point(37, 145);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(73, 13);
             this.label5.TabIndex = 7;
@@ -467,7 +470,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             0,
             0,
             65536});
-            this.ciAdditional.Location = new System.Drawing.Point(116, 167);
+            this.ciAdditional.Location = new System.Drawing.Point(116, 193);
             this.ciAdditional.Name = "ciAdditional";
             this.ciAdditional.Size = new System.Drawing.Size(95, 21);
             this.ciAdditional.TabIndex = 12;
@@ -480,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             0,
             0,
             65536});
-            this.ciInsurance.Location = new System.Drawing.Point(116, 140);
+            this.ciInsurance.Location = new System.Drawing.Point(116, 166);
             this.ciInsurance.Name = "ciInsurance";
             this.ciInsurance.Size = new System.Drawing.Size(95, 21);
             this.ciInsurance.TabIndex = 10;
@@ -493,7 +496,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             0,
             0,
             65536});
-            this.ciFreight.Location = new System.Drawing.Point(116, 116);
+            this.ciFreight.Location = new System.Drawing.Point(116, 142);
             this.ciFreight.Name = "ciFreight";
             this.ciFreight.Size = new System.Drawing.Size(95, 21);
             this.ciFreight.TabIndex = 8;
@@ -503,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.ciPurpose.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ciPurpose.FormattingEnabled = true;
-            this.ciPurpose.Location = new System.Drawing.Point(115, 62);
+            this.ciPurpose.Location = new System.Drawing.Point(115, 86);
             this.ciPurpose.Name = "ciPurpose";
             this.ciPurpose.PromptText = "(Multiple Values)";
             this.ciPurpose.Size = new System.Drawing.Size(161, 21);
@@ -513,7 +516,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.ciTermsOfSale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ciTermsOfSale.FormattingEnabled = true;
-            this.ciTermsOfSale.Location = new System.Drawing.Point(115, 35);
+            this.ciTermsOfSale.Location = new System.Drawing.Point(115, 61);
             this.ciTermsOfSale.Name = "ciTermsOfSale";
             this.ciTermsOfSale.PromptText = "(Multiple Values)";
             this.ciTermsOfSale.Size = new System.Drawing.Size(161, 21);
@@ -523,7 +526,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelPurpose.AutoSize = true;
             this.labelPurpose.BackColor = System.Drawing.Color.White;
-            this.labelPurpose.Location = new System.Drawing.Point(60, 65);
+            this.labelPurpose.Location = new System.Drawing.Point(60, 91);
             this.labelPurpose.Name = "labelPurpose";
             this.labelPurpose.Size = new System.Drawing.Size(50, 13);
             this.labelPurpose.TabIndex = 3;
@@ -531,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // ciComments
             // 
-            this.ciComments.Location = new System.Drawing.Point(115, 89);
+            this.ciComments.Location = new System.Drawing.Point(115, 115);
             this.fieldLengthProvider.SetMaxLengthSource(this.ciComments, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExCommercialInvoiceComments);
             this.ciComments.Name = "ciComments";
             this.ciComments.Size = new System.Drawing.Size(161, 21);
@@ -541,7 +544,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelComments.AutoSize = true;
             this.labelComments.BackColor = System.Drawing.Color.White;
-            this.labelComments.Location = new System.Drawing.Point(49, 92);
+            this.labelComments.Location = new System.Drawing.Point(49, 118);
             this.labelComments.Name = "labelComments";
             this.labelComments.Size = new System.Drawing.Size(61, 13);
             this.labelComments.TabIndex = 5;
@@ -551,11 +554,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelTermsOfSale.AutoSize = true;
             this.labelTermsOfSale.BackColor = System.Drawing.Color.White;
-            this.labelTermsOfSale.Location = new System.Drawing.Point(38, 38);
+            this.labelTermsOfSale.Location = new System.Drawing.Point(38, 64);
             this.labelTermsOfSale.Name = "labelTermsOfSale";
             this.labelTermsOfSale.Size = new System.Drawing.Size(75, 13);
             this.labelTermsOfSale.TabIndex = 0;
             this.labelTermsOfSale.Text = "Terms of sale:";
+            // 
+            // electronicTradeDocuments
+            // 
+            this.electronicTradeDocuments.AutoSize = true;
+            this.electronicTradeDocuments.BackColor = System.Drawing.Color.White;
+            this.electronicTradeDocuments.Location = new System.Drawing.Point(36, 38);
+            this.electronicTradeDocuments.Name = "electronicTradeDocuments";
+            this.electronicTradeDocuments.Size = new System.Drawing.Size(154, 17);
+            this.electronicTradeDocuments.TabIndex = 0;
+            this.electronicTradeDocuments.Text = "File electronically";
+            this.electronicTradeDocuments.UseVisualStyleBackColor = false;
             // 
             // commercialInvoice
             // 
@@ -826,6 +840,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.Label labelComments;
         private System.Windows.Forms.Label labelTermsOfSale;
         private System.Windows.Forms.CheckBox commercialInvoice;
+        private System.Windows.Forms.CheckBox electronicTradeDocuments;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
