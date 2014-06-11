@@ -271,6 +271,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 nativeRequest.RequestedShipment = new RequestedShipment();
             }
 
+            // Make sure the RequestedShipment is there
+            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
+            {
+                // We'll be manipulating properties of the special services, so make sure it's been created
+                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
+            }
+
             // Only set the shipping document specification if we are not SmartPost
             FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
             if ((FedExServiceType)fedExShipment.Service != FedExServiceType.SmartPost)

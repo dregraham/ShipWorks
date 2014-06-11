@@ -112,6 +112,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
+        public void Manipulate_AccountsForNullSpecialServices_Test()
+        {
+            // setup the test by setting the requested shipment to null
+            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.IsNotNull(nativeRequest.RequestedShipment);
+        }
+
+        [TestMethod]
         public void Manipulate_CustomClearanceDetailsIsNotNull_WhenCommercialInvoiceIsTrue_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
