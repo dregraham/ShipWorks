@@ -95,7 +95,7 @@ namespace ShipWorks.FileTransfer
 
                 if (!string.IsNullOrWhiteSpace(initialFolder))
                 {
-                    FetchNecessaryDecendants(rootFolders, rootName + initialFolder);
+                    FetchNecessaryDecendants(rootFolders, rootName + EnsureStartingSlash(initialFolder));
                 }
 
                 return rootFolders;
@@ -126,6 +126,19 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
+        /// Ensure the passed string has a slash at the beginning
+        /// </summary>
+        private static string EnsureStartingSlash(string value)
+        {
+            if (value == null)
+            {
+                return "/";
+            }
+
+            return value.StartsWith("/", StringComparison.Ordinal) ? value : "/" + value;
+        }
+
+        /// <summary>
         /// Load the imap folders from the result of the async task
         /// </summary>
         private void LoadRootFolders(Task<List<FtpFolderNode>> task, string initialFolder)
@@ -142,7 +155,9 @@ namespace ShipWorks.FileTransfer
             CreateGridRows(rootFolders, sandGrid.Rows);
 
             // Try to select the desired selection
-            GridRow desiredSelection = sandGrid.FlatRows.Cast<GridRow>().FirstOrDefault(r => ((FtpFolderNode) r.Tag).Path == initialFolder);
+            string initialFolderWithSlash = EnsureStartingSlash(initialFolder);
+            GridRow desiredSelection = sandGrid.FlatRows.Cast<GridRow>().FirstOrDefault(r => ((FtpFolderNode) r.Tag).Path == initialFolderWithSlash);
+
             if (desiredSelection != null)
             {
                 GridRow parent = desiredSelection.ParentRow;
