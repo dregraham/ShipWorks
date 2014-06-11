@@ -572,11 +572,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.filingOptionLabel.AutoSize = true;
             this.filingOptionLabel.BackColor = System.Drawing.Color.White;
-            this.filingOptionLabel.Location = new System.Drawing.Point(51, 87);
+            this.filingOptionLabel.Location = new System.Drawing.Point(24, 87);
             this.filingOptionLabel.Name = "filingOptionLabel";
             this.filingOptionLabel.Size = new System.Drawing.Size(70, 13);
             this.filingOptionLabel.TabIndex = 10;
-            this.filingOptionLabel.Text = "Filing Option:";
+            this.filingOptionLabel.Text = "B13A Filing Option:";
             this.filingOptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // filingOption

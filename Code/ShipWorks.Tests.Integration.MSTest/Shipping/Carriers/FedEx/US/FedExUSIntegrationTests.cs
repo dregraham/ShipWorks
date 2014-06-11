@@ -212,5 +212,40 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 testObject.Ship();
             }
         }
+
+        [DataSource("DataSource_Ship_FedExETD")]
+        [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestMethod]
+        [TestCategory("FedEx")]
+        public void Ship_FedExETD()
+        {
+            var testObject = new FedExUSExpressInternationalFixture();
+
+            if (PopulateTestObject(testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                try
+                {
+                    Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", testObject.CustomerTransactionId));
+                    Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
+
+                    testObject.FedExAccountNumber = fedExTestAccountNumber;
+
+                    testObject.Ship();
+                }
+                catch (Exception ex)
+                {
+                    // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
+                    if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                    {
+                        return;
+                    }
+
+                    string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow[5], ex.Message);
+                    throw new Exception(msg, ex);
+                }
+            }
+        }
     }
 }

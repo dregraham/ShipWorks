@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -55,13 +57,79 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 ConfigureImporter(fedExShipment, customsDetail);
 
                 customsDetail.InsuranceCharges = new Money
-                    {
-                        Amount = fedExShipment.CommercialInvoiceInsurance,
-                        Currency = shipmentCurrencyType 
-                    };
+                {
+                    Amount = fedExShipment.CommercialInvoiceInsurance,
+                    Currency = shipmentCurrencyType
+                };
                 nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
+
+                ConfigureEtd(nativeRequest);
+            }
+        }
+
+        /// <summary>
+        /// Add Etd fields
+        /// </summary>
+        private static void ConfigureEtd(IFedExNativeShipmentRequest nativeRequest)
+        {
+            List<RequestedShippingDocumentType> requestedEtdDocTypes = new List<RequestedShippingDocumentType>() { RequestedShippingDocumentType.COMMERCIAL_INVOICE };
+
+            EtdDetail etdDetail = new EtdDetail();
+            etdDetail.RequestedDocumentCopies = requestedEtdDocTypes.ToArray();
+
+            List<ShipmentSpecialServiceType> shipmentSpecialServiceTypes = new List<ShipmentSpecialServiceType>();
+            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes != null)
+            {
+                shipmentSpecialServiceTypes.AddRange(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            }
+            shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.ELECTRONIC_TRADE_DOCUMENTS);
+
+            ShippingDocumentSpecification shippingDocumentSpecification = nativeRequest.RequestedShipment.ShippingDocumentSpecification;
+            ConfigureCustomsShippingDocumentSpecs(shippingDocumentSpecification);
+
+            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes.ToArray();
+            nativeRequest.RequestedShipment.SpecialServicesRequested.EtdDetail = etdDetail;
+        }
+
+        /// <summary>
+        /// Add ShippingDocumentSpecification if needed
+        /// </summary>
+        private static void ConfigureCustomsShippingDocumentSpecs(ShippingDocumentSpecification shippingDocumentSpecification)
+        {
+            List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>(shippingDocumentSpecification.ShippingDocumentTypes);
+            shippingDocumentTypes.Add(RequestedShippingDocumentType.COMMERCIAL_INVOICE);
+            shippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
+
+            CertificateOfOriginDetail certificateOfOriginDetail = shippingDocumentSpecification.CertificateOfOrigin;
+            if (certificateOfOriginDetail == null)
+            {
+                certificateOfOriginDetail = new CertificateOfOriginDetail();
+            }
+            
+            certificateOfOriginDetail.DocumentFormat = new ShippingDocumentFormat()
+            {
+                ImageType = ShippingDocumentImageType.PNG,
+                ImageTypeSpecified = true,
+                StockType = ShippingDocumentStockType.PAPER_4X6,
+                StockTypeSpecified = true
+            };
+
+            CommercialInvoiceDetail commercialInvoiceDetail = shippingDocumentSpecification.CommercialInvoiceDetail;
+            if (commercialInvoiceDetail == null)
+            {
+                commercialInvoiceDetail = new CommercialInvoiceDetail();
             }
 
+            commercialInvoiceDetail.Format = new ShippingDocumentFormat()
+            {
+                ImageType = ShippingDocumentImageType.PNG,
+                ImageTypeSpecified = true,
+                StockType = ShippingDocumentStockType.PAPER_4X6,
+                StockTypeSpecified = true
+            };
+
+            shippingDocumentSpecification.CertificateOfOrigin = certificateOfOriginDetail;
+            shippingDocumentSpecification.CommercialInvoiceDetail = commercialInvoiceDetail;
         }
 
         /// <summary>
@@ -201,6 +269,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             {
                 // We'll be manipulating properties of the requested shipment, so make sure it's been created
                 nativeRequest.RequestedShipment = new RequestedShipment();
+            }
+
+            // Only set the shipping document specification if we are not SmartPost
+            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
+            if ((FedExServiceType)fedExShipment.Service != FedExServiceType.SmartPost)
+            {
+                // Make sure the ShippingDocumentSpecification is there
+                if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
+                {
+                    nativeRequest.RequestedShipment.ShippingDocumentSpecification = new ShippingDocumentSpecification();
+                }
+
+                // Make sure the ShippingDocumentTypes is there
+                if (nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes == null)
+                {
+                    nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = new RequestedShippingDocumentType[0];
+                }
             }
         }
     }
