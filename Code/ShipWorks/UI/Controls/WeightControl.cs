@@ -456,7 +456,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void FormatWeightText(double weight)
         {
-            string result = FormatWeight(weight, (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+            string result = FormatWeight(weight, UserSession.User == null ? displayFormat : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
 
             lastDisplay = result;
 
