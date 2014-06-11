@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionGeneral.ContentPanel.Controls.Add(this.admissibilityPackaging);
             this.sectionGeneral.ContentPanel.Controls.Add(this.labelAdmissibilityPackaging);
             this.sectionGeneral.Location = new System.Drawing.Point(6, 5);
-            this.sectionGeneral.Size = new System.Drawing.Size(523, 212);
+            this.sectionGeneral.Size = new System.Drawing.Size(441, 212);
             // 
             // groupSelectedContent
             // 
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.groupSelectedContent.Controls.Add(this.labelUnitPrice);
             this.groupSelectedContent.Controls.Add(this.numberOfPieces);
             this.groupSelectedContent.Controls.Add(this.labelNumberOfPieces);
-            this.groupSelectedContent.Size = new System.Drawing.Size(283, 244);
+            this.groupSelectedContent.Size = new System.Drawing.Size(418, 244);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelNumberOfPieces, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.numberOfPieces, 0);
             this.groupSelectedContent.Controls.SetChildIndex(this.labelUnitPrice, 0);
@@ -150,15 +150,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // add
             // 
-            this.add.Location = new System.Drawing.Point(231, 10);
+            this.add.Location = new System.Drawing.Point(362, 10);
             // 
             // delete
             // 
-            this.delete.Location = new System.Drawing.Point(231, 37);
+            this.delete.Location = new System.Drawing.Point(362, 37);
             // 
             // sandGrid
             // 
-            this.sandGrid.Size = new System.Drawing.Size(216, 116);
+            this.sandGrid.Size = new System.Drawing.Size(344, 116);
             // 
             // labelBrokerAccountHeading
             // 
@@ -574,7 +574,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.filingOptionLabel.BackColor = System.Drawing.Color.White;
             this.filingOptionLabel.Location = new System.Drawing.Point(24, 87);
             this.filingOptionLabel.Name = "filingOptionLabel";
-            this.filingOptionLabel.Size = new System.Drawing.Size(70, 13);
+            this.filingOptionLabel.Size = new System.Drawing.Size(98, 13);
             this.filingOptionLabel.TabIndex = 10;
             this.filingOptionLabel.Text = "B13A Filing Option:";
             this.filingOptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
