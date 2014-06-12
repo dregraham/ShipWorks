@@ -83,6 +83,9 @@ namespace ShipWorks.Data
             config.CustomerUpdateBilling = true;
             config.CustomerUpdateShipping = true;
 
+            config.CustomerUpdateModifiedBilling = 0;
+            config.CustomerUpdateModifiedShipping = 0;
+
             config.AuditNewOrders = false;
             config.AuditDeletedOrders = false;
 

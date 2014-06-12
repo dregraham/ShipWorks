@@ -457,6 +457,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomerUpdateShipping", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("CustomerUpdateModifiedBilling", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CustomerUpdateModifiedShipping", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("AuditNewOrders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -612,6 +618,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.CustomerUpdateShipping, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.CustomerUpdateShipping, value); }
+		}
+
+		/// <summary> The CustomerUpdateModifiedBilling property of the Entity Configuration<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateModifiedBilling"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 CustomerUpdateModifiedBilling
+		{
+			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedBilling, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedBilling, value); }
+		}
+
+		/// <summary> The CustomerUpdateModifiedShipping property of the Entity Configuration<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateModifiedShipping"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 CustomerUpdateModifiedShipping
+		{
+			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedShipping, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedShipping, value); }
 		}
 
 		/// <summary> The AuditNewOrders property of the Entity Configuration<br/><br/>

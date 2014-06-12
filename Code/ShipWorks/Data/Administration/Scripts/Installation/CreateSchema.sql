@@ -3667,6 +3667,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerCompareAddress] [bit] NOT NULL,
 [CustomerUpdateBilling] [bit] NOT NULL,
 [CustomerUpdateShipping] [bit] NOT NULL,
+[CustomerUpdateModifiedBilling] [int] NOT NULL,
+[CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL
 )
