@@ -259,7 +259,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
                     string[] filesToDelete = Directory.GetFiles(certificationDirectory, ShipmentTransactionId + "*.png");
                     foreach (string fileToDelete in filesToDelete)
                     {
-                        Console.WriteLine(string.Format("Deleting image file {0}", fileToDelete));
                         File.Delete(fileToDelete);
                     }
                 }

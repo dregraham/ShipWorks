@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Win32;
+using log4net;
+using log4net.Core;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -35,6 +37,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
         public FedExPrototypeFixture()
         {
+            ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).Root.Level = Level.Error;
+            ((log4net.Repository.Hierarchy.Hierarchy)LogManager.GetRepository()).RaiseConfigurationChanged(EventArgs.Empty);
+
             // Sleep to allow time to attach the debugger to runner.exe if needed
             //System.Threading.Thread.Sleep(30000);
             // Ctrl + Alt + Shift + Windows Key
@@ -294,7 +299,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     string[] filesToDelete = Directory.GetFiles(certificationDirectory, CustomerTransactionId + "*.png");
                     foreach (string fileToDelete in filesToDelete)
                     {
-                        Console.WriteLine(string.Format("Deleting image file {0}", fileToDelete));
                         File.Delete(fileToDelete);
                     }
                 }
