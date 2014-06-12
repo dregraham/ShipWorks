@@ -21,9 +21,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Debug = System.Diagnostics.Debug;
 using System.Globalization;
 using System.IO;
@@ -365,6 +367,7 @@ namespace Interapptive.Shared.IO.Text.Csv
 
 			_currentRecordIndex = -1;
 			_defaultParseErrorAction = ParseErrorAction.RaiseEvent;
+            DuplicateFieldAction = DuplicateFieldAction.Throw;
 		}
 
 		#endregion
@@ -508,6 +511,15 @@ namespace Interapptive.Shared.IO.Text.Csv
 				_missingFieldAction = value;
 			}
 		}
+
+        /// <summary>
+        /// Gets or sets the action to take when a duplicate field is found
+        /// </summary>
+	    public DuplicateFieldAction DuplicateFieldAction
+	    {
+	        get; 
+            set;
+        }
 
 		/// <summary>
 		/// Gets or sets a value indicating if the reader supports multiline fields.
@@ -1487,8 +1499,8 @@ namespace Interapptive.Shared.IO.Text.Csv
 
 					_firstRecordInCache = false;
 
-					_fieldHeaders = new string[_fieldCount];
-					_fieldHeaderIndexes = new HybridDictionary(_fieldCount, true);
+                    List<string> fieldHeaders = new List<string>(_fieldCount);
+                    _fieldHeaderIndexes = new HybridDictionary(_fieldCount, true);
 
                     int unnamedCount = 0;
 					for (int i = 0; i < _fields.Length; i++)
@@ -1499,9 +1511,19 @@ namespace Interapptive.Shared.IO.Text.Csv
                             _fields[i] = String.Format("UNNAMED_{0}", ++unnamedCount);
                         }
 
-						_fieldHeaders[i] = _fields[i];
-						_fieldHeaderIndexes.Add(_fields[i], i);
+                        // Ensure that header names are unique.
+					    if (!fieldHeaders.Any(x => string.Equals(x, _fields[i], StringComparison.OrdinalIgnoreCase)))
+					    {
+                            fieldHeaders.Add(_fields[i]);
+                            _fieldHeaderIndexes.Add(_fields[i], i);   
+					    }
+                        else if (DuplicateFieldAction == DuplicateFieldAction.Throw)
+                        {
+                            throw new ArgumentException(string.Format("There is already a field named {0} in the file", _fields[i]));
+                        }
 					}
+
+				    _fieldHeaders = fieldHeaders.ToArray();
 
 					// Proceed to first record
 					if (!onlyReadHeaders)

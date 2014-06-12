@@ -387,6 +387,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         void OnChangeService(object sender, EventArgs e)
         {
+            if (service.SelectedValue == null)
+            {
+                MessageHelper.ShowError(this, "The selected service is not supported by ShipWorks.  Please contact customer support for assistance.");
+                return;
+            }
+
             SaveToShipments();
 
             UpdateSectionDescription();
@@ -395,6 +401,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpdateMiAndSurePostSpecificVisibility(new List<UpsServiceType>() {(UpsServiceType)service.SelectedValue});
 
             RaiseShipmentServiceChanged();
+            RaiseRateCriteriaChanged();
 
             if (!service.MultiValued && service.SelectedValue != null)
             {

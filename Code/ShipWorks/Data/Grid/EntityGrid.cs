@@ -935,6 +935,23 @@ namespace ShipWorks.Data.Grid
             TemplateTreePopupController.ShowMenuDropDown(FindForm(), (ToolStripMenuItem) sender, OnCopyWithTemplate);
         }
 
+        /// <summary>
+        /// Handle key presses
+        /// </summary>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.C | Keys.Control))
+            {
+                // Sand grid's default handling of ctrl-c wasn't copying correctly, and if there was a clipboard exception,
+                // it wasn't being properly handled. So we'll just funnel ctrl-c into our CopyRows functionality
+                InitiateTextCopy(Columns.OfType<EntityGridColumn>().Where(c => c.Visible).ToList(), false);
+            }
+            else
+            {
+                base.OnKeyDown(e);   
+            }
+        }
+
         #endregion
 
         #region Common

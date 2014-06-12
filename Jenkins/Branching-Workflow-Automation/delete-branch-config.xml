@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>FEATURE_NAME</name>
+          <description>A quick name to identify the list of jobs for this particular feature.</description>
+          <defaultValue></defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>e:\jenkins-builds\create-branch-workflow</customWorkspace>
+  <builders>
+    <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
+      <command>echo &quot;Deleting jobs for $env:FEATURE_NAME&quot;
+
+$listJobsUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/api/xml?xpath=//job/name&amp;wrapper=jobs&quot;
+echo $listJobsUrl 
+
+# Make a request to obtain all of the jobs for the feature&apos;s view
+[net.httpWebRequest] $request = [net.webRequest]::create($listJobsUrl)
+[net.httpWebResponse] $response = $request.getResponse()
+
+# Read the response into an XML variable
+$responseStream = $response.GetResponseStream()
+$streamReader = new-object IO.StreamReader($responseStream)
+[xml] $jobXml = $streamReader.ReadToEnd()
+
+# Read the job names from the XML ane make a request to Jenkins delete each job
+$jobNames = Select-Xml &quot;//jobs/name&quot; $jobXml
+$jobNames | ForEach-Object { 
+    echo &quot;Deleting job $_&quot; 
+
+    $deleteJobUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/job/$_/doDelete&quot;
+    echo $deleteJobUrl
+
+    # $deleteJobUrl = &quot;http://www.google.com/&quot;
+    [net.httpWebRequest] $jobRequest = [net.webRequest]::create($deleteJobUrl)
+    $jobRequest.Method = &quot;POST&quot;
+
+    $jobRequest.getResponse()
+}
+
+# URL to delete the feature&apos;s view in Jenkins
+$deleteViewUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/doDelete&quot;
+
+# Make the request to delete the feature view
+$request = [net.webRequest]::create($deleteViewUrl)
+$request.Method = &quot;POST&quot;
+$request.getResponse()</command>
+    </hudson.plugins.powershell.PowerShell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

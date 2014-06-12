@@ -1003,6 +1003,7 @@ namespace ShipWorks.Shipping
 
                     bool success = false;
                     ShippingException lastException = null;
+                    ShipmentEntity processedShipment = null;
 
                     foreach (ShipmentEntity shipmentToTry in shipmentsToTryToProcess)
                     {
@@ -1017,6 +1018,8 @@ namespace ShipWorks.Shipping
                             }
 
                             success = true;
+                            processedShipment = shipmentToTry;
+
                             break;
                         }
                         catch (ShippingException ex)
@@ -1031,6 +1034,10 @@ namespace ShipWorks.Shipping
 
                         throw new ShippingException(lastException.Message,lastException);
                     }
+                    
+                    // Log to the knowledge base after everything else has been successful, so an error logging
+                    // to the knowledge base does not prevent the shipment from being actually processed.
+                    LogToShipSenseKnowledgebase(ShipmentTypeManager.GetType(processedShipment), processedShipment);
                 }
             }
             catch (SqlAppResourceLockException ex)
@@ -1189,10 +1196,6 @@ namespace ShipWorks.Shipping
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
-
-                // Log to the knowledge base after everything else has been successful, so an error logging
-                // to the knowledge base does not prevent the shipment from being actually processed.
-                LogToShipSenseKnowledgebase(shipmentType, shipment);
             }
             catch (ShipWorksLicenseException ex)
             {
