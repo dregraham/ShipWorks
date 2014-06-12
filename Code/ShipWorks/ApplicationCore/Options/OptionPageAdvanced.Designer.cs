@@ -58,9 +58,11 @@ namespace ShipWorks.ApplicationCore.Options
             this.label3 = new System.Windows.Forms.Label();
             this.autoCreateShipments = new System.Windows.Forms.CheckBox();
             this.sectionShipmentCreation = new ShipWorks.UI.Controls.SectionTitle();
-            this.updateModifiedCustomerShipping = new System.Windows.Forms.CheckBox();
-            this.updateModifiedCustomerBilling = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.orderShippingAddressChanged = new System.Windows.Forms.ComboBox();
+            this.orderBillingAddressChanged = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // addressCasing
@@ -223,7 +225,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionAuditing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionAuditing.Location = new System.Drawing.Point(10, 534);
+            this.sectionAuditing.Location = new System.Drawing.Point(10, 544);
             this.sectionAuditing.Name = "sectionAuditing";
             this.sectionAuditing.Size = new System.Drawing.Size(481, 22);
             this.sectionAuditing.TabIndex = 16;
@@ -232,7 +234,7 @@ namespace ShipWorks.ApplicationCore.Options
             // auditNewOrders
             // 
             this.auditNewOrders.AutoSize = true;
-            this.auditNewOrders.Location = new System.Drawing.Point(35, 564);
+            this.auditNewOrders.Location = new System.Drawing.Point(35, 574);
             this.auditNewOrders.Name = "auditNewOrders";
             this.auditNewOrders.Size = new System.Drawing.Size(249, 17);
             this.auditNewOrders.TabIndex = 17;
@@ -243,7 +245,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.infotipAudit.Caption = "Auditing all new order data uses a significant amount of space in the database.\r\n" +
     "\r\nAny edits are still audited, including both the original and updated values.";
-            this.infotipAudit.Location = new System.Drawing.Point(282, 565);
+            this.infotipAudit.Location = new System.Drawing.Point(282, 575);
             this.infotipAudit.Name = "infotipAudit";
             this.infotipAudit.Size = new System.Drawing.Size(12, 12);
             this.infotipAudit.TabIndex = 33;
@@ -252,7 +254,7 @@ namespace ShipWorks.ApplicationCore.Options
             // auditDeletedOrders
             // 
             this.auditDeletedOrders.AutoSize = true;
-            this.auditDeletedOrders.Location = new System.Drawing.Point(35, 587);
+            this.auditDeletedOrders.Location = new System.Drawing.Point(35, 597);
             this.auditDeletedOrders.Name = "auditDeletedOrders";
             this.auditDeletedOrders.Size = new System.Drawing.Size(265, 17);
             this.auditDeletedOrders.TabIndex = 34;
@@ -263,7 +265,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionShipSense.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionShipSense.Location = new System.Drawing.Point(10, 615);
+            this.sectionShipSense.Location = new System.Drawing.Point(10, 625);
             this.sectionShipSense.Name = "sectionShipSense";
             this.sectionShipSense.Size = new System.Drawing.Size(481, 22);
             this.sectionShipSense.TabIndex = 17;
@@ -273,7 +275,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.clearKnowledgebase.Image = global::ShipWorks.Properties.Resources.delete16;
             this.clearKnowledgebase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.clearKnowledgebase.Location = new System.Drawing.Point(32, 809);
+            this.clearKnowledgebase.Location = new System.Drawing.Point(32, 819);
             this.clearKnowledgebase.Name = "clearKnowledgebase";
             this.clearKnowledgebase.Size = new System.Drawing.Size(168, 23);
             this.clearKnowledgebase.TabIndex = 37;
@@ -284,7 +286,7 @@ namespace ShipWorks.ApplicationCore.Options
             // enableShipSense
             // 
             this.enableShipSense.AutoSize = true;
-            this.enableShipSense.Location = new System.Drawing.Point(35, 682);
+            this.enableShipSense.Location = new System.Drawing.Point(35, 692);
             this.enableShipSense.Name = "enableShipSense";
             this.enableShipSense.Size = new System.Drawing.Size(348, 17);
             this.enableShipSense.TabIndex = 35;
@@ -293,7 +295,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // labelShipSenseInfo
             // 
-            this.labelShipSenseInfo.Location = new System.Drawing.Point(17, 647);
+            this.labelShipSenseInfo.Location = new System.Drawing.Point(17, 657);
             this.labelShipSenseInfo.Name = "labelShipSenseInfo";
             this.labelShipSenseInfo.Size = new System.Drawing.Size(423, 40);
             this.labelShipSenseInfo.TabIndex = 36;
@@ -304,7 +306,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.editShipSenseSettings.Image = global::ShipWorks.Properties.Resources.edit16;
             this.editShipSenseSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.editShipSenseSettings.Location = new System.Drawing.Point(33, 749);
+            this.editShipSenseSettings.Location = new System.Drawing.Point(33, 759);
             this.editShipSenseSettings.Name = "editShipSenseSettings";
             this.editShipSenseSettings.Size = new System.Drawing.Size(167, 23);
             this.editShipSenseSettings.TabIndex = 38;
@@ -316,7 +318,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.button1.Image = global::ShipWorks.Properties.Resources.arrows_green_static;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(32, 839);
+            this.button1.Location = new System.Drawing.Point(32, 849);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(168, 23);
             this.button1.TabIndex = 39;
@@ -326,7 +328,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(17, 713);
+            this.label2.Location = new System.Drawing.Point(17, 723);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(352, 32);
             this.label2.TabIndex = 40;
@@ -335,7 +337,7 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(17, 787);
+            this.label3.Location = new System.Drawing.Point(17, 797);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(423, 20);
             this.label3.TabIndex = 41;
@@ -344,7 +346,7 @@ namespace ShipWorks.ApplicationCore.Options
             // autoCreateShipments
             // 
             this.autoCreateShipments.AutoSize = true;
-            this.autoCreateShipments.Location = new System.Drawing.Point(35, 909);
+            this.autoCreateShipments.Location = new System.Drawing.Point(35, 919);
             this.autoCreateShipments.Name = "autoCreateShipments";
             this.autoCreateShipments.Size = new System.Drawing.Size(281, 17);
             this.autoCreateShipments.TabIndex = 43;
@@ -355,31 +357,11 @@ namespace ShipWorks.ApplicationCore.Options
             // 
             this.sectionShipmentCreation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionShipmentCreation.Location = new System.Drawing.Point(10, 878);
+            this.sectionShipmentCreation.Location = new System.Drawing.Point(10, 888);
             this.sectionShipmentCreation.Name = "sectionShipmentCreation";
             this.sectionShipmentCreation.Size = new System.Drawing.Size(481, 22);
             this.sectionShipmentCreation.TabIndex = 44;
             this.sectionShipmentCreation.Text = "Shipment Creation";
-            // 
-            // updateModifiedCustomerShipping
-            // 
-            this.updateModifiedCustomerShipping.AutoSize = true;
-            this.updateModifiedCustomerShipping.Location = new System.Drawing.Point(34, 506);
-            this.updateModifiedCustomerShipping.Name = "updateModifiedCustomerShipping";
-            this.updateModifiedCustomerShipping.Size = new System.Drawing.Size(323, 17);
-            this.updateModifiedCustomerShipping.TabIndex = 47;
-            this.updateModifiedCustomerShipping.Text = "Update the shipping email and mailing address from the order.";
-            this.updateModifiedCustomerShipping.UseVisualStyleBackColor = true;
-            // 
-            // updateModifiedCustomerBilling
-            // 
-            this.updateModifiedCustomerBilling.AutoSize = true;
-            this.updateModifiedCustomerBilling.Location = new System.Drawing.Point(34, 486);
-            this.updateModifiedCustomerBilling.Name = "updateModifiedCustomerBilling";
-            this.updateModifiedCustomerBilling.Size = new System.Drawing.Size(310, 17);
-            this.updateModifiedCustomerBilling.TabIndex = 46;
-            this.updateModifiedCustomerBilling.Text = "Update the billing email and mailing address from the order.";
-            this.updateModifiedCustomerBilling.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -390,14 +372,58 @@ namespace ShipWorks.ApplicationCore.Options
             this.label4.TabIndex = 45;
             this.label4.Text = "When ShipWorks downloads an order with updated details:";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(32, 485);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(192, 13);
+            this.label5.TabIndex = 48;
+            this.label5.Text = "When the billing address has changed:";
+            // 
+            // orderShippingAddressChanged
+            // 
+            this.orderShippingAddressChanged.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.orderShippingAddressChanged.FormattingEnabled = true;
+            this.orderShippingAddressChanged.Items.AddRange(new object[] {
+            "Type username",
+            "Select username from dropdown"});
+            this.orderShippingAddressChanged.Location = new System.Drawing.Point(230, 482);
+            this.orderShippingAddressChanged.Name = "orderShippingAddressChanged";
+            this.orderShippingAddressChanged.Size = new System.Drawing.Size(191, 21);
+            this.orderShippingAddressChanged.TabIndex = 49;
+            // 
+            // orderBillingAddressChanged
+            // 
+            this.orderBillingAddressChanged.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.orderBillingAddressChanged.FormattingEnabled = true;
+            this.orderBillingAddressChanged.Items.AddRange(new object[] {
+            "Type username",
+            "Select username from dropdown"});
+            this.orderBillingAddressChanged.Location = new System.Drawing.Point(242, 509);
+            this.orderBillingAddressChanged.Name = "orderBillingAddressChanged";
+            this.orderBillingAddressChanged.Size = new System.Drawing.Size(191, 21);
+            this.orderBillingAddressChanged.TabIndex = 50;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 512);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(205, 13);
+            this.label6.TabIndex = 51;
+            this.label6.Text = "When the shipping address has changed:";
+            // 
             // OptionPageAdvanced
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScrollMargin = new System.Drawing.Size(0, 8);
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.updateModifiedCustomerShipping);
-            this.Controls.Add(this.updateModifiedCustomerBilling);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.orderBillingAddressChanged);
+            this.Controls.Add(this.orderShippingAddressChanged);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.sectionShipmentCreation);
             this.Controls.Add(this.autoCreateShipments);
@@ -470,9 +496,11 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox autoCreateShipments;
         private UI.Controls.SectionTitle sectionShipmentCreation;
-        private System.Windows.Forms.CheckBox updateModifiedCustomerShipping;
-        private System.Windows.Forms.CheckBox updateModifiedCustomerBilling;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox orderShippingAddressChanged;
+        private System.Windows.Forms.ComboBox orderBillingAddressChanged;
+        private System.Windows.Forms.Label label6;
 
     }
 }
