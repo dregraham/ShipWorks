@@ -234,7 +234,8 @@ namespace ShipWorks.Data.Grid.Columns
 
                 case GridColumnPreviewInputType.LiteralString:
                     {
-                        GridColumnFormattedValue formattedValue = new GridColumnFormattedValue(exampleValue, null, null) { Text = (string) exampleValue };
+                        Debug.Assert(exampleValue as string != null);
+                        GridColumnFormattedValue formattedValue = new GridColumnFormattedValue(exampleValue, null, null) { Text = (exampleValue ?? "").ToString() };
 
                         ApplyDecoration(formattedValue);
 

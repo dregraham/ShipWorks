@@ -196,6 +196,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 {
                     // OrderMotion's CSVs are poorly formatted
                     reader.MissingFieldAction = MissingFieldAction.ReplaceByEmpty;
+                    reader.DuplicateFieldAction = DuplicateFieldAction.Ignore;
 
                     // cycle through the records
                     while (reader.ReadNextRecord())
@@ -281,9 +282,10 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
                 retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                // Fild wasn't found, skip it
+                // Field wasn't found, skip it
+                log.Warn(ex);
             }
         }
 
