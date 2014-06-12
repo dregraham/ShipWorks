@@ -53,7 +53,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
             serviceMappings.Add(new UpsServiceMapping(UpsServiceType.UpsExpress, USCountryCode, "07", "01", "01", "ES", WorldShipServiceDescriptions.UpsExpress, false, false));
             serviceMappings.Add(new UpsServiceMapping(UpsServiceType.UpsExpedited, USCountryCode, "02", "08", "05", "EX", WorldShipServiceDescriptions.UpsExpedited, false, false));
             serviceMappings.Add(new UpsServiceMapping(UpsServiceType.Ups3DaySelectFromCanada, USCountryCode, "12", "12", "33", "3DM", WorldShipServiceDescriptions.Ups3DaySelectFromCanada, false, false));
-
+            serviceMappings.Add(new UpsServiceMapping(UpsServiceType.UpsCaWorldWideExpressSaver, USCountryCode, "65", "65", "28", "SV", WorldShipServiceDescriptions.UpsExpressSaver, false, false));
+            
             // Puerto Rico service mappings
             serviceMappings.Add(new UpsServiceMapping(UpsServiceType.UpsExpedited, PuertoRicoCountryCode, "02", "08", "05", "EX", WorldShipServiceDescriptions.UpsExpedited, false, false));
             serviceMappings.Add(new UpsServiceMapping(UpsServiceType.UpsCaWorldWideExpressSaver, PuertoRicoCountryCode, "28", "65", "65", "SV", WorldShipServiceDescriptions.UpsExpressSaver, false, false));
