@@ -663,7 +663,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, string prefix)
         {
-            if (!shouldUpdate && IsAddressEmpty(order, prefix))
+            if (!shouldUpdate || IsAddressEmpty(order, prefix))
             {
                 return;
             }
@@ -679,12 +679,11 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Is the entity's address considered empty?
         /// </summary>
-        private static bool IsAddressEmpty(EntityBase2 existingCustomer, string prefix)
+        private static bool IsAddressEmpty(EntityBase2 entity, string prefix)
         {
-            PersonAdapter personAdapter = new PersonAdapter(existingCustomer, prefix);
+            PersonAdapter personAdapter = new PersonAdapter(entity, prefix);
 
             return string.IsNullOrEmpty(personAdapter.City) &&
-                   string.IsNullOrEmpty(personAdapter.StateProvCode) &&
                    string.IsNullOrEmpty(personAdapter.PostalCode);
         }
 
