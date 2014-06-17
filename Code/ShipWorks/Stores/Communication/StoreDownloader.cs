@@ -663,23 +663,23 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, string prefix)
         {
-            if (!shouldUpdate)
+            if (!shouldUpdate && IsAddressEmpty(order, prefix))
             {
                 return;
             }
 
             if (behavior == ModifiedOrderCustomerUpdateBehavior.AlwaysCopy ||
                 (behavior == ModifiedOrderCustomerUpdateBehavior.CopyIfBlank &&
-                 IsCustomerAddressEmpty(existingCustomer, prefix)))
+                 IsAddressEmpty(existingCustomer, prefix)))
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
             }
         }
 
         /// <summary>
-        /// Is the customer's address considered empty?
+        /// Is the entity's address considered empty?
         /// </summary>
-        private static bool IsCustomerAddressEmpty(CustomerEntity existingCustomer, string prefix)
+        private static bool IsAddressEmpty(EntityBase2 existingCustomer, string prefix)
         {
             PersonAdapter personAdapter = new PersonAdapter(existingCustomer, prefix);
 
