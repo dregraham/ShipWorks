@@ -628,8 +628,8 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, config, order, existingCustomer, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, config, order, existingCustomer, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
@@ -661,15 +661,15 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Update's the customer's address from an order, if it's necessary
         /// </summary>
-        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ConfigurationEntity config, OrderEntity order, CustomerEntity existingCustomer, string prefix)
+        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, string prefix)
         {
             if (!shouldUpdate)
             {
                 return;
             }
 
-            if (config.CustomerUpdateModifiedBilling == (int) ModifiedOrderCustomerUpdateBehavior.AlwaysCopy ||
-                (config.CustomerUpdateModifiedBilling == (int) ModifiedOrderCustomerUpdateBehavior.CopyIfBlank &&
+            if (behavior == ModifiedOrderCustomerUpdateBehavior.AlwaysCopy ||
+                (behavior == ModifiedOrderCustomerUpdateBehavior.CopyIfBlank &&
                  IsCustomerAddressEmpty(existingCustomer, prefix)))
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
