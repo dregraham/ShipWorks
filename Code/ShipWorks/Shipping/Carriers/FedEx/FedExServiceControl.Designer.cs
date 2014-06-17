@@ -82,10 +82,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelLoadAndCount = new System.Windows.Forms.Label();
             this.freightInsidePickup = new System.Windows.Forms.CheckBox();
             this.sectionOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.referenceShipmentIntegrity = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
-            this.labelShipmentIntegrity = new System.Windows.Forms.Label();
             this.referencePO = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelPO = new System.Windows.Forms.Label();
+            this.referenceShipmentIntegrity = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelShipmentIntegrity = new System.Windows.Forms.Label();
             this.referenceInvoice = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelInvoice = new System.Windows.Forms.Label();
             this.referenceCustomer = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -229,16 +229,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionRecipient
             // 
-            this.sectionRecipient.Collapsed = false;
-            // 
-            // sectionRecipient.ContentPanel
-            // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
-            this.sectionRecipient.Size = new System.Drawing.Size(504, 414);
+            this.sectionRecipient.Size = new System.Drawing.Size(504, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
             // personControl
@@ -256,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 1057);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 667);
             this.sectionReturns.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionShipment
@@ -273,7 +265,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionShipment.ContentPanel.Controls.Add(this.packagingType);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelPackaging);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 453);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(504, 338);
             // 
             // sectionHoldAtLocation
@@ -287,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
             this.sectionHoldAtLocation.ExpandedHeight = 176;
             this.sectionHoldAtLocation.ExtraText = "";
-            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 999);
+            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 609);
             this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
             this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
             this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
@@ -315,7 +307,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorTransport);
             this.sectionBilling.ExpandedHeight = 149;
             this.sectionBilling.ExtraText = "";
-            this.sectionBilling.Location = new System.Drawing.Point(3, 883);
+            this.sectionBilling.Location = new System.Drawing.Point(3, 493);
             this.sectionBilling.Name = "sectionBilling";
             this.sectionBilling.SectionName = "Billing";
             this.sectionBilling.SettingsKey = "84780845-669f-4fb1-9ab1-cd2accdff93c";
@@ -603,7 +595,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(3, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(1094, 213);
+            this.packageControl.Size = new System.Drawing.Size(975, 213);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
@@ -686,7 +678,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHomeDelivery.ContentPanel.Controls.Add(this.labelHomeInstructions);
             this.sectionHomeDelivery.ExpandedHeight = 144;
             this.sectionHomeDelivery.ExtraText = "";
-            this.sectionHomeDelivery.Location = new System.Drawing.Point(3, 941);
+            this.sectionHomeDelivery.Location = new System.Drawing.Point(3, 551);
             this.sectionHomeDelivery.Name = "sectionHomeDelivery";
             this.sectionHomeDelivery.SectionName = "Home Delivery";
             this.sectionHomeDelivery.SettingsKey = "{93c6c394-09fb-4126-9c2e-a5129d9b5ec6}";
@@ -776,7 +768,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFreight.ContentPanel.Controls.Add(this.freightInsidePickup);
             this.sectionFreight.ExpandedHeight = 89;
             this.sectionFreight.ExtraText = "";
-            this.sectionFreight.Location = new System.Drawing.Point(3, 970);
+            this.sectionFreight.Location = new System.Drawing.Point(3, 580);
             this.sectionFreight.Name = "sectionFreight";
             this.sectionFreight.SectionName = "Freight";
             this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
@@ -860,7 +852,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.ContentPanel.Controls.Add(this.labelSignature);
             this.sectionOptions.ExpandedHeight = 172;
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 825);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 435);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Signature & Reference";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -1024,7 +1016,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.ContentPanel.Controls.Add(this.pictureBox1);
             this.sectionEmail.ExpandedHeight = 277;
             this.sectionEmail.ExtraText = "";
-            this.sectionEmail.Location = new System.Drawing.Point(3, 912);
+            this.sectionEmail.Location = new System.Drawing.Point(3, 522);
             this.sectionEmail.Name = "sectionEmail";
             this.sectionEmail.SectionName = "Email Notifications";
             this.sectionEmail.SettingsKey = "{2a314180-f0db-4a03-ba4c-dcc418010bca}";
@@ -1101,6 +1093,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(9, 158);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
             this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(402, 1);
+            this.kryptonBorderEdgeEmail2.TabIndex = 21;
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
@@ -1180,6 +1173,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(8, 59);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
             this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(402, 1);
+            this.kryptonBorderEdgeEmail.TabIndex = 13;
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
@@ -1333,6 +1327,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdge1.Location = new System.Drawing.Point(9, 158);
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(402, 1);
+            this.kryptonBorderEdge1.TabIndex = 21;
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
             // 
             // checkBox3
@@ -1412,6 +1407,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdge2.Location = new System.Drawing.Point(8, 59);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
             this.kryptonBorderEdge2.Size = new System.Drawing.Size(402, 1);
+            this.kryptonBorderEdge2.TabIndex = 13;
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
             // 
             // label5
@@ -1555,7 +1551,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.ContentPanel.Controls.Add(this.codEnabled);
             this.sectionCOD.ExpandedHeight = 543;
             this.sectionCOD.ExtraText = "";
-            this.sectionCOD.Location = new System.Drawing.Point(3, 1028);
+            this.sectionCOD.Location = new System.Drawing.Point(3, 638);
             this.sectionCOD.Name = "sectionCOD";
             this.sectionCOD.SectionName = "C.O.D.";
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
@@ -1650,8 +1646,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             0,
             0,
             0,
-            131072});
-            this.codAmount.IgnoreSet = false;
+            65536});
             this.codAmount.Location = new System.Drawing.Point(86, 30);
             this.codAmount.Name = "codAmount";
             this.codAmount.Size = new System.Drawing.Size(94, 21);
@@ -1732,7 +1727,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartManifestID);
             this.sectionSmartPost.ExpandedHeight = 174;
             this.sectionSmartPost.ExtraText = "";
-            this.sectionSmartPost.Location = new System.Drawing.Point(3, 854);
+            this.sectionSmartPost.Location = new System.Drawing.Point(3, 464);
             this.sectionSmartPost.Name = "sectionSmartPost";
             this.sectionSmartPost.SectionName = "FedEx SmartPost";
             this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
@@ -1855,7 +1850,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionPackageDetails.ContentPanel.Controls.Add(this.otherPackageHolder);
             this.sectionPackageDetails.ExpandedHeight = 774;
             this.sectionPackageDetails.ExtraText = "";
-            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 796);
+            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 406);
             this.sectionPackageDetails.Name = "sectionPackageDetails";
             this.sectionPackageDetails.SectionName = "Other Package Details";
             this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
@@ -1918,7 +1913,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.dropoffType);
             this.sectionServiceOptions.ExpandedHeight = 63;
             this.sectionServiceOptions.ExtraText = "";
-            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 1086);
+            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 696);
             this.sectionServiceOptions.Name = "sectionServiceOptions";
             this.sectionServiceOptions.SectionName = "Service Options";
             this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";

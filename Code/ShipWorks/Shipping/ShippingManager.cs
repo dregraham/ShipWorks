@@ -53,7 +53,6 @@ using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Shipping
 {
@@ -795,14 +794,7 @@ namespace ShipWorks.Shipping
             // Determine residential status
             if (shipmentType.IsResidentialStatusRequired(clonedShipment))
             {
-                try
-                {
-                    clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
-                }
-                catch (FedExAddressValidationException ex)
-                {
-                    log.WarnFormat("FedEx could not determine the residential status of an address for shipment ID {0}. {1}", clonedShipment.ShipmentID, ex.Message);
-                }
+                clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
             }
 
             // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
