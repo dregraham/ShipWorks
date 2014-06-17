@@ -1204,6 +1204,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.Ups == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.Ups.Packages.Any())
             {
                 throw new UpsException("There must be at least one package to create the UPS package adapter.");
