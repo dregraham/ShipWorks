@@ -62,14 +62,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteAttributeString("ID", "0");
 
                     xmlWriter.WriteElementString("Service", "ONLINE");
-                    xmlWriter.WriteElementString("FirstClassMailType", GetFirstClassMailType(packaging));
                     xmlWriter.WriteElementString("ZipOrigination", new PersonAdapter(shipment, "Origin").PostalCode5);
                     xmlWriter.WriteElementString("ZipDestination", new PersonAdapter(shipment, "Ship").PostalCode5);
                     
                     WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
-                    xmlWriter.WriteElementString("Container", GetContainerValue(shipment.Postal, packaging, shipment.Postal.NonRectangular));
+                    xmlWriter.WriteElementString("Container", string.Empty); // Required element, but value is not
 
                     DimensionsAdapter dimensions = new DimensionsAdapter(shipment.Postal);
                     xmlWriter.WriteElementString("Size", GetSizeValue(shipment.Postal, dimensions));
