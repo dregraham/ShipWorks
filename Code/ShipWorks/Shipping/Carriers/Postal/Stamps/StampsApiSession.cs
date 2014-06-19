@@ -809,15 +809,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
             {
                 // For APO/FPO, the customs docs come in the next two images
-                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && shipment.ShipPostalCode.StartsWith("09"))
                 {
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
                     {
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(49, 48, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(49, 1078, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(49, 48, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(49, 1078, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1030, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1030, 1597, 1005));
                     }
                     else
                     {
