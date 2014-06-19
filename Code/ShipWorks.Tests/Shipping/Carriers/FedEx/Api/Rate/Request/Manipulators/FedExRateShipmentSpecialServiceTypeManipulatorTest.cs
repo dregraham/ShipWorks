@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
@@ -155,6 +156,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             // Setup the test by adjusting the ship date to be a Saturday
             shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
+            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.RegularPickup;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -163,6 +165,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             serviceTypes.AddRange(((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+        }
+
+        [TestMethod]
+        public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsSaturdayAndDropoffTypeIsNotRegularPickup_Test()
+        {
+            // Setup the test by adjusting the ship date to be a Saturday
+            shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
+            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.Station;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Grab the shipment special service type array and make sure the future shipment type is present
+            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
+            serviceTypes.AddRange(((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+
+            Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
         [TestMethod]
@@ -234,6 +252,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
             shipmentEntity.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
+            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.RegularPickup;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -243,6 +262,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+        }
+
+        [TestMethod]
+        public void Manipulate_DoesNotAddSaturdayPickup_WhenShipDateIsSaturdayAndDropoffTypeIsNotRegularPickup_Test()
+        {
+            // Setup the test by adjusting the ship date to be a Saturday at least a week away
+            shipmentEntity.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
+            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.Station;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Grab the shipment special service type array and make sure the future shipment type is present
+            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
+            serviceTypes.AddRange(((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+
+            Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
+            Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
         [TestMethod]

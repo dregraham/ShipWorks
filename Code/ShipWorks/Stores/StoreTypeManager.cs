@@ -106,6 +106,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);             
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
+                case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");

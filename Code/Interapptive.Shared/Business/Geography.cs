@@ -381,6 +381,12 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public static string GetStateProvCode(string name)
         {
+            // If we get a null (which we've seen from ebay at least), just return an empty string
+            if (string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
             string code;
             if (states.TryGetValue(name, out code))
             {

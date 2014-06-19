@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
@@ -61,10 +62,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 specialServiceTypes.Add(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT);
             }
 
-            if (shipTimestamp.DayOfWeek == DayOfWeek.Saturday)
+            // If dropoff type is regular pick up or courier, then we need to send ShipmentSpecialServiceType.SATURDAY_PICKUP
+            // Otherwise, the customer will not be asking for a pickup.
+            FedExDropoffType dropoffType = (FedExDropoffType)request.ShipmentEntity.FedEx.DropoffType;
+            if (dropoffType == FedExDropoffType.RegularPickup || dropoffType == FedExDropoffType.RequestCourier)
             {
-                // This will be a Saturday pickup
-                specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_PICKUP);
+                if (shipTimestamp.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    // This will be a Saturday pickup
+                    specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_PICKUP);
+                }
             }
 
             // Pull out the FedEx shipment info from the shipment entity and check if they want Saturday 

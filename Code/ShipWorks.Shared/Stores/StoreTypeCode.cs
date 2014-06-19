@@ -194,6 +194,11 @@ namespace ShipWorks.Stores
         [Description("Sears")]
         [StoreTypeIdentity("SEARS", "SRS")]
         [StoreTypeIcon("sears")]
-        Sears = 36
+        Sears = 36,
+
+        [Description("SolidCommerce")]
+        [StoreTypeIdentity("SOLIDCOMMERCE", "SDC")]
+        [StoreTypeIcon("solidcommerce")]
+        SolidCommerce = 37
     }
 }

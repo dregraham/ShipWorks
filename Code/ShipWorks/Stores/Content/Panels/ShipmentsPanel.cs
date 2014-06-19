@@ -133,11 +133,13 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 ratesControl.ChangeShipment(null);
 
-                // Don't auto create for a customer, only for an order
-                if (EntityUtility.GetEntityType(EntityID.Value) == EntityType.OrderEntity && ShippingSettings.Fetch().AutoCreateShipments)
-                {                    
-                    long orderID = EntityID.Value;
+                long orderID = EntityID.Value;
 
+                // Don't auto create for a customer, only for an order
+                if (EntityUtility.GetEntityType(orderID) == EntityType.OrderEntity && 
+                    ShippingSettings.Fetch().AutoCreateShipments &&
+                    UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID))
+                {
                     // Don't do it if we are already in the middle of doing it
                     if (!autoCreatingShipments.Contains(orderID))
                     {

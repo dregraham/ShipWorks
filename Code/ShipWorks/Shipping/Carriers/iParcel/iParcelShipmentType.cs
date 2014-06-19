@@ -137,12 +137,23 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="shipment">The shipment.</param>
         protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
         {
+            if (shipment.IParcel.Packages.RemovedEntitiesTracker == null)
+            {
+                shipment.IParcel.Packages.RemovedEntitiesTracker = new IParcelPackageCollection();
+            }
+
             base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
 
             while (shipment.IParcel.Packages.Count < knowledgebaseEntry.Packages.Count())
             {
                 IParcelPackageEntity package = CreateDefaultPackage();
                 shipment.IParcel.Packages.Add(package);
+            }
+
+            while (shipment.IParcel.Packages.Count > knowledgebaseEntry.Packages.Count())
+            {
+                // Remove the last package until the packages counts match
+                shipment.IParcel.Packages.RemoveAt(shipment.IParcel.Packages.Count - 1);
             }
         }
 
@@ -151,6 +162,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.IParcel == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.IParcel.Packages.Any())
             {
                 throw new iParcelException("There must be at least one package to create the i-parcel package adapter.");

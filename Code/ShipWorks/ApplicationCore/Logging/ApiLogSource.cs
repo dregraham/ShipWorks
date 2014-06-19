@@ -45,6 +45,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Newegg,
         BuyDotCom,
         Sears,
+        SolidCommerce,
         WebRequestTask,
 
         [ApiPrivateLogSource]
@@ -82,5 +83,6 @@ namespace ShipWorks.ApplicationCore.Logging
 
         [ApiPrivateLogSource]
         iParcel
+
     }
 }

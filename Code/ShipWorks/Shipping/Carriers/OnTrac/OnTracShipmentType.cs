@@ -93,6 +93,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.OnTrac == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             return new List<IPackageAdapter>()
             {
                 new OnTracPackageAdapter(shipment)

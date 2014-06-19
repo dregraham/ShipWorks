@@ -214,14 +214,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             },
 
                         new GridColumnDefinition("{B79CDE81-97FA-4F09-B900-5F26DA061232}",
-                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "My eBay (Shipped)", true,
+                            new GridBooleanDisplayType() { TrueText = "Shipped", FalseText = "Not Shipped" }, "My eBay (Shipped)", "Shipped",
                             EbayOrderItemFields.MyEbayShipped)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
                             },
 
                         new GridColumnDefinition("{8E552A78-A06F-457E-80D9-415BEAFC5143}",
-                            new GridBooleanDisplayType() { TrueText = "Paid", FalseText = "Not Paid" }, "My eBay (Paid)", true,
+                            new GridBooleanDisplayType() { TrueText = "Paid", FalseText = "Not Paid" }, "My eBay (Paid)", "Paid",
                             EbayOrderItemFields.MyEbayPaid)
                             {
                                 StoreTypeCode = StoreTypeCode.Ebay
@@ -332,7 +332,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         #region BigCommerce 
 
                         new GridColumnDefinition("{A6555016-825A-4751-AE26-BCF05735EA45}", true,
-                            new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" }, "Digital Item", false,
+                            new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" }, "Digital Item", "Yes",
                             BigCommerceOrderItemFields.IsDigitalItem)
                             {
                                 StoreTypeCode = StoreTypeCode.BigCommerce

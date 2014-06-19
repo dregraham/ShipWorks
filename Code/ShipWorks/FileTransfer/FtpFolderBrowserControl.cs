@@ -20,6 +20,7 @@ namespace ShipWorks.FileTransfer
     /// </summary>
     public partial class FtpFolderBrowserControl : UserControl
     {
+        const string rootName = "<home>";
         Ftp ftp;
 
         class FtpFolderNode
@@ -80,11 +81,21 @@ namespace ShipWorks.FileTransfer
             {
                 ftp = FtpUtility.LogonToFtp(account);
 
-                var rootFolders = GetFolderList("/");
+                // Since we get folders below root, we need to create a "fake" node so that
+                // a user can select the root of an FTP site, if they want
+                List<FtpFolderNode> rootFolders = new List<FtpFolderNode>
+                {
+                    new FtpFolderNode
+                    {
+                        Name = rootName,
+                        Path = "/",
+                        Children = GetFolderList("/")
+                    }
+                };
 
                 if (!string.IsNullOrWhiteSpace(initialFolder))
                 {
-                    FetchNecessaryDecendants(rootFolders, initialFolder);
+                    FetchNecessaryDecendants(rootFolders, rootName + EnsureStartingSlash(initialFolder));
                 }
 
                 return rootFolders;
@@ -115,6 +126,19 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
+        /// Ensure the passed string has a slash at the beginning
+        /// </summary>
+        private static string EnsureStartingSlash(string value)
+        {
+            if (value == null)
+            {
+                return "/";
+            }
+
+            return value.StartsWith("/", StringComparison.Ordinal) ? value : "/" + value;
+        }
+
+        /// <summary>
         /// Load the imap folders from the result of the async task
         /// </summary>
         private void LoadRootFolders(Task<List<FtpFolderNode>> task, string initialFolder)
@@ -131,7 +155,9 @@ namespace ShipWorks.FileTransfer
             CreateGridRows(rootFolders, sandGrid.Rows);
 
             // Try to select the desired selection
-            GridRow desiredSelection = sandGrid.FlatRows.Cast<GridRow>().FirstOrDefault(r => ((FtpFolderNode) r.Tag).Path == initialFolder);
+            string initialFolderWithSlash = EnsureStartingSlash(initialFolder);
+            GridRow desiredSelection = sandGrid.FlatRows.Cast<GridRow>().FirstOrDefault(r => ((FtpFolderNode) r.Tag).Path == initialFolderWithSlash);
+
             if (desiredSelection != null)
             {
                 GridRow parent = desiredSelection.ParentRow;
@@ -145,9 +171,12 @@ namespace ShipWorks.FileTransfer
                 desiredSelection.EnsureVisible();
             }
 
-            // Select the default
             if (sandGrid.Rows.Count > 0)
             {
+                // Ensure the root row is expanded and not selected by default
+                sandGrid.Rows[0].Expanded = true;
+
+                // Select the default
                 if (sandGrid.SelectedElements.Count == 0)
                 {
                     sandGrid.Rows[0].Selected = true;

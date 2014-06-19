@@ -61,6 +61,16 @@ namespace ShipWorks.Shipping.ShipSense
 
             packages = deserializedEntry.Packages.ToList();
             CustomsItems = deserializedEntry.CustomsItems.ToList();
+
+            // Disregard the customs for any entry that has customs item info that is blank, so
+            // blank data doesn't overwrite the order item data when ShipSense gets applied. This
+            // came up as a result of UPS allowing shipments to be processed with blank info that
+            // was being saved to ShipSense.
+            if (CustomsItems.Any(item => string.IsNullOrWhiteSpace(item.Description) || string.IsNullOrWhiteSpace(item.CountryOfOrigin)
+                                         || item.UnitValue <= 0 || item.Weight <= 0))
+            {
+                CustomsItems = new List<KnowledgebaseCustomsItem>();
+            }
         }
 
         /// <summary>

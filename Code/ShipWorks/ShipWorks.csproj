@@ -2405,6 +2405,7 @@
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\SolidCommerce\SolidCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\IApiQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\MSAccessQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\SqlServerQueryProvider.cs" />
@@ -10644,6 +10645,7 @@
     <None Include="Resources\smiley.png" />
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
+    <None Include="Resources\solidcommerce.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
