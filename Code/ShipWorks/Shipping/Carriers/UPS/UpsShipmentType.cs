@@ -1234,5 +1234,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             return adapters;
         }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (shipment.OriginCountryCode == "PR" && shipment.ShipCountryCode == "US")
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
+        }
     }
 }
