@@ -809,7 +809,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
             {
                 // For APO/FPO, the customs docs come in the next two images
-                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && shipment.ShipPostalCode.StartsWith("09"))
                 {
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
