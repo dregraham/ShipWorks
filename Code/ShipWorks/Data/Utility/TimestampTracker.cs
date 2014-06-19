@@ -45,7 +45,16 @@ namespace ShipWorks.Data.Utility
         {
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                long current = (long) SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)");
+                long current = 0;
+                object value = SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)");
+
+                // During a reconnect or after an upgrade, the timestamp is sometimes returned as null
+                // If that happens, we'll assume no changes for the moment and let the next run through
+                // of the heartbeat pick it up.
+                if (value is long)
+                {
+                    current = (long) value;
+                }
 
                 if (current > timestamp)
                 {
