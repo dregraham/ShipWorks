@@ -3264,6 +3264,8 @@ namespace ShipWorks.Data.Model
 		CustomsOptionsDesription,
 		///<summary>CommercialInvoice. </summary>
 		CommercialInvoice,
+		///<summary>CommercialInvoiceFileElectronically. </summary>
+		CommercialInvoiceFileElectronically,
 		///<summary>CommercialInvoiceTermsOfSale. </summary>
 		CommercialInvoiceTermsOfSale,
 		///<summary>CommercialInvoicePurpose. </summary>

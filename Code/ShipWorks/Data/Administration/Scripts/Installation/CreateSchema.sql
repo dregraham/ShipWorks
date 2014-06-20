@@ -1547,6 +1547,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CustomsOptionsType] [int] NOT NULL,
 [CustomsOptionsDesription] [nvarchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CommercialInvoice] [bit] NOT NULL,
+[CommercialInvoiceFileElectronically] [bit] NOT NULL,
 [CommercialInvoiceTermsOfSale] [int] NOT NULL,
 [CommercialInvoicePurpose] [int] NOT NULL,
 [CommercialInvoiceComments] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

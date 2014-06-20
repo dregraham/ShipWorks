@@ -302,6 +302,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.CustomsNaftaProducerId = string.Empty;
 
             shipment.FedEx.CommercialInvoice = false;
+            shipment.FedEx.CommercialInvoiceFileElectronically = false;
             shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
             shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Sold;
             shipment.FedEx.CommercialInvoiceComments = "";

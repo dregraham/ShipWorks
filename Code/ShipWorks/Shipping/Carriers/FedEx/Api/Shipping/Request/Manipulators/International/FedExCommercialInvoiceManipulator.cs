@@ -63,8 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 };
                 nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
 
-                // TODO: un comment this when FedEx tells us why we can't request PNGs
-                //ConfigureEtd(fedExShipment, nativeRequest);
+                ConfigureEtd(fedExShipment, nativeRequest);
             }
         }
 
@@ -73,6 +72,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         private static void ConfigureEtd(FedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest nativeRequest)
         {
+            // Return if the user chose no commercial invoice or not to file electronically.
+            if (!fedExShipment.CommercialInvoice || !fedExShipment.CommercialInvoiceFileElectronically)
+            {
+                return;
+            }
+
             // Only set the shipping document specification if we are not SmartPost
             if ((FedExServiceType) fedExShipment.Service == FedExServiceType.SmartPost)
             {
@@ -119,21 +124,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>(shippingDocumentSpecification.ShippingDocumentTypes);
             shippingDocumentTypes.Add(RequestedShippingDocumentType.COMMERCIAL_INVOICE);
             shippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
-
-            CertificateOfOriginDetail certificateOfOriginDetail = shippingDocumentSpecification.CertificateOfOrigin;
-            if (certificateOfOriginDetail == null)
-            {
-                certificateOfOriginDetail = new CertificateOfOriginDetail();
-            }
             
-            certificateOfOriginDetail.DocumentFormat = new ShippingDocumentFormat()
-            {
-                ImageType = ShippingDocumentImageType.PNG,
-                ImageTypeSpecified = true,
-                StockType = ShippingDocumentStockType.PAPER_4X6,
-                StockTypeSpecified = true
-            };
-
             CommercialInvoiceDetail commercialInvoiceDetail = shippingDocumentSpecification.CommercialInvoiceDetail;
             if (commercialInvoiceDetail == null)
             {
@@ -142,13 +133,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             commercialInvoiceDetail.Format = new ShippingDocumentFormat()
             {
-                ImageType = ShippingDocumentImageType.PNG,
+                ImageType = ShippingDocumentImageType.PDF,
                 ImageTypeSpecified = true,
-                StockType = ShippingDocumentStockType.PAPER_4X6,
+                StockType = ShippingDocumentStockType.PAPER_LETTER,
                 StockTypeSpecified = true
             };
 
-            shippingDocumentSpecification.CertificateOfOrigin = certificateOfOriginDetail;
             shippingDocumentSpecification.CommercialInvoiceDetail = commercialInvoiceDetail;
 
             nativeRequest.RequestedShipment.ShippingDocumentSpecification = shippingDocumentSpecification;

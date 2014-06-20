@@ -1125,6 +1125,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsOptionsType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsOptionsType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsOptionsDesription", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsOptionsDesription, 32, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoice", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoice, 0, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoiceFileElectronically", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoiceFileElectronically, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoiceTermsOfSale", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoiceTermsOfSale, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoicePurpose", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoicePurpose, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoiceComments", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoiceComments, 200, 0, 0);

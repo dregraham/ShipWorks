@@ -730,6 +730,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CommercialInvoice", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("CommercialInvoiceFileElectronically", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("CommercialInvoiceTermsOfSale", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1923,6 +1926,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.CommercialInvoice, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.CommercialInvoice, value); }
+		}
+
+		/// <summary> The CommercialInvoiceFileElectronically property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."CommercialInvoiceFileElectronically"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean CommercialInvoiceFileElectronically
+		{
+			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.CommercialInvoiceFileElectronically, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.CommercialInvoiceFileElectronically, value); }
 		}
 
 		/// <summary> The CommercialInvoiceTermsOfSale property of the Entity FedExShipment<br/><br/>

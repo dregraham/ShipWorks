@@ -6982,6 +6982,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoice);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceFileElectronically field instance</summary>
+		public static EntityField2 CommercialInvoiceFileElectronically
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoiceFileElectronically);}
+		}
 		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceTermsOfSale field instance</summary>
 		public static EntityField2 CommercialInvoiceTermsOfSale
 		{
