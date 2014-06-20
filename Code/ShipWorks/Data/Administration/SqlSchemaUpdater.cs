@@ -1,40 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
 using System.Data;
-using System.IO;
-using System.Xml;
 using System.Linq;
 using log4net;
-using System.Xml.XPath;
-using Interapptive.Shared;
-using System.Windows.Forms;
-using System.Threading;
-using Interapptive.Shared.IO.Zip;
 using System.Reflection;
-using ShipWorks.Data;
-using ShipWorks.Data.Administration;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
-using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Administration.UpdateFrom2x;
-using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Filters;
-using System.Transactions;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Audit;
-using System.Collections.ObjectModel;
-using ShipWorks.Data.Utility;
 using ShipWorks.ApplicationCore.Interaction;
 using NDesk.Options;
 using ShipWorks.Data.Administration.UpdateFrom2x.Database;
-using ShipWorks.SqlServer.Filters.DirtyCounts;
-using System.Collections;
-using IsolationLevel = System.Data.IsolationLevel;
 
 namespace ShipWorks.Data.Administration
 {
@@ -146,8 +124,8 @@ namespace ShipWorks.Data.Administration
 
                             ExistingConnectionScope.Commit();
 
-                            // If we were upgrading from 3.9.0.4 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                            if (installed <= new Version(3, 9, 0, 4))
+                            // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
+                            if (installed <= new Version(3, 9, 3, 0))
                             {
                                 ExistingConnectionScope.ExecuteWithCommand(cmd =>
                                 {
