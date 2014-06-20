@@ -172,7 +172,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Get the certificate verification data from Tango
-            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCarrierCertificateVerificationData");
+            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "CarrierCertificate");
 
             // Pull certificate verification data from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
