@@ -239,12 +239,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="shipment">The shipment.</param>
         protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
         {
+            if (shipment.Ups.Packages.RemovedEntitiesTracker == null)
+            {
+                shipment.Ups.Packages.RemovedEntitiesTracker = new UpsPackageCollection();
+            }
+
             base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
 
             while (shipment.Ups.Packages.Count < knowledgebaseEntry.Packages.Count())
             {
                 UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
                 shipment.Ups.Packages.Add(package);
+            }
+
+            while (shipment.Ups.Packages.Count > knowledgebaseEntry.Packages.Count())
+            {
+                // Remove the last package until the packages counts match
+                shipment.Ups.Packages.RemoveAt(shipment.Ups.Packages.Count - 1);
             }
         }
 
@@ -1204,6 +1215,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.Ups == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.Ups.Packages.Any())
             {
                 throw new UpsException("There must be at least one package to create the UPS package adapter.");
@@ -1217,6 +1233,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return adapters;
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (shipment.OriginCountryCode == "PR" && shipment.ShipCountryCode == "US")
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
         }
     }
 }

@@ -51,10 +51,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 // is the category that most of our users will be in.
                 double ratedWeight = shipment.TotalWeight > 0 ? shipment.TotalWeight : BestRateScope.IsActive ? 0.88 : .1;
 
+                DimensionsAdapter dimensions = new DimensionsAdapter(shipment.Postal);
+
                 // Domestic
                 if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
                 {
-                    xmlWriter.WriteStartElement("RateV3Request");
+                    xmlWriter.WriteStartElement("RateV4Request");
                     xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
                     xmlWriter.WriteAttributeString("PASSWORD", PostalWebUtility.UspsPassword);
 
@@ -62,17 +64,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteAttributeString("ID", "0");
 
                     xmlWriter.WriteElementString("Service", "ONLINE");
-                    xmlWriter.WriteElementString("FirstClassMailType", GetFirstClassMailType(packaging));
                     xmlWriter.WriteElementString("ZipOrigination", new PersonAdapter(shipment, "Origin").PostalCode5);
                     xmlWriter.WriteElementString("ZipDestination", new PersonAdapter(shipment, "Ship").PostalCode5);
                     
                     WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
                     xmlWriter.WriteElementString("Ounces", weightValue.OuncesOnly.ToString());
-                    xmlWriter.WriteElementString("Container", GetContainerValue(packaging, shipment.Postal.NonRectangular));
+                    xmlWriter.WriteElementString("Container", string.Empty); // Required element, but value is not
 
-                    DimensionsAdapter dimensions = new DimensionsAdapter(shipment.Postal);
-                    xmlWriter.WriteElementString("Size", GetSizeValue(dimensions));
+                    
+                    xmlWriter.WriteElementString("Size", GetSizeValue(shipment.Postal, dimensions));
                     xmlWriter.WriteElementString("Width", dimensions.Width.ToString());
                     xmlWriter.WriteElementString("Length", dimensions.Length.ToString());
                     xmlWriter.WriteElementString("Height", dimensions.Height.ToString());
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 // International
                 else
                 {
-                    xmlWriter.WriteStartElement("IntlRateRequest");
+                    xmlWriter.WriteStartElement("IntlRateV2Request");
                     xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
                     xmlWriter.WriteAttributeString("PASSWORD", PostalWebUtility.UspsPassword);
 
@@ -99,7 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                     xmlWriter.WriteElementString("Machinable", shipment.Postal.NonMachinable ? "false" : "true");
                     xmlWriter.WriteElementString("MailType", GetInternationalMailType(packaging));
+                    xmlWriter.WriteElementString("ValueOfContents", shipment.CustomsValue.ToString());
                     xmlWriter.WriteElementString("Country", Geography.GetCountryName(shipment.ShipCountryCode));
+                    xmlWriter.WriteElementString("Container", GetContainerValue(shipment.Postal, packaging, shipment.Postal.NonRectangular));
+                    xmlWriter.WriteElementString("Size", GetSizeValue(shipment.Postal, dimensions));
+                    xmlWriter.WriteElementString("Width", dimensions.Width.ToString());
+                    xmlWriter.WriteElementString("Length", dimensions.Length.ToString());
+                    xmlWriter.WriteElementString("Height", dimensions.Height.ToString());
+                    xmlWriter.WriteElementString("Girth", dimensions.Girth.ToString());
 
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndElement();
@@ -114,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             logger.LogRequest(xmlRequest);
 
             // Process the request
-            string xmlResponse = ProcessXmlRequest(xmlRequest, PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) ? "RateV3" : "IntlRate");
+            string xmlResponse = ProcessXmlRequest(xmlRequest, PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) ? "RateV4" : "IntlRateV2");
 
             // Log the response
             logger.LogResponse(xmlResponse);
@@ -547,49 +555,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Get the API size value to use based on the given dimensions
         /// </summary>
-        private static string GetSizeValue(DimensionsAdapter dimensions)
+        private static string GetSizeValue(PostalShipmentEntity postalShipment, DimensionsAdapter dimensions)
         {
-            double size = dimensions.Length + 2 * (dimensions.Width + dimensions.Height);
-
-            if (size <= 84)
+            if (postalShipment.PackagingType == (int)PostalPackagingType.Package)
             {
-                return "REGULAR";
+                if (dimensions.Height > 12 || dimensions.Width > 12 || dimensions.Length > 12)
+                {
+                    return "LARGE";
+                }
             }
-
-            if (size <= 108)
-            {
-                return "LARGE";
-            }
-
-            return "OVERSIZE";
-        }
-
-        /// <summary>
-        /// Get the API value to use for FirstClassMailType for the given packaging
-        /// </summary>
-        private static string GetFirstClassMailType(PostalPackagingType packaging)
-        {
-            switch (packaging)
-            {
-                case PostalPackagingType.Envelope:
-                case PostalPackagingType.LargeEnvelope:
-                case PostalPackagingType.FlatRateEnvelope:
-                    return "FLAT";
-
-                case PostalPackagingType.Package:
-                case PostalPackagingType.FlatRateSmallBox:
-                case PostalPackagingType.FlatRateMediumBox:
-                case PostalPackagingType.FlatRateLargeBox:
-                default:
-                    return "PARCEL";
-            }
+            
+            return "REGULAR";
         }
 
         /// <summary>
         /// Get the API value to use for the container tag
         /// </summary>
-        private static string GetContainerValue(PostalPackagingType packaging, bool nonRectangular)
+        private static string GetContainerValue(PostalShipmentEntity postalShipment, PostalPackagingType packaging, bool nonRectangular)
         {
+            
             switch (packaging)
             {
                 case PostalPackagingType.FlatRateSmallBox: return "SM FLAT RATE BOX";
@@ -597,7 +581,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 case PostalPackagingType.FlatRateLargeBox: return "LG FLAT RATE BOX";
                 case PostalPackagingType.FlatRateEnvelope: return "FLAT RATE ENVELOPE";
                 case PostalPackagingType.Package:
-                    return nonRectangular ? "NONRECTANGULAR" : "RECTANGULAR";
+                    DimensionsAdapter adapter = new DimensionsAdapter(postalShipment);
+                    if (GetSizeValue(postalShipment, adapter) == "REGULAR")
+                    {
+                        // Postal doesn't like container value for regular packages
+                        return "VARIABLE";
+                    }
+                    else
+                    {
+                        return nonRectangular ? "NONRECTANGULAR" : "RECTANGULAR";
+                    }
                 default:
                     return "VARIABLE";
             }

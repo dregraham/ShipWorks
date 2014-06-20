@@ -57,6 +57,12 @@ namespace ShipWorks.ApplicationCore.Options
             updateCustomerBilling.Checked = config.CustomerUpdateBilling;
             updateCustomerShipping.Checked = config.CustomerUpdateShipping;
 
+            EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderBillingAddressChanged);
+            orderBillingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling;
+
+            EnumHelper.BindComboBox<ModifiedOrderCustomerUpdateBehavior>(orderShippingAddressChanged);
+            orderShippingAddressChanged.SelectedValue = (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping;
+
             auditNewOrders.Checked = config.AuditNewOrders;
             auditDeletedOrders.Checked = config.AuditDeletedOrders;
 
@@ -80,6 +86,9 @@ namespace ShipWorks.ApplicationCore.Options
 
             config.CustomerUpdateBilling = updateCustomerBilling.Checked;
             config.CustomerUpdateShipping = updateCustomerShipping.Checked;
+
+            config.CustomerUpdateModifiedBilling = (int) orderBillingAddressChanged.SelectedValue;
+            config.CustomerUpdateModifiedShipping = (int) orderShippingAddressChanged.SelectedValue;
 
             config.AuditNewOrders = auditNewOrders.Checked;
             config.AuditDeletedOrders = auditDeletedOrders.Checked;

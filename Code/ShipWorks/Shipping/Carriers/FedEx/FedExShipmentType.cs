@@ -178,6 +178,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.FedEx == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.FedEx.Packages.Any())
             {
                 throw new FedExException("There must be at least one package to create the FedEx package adapter.");
@@ -383,12 +388,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
         {
+            if (shipment.FedEx.Packages.RemovedEntitiesTracker == null)
+            {
+                shipment.FedEx.Packages.RemovedEntitiesTracker = new FedExPackageCollection();
+            }
+
             base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
 
             while (shipment.FedEx.Packages.Count < knowledgebaseEntry.Packages.Count())
             {
                 FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
                 shipment.FedEx.Packages.Add(package);
+            }
+
+            while (shipment.FedEx.Packages.Count > knowledgebaseEntry.Packages.Count())
+            {
+                // Remove the last package until the packages counts match
+                shipment.FedEx.Packages.RemoveAt(shipment.FedEx.Packages.Count - 1);
             }
         }
 
