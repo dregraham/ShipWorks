@@ -12,17 +12,17 @@ using Apitron.PDF.Rasterizer.Configuration;
 namespace Interapptive.Shared.Pdf
 {
     /// <summary>
-    /// Implementation of IPdfDocument
+    /// Implementation of IPdfDocument that uses Apitron to convert a PDF to an image (TIFF) .
     /// </summary>
     public class PdfDocument : IPdfDocument, IDisposable
     {
         private Document pdfDocument;
-        private List<Stream> images = new List<Stream>();
+        private readonly List<Stream> images = new List<Stream>();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PdfDocument"/> class.
         /// </summary>
-        /// <param name="pdf">Stream representation of the pdf</param>
+        /// <param name="pdf">Stream representation of the PDF.</param>
         public PdfDocument(Stream pdf)
         {
             pdfDocument = new Document(pdf);
@@ -34,17 +34,14 @@ namespace Interapptive.Shared.Pdf
         /// <returns>List of streams, for each page image.</returns>
         public IEnumerable<Stream> ToImages()
         {
-            // Iterate through each page, rendering each to an image
-            foreach (Page currentPage in pdfDocument.Pages)
+            using (MemoryStream stream = new MemoryStream())
             {
-                // We use original page's width and height for image as well as default rendering settings
-                using (Bitmap bitmap = currentPage.Render((int)currentPage.Width, (int)currentPage.Height, new RenderingSettings()))
-                {
-                    Stream imageMemoryStream = new MemoryStream();
-                    bitmap.Save(imageMemoryStream, ImageFormat.Png);
+                TiffRenderingSettings tiffRenderingSettings = new TiffRenderingSettings(TiffCompressionMethod.CCIT4, 300, 300);
+                tiffRenderingSettings.PrinterMode = true;
+                tiffRenderingSettings.RenderMode = RenderMode.HighQuality;
 
-                    images.Add(imageMemoryStream);
-                }
+                pdfDocument.SaveToTiff(stream, tiffRenderingSettings);
+                images.Add(new MemoryStream(stream.ToArray()));
             }
 
             return images;

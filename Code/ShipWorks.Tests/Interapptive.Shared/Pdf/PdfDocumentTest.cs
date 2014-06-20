@@ -42,28 +42,33 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
 
         // Verify that a multipage conversion works correctly
         [TestMethod]
-        public void Convert_MultiPagePdf_ReturnsMultipleImageStreams_Test()
+        public void Convert_MultiPagePdf_ReturnsSingleImageStream_Test()
         {
-            List<Stream> images;
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";
+            List<Stream> images = new List<Stream>();
 
-            using (Stream pdfFileStream = assembly.GetManifestResourceStream(resourceName))
+            try
             {
-                using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
-                {
-                    images = pdfDocument.ToImages().ToList();
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                const string ResourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";
 
-                    foreach (Stream imageStream in images)
+                using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
+                {
+                    using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
                     {
-                        // See if we can make the image into a bitmap.
-                        Bitmap bitmap = new Bitmap(images.First());
-                        bitmap.Dispose();
+                        images = pdfDocument.ToImages().ToList();
                     }
                 }
-            }
 
-            Assert.AreEqual(9, images.Count);
+                // Since we're converting to TIFF there should only be one image for the entire PDF
+                Assert.AreEqual(1, images.Count);
+            }
+            finally
+            {
+                foreach (Stream imageStream in images)
+                {
+                    images.First().Dispose();
+                }
+            }
         }
     }
 }
