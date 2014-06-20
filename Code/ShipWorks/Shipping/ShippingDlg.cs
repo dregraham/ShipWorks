@@ -1155,6 +1155,7 @@ namespace ShipWorks.Shipping
                     {
                         // Refresh the shipment control, so any status changes are reflected
                         shipmentControl.RefreshAndResort();
+                        CustomsControl.LoadShipments(shipmentControl.SelectedShipments, shipmentControl.SelectedShipments.ToList().All(s => !s.Processed));
                     }
                 }
             }
