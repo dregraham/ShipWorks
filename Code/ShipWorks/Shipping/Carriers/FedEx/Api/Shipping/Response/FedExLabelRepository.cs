@@ -75,9 +75,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                             SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
                         }
 
-                        // Save off non alcohol labels
-                        foreach (ShippingDocument document in packageReply.PackageDocuments
-                                                                          .Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
+                        // Save off non alcohol labels that have an AccessReference value
+                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
+                        {
+                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
+                        }
+
+                        // Save off the OP-900 document (AccessReference is null, so it's not captured in the section above)
+                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.OP_900))
                         {
                             SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                         }
