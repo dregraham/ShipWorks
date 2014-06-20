@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -50,6 +52,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 InitializeLineItem(nativeRequest);
                 FedExPackageEntity package = request.ShipmentEntity.FedEx.Packages[currentPackageIndex];
 
+                ConfigureShippingDocuments(nativeRequest);
+
                 // Add the service option to the request
                 ConfigureDangerousGoodsOption(nativeRequest);
 
@@ -82,6 +86,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = dangerousGoods;
             }
+        }
+
+        /// <summary>
+        /// Configures the shipping documents for OP_900
+        /// </summary>
+        /// <param name="nativeRequest">The native request.</param>
+        private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest)
+        {
+            if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
+            {
+                nativeRequest.RequestedShipment.ShippingDocumentSpecification = new ShippingDocumentSpecification();
+            }
+
+            List<RequestedShippingDocumentType> requestedShippingDocumentTypes = new List<RequestedShippingDocumentType>();
+            if (nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes != null)
+            {
+                requestedShippingDocumentTypes = nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes.ToList();
+            }
+
+            requestedShippingDocumentTypes.Add(RequestedShippingDocumentType.OP_900);
+
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
+
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail()
+            {
+                Format = new ShippingDocumentFormat()
+                {
+                    ImageType = ShippingDocumentImageType.PDF,
+                    ImageTypeSpecified = true,
+                    StockType = ShippingDocumentStockType.OP_900_LL_B,
+                    StockTypeSpecified = true
+                }
+            };
         }
 
         /// <summary>

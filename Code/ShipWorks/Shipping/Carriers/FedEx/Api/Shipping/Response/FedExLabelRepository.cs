@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                                                                           .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS);
 
                         // Save off any alcohol stickers
-                        foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL" ))
+                        foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL"))
                         {
                             SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
                         }
