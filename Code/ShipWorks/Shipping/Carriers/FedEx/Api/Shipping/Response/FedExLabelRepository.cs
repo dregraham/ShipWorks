@@ -187,6 +187,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 
                 case ReturnedShippingDocumentType.OP_900:
                     return "OP-900";
+
+                case ReturnedShippingDocumentType.COMMERCIAL_INVOICE:
+                    return "CommercialInvoice";
             }
 
             throw new InvalidOperationException("Unhandled label document type: " + documentType);
