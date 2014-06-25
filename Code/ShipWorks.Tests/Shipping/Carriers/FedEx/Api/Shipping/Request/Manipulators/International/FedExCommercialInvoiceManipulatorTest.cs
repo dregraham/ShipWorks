@@ -49,7 +49,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     ImporterStateProvCode = "MO",
                     ImporterStreet1 = "1 Memorial Drive",
                     ImporterStreet2 = "Suite 2000",                    
-                }
+                },
+                OriginCountryCode = "US",
+                ShipCountryCode = "GB"
             };
 
             nativeRequest = new ProcessShipmentRequest()
