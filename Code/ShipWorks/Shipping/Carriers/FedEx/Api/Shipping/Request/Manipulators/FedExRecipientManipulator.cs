@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -45,6 +49,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             if (address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
             {
                 address.StateOrProvinceCode = "PR";
+            }
+
+            // FedEx cannot display more than 50 characters per line of address
+            if (address.StreetLines[0].Length > 50)
+            {
+                // If only one address line is entered, wrap to the second line
+                if (address.StreetLines.Length == 1)
+                {
+                    List<string> streetList = address.StreetLines.ToList();
+                    streetList.Add(streetList.First().Substring(50));
+                    address.StreetLines = streetList.ToArray();   
+                }
+
+                address.StreetLines[0] = address.StreetLines[0].Substring(0, 50);
             }
 
             // Create the shipper
