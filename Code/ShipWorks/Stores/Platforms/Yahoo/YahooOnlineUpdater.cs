@@ -273,6 +273,26 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                 case ShipmentTypeCode.OnTrac:
                     return "OnTrac";
 
+                case ShipmentTypeCode.Other:
+                    // As of June 2014, Yahoo only allows UPS, Fedex, DHL, and Usps as the carrier by default
+                    // If someone ships with 'Other', we'll try to send the right one if we can
+                    if (shipment.Other.Carrier.ToLower().Contains("ups"))
+                    {
+                        return "Ups";
+                    }
+
+                    if (shipment.Other.Carrier.ToLower().Contains("fedex"))
+                    {
+                        return "Fedex";
+                    }
+
+                    if (shipment.Other.Carrier.ToLower().Contains("dhl"))
+                    {
+                        return "DHL";
+                    }
+
+                    return "Usps";
+
                 default:
                     return "Usps";
             }

@@ -532,6 +532,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Determine the state/provice based on the region from CA.  
+        /// </summary>
+        private static string GetStateProvCode(string region)
+        {
+            // CA will send 001 if they don't know what to do with the region.  
+            // So we'll just return ""
+            if (region == "001")
+            {
+                return string.Empty;
+            }
+            
+            return Geography.GetStateProvCode(region);   
+        }
+
+        /// <summary>
         /// Addresses
         /// </summary>
         private void LoadAddresses(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
@@ -545,7 +560,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             order.ShipStreet1 = shipping.AddressLine1;
             order.ShipStreet2 = shipping.AddressLine2;
             order.ShipCity = shipping.City;
-            order.ShipStateProvCode = Geography.GetStateProvCode(shipping.Region);
+            order.ShipStateProvCode = GetStateProvCode(shipping.Region);
             order.ShipPostalCode = shipping.PostalCode;
             order.ShipCountryCode = shipping.CountryCode.Trim();
             order.ShipPhone = shipping.PhoneNumberDay;
@@ -573,7 +588,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.BillStreet1 = billing.AddressLine1;
                 order.BillStreet2 = billing.AddressLine2;
                 order.BillCity = billing.City;
-                order.BillStateProvCode = Geography.GetStateProvCode(billing.Region);
+                order.BillStateProvCode = GetStateProvCode(billing.Region);
                 order.BillPostalCode = billing.PostalCode;
                 order.BillCountryCode = billing.CountryCode.Trim();
                 order.BillPhone = billing.PhoneNumberDay;
