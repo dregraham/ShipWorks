@@ -534,7 +534,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Determine the state/provice based on the region from CA.  
         /// </summary>
-        private string GetStateProvCode(string region)
+        private static string GetStateProvCode(string region)
         {
             // CA will send 001 if they don't know what to do with the region.  
             // So we'll just return ""
