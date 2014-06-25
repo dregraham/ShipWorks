@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shipmentCurrencyType = GetShipmentCurrencyType(fedExShipment.Shipment);
 
-            if (fedExShipment.CommercialInvoice)
+            if (fedExShipment.CommercialInvoice && !new FedExShipmentType().IsDomestic(request.ShipmentEntity))
             {
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
 
