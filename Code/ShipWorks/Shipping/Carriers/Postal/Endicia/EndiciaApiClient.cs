@@ -1676,6 +1676,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             switch (mailClass)
             {
                 case "Express": return PostalServiceType.ExpressMail;
+                case "PriorityExpress": return PostalServiceType.ExpressMail;
                 case "First": return PostalServiceType.FirstClass;
                 case "LibraryMail": return PostalServiceType.LibraryMail;
                 case "MediaMail": return PostalServiceType.MediaMail;
