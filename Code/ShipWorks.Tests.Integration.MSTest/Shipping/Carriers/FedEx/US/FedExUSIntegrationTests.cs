@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         public void Ship_FedExUSGroundDomestic()
         {
             var testObject = new FedExUSGroundFixture();
-
+            
             try
             {
                 if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
@@ -231,6 +231,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                     Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
+                    testObject.CommercialInvoiceFileElectronically = true;
 
                     testObject.Ship();
                 }

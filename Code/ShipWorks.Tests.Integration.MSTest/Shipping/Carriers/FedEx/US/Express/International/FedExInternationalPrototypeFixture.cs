@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International
 {
@@ -39,6 +40,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string ImporterOfRecordPostalCode { get; set; }
         public string ImporterOfRecordPhoneNumber { get; set; }
 
+        public string CustomsOptionType { get; set; }
+        public string CustomsOptionDescription { get; set; }
+
+        public bool CommercialInvoiceFileElectronically { get; set; }
 
         /// <summary>
         /// Creates the shipment.
@@ -67,10 +72,22 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             }
 
             shipment.FedEx.CustomsDocumentsDescription = CustomsClearanceDocumentContent;
+            shipment.FedEx.CommercialInvoiceFileElectronically = CommercialInvoiceFileElectronically;
 
             if (!string.IsNullOrEmpty(CustomsClearanceValueAmount))
             {
                 shipment.CustomsValue = decimal.Parse(CustomsClearanceValueAmount) * shipment.FedEx.Packages.Count; ;
+            }
+
+            if (!string.IsNullOrEmpty(CustomsOptionType))
+            {
+                // The only option type is Faulty item so just hard code the type here
+                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+                shipment.FedEx.CustomsOptionsDesription = CustomsOptionDescription;
+            }
+            else
+            {
+                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
             }
         }
 

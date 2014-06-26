@@ -341,6 +341,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground
                 if (usGroundDomesticMapping == null || usGroundDomesticMapping.Count == 0)
                 {
                     usGroundDomesticMapping = new List<ColumnPropertyMapDefinition>();
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.CustomsOptions", PropertyName = "CustomsOptionDescription", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CustomsClearanceDetail.CustomsOptions.Type", PropertyName = "CustomsOptionType", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CodRecipient.Address.City", PropertyName = "CodCity", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CodRecipient.Address.CountryCode", PropertyName = "CodCountryCode", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "CodRecipient.Address.PostalCode", PropertyName = "CodPostalCode", SpreadsheetColumnIndex = -1 });
