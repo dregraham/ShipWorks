@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -56,15 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             // FedEx cannot display more than 50 characters per line of address
             if (address.StreetLines[0].Length > maxAddressLength)
             {
-                // If only one address line is entered, wrap to the second line
-                if (address.StreetLines.Length == 1)
-                {
-                    List<string> streetList = address.StreetLines.ToList();
-                    streetList.Add(streetList.First().Substring(maxAddressLength));
-                    address.StreetLines = streetList.ToArray();   
-                }
-
-                address.StreetLines[0] = address.StreetLines[0].Substring(0, maxAddressLength);
+                WrapAddress(address);
             }
 
             // Create the shipper
@@ -89,6 +82,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             else
             {
                 requestedShipment.Recipient = recipient;                
+            }
+        }
+
+        /// <summary>
+        /// Wraps the address to line 2 if first line isn't more than 35 characters and line 2 is currently empty
+        /// </summary>
+        /// <param name="address">The address.</param>
+        private static void WrapAddress(Address address)
+        {
+            // If only one address line is entered, wrap to the second line
+            if (address.StreetLines.Length == 1 && address.StreetLines[0].Length > 35)
+            {
+                StringBuilder newLine1 = new StringBuilder();
+                StringBuilder newLine2 = new StringBuilder();
+                bool line1Full = false;
+
+                string[] addressWords = address.StreetLines[0].Split(' ');
+                
+                foreach (string line1Word in addressWords)
+                {
+                    if (!line1Full)
+                    {
+                        // line1 is full if the current length plus the new word plus a space is over maxAddressLength
+                        line1Full = (newLine1.Length + line1Word.Length + 1) > maxAddressLength;
+                    }
+
+                    if (line1Full)
+                    {
+                        newLine2.AppendFormat(newLine2.Length == 0 ? "{0}" : " {0}", line1Word);
+                    }
+                    else
+                    {
+                        newLine1.AppendFormat(newLine1.Length == 0 ? "{0}" : " {0}", line1Word);
+                    }
+                }
+
+                // if both lines are under max length, use them. If not, don't wrap.
+                if (newLine1.Length <= maxAddressLength && newLine2.Length <= maxAddressLength)
+                {
+                    address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };                    
+                }
             }
         }
     }
