@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AddressIsWrappedToSecondLine_WhenSingleLineAddressIsTooLong()
         { 
-            shipmentEntity.ShipStreet1 = new string('x', 51);
+            shipmentEntity.ShipStreet1 = new string('x', 36);
             shipmentEntity.ShipStreet2 = string.Empty;
             shipmentEntity.ShipStreet3 = string.Empty;
 
@@ -95,14 +95,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(new string('x', 50), nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.AreEqual(new string('x', 35), nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
             Assert.AreEqual("x", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
 
         [TestMethod]
         public void Manipulate_AddressIsTruncated_WhenMultiLineAddressIsTooLong()
         {
-            shipmentEntity.ShipStreet1 = new string('x', 51);
+            shipmentEntity.ShipStreet1 = new string('x', 36);
             shipmentEntity.ShipStreet2 = "y";
             shipmentEntity.ShipStreet3 = string.Empty;
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(new string('x', 50), nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.AreEqual(new string('x', 35), nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
             Assert.AreEqual("y", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
     }

@@ -16,6 +16,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     /// </summary>
     public class FedExRecipientManipulator : FedExShippingRequestManipulatorBase
     {
+        private const int maxAddressLength = 35;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
         /// </summary>
@@ -52,17 +54,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             }
 
             // FedEx cannot display more than 50 characters per line of address
-            if (address.StreetLines[0].Length > 50)
+            if (address.StreetLines[0].Length > maxAddressLength)
             {
                 // If only one address line is entered, wrap to the second line
                 if (address.StreetLines.Length == 1)
                 {
                     List<string> streetList = address.StreetLines.ToList();
-                    streetList.Add(streetList.First().Substring(50));
+                    streetList.Add(streetList.First().Substring(maxAddressLength));
                     address.StreetLines = streetList.ToArray();   
                 }
 
-                address.StreetLines[0] = address.StreetLines[0].Substring(0, 50);
+                address.StreetLines[0] = address.StreetLines[0].Substring(0, maxAddressLength);
             }
 
             // Create the shipper
