@@ -6,6 +6,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
@@ -18,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     public class FedExRecipientManipulator : FedExShippingRequestManipulatorBase
     {
         private const int maxAddressLength = 35;
+        private const int maxSmartPostLength = 30;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
@@ -57,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             // FedEx cannot display more than 50 characters per line of address
             if (address.StreetLines[0].Length > maxAddressLength)
             {
-                WrapAddress(address);
+                WrapAddress(address, shipment);
             }
 
             // Create the shipper
@@ -89,10 +91,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// Wraps the address to line 2 if first line isn't more than 35 characters and line 2 is currently empty
         /// </summary>
         /// <param name="address">The address.</param>
-        private static void WrapAddress(Address address)
+        /// <param name="shipment"></param>
+        private static void WrapAddress(Address address, ShipmentEntity shipment)
         {
+            int calculatedMathLenght = ((FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost)
+                ? maxSmartPostLength
+                : maxAddressLength;
+
             // If only one address line is entered, wrap to the second line
-            if (address.StreetLines.Length == 1 && address.StreetLines[0].Length > 35)
+            if (address.StreetLines.Length == 1 && address.StreetLines[0].Length > calculatedMathLenght)
             {
                 StringBuilder newLine1 = new StringBuilder();
                 StringBuilder newLine2 = new StringBuilder();
@@ -105,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     if (!line1Full)
                     {
                         // line1 is full if the current length plus the new word plus a space is over maxAddressLength
-                        line1Full = (newLine1.Length + line1Word.Length + 1) > maxAddressLength;
+                        line1Full = (newLine1.Length + line1Word.Length + 1) > calculatedMathLenght;
                     }
 
                     if (line1Full)
@@ -119,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 }
 
                 // if both lines are under max length, use them. If not, don't wrap.
-                if (newLine1.Length <= maxAddressLength && newLine2.Length <= maxAddressLength)
+                if (newLine1.Length <= calculatedMathLenght && newLine2.Length <= calculatedMathLenght)
                 {
                     address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };                    
                 }

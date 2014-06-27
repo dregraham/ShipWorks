@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
@@ -90,6 +91,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.ShipStreet2 = string.Empty;
             shipmentEntity.ShipStreet3 = string.Empty;
 
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
+
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
@@ -100,11 +103,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
+        public void Manipulate_AddressIsWrappedToSecondLineAtWord_WhenSingleLineAddressIsTooLong()
+        {
+            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234567890";
+            shipmentEntity.ShipStreet2 = string.Empty;
+            shipmentEntity.ShipStreet3 = string.Empty;
+
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+
+            nativeRequest = new ProcessShipmentRequest();
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.AreEqual("1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.AreEqual("1234567890", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+        }
+
+        [TestMethod]
         public void Manipulate_AddressIsTruncated_WhenMultiLineAddressIsTooLong()
         {
             shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
             shipmentEntity.ShipStreet2 = "y";
             shipmentEntity.ShipStreet3 = string.Empty;
+
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
 
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -113,6 +136,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             Assert.AreEqual("1234 1234 1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
             Assert.AreEqual("y", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+        }
+
+        [TestMethod]
+        public void Manipulate_AddressIsWrappedAtThirtyChars_WhenSingleLineAddressIsTooLongAndSmartPost()
+        {
+            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
+            shipmentEntity.ShipStreet2 = string.Empty;
+            shipmentEntity.ShipStreet3 = string.Empty;
+
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
+
+            nativeRequest = new ProcessShipmentRequest();
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.AreEqual("1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.AreEqual("1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
     }
 }
