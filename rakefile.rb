@@ -273,6 +273,7 @@ namespace :db do
 		if args != nil and args[:instance] != nil and args[:instance] != ""
 			# A database name was passed in, so use it for the target database
 			instanceName = args[:instance]
+			puts "Connecting to instance " + instanceName + "..."
 		end
 		
 		# Drop the seed database if it exists
@@ -296,7 +297,7 @@ namespace :db do
 
 		dropSqlText = dropSqlText.gsub(/{DBNAME}/, databaseName)
 		File.open("./DropSeedDatabase.sql", "w") {|file| file.puts dropSqlText}
-		sh "sqlcmd -S (local) -i DropSeedDatabase.sql"
+		sh "sqlcmd -S " + instanceName + " -i DropSeedDatabase.sql"
 
 		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
 		
@@ -306,25 +307,37 @@ namespace :db do
 		puts "Finding SQL Server data path for " + instanceName + "..."
 		filePath = ""
 		
+		registryInstanceName = instanceName
+		backSlashIndex = registryInstanceName.index("\\")		
+		if backSlashIndex > 0 
+			# Trim off "(local)\" portion of the instance name in order to query the 
+			# registry
+			registryInstanceName = registryInstanceName[backSlashIndex..-1]
+		end
+		
 		# Lookup the file path to use in the script based on the instance's data path in SQL Server; 
 		# pass in 0x100 to read from 64-bit registry otherwise the key will not be found			
 		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\MSSQLServer"
-		keyName = keyName.gsub(/{INSTANCENAME}/, instanceName)
+		keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
 		puts "Looking for key " + keyName + "..."
-		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			begin
-				filePath = reg["DefaultData"]
-			rescue
-				# Registry value DefaultData did not exist
-				filePath = ""
+		begin		
+			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+				begin
+					filePath = reg["DefaultData"]
+				rescue
+					# Registry value DefaultData did not exist
+					filePath = ""
+				end
 			end
+		rescue
+			filePath = ""
 		end
 				
 		if filePath == nil or filePath == ""
 			# Nothing useful was found in the DefaultData value, so fallback to appending
 			# "\Data" to the SQL path value for the instance
 			keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\Setup"
-			keyName = keyName.gsub(/{INSTANCENAME}/, instanceName)
+			keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
 			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
 				filePath = reg["SQLPath"] + "\\Data\\"
 			end
@@ -343,7 +356,7 @@ namespace :db do
 
 		# Write the script to disk, so we can execute it via shell
 		File.open("./CreateSeedDatabase.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S (local) -i CreateSeedDatabase.sql"
+		sh "sqlcmd -S " + instanceName + " -i CreateSeedDatabase.sql"
 
 		# Clean up the temporary script
 		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
@@ -363,8 +376,14 @@ namespace :db do
 		end
 		
 		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
-			# A database anme was passed in, so use it for the target database
+			# A database name was passed in, so use it for the target database
 			databaseName = args[:targetDatabase]
+		end
+		
+		if args != nil and args[:instance] != nil and args[:instance] != ""
+			# A database name was passed in, so use it for the target database
+			instanceName = args[:instance]
+			puts "Connecting to instance " + instanceName + "..."
 		end
 		
 		# Clean up any remnants of the temporary script that may exist from a previous run
@@ -392,7 +411,7 @@ namespace :db do
 		
 		# Write our script to a temporary file and execute the SQL
 		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S (local) -i CreateSeedSchema.sql"
+		sh "sqlcmd -S " + instanceName + " -i CreateSeedSchema.sql"
 
 		# Clean up the temporary script
 		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
@@ -403,10 +422,17 @@ namespace :db do
 		puts "Populating data..."
 
 		databaseName = "ShipWorks_SeedData"
+		instanceName = "(local)"
 		
 		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
 			# A database name was passed in, so use it for the target database
 			databaseName = args[:targetDatabase]
+		end
+		
+		if args != nil and args[:instance] != nil and args[:instance] != ""
+			# A database name was passed in, so use it for the target database
+			instanceName = args[:instance]
+			puts "Connecting to instance " + instanceName + "..."
 		end
 		
 		# Clean up any remnants of the temporary script that may exist from a previous run
@@ -425,7 +451,7 @@ namespace :db do
 
 		# Write our script to a temporary file and execute the SQL
 		File.open("./TempSeedData.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S (local) -i TempSeedData.sql"
+		sh "sqlcmd -S " + instanceName + " -i TempSeedData.sql"
 
 		# Clean up the temporary script
 		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
@@ -497,8 +523,7 @@ namespace :setup do
 		instanceGuid = SecureRandom.uuid
 		puts instanceGuid
 		
-		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""
-			
+		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
 			# Create the ShipWorks instance value based on the registryKey name provided
 			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
 			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
