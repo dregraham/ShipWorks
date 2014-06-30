@@ -494,7 +494,7 @@ namespace :db do
 				end
 
 				backSlashIndex = sqlInstanceName.index("\\")		
-				if backSlashIndex > 0 
+				if backSlashIndex != nil and backSlashIndex > 0 
 					# Since we're building the instance name based on computer name, trim 
 					# off "(local)\" portion of the instance name in order to query the registry
 					sqlInstanceName = sqlInstanceName[backSlashIndex..-1]
