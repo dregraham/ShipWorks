@@ -25,7 +25,7 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake db:switch[ShipWorks_SeedData] db:deploy</command>
+      <command>rake "db:switch[INTJENKINS\\\\Jenkins, ShipWorks_SeedData]" db:deploy</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
