@@ -255,10 +255,14 @@ end
 ########################################################################
 namespace :db do
 
-	desc "Create and populate a new ShipWorks database with seed data"
+	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
 	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy] do |t, args|
 	end
 
+	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
+	task :populate, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed] do |t, args|
+	end
+	
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create do |t, args|
 
@@ -363,7 +367,7 @@ namespace :db do
 	end
 
 	desc "Build the ShipWorks_SeedData database schema from scratch"
-	task :schema, :schemaVersion do |t, args|
+	task :schema, :schemaVersion, :instance, :targetDatabase do |t, args|
 		puts "Creating the database schema..."
 			
 		databaseName = "ShipWorks_SeedData"
