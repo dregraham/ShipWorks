@@ -9,13 +9,13 @@ namespace ShipWorks.ApplicationCore.Options
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ModifiedOrderCustomerUpdateBehavior
     {
-        [Description("Never copy")]
+        [Description("Never update the customer")]
         NeverCopy = 0,
 
-        [Description("Copy if blank")]
-        CopyIfBlank = 1,
+        [Description("Only update the customer if blank or matching")]
+        CopyIfBlankOrMatching = 1,
 
-        [Description("Always copy")]
+        [Description("Always update the customer")]
         AlwaysCopy = 2
     }
 }

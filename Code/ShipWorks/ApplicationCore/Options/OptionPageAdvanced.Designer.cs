@@ -390,7 +390,7 @@ namespace ShipWorks.ApplicationCore.Options
             "Select username from dropdown"});
             this.orderShippingAddressChanged.Location = new System.Drawing.Point(242, 509);
             this.orderShippingAddressChanged.Name = "orderShippingAddressChanged";
-            this.orderShippingAddressChanged.Size = new System.Drawing.Size(191, 21);
+            this.orderShippingAddressChanged.Size = new System.Drawing.Size(249, 21);
             this.orderShippingAddressChanged.TabIndex = 49;
             // 
             // orderBillingAddressChanged
@@ -400,9 +400,9 @@ namespace ShipWorks.ApplicationCore.Options
             this.orderBillingAddressChanged.Items.AddRange(new object[] {
             "Type username",
             "Select username from dropdown"});
-            this.orderBillingAddressChanged.Location = new System.Drawing.Point(230, 482);
+            this.orderBillingAddressChanged.Location = new System.Drawing.Point(242, 482);
             this.orderBillingAddressChanged.Name = "orderBillingAddressChanged";
-            this.orderBillingAddressChanged.Size = new System.Drawing.Size(191, 21);
+            this.orderBillingAddressChanged.Size = new System.Drawing.Size(249, 21);
             this.orderBillingAddressChanged.TabIndex = 50;
             // 
             // label6
