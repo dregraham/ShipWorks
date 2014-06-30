@@ -205,9 +205,9 @@ namespace ShipWorks.Stores
 
 
 
-        [Description("FoxyCart")]
-        [StoreTypeIdentity("FOXYCART", "FYC")]
-        [StoreTypeIcon("foxycart")]
-        FoxyCart = 39
+        [Description("OrderDesk")]
+        [StoreTypeIdentity("ORDERDESK", "ORD")]
+        [StoreTypeIcon("orderdesk")]
+        OrderDesk = 39
     }
 }

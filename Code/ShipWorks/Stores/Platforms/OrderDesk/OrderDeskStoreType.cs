@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Logging;
+﻿using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
-namespace ShipWorks.Stores.Platforms.FoxyCart
+namespace ShipWorks.Stores.Platforms.OrderDesk
 {
     /// <summary>
-    /// FoxyCart Store Type
+    /// OrderDeskCart Store Type
     /// </summary>
-    public class FoxyCartStoreType : GenericModuleStoreType
+    public class OrderDeskStoreType : GenericModuleStoreType
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FoxyCartStoreType"/> class.
+        /// Initializes a new instance of the <see cref="OrderDeskStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public FoxyCartStoreType(StoreEntity store)
+        public OrderDeskStoreType(StoreEntity store)
             : base(store)
         {
         }
@@ -29,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.FoxyCart
         {
             get
             {
-                return StoreTypeCode.FoxyCart;
+                return StoreTypeCode.OrderDesk;
             }
         }
 
@@ -40,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.FoxyCart
         {
             get
             {
-                return ApiLogSource.FoxyCart;
+                return ApiLogSource.OrderDeskCart;
             }
         }
     }

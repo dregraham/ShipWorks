@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Sears,
         SolidCommerce,
         WebRequestTask,
-        FoxyCart,
+        OrderDeskCart,
 
         [ApiPrivateLogSource]
         UspsNoPostage,

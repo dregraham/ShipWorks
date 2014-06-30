@@ -153,16 +153,6 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap foxycart {
-            get {
-                object obj = ResourceManager.GetObject("foxycart", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap genericfile {
             get {
                 object obj = ResourceManager.GetObject("genericfile", resourceCulture);
@@ -236,6 +226,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap newegg {
             get {
                 object obj = ResourceManager.GetObject("newegg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap orderdesk {
+            get {
+                object obj = ResourceManager.GetObject("orderdesk", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
