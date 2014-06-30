@@ -199,6 +199,15 @@ namespace ShipWorks.Stores
         [Description("SolidCommerce")]
         [StoreTypeIdentity("SOLIDCOMMERCE", "SDC")]
         [StoreTypeIcon("solidcommerce")]
-        SolidCommerce = 37
+        SolidCommerce = 37,
+
+
+
+
+
+        [Description("FoxyCart")]
+        [StoreTypeIdentity("FOXYCART", "FYC")]
+        [StoreTypeIcon("foxycart")]
+        FoxyCart = 39
     }
 }
