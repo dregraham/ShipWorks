@@ -107,6 +107,13 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
+                case StoreTypeCode.WooCommerce: return new Platforms.WooCommerce.WooCommerceStoreType(store);
+                case StoreTypeCode.Cart66Lite: return new Platforms.Cart66.Cart66LiteStoreType(store);
+                case StoreTypeCode.Cart66Pro: return new Platforms.Cart66.Cart66ProStoreType(store);
+                case StoreTypeCode.Shopp: return new Platforms.Shopp.ShoppStoreType(store);
+                case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
+                case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
+                case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");

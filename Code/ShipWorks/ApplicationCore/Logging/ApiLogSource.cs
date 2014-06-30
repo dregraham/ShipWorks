@@ -82,7 +82,27 @@ namespace ShipWorks.ApplicationCore.Logging
         OnTrac,
 
         [ApiPrivateLogSource]
-        iParcel
+        iParcel,
 
+        [ApiPrivateLogSource]
+        WooCommerce,
+
+        [ApiPrivateLogSource]
+        Cart66Lite,
+
+        [ApiPrivateLogSource]
+        Cart66Pro,
+
+        [ApiPrivateLogSource]
+        Shopp,
+
+        [ApiPrivateLogSource]
+        Shopperpress,
+
+        [ApiPrivateLogSource]
+        WPeCommerce,
+
+        [ApiPrivateLogSource]
+        Jigoshop,
     }
 }
