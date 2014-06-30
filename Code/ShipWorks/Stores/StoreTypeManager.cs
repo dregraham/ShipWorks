@@ -107,6 +107,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
+                case StoreTypeCode.FoxyCart: return new Platforms.FoxyCart.FoxyCartStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
