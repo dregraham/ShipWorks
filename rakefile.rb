@@ -458,9 +458,10 @@ namespace :db do
 	end
 	
 	desc "Switch the ShipWorks settings to point to a given database"
-	task :switch, :targetDatabase, :instanceName do |t, args|
+	task :switch, :instance, :targetDatabase do |t, args|
 		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""			
 			# A target database was passed in, so update the sql session file
+			#puts "Database name is " + args[:targetDatabase]
 			
 			# Assume we're in the directory containing the ShipWorks solution - we need to get
 			# the registry key name based on the directory to the ShipWorks.exe to figure out
@@ -468,15 +469,6 @@ namespace :db do
 			appDirectory = Dir.pwd + "/Artifacts/Application"
 			appDirectory = appDirectory.gsub('/', '\\')
 			
-			sqlInstanceName = "Development"
-			
-			if args[:instanceName] != nil and args[:instanceName] != ""
-				# Default the instance name to run on the local machine's Development instance if 
-				# none is provided
-				sqlInstanceName = args[:instanceName]
-			end
-			
-			sqlServerInstanceName = ENV["COMPUTERNAME"] + "\\" + sqlInstanceName
 			shipWorksInstanceGuid = ""					
 			
 			# Read the GUID from the registry, so we know which directory to look in; pass in 
@@ -492,10 +484,28 @@ namespace :db do
 				
 				puts "Updating SQL session file..."			
 
+				sqlInstanceName = "Development"
+			
+				if args[:instance] != nil and args[:instance] != ""
+					# Default the instance name to run on the local machine's Development instance if 
+					# none is provided
+					sqlInstanceName = args[:instance]
+					puts "An instance name was provided: " + sqlInstanceName				
+				end
+
+				backSlashIndex = sqlInstanceName.index("\\")		
+				if backSlashIndex > 0 
+					# Since we're building the instance name based on computer name, trim 
+					# off "(local)\" portion of the instance name in order to query the registry
+					sqlInstanceName = sqlInstanceName[backSlashIndex..-1]
+				end
+			
+				sqlServerInstanceName = ENV["COMPUTERNAME"] + "\\" + sqlInstanceName
+				
 				# Replace the current instance and database name with that of the info provided
 				contents = File.read(fileName)				
 				contents = contents.gsub(/<Instance>.*<\/Instance>/, '<Instance>' + sqlServerInstanceName + '</Instance>')
-				contents = contents.gsub(/<Database>[\w]*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
+				contents = contents.gsub(/<Database>.*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
 				
 				# Write the updated SQL session XML back to the file
 				File.open(fileName, 'w') { |file| file.write(contents) }
@@ -544,13 +554,21 @@ namespace :setup do
 			# Read the instance GUID from the registry
 			instanceGuid = reg[args.instancePath]				
 		end
+		
+		instanceName = "(local)\\Development"
+		if args[:instanceName] != nil and args[:instanceName] != ""
+			# Default the instance name to run on the local machine's Development instance if 
+			# none is provided
+			instanceName = args[:instanceName]
+			puts "Changed instance name to " + instanceName
+		end
 			
 		
 		# Write out some boiler plate XML that will contain the database name provided
 		boilerPlateXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <SqlSession>
   <Server>
-    <Instance>(local)\\DEVELOPMENT</Instance>
+    <Instance>@@INSTANCE_NAME@@</Instance>
     <Database>@@DATABASE_NAME@@</Database>
   </Server>
   <Credentials>
@@ -559,6 +577,8 @@ namespace :setup do
     <WindowsAuth>True</WindowsAuth>
   </Credentials>
 </SqlSession>"
+		
+		boilerPlateXml = boilerPlateXml.gsub(/<Instance>@@INSTANCE_NAME@@<\/Instance>/, '<Instance>' + instanceName + '</Instance>')
 		boilerPlateXml = boilerPlateXml.gsub(/<Database>@@DATABASE_NAME@@<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
 		
 		# Make sure the directories are created before writing to the sqlsession file
