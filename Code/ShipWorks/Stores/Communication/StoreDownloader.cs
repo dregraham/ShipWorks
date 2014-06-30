@@ -628,15 +628,15 @@ namespace ShipWorks.Stores.Communication
                             CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
                             if (existingCustomer != null)
                             {
-                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, "Bill");
-                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, "Ship");
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, originalShippingAddress, "Ship");
 
                                 adapter.SaveEntity(existingCustomer);
                             }
                         }
                     }
 
-                    log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");
+                    log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
                     AddToDownloadHistory(order, orderIdentifier, alreadyDownloaded, adapter);
@@ -661,16 +661,41 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Update's the customer's address from an order, if it's necessary
         /// </summary>
-        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, string prefix)
+        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, PersonAdapter originalAddress, string prefix)
         {
             if (!shouldUpdate || IsAddressEmpty(order, prefix))
             {
                 return;
             }
 
-            if (behavior == ModifiedOrderCustomerUpdateBehavior.AlwaysCopy ||
-                (behavior == ModifiedOrderCustomerUpdateBehavior.CopyIfBlank &&
-                 IsAddressEmpty(existingCustomer, prefix)))
+            bool shouldCopy;
+            switch (behavior)
+            {
+                case ModifiedOrderCustomerUpdateBehavior.NeverCopy:
+                    shouldCopy = false;
+                    break;
+                case ModifiedOrderCustomerUpdateBehavior.CopyIfBlankOrMatching:
+                    if (IsAddressEmpty(existingCustomer,prefix))
+                    {
+                        shouldCopy = true;
+                    }
+                    else if (originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
+                    {
+                        shouldCopy = true;
+                    }
+                    else
+                    {
+                        shouldCopy = false;
+                    }
+                    break;
+                case ModifiedOrderCustomerUpdateBehavior.AlwaysCopy:
+                    shouldCopy = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("behavior");
+            }
+            
+            if (shouldCopy)
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
             }
