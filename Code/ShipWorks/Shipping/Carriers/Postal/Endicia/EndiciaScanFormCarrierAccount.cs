@@ -147,7 +147,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 EndiciaShipmentFields.EndiciaAccountID == accountEntity.EndiciaAccountID &
 
                 // And has to have been processed today.  This will get all shipments that were processed since midnight locally.
-                ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime()
+                ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime() &
+
+                 // Exclude first class envelopes
+                !(PostalShipmentFields.Service == (int)PostalServiceType.FirstClass & PostalShipmentFields.PackagingType == (int)PostalPackagingType.Envelope)
+
             );
 
             bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);
