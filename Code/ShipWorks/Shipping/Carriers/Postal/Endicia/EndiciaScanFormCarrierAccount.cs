@@ -151,7 +151,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                  // Exclude first class envelopes
                 !(PostalShipmentFields.Service == (int)PostalServiceType.FirstClass & PostalShipmentFields.PackagingType == (int)PostalPackagingType.Envelope)
-
             );
 
             bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);

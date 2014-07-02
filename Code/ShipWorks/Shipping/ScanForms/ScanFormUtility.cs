@@ -4,6 +4,7 @@ using System.Linq;
 using Divelements.SandRibbon;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
 using ShipWorks.UI;
@@ -125,7 +126,13 @@ namespace ShipWorks.Shipping.ScanForms
                         try
                         {
                             ShippingManager.EnsureShipmentLoaded(shipment);
-                            shipments.Add(shipment);
+
+                            PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
+                            if (!ShipmentTypeManager.IsEndiciaConsolidator(postalServiceType) &&
+                                !ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
+                            {
+                                shipments.Add(shipment);                                
+                            }
                         }
                         catch (ObjectDeletedException)
                         {
