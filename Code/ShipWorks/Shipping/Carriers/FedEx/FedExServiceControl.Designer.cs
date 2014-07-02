@@ -1673,6 +1673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.codEnabled.TabIndex = 0;
             this.codEnabled.Text = "C.O.D. (Collect on Delivery)";
             this.codEnabled.UseVisualStyleBackColor = false;
+            this.codEnabled.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // panelTrademarkInfo
             // 

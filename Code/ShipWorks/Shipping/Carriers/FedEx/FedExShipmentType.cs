@@ -1195,6 +1195,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.CodEnabled.FieldIndex],
                 }
             );
 
@@ -1207,6 +1208,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
                 fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
                 fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DryIceWeight.FieldIndex]);
             }
 
             return fields;

@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
@@ -308,7 +309,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExRatePickupManipulator(),
                 new FedExRatePackageDetailsManipulator(settings),
                 new FedExRatePackageSpecialServicesManipulator(),
-                new FedExRatePackagingTypeManipulator()
+                new FedExRatePackagingTypeManipulator(),
+                new FedExRateCodOptionsManipulator(settingsRepository),
+                new FedExRateDryIceManipulator(settings),
+                new FedExRateBrokerManipulator(settings)
             };
 
             if (specializedManipulators != null && specializedManipulators.Any())

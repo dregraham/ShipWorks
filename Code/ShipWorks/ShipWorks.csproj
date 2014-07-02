@@ -109,6 +109,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
@@ -621,7 +625,10 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\International\FedExRateBrokerManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />

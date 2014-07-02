@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
                     shippingClerk.Ship(shipment);
 
-                    shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.DimsWeight);
+                    shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
                     shipment.Processed = true;
                     shipment.ProcessedDate = DateTime.UtcNow;
                     shipment.Voided = false;
