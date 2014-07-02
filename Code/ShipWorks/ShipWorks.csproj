@@ -2199,7 +2199,21 @@
     <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.Designer.cs">
+      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlServerTimeZoneType.cs" />
     <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreType.cs" />
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlUtility.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7290,6 +7304,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.resx">
+      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.resx">
+      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.resx">
       <DependentUpon>BuyDotComAccountSettingsControl.cs</DependentUpon>
