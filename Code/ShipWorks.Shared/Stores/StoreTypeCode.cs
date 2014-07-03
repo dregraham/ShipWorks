@@ -234,6 +234,11 @@ namespace ShipWorks.Stores
         [Description("WooCommerce")]
         [StoreTypeIdentity("WOOCOMMERCE", "WOO")]
         [StoreTypeIcon("woocommerce")]
-        WooCommerce = 46
+        WooCommerce = 46,
+
+        [Description("ChannelSale")]
+        [StoreTypeIdentity("CHANNELSALE", "CHS")]
+        [StoreTypeIcon("channelsale")]
+        ChannelSale = 47,
     }
 }
