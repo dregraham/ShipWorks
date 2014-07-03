@@ -678,8 +678,8 @@ namespace ShipWorks.Stores.Communication
                     if (IsAddressEmpty(existingCustomer,prefix))
                     {
                         shouldCopy = true;
-                    }
-                    else if (originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
+                    } 
+                    else if (originalAddress==null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
                     {
                         shouldCopy = true;
                     }
