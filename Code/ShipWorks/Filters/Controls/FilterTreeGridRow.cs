@@ -121,7 +121,7 @@ namespace ShipWorks.Filters.Controls
                 if (FilterCount.CostInMilliseconds > WarningThresholdInMilliseconds)
                 {
                     IsFlaggedAsSlowRunning = true;
-                    cell.Image = Properties.Resources.clock;
+                    cell.Image = Properties.Resources.funnel_warning;
                     cell.Text = FilterNode.Filter.Name + " (slow)";
 
                     if (!previousFlag && !statusChangeWrittenToLog)
