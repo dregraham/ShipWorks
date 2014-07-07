@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model;
@@ -50,11 +51,11 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Load the results of the given changeset based on the given open reader.  The schema of the reader is defined by the EntityChangeTrackingMonitor
         /// </summary>
-        public static EntityChangeTrackingChangeset LoadFromChanges(EntityType entityType, SqlDataReader reader)
+        public static EntityChangeTrackingChangeset LoadFromChanges(EntityType entityType, DataTable table)
         {
-            if (reader == null)
+            if (table == null)
             {
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException("table");
             }
 
             EntityChangeTrackingChangeset changeset = new EntityChangeTrackingChangeset(entityType);
@@ -63,10 +64,12 @@ namespace ShipWorks.Data.Caching
             changeset.inserts = new List<long>();
             changeset.updates = new List<long>();
 
-            while (reader.Read())
+            foreach (DataRow dataRow in table.Rows)
             {
-                long key = reader.GetInt64(0);
-                string operation = reader.GetString(1);
+                
+            
+                long key = (long) dataRow[0];
+                string operation = (string) dataRow[1];
 
                 switch (operation)
                 {

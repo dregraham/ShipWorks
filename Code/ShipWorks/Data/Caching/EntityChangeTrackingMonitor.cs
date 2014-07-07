@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Web.UI.WebControls;
+using log4net;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Data.Caching
 {
@@ -24,6 +30,8 @@ namespace ShipWorks.Data.Caching
         // The query we use to do the change monitoring
         string syncQuery;
 
+        static readonly ILog log = LogManager.GetLogger(typeof(EntityChangeTrackingMonitor));
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -117,33 +125,38 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public List<EntityChangeTrackingChangeset> CheckForChanges()
         {
+            string lsvParameter = "@lsv";
             lock (tables)
             {
                 List<EntityChangeTrackingChangeset> changes = new List<EntityChangeTrackingChangeset>();
 
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
+                try
                 {
-                    SqlCommand cmd = SqlCommandProvider.Create(con);
-                    cmd.CommandText = syncQuery;
-                    cmd.Parameters.AddWithValue("@lsv", lastSyncVersion);
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        // No fields means we didnt return any results at all - which will only happen if the lastSyncVersion has not changed
-                        if (reader.FieldCount > 0)
+                        SqlCommand cmd = SqlCommandProvider.Create(con);
+                        cmd.CommandText = syncQuery;
+                        cmd.Parameters.AddWithValue(lsvParameter, lastSyncVersion);
+                        DataSet dataSet = new DataSet();
+
+                        using (DataAdapter adapter = new SqlDataAdapter(cmd))
                         {
-                            // Read the results of each table we are monitoring
-                            foreach (EntityType entityType in tables)
+                            adapter.Fill(dataSet);
+                        }
+
+                        if (dataSet.Tables.Count > 1)
+                        {
+                            for (int index = 0; index < tables.Count; index++)
                             {
+                                EntityType entityType = tables[index];
+                                DataTable dataTable = dataSet.Tables[index];
+
                                 EntityChangeTrackingChangeset changeset;
 
-                                // Status code
-                                if (reader.FieldCount == 1)
+                                if (dataTable != null && dataTable.Columns.Count == 1)
                                 {
-                                    reader.Read();
-                                    string status = reader.GetString(0);
+                                    string status = (string) dataTable.Rows[0][0];
 
-                                    // Invalid
                                     if (status == "I")
                                     {
                                         changeset = EntityChangeTrackingChangeset.LoadAsInvalid(entityType);
@@ -152,29 +165,31 @@ namespace ShipWorks.Data.Caching
                                     {
                                         throw new InvalidOperationException(string.Format("Unexpected status code reading changes: '{0}'", status));
                                     }
+
                                 }
                                 else
                                 {
                                     // Load the changes from the reader
-                                    changeset = EntityChangeTrackingChangeset.LoadFromChanges(entityType, reader);
+                                    changeset = EntityChangeTrackingChangeset.LoadFromChanges(entityType, dataTable);
                                 }
+
 
                                 // Add to the result list
                                 changes.Add(changeset);
-
-                                // Move to the next SQL result set
-                                reader.NextResult();
                             }
 
-                            // We should now be positioned on the last SQL result set - which should be the next sync version
-                            reader.Read();
-                            lastSyncVersion = reader.GetInt64(0);
+                            lastSyncVersion = (long) dataSet.Tables[dataSet.Tables.Count - 1].Rows[0][0];
                         }
                         else
                         {
-                            return tables.Select(entityType => EntityChangeTrackingChangeset.LoadAsCurrent(entityType)).ToList();
+                            return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                         }
                     }
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("Error in CheckForChanges", ex);
+                    return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                 }
 
                 return changes;
