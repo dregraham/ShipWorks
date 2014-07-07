@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.ShipSense
 {
@@ -549,9 +550,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
             multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
 
-
             testObject.SynchronizeWith(multiPackageShipment);
-
 
             Assert.IsFalse(multiPackageEntry.Matches(shipments[0]));
             Assert.IsFalse(multiPackageEntry.Matches(shipments[2]));
@@ -579,9 +578,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             KnowledgebaseEntry multiPackageEntry = new KnowledgebaseEntry();
             multiPackageEntry.ApplyFrom(shipmentType.GetPackageAdapters(multiPackageShipment), multiPackageShipment.CustomsItems);
 
-
             testObject.SynchronizeWith(multiPackageShipment);
-
 
             Assert.IsTrue(multiPackageEntry.Matches(shipments[4]));
         }
@@ -614,6 +611,21 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(multiPackageShipment);
 
             Assert.IsFalse(multiPackageEntry.Matches(shipments[4]));
+        }
+
+        [TestMethod]
+        public void SynchronizeWith_DoesNotThrowKeyNotFoundException_WhenNoShipmentsExist()
+        {
+            testObject = new ShipSenseSynchronizer(new List<ShipmentEntity>(), shippingSettings, knowledgebase.Object);
+
+            try
+            {
+                testObject.SynchronizeWith(GetSinglePackageShipmentForOrder1(1));
+            }
+            catch (KeyNotFoundException)
+            {
+                Assert.Fail("Should not have thrown KeyNotFoundException");
+            }
         }
         
         private ShipmentEntity GetSinglePackageShipmentForOrder1(int shipmentID)
