@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             CodDetail codDetail = new CodDetail();
             codDetail.CollectionType = GetApiCodCollectionType((FedExCodPaymentType) shipmentEntity.FedEx.CodPaymentType);
+            codDetail.CollectionTypeSpecified = true;
 
             // Add Freight
             if (shipmentEntity.FedEx.CodAddFreight)
@@ -215,6 +216,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             codDetail.CodCollectionAmount = new Money
             {
                 Amount = amount,
+                AmountSpecified = true,
                 Currency = currency
             };
 
