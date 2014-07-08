@@ -574,6 +574,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.nonStandardPackaging.TabIndex = 7;
             this.nonStandardPackaging.Text = "Non-standard";
             this.nonStandardPackaging.UseVisualStyleBackColor = false;
+            this.nonStandardPackaging.CheckedChanged += new System.EventHandler(this.OnNonStandardPackagingChanged);
             this.nonStandardPackaging.CheckStateChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
             // saturdayDelivery

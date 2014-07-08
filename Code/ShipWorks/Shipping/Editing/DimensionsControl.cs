@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler DimensionsChanged;
 
         // So we know when not to raise the changed event
-        bool loading = false;
+        bool suspendChangedEvent = false;
 
         // No values in the control
         bool cleared = false;
@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void LoadDimensions(IEnumerable<DimensionsAdapter> dimensions)
         {
-            loading = true;
+            suspendChangedEvent = true;
 
             loadedDimensions = dimensions.ToList();
 
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.Editing
 
             profiles.SelectedIndexChanged += this.OnChangeProfile;
 
-            loading = false;
+            suspendChangedEvent = false;
         }
 
         /// <summary>
@@ -287,6 +287,10 @@ namespace ShipWorks.Shipping.Editing
         {
             Debug.Assert(!profiles.MultiValued);
 
+            // We don't need to call OnDimensionsChanged 4 times (length, width, height, weight), 
+            // so suspend change events until they are updated.
+            suspendChangedEvent = true;
+
             DimensionsProfileEntity profile = DimensionsManager.GetProfile((long) profiles.SelectedValue);
             if (profile == null)
             {
@@ -300,8 +304,15 @@ namespace ShipWorks.Shipping.Editing
                 length.Text = profile.Length.ToString();
                 width.Text = profile.Width.ToString();
                 height.Text = profile.Height.ToString();
+
                 weight.Weight = profile.Weight;
             }
+
+            // Go back to listening for changed events
+            suspendChangedEvent = false;
+
+            // Manually fire OnDimensionsChanged so we get any rate/ShipSense changes updated
+            OnDimensionsChanged(null, null);
 
             UpdateEditable(profile == null);
         }
@@ -353,7 +364,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnDimensionsChanged(object sender, EventArgs e)
         {
-            if (loading)
+            if (suspendChangedEvent)
             {
                 return;
             }

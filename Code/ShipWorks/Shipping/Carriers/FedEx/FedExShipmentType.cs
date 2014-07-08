@@ -1190,6 +1190,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.NonStandardContainer.FieldIndex]
                 }
             );
 

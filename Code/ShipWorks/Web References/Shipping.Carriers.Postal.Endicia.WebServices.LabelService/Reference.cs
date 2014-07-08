@@ -11459,15 +11459,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
         }
 
         /// <remarks/>
-        public string MailpieceShape
+        public CertifiedIntermediary CertifiedIntermediary
         {
             get
             {
-                return this.mailpieceShapeField;
+                return this.certifiedIntermediaryField;
             }
             set
             {
-                this.mailpieceShapeField = value;
+                this.certifiedIntermediaryField = value;
             }
         }
 
@@ -11494,6 +11494,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
             set
             {
                 this.weightOzField = value;
+            }
+        }
+
+        /// <remarks/>
+        public string MailpieceShape
+        {
+            get
+            {
+                return this.mailpieceShapeField;
+            }
+            set
+            {
+                this.mailpieceShapeField = value;
             }
         }
 
@@ -11586,16 +11599,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService {
             set
             {
                 this.mailpieceDimensionsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public CertifiedIntermediary CertifiedIntermediary {
-            get {
-                return this.certifiedIntermediaryField;
-            }
-            set {
-                this.certifiedIntermediaryField = value;
             }
         }
         

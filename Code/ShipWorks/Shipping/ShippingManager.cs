@@ -605,6 +605,7 @@ namespace ShipWorks.Shipping
                 if (shipmentList == null || !shipmentList.Contains(shipment.ShipmentID))
                 {
                     shipmentList = DataProvider.GetRelatedKeys(shipment.OrderID, EntityType.ShipmentEntity);
+                    shipmentList.Sort();
                     siblingData[shipment.OrderID] = shipmentList;
                 }
 
