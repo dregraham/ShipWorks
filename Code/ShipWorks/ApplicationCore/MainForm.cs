@@ -2583,7 +2583,12 @@ namespace ShipWorks
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count == 0)
+            // Cache the list of items to delete because it was possible to delete an item then hit the delete key before
+            // the item completely deleted. This would cause the initial check of selected items to pass, but the deletion
+            // process would throw because by that point, the selection was cleared and the list was empty.
+            List<long> keysToDelete = gridControl.Selection.OrderedKeys.ToList();
+
+            if (keysToDelete.Count == 0)
             {
                 return;
             }
@@ -2616,7 +2621,7 @@ namespace ShipWorks
                         ForceHeartbeat(HeartbeatOptions.ChangesExpected);
                     };
 
-                deleter.DeleteAsync(gridControl.Selection.OrderedKeys);
+                deleter.DeleteAsync(keysToDelete);
             }
         }
 
