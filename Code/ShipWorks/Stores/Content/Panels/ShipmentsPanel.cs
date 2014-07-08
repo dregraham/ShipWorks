@@ -153,6 +153,12 @@ namespace ShipWorks.Stores.Content.Panels
                             .ContinueWith(
                                 ant =>
                                 {
+                                    if (ant.IsFaulted)
+                                    {
+                                        log.Warn("Could not create shipment", ant.Exception);
+                                        return;
+                                    }
+
                                     autoCreatingShipments.Remove(orderID);
 
                                     if (orderID == EntityID)
