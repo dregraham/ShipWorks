@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -115,13 +116,23 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
         [TestCategory("ApplicationCore")]
         public void CheckIn_DoesNotThrowORMEntityOutOfSyncException_WhenDatabaseValuesHaveChanged()
         {
-            // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
-            // in solution directory)
-            ServiceStatusEntity firstServiceStatus = new LinqMetaData(new SqlAdapter(SqlSession.Current.OpenConnection())).ServiceStatus.FirstOrDefault();
-            ServiceStatusEntity secondServiceStatus = new LinqMetaData(new SqlAdapter(SqlSession.Current.OpenConnection())).ServiceStatus.FirstOrDefault();
+            ServiceStatusEntity firstServiceStatus = null;
+
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                firstServiceStatus = new LinqMetaData(adapter).ServiceStatus.FirstOrDefault();
+            }
+
+            if (firstServiceStatus == null)
+            {
+                Assert.Fail("Could not retrieve a service status");
+            }
+
+            // Imitate something else modifying the service status without refetching it
+            firstServiceStatus.LastStartDateTime = DateTime.Now.Subtract(new TimeSpan(0, 0, 0, 15));
+            SqlAdapter.Default.SaveEntity(firstServiceStatus);
 
             ServiceStatusManager.CheckIn(firstServiceStatus);
-            ServiceStatusManager.CheckIn(secondServiceStatus);
         }
     }
 }
