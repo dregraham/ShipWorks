@@ -13442,3 +13442,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Data.Administration.Indexing.IndexMonitor.#RebuildIndex(ShipWorks.Data.Administration.Indexing.TableIndex)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.RebuildTableIndexTask.#RebuildIndex(ShipWorks.Data.Administration.Indexing.TableIndex)")]
 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.RebuildTableIndexTask.#Run(System.Collections.Generic.List`1<System.Int64>,ShipWorks.Actions.ActionStepContext)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Scope = "member", Target = "ShipWorks.Data.Administration.Indexing.IndexMonitor.#RebuildIndex(ShipWorks.Data.Administration.Indexing.TableIndex)")]
