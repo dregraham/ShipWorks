@@ -132,7 +132,7 @@ DECLARE @StartReindexTimeString NVARCHAR(50)
 DECLARE @NextReindexFireTime DATETIME
 DECLARE @NextReindexFireTimeTicks BIGINT
 -- Next Monday at 2am
-SET @StartReindexTime = dateadd(hour, 2, dateadd(week, datediff(week, 0, '1/6/2014'), 7))
+SET @StartReindexTime = dateadd(hour, 2, dateadd(week, datediff(week, 0, GETDATE()), 7))
 SET @NextReindexFireTime = DATEADD(week, 1, @StartReindexTime)
 
 -- Convert to UTC
