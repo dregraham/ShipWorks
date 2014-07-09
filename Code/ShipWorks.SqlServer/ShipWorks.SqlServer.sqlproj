@@ -226,6 +226,7 @@
     <Compile Include="Shipping\OrderShipmentShipSenseStatusTrigger.cs" />
     <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
     <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
+    <Compile Include="Maintenance\RebuildTableIndex.cs" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -290,6 +291,7 @@
     <Folder Include="Templates\" />
     <Folder Include="Users\" />
     <Folder Include="Purge" />
+    <Folder Include="Maintenance" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
