@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                                     <StartDateTimeInUtc>{0}</StartDateTimeInUtc>
                                     <FrequencyInDays>1</FrequencyInDays>
                                   </DailyActionSchedule>
-                                  <TimeoutInHours value=""120"" />
+                                  <TimeoutInMinutes value=""120"" />
                                 </Settings>";
             
             actionTaskEntity = new ActionTaskEntity()
