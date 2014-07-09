@@ -13440,3 +13440,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.StartsWith(System.String)", Scope = "member", Target = "ShipWorks.Shipping.Carriers.Postal.Stamps.StampsApiSession.#SaveLabelImages(ShipWorks.Data.Model.EntityClasses.ShipmentEntity,System.String[])")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate", Scope = "member", Target = "ShipWorks.Data.Administration.Indexing.IIndexMonitor.#GetIndexesToRebuild()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Scope = "member", Target = "ShipWorks.Data.Administration.Indexing.IndexMonitor.#RebuildIndex(ShipWorks.Data.Administration.Indexing.TableIndex)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.Actions.Tasks.Common.RebuildTableIndexTask.#RebuildIndex(ShipWorks.Data.Administration.Indexing.TableIndex)")]
+

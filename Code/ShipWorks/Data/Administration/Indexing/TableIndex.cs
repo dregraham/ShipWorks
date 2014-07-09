@@ -11,6 +11,15 @@ namespace ShipWorks.Data.Administration.Indexing
     public class TableIndex
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="TableIndex"/> class.
+        /// </summary>
+        public TableIndex()
+        {
+            TableName = string.Empty;
+            IndexName = string.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets the name of the table.
         /// </summary>
         public string TableName
@@ -26,6 +35,15 @@ namespace ShipWorks.Data.Administration.Indexing
         {
             get; 
             set;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return TableName + "." + IndexName;
         }
     }
 }
