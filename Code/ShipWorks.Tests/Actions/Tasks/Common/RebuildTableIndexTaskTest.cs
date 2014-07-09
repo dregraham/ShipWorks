@@ -54,6 +54,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                                     <StartDateTimeInUtc>{0}</StartDateTimeInUtc>
                                     <FrequencyInDays>1</FrequencyInDays>
                                   </DailyActionSchedule>
+                                  <TimeoutInHours value=""120"" />
                                 </Settings>";
             
             actionTaskEntity = new ActionTaskEntity()
@@ -63,14 +64,16 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 TaskIdentifier = "RebuildTableIndex"
             };
 
-            testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);
-            testObject.Initialize(actionTaskEntity);
+            testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);            
 
             ActionQueueEntity queueEntity = new ActionQueueEntity();
             queueEntity.ActionVersion = GetBytes("167C");
 
-            actionStepContext = new ActionStepContext(queueEntity, new ActionQueueStepEntity(), null);
-            actionStepContext.Step.TaskSettings = "<Settings><TimeoutInHours value=\"120\" /></Settings>";
+            ActionQueueStepEntity stepEntity = new ActionQueueStepEntity();
+            stepEntity.TaskSettings = string.Format(taskSettingTemplate, XmlConvert.ToString(DefaultStartDateTimeInUtc, XmlDateTimeSerializationMode.Utc));
+
+            actionStepContext = new ActionStepContext(queueEntity, stepEntity, null);
+            
         }
 
         static byte[] GetBytes(string str)
@@ -167,7 +170,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddMinutes(testObject.TimeoutInMinutes + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
