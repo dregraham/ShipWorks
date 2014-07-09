@@ -163,6 +163,8 @@ INSERT INTO [dbo].[Scheduling_SIMPROP_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [
 VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 1, 0, 0, 0, 0.0000, 0.0000, 0, 0)
 GO
 
+DECLARE @ActionID NVARCHAR(20)
+
 -- Create RebuildTableIndex Action
 DECLARE @StartReindexTime DATETIME
 DECLARE @StartReindexTimeString NVARCHAR(50)
