@@ -21,6 +21,13 @@ namespace ShipWorks.Actions.Tasks.Common
         private IDateTimeProvider dateTimeProvider;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RebuildTableIndexTask"/> class.
+        /// </summary>
+        public RebuildTableIndexTask()
+            : this(new IndexMonitor(), new DateTimeProvider(), LogManager.GetLogger(typeof(RebuildTableIndexTask)))
+        { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RebuildTableIndexTask" /> class.
         /// </summary>
         /// <param name="indexMonitor">The index monitor.</param>
