@@ -13,7 +13,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// <summary>
     /// ActionTask that rebuilds database table indexes as needed based on index performance history.
     /// </summary>
-    [ActionTask("Rebuild database indexes", "RebuildTableIndex", ActionTaskCategory.Administration)]
+    [ActionTask("Rebuild database indexes", "RebuildTableIndex", ActionTaskCategory.Administration, true)]
     public class RebuildTableIndexTask : ActionTask
     {
         private ILog log;
