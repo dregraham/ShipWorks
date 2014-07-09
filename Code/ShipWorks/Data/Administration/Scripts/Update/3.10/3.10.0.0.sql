@@ -144,7 +144,7 @@ SET @NextReindexFireTime = DATEADD(hh, DATEDIFF(hh, GETDATE(), GETUTCDATE()), @N
 SET @NextReindexFireTimeTicks = dbo.GetTicksFromDateTime(@NextReindexFireTime)
 
 INSERT INTO [dbo].[Action] ([Name], [Enabled], [ComputerLimitedType], [ComputerLimitedList], [StoreLimited], [StoreLimitedList], [TriggerType], [TriggerSettings], [TaskSummary], [InternalOwner]) 
-VALUES (N'Reindex Data', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartReindexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>1</FrequencyInDays></DailyActionSchedule></Settings>',1), N'RebuildTableIndex', 'ReIndex')
+VALUES (N'Reindex Data', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartReindexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule></Settings>',1), N'RebuildTableIndex', 'ReIndex')
 SELECT @ActionID = CONVERT(NVARCHAR(20), SCOPE_IDENTITY())
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_JOB_DETAILS]')
