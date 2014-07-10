@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Interapptive.Shared.Data;
+using log4net;
 using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 
@@ -11,6 +13,8 @@ namespace ShipWorks.Data.Administration.Indexing
     /// </summary>
     public class IndexMonitor : IIndexMonitor
     {
+        private ILog log = LogManager.GetLogger(typeof (IndexMonitor));
+ 
         /// <summary>
         /// Intended to obtain a collection of indexes that need to be
         /// rebuilt based on performance history.
@@ -46,15 +50,22 @@ namespace ShipWorks.Data.Administration.Indexing
                 ON tv.objectid = ob.[object_id] 
                 INNER JOIN sys.schemas sc 
                 ON sc.schema_id = ob.schema_id";
-
-                SqlDataReader resultsToRebuild = SqlCommandProvider.ExecuteReader(con, sql);
-
-                while (resultsToRebuild.Read())
+                try
                 {
-                    indexesToRebuild.Add(new TableIndex() {
-                        TableName = resultsToRebuild.GetString(0),
-                        IndexName = resultsToRebuild.GetString(1)
-                    });
+                    SqlDataReader resultsToRebuild = SqlCommandProvider.ExecuteReader(con, sql);
+
+                    while (resultsToRebuild.Read())
+                    {
+                        indexesToRebuild.Add(new TableIndex()
+                        {
+                            TableName = resultsToRebuild.GetString(0),
+                            IndexName = resultsToRebuild.GetString(1)
+                        });
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("An Error occured when attempting to get tables to rebuild.", ex);
                 }
             }
 
