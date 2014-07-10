@@ -125,23 +125,20 @@ GO
 
 DECLARE @ActionID NVARCHAR(20)
 
-
 -- Create RebuildTableIndex Action
 DECLARE @StartReindexTime DATETIME
 DECLARE @StartReindexTimeString NVARCHAR(50)
-DECLARE @NextReindexFireTime DATETIME
-DECLARE @NextReindexFireTimeTicks BIGINT
+DECLARE @ReindexFireTimeTicks BIGINT
 -- Next Monday at 2am
 SET @StartReindexTime = dateadd(hour, 2, dateadd(week, datediff(week, 0, GETDATE()), 7))
-SET @NextReindexFireTime = DATEADD(week, 1, @StartReindexTime)
+
 
 -- Convert to UTC
 SET @StartReindexTime = DATEADD(hh, DATEDIFF(hh, GETDATE(), GETUTCDATE()), @StartReindexTime)
 SET @StartReindexTimeString = CONVERT(NVARCHAR(50), @StartReindexTime, 127) + 'Z'
 
 -- Convert to UTC, and get ticks
-SET @NextReindexFireTime = DATEADD(hh, DATEDIFF(hh, GETDATE(), GETUTCDATE()), @NextReindexFireTime)
-SET @NextReindexFireTimeTicks = dbo.GetTicksFromDateTime(@NextReindexFireTime)
+SET @ReindexFireTimeTicks = dbo.GetTicksFromDateTime(@StartReindexTimeString)
 
 INSERT INTO [dbo].[Action] ([Name], [Enabled], [ComputerLimitedType], [ComputerLimitedList], [StoreLimited], [StoreLimitedList], [TriggerType], [TriggerSettings], [TaskSummary], [InternalOwner]) 
 VALUES (N'Reindex Data', 1, 0, '', 0, N'', 6, CONVERT(xml,N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>' + @StartReindexTimeString  + '</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule></Settings>',1), N'RebuildTableIndex', 'ReIndex')
@@ -158,11 +155,11 @@ VALUES (CONVERT(BIGINT, @ActionID), N'RebuildTableIndex', CONVERT(xml, N'<Settin
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA]) 
-VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', @ActionID, N'DEFAULT', NULL, @NextReindexFireTimeTicks, NULL, 5, N'WAITING', N'CAL_INT', @NextReindexFireTimeTicks, NULL, NULL, 0, NULL)
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', @ActionID, N'DEFAULT', NULL, @ReindexFireTimeTicks, NULL, 5, N'WAITING', N'CAL_INT', @ReindexFireTimeTicks, NULL, NULL, 0, NULL)
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_SIMPROP_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_SIMPROP_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [STR_PROP_1], [STR_PROP_2], [STR_PROP_3], [INT_PROP_1], [INT_PROP_2], [LONG_PROP_1], [LONG_PROP_2], [DEC_PROP_1], [DEC_PROP_2], [BOOL_PROP_1], [BOOL_PROP_2]) 
-VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 1, 0, 0, 0, 0.0000, 0.0000, 0, 0)
+VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', N'Day', dbo.GetLocalTimezoneName(), NULL, 7, 0, 0, 0, 0.0000, 0.0000, 0, 0)
 GO
 
 -- Cleanup functions
