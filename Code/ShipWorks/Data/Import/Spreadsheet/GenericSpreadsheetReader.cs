@@ -242,6 +242,12 @@ namespace ShipWorks.Data.Import.Spreadsheet
                     value,
                     FindFieldMapping(identifier).SourceColumnName), ex);
             }
+            catch (OverflowException ex)
+            {
+                throw new GenericSpreadsheetException(string.Format("The value '{0}' in column '{1}' is too big.",
+                    value,
+                    FindFieldMapping(identifier).SourceColumnName), ex);
+            }
         }
 
         /// <summary>

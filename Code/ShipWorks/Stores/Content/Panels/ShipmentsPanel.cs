@@ -153,6 +153,14 @@ namespace ShipWorks.Stores.Content.Panels
                             .ContinueWith(
                                 ant =>
                                 {
+                                    // If there was a problem creating the shipment, just give up.  This is to handle a situation
+                                    // where ShipWorks would lock in an endless loop on an exception
+                                    if (ant.IsFaulted)
+                                    {
+                                        log.Warn("Could not create shipment", ant.Exception);
+                                        return;
+                                    }
+
                                     autoCreatingShipments.Remove(orderID);
 
                                     if (orderID == EntityID)

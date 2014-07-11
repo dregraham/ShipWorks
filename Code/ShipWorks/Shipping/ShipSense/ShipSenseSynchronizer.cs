@@ -180,7 +180,9 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="shipment">The shipment that the ShipSense data is being sourced from.</param>
         private void SynchronizeMatchingShipments(KnowledgebaseHashResult hashResult, ShipmentEntity shipment)
         {
-            if (isShipSenseEnabled)
+            // Don't bother trying to synchronize if there are no shipments that match the specified hash.  This
+            // scenario was causing a KeyNotFoundException
+            if (isShipSenseEnabled && shipmentDictionary.ContainsKey(hashResult.HashValue))
             {
                 // Create a knowledge base entry and populate it based on the shipment provided. We'll
                 // use this to apply the ShipSense settings to any other shipments with the same hash
