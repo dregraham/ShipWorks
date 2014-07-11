@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Indexing;
 using System;
 using System.Collections.Generic;
@@ -105,10 +106,13 @@ namespace ShipWorks.Actions.Tasks.Common
                     Queue<TableIndex> indexesToRebuild = new Queue<TableIndex>(indexMonitor.GetIndexesToRebuild());
                     LogIndexesNeedingRebuilt(indexesToRebuild.ToList());
 
-                    while (indexesToRebuild.Any() && dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
+                    using (new LoggedStopwatch(log, "Rebuilding Indexes Total Time."))
                     {
-                        // Time window still hasn't expired, so we can rebuild the next index
-                        RebuildIndex(indexesToRebuild.Dequeue());
+                        while (indexesToRebuild.Any() && dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
+                        {
+                            // Time window still hasn't expired, so we can rebuild the next index
+                            RebuildIndex(indexesToRebuild.Dequeue());
+                        }
                     }
                 }
             }

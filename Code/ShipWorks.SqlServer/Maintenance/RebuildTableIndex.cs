@@ -1,3 +1,4 @@
+using System;
 using Microsoft.SqlServer.Server;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.SqlServer.Purge;
@@ -22,6 +23,7 @@ public partial class StoredProcedures
             con.Open();
 
             SqlCommand cmd = con.CreateCommand();
+            cmd.CommandTimeout = (int)TimeSpan.FromHours(3).TotalSeconds;
             cmd.CommandText = SqlToGenerateRebuildScript();
 
             cmd.Parameters.AddWithValue("@TableName", tableName);
