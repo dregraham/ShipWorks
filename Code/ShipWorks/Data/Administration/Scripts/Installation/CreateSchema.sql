@@ -1809,9 +1809,9 @@ CREATE TABLE [dbo].[GridColumnLayout]
 [DetailViewSettings] [xml] NULL
 )
 GO
-PRINT N'Creating primary key [PK_GridLayout] on [dbo].[GridColumnLayout]'
+PRINT N'Creating primary key PK_GridColumnLayout on [dbo].[GridColumnLayout]'
 GO
-ALTER TABLE [dbo].[GridColumnLayout] ADD CONSTRAINT [PK_GridLayout] PRIMARY KEY CLUSTERED  ([GridColumnLayoutID])
+ALTER TABLE [dbo].[GridColumnLayout] ADD CONSTRAINT [PK_GridColumnLayout] PRIMARY KEY CLUSTERED  ([GridColumnLayoutID])
 GO
 PRINT N'Creating [dbo].[FilterNodeContentDetail]'
 GO
@@ -1900,13 +1900,13 @@ CREATE TABLE [dbo].[GridColumnPosition]
 [Position] [int] NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_GridColumnLayout] on [dbo].[GridColumnPosition]'
+PRINT N'Creating primary key PK_GridColumnPosition on [dbo].[GridColumnPosition]'
 GO
-ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT [PK_GridColumnLayout] PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
+ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT PK_GridColumnPosition PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
 GO
 PRINT N'Creating index [IX_GridLayoutColumn] on [dbo].[GridColumnPosition]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_GridLayoutColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_GridColumnPosition_GridColumnLayoutIdColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
 GO
 PRINT N'Creating [dbo].[InfopiaOrderItem]'
 GO
