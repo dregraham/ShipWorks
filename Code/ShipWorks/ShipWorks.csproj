@@ -2061,6 +2061,9 @@
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
     <Compile Include="Stores\ComputerDownloadAllowed.cs" />
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
+    <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2076,6 +2079,9 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
+    <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -2485,6 +2491,7 @@
     <Compile Include="Stores\Platforms\Volusion\VolusionTimeZoneControl.Designer.cs">
       <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\WPeCommerce\WPeCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdatePage.cs">
       <SubType>UserControl</SubType>
@@ -10646,6 +10653,12 @@
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
+    <Content Include="Resources\Stores\Icons\cart66.png" />
+    <Content Include="Resources\Stores\Icons\jigoshop.png" />
+    <Content Include="Resources\Stores\Icons\shopp.png" />
+    <Content Include="Resources\Stores\Icons\shopperpress.png" />
+    <Content Include="Resources\Stores\Icons\woocommerce.png" />
+    <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
