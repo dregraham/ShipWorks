@@ -160,7 +160,7 @@ namespace ShipWorks.SqlServer.Filters
                                             WHERE ObjectType = 31 AND ParentID IS NULL AND s.ShipmentID = ObjectID;";
                                     int updated = fillParentKeyCmd.ExecuteNonQuery();
 
-                                    DebugMessage(string.Format("Updated {0} order ID's with their customer ID's", updated));
+                                    DebugMessage(string.Format("Updated {0} shipment ID's with their order ID's", updated));
                                 }
 
 
@@ -565,7 +565,7 @@ namespace ShipWorks.SqlServer.Filters
                     INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                        SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
                        FROM FilterNodeContentDirty d WITH (NOLOCK)
-                       WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
+                       WHERE d.ObjectType = 13 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
                 cmd.ExecuteNonQuery();
             }
 
@@ -578,7 +578,7 @@ namespace ShipWorks.SqlServer.Filters
                 INSERT INTO FilterNodeUpdateOrder (ObjectID, ComputerID, ColumnsUpdated)
                    SELECT d.ParentID, d.ComputerID, d.ColumnsUpdated
                    FROM FilterNodeContentDirty d WITH (NOLOCK)
-                   WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
+                   WHERE d.ObjectType = 31 AND d.FilterNodeContentDirtyID <= @maxDirtyID AND d.ParentID IS NOT NULL AND dbo.BitwiseAnd(d.ColumnsUpdated, @columnMask) != 0x0;";
                 cmd.ExecuteNonQuery();
             }
         }

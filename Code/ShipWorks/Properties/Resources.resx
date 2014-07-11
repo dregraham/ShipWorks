@@ -1492,7 +1492,7 @@
   <data name="squares_circle_green_transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Progress\squares_circle_green_transparent.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-    <data name="splash_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="splash_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\splash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="sw_cubes_32x32_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -1503,5 +1503,11 @@
   </data>
   <data name="sw_cubes_big_april" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\aprilfools-48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="clock_warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\clock_warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="funnel_warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\funnel_warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

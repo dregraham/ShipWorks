@@ -493,7 +493,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             profile.FedEx.PayorTransportType = (int) FedExPayorType.Sender;
             profile.FedEx.PayorTransportAccount = "";
-            profile.FedEx.PayorDutiesType = (int) FedExPayorType.Sender;
+            profile.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
             profile.FedEx.PayorDutiesAccount = "";
 
             profile.FedEx.SaturdayDelivery = false;

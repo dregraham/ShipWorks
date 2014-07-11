@@ -191,11 +191,34 @@ namespace ShipWorks.ApplicationCore.Services
         /// <param name="serviceStatus">The service for which to check-in.</param>
         public static void CheckIn(ServiceStatusEntity serviceStatus)
         {
+            try
+            {
+                CheckInInternal(serviceStatus);
+            }
+            catch (ORMEntityOutOfSyncException ex)
+            {
+                log.Warn("ServiceStatusEntity was out of sync when checking in.  Trying again.", ex);
+                
+                // Refresh the status and try to run the check in again
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntity(serviceStatus);
+                }
+
+                CheckInInternal(serviceStatus);
+            }
+
+            SaveServiceStatus(serviceStatus);
+        }
+
+        /// <summary>
+        /// Perform the actual check in and logging here so it can be retried if necessary
+        /// </summary>
+        private static void CheckInInternal(ServiceStatusEntity serviceStatus)
+        {
             serviceStatus.LastCheckInDateTime = DateTime.UtcNow;
 
             log.InfoFormat("Service '{0}' checking in at {1}", serviceStatus.ServiceDisplayName, serviceStatus.LastCheckInDateTime);
-
-            SaveServiceStatus(serviceStatus);
         }
 
         /// <summary>
