@@ -16,11 +16,12 @@ namespace ShipWorks.Filters
         int count;
         long countVersion;
         long rowVersion;
+        int cost; 
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FilterCount(long nodeID, long countID, FilterNodePurpose purpose, FilterCountStatus status, int count, long countVersion, long rowVersion)
+        public FilterCount(long nodeID, long countID, FilterNodePurpose purpose, FilterCountStatus status, int count, long countVersion, long rowVersion, int cost)
         {
             this.nodeID = nodeID;
             this.countID = countID;
@@ -29,6 +30,7 @@ namespace ShipWorks.Filters
             this.count = count;
             this.countVersion = countVersion;
             this.rowVersion = rowVersion;
+            this.cost = cost;
         }
 
         /// <summary>
@@ -94,6 +96,14 @@ namespace ShipWorks.Filters
         public long RowVersion
         {
             get { return rowVersion; }
+        }
+
+        /// <summary>
+        /// The cost (in milliseconds) it took to calculate the filter count.
+        /// </summary>
+        public int CostInMilliseconds
+        {
+            get { return cost; }
         }
     }
 }

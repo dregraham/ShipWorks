@@ -174,7 +174,7 @@ namespace ShipWorks.Filters
                 using (SqlCommand cmd = SqlCommandProvider.Create(con))
                 {
                     cmd.CommandText = @"
-                    SELECT n.FilterNodeID, c.FilterNodeContentID, n.Purpose, c.Status, c.Count, c.CountVersion, CAST(c.RowVersion as bigint) AS 'RowVersion'
+                    SELECT n.FilterNodeID, c.FilterNodeContentID, n.Purpose, c.Status, c.Count, c.CountVersion, CAST(c.RowVersion as bigint) AS 'RowVersion', c.Cost
                         FROM FilterNode n WITH (NOLOCK) INNER JOIN FilterNodeContent c WITH (NOLOCK) ON n.FilterNodeContentID = c.FilterNodeContentID
                         WHERE c.RowVersion > @MaxRowVersion";
                     cmd.Parameters.AddWithValue("@MaxRowVersion", maxTimestamp);
@@ -185,15 +185,17 @@ namespace ShipWorks.Filters
 
                         while (reader.Read())
                         {
-                            filterCountList.Add(
-                                new FilterCount(
+                            filterCountList.Add(new FilterCount
+                                (
                                     (long)reader["FilterNodeID"],
                                     (long)reader["FilterNodeContentID"],
                                     (FilterNodePurpose)Convert.ToInt32(reader["Purpose"]),
                                     (FilterCountStatus)Convert.ToInt32(reader["Status"]),
                                     (int)reader["Count"],
                                     (long)reader["CountVersion"],
-                                    (long)reader["RowVersion"])
+		                            (long) reader["RowVersion"],
+		                            (int) reader["cost"]
+                                )
                             );
                         }
 
