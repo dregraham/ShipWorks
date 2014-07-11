@@ -122,15 +122,14 @@ BEGIN
 END
 GO
 
-
-DECLARE @ActionID NVARCHAR(20)
-
 -- Create RebuildTableIndex Action
+DECLARE @ActionID NVARCHAR(20)
 DECLARE @StartReindexTime DATETIME
 DECLARE @StartReindexTimeString NVARCHAR(50)
 DECLARE @ReindexFireTimeTicks BIGINT
--- Next Monday at 2am
-SET @StartReindexTime = dateadd(hour, 2, dateadd(week, datediff(week, 0, GETDATE()), 7))
+
+-- Next Sunday at 2am
+SET @StartReindexTime = dateadd(hour, 2, dateadd(week, datediff(week, 0, GETDATE()), 6))
 
 
 -- Convert to UTC
