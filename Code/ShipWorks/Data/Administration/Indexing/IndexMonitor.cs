@@ -13,7 +13,7 @@ namespace ShipWorks.Data.Administration.Indexing
     public class IndexMonitor : IIndexMonitor
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(IndexMonitor));
-        private static readonly int timeoutHours = 3;
+        private const int timeoutHours = 3;
         private static readonly int timeoutSeconds = (int)TimeSpan.FromHours(timeoutHours).TotalSeconds;
         private static string sqlConnectionString;
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Data.Administration.Indexing
         /// Gets a connection string, based on SqlAdapter.Default.ConnectionString, and modifies it to have a new
         /// number of minutes for the timeout.
         /// </summary>
-        private string ConnectionString
+        private static string ConnectionString
         {
             get
             {
