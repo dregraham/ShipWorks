@@ -95,10 +95,10 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             try
             {
-                // This can only be run from a schedule (based on the IsAllowedForTrigger method), 
-                // so it is reasonable to assume the trigger settings are for a scheduled trigger.
-                ScheduledTrigger trigger = new ScheduledTrigger(context.Step.TaskSettings);
-                DateTime scheduledEndTimeInUtc = trigger.Schedule.StartDateTimeInUtc.AddMinutes(TimeoutInMinutes);
+                ScheduledTrigger scheduledTrigger = new ScheduledTrigger(context.Step.TaskSettings);
+                TimeSpan startTimeOfDay = scheduledTrigger.Schedule.StartDateTimeInUtc.TimeOfDay;
+                DateTime scheduledStart = dateTimeProvider.UtcNow.Date + startTimeOfDay;
+                DateTime scheduledEndTimeInUtc = scheduledStart + TimeSpan.FromMinutes(TimeoutInMinutes);
 
                 if (dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
                 {

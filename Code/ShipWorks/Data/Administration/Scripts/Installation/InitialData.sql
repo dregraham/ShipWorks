@@ -193,7 +193,7 @@ VALUES (N'QuartzScheduler', @ActionID, N'DEFAULT', NULL, N'ShipWorks.Actions.Sch
 
 PRINT (N'Add 1 row to [dbo].[ActionTask]')
 INSERT INTO [dbo].[ActionTask] ([ActionID], [TaskIdentifier], [TaskSettings], [StepIndex], [InputSource], [InputFilterNodeID], [FilterCondition], [FilterConditionNodeID], [FlowSuccess], [FlowSkipped], [FlowError])
-VALUES (CONVERT(BIGINT, @ActionID), N'RebuildTableIndex', CONVERT(xml, N'<Settings><TimeoutInHours value="120"/></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
+VALUES (CONVERT(BIGINT, @ActionID), N'RebuildTableIndex', CONVERT(xml, N'<Settings><DailyActionSchedule><ScheduleType>2</ScheduleType><StartDateTimeInUtc>2014-07-06T07:00:00Z</StartDateTimeInUtc><FrequencyInDays>7</FrequencyInDays></DailyActionSchedule><TimeoutInMinutes value="120" /></Settings>', 1), 0, -1, -1, 0, -1, 0, 0, 0)
 
 PRINT(N'Add 1 row to [dbo].[Scheduling_TRIGGERS]')
 INSERT INTO [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP], [JOB_NAME], [JOB_GROUP], [DESCRIPTION], [NEXT_FIRE_TIME], [PREV_FIRE_TIME], [PRIORITY], [TRIGGER_STATE], [TRIGGER_TYPE], [START_TIME], [END_TIME], [CALENDAR_NAME], [MISFIRE_INSTR], [JOB_DATA]) 

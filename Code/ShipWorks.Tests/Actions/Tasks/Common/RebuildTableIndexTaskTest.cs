@@ -24,9 +24,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         private Mock<ILog> log;
         private Mock<IDateTimeProvider> dateTimeProvider;
         private ActionStepContext actionStepContext;
-
         private ActionTaskEntity actionTaskEntity;
-        private readonly DateTime DefaultStartDateTimeInUtc = new DateTime(2014, 7, 14, 2, 0, 0, DateTimeKind.Utc);
+        private readonly DateTime DefaultStartDateTimeInUtc = new DateTime(2014, 7, 13, 2, 0, 0, DateTimeKind.Utc);
 
         [TestInitialize]
         public void Intitialize()
