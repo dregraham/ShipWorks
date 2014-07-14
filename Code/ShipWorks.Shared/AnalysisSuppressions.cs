@@ -24,3 +24,8 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "i", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#iParcel")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "os", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#osCommerce")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UpsOn", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#UpsOnLineTools")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Jigoshop", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Jigoshop")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pe", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#WPeCommerce")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopp", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Shopp")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopperpress", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Shopperpress")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pe", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#WPeCommerce")]
