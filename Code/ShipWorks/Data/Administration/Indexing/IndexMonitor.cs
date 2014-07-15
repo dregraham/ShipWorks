@@ -66,13 +66,15 @@ namespace ShipWorks.Data.Administration.Indexing
         /// </summary>
         public void RebuildIndex(TableIndex index)
         {
-            using (DataAccessAdapter adapter = new DataAccessAdapter())
+            using (SqlConnection sqlConnection = new SqlConnection(SqlAdapter.Default.ConnectionString))
             {
-                adapter.CallActionStoredProcedure("RebuildTableIndexProcedure", new SqlParameter[]
+                sqlConnection.Open();
+
+                using (SqlCommand sqlCommand = sqlConnection.CreateCommand())
                 {
-                    new SqlParameter("@tableName", index.TableName),
-                    new SqlParameter("@indexName", index.IndexName)
-                });
+                    sqlCommand.CommandText = string.Format("exec RebuildTableIndex {0}, {1}", index.TableName, index.IndexName);
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
         }
     }

@@ -2,6 +2,7 @@
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Administration.Indexing;
@@ -22,6 +23,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         private Mock<IIndexMonitor> indexMonitor;
         private Mock<ILog> log;
         private Mock<IDateTimeProvider> dateTimeProvider;
+        private ActionStepContext actionStepContext;
 
         private ActionTaskEntity actionTaskEntity;
         private readonly DateTime DefaultStartDateTimeInUtc = new DateTime(2014, 7, 14, 2, 0, 0, DateTimeKind.Utc);
@@ -63,6 +65,19 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);
             testObject.Initialize(actionTaskEntity);
+
+            ActionQueueEntity queueEntity = new ActionQueueEntity();
+            queueEntity.ActionVersion = GetBytes("167C");
+
+            actionStepContext = new ActionStepContext(queueEntity, new ActionQueueStepEntity(), null);
+            actionStepContext.Step.TaskSettings = "<Settings><TimeoutInHours value=\"120\" /></Settings>";
+        }
+
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
         }
 
         [TestMethod]
@@ -141,7 +156,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneHourDate = DefaultStartDateTimeInUtc.AddHours(testObject.TimeoutInMinutes/60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneHourDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
@@ -163,7 +178,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneSecondDate = DefaultStartDateTimeInUtc.AddSeconds(testObject.TimeoutInMinutes * 60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneSecondDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
@@ -174,7 +189,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMillisecondDate = DefaultStartDateTimeInUtc.AddMilliseconds(testObject.TimeoutInMinutes * 60000 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMillisecondDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
@@ -185,7 +200,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Once());
         }
@@ -196,7 +211,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.Info("The following indexes need to be rebuilt: Table1.Index1, Table2.Index2"), Times.Once());
         }
@@ -209,7 +224,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Returns(new List<TableIndex>());
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.Info("No indexes need to be rebuilt at this time."), Times.Once());
         }
@@ -221,8 +236,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Returns(new List<TableIndex> { new TableIndex() });
-            
-            testObject.Run(new List<long>(), null);
+
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.RebuildIndex(It.IsAny<TableIndex>()), Times.Once());
         }
@@ -235,7 +250,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Returns(new List<TableIndex> { new TableIndex() });
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.InfoFormat("Rebuilding index {0}", It.IsAny<TableIndex>()), Times.Once());
         }
@@ -248,7 +263,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Returns(new List<TableIndex> { new TableIndex() });
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Once());
         }
@@ -259,7 +274,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             indexMonitor.Verify(m => m.RebuildIndex(It.IsAny<TableIndex>()), Times.Exactly(2));
         }
@@ -270,7 +285,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.InfoFormat("Rebuilding index {0}", It.IsAny<TableIndex>()), Times.Exactly(2));
         }
@@ -281,7 +296,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneMinuteDate);
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Exactly(2));
         }
@@ -304,7 +319,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                             } 
                         });
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             // Should have finished building one index
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Once());
@@ -328,7 +343,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                             }
                         });
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
 
             // Should have caught and logged one exception
             log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
@@ -340,7 +355,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         {
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Throws(new Exception("Mocked exception"));
 
-            testObject.Run(new List<long>(), null);
+            testObject.Run(new List<long>(), actionStepContext);
         }
 
         [TestMethod]
@@ -350,7 +365,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             {
                 indexMonitor.Setup(m => m.GetIndexesToRebuild()).Throws(new Exception("Mocked exception"));
 
-                testObject.Run(new List<long>(), null);
+                testObject.Run(new List<long>(), actionStepContext);
             }
             catch (Exception ex)
             {

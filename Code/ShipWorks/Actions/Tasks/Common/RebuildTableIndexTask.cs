@@ -90,13 +90,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Rebuilds the table indexes.
         /// </summary>
-        protected override void Run()
+        public override void Run(List<long> inputKeys, ActionStepContext context)
         {
             try
             {
                 // This can only be run from a schedule (based on the IsAllowedForTrigger method), 
                 // so it is reasonable to assume the trigger settings are for a scheduled trigger.
-                ScheduledTrigger trigger = new ScheduledTrigger(Entity.TaskSettings);
+                ScheduledTrigger trigger = new ScheduledTrigger(context.Step.TaskSettings);
                 DateTime scheduledEndTimeInUtc = trigger.Schedule.StartDateTimeInUtc.AddMinutes(TimeoutInMinutes);
 
                 if (dateTimeProvider.UtcNow < scheduledEndTimeInUtc)
