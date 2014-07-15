@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Platforms.OrderDesk;
 
 namespace ShipWorks.Stores
 {
@@ -108,7 +107,8 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
-                case StoreTypeCode.OrderDesk: return new OrderDeskStoreType(store);
+                case StoreTypeCode.BrightPearl: return new Platforms.BrightPearl.BrightPearlStoreType(store);
+                case StoreTypeCode.OrderDesk: return new Platforms.OrderDesk.OrderDeskStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");

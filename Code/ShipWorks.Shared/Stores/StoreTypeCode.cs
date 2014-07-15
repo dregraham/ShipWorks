@@ -201,9 +201,10 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
-
-
-
+        [Description("BrightPearl")]
+        [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
+        [StoreTypeIcon("brightpearl")]
+        BrightPearl = 38,
 
         [Description("OrderDesk")]
         [StoreTypeIdentity("ORDERDESK", "ORD")]

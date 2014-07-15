@@ -93,6 +93,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap brightpearl {
+            get {
+                object obj = ResourceManager.GetObject("brightpearl", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap channeladvisor {
             get {
                 object obj = ResourceManager.GetObject("channeladvisor", resourceCulture);
