@@ -2320,6 +2320,7 @@
     <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.Designer.cs">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\OrderDesk\OrderDeskStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggOrderType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Net\PageCalculator.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsControl.Designer.cs">
@@ -10653,6 +10654,7 @@
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
+    <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

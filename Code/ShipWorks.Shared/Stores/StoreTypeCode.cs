@@ -199,6 +199,15 @@ namespace ShipWorks.Stores
         [Description("SolidCommerce")]
         [StoreTypeIdentity("SOLIDCOMMERCE", "SDC")]
         [StoreTypeIcon("solidcommerce")]
-        SolidCommerce = 37
+        SolidCommerce = 37,
+
+
+
+
+
+        [Description("OrderDesk")]
+        [StoreTypeIdentity("ORDERDESK", "ORD")]
+        [StoreTypeIcon("orderdesk")]
+        OrderDesk = 39
     }
 }
