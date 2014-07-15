@@ -47,6 +47,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Sears,
         SolidCommerce,
         WebRequestTask,
+        Fortune3,
 
         [ApiPrivateLogSource]
         UspsNoPostage,

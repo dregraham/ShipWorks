@@ -234,6 +234,11 @@ namespace ShipWorks.Stores
         [Description("WooCommerce")]
         [StoreTypeIdentity("WOOCOMMERCE", "WOO")]
         [StoreTypeIcon("woocommerce")]
-        WooCommerce = 46
+        WooCommerce = 46,
+
+        [Description("Fortune3")]
+        [StoreTypeIdentity("FORTUNE3", "FT3")]
+        [StoreTypeIcon("fortune3")]
+        Fortune3 = 48
     }
 }
