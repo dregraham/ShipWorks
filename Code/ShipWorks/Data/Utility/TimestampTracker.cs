@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -47,11 +48,7 @@ namespace ShipWorks.Data.Utility
                 object value = null;
 
                 SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(3, -5, "TimestapTracker.CheckForChange");
-                using (SqlCommand sqlCommand = new SqlCommand("SELECT CAST(@@DBTS AS BIGINT)"))
-                {
-                    IRetrievalQuery query = new RetrievalQuery(sqlCommand);
-                    sqlAdapterRetry.ExecuteWithRetry(adapter => value = adapter.ExecuteScalarQuery(query));    
-                }
+                sqlAdapterRetry.ExecuteWithRetry(() => value = SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)"));
 
                 // During a reconnect or after an upgrade, the timestamp is sometimes returned as null
                 // If that happens, we'll assume no changes for the moment and let the next run through
