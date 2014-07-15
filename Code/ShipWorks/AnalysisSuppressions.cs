@@ -13451,3 +13451,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopperpress", Scope = "type", Target = "ShipWorks.Stores.Platforms.Shopperpress.ShopperpressStoreType")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopp", Scope = "type", Target = "ShipWorks.Stores.Platforms.Shopp.ShoppStoreType")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pe", Scope = "type", Target = "ShipWorks.Stores.Platforms.WPeCommerce.WPeCommerceStoreType")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "Username", Scope = "member", Target = "ShipWorks.Shipping.Insurance.InsureShip.InsureShipSettings.#Username")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "ShipWorks.Shipping.Insurance.InsureShip.InsureShipSettings.#UseTestServer")]
