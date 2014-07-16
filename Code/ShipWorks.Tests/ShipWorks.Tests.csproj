@@ -124,6 +124,7 @@
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
+    <Compile Include="Actions\Tasks\Common\RebuildTableIndexTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTaskTests.cs" />
     <Compile Include="Actions\Tasks\Common\PurgeDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\TaskTestUtility.cs" />
@@ -381,6 +382,7 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
+    <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />

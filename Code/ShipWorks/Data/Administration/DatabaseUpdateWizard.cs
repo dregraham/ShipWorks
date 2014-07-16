@@ -886,7 +886,17 @@ namespace ShipWorks.Data.Administration
             {
                 invoker.EndInvoke(result);
 
-                progressDlg.FormClosed += (object sender, FormClosedEventArgs e) => { MoveNext(); };
+                if (progressDlg.Visible)
+                {
+                    // If the dialog is visible, wait until it closes before moving on
+                    progressDlg.FormClosed += (object sender, FormClosedEventArgs e) => MoveNext();
+                }
+                else
+                {
+                    // Since the dialog is not visible, just move on now
+                    log.Debug("Progress dialog was already closed.");
+                    MoveNext();
+                }
             }
             catch (OperationCanceledException)
             {

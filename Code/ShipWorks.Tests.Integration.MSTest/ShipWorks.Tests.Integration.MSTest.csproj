@@ -111,6 +111,7 @@
     <Compile Include="IntegrationTestBase.cs" />
     <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
     <Compile Include="ShipSense\ShipSenseLoaderTest.cs" />
+    <Compile Include="ShipWorks.SqlServer\Maintenance\RebuildTableIndexTest.cs" />
     <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

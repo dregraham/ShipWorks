@@ -1617,6 +1617,10 @@ namespace ShipWorks.Data.Model
 		CustomerUpdateBilling,
 		///<summary>CustomerUpdateShipping. </summary>
 		CustomerUpdateShipping,
+		///<summary>CustomerUpdateModifiedBilling. </summary>
+		CustomerUpdateModifiedBilling,
+		///<summary>CustomerUpdateModifiedShipping. </summary>
+		CustomerUpdateModifiedShipping,
 		///<summary>AuditNewOrders. </summary>
 		AuditNewOrders,
 		///<summary>AuditDeletedOrders. </summary>

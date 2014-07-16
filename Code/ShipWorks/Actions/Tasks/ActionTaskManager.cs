@@ -100,7 +100,7 @@ namespace ShipWorks.Actions.Tasks
             Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap = new Dictionary<StoreTypeCode, DescriptorStoreInfo>();
 
             // A menu item for each descriptor that has no store-specific issues
-            foreach (ActionTaskDescriptor descriptor in taskDescriptors.Values.OrderBy(d => d.BaseName))
+            foreach (ActionTaskDescriptor descriptor in taskDescriptors.Values.Where(atd => !atd.Hidden).OrderBy(d => d.BaseName))
             {
                 // We need to create a dummy instance of the task to figure out how to bind it
                 ActionTask taskDummy = descriptor.CreateInstance();
