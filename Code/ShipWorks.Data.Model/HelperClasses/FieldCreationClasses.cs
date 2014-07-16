@@ -3427,6 +3427,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateShipping);}
 		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerUpdateModifiedBilling field instance</summary>
+		public static EntityField2 CustomerUpdateModifiedBilling
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateModifiedBilling);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerUpdateModifiedShipping field instance</summary>
+		public static EntityField2 CustomerUpdateModifiedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateModifiedShipping);}
+		}
 		/// <summary>Creates a new ConfigurationEntity.AuditNewOrders field instance</summary>
 		public static EntityField2 AuditNewOrders
 		{

@@ -127,6 +127,9 @@
   <data name="bigcommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\bigcommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="brightpearl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\brightpearl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="cart66" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\stores\icons\cart66.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -174,6 +177,9 @@
   </data>
   <data name="newegg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\newegg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="orderdesk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\orderdesk.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="orderdynamics" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\orderdynamics.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
