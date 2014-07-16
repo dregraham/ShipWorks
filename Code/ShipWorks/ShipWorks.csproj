@@ -693,8 +693,10 @@
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipResponseException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Enums\InsureShipResponseCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
