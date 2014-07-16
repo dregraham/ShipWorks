@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -36,36 +37,52 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             this.Affiliate = affiliate;
             this.Log = log;
         }
+
         /// <summary>
         /// Gets or sets the response factory.
         /// </summary>
         protected IInsureShipResponseFactory ResponseFactory
         {
+            get; 
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the log.
+        /// </summary>
+        protected ILog Log
+        {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Gets or sets the shipment.
         /// </summary>
-        protected ShipmentEntity Shipment
+        public ShipmentEntity Shipment
         {
-            get;
-            set;
+            get; 
+            private set;
         }
 
         /// <summary>
         /// Gets or sets the affiliate.
         /// </summary>
-        protected InsureShipAffiliate Affiliate
-        {
-            get;
-            set;
+        public InsureShipAffiliate Affiliate 
+        { 
+            get; 
+            private set;
         }
 
-        protected ILog Log
+        /// <summary>
+        /// Gets or sets the raw response.
+        /// </summary>
+        /// <value>
+        /// The raw response.
+        /// </value>
+        public virtual HttpResponse RawResponse
         {
-            get;
+            get; 
             set;
         }
 

@@ -699,6 +699,7 @@
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipmentResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipRequestFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
