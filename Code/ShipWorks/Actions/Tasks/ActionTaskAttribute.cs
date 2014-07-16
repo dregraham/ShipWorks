@@ -11,6 +11,7 @@ namespace ShipWorks.Actions.Tasks
         string displayName;
         string identifier;
         ActionTaskCategory category;
+        bool hidden = false;
 
         /// <summary>
         /// Constructor
@@ -20,6 +21,17 @@ namespace ShipWorks.Actions.Tasks
             this.displayName = displayName;
             this.identifier = identifier;
             this.category = category;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ActionTaskAttribute(string displayName, string identifier, ActionTaskCategory category, bool hidden)
+        {
+            this.displayName = displayName;
+            this.identifier = identifier;
+            this.category = category;
+            this.hidden = hidden;
         }
 
         /// <summary>
@@ -53,6 +65,17 @@ namespace ShipWorks.Actions.Tasks
             get
             {
                 return category;
+            }
+        }
+
+        /// <summary>
+        /// Used to determine if this ActionTask should be hidden in the UI
+        /// </summary>
+        public bool Hidden
+        {
+            get
+            {
+                return hidden;
             }
         }
     }

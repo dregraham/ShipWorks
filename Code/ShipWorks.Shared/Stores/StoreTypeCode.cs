@@ -201,12 +201,22 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
+		[Description("BrightPearl")]
+        [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
+        [StoreTypeIcon("brightpearl")]
+        BrightPearl = 38,
+		
+		[Description("OrderDesk")]
+        [StoreTypeIdentity("ORDERDESK", "ORD")]
+        [StoreTypeIcon("orderdesk")]
+        OrderDesk = 39,
+		
         [Description("Cart66 Lite")]
         [StoreTypeIdentity("CART66LITE", "C6L")]
         [StoreTypeIcon("cart66")]
         Cart66Lite = 40,
 
-        [Description("Cart66 Pro")]
+		[Description("Cart66 Pro")]
         [StoreTypeIdentity("CART66PRO", "C6P")]
         [StoreTypeIcon("cart66")]
         Cart66Pro = 41,
@@ -216,11 +226,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("shopp")]
         Shopp = 42,
 
-        [Description("Shopperpress")]
+		[Description("Shopperpress")]
         [StoreTypeIdentity("SHOPPERPRESS", "SHP")]
         [StoreTypeIcon("shopperpress")]
         Shopperpress = 43,
-
+		
         [Description("WP eCommerce")]
         [StoreTypeIdentity("WPECOMMERCE", "WPE")]
         [StoreTypeIcon("wpecommerce")]

@@ -33,7 +33,7 @@
             // 
             // accountSettingsControl
             // 
-            this.accountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.accountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountSettingsControl.Location = new System.Drawing.Point(12, 10);
             this.accountSettingsControl.Name = "accountSettingsControl";
             this.accountSettingsControl.Size = new System.Drawing.Size(482, 188);
