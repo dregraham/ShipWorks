@@ -13,6 +13,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Creates the insure shipment response.
         /// </summary>
-        void CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase);
+        IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase);
     }
 }
