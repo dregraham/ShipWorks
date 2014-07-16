@@ -125,76 +125,14 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         public List<EntityChangeTrackingChangeset> CheckForChanges()
         {
-            string lsvParameter = "@lsv";
-
             lock (tables)
             {
                 List<EntityChangeTrackingChangeset> changes = new List<EntityChangeTrackingChangeset>();
+                DataSet dataSet;
 
                 try
                 {
-                    using (SqlConnection con = SqlSession.Current.OpenConnection())
-                    {
-                        SqlCommand cmd = SqlCommandProvider.Create(con);
-                        cmd.CommandText = syncQuery;
-                        cmd.Parameters.AddWithValue(lsvParameter, lastSyncVersion);
-                        DataSet dataSet = new DataSet();
-
-                        using (DataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            adapter.Fill(dataSet);
-                        }
-
-                        // There should always be at least 2 tables because the initialize command requires tables to include 1 entitytype.
-                        // This would result in 1 table and the last table would be the changeset number returned by the proc.
-                        if (dataSet.Tables.Count > 1)
-                        {
-                            for (int index = 0; index < tables.Count; index++)
-                            {
-                                // The EntityType in tables and tables in dataSet.Tables are in the same order.
-                                EntityType entityType = tables[index];
-                                DataTable dataTable = dataSet.Tables[index];
-
-                                EntityChangeTrackingChangeset changeset;
-
-                                if (dataTable != null && dataTable.Columns.Count == 1)
-                                {
-                                    string status = (string) dataTable.Rows[0][0];
-
-                                    // Invalid
-                                    if (status == "I")
-                                    {
-                                        changeset = EntityChangeTrackingChangeset.LoadAsInvalid(entityType);
-                                    }
-                                    else
-                                    {
-                                        throw new InvalidOperationException(string.Format("Unexpected status code reading changes: '{0}'", status));
-                                    }
-                                }
-                                else
-                                {
-                                    // Load the changes from the reader
-                                    changeset = EntityChangeTrackingChangeset.LoadFromChanges(entityType, dataTable);
-                                }
-                                
-                                // Add to the result list
-                                changes.Add(changeset);
-                            }
-
-                            lastSyncVersion = (long) dataSet.Tables[dataSet.Tables.Count - 1].Rows[0][0];
-                        } 
-                        else if (dataSet.Tables.Count == 1)
-                        {
-                            // No table changesets returned. This should never really happen, but mirrors the original code.
-                            // Maybe this branch of the if statement should be removed.
-                            return tables.Select(EntityChangeTrackingChangeset.LoadAsCurrent).ToList();
-                        }
-                        else
-                        {
-                            // this means dataSet.Tables.Count = 0. This should never happen as there should always be at least 2 tables.
-                            return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
-                        }
-                    }
+                    dataSet = GetChangesFromDatabase();
                 }
                 catch (SqlException ex)
                 {
@@ -202,8 +140,77 @@ namespace ShipWorks.Data.Caching
                     return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                 }
 
+                // No tables means we didnt return any results at all - which will only happen if the lastSyncVersion has not changed
+                if (dataSet.Tables.Count > 0)
+                {
+                    for (int index = 0; index < tables.Count; index++)
+                    {
+                        // The EntityType in tables and tables in dataSet. Tables are in the same order.
+                        EntityType entityType = tables[index];
+                        DataTable dataTable = dataSet.Tables[index];
+
+                        EntityChangeTrackingChangeset changeset;
+
+                        if (dataTable.Columns.Count == 1)
+                        {
+                            string status = (string) dataTable.Rows[0][0];
+
+                            // Invalid
+                            if (status == "I")
+                            {
+                                changeset = EntityChangeTrackingChangeset.LoadAsInvalid(entityType);
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException(string.Format("Unexpected status code reading changes: '{0}'", status));
+                            }
+                        }
+                        else
+                        {
+                            // Load the changes from the table
+                            changeset = EntityChangeTrackingChangeset.LoadFromChanges(entityType, dataTable);
+                        }
+
+                        // Add to the result list
+                        changes.Add(changeset);
+                    }
+
+                    // The last table returned contains one column and is the lastSyncVersion
+                    lastSyncVersion = (long) dataSet.Tables[dataSet.Tables.Count - 1].Rows[0][0];
+                }
+                else
+                {
+                    // lastSyncVersion hasn't changed
+                    return tables.Select(EntityChangeTrackingChangeset.LoadAsCurrent).ToList();
+                }
+
                 return changes;
             }
+        }
+
+        /// <summary>
+        /// Gets the changes from database.
+        /// </summary>
+        private DataSet GetChangesFromDatabase()
+        {
+            DataSet dataSet;
+            dataSet = new DataSet();
+            string lsvParameter = "@lsv";
+
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                {
+                    cmd.CommandText = syncQuery;
+                    cmd.Parameters.AddWithValue(lsvParameter, lastSyncVersion);
+
+                    using (DataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        adapter.Fill(dataSet);
+                    }
+                }
+            }
+            return dataSet;
         }
     }
 }
