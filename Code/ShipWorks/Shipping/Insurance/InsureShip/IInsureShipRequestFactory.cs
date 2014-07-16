@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Creates the insure shipment request.
         /// </summary>
-        void CreateInsureShipmentRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate);
+        InsureShipRequestBase CreateInsureShipmentRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate);
     }
 }

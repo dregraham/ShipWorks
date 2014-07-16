@@ -13,39 +13,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     public abstract class InsureShipRequestBase
     {
         /// <summary>
-        /// Gets or sets the response factory.
-        /// </summary>
-        protected IInsureShipResponseFactory ResponseFactory
-        {
-            get; 
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the shipment.
-        /// </summary>
-        protected ShipmentEntity Shipment
-        {
-            get; 
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the affiliate.
-        /// </summary>
-        protected InsureShipAffiliate Affiliate 
-        { 
-            get; 
-            set;
-        }
-
-        protected ILog Log
-        {
-            get; 
-            set;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -68,6 +35,38 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             this.Shipment = shipment;
             this.Affiliate = affiliate;
             this.Log = log;
+        }
+        /// <summary>
+        /// Gets or sets the response factory.
+        /// </summary>
+        protected IInsureShipResponseFactory ResponseFactory
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the shipment.
+        /// </summary>
+        protected ShipmentEntity Shipment
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the affiliate.
+        /// </summary>
+        protected InsureShipAffiliate Affiliate
+        {
+            get;
+            set;
+        }
+
+        protected ILog Log
+        {
+            get;
+            set;
         }
 
         /// <summary>
