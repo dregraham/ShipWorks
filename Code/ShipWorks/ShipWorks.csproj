@@ -699,12 +699,14 @@
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipRequestFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipRequestBase.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipResponseException.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Enums\InsureShipResponseCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponse.cs" />
