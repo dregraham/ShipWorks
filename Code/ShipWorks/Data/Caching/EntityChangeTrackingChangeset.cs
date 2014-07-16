@@ -66,8 +66,6 @@ namespace ShipWorks.Data.Caching
 
             foreach (DataRow dataRow in table.Rows)
             {
-                
-            
                 long key = (long) dataRow[0];
                 string operation = (string) dataRow[1];
 
@@ -78,7 +76,6 @@ namespace ShipWorks.Data.Caching
                     case "U": changeset.updates.Add(key); break;
                 }
             }
-
             return changeset;
         }
 

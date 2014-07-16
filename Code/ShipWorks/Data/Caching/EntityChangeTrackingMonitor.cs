@@ -126,6 +126,7 @@ namespace ShipWorks.Data.Caching
         public List<EntityChangeTrackingChangeset> CheckForChanges()
         {
             string lsvParameter = "@lsv";
+
             lock (tables)
             {
                 List<EntityChangeTrackingChangeset> changes = new List<EntityChangeTrackingChangeset>();
@@ -144,10 +145,13 @@ namespace ShipWorks.Data.Caching
                             adapter.Fill(dataSet);
                         }
 
+                        // There should always be at least 2 tables because the initialize command requires tables to include 1 entitytype.
+                        // This would result in 1 table and the last table would be the changeset number returned by the proc.
                         if (dataSet.Tables.Count > 1)
                         {
                             for (int index = 0; index < tables.Count; index++)
                             {
+                                // The EntityType in tables and tables in dataSet.Tables are in the same order.
                                 EntityType entityType = tables[index];
                                 DataTable dataTable = dataSet.Tables[index];
 
@@ -157,6 +161,7 @@ namespace ShipWorks.Data.Caching
                                 {
                                     string status = (string) dataTable.Rows[0][0];
 
+                                    // Invalid
                                     if (status == "I")
                                     {
                                         changeset = EntityChangeTrackingChangeset.LoadAsInvalid(entityType);
@@ -165,23 +170,28 @@ namespace ShipWorks.Data.Caching
                                     {
                                         throw new InvalidOperationException(string.Format("Unexpected status code reading changes: '{0}'", status));
                                     }
-
                                 }
                                 else
                                 {
                                     // Load the changes from the reader
                                     changeset = EntityChangeTrackingChangeset.LoadFromChanges(entityType, dataTable);
                                 }
-
-
+                                
                                 // Add to the result list
                                 changes.Add(changeset);
                             }
 
                             lastSyncVersion = (long) dataSet.Tables[dataSet.Tables.Count - 1].Rows[0][0];
+                        } 
+                        else if (dataSet.Tables.Count == 1)
+                        {
+                            // No table changesets returned. This should never really happen, but mirrors the original code.
+                            // Maybe this branch of the if statement should be removed.
+                            return tables.Select(EntityChangeTrackingChangeset.LoadAsCurrent).ToList();
                         }
                         else
                         {
+                            // this means dataSet.Tables.Count = 0. This should never happen as there should always be at least 2 tables.
                             return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                         }
                     }
