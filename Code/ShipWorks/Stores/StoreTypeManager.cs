@@ -123,6 +123,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
                 case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
+                case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -146,7 +147,8 @@ namespace ShipWorks.Stores
                 StoreTypeCode.Shopp,
                 StoreTypeCode.Shopperpress,
                 StoreTypeCode.WPeCommerce,
-                StoreTypeCode.Jigoshop
+                StoreTypeCode.Jigoshop,
+                //StoreTypeCode.LiveSite
             };
 
             return disabledTypes.Contains(typeCode);

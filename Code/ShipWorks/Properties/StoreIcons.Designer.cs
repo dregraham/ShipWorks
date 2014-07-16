@@ -100,7 +100,7 @@ namespace ShipWorks.Properties {
             }
         }
         
-		/// <summary>
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap cart66 {
@@ -109,7 +109,7 @@ namespace ShipWorks.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-		
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -206,6 +206,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap jigoshop {
             get {
                 object obj = ResourceManager.GetObject("jigoshop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap livesite {
+            get {
+                object obj = ResourceManager.GetObject("livesite", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
