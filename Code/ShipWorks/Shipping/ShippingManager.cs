@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Users;
 using ShipWorks.Data.Grid;
@@ -1147,6 +1148,17 @@ namespace ShipWorks.Shipping
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
                     shipmentType.ProcessShipment(shipment);
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
+                    
+                    if (Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                        .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                        .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                                       choice.InsuranceValue > 0))
+                    {
+                        log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                        InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
+                        insureShipPolicy.Insure(shipment);
+                        log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+                    }
 
                     // Now that the label is generated, we can reset the shipping fields the store changed back to their 
                     // original values before saving to the database
