@@ -10,49 +10,49 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExPackagingType
     {
-        [Description("FedEx Envelope")]
+        [Description("FedEx® Envelope")]
         Envelope = 0,
 
-        [Description("FedEx Pak")]
+        [Description("FedEx® Pak")]
         Pak = 1,
 
-        [Description("FedEx Box")]
+        [Description("FedEx® Box")]
         Box = 2,
 
-        [Description("FedEx Tube")]
+        [Description("FedEx® Tube")]
         Tube = 3,
 
-        [Description("FedEx 10kg Box")]
+        [Description("FedEx® 10kg Box")]
         Box10Kg = 4,
 
-        [Description("FedEx 25kg Box")]
+        [Description("FedEx® 25kg Box")]
         Box25Kg = 5,
 
         [Description("Your Packaging")]
         Custom = 6,
 
-        [Description("SmartPost Media Mail")]
+        [Description("SmartPost® Media Mail")]
         SPMediaMail = 7,
 
-        [Description("SmartPost Parcel Select")]
+        [Description("SmartPost® Parcel Select")]
         SPParcelSelect = 8,
 
-        [Description("SmartPost Presorted  BPM")]
+        [Description("SmartPost® Presorted  BPM")]
         SPPresortedBPM = 9,
 
-        [Description("SmartPost Presorted Standard")]
+        [Description("SmartPost® Presorted Standard")]
         SPPresortedStandard = 10,
 
-        [Description("FedEx Small Box")]
+        [Description("FedEx® Small Box")]
         SmallBox = 11,
 
-        [Description("FedEx Medium Box")]
+        [Description("FedEx® Medium Box")]
         MediumBox = 12,
 
-        [Description("FedEx Large Box")]
+        [Description("FedEx® Large Box")]
         LargeBox = 13,
 
-        [Description("FedEx Extra Large Box")]
+        [Description("FedEx® Extra Large Box")]
         ExtraLargeBox = 14
     }
 }
