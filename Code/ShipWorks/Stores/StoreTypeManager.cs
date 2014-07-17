@@ -28,12 +28,12 @@ namespace ShipWorks.Stores
                         continue;
                     }
 
-                    if (IsStoreTypeDisabled(typeCode))
-                    {
-                        // Temporary: don't show in ShipWorks for the new stores until marketing materials 
-                        // and other ancillary materials are ready to go
-                        continue;
-                    }
+                    //if (IsStoreTypeDisabled(typeCode))
+                    //{
+                    //    // Temporary: don't show in ShipWorks for the new stores until marketing materials 
+                    //    // and other ancillary materials are ready to go
+                    //    continue;
+                    //}
                     
                     StoreType storeType = GetType(typeCode);
                     storeTypes.Add(storeType);
