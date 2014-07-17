@@ -1082,7 +1082,7 @@ namespace ShipWorks.Shipping
                 // after processing, so it doesn't look like that's the phone the customer entered for the shipment.
                 if (shipment.ShipPhone.Trim().Length == 0)
                 {
-                    if (settings.BlankPhoneOption == (int)ShipmentBlankPhoneOption.SpecifiedPhone)
+                    if (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.SpecifiedPhone)
                     {
                         shipment.ShipPhone = settings.BlankPhoneNumber;
                     }
@@ -1133,12 +1133,12 @@ namespace ShipWorks.Shipping
                 StoreType storeType = StoreTypeManager.GetType(storeEntity);
                 List<ShipmentFieldIndex> fieldsToRestore = storeType.OverrideShipmentDetails(shipment);
 
-                if (shipment.ShipSenseStatus == (int)ShipSenseStatus.Applied)
+                if (shipment.ShipSenseStatus == (int) ShipSenseStatus.Applied)
                 {
                     Knowledgebase knowledgebase = new Knowledgebase();
                     if (knowledgebase.IsOverwritten(shipment))
                     {
-                        shipment.ShipSenseStatus = (int)ShipSenseStatus.Overwritten;
+                        shipment.ShipSenseStatus = (int) ShipSenseStatus.Overwritten;
                     }
                 }
 
@@ -1148,7 +1148,7 @@ namespace ShipWorks.Shipping
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Start", shipment.ShipmentID);
                     shipmentType.ProcessShipment(shipment);
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
-                    
+
                     if (Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                         .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                         .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
@@ -1165,8 +1165,8 @@ namespace ShipWorks.Shipping
                     foreach (ShipmentFieldIndex fieldIndex in fieldsToRestore)
                     {
                         // Make sure the field is not seen as dirty since we're setting the shipment back to its original value
-                        shipment.SetNewFieldValue((int)fieldIndex, clone.GetCurrentFieldValue((int)fieldIndex));
-                        shipment.Fields[(int)fieldIndex].IsChanged = false;
+                        shipment.SetNewFieldValue((int) fieldIndex, clone.GetCurrentFieldValue((int) fieldIndex));
+                        shipment.Fields[(int) fieldIndex].IsChanged = false;
                     }
 
                     shipment.Processed = true;
@@ -1187,7 +1187,7 @@ namespace ShipWorks.Shipping
                         // Dispatch the shipment processed event
                         ActionDispatcher.DispatchShipmentProcessed(shipment, adapter);
                         log.InfoFormat("Shipment {0}  - Dispatched", shipment.ShipmentID);
-                    }                    
+                    }
 
                     adapter.Commit();
                 }
@@ -1201,6 +1201,10 @@ namespace ShipWorks.Shipping
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
+            }
+            catch (InsureShipException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
             }
             catch (ShipWorksLicenseException ex)
             {
