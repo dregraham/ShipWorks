@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {
@@ -13,6 +10,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Process a response from InsureShip
         /// </summary>
-        void Process();
+        InsureShipResponseCode Process();
     }
 }

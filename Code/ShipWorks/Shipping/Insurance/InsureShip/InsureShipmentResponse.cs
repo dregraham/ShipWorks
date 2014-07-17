@@ -22,13 +22,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
-        /// Process a response from InsureShip. This will inspect the raw response to ensure the 
+        /// Process a response from InsureShip. This will inspect the raw response to ensure the
         /// request was successful. A response code of anything other than 204 will result in an
         /// InsureShipResponseException being thrown.
         /// </summary>
-        /// <exception cref="ShipWorks.Shipping.Insurance.InsureShip.InsureShipResponseException">
-        /// </exception>
-        public void Process()
+        /// <returns></returns>
+        /// <exception cref="ShipWorks.Shipping.Insurance.InsureShip.InsureShipResponseException"></exception>
+        public InsureShipResponseCode Process()
         {            
             InsureShipResponseCode responseCode;
             
@@ -52,6 +52,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                 throw new InsureShipResponseException(responseCode, message);
             }
+
+            return responseCode;
         }
     }
 }
