@@ -35,6 +35,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             log = new Mock<ILog>();
             log.Setup(l => l.Error(It.IsAny<object>(), It.IsAny<InsureShipResponseException>()));
+            log.Setup(l => l.Error(It.IsAny<string>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
             
@@ -121,6 +122,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.Insure(shipment);
         }
 
+        [TestMethod]
         public void Insure_LogsMessage_WhenInsureShipResponseExceptionIsCaught_Test()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.UnknownFailure);
@@ -133,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             catch(InsureShipException)
             { }
 
-            log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with InsureShip. A(n) UnknownFailure response code was received from InsureShip."));
+            log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with InsureShip. A(n) UnknownFailure response code was received from InsureShip.", responseException), Times.Once());
         }
     }
 }
