@@ -10,7 +10,7 @@ namespace ShipWorks.Stores
     /// Manager of all the StoreTypes available in ShipWorks
     /// </summary>
     public static class StoreTypeManager
-    {        
+    {
         /// <summary>
         /// Returns all store types in ShipWorks
         /// </summary>
@@ -28,6 +28,13 @@ namespace ShipWorks.Stores
                         continue;
                     }
 
+                    if (IsStoreTypeDisabled(typeCode))
+                    {
+                        // Temporary: don't show in ShipWorks for the new stores until marketing materials 
+                        // and other ancillary materials are ready to go
+                        continue;
+                    }
+                    
                     StoreType storeType = GetType(typeCode);
                     storeTypes.Add(storeType);
                 }
@@ -107,10 +114,42 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
+                case StoreTypeCode.BrightPearl: return new Platforms.BrightPearl.BrightPearlStoreType(store);
+                case StoreTypeCode.OrderDesk: return new Platforms.OrderDesk.OrderDeskStoreType(store);
+                case StoreTypeCode.WooCommerce: return new Platforms.WooCommerce.WooCommerceStoreType(store);
+                case StoreTypeCode.Cart66Lite: return new Platforms.Cart66.Cart66LiteStoreType(store);
+                case StoreTypeCode.Cart66Pro: return new Platforms.Cart66.Cart66ProStoreType(store);
+                case StoreTypeCode.Shopp: return new Platforms.Shopp.ShoppStoreType(store);
+                case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
+                case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
+                case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
         }
 
+        /// <summary>
+        /// Determines whether the store type is disabled. This is only temporary, so we can continue
+        /// to release ShipWorks until supporting materials for the new store types are ready.
+        /// </summary>
+        private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
+        {
+            // Don't show in ShipWorks until marketing materials and other ancillary 
+            // materials are ready to go
+            List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
+            {
+                StoreTypeCode.BrightPearl,
+                StoreTypeCode.OrderDesk,
+                StoreTypeCode.WooCommerce,
+                StoreTypeCode.Cart66Lite,
+                StoreTypeCode.Cart66Pro,
+                StoreTypeCode.Shopp,
+                StoreTypeCode.Shopperpress,
+                StoreTypeCode.WPeCommerce,
+                StoreTypeCode.Jigoshop
+            };
+
+            return disabledTypes.Contains(typeCode);
+        }
     }
 }

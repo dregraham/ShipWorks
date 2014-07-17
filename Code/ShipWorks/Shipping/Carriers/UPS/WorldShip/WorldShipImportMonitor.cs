@@ -230,7 +230,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     if (deleteList.Count > 0)
                     {
-                        adapter.DeleteEntityCollection(deleteList);
+                        try
+                        {
+                            adapter.DeleteEntityCollection(deleteList);
+                        }
+                        catch (ORMConcurrencyException ex)
+                        {
+                            // This means that the processed entry was already deleted, so just eat the error and we'll delete any
+                            // remaining abandoned entities the next time we check for updates
+                            log.Warn("Abandoned WorldShip processed entity was already deleted", ex);
+                        }
                     }
                 }
             }

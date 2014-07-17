@@ -1134,5 +1134,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             RaiseRateCriteriaChanged();
         }
+
+        /// <summary>
+        /// Called when [non standard packaging changed].
+        /// </summary>
+        private void OnNonStandardPackagingChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
     }
 }

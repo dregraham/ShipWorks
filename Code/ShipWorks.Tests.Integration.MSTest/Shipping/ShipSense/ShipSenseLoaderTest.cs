@@ -72,7 +72,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
             }
         }
 
-
         [TestMethod]
         [TestCategory("ShipSense")]
         public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess_Test()

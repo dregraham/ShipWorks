@@ -93,6 +93,26 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap brightpearl {
+            get {
+                object obj = ResourceManager.GetObject("brightpearl", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+		/// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cart66 {
+            get {
+                object obj = ResourceManager.GetObject("cart66", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+		
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap channeladvisor {
             get {
                 object obj = ResourceManager.GetObject("channeladvisor", resourceCulture);
@@ -183,6 +203,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap jigoshop {
+            get {
+                object obj = ResourceManager.GetObject("jigoshop", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap magento {
             get {
                 object obj = ResourceManager.GetObject("magento", resourceCulture);
@@ -226,6 +256,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap newegg {
             get {
                 object obj = ResourceManager.GetObject("newegg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap orderdesk {
+            get {
+                object obj = ResourceManager.GetObject("orderdesk", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -333,6 +373,26 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap shopp {
+            get {
+                object obj = ResourceManager.GetObject("shopp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap shopperpress {
+            get {
+                object obj = ResourceManager.GetObject("shopperpress", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shopsite {
             get {
                 object obj = ResourceManager.GetObject("shopsite", resourceCulture);
@@ -386,6 +446,26 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap webshopmanager {
             get {
                 object obj = ResourceManager.GetObject("webshopmanager", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap woocommerce {
+            get {
+                object obj = ResourceManager.GetObject("woocommerce", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wpecommerce {
+            get {
+                object obj = ResourceManager.GetObject("wpecommerce", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

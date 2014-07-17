@@ -313,7 +313,7 @@ namespace :db do
 		
 		registryInstanceName = instanceName
 		backSlashIndex = registryInstanceName.index("\\")		
-		if backSlashIndex > 0 
+		if !backSlashIndex.nil? && backSlashIndex > 0 
 			# Trim off "(local)\" portion of the instance name in order to query the 
 			# registry
 			registryInstanceName = registryInstanceName[backSlashIndex..-1]

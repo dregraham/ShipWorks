@@ -68,6 +68,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -87,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
+    <Compile Include="Functional\Services\ServiceStatusManagerTest.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="DataDrivenIntegrationTestBase.cs" />
     <Compile Include="Actions\Scheduling\HourlyActionScheduleTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseLoaderTest.cs" />
+    <Compile Include="ShipWorks.SqlServer\Maintenance\RebuildTableIndexTest.cs" />
     <Compile Include="ShipWorksInitializer.cs" />
     <Compile Include="Utilities\InterapptiveOnlyUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -162,7 +165,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

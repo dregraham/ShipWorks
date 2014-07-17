@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ using log4net;
 using System.Data.SqlClient;
 using System.Data;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Users;
 using ShipWorks.Filters.Content.SqlGeneration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -129,45 +131,78 @@ namespace ShipWorks.Filters
         /// </summary>
         private static bool GetLatestCounts()
         {
-            bool countsChanged = false;
+            List<FilterCount> filterCountList = null;
 
-            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            try
             {
-                SqlCommand cmd = SqlCommandProvider.Create(con);
-                cmd.CommandText = @"
-                    SELECT n.FilterNodeID, c.FilterNodeContentID, n.Purpose, c.Status, c.Count, c.CountVersion, CAST(c.RowVersion as bigint) AS 'RowVersion'
-                        FROM FilterNode n INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
-                        WHERE c.RowVersion > @MaxRowVersion";
-                cmd.Parameters.AddWithValue("@MaxRowVersion", maxTimestamp);
+                filterCountList = GetFilterCountList();
+            }
+            catch (SqlException ex)
+            {
+                // If we couldn't get the counts, don't worry too much about it since the next heartbeat will run it again
+                log.Warn("Could not get latest filter counts", ex);
+            }
 
-                using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+            // No need to do anything else if there aren't any counts
+            if (filterCountList == null || !filterCountList.Any())
+            {
+                return false;
+            }
+
+            lock (countCache)
+            {
+                foreach (FilterCount filterCount in filterCountList)
                 {
-                    while (reader.Read())
-                    {
-                        countsChanged = true;
-
-                        FilterCount filterCount = new FilterCount(
-                            (long) reader["FilterNodeID"],
-                            (long) reader["FilterNodeContentID"],
-                            (FilterNodePurpose) Convert.ToInt32(reader["Purpose"]),
-                            (FilterCountStatus) Convert.ToInt32(reader["Status"]),
-                            (int) reader["Count"],
-                            (long) reader["CountVersion"],
-                            (long) reader["RowVersion"]);
-
-                        lock (countCache)
-                        {
-                            // Cache this under the node ID
-                            countCache[filterCount.FilterNodeID] = filterCount;
-                        }
-
-                        // Save the new max
-                        maxTimestamp = Math.Max((long) reader["RowVersion"], maxTimestamp);
-                    }
+                    // Cache this under the node ID
+                    countCache[filterCount.FilterNodeID] = filterCount;
                 }
             }
 
-            return countsChanged;
+            // Save the new max
+            maxTimestamp = filterCountList.Select(x => x.RowVersion).Concat(new[] { maxTimestamp }).Max();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Get a list of the latest filter counts from the database
+        /// </summary>
+        private static List<FilterCount> GetFilterCountList()
+        {
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                using (SqlCommand cmd = SqlCommandProvider.Create(con))
+                {
+                    cmd.CommandText = @"
+                    SELECT n.FilterNodeID, c.FilterNodeContentID, n.Purpose, c.Status, c.Count, c.CountVersion, CAST(c.RowVersion as bigint) AS 'RowVersion', c.Cost
+                        FROM FilterNode n WITH (NOLOCK) INNER JOIN FilterNodeContent c WITH (NOLOCK) ON n.FilterNodeContentID = c.FilterNodeContentID
+                        WHERE c.RowVersion > @MaxRowVersion";
+                    cmd.Parameters.AddWithValue("@MaxRowVersion", maxTimestamp);
+
+                    using (SqlDataReader reader = SqlCommandProvider.ExecuteReader(cmd))
+                    {
+                        List<FilterCount> filterCountList = new List<FilterCount>();
+
+                        while (reader.Read())
+                        {
+                            filterCountList.Add(new FilterCount
+                                (
+                                    (long)reader["FilterNodeID"],
+                                    (long)reader["FilterNodeContentID"],
+                                    (FilterNodePurpose)Convert.ToInt32(reader["Purpose"]),
+                                    (FilterCountStatus)Convert.ToInt32(reader["Status"]),
+                                    (int)reader["Count"],
+                                    (long)reader["CountVersion"],
+		                            (long) reader["RowVersion"],
+		                            (int) reader["cost"]
+                                )
+                            );
+                        }
+
+                        return filterCountList;
+                    }   
+                }
+            }
         }
 
         /// <summary>
