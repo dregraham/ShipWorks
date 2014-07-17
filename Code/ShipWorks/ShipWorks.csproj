@@ -715,6 +715,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Enums\InsureShipResponseCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicy.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
