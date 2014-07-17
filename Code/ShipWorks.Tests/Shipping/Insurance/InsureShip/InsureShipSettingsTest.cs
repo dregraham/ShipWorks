@@ -95,7 +95,5 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             Assert.AreEqual("https://api2.insureship.com/api/", testObject.Url.AbsoluteUri);
         }
-
-
     }
 }

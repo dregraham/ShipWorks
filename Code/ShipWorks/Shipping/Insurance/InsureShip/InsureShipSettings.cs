@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     /// <summary>
     /// Class to get InsureShip settings.
     /// </summary>
-    public class InsureShipSettings
+    public class InsureShipSettings : IInsureShipSettings
     {
         /// <summary>
         /// Gets or sets a value indicating whether [use test server] based on a registry setting.

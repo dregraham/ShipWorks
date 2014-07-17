@@ -16,6 +16,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
     {
         private InsureShipPolicy testObject;
 
+        private Mock<IInsureShipSettings> settings = new Mock<IInsureShipSettings>();
         private Mock<IInsureShipRequestFactory> requestFactory;
         private Mock<IInsureShipResponseFactory> responseFactory;
 
@@ -30,6 +31,11 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestInitialize]
         public void Initialize()
         {
+            settings.Setup(s => s.DistributorID).Returns("D00002");
+            settings.Setup(s => s.Username).Returns("test2");
+            settings.Setup(s => s.Password).Returns("password");
+            settings.Setup(s => s.Url).Returns(new Uri("https://int.insureship.com/api/"));
+
             shipment = new ShipmentEntity(100031);
             affiliate = new InsureShipAffiliate("test", "test");
 
@@ -42,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             responseFactory = new Mock<IInsureShipResponseFactory>();
             response = new Mock<IInsureShipResponse>();
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, affiliate, log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, affiliate, settings.Object, log.Object);
             request.Setup(r => r.Submit()).Returns(response.Object);
 
             requestFactory = new Mock<IInsureShipRequestFactory>();

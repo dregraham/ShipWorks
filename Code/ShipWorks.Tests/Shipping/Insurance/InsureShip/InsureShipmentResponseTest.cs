@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using log4net;
@@ -17,6 +18,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
     {
         private InsureShipmentResponse testObject;
 
+        private Mock<IInsureShipSettings> settings = new Mock<IInsureShipSettings>();
         private Mock<InsureShipRequestBase> request;
         private Mock<IInsureShipResponseFactory> responseFactory;
 
@@ -28,6 +30,12 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestInitialize]
         public void Initialize()
         {
+            settings.Setup(s => s.UseTestServer).Returns(true);
+            settings.Setup(s => s.DistributorID).Returns("D00002");
+            settings.Setup(s => s.Username).Returns("test2");
+            settings.Setup(s => s.Password).Returns("password");
+            settings.Setup(s => s.Url).Returns(new Uri("https://int.insureship.com/api/"));
+
             shipment = new ShipmentEntity(100031);
 
             log = new Mock<ILog>();
@@ -36,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             writer = new Mock<TextWriter>();
             responseFactory = new Mock<IInsureShipResponseFactory>();
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
 
             testObject = new InsureShipmentResponse(request.Object, log.Object);
         }
@@ -44,20 +52,18 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]        
         public void Process_UsesRawResponse_FromRequest_Test()
         {
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 204 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns((int)HttpStatusCode.NoContent);
 
             testObject.Process();
 
-            request.Verify(r => r.RawResponse, Times.Once());
+            request.Verify(r => r.StatusCode, Times.Once());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotRecognized_Test()
         {
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 900 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns(900);
 
             testObject.Process();
         }
@@ -65,8 +71,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]        
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 900 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns(900);
 
             try
             {
@@ -82,8 +87,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 419 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns(419);
 
             testObject.Process();
         }
@@ -92,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 419 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns(419);
 
             try
             {
@@ -109,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             // Response code of 204 is success
             HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 204 };
-            request.Setup(r => r.RawResponse).Returns(rawResponse);
+            request.Setup(r => r.StatusCode).Returns((int)HttpStatusCode.NoContent);
 
             testObject.Process();
         }

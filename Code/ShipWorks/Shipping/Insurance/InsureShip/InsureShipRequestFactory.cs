@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// </summary>
         public InsureShipRequestBase CreateInsureShipmentRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
         {
-            throw new NotImplementedException();
+            return new InsureShipInsureShipmentRequest(shipmentEntity, insureShipAffiliate);
         }
     }
 }
