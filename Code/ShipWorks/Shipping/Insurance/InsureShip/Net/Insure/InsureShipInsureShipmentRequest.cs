@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);
             postData.Add("shipping_country ", Shipment.ShipCountryCode);
-            postData.Add("shipment_value", GetShipmentValue().ToString(CultureInfo.InvariantCulture));
+            postData.Add("shipment_value", GetInsuredValue().ToString(CultureInfo.InvariantCulture));
             postData.Add("order_id", GetUniqueShipmentId());
             postData.Add("shipment_id", GetUniqueShipmentId());
             postData.Add("tracking_id", Shipment.TrackingNumber);
@@ -74,44 +74,20 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <summary>
         /// Determines the insured value for the shipment.
         /// </summary>
-        private decimal GetShipmentValue()
+        private decimal GetInsuredValue()
         {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) Shipment.ShipmentType;
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(Shipment);
 
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    return Shipment.Ups.Packages.Sum(p => p.InsuranceValue);
-
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
-                case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-                    return Shipment.Postal.InsuranceValue;
-
-                case ShipmentTypeCode.FedEx:
-                    return Shipment.FedEx.Packages.Sum(p => p.InsuranceValue);
-
-                case ShipmentTypeCode.OnTrac:
-                    return Shipment.OnTrac.InsuranceValue;
-
-                case ShipmentTypeCode.iParcel:
-                    return Shipment.IParcel.Packages.Sum(p => p.InsuranceValue);
-
-                case ShipmentTypeCode.Other:
-                    return Shipment.Other.InsuranceValue;
-
-                case ShipmentTypeCode.EquaShip:
-                    return Shipment.EquaShip.InsuranceValue;
-
-                default:
-                    throw new InvalidOperationException(
-                        string.Format(
-                            "ShipWorks could not get shipment value for InsureShip. An unrecognized shipment type was provided: {0}.",
-                            shipmentTypeCode.ToString()));
-            }
+            return
+                Enumerable.Range(0, shipmentType.GetParcelCount(Shipment))
+                    .Select(parcelIndex => shipmentType.GetParcelDetail(Shipment, parcelIndex).Insurance)
+                    .Where(
+                        choice =>
+                            choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                            choice.InsuranceValue > 0)
+                    .Select(insuredPackages => insuredPackages.InsuranceValue)
+                    .DefaultIfEmpty(0)
+                    .Sum();
         }
     }
 }
