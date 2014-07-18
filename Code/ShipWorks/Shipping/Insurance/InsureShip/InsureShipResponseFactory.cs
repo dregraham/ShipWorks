@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// </summary>
         public IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase)
         {
-            return new InsureShipmentResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipmentResponse)));
+            return new InsureShipInsureShipmentResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipInsureShipmentResponse)));
         }
     }
 }

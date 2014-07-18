@@ -6,17 +6,17 @@ using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {
-    public class InsureShipmentResponse : IInsureShipResponse
+    public class InsureShipInsureShipmentResponse : IInsureShipResponse
     {
         private readonly InsureShipRequestBase request;
         private readonly ILog log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InsureShipmentResponse" /> class.
+        /// Initializes a new instance of the <see cref="InsureShipInsureShipmentResponse" /> class.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="log">The log.</param>
-        public InsureShipmentResponse(InsureShipRequestBase request, ILog log)
+        public InsureShipInsureShipmentResponse(InsureShipRequestBase request, ILog log)
         {
             this.request = request;
             this.log = log;

@@ -9,9 +9,9 @@ using ShipWorks.Shipping.Insurance.InsureShip;
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
     [TestClass]
-    public class InsureShipmentResponseTest
+    public class InsureShipInsureShipmentResponseTest
     {
-        private InsureShipmentResponse testObject;
+        private InsureShipInsureShipmentResponse testObject;
 
         private Mock<IInsureShipSettings> settings;
         private Mock<InsureShipRequestBase> request;
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
             request.Setup(r => r.RawResponse).Returns(response.Object);
 
-            testObject = new InsureShipmentResponse(request.Object, log.Object);
+            testObject = new InsureShipInsureShipmentResponse(request.Object, log.Object);
         }
 
         [TestMethod]        
