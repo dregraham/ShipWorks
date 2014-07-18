@@ -48,10 +48,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
         public string BrokerStateOrProvinceCode { get; set; }
         public string BrokerPostalCode { get; set; }
         public string BrokerCountryCode { get; set; }
-
-        public string CustomsOptionType { get; set; }
-        public string CustomsOptionDescription { get; set; }
-
+        
         public string CustomsRecipientIdType { get; set; }
         public string CustomsRecipientIdValue { get; set; }
 
