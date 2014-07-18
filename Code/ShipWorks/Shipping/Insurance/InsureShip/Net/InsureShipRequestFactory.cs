@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// Implementation of an InsureShip Insure Shipment Request Factory

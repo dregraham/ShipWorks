@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip.Enums
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// InsureShip API Response codes

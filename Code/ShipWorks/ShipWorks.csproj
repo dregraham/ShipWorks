@@ -699,9 +699,9 @@
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipInsureShipmentResponse.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipRequestFactory.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponseFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipSettings.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
       <SubType>Code</SubType>
@@ -709,14 +709,14 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipInsureShipmentRequest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipRequestBase.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipRequestFactory.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipResponseException.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\Enums\InsureShipResponseCode.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestBase.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseException.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseCode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipResponseFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicy.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />

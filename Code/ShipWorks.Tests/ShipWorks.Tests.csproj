@@ -365,7 +365,7 @@
     <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResultTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
-    <Compile Include="Shipping\Insurance\InsureShip\InsureShipInsureShipmentResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponseTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />

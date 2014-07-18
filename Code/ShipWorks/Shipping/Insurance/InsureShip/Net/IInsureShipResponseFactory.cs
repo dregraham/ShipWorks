@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Shipping.Insurance.InsureShip
+﻿namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// Interface for an InsureShip Response Factory

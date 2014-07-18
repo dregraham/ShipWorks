@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// Interface for a InsureShip Request Factory

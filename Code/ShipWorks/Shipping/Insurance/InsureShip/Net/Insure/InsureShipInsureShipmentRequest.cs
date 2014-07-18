@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using Interapptive.Shared.Net;
 using log4net;
-using log4net.Core;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
     /// <summary>
     /// InsureShip request class for insuring a shipment
@@ -114,7 +107,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     return Shipment.EquaShip.InsuranceValue;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidOperationException(
+                        string.Format(
+                            "ShipWorks could not get shipment value for InsureShip. An unrecognized shipment type was provided: {0}.",
+                            shipmentTypeCode.ToString()));
             }
         }
     }

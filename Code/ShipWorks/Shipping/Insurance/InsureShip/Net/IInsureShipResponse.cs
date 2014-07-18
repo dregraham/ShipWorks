@@ -1,6 +1,4 @@
-﻿using ShipWorks.Shipping.Insurance.InsureShip.Enums;
-
-namespace ShipWorks.Shipping.Insurance.InsureShip
+﻿namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// Interface for working with InsureShip responses

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Net;
+using ShipWorks.Shipping.Insurance.InsureShip.Net;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
-namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
+namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
 {
     [TestClass]
     public class InsureShipInsureShipmentResponseTest

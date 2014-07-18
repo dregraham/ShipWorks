@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {

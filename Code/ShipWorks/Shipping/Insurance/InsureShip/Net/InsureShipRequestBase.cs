@@ -7,10 +7,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
     /// <summary>
     /// Abstract Base of an InsureShipRequest

@@ -1,6 +1,6 @@
-﻿using log4net;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {

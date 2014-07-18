@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Shipping.Insurance.InsureShip.Enums;
+using ShipWorks.Shipping.Insurance.InsureShip.Net;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

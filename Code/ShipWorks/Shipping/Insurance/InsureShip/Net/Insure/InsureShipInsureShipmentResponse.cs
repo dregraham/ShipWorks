@@ -2,9 +2,8 @@
 using System.Globalization;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
     public class InsureShipInsureShipmentResponse : IInsureShipResponse
     {
@@ -28,7 +27,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// InsureShipResponseException being thrown.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Insurance.InsureShip.InsureShipResponseException"></exception>
+        /// <exception cref="InsureShipResponseException"></exception>
         public InsureShipResponseCode Process()
         {            
             InsureShipResponseCode responseCode;
