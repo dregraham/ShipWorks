@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("https://int.insureship.com/api/", testObject.Url.AbsoluteUri);
+            Assert.AreEqual("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("https://api2.insureship.com/api/", testObject.Url.AbsoluteUri);
+            Assert.AreEqual("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
     }
 }

@@ -33,6 +33,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// InsureShip Url
         /// </summary>
-        Uri Url { get; }
+        Uri ApiUrl { get; }
+
+        /// <summary>
+        /// Gets the URL to use when inspecting the certificate data for authenticity.
+        /// </summary>
+        Uri CertificateUrl { get; }
     }
 }

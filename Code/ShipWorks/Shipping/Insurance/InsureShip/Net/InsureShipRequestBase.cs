@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
@@ -70,7 +71,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// Gets or sets the settings.
         /// </summary>
         protected IInsureShipSettings Settings { get; private set; }
-
+        
         /// <summary>
         /// Submits this request to InsureShip
         /// </summary>
@@ -101,6 +102,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <returns>An instance of an IInsureShipResponse.</returns>
         protected IInsureShipResponse SubmitPost(Uri postUri, Dictionary<string, string> postData)
         {
+            if (!IsTrustedCertificate())
+            {
+                string message = "A trusted connection to InsureShip could not be established.";
+
+                Log.Error(message);
+                throw new InsureShipException(message);
+            }
+
             RequestSubmitter = new HttpVariableRequestSubmitter { Uri = postUri };
 
             foreach (string key in postData.Keys)
@@ -165,6 +174,18 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
                 LogResponse(responseText.ToString(), "log");
             }
+        }
+
+        /// <summary>
+        /// Determines whether the connection to InsureShip is secure by inspecting the certificate.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsTrustedCertificate()
+        {
+            ICertificateInspector certificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.InsureShipCertificateVerificationData);
+            CertificateRequest request = new CertificateRequest(Settings.CertificateUrl, certificateInspector);
+
+            return request.Submit() == CertificateSecurityLevel.Trusted;
         }
     }
 }
