@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 
             PopulateShipmentOrder();
 
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(Shipment);
+
             Dictionary<string, string> postData = new Dictionary<string, string>();
             postData.Add("distributor_id", Settings.DistributorID);
             postData.Add("store_id", Affiliate.InsureShipStoreID);
@@ -61,7 +63,9 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipment_id", GetUniqueShipmentId());
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("item_name", string.Join(",", Shipment.Order.OrderItems.Select(oi => oi.Name)));
-
+            postData.Add("carrier", shipmentType.ShipmentTypeName);
+            postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment));
+            
             // If using the test server, append the test affiliate.
             if (Settings.UseTestServer)
             {            
