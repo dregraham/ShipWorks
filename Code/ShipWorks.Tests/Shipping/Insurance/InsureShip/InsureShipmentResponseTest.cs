@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Web;
 using log4net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -18,33 +13,38 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
     {
         private InsureShipmentResponse testObject;
 
-        private Mock<IInsureShipSettings> settings = new Mock<IInsureShipSettings>();
+        private Mock<IInsureShipSettings> settings;
         private Mock<InsureShipRequestBase> request;
+
         private Mock<IInsureShipResponseFactory> responseFactory;
+        Mock<HttpWebResponse> response = new Mock<HttpWebResponse>();
 
         private Mock<ILog> log;
-        private Mock<TextWriter> writer;
 
         private ShipmentEntity shipment;
 
         [TestInitialize]
         public void Initialize()
         {
+            shipment = new ShipmentEntity(100031);
+
+            settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.UseTestServer).Returns(true);
             settings.Setup(s => s.DistributorID).Returns("D00002");
             settings.Setup(s => s.Username).Returns("test2");
             settings.Setup(s => s.Password).Returns("password");
             settings.Setup(s => s.Url).Returns(new Uri("https://int.insureship.com/api/"));
-
-            shipment = new ShipmentEntity(100031);
-
+            
             log = new Mock<ILog>();
             log.Setup(l => l.Error(It.IsAny<object>()));
 
-            writer = new Mock<TextWriter>();
             responseFactory = new Mock<IInsureShipResponseFactory>();
 
+            response = new Mock<HttpWebResponse>();
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
+
             request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
+            request.Setup(r => r.RawResponse).Returns(response.Object);
 
             testObject = new InsureShipmentResponse(request.Object, log.Object);
         }
@@ -52,18 +52,16 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]        
         public void Process_UsesRawResponse_FromRequest_Test()
         {
-            request.Setup(r => r.StatusCode).Returns((int)HttpStatusCode.NoContent);
-
             testObject.Process();
 
-            request.Verify(r => r.StatusCode, Times.Once());
+            request.Verify(r => r.RawResponse, Times.Once());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipResponseException))]
-        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotRecognized_Test()
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
-            request.Setup(r => r.StatusCode).Returns(900);
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
 
             testObject.Process();
         }
@@ -71,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]        
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
-            request.Setup(r => r.StatusCode).Returns(900);
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
 
             try
             {
@@ -80,23 +78,33 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             catch (InsureShipResponseException)
             { }
 
-            log.Verify(l => l.Error("An unknown response code was received from the InsureShip API for shipment 100031: 900"));
+            log.Verify(l => l.Error("An unknown response code was received from the InsureShip API for shipment 100031: 302"));
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            request.Setup(r => r.StatusCode).Returns(419);
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
 
             testObject.Process();
         }
 
         [TestMethod]
-        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        [ExpectedException(typeof(InsureShipResponseException))]
+        public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 419 };
-            request.Setup(r => r.StatusCode).Returns(419);
+            // Called out specifically since there is not an HttpStatusCode entry for 419
+            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
+
+            testObject.Process();
+        }
+
+        [TestMethod]
+        public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
+        {
+            // Called out specifically since there is not an HttpStatusCode entry for 419
+            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
 
             try
             {
@@ -109,11 +117,25 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
+        public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
+        {
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+
+            try
+            {
+                testObject.Process();
+            }
+            catch (InsureShipResponseException)
+            { }
+
+            log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with the InsureShip API: 409"));
+        }
+
+        [TestMethod]
         public void Process_SuccessfulResponse_Test()
         {
             // Response code of 204 is success
-            HttpResponse rawResponse = new HttpResponse(writer.Object) { StatusCode = 204 };
-            request.Setup(r => r.StatusCode).Returns((int)HttpStatusCode.NoContent);
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
 
             testObject.Process();
         }

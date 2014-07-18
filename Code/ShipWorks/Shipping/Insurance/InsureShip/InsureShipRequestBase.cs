@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
-using System.Web.UI;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance.InsureShip.Enums;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
@@ -16,23 +15,20 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
     /// <summary>
     /// Abstract Base of an InsureShipRequest
     /// </summary>
-    public abstract class InsureShipRequestBase
+    public abstract class InsureShipRequestBase : ApiLogEntry
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
         protected InsureShipRequestBase(ShipmentEntity shipment, InsureShipAffiliate affiliate)
-        {
-            Shipment = shipment;
-            Affiliate = affiliate;
-            Settings = new InsureShipSettings();
-            ResponseFactory = new InsureShipResponseFactory();
-        }
+            : this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipRequestBase)))
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
         protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
+            : base(ApiLogSource.InsureShip, "InsureShip")
         {
             ResponseFactory = responseFactory;
             Shipment = shipment;
@@ -44,62 +40,37 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets or sets the response factory.
         /// </summary>
-        protected IInsureShipResponseFactory ResponseFactory
-        {
-            get; 
-            private set;
-        }
+        protected IInsureShipResponseFactory ResponseFactory { get; private set; }
 
         /// <summary>
         /// Gets the log.
         /// </summary>
-        protected ILog Log
-        {
-            get;
-            set;
-        }
+        protected ILog Log { get; private set; }
 
         /// <summary>
         /// Gets or sets the shipment.
         /// </summary>
-        public ShipmentEntity Shipment
-        {
-            get; 
-            private set;
-        }
+        public ShipmentEntity Shipment { get; private set; }
 
         /// <summary>
         /// Gets or sets the affiliate.
         /// </summary>
-        public InsureShipAffiliate Affiliate 
-        { 
-            get; 
-            private set;
-        }
+        public InsureShipAffiliate Affiliate { get; private set; }
 
         /// <summary>
-        /// Gets or sets the response status code.
+        /// Gets the request submitter.
         /// </summary>
-        public virtual int StatusCode
-        {
-            get; 
-            set;
-        }
+        protected HttpVariableRequestSubmitter RequestSubmitter { get; private set; }
 
         /// <summary>
-        /// Gets or sets a response exception, null if one did not occurr.
+        /// Gets or sets the raw response.
         /// </summary>
-        public virtual Exception ResponseException
-        {
-            get;
-            set;
-        }
+        public virtual HttpWebResponse RawResponse { get; private set; }
 
-        protected IInsureShipSettings Settings
-        {
-            get; 
-            set;
-        }
+        /// <summary>
+        /// Gets or sets the settings.
+        /// </summary>
+        protected IInsureShipSettings Settings { get; private set; }
 
         /// <summary>
         /// Submits this request to InsureShip
@@ -107,7 +78,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         public abstract IInsureShipResponse Submit();
 
         /// <summary>
-        /// Gets the unique shipment identifier.
+        /// Uses the Order ID and the Shipment ID to create the unique shipment identifier .
         /// </summary>
         public virtual string GetUniqueShipmentId()
         {
@@ -124,46 +95,77 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
-        /// Submits byte data to a URI via POST.  Sets the StatusCode based on response.
+        /// A helper method that builds up the request details using the URI and data provided.
         /// </summary>
-        protected IInsureShipResponse SubmitPost(Uri postUri, string postData)
+        /// <param name="postUri">The post URI.</param>
+        /// <param name="postData">The post data.</param>
+        /// <returns>An instance of an IInsureShipResponse.</returns>
+        protected IInsureShipResponse SubmitPost(Uri postUri, Dictionary<string, string> postData)
         {
-            HttpWebRequest request = WebRequest.Create(postUri) as HttpWebRequest;
-            
-            byte[] postBytes = Encoding.UTF8.GetBytes(postData.ToCharArray());
+            RequestSubmitter = new HttpVariableRequestSubmitter { Uri = postUri };
 
-            string auth = string.Format("Basic {0}",
-                Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Settings.Username, Settings.Password)))
-                );
-
-            request.Method = "POST";
-            request.PreAuthenticate = true;
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = postBytes.Length;
-            request.Accept = "application/json";
-            request.AuthenticationLevel = System.Net.Security.AuthenticationLevel.MutualAuthRequested;
-            request.Headers.Add("Authorization", auth);
-
-            using (Stream requestStream = request.GetRequestStream())
+            foreach (string key in postData.Keys)
             {
-                requestStream.Write(postBytes, 0, postData.Length);
-                requestStream.Close();
+                RequestSubmitter.Variables.Add(key, postData[key]);
             }
 
-            HttpWebResponse webResponse = null;
+            string credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Settings.Username, Settings.Password)));
+            string auth = string.Format("Basic {0}", credentials);
+
+            RequestSubmitter.ContentType = "application/x-www-form-urlencoded";
+            RequestSubmitter.Headers.Add("Accept", "application/json");
+            RequestSubmitter.Headers.Add("Authorization", auth);
+
+            AddAllowedHttpStatusCodes();
+
             try
             {
-                webResponse = request.GetResponse() as HttpWebResponse;
+                LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
+
+                RawResponse = RequestSubmitter.GetResponse().HttpWebResponse;
+                LogInsureShipResponse(RawResponse);
             }
             catch (WebException ex)
             {
-                ResponseException = ex;
-                webResponse = (HttpWebResponse)ex.Response;
+                Log.Error(ex);
+                LogInsureShipResponse(ex.Response as HttpWebResponse);
+
+                RawResponse = ex.Response as HttpWebResponse;
             }
 
-            StatusCode = (int) webResponse.StatusCode;
-
             return ResponseFactory.CreateInsureShipmentResponse(this);
+        }
+
+        /// <summary>
+        /// Adds the allowed HTTP status codes to the request based on the response
+        /// codes we are expecting from the InsureShip API.
+        /// </summary>
+        private void AddAllowedHttpStatusCodes()
+        {
+            List<HttpStatusCode> allowedCodes = new List<HttpStatusCode>();
+            foreach (Enum value in Enum.GetValues(typeof (InsureShipResponseCode)))
+            {
+                int httpStatusCodeValue = int.Parse(EnumHelper.GetApiValue(value));
+                allowedCodes.Add((HttpStatusCode) httpStatusCodeValue);
+            }
+
+            RequestSubmitter.AllowHttpStatusCodes(allowedCodes.ToArray());
+        }
+
+        /// <summary>
+        /// Logs the response from InsureShip.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        private void LogInsureShipResponse(HttpWebResponse response)
+        {
+            if (response != null)
+            {
+                StringBuilder responseText = new StringBuilder();
+                responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
+                responseText.AppendLine(response.Headers.ToString());
+
+                LogResponse(responseText.ToString(), "log");
+            }
         }
     }
 }

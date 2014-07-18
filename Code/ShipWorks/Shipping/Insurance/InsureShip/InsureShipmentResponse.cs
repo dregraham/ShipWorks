@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Shipping.Insurance.InsureShip.Enums;
@@ -34,11 +35,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             
             try
             {
-                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(request.StatusCode.ToString());
+                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)request.RawResponse.StatusCode).ToString(CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {
-                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, request.StatusCode);
+                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, (int)request.RawResponse.StatusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message);
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             // We have a recognizable response status code
             if (responseCode != InsureShipResponseCode.Success)
             {
-                string message = string.Format("An error occurred trying to insure shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, request.StatusCode);
+                string message = string.Format("An error occurred trying to insure shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, (int)request.RawResponse.StatusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(responseCode, message);
