@@ -559,3 +559,12 @@ EXEC sp_addextendedproperty N'AuditFormat', N'125', 'SCHEMA', N'dbo', 'TABLE', N
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Weight Units', 'SCHEMA', N'dbo', 'TABLE', N'FedExShipment', 'COLUMN', N'WeightUnitType'
 GO
+
+
+PRINT N'Updating [dbo].[ShippingSettings]'
+GO
+UPDATE ShippingSettings
+SET	FedExUsername = 'HELzVKFPZMsWuwKE',
+	FedExPassword = 'ozJYy2Y+V+avbjYWzknMdLs0yUzXhWIlZTGoiU9BeTI='
+	WHERE ISNULL(FedExUsername,'') != ''
+GO
