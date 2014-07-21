@@ -895,6 +895,7 @@ CREATE TABLE [dbo].[Shipment]
 [ReturnShipment] [bit] NOT NULL,
 [Insurance] [bit] NOT NULL,
 [InsuranceProvider] [int] NOT NULL,
+[InsuredWith] int NOT NULL,
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginNameParseStatus] [int] NOT NULL,

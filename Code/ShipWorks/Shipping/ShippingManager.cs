@@ -189,6 +189,7 @@ namespace ShipWorks.Shipping
             shipment.ReturnShipment = false;
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
+            shipment.InsuredWith = (int) InsuredWith.NotWithApi;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();

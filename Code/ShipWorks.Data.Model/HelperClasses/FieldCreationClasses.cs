@@ -15342,6 +15342,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InsuranceProvider);}
 		}
+		/// <summary>Creates a new ShipmentEntity.InsuredWith field instance</summary>
+		public static EntityField2 InsuredWith
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InsuredWith);}
+		}
 		/// <summary>Creates a new ShipmentEntity.ShipNameParseStatus field instance</summary>
 		public static EntityField2 ShipNameParseStatus
 		{
