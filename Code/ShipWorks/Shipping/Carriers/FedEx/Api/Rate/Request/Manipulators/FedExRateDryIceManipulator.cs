@@ -41,17 +41,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             RateRequest nativeRequest = InitializeShipmentRequest(request);
 
-            if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
+
+            if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
             {
-                // Dry ice must be configured at the package level for any service other than ground 
+                // Dry ice must be configured at the package level for all services (see comment below)
                 ConfigurePackage(request, nativeRequest, currentPackageIndex);
             }
 
-            if (request.ShipmentEntity.FedEx.Service == (int) FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
-            {
-                // Dry ice must be configured at the shipment level for ground service 
-                ConfigureShipment(request, nativeRequest);
-            }
+            // Lines below are commented out due to error responses coming back from FedEx
+            // when trying to configure dry ice at the shipment level and was only working 
+            // when configured at the package level. These were successful at one point 
+            // when passing the certification tests???
+
+            //if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
+            //{
+            //    // Dry ice must be configured at the package level for any service other than ground 
+            //    ConfigurePackage(request, nativeRequest, currentPackageIndex);
+            //}
+
+            //if (request.ShipmentEntity.FedEx.Service == (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
+            //{
+            //    // Dry ice must be configured at the shipment level for ground service 
+            //    ConfigureShipment(request, nativeRequest);
+            //}
         }
 
 
@@ -90,7 +102,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 TotalWeight = new Weight
                 {
                     Value = (decimal)(request.ShipmentEntity.FedEx.Packages.Sum(p => p.DryIceWeight) / 2.2046),
-                    Units = WeightUnits.KG
+                    ValueSpecified = true,
+                    Units = WeightUnits.KG,
+                    UnitsSpecified = true
                 }
             };
         }
@@ -112,7 +126,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight = new Weight
             {
                 Value = (decimal) (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight/2.2046),
-                Units = WeightUnits.KG
+                ValueSpecified = true,
+                Units = WeightUnits.KG,
+                UnitsSpecified = true
             };
         }
 
