@@ -83,31 +83,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             }
         }
 
-        /// <summary>
-        /// Configures dry ice properties at the shipment level.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureShipment(CarrierRequest request, RateRequest nativeRequest)
-        {
-            ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes;
+        ///// <summary>
+        ///// Configures dry ice properties at the shipment level.
+        ///// </summary>
+        ///// <param name="request">The request.</param>
+        ///// <param name="nativeRequest">The native request.</param>
+        //private void ConfigureShipment(CarrierRequest request, RateRequest nativeRequest)
+        //{
+        //    ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
+        //    Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
+        //    nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes;
 
-            shipmentSpecialServiceTypes[shipmentSpecialServiceTypes.Length - 1] = ShipmentSpecialServiceType.DRY_ICE;
+        //    shipmentSpecialServiceTypes[shipmentSpecialServiceTypes.Length - 1] = ShipmentSpecialServiceType.DRY_ICE;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail = new ShipmentDryIceDetail
-            {
-                PackageCount = request.ShipmentEntity.FedEx.Packages.Count(p => p.DryIceWeight > 0).ToString(),
-                TotalWeight = new Weight
-                {
-                    Value = (decimal)(request.ShipmentEntity.FedEx.Packages.Sum(p => p.DryIceWeight) / 2.2046),
-                    ValueSpecified = true,
-                    Units = WeightUnits.KG,
-                    UnitsSpecified = true
-                }
-            };
-        }
+        //    nativeRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail = new ShipmentDryIceDetail
+        //    {
+        //        PackageCount = request.ShipmentEntity.FedEx.Packages.Count(p => p.DryIceWeight > 0).ToString(),
+        //        TotalWeight = new Weight
+        //        {
+        //            Value = (decimal)(request.ShipmentEntity.FedEx.Packages.Sum(p => p.DryIceWeight) / 2.2046),
+        //            ValueSpecified = true,
+        //            Units = WeightUnits.KG,
+        //            UnitsSpecified = true
+        //        }
+        //    };
+        //}
 
         /// <summary>
         /// Configures dry ice properties at the package level.
