@@ -120,12 +120,21 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InsureShipException))]
-        public void Insure_ThrowsInsureShipException_WhenInsureShipResponseExceptionIsCaught_Test()
+        public void Insure_ReturnsFalse_WhenInsureShipResponseExceptionIsCaught_Test()
         {
             response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.UnknownFailure));
 
-            testObject.Insure(shipment);
+            bool insureResult = testObject.Insure(shipment);
+
+            Assert.IsFalse(insureResult, "Expected False when error is thrown.");
+        }
+
+        [TestMethod]
+        public void Insure_ReturnsTrue_WhenNoErrorThrown_Test()
+        {
+            bool insureResult = testObject.Insure(shipment);
+
+            Assert.IsTrue(insureResult, "Expected False when error is thrown.");
         }
 
         [TestMethod]

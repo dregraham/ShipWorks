@@ -41,8 +41,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
         /// <exception cref="InsureShipException">This shipment was not insured. An error occurred trying to insure this shipment.</exception>
-        public InsureShipResponseCode Insure(ShipmentEntity shipment)
+        public bool Insure(ShipmentEntity shipment)
         {
+            bool success = false;
+
             try
             {
                 log.InfoFormat("Submitting shipment information to InsureShip for shipment {0}.", shipment.ShipmentID);
@@ -54,16 +56,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                 // This should never actually get here unless the response was successful, but log it just in case.
                 log.InfoFormat("Response code from InsureShip was {0}successful (response code {1}).", responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", responseCode);
-                return responseCode;
+                success = true;
             }
             catch (InsureShipResponseException exception)
             {
                 string message = string.Format("An error occurred trying to insure shipment {0} with InsureShip. A(n) {1} response code was received from InsureShip.", shipment.ShipmentID, exception.InsureShipResponseCode);
                 log.Error(message, exception);
-
-                throw new InsureShipException(string.Format("This shipment was not insured. An error occurred trying to insure this shipment (response code {0}).", exception.InsureShipResponseCode));
             }
-            
+
+            return success;
         }
     }
 }
