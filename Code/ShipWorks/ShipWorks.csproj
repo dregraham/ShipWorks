@@ -2086,6 +2086,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
