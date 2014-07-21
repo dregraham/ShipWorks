@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,7 +7,6 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -121,14 +118,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             {
                 // This was added solely for certification tests and not something that can
                 // currently be set in the UI
-                codDetail.CodRecipient.AccountNumber = shipmentEntity.FedEx.CodAccountNumber;
+                codDetail.CodRecipient.AccountNumber = shipmentEntity.FedEx.CodAccountNumber;                
             }
 
 
             if (!string.IsNullOrEmpty(shipmentEntity.FedEx.CodTIN))
             {
                 // Add the tax information if it's provided
-                codDetail.CodRecipient.Tins = new TaxpayerIdentification[] {new TaxpayerIdentification() {Number = shipmentEntity.FedEx.CodTIN, TinType = TinType.PERSONAL_STATE}};
+                codDetail.CodRecipient.Tins = new TaxpayerIdentification[] {new TaxpayerIdentification() {Number = shipmentEntity.FedEx.CodTIN, TinType = TinType.PERSONAL_STATE}};                
             }
 
             // If this is the last shipment of an MPS, we need to put the return tracking id, and it exists (in Ground it doesnt)
@@ -136,12 +133,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             {
                 codDetail.ReturnTrackingId = new TrackingId();
                 codDetail.ReturnTrackingId.TrackingNumber = shipmentEntity.FedEx.CodTrackingNumber;
-                codDetail.ReturnTrackingId.FormId = shipmentEntity.FedEx.CodTrackingFormID;
+                codDetail.ReturnTrackingId.FormId = shipmentEntity.FedEx.CodTrackingFormID;                
             }
 
             // This is all that is required in FedEx tests.
             codDetail.ReferenceIndicator = CodReturnReferenceIndicatorType.INVOICE;
+            codDetail.ReferenceIndicatorSpecified = true;
+
             codDetail.CodRecipient.Address.Residential = false;
+            codDetail.CodRecipient.Address.ResidentialSpecified = true;
 
             return codDetail;
         }
