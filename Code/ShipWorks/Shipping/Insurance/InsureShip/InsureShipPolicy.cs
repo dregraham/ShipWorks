@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
         /// <exception cref="InsureShipException">This shipment was not insured. An error occurred trying to insure this shipment.</exception>
-        public bool Insure(ShipmentEntity shipment)
+        public void Insure(ShipmentEntity shipment)
         {
             bool success = false;
 
@@ -64,7 +64,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 log.Error(message, exception);
             }
 
-            return success;
+            if (success)
+            {
+                shipment.InsuredWith = (int) InsuredWith.SuccessfullyInsuredViaApi;
+            }
+            else
+            {
+                shipment.InsuredWith = (int) InsuredWith.FailedToInsureViaApi;
+            }
         }
     }
 }

@@ -349,7 +349,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public static void LogShipment(StoreEntity store, ShipmentEntity shipment, InsuredWith insuredWith, bool isRetry = false)
+        public static void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
             {
@@ -432,7 +432,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
                 postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
                 postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
-                postRequest.Variables.Add("insuredwith", EnumHelper.GetDescription(insuredWith));
+                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue((InsuredWith) shipment.InsuredWith));
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));

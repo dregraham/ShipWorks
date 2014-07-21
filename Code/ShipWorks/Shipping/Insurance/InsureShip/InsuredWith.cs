@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
         [Description("Sucessfully Insured Via the API")]
         [ApiValue("1")]
-        SucessfullyInsuredViaApi = 1,
+        SuccessfullyInsuredViaApi = 1,
 
         [Description("Failed To Insure Via the API")]
         [ApiValue("2")]
