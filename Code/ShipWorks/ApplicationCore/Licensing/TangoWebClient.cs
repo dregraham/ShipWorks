@@ -212,6 +212,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCounterRatesCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
 
             return results;
         }
