@@ -100,7 +100,7 @@ namespace ShipWorks.Properties {
             }
         }
         
-		/// <summary>
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap cart66 {
@@ -109,7 +109,7 @@ namespace ShipWorks.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-		
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -406,6 +406,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap solidcommerce {
             get {
                 object obj = ResourceManager.GetObject("solidcommerce", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap suredone {
+            get {
+                object obj = ResourceManager.GetObject("suredone", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
