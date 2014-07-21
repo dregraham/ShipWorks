@@ -1142,6 +1142,8 @@ namespace ShipWorks.Shipping
                     }
                 }
 
+                InsuredWith insuredWith;
+
                 // Transacted
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -1149,16 +1151,7 @@ namespace ShipWorks.Shipping
                     shipmentType.ProcessShipment(shipment);
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                    if (Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                        .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                        .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                                       choice.InsuranceValue > 0))
-                    {
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
-                        InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
-                        insureShipPolicy.Insure(shipment);
-                        log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
-                    }
+                    insuredWith = InsureWithInsureShip(shipment, storeEntity, shipmentType);
 
                     // Now that the label is generated, we can reset the shipping fields the store changed back to their 
                     // original values before saving to the database
@@ -1197,7 +1190,7 @@ namespace ShipWorks.Shipping
                 // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                 if (!shipmentType.ProcessingCompletesExternally)
                 {
-                    TangoWebClient.LogShipment(storeEntity, shipment);
+                    TangoWebClient.LogShipment(storeEntity, shipment, insuredWith);
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
@@ -1219,7 +1212,24 @@ namespace ShipWorks.Shipping
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
+        private static InsuredWith InsureWithInsureShip(ShipmentEntity shipment, StoreEntity storeEntity, ShipmentType shipmentType)
+        {
+            bool shouldInsure = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                               choice.InsuranceValue > 0);
+            bool wasInsured = false;
+
+            if (shouldInsure)
+            {
+                log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
+                InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
+                wasInsured = insureShipPolicy.Insure(shipment);
+                log.InfoFormat("Shipment {0}  - Insure Shipment Complete", shipment.ShipmentID);
+            }
+        }
+
         /// <summary>
         /// Logs the shipment data to the ShipSense knowledge base. All exceptions will be caught
         /// and logged and wrapped in a ShippingException.
