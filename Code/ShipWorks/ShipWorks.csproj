@@ -2537,6 +2537,7 @@
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreType.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.Designer.cs">
       <DependentUpon>PrinterTypeControl.cs</DependentUpon>
