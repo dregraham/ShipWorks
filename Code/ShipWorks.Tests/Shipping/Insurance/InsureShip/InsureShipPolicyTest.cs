@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             settings.Setup(s => s.DistributorID).Returns("D00002");
             settings.Setup(s => s.Username).Returns("test2");
             settings.Setup(s => s.Password).Returns("password");
-            settings.Setup(s => s.Url).Returns(new Uri("https://int.insureship.com/api/"));
+            settings.Setup(s => s.ApiUrl).Returns(new Uri("https://int.insureship.com/api/"));
 
             shipment = new ShipmentEntity(100031);
             affiliate = new InsureShipAffiliate("test", "test");

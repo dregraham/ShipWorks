@@ -66,11 +66,19 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// InsureShip Url
         /// </summary>
-        public Uri Url
+        public Uri ApiUrl
+        {
+            get { return new Uri(CertificateUrl.AbsoluteUri + "api/"); }
+        }
+
+        /// <summary>
+        /// Gets the URL to use when inspecting the certificate data for authenticity.
+        /// </summary>
+        public Uri CertificateUrl
         {
             get
             {
-                return UseTestServer ? new Uri("https://int.insureship.com/api/") : new Uri("https://api2.insureship.com/api/");
+                return UseTestServer ? new Uri("https://int.insureship.com") : new Uri("https://api2.insureship.com");
             }
         }
     }

@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// </summary>
         public override IInsureShipResponse Submit()
         {
-            Uri uri = new Uri(string.Format("{0}distributors/{1}/policies", Settings.Url.AbsoluteUri, Settings.DistributorID));
+            Uri uri = new Uri(string.Format("{0}distributors/{1}/policies", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID));
             return SubmitPost(uri, CreatePostData());
         }
 

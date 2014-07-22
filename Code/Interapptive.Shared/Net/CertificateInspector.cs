@@ -43,9 +43,9 @@ namespace Interapptive.Shared.Net
         /// of the certificate based on what the inspector is looking for.</returns>
         public CertificateSecurityLevel Inspect(ICertificateRequest request)
         {
-            // Optimistically set the security level to trusted in the event that there
+            // Pessimistically set the security level to spoofed in the event that there
             // are not any elements to check in the certificate
-            CertificateSecurityLevel securityLevel = CertificateSecurityLevel.Trusted;
+            CertificateSecurityLevel securityLevel = CertificateSecurityLevel.Spoofed;
 
             if (expectedCertificateSubjectElements.Any())
             {
@@ -60,9 +60,13 @@ namespace Interapptive.Shared.Net
                     // There is a certificate, so we need to check the subject to make sure
                     // it contains all of the data elements we're expecting
                     string subject = certificate.Subject.ToUpper(CultureInfo.InvariantCulture);
-                    if (!expectedCertificateSubjectElements.All(subject.Contains))
+                    if (expectedCertificateSubjectElements.All(subject.Contains))
                     {
-                        // The certificate did not match all the elements - consider it as spoofed
+                        // The certificate matched all the elements - consider it trusted
+                        securityLevel = CertificateSecurityLevel.Trusted;
+                    }
+                    else
+                    {
                         securityLevel = CertificateSecurityLevel.Spoofed;
                     }
                 }
