@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.Insure(shipment);
 
             // Response was setup to simulate a successful response from InsureShip
-            log.Verify(l => l.InfoFormat("Response code from InsureShip was {0}successful (response code {1}).", string.Empty, InsureShipResponseCode.Success), Times.Once());
+            log.Verify(l => l.InfoFormat("Response code from InsureShip was {0} successful (response code {1}).", string.Empty, InsureShipResponseCode.Success), Times.Once());
         }
 
         [TestMethod]
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             testObject.Insure(shipment);
 
-            log.Verify(l => l.InfoFormat("Response code from InsureShip was {0}successful (response code {1}).", "not ", InsureShipResponseCode.Conflict), Times.Once());
+            log.Verify(l => l.InfoFormat("Response code from InsureShip was {0} successful (response code {1}).", "not ", InsureShipResponseCode.Conflict), Times.Once());
         }
 
         [TestMethod]

@@ -376,6 +376,7 @@ namespace ShipWorks.Shipping
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
+            clonedShipment.InsuredWith = (int) InsuredWith.NotWithApi;
 
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
@@ -1150,7 +1151,6 @@ namespace ShipWorks.Shipping
                     shipmentType.ProcessShipment(shipment);
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                    shipment.InsuredWith = (int) InsuredWith.NotWithApi;
                     if (Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                         .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                         .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0))

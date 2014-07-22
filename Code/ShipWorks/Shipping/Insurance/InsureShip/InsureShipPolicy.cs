@@ -44,7 +44,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         public void Insure(ShipmentEntity shipment)
         {
             bool success = false;
-
             try
             {
                 log.InfoFormat("Submitting shipment information to InsureShip for shipment {0}.", shipment.ShipmentID);
@@ -55,22 +54,31 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 InsureShipResponseCode responseCode = response.Process();
 
                 // This should never actually get here unless the response was successful, but log it just in case.
-                log.InfoFormat("Response code from InsureShip was {0}successful (response code {1}).", responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", responseCode);
-                success = true;
+                log.InfoFormat("Response code from InsureShip was {0} successful (response code {1}).",
+                    responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", responseCode);
+
+                success = responseCode == InsureShipResponseCode.Success;
             }
             catch (InsureShipResponseException exception)
             {
-                string message = string.Format("An error occurred trying to insure shipment {0} with InsureShip. A(n) {1} response code was received from InsureShip.", shipment.ShipmentID, exception.InsureShipResponseCode);
+                string message =
+                    string.Format(
+                        "An error occurred trying to insure shipment {0} with InsureShip. A(n) {1} response code was received from InsureShip.",
+                        shipment.ShipmentID, exception.InsureShipResponseCode);
                 log.Error(message, exception);
+            }
+            catch (InsureShipException exception)
+            {
+                log.Error(exception);
             }
 
             if (success)
             {
-                shipment.InsuredWith = (int) InsuredWith.SuccessfullyInsuredViaApi;
+                shipment.InsuredWith = (int)InsuredWith.SuccessfullyInsuredViaApi;
             }
             else
             {
-                shipment.InsuredWith = (int) InsuredWith.FailedToInsureViaApi;
+                shipment.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
             }
         }
     }

@@ -38,7 +38,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             }
             catch (Exception)
             {
-                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, (int)request.RawResponse.StatusCode);
+                int statusCode = request.RawResponse != null ? (int) request.RawResponse.StatusCode : -0;
+                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, statusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message);
@@ -47,7 +48,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             // We have a recognizable response status code
             if (responseCode != InsureShipResponseCode.Success)
             {
-                string message = string.Format("An error occurred trying to insure shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, (int)request.RawResponse.StatusCode);
+                int statusCode = request.RawResponse != null ? (int)request.RawResponse.StatusCode : -0;
+                string message = string.Format("An error occurred trying to insure shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, statusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(responseCode, message);
