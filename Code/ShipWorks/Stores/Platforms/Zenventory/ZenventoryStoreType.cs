@@ -62,5 +62,15 @@ namespace ShipWorks.Stores.Platforms.Zenventory
             return pages;
         }
 
+        /// <summary>
+        /// Identifies this store type
+        /// </summary>
+        protected override string InternalLicenseIdentifier
+        {
+            get
+            {
+                return ((GenericModuleStoreEntity)Store).ModuleUsername;
+            }
+        }
     }
 }
