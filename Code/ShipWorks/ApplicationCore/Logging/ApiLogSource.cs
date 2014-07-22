@@ -108,6 +108,9 @@ namespace ShipWorks.ApplicationCore.Logging
         Jigoshop,
 
         [ApiPrivateLogSource]
+        SureDone,
+		
+		[ApiPrivateLogSource]
         InsureShip
     }
 }

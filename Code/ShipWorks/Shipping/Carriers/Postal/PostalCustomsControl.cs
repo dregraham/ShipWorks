@@ -49,6 +49,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
+                    if (shipment.Postal == null)
+                    {
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+                    }
+
                     contentType.ApplyMultiValue((PostalCustomsContentType) shipment.Postal.CustomsContentType);
                     otherDetail.ApplyMultiText(shipment.Postal.CustomsContentDescription);
                 }
