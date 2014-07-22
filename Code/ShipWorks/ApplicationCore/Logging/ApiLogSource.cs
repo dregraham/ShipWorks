@@ -49,6 +49,7 @@ namespace ShipWorks.ApplicationCore.Logging
         WebRequestTask,
         BrightPearl,
         OrderDeskCart,
+        Zenventory,
 
         [ApiPrivateLogSource]
         UspsNoPostage,
