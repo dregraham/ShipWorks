@@ -124,6 +124,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
                 case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
+                case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
