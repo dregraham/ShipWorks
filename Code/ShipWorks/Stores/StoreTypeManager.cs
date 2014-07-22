@@ -147,7 +147,8 @@ namespace ShipWorks.Stores
                 StoreTypeCode.Shopp,
                 StoreTypeCode.Shopperpress,
                 StoreTypeCode.WPeCommerce,
-                StoreTypeCode.Jigoshop
+                StoreTypeCode.Jigoshop,
+                StoreTypeCode.SureDone
             };
 
             return disabledTypes.Contains(typeCode);
