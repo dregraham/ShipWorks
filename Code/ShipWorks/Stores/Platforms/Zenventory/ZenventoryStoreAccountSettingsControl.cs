@@ -24,8 +24,8 @@ namespace ShipWorks.Stores.Platforms.Zenventory
     /// </summary>
     public partial class ZenventoryStoreAccountSettingsControl : AccountSettingsControlBase
     {
-        private const string TestUrl = "http://test.zenventory.com/zenventory/security/login.php";
-        private const string LiveUrl = "http://live.zenventory.com/zenventory/security/login.php";
+        private const string TestUrl = "http://test.zenventory.com/zenventory/services/shipworks.php";
+        private const string LiveUrl = "http://www.zenventory.com/zenventory/services/shipworks.php";
 
         /// <summary>
         /// Constructor
@@ -33,6 +33,8 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         public ZenventoryStoreAccountSettingsControl()
         {
             InitializeComponent();
+
+            useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
         }
 
         /// <summary>
