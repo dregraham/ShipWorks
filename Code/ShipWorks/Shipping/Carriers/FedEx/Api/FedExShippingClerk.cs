@@ -968,7 +968,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw (HandleException(ex));
             }
 		}
-		
-		
+
+        /// <summary>
+        /// Gets the major version of the Ship WebService
+        /// </summary>
+        public static string ShipWebServiceVersion
+        {
+            get
+            {
+                WebServices.Ship.VersionId version = new WebServices.Ship.VersionId();
+                return version.Major.ToString();
+            }
+        }
     }
 }

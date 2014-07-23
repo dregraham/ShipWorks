@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Logging;
@@ -112,12 +113,14 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Pull the credentials from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
+            // Use the correct version that ShipWorks should work with.
+            string fedExBasePath = string.Format("/CounterRateCredentials/FedEx_v{0}/", FedExShippingClerk.ShipWebServiceVersion);
 
             // FedEx fields - password needs to encrypted
-            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", "/CounterRateCredentials/FedEx/AccountNumber", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", "/CounterRateCredentials/FedEx/MeterNumber", results);
-            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", "/CounterRateCredentials/FedEx/Username", results);
-            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", "/CounterRateCredentials/FedEx/Password", results, "FedEx");
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", fedExBasePath + "AccountNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExMeterNumber", fedExBasePath + "MeterNumber", results);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "FedExUsername", fedExBasePath + "Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "FedExPassword", fedExBasePath + "Password", results, "FedEx");
 
             // UPS fields - access key needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "UpsUserId", "/CounterRateCredentials/UPS/UserID", results);
