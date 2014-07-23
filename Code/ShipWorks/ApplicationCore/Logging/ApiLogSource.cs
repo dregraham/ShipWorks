@@ -50,7 +50,8 @@ namespace ShipWorks.ApplicationCore.Logging
         BrightPearl,
         OrderDeskCart,
         LiveSite,
-
+		Fortune3,
+		
         [ApiPrivateLogSource]
         UspsNoPostage,
 

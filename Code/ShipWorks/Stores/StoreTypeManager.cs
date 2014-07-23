@@ -125,6 +125,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
                 case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
 				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
+				case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -150,7 +151,8 @@ namespace ShipWorks.Stores
                 StoreTypeCode.WPeCommerce,
                 StoreTypeCode.Jigoshop,
 				StoreTypeCode.LiveSite,
-                StoreTypeCode.SureDone
+                StoreTypeCode.SureDone,
+				StoreTypeCode.Fortune3
             };
 
             return disabledTypes.Contains(typeCode);
