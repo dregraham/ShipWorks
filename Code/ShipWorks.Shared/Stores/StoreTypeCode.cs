@@ -246,7 +246,12 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("woocommerce")]
         WooCommerce = 46,
 
-        [Description("SureDone")]
+        [Description("LiveSite")]
+        [StoreTypeIdentity("LIVESITE", "LST")]
+        [StoreTypeIcon("livesite")]
+        LiveSite = 49,
+		
+		[Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
         SureDone = 50

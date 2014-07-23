@@ -2084,6 +2084,7 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
@@ -10529,6 +10530,7 @@
     <None Include="Resources\EndiciaLogo.png" />
     <None Include="Resources\clock_warning.png" />
     <None Include="Resources\funnel_warning.png" />
+    <None Include="Resources\livesite.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
