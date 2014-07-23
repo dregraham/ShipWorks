@@ -1,6 +1,10 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿using System.Collections.Generic;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.ChannelSale.WizardPages;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ChannelSale
 {
@@ -37,6 +41,25 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
             {
                 return ApiLogSource.ChannelSale;
             }
+        }
+
+        /// <summary>
+        /// Create the Wizard pages used in the setup wizard to configure the store.
+        /// </summary>
+        public override List<WizardPage> CreateAddStoreWizardPages()
+        {
+            return new List<WizardPage>
+            {
+                new ChannelSaleWizardPage()
+            };
+        }
+
+        /// <summary>
+        /// Create the user control used in the Store Manager window.
+        /// </summary>
+        public override AccountSettingsControlBase CreateAccountSettingsControl()
+        {
+            return new ChannelSaleAccountSettingsControl();
         }
 
         /// <summary>
