@@ -209,7 +209,7 @@
             this.value.Size = new System.Drawing.Size(95, 21);
             this.value.TabIndex = 7;
             this.value.Text = "$0.00";
-            this.value.TextChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
+            this.value.Leave += new System.EventHandler(this.OnShipSenseFieldChanged);
             this.value.Leave += new System.EventHandler(this.OnLeaveValueAffectingControl);
             // 
             // labelQuantity

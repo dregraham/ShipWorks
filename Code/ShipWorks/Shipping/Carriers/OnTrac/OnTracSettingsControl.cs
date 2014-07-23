@@ -10,6 +10,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public OnTracSettingsControl()
         {
             InitializeComponent();
+
+            insuranceProviderChooser.ProviderChanged += OnInsuranceProviderChanged;
         }
 
         /// <summary>

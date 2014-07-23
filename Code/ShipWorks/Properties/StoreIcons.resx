@@ -223,6 +223,9 @@
   <data name="solidcommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\solidcommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="suredone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stores\Icons\suredone.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="three3dcart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\3dcart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
