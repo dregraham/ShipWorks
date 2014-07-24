@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         public IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase)
         {
-            throw new System.NotImplementedException();
+            return new InsureShipVoidPolicyResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipVoidPolicyResponse)));
         }
     }
 }
