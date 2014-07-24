@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         public InsureShipRequestBase CreateVoidPolicyRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
         {
-            throw new System.NotImplementedException();
+            return new InsureShipVoidPolicyRequest(shipmentEntity, insureShipAffiliate);
         }
     }
 }
