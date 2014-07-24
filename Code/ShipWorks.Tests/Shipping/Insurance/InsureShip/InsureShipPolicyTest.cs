@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             responseFactory = new Mock<IInsureShipResponseFactory>();
             response = new Mock<IInsureShipResponse>();
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, affiliate, settings.Object, log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, affiliate, settings.Object, log.Object, "InsureShipment");
             request.Setup(r => r.Submit()).Returns(response.Object);
 
             requestFactory = new Mock<IInsureShipRequestFactory>();

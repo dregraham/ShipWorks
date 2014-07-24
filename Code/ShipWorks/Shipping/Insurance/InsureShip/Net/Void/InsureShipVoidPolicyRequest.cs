@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
         /// Initializes a new instance of the <see cref="InsureShipVoidPolicyRequest"/> class.
         /// </summary>
         public InsureShipVoidPolicyRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log) : 
-            base(responseFactory, shipment, affiliate, insureShipSettings, log)
+            base(responseFactory, shipment, affiliate, insureShipSettings, log, "VoidPolicy")
         { }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
             response = new Mock<HttpWebResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object, "VoidPolicy");
             request.Setup(r => r.RawResponse).Returns(response.Object);
 
             testObject = new InsureShipVoidPolicyResponse(request.Object, log.Object);

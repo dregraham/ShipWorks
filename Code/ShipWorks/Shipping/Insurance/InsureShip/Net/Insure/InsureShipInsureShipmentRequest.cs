@@ -22,8 +22,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        public InsureShipInsureShipmentRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log) : 
-            base(responseFactory, shipment, affiliate, insureShipSettings, log)
+        public InsureShipInsureShipmentRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log) :
+            base(responseFactory, shipment, affiliate, insureShipSettings, log, "InsureShipment")
         { }
 
         /// <summary>

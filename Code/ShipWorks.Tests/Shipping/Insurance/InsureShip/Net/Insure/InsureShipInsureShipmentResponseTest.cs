@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             response = new Mock<HttpWebResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object, "InsureShipment");
             request.Setup(r => r.RawResponse).Returns(response.Object);
 
             testObject = new InsureShipInsureShipmentResponse(request.Object, log.Object);

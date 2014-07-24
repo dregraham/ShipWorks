@@ -20,15 +20,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        protected InsureShipRequestBase(ShipmentEntity shipment, InsureShipAffiliate affiliate)
-            : this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipRequestBase)))
+        protected InsureShipRequestBase(ShipmentEntity shipment, InsureShipAffiliate affiliate, string logFileName)
+            : this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipRequestBase)), logFileName)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
-            : base(ApiLogSource.InsureShip, "InsureShip")
+        protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log, string logFileName)
+            : base(ApiLogSource.InsureShip, logFileName)
         {
             ResponseFactory = responseFactory;
             Shipment = shipment;
