@@ -15,5 +15,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipInsureShipmentResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipInsureShipmentResponse)));
         }
+
+        /// <summary>
+        /// Creates the void policy response.
+        /// </summary>
+        public IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

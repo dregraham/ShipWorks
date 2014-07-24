@@ -9,5 +9,10 @@
         /// Creates the insure shipment response.
         /// </summary>
         IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase);
+
+        /// <summary>
+        /// Creates the void policy response.
+        /// </summary>
+        IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase);
     }
 }
