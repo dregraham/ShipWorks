@@ -931,7 +931,7 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        throw new ShippingException(voidInsuranceException.Message, voidInsuranceException);
+                        throw new ShippingException("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at 1-866-701-3654.", voidInsuranceException);
                     }
                 }
             }
