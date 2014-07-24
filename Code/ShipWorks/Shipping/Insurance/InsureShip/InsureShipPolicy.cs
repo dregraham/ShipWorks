@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                         shipment.ShipmentID, exception.InsureShipResponseCode);
 
                     log.Error(message, exception);
-                    throw new InsureShipException(message, exception);
+                    throw new InsureShipException("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at 1-866-701-3654.", exception);
                 }
             }
         }
