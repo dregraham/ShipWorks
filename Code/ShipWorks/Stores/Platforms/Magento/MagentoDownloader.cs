@@ -32,12 +32,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             // pull out the order number
             long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
-            string orderPostfix = XPathUtility.Evaluate(orderXPath, "Debug/OrderNumberPostfix", "");
+            string orderPostfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
             if (orderPostfix.Length > 0)
             {
                 orderPostfix = "-" + orderPostfix;
             }
-            return new MagentoOrderIdentifier(orderNumber, orderPostfix);
+
+            string orderPrefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
+
+            return new MagentoOrderIdentifier(orderNumber, orderPrefix, orderPostfix);
         }
 
         /// <summary>
