@@ -15,5 +15,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipInsureShipmentRequest(shipmentEntity, insureShipAffiliate);
         }
+
+        /// <summary>
+        /// Creates the void policy request.
+        /// </summary>
+        public InsureShipRequestBase CreateVoidPolicyRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
