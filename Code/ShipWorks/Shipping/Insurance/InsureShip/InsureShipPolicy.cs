@@ -36,10 +36,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
-        /// Insures the shipment with InsureShip.
+        /// Insures the shipment with InsureShip and sets the InsuredWith property of the shipment based
+        /// on the response from InsureShip.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns></returns>
         /// <exception cref="InsureShipException">This shipment was not insured. An error occurred trying to insure this shipment.</exception>
         public void Insure(ShipmentEntity shipment)
         {
@@ -72,14 +72,16 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 log.Error(exception);
             }
 
-            if (success)
-            {
-                shipment.InsuredWith = (int)InsuredWith.SuccessfullyInsuredViaApi;
-            }
-            else
-            {
-                shipment.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
-            }
+            shipment.InsuredWith = success ? (int) InsuredWith.SuccessfullyInsuredViaApi : (int) InsuredWith.FailedToInsureViaApi;
+        }
+
+        /// <summary>
+        /// Voids the policy associated with the given shipment if it has been insured via the InsureShip API.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public void Void(ShipmentEntity shipment)
+        {
+            
         }
     }
 }
