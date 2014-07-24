@@ -99,8 +99,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         /// <param name="postUri">The post URI.</param>
         /// <param name="postData">The post data.</param>
-        /// <returns>An instance of an IInsureShipResponse.</returns>
-        protected IInsureShipResponse SubmitPost(Uri postUri, Dictionary<string, string> postData)
+        protected void SubmitPost(Uri postUri, Dictionary<string, string> postData)
         {
             if (!IsTrustedCertificate())
             {
@@ -140,8 +139,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
                 RawResponse = ex.Response as HttpWebResponse;
             }
-
-            return ResponseFactory.CreateInsureShipmentResponse(this);
         }
 
         /// <summary>
