@@ -95,5 +95,21 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             Assert.AreEqual("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
+
+        [TestMethod]
+        public void VoidPolicyMaximumAge_IsCorrect_WhenUsingProductionServer()
+        {
+            testObject.UseTestServer = false;
+
+            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+        }
+
+        [TestMethod]
+        public void VoidPolicyMaximumAge_IsCorrect_WhenUsingTestServer()
+        {
+            testObject.UseTestServer = false;
+
+            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+        }
     }
 }

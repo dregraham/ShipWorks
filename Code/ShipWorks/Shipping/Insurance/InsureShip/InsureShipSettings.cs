@@ -81,5 +81,16 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 return UseTestServer ? new Uri("https://int.insureship.com") : new Uri("https://api2.insureship.com");
             }
         }
+
+        /// <summary>
+        /// Gets the maximum age of a policy that is allowed to be voided.
+        /// </summary>
+        public TimeSpan VoidPolicyMaximumAge
+        {
+            get
+            {
+                return TimeSpan.FromHours(24);
+            }
+        }
     }
 }
