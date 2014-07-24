@@ -2090,6 +2090,7 @@
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -2106,6 +2107,7 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
@@ -10428,6 +10430,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10552,6 +10555,8 @@
     <None Include="Resources\EndiciaLogo.png" />
     <None Include="Resources\clock_warning.png" />
     <None Include="Resources\funnel_warning.png" />
+    <None Include="Resources\livesite.png" />
+    <None Include="Resources\fortune3.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
