@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
@@ -168,6 +169,20 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                 StringBuilder responseText = new StringBuilder();
                 responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
                 responseText.AppendLine(response.Headers.ToString());
+
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            responseText.AppendLine(reader.ReadToEnd());
+                            reader.Close();
+                        }
+
+                        responseStream.Close();
+                    }
+                }
 
                 LogResponse(responseText.ToString(), "log");
             }
