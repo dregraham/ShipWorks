@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using log4net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
@@ -18,6 +19,7 @@ namespace ShipWorks.Actions.Tasks.Common
     [ActionTask("Download orders", "DownloadOrders", ActionTaskCategory.UpdateLocally)]
     public class DownloadOrdersTask : ActionTask
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(DownloadOrdersTask));
         private List<long> storeIDs;
 
         /// <summary>
@@ -61,11 +63,13 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override void Run(List<long> inputKeys, ActionStepContext context)
         {
-            List<StoreEntity> storeEntities = new List<StoreEntity>();
-            foreach (long storeId in StoreIDs)
+            // Null stores were causing the AddToDownloadQueue method to cause the scheduler to crash
+            List<StoreEntity> storeEntities =  StoreIDs.Select(StoreManager.GetStore).Where(x => x != null).ToList();
+
+            // Log any missing store ids.  These stores were most likely deleted since the task was created
+            foreach (long storeId in StoreIDs.Except(storeEntities.Select(x => x.StoreID)))
             {
-                StoreEntity storeEntity = StoreManager.GetStore(storeId);
-                storeEntities.Add(storeEntity);
+                log.WarnFormat("Could not find store with id {0}", storeId);
             }
 
             DownloadManager.StartDownload(storeEntities, DownloadInitiatedBy.ShipWorks);

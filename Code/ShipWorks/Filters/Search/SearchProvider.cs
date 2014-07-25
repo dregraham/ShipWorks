@@ -620,8 +620,15 @@ namespace ShipWorks.Filters.Search
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Delete our search filter node
-                adapter.DeleteEntity(new FilterNodeEntity(searchNode.FilterNodeID) { IgnoreConcurrency = true });
-
+                try
+                {
+                    adapter.DeleteEntity(new FilterNodeEntity(searchNode.FilterNodeID) { IgnoreConcurrency = true });
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    log.Warn(string.Format("FilterNode {0} looks like it was already deleted", searchNode.FilterNodeID), ex);
+                }
+                
                 // Delete our search database entry
                 adapter.DeleteEntitiesDirectly(typeof(SearchEntity), new RelationPredicateBucket(SearchFields.FilterNodeID == searchNode.FilterNodeID));
 

@@ -37,8 +37,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
                 case "tim-pc":
                     swInstance = Guid.Parse("{2D64FF9F-527F-47EF-BA24-ECBF526431EE}");
                     break;
-                case "john-pc":
-                    swInstance = Guid.Parse("{00000000-143F-4C2B-A80F-5CF0E121A909}");
+                case "john3610-pc":
+                    swInstance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
                     break;
                 case "kevin-pc":
                     swInstance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");

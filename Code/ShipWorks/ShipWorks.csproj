@@ -388,6 +388,7 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
+    <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -514,6 +515,7 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -571,6 +573,9 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
+    <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
+    <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
@@ -2063,6 +2068,7 @@
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -2092,8 +2098,10 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
@@ -2218,6 +2226,21 @@
     <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.Designer.cs">
+      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlServerTimeZoneType.cs" />
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreType.cs" />
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlUtility.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2334,6 +2357,7 @@
     <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.Designer.cs">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\OrderDesk\OrderDeskStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggOrderType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Net\PageCalculator.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsControl.Designer.cs">
@@ -7310,6 +7334,12 @@
     <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.resx">
+      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.resx">
+      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.resx">
       <DependentUpon>BuyDotComAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7531,6 +7561,7 @@
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -10394,6 +10425,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10433,6 +10466,7 @@
     <None Include="Resources\aprilfools-32x32.png" />
     <None Include="Resources\aprilfools-48x48.png" />
     <None Include="Resources\aprilfools-16x16.png" />
+    <None Include="Resources\brightpearl.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10515,6 +10549,10 @@
     <None Include="Resources\check3.png" />
     <None Include="Resources\dashed_outline.png" />
     <None Include="Resources\EndiciaLogo.png" />
+    <None Include="Resources\clock_warning.png" />
+    <None Include="Resources\funnel_warning.png" />
+    <None Include="Resources\livesite.png" />
+    <None Include="Resources\fortune3.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10674,7 +10712,9 @@
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
+    <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Resources\Stores\Icons\shopperpress.png" />
+    <Content Include="Resources\Stores\Icons\suredone.png" />
     <Content Include="Resources\Stores\Icons\woocommerce.png" />
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />

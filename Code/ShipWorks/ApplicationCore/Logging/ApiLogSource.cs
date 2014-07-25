@@ -47,7 +47,11 @@ namespace ShipWorks.ApplicationCore.Logging
         Sears,
         SolidCommerce,
         WebRequestTask,
-
+        BrightPearl,
+        OrderDeskCart,
+        LiveSite,
+		Fortune3,
+		
         [ApiPrivateLogSource]
         UspsNoPostage,
 
@@ -107,5 +111,8 @@ namespace ShipWorks.ApplicationCore.Logging
 
         [ApiPrivateLogSource]
         ChannelSale,
+
+        [ApiPrivateLogSource]
+        SureDone,
     }
 }

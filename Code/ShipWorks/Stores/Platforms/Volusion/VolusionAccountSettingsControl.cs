@@ -10,6 +10,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -18,6 +19,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public partial class VolusionAccountSettingsControl : AccountSettingsControlBase
     {
+        private static ILog log = LogManager.GetLogger(typeof (VolusionAccountSettingsControl));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -144,26 +147,36 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            
-            VolusionWebSession webSession = new VolusionWebSession(urlTextBox.Text);
-            if (webSession.LogOn(emailTextBox.Text, passwordTextBox.Text))
+
+            try
             {
-                string encryptedPassword = webSession.RetrieveEncryptedPassword();
-
-                if (encryptedPassword.Length > 0)
+                VolusionWebSession webSession = new VolusionWebSession(urlTextBox.Text);
+                if (webSession.LogOn(emailTextBox.Text, passwordTextBox.Text))
                 {
-                    encryptedPasswordTextBox.Text = encryptedPassword;
+                    string encryptedPassword = webSession.RetrieveEncryptedPassword();
 
-                    MessageHelper.ShowInformation(this, "ShipWorks successfully located your Encrypted Password.");
+                    if (encryptedPassword.Length > 0)
+                    {
+                        encryptedPasswordTextBox.Text = encryptedPassword;
+
+                        MessageHelper.ShowInformation(this, "ShipWorks successfully located your Encrypted Password.");
+                    }
+                    else
+                    {
+                        MessageHelper.ShowError(this, "ShipWorks was able to login to your Volusion store but could not locate the Encrypted Password.");
+                    }
                 }
                 else
                 {
-                    MessageHelper.ShowError(this, "ShipWorks was able to login to your Volusion store but could not locate the Encrypted Password.");
+                    MessageHelper.ShowError(this, "ShipWorks was unable to login to your Volusion store with the provided settings.");
                 }
             }
-            else
+            catch (VolusionException ex)
             {
-                MessageHelper.ShowError(this, "ShipWorks was unable to login to your Volusion store with the provided settings.");
+                // The RetrieveEncryptedPassword method could throw a VolusionException if the
+                // password could not be found
+                log.Error(ex);
+                MessageHelper.ShowError(this, "ShipWorks could not locate the Encrypted Password for your Volusion store.");
             }
         }
     }

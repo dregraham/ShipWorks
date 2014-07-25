@@ -1,8 +1,10 @@
-﻿using ShipWorks.Actions;
+﻿using System.Data.SqlClient;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Triggers;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -60,7 +62,8 @@ namespace ShipWorks.ApplicationCore.Services
             ComputerManager.InitializeForCurrentSession();
 
             // Add any missing computers 
-            AddMissingComputers();
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
+            sqlAdapterRetry.ExecuteWithRetry(AddMissingComputers);
 
             tableSynchronizer = new TableSynchronizer<ServiceStatusEntity>();
             InternalCheckForChanges();
@@ -98,15 +101,19 @@ namespace ShipWorks.ApplicationCore.Services
         /// </summary>
         private static void AddMissingComputers()
         {
+            var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int)e.Value).ToArray();
+            List<ComputerEntity> computers = ComputerManager.Computers;
+
+            foreach (ComputerEntity computer in computers)
+            {
+                computer.ServiceStatus.Clear();
+                computer.ServiceStatus.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
+            }
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                var serviceTypeValues = EnumHelper.GetEnumList<ShipWorksServiceType>().Select(e => (int) e.Value).ToArray();
-
-                foreach (ComputerEntity computer in ComputerManager.Computers)
+                foreach (ComputerEntity computer in computers)
                 {
-                    computer.ServiceStatus.Clear();
-                    computer.ServiceStatus.AddRange(DataProvider.GetRelatedEntities(computer.ComputerID, EntityType.ServiceStatusEntity).Cast<ServiceStatusEntity>());
-
                     // For each ShipWorksServiceType value, if the computer does have an entry for it, add it.
                     var missingServiceTypes = serviceTypeValues.Except(computer.ServiceStatus.Select(x => x.ServiceType));
 
@@ -119,7 +126,7 @@ namespace ShipWorks.ApplicationCore.Services
                             ComputerID = computer.ComputerID
                         };
 
-                        SaveServiceStatus(serviceStatus);
+                        SaveServiceStatus(adapter, serviceStatus);
                     }
                 }
 
@@ -165,15 +172,11 @@ namespace ShipWorks.ApplicationCore.Services
         /// <summary>
         /// Saves the given ServiceStatusEntity. 
         /// </summary>
-        private static void SaveServiceStatus(ServiceStatusEntity serviceStatus)
+        private static void SaveServiceStatus(SqlAdapter adapter, ServiceStatusEntity serviceStatus)
         {
             try
             {
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    // Save and refetch.
-                    adapter.SaveAndRefetch(serviceStatus);
-                }
+                adapter.SaveEntity(serviceStatus);
             }
             catch (ORMConcurrencyException ex)
             {
@@ -191,11 +194,35 @@ namespace ShipWorks.ApplicationCore.Services
         /// <param name="serviceStatus">The service for which to check-in.</param>
         public static void CheckIn(ServiceStatusEntity serviceStatus)
         {
+            try
+            {
+                CheckInInternal(serviceStatus);
+            }
+            catch (ORMEntityOutOfSyncException ex)
+            {
+                log.Warn("ServiceStatusEntity was out of sync when checking in.  Trying again.", ex);
+                
+                // Refresh the status and try to run the check in again
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntity(serviceStatus);
+                }
+
+                CheckInInternal(serviceStatus);
+            }
+
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "Attempting to SaveServiceStatus.");
+            sqlAdapterRetry.ExecuteWithRetry(() => SaveServiceStatus(SqlAdapter.Default, serviceStatus));
+        }
+
+        /// <summary>
+        /// Perform the actual check in and logging here so it can be retried if necessary
+        /// </summary>
+        private static void CheckInInternal(ServiceStatusEntity serviceStatus)
+        {
             serviceStatus.LastCheckInDateTime = DateTime.UtcNow;
 
             log.InfoFormat("Service '{0}' checking in at {1}", serviceStatus.ServiceDisplayName, serviceStatus.LastCheckInDateTime);
-
-            SaveServiceStatus(serviceStatus);
         }
 
         /// <summary>

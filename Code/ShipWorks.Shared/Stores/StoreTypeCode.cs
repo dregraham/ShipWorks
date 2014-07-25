@@ -201,6 +201,16 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
+		[Description("BrightPearl")]
+        [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
+        [StoreTypeIcon("brightpearl")]
+        BrightPearl = 38,
+		
+		[Description("OrderDesk")]
+        [StoreTypeIdentity("ORDERDESK", "ORD")]
+        [StoreTypeIcon("orderdesk")]
+        OrderDesk = 39,
+
         [Description("Cart66 Lite")]
         [StoreTypeIdentity("CART66LITE", "C6L")]
         [StoreTypeIcon("cart66")]
@@ -240,5 +250,20 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("CHANNELSALE", "CHS")]
         [StoreTypeIcon("channelsale")]
         ChannelSale = 47,
+
+		[Description("Fortune3")]
+        [StoreTypeIdentity("FORTUNE3", "FT3")]
+        [StoreTypeIcon("fortune3")]
+        Fortune3 = 48,
+		
+        [Description("LiveSite")]
+        [StoreTypeIdentity("LIVESITE", "LST")]
+        [StoreTypeIcon("livesite")]
+        LiveSite = 49,
+		
+		[Description("SureDone")]
+        [StoreTypeIdentity("SUREDONE", "SDN")]
+        [StoreTypeIcon("suredone")]
+        SureDone = 50
     }
 }

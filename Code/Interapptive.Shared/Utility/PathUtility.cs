@@ -17,6 +17,10 @@ namespace Interapptive.Shared.Utility
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PathUtility));
 
+        static readonly HashSet<char> illegalFileNameChars = new HashSet<char>(Path.GetInvalidFileNameChars());
+        static readonly HashSet<char> illegalPathChars = new HashSet<char>(Path.GetInvalidPathChars().Concat(new[] { '*', '?', ':' }));
+        static readonly Regex pathRootPattern = new Regex(@"^[a-zA-Z]\:\\.*", RegexOptions.Compiled);
+
         /// <summary>
         /// Trim the given path to fit within the specified number of pixels.
         /// </summary>
@@ -86,6 +90,52 @@ namespace Interapptive.Shared.Utility
             pattern = pattern.Replace(question, ".?");
 
             return Regex.Match(name, pattern).Success;
+        }
+
+        /// <summary>
+        /// Cleans the specified path by replacing any invalid characters with underscores
+        /// </summary>
+        public static string CleanPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return string.Empty;
+            }
+
+            // We can't use Path.IsPathRooted here because it throws if the path contains certain illegal chars
+            bool isRooted = pathRootPattern.IsMatch(path);
+
+            string root = isRooted ? path.Substring(0, 3) : string.Empty;
+            string directory = isRooted ? path.Substring(3) : path;
+
+            StringBuilder output = new StringBuilder(root, path.Length);
+
+            foreach (char c in directory)
+            {
+                output.Append(illegalPathChars.Contains(c) ? '_' : c);
+            }
+
+            return output.ToString();
+        }
+
+        /// <summary>
+        /// Cleans the specified file name by replacing any invalid characters with underscores
+        /// </summary>
+        public static string CleanFileName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return string.Empty;
+            }
+
+            StringBuilder output = new StringBuilder(name.Length);
+
+            foreach (char c in name)
+            {
+                output.Append(illegalFileNameChars.Contains(c) ? '_' : c);
+            }
+
+            return output.ToString();
         }
     }
 }
