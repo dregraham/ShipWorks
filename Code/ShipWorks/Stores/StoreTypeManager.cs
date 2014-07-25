@@ -154,7 +154,6 @@ namespace ShipWorks.Stores
 				StoreTypeCode.LiveSite,
                 StoreTypeCode.SureDone,
 				StoreTypeCode.Fortune3,
-				StoreTypeCode.ChannelSale,
             };
 
             return disabledTypes.Contains(typeCode);
