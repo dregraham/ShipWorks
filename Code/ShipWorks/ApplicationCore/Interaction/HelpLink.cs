@@ -19,15 +19,23 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public HelpLink()
         {
-
+            Url = "http://www.interapptive.com/shipworks/help";
         }
+
+        /// <summary>
+        /// Gets or sets the URL that the help content is located at.
+        /// </summary>
+        /// <value>
+        /// The URL.
+        /// </value>
+        public string Url { get; set; }
 
         /// <summary>
         /// Help Link click
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/shipworks/help", this);
+            WebHelper.OpenUrl(Url, this);
         }
     }
 }
