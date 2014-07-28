@@ -28,9 +28,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericStoreModulePage()
+        public GenericStoreModulePage(GenericModuleStoreType storeType)
         {
             InitializeComponent();
+            accountSettingsControl.Initialize(storeType);
         }
 
         /// <summary>
