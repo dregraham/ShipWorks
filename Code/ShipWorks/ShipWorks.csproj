@@ -701,6 +701,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
@@ -12294,13 +12295,14 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>setlocal
-set exe="$(SolutionDir)Artifacts\Application\$(TargetFileName)"
-if exist %25exe%25 (
-    REM Stopping the ShipWorks Service (Scheduler)
-    %25exe%25 /s=scheduler /stop
-)
-</PreBuildEvent>
+    <PreBuildEvent>
+      setlocal
+      set exe="$(SolutionDir)Artifacts\Application\$(TargetFileName)"
+      if exist %25exe%25 (
+      REM Stopping the ShipWorks Service (Scheduler)
+      %25exe%25 /s=scheduler /stop
+      )
+    </PreBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

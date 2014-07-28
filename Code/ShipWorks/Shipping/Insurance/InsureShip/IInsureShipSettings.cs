@@ -43,6 +43,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
         /// </summary>
-        TimeSpan SubmitClaimDelayTimespan { get; }
+        TimeSpan ClaimSubmissionWaitingPeriod { get; }
     }
 }
