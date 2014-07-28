@@ -33,6 +33,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             // pull out the order number
             long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
             string orderPostfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
+            
+            // Look in the old location if can't find it in new location
+            if (string.IsNullOrEmpty(orderPostfix))
+            {
+                orderPostfix = XPathUtility.Evaluate(orderXPath, "Debug/OrderNumberPostfix", "");
+            }
+
             if (orderPostfix.Length > 0)
             {
                 orderPostfix = "-" + orderPostfix;
