@@ -48,8 +48,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
             postData.Add("store_id", Affiliate.InsureShipStoreID);
             postData.Add("store_name", Affiliate.InsureShipPolicyID);
             postData.Add("order_id", GetUniqueShipmentId());
-            postData.Add("firstname", Shipment.OriginFirstName);
-            postData.Add("lastname", Shipment.OriginLastName);
+            postData.Add("firstname", Shipment.ShipFirstName);
+            postData.Add("lastname", Shipment.ShipLastName);
             
             // If using the test server, append the test affiliate.
             if (Settings.UseTestServer)

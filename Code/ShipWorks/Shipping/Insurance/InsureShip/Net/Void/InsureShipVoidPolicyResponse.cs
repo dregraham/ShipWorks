@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
 {
@@ -35,7 +37,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
             
             try
             {
-                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)request.RawResponse.StatusCode).ToString(CultureInfo.InvariantCulture));
+                HttpStatusCode status = request.RawResponse.StatusCode;
+
+                // It looks like the void request returns a 200 on success instead of a 204
+                responseCode = status == HttpStatusCode.OK ? 
+                    InsureShipResponseCode.Success :
+                    EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)status).ToString(CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {

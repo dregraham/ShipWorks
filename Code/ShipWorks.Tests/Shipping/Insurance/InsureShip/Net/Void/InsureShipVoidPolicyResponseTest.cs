@@ -141,5 +141,14 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
 
             testObject.Process();
         }
+
+        [TestMethod]
+        public void Process_SuccessfulResponseWith200_Test()
+        {
+            // Response code of 200 is success as well
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
+
+            testObject.Process();
+        }
     }
 }
