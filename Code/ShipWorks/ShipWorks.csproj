@@ -700,6 +700,7 @@
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponseFactory.cs" />

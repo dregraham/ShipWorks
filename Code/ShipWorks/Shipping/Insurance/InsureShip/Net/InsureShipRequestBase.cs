@@ -78,14 +78,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         public abstract IInsureShipResponse Submit();
 
         /// <summary>
-        /// Uses the Order ID and the Shipment ID to create the unique shipment identifier .
-        /// </summary>
-        public virtual string GetUniqueShipmentId()
-        {
-            return string.Format("{0}-{1}", Shipment.OrderID, Shipment.ShipmentID);    
-        }
-
-        /// <summary>
         /// Virtual method that hides the static OrderUtility.PopulateOrderDetails so 
         /// that we can unit test the request.
         /// </summary>

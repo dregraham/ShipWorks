@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("billing_state", Shipment.Order.BillStateProvCode);
             postData.Add("billing_zip", Shipment.Order.BillPostalCode);
             postData.Add("billing_country ", Shipment.Order.BillCountryCode);
-            postData.Add("order_id", GetUniqueShipmentId());
+            postData.Add("order_id", new InsureShipShipmentIdentifier(Shipment).GetUniqueShipmentId());
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("carrier", shipmentType.ShipmentTypeName);
 
