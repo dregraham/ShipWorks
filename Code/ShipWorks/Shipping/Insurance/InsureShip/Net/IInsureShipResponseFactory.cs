@@ -9,5 +9,10 @@
         /// Creates the insure shipment response.
         /// </summary>
         IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase);
+
+        /// <summary>
+        /// Creates an instance of an IInsureShipResponse for submitting a claim to InsureShip.
+        /// </summary>
+        IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase);
     }
 }

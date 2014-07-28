@@ -15,5 +15,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipInsureShipmentResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipInsureShipmentResponse)));
         }
+
+        /// <summary>
+        /// Creates an instance of an IInsureShipResponse for submitting a claim to InsureShip.
+        /// </summary>
+        public IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase)
+        {
+            // TODO: Update after concrete response class has been added/implemented
+            throw new System.NotImplementedException();
+        }
     }
 }
