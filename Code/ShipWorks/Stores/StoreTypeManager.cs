@@ -131,22 +131,22 @@ namespace ShipWorks.Stores
             throw new InvalidOperationException("Invalid store type.");
         }
 
-        /// <summary>
-        /// Determines whether the store type is disabled. This is only temporary, so we can continue
-        /// to release ShipWorks until supporting materials for the new store types are ready.
-        /// </summary>
-        private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
-        {
-            // Don't show in ShipWorks until marketing materials and other ancillary 
-            // materials are ready to go
-            List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
-            {
-				//StoreTypeCode.LiveSite,
-                //StoreTypeCode.SureDone,
-				//StoreTypeCode.Fortune3
-            };
+        ///// <summary>
+        ///// Determines whether the store type is disabled. This is only temporary, so we can continue
+        ///// to release ShipWorks until supporting materials for the new store types are ready.
+        ///// </summary>
+        //private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
+        //{
+        //    // Don't show in ShipWorks until marketing materials and other ancillary 
+        //    // materials are ready to go
+        //    List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
+        //    {
+        //        //StoreTypeCode.LiveSite,
+        //        //StoreTypeCode.SureDone,
+        //        //StoreTypeCode.Fortune3
+        //    };
 
-            return disabledTypes.Contains(typeCode);
-        }
+        //    return disabledTypes.Contains(typeCode);
+        //}
     }
 }
