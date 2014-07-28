@@ -15,5 +15,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipInsureShipmentRequest(shipmentEntity, insureShipAffiliate);
         }
+
+        /// <summary>
+        /// Creates the submit claim request.
+        /// </summary>
+        public InsureShipRequestBase CreateSubmitClaimRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
