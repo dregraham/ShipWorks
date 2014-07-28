@@ -39,5 +39,13 @@ namespace ShipWorks.Stores.Platforms.Jigoshop
                 return ApiLogSource.Jigoshop;
             }
         }
+
+        /// <summary>
+        /// Gets the account settings help URL.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000022268-connecting-jigoshop-with"; }
+        }
     }
 }
