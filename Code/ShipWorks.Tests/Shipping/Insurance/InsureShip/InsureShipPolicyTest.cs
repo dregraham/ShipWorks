@@ -120,24 +120,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
-        public void Insure_InsuredWithIsFailed_WhenInsureShipResponseExceptionIsCaught_Test()
-        {
-            response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.UnknownFailure));
-
-            testObject.Insure(shipment);
-
-            Assert.AreEqual(InsuredWith.FailedToInsureViaApi, (InsuredWith) shipment.InsuredWith, "Expected Failed when error is thrown.");
-        }
-
-        [TestMethod]
-        public void Insure_InsuredWithIsSuccess_WhenNoErrorThrown_Test()
-        {
-            testObject.Insure(shipment);
-
-            Assert.AreEqual(InsuredWith.SuccessfullyInsuredViaApi, (InsuredWith)shipment.InsuredWith, "Expected Success when error is thrown.");
-        }
-
-        [TestMethod]
         public void Insure_LogsMessage_WhenInsureShipResponseExceptionIsCaught_Test()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.UnknownFailure);

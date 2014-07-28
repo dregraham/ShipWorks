@@ -2,6 +2,7 @@
 using System.Globalization;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
@@ -29,7 +30,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <returns></returns>
         /// <exception cref="InsureShipResponseException"></exception>
         public InsureShipResponseCode Process()
-        {            
+        {
+            request.Shipment.InsurancePolicy = request.Shipment.InsurancePolicy ?? new InsurancePolicyEntity
+            {
+                InsureShipStoreName = request.Shipment.Order.Store.StoreName,
+                CreatedWithApi = false
+            };
+
             InsureShipResponseCode responseCode;
             
             try
@@ -54,6 +61,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 
                 throw new InsureShipResponseException(responseCode, message);
             }
+
+            request.Shipment.InsurancePolicy.CreatedWithApi = true;
 
             return responseCode;
         }

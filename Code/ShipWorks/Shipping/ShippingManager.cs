@@ -189,7 +189,6 @@ namespace ShipWorks.Shipping
             shipment.ReturnShipment = false;
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
-            shipment.InsuredWith = (int) InsuredWith.NotWithApi;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
@@ -376,7 +375,6 @@ namespace ShipWorks.Shipping
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
-            clonedShipment.InsuredWith = (int) InsuredWith.NotWithApi;
 
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)

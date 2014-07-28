@@ -28,7 +28,16 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         [TestInitialize]
         public void Initialize()
         {
-            shipment = new ShipmentEntity(100031);
+            shipment = new ShipmentEntity(100031)
+            {
+                Order = new OrderEntity
+                {
+                    Store = new StoreEntity
+                    {
+                        StoreName = "Foo"
+                    }
+                }
+            };
 
             settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.UseTestServer).Returns(true);
@@ -140,6 +149,29 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
 
             testObject.Process();
+        }
+
+        [TestMethod]
+        public void Process_CreatedWithApiIsFalse_OnNonSuccessfulResponse()
+        {
+            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+
+            try
+            {
+                testObject.Process();
+            }
+            catch (InsureShipResponseException)
+            { }
+
+            Assert.IsFalse(shipment.InsurancePolicy.CreatedWithApi);
+        }
+
+        [TestMethod]
+        public void Process_CreatedWithApiIsTrue_OnSuccessfulResponse()
+        {
+            testObject.Process();
+
+            Assert.IsTrue(shipment.InsurancePolicy.CreatedWithApi);
         }
     }
 }

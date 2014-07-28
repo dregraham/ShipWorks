@@ -433,7 +433,17 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
                 postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
                 postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
-                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue((InsuredWith) shipment.InsuredWith));
+
+                if (shipment.InsurancePolicy == null)
+                {
+                    postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
+                }
+                else
+                {
+                    InsuredWith insuredWith = shipment.InsurancePolicy.CreatedWithApi ? InsuredWith.SuccessfullyInsuredViaApi : InsuredWith.FailedToInsureViaApi;
+                    postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
+                }
+                
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));

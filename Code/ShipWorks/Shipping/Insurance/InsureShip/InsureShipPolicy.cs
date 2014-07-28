@@ -43,7 +43,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <exception cref="InsureShipException">This shipment was not insured. An error occurred trying to insure this shipment.</exception>
         public void Insure(ShipmentEntity shipment)
         {
-            bool success = false;
             try
             {
                 log.InfoFormat("Submitting shipment information to InsureShip for shipment {0}.", shipment.ShipmentID);
@@ -56,8 +55,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 // This should never actually get here unless the response was successful, but log it just in case.
                 log.InfoFormat("Response code from InsureShip was {0} successful (response code {1}).",
                     responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", responseCode);
-
-                success = responseCode == InsureShipResponseCode.Success;
             }
             catch (InsureShipResponseException exception)
             {
@@ -70,15 +67,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             catch (InsureShipException exception)
             {
                 log.Error(exception);
-            }
-
-            if (success)
-            {
-                shipment.InsuredWith = (int)InsuredWith.SuccessfullyInsuredViaApi;
-            }
-            else
-            {
-                shipment.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
             }
         }
     }
