@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
@@ -21,8 +22,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         public IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase)
         {
-            // TODO: Update after concrete response class has been added/implemented
-            throw new System.NotImplementedException();
+           return new InsureShipSubmitClaimResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipSubmitClaimResponse)));
         }
     }
 }

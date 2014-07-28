@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net

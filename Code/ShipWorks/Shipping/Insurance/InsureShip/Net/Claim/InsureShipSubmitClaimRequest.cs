@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
+namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
 {
     /// <summary>
     /// InsureShip request class for submitting a claim
