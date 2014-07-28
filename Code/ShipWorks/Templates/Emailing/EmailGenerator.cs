@@ -88,7 +88,7 @@ namespace ShipWorks.Templates.Emailing
             {
                 throw new EmailException(
                     "The selected template is for printing thermal labels.\n\n" +
-                    "Thermal label data must be sent directly to a thermal printer, and cannot be emailed.");
+                    "Thermal label data must be sent directly to a thermal printer, and cannot be emailed.", EmailExceptionErrorNumber.InvalidTemplateSelected);
             }
 
             EmailGenerator generator = new EmailGenerator();
@@ -108,7 +108,7 @@ namespace ShipWorks.Templates.Emailing
             {
                 throw new EmailException(
                     "The selected template is for printing thermal labels.\n\n" +
-                    "Thermal label data must be sent directly to a thermal printer, and cannot be emailed.");
+                    "Thermal label data must be sent directly to a thermal printer, and cannot be emailed.", EmailExceptionErrorNumber.InvalidTemplateSelected);
             }
 
             EmailGenerator generator = new EmailGenerator();
@@ -155,8 +155,8 @@ namespace ShipWorks.Templates.Emailing
             {
                 string message = "An error occurred while trying to email using the selected template:\n\n" + ex.Message;
 
-                // Wrap TemplateException in a SaveException
-                throw new EmailException(message, ex);
+                // Wrap TemplateException in an EmailException
+                throw new EmailException(message, ex, EmailExceptionErrorNumber.InvalidTemplateSelected);
             }
         }
 
@@ -199,7 +199,7 @@ namespace ShipWorks.Templates.Emailing
                 string message = "An error occurred while trying to email using the selected template:\n\n" + ex.Message;
 
                 // Wrap TemplateException in a SaveException
-                completionArgs = new EmailGenerationCompletedEventArgs(emailsGenerated, securityDenials, new EmailException(message, ex), false, userState);
+                completionArgs = new EmailGenerationCompletedEventArgs(emailsGenerated, securityDenials, new EmailException(message, ex, EmailExceptionErrorNumber.InvalidTemplateSelected), false, userState);
             }
             catch (Exception ex)
             {
@@ -384,11 +384,11 @@ namespace ShipWorks.Templates.Emailing
             {
                 if (e.Customer != null)
                 {
-                    throw new EmailException("A customer has orders from more than one store, and ShipWorks could not determine which template email settings to use.");
+                    throw new EmailException("A customer has orders from more than one store, and ShipWorks could not determine which template email settings to use.", EmailExceptionErrorNumber.IndeterminateTemplateSettings);
                 }
                 else
                 {
-                    throw new EmailException("The input has orders from more than one store, and ShipWorks could not determine which template email settings to use.");
+                    throw new EmailException("The input has orders from more than one store, and ShipWorks could not determine which template email settings to use.", EmailExceptionErrorNumber.IndeterminateTemplateSettings);
                 }
             }
         }

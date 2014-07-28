@@ -33,6 +33,14 @@ namespace ShipWorks.Email
         /// </summary>
         [Description("Error")]
         [ImageResource("mail_error")]
-        Failed = 2
+        Failed = 2,
+
+        /// <summary>
+        /// The last attempt at sending the message failed because 
+        /// the email message had invalid fields (like missing the To field)
+        /// </summary>
+        [Description("Error")]
+        [ImageResource("mail_error")]
+        Retry = 3
     }
 }
