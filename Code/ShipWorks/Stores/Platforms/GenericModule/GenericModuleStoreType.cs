@@ -366,7 +366,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new GenericStoreAccountSettingsControl();
+            GenericStoreAccountSettingsControl settingsControl = new GenericStoreAccountSettingsControl();
+            settingsControl.Initialize(this);
+
+            return settingsControl;
         }
 
         /// <summary>
