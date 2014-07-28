@@ -81,5 +81,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 return UseTestServer ? new Uri("https://int.insureship.com") : new Uri("https://api2.insureship.com");
             }
         }
+
+        /// <summary>
+        /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
+        /// </summary>
+        public TimeSpan SubmitClaimDelayTimespan
+        {
+            get { return TimeSpan.FromDays(7); }
+        }
     }
 }

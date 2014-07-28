@@ -39,5 +39,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// Gets the URL to use when inspecting the certificate data for authenticity.
         /// </summary>
         Uri CertificateUrl { get; }
+
+        /// <summary>
+        /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
+        /// </summary>
+        TimeSpan SubmitClaimDelayTimespan { get; }
     }
 }
