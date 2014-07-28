@@ -95,10 +95,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            string orderNumberComplete = order.OrderNumberComplete;
-            string postFix = Regex.Match(orderNumberComplete, String.Format("{0}(\\-.*)", order.OrderNumber)).Groups[1].Value;
+            string[] splitCompleteOrderNumber = order.OrderNumberComplete.Split(new [] {order.OrderNumber.ToString()}, StringSplitOptions.None);
 
-            return new MagentoOrderIdentifier(order.OrderNumber, postFix);
+            return new MagentoOrderIdentifier(order.OrderNumber, splitCompleteOrderNumber[0], splitCompleteOrderNumber[1]);
         }
 
         /// <summary>
