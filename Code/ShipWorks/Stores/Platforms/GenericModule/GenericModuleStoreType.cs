@@ -60,6 +60,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public virtual string AccountSettingsHelpUrl
+        {
+            get { return "http://www.interapptive.com/shipworks/help"; }
+        }
+
+        /// <summary>
         /// Identifies this store type
         /// </summary>
         protected override string InternalLicenseIdentifier
@@ -331,7 +339,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             List<WizardPage> pages = new List<WizardPage>();
 
-            pages.Add(new GenericStoreModulePage());
+            pages.Add(new GenericStoreModulePage(this));
 
             return pages;
         }

@@ -141,15 +141,6 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.BrightPearl,
-                StoreTypeCode.OrderDesk,
-                StoreTypeCode.WooCommerce,
-                StoreTypeCode.Cart66Lite,
-                StoreTypeCode.Cart66Pro,
-                StoreTypeCode.Shopp,
-                StoreTypeCode.Shopperpress,
-                StoreTypeCode.WPeCommerce,
-                StoreTypeCode.Jigoshop,
 				StoreTypeCode.LiveSite,
                 StoreTypeCode.SureDone,
 				StoreTypeCode.Fortune3
