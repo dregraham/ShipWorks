@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 shipment.InsurancePolicy.ClaimType = (int) claimType;
                 shipment.InsurancePolicy.ItemName = items;
                 shipment.InsurancePolicy.DamageValue = damageAmount;
-
+                shipment.InsurancePolicy.SubmissionDate = DateTime.UtcNow;
                 try
                 {
                     log.InfoFormat("Submitting claim to InsureShip for shipment {0}.", shipment.ShipmentID);

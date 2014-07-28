@@ -156,6 +156,19 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
+        public void Submit_SetsSubmissionDate_WhenShipmentIsEligible_Test()
+        {
+            DateTime testBegin = DateTime.UtcNow;
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+
+            DateTime testEnd = DateTime.UtcNow;
+
+            // Make sure the test submission date is set to the time period between before the 
+            // Submit method was invoked and when it finished
+            Assert.IsTrue(testBegin >= shipment.InsurancePolicy.SubmissionDate && shipment.InsurancePolicy.SubmissionDate <= testEnd);
+        }
+
+        [TestMethod]
         public void Submit_LogsMessage_WhenSubmittingRequest_Test()
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
