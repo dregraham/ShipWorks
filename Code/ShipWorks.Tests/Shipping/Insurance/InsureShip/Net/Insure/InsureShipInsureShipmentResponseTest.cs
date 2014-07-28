@@ -28,16 +28,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         [TestInitialize]
         public void Initialize()
         {
-            shipment = new ShipmentEntity(100031)
-            {
-                Order = new OrderEntity
-                {
-                    Store = new StoreEntity
-                    {
-                        StoreName = "Foo"
-                    }
-                }
-            };
+            shipment = new ShipmentEntity(100031);
 
             settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.UseTestServer).Returns(true);

@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         {
             request.Shipment.InsurancePolicy = request.Shipment.InsurancePolicy ?? new InsurancePolicyEntity
             {
-                InsureShipStoreName = request.Shipment.Order.Store.StoreName,
+                InsureShipStoreName = request.Affiliate.InsureShipPolicyID,
                 CreatedWithApi = false
             };
 
