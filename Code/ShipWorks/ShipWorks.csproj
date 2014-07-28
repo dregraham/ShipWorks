@@ -2068,6 +2068,7 @@
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -2084,8 +2085,10 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
@@ -7539,6 +7542,7 @@
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -10528,6 +10532,8 @@
     <None Include="Resources\EndiciaLogo.png" />
     <None Include="Resources\clock_warning.png" />
     <None Include="Resources\funnel_warning.png" />
+    <None Include="Resources\livesite.png" />
+    <None Include="Resources\fortune3.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10688,6 +10694,7 @@
     <Content Include="Resources\Stores\Icons\shopp.png" />
     <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Resources\Stores\Icons\shopperpress.png" />
+    <Content Include="Resources\Stores\Icons\suredone.png" />
     <Content Include="Resources\Stores\Icons\woocommerce.png" />
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores;
 using ShipWorks.ApplicationCore.Licensing;
 using System.Diagnostics;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.Common.Threading;
 using ShipWorks.ApplicationCore;
 using System.IO;
 using System.Xml.Linq;
@@ -49,6 +46,9 @@ namespace ShipWorks.Shipping.Insurance
 
         // The info banner version
         private static int infoBannerVersion = 1;
+
+        // Cost per $100 of declared value for OnTrac
+        const decimal onTracInsuranceRate = 0.8m;
 
         /// <summary>
         /// The URL to the customer agreement file online
@@ -377,9 +377,13 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.FedEx:
+                    {
+                        cost.Carrier = CalculateUpsFedExCost(declaredValue);
+                    }
+                    break;
                 case ShipmentTypeCode.OnTrac:
                     {
-                        cost.Carrier = CalculateUpsFedExOnTracCost(declaredValue);
+                        cost.Carrier = CalculateOnTracCost(declaredValue);
                     }
                     break;
 
@@ -418,7 +422,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Determine the cost of insurance for UPS, FedEx, and OnTrac based on the given declared value
         /// </summary>
-        private static decimal CalculateUpsFedExOnTracCost(decimal declaredValue)
+        private static decimal CalculateUpsFedExCost(decimal declaredValue)
         {
             // Anything less than $100 is free
             if (declaredValue <= 100)
@@ -433,6 +437,26 @@ namespace ShipWorks.Shipping.Insurance
                 // It's .75 per 100, but a minimum of 2.25
                 return (decimal) Math.Max(2.25m, quantity * 0.75m);
             }
+        }
+
+        /// <summary>
+        /// Determine the cost of insurance for OnTrac based on the given declared value
+        /// </summary>
+        private static decimal CalculateOnTracCost(decimal declaredValue)
+        {
+            // Anything less than $101 is free
+            if (declaredValue < 101)
+            {
+                return 0;
+            }
+
+            // Get how many increments of $100
+            // This one is different from the other caclulations because the $100 increments
+            // start at $101 instead of $100
+            int quantity = (int)Math.Floor((declaredValue - 101) / 100m) + 1;
+
+            // It's rate per 100, but a minimum of 0
+            return Math.Max(0m, quantity * onTracInsuranceRate);
         }
 
         /// <summary>

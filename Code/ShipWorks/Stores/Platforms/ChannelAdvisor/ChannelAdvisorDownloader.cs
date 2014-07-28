@@ -468,14 +468,34 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             orderItem.UPC = matchingItem.UPC;
                         }
 
+                        // MPN
                         if (!String.IsNullOrEmpty(matchingItem.MPN))
                         {
                             orderItem.MPN = matchingItem.MPN;
                         }
-
+                        
+                        PopulateItemAttributes(client, orderItem);
                         PopulateImages(client, orderItem);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the attribute information from ChannelAdvisor and populates the order item attributes appropriately.
+        /// </summary>
+        private void PopulateItemAttributes(ChannelAdvisorClient client, ChannelAdvisorOrderItemEntity orderItem)
+        {
+            IEnumerable<AttributeInfo> attributes = client.GetInventoryItemAttributes(orderItem.SKU);
+            foreach (AttributeInfo caAttribute in attributes)
+            {
+                OrderItemAttributeEntity orderItemAttribute = StoreType.CreateOrderItemAttributeInstance();
+                orderItemAttribute.Name = caAttribute.Name ?? string.Empty;
+                orderItemAttribute.Description = caAttribute.Value ?? string.Empty;
+                orderItemAttribute.UnitPrice = 0;
+                orderItemAttribute.IsManual = false;
+
+                orderItem.OrderItemAttributes.Add(orderItemAttribute);
             }
         }
 
