@@ -264,6 +264,6 @@ namespace ShipWorks.Stores
         [Description("Lime Light CRM")]
         [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
         [StoreTypeIcon("limelightcrm")]
-        LimeLightCRM = 51,
+        LimeLightCRM = 53,
     }
 }
