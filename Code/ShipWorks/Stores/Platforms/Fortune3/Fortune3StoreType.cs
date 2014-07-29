@@ -43,5 +43,13 @@ namespace ShipWorks.Stores.Platforms.Fortune3
                 return ApiLogSource.Fortune3;
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/categories/105240/folders/4000004783/articles/4000022391-connecting-fortune3-with"; }
+        }
     }
 }
