@@ -2563,6 +2563,19 @@
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.Designer.cs">
+      <DependentUpon>ZenventoryAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>ZenventoryStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreType.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.Designer.cs">
       <DependentUpon>PrinterTypeControl.cs</DependentUpon>
@@ -7450,6 +7463,12 @@
     <EmbeddedResource Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.resx">
       <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.resx">
+      <DependentUpon>ZenventoryAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.resx">
+      <DependentUpon>ZenventoryStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\DecimalTextBox.resx">
       <DependentUpon>DecimalTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -10722,6 +10741,7 @@
     <Content Include="Resources\Stores\Icons\suredone.png" />
     <Content Include="Resources\Stores\Icons\woocommerce.png" />
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
+    <None Include="Resources\zenventory.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />

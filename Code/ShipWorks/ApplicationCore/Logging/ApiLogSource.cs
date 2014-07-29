@@ -50,6 +50,7 @@ namespace ShipWorks.ApplicationCore.Logging
         BrightPearl,
         OrderDeskCart,
         LiveSite,
+        Zenventory,
 		Fortune3,
 		
         [ApiPrivateLogSource]

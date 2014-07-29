@@ -75,5 +75,13 @@ namespace ShipWorks.Stores.Platforms.SureDone
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/categories/105240/folders/4000004785/articles/4000022397-connecting-suredone-with"; }
+        }
     }
 }
