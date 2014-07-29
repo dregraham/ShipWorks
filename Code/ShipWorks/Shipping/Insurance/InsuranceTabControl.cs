@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Insurance
 
             if (!shipment.Processed)
             {
-                messageLabel.Text = "This shipment has not been processed yet.\nInsurance information will display after a label has been created.";
+                messageLabel.Text = "The selected shipment has not been processed.";
                 messageLabel.Visible = true;
                 insuranceViewClaimControl.Visible = false;
                 return;
