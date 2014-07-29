@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
 using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
@@ -23,6 +24,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         public IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase)
         {
            return new InsureShipSubmitClaimResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipSubmitClaimResponse)));
+        }
+        }
+
+        /// <summary>
+        /// Creates the void policy response.
+        /// </summary>
+        public IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase)
+        {
+            return new InsureShipVoidPolicyResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipVoidPolicyResponse)));
         }
     }
 }

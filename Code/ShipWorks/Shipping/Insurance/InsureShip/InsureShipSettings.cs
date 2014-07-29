@@ -89,5 +89,16 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             get { return TimeSpan.FromDays(7); }
         }
+
+        /// <summary>
+        /// Gets the maximum age of a policy that is allowed to be voided.
+        /// </summary>
+        public TimeSpan VoidPolicyMaximumAge
+        {
+            get
+            {
+                return TimeSpan.FromHours(24);
+            }
+        }
     }
 }

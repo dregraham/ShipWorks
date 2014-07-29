@@ -16,5 +16,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// Creates the submit claim request
         /// </summary>
         InsureShipRequestBase CreateSubmitClaimRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate);
+
+        /// <summary>
+        /// Creates the void policy request.
+        /// </summary>
+        InsureShipRequestBase CreateVoidPolicyRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate);
     }
 }

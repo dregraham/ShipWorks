@@ -884,6 +884,8 @@ namespace ShipWorks.Shipping
                     // Ensure the carrier specific data has been loaded in case the shipment type needs it for voiding
                     EnsureShipmentLoaded(shipment);
 
+                    InsureShipException voidInsuranceException = null;
+
                     // Transacted
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
@@ -896,6 +898,25 @@ namespace ShipWorks.Shipping
 
                         adapter.SaveAndRefetch(shipment);
 
+                        if (IsInsuredByInsureShip(shipmentType, shipment))
+                        {
+                            log.InfoFormat("Shipment {0}  - Void Shipment Start", shipment.ShipmentID);
+                            InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(store));
+
+                            try
+                            {
+                                insureShipPolicy.Void(shipment);
+                            }
+                            catch (InsureShipException ex)
+                            {
+                                // If there was an error voiding the insurance policy, save the exception so we can rethrow at the 
+                                // very end of the voiding process to ensure that any other code for voiding can run
+                                voidInsuranceException = ex;
+                            }
+                            
+                            log.InfoFormat("Shipment {0}  - Void Shipment Complete", shipment.ShipmentID);
+                        }
+
                         // Dispatch the shipment voided event
                         ActionDispatcher.DispatchShipmentVoided(shipment, adapter);
 
@@ -904,6 +925,12 @@ namespace ShipWorks.Shipping
 
                     // Void the shipment in tango
                     TangoWebClient.VoidShipment(store, shipment);
+
+                    // Rethrow the insurance exception if there was one
+                    if (voidInsuranceException != null)
+                    {
+                        throw new ShippingException("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at 1-866-701-3654.", voidInsuranceException);
+                    }
                 }
             }
             catch (SqlAppResourceLockException ex)
@@ -1149,9 +1176,7 @@ namespace ShipWorks.Shipping
                     shipmentType.ProcessShipment(shipment);
                     log.InfoFormat("Shipment {0}  - ShipmentType.Process Complete", shipment.ShipmentID);
 
-                    if (Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                        .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                        .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0))
+                    if (IsInsuredByInsureShip(shipmentType, shipment))
                     {
                         log.InfoFormat("Shipment {0}  - Insure Shipment Start", shipment.ShipmentID);
                         InsureShipPolicy insureShipPolicy = new InsureShipPolicy(TangoWebClient.GetInsureShipAffiliate(storeEntity));
@@ -1423,6 +1448,16 @@ namespace ShipWorks.Shipping
                 return ServiceLevelType.FourToSevenDays;
             }
             return ServiceLevelType.Anytime;
+        }
+
+        /// <summary>
+        /// Gets whether the shipment is insured by InsureShip
+        /// </summary>
+        private static bool IsInsuredByInsureShip(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            return Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0);
         }
     }
 }

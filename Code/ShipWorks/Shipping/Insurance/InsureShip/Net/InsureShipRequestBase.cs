@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.Net;
@@ -20,15 +21,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        protected InsureShipRequestBase(ShipmentEntity shipment, InsureShipAffiliate affiliate)
-            : this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipRequestBase)))
+        protected InsureShipRequestBase(ShipmentEntity shipment, InsureShipAffiliate affiliate, string logFileName)
+            : this(new InsureShipResponseFactory(), shipment, affiliate, new InsureShipSettings(), LogManager.GetLogger(typeof(InsureShipRequestBase)), logFileName)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
-        protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
-            : base(ApiLogSource.InsureShip, "InsureShip")
+        protected InsureShipRequestBase(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log, string logFileName)
+            : base(ApiLogSource.InsureShip, logFileName)
         {
             ResponseFactory = responseFactory;
             Shipment = shipment;
@@ -91,8 +92,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         /// <param name="postUri">The post URI.</param>
         /// <param name="postData">The post data.</param>
-        /// <returns>An instance of an IInsureShipResponse.</returns>
-        protected IInsureShipResponse SubmitPost(Uri postUri, Dictionary<string, string> postData)
+        protected void SubmitPost(Uri postUri, Dictionary<string, string> postData)
         {
             if (!IsTrustedCertificate())
             {
@@ -132,8 +132,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
                 RawResponse = ex.Response as HttpWebResponse;
             }
-
-            return ResponseFactory.CreateInsureShipmentResponse(this);
         }
 
         /// <summary>
@@ -163,6 +161,20 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                 StringBuilder responseText = new StringBuilder();
                 responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
                 responseText.AppendLine(response.Headers.ToString());
+
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            responseText.AppendLine(reader.ReadToEnd());
+                            reader.Close();
+                        }
+
+                        responseStream.Close();
+                    }
+                }
 
                 LogResponse(responseText.ToString(), "log");
             }

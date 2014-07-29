@@ -101,5 +101,21 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             Assert.AreEqual(TimeSpan.FromDays(7).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
         }
+		
+        [TestMethod]
+        public void VoidPolicyMaximumAge_IsCorrect_WhenUsingProductionServer()
+        {
+            testObject.UseTestServer = false;
+
+            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+        }
+
+        [TestMethod]
+        public void VoidPolicyMaximumAge_IsCorrect_WhenUsingTestServer()
+        {
+            testObject.UseTestServer = false;
+
+            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+        }
     }
 }
