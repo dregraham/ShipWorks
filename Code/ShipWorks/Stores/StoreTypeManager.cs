@@ -125,6 +125,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
                 case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
 				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
+                case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
 				case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
             }
 
@@ -143,7 +144,8 @@ namespace ShipWorks.Stores
         //    {
         //        //StoreTypeCode.LiveSite,
         //        //StoreTypeCode.SureDone,
-        //        //StoreTypeCode.Fortune3
+		//		StoreTypeCode.Fortune3
+        //        StoreTypeCode.Zenventory
         //    };
 
         //    return disabledTypes.Contains(typeCode);

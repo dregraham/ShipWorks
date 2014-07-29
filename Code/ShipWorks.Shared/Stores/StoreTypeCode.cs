@@ -259,6 +259,11 @@ namespace ShipWorks.Stores
 		[Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
-        SureDone = 50
+        SureDone = 50,
+
+        [Description("Zenventory")]
+        [StoreTypeIdentity("ZENVENTORY", "ZVN")]
+        [StoreTypeIcon("zenventory")]
+        Zenventory = 51
     }
 }
