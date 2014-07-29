@@ -25,7 +25,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
            return new InsureShipSubmitClaimResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipSubmitClaimResponse)));
         }
-        }
 
         /// <summary>
         /// Creates the void policy response.

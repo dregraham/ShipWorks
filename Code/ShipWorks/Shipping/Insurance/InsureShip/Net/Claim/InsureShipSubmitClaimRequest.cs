@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
         public InsureShipSubmitClaimRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
-            : base(responseFactory, shipment, affiliate, insureShipSettings, log)
+            : base(responseFactory, shipment, affiliate, insureShipSettings, log, "SubmitClaim")
         {
         }
 
@@ -32,7 +32,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         public override IInsureShipResponse Submit()
         {
             Uri uri = new Uri(string.Format("{0}claims/submit/{1}", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID));
-            return SubmitPost(uri, CreatePostData());
+            SubmitPost(uri, CreatePostData());
+            return ResponseFactory.CreateVoidPolicyResponse(this);
         }
 
         /// <summary>

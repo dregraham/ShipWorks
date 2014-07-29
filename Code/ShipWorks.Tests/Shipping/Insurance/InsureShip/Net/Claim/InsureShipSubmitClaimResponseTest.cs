@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
             response.Setup(r => r.GetResponseStream()).Returns(responseStream);
 
-            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object);
+            request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object, "Sample");
             request.Setup(r => r.RawResponse).Returns(response.Object);
 
             testObject = new InsureShipSubmitClaimResponse(request.Object, log.Object);
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             }
         }
 
-    [TestMethod]
+        [TestMethod]
         public void Process_UsesRawResponse_FromRequest_Test()
         {
             testObject.Process();

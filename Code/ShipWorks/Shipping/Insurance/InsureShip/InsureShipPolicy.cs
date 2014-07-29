@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             bool voidable = false;
             
-            if (shipment.Processed && shipment.InsuredWith == (int)InsuredWith.SuccessfullyInsuredViaApi)
+            if (shipment.Processed && shipment.InsurancePolicy != null && shipment.InsurancePolicy.CreatedWithApi)
             {
                 // Shipment was insured with the API, so check whether the age of the policy falls within the 
                 // grace period for voiding

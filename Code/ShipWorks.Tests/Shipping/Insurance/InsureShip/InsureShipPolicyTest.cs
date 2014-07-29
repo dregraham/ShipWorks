@@ -65,7 +65,10 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 Processed = true,
                 ProcessedDate = DateTime.UtcNow,
-                InsuredWith = (int) InsuredWith.SuccessfullyInsuredViaApi
+                InsurancePolicy = new InsurancePolicyEntity
+                {
+                    CreatedWithApi = true
+                }
             };
             
             testObject = new InsureShipPolicy(affiliate, requestFactory.Object, log.Object, settings.Object);
@@ -171,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_DoesNotMakeRequest_WhenShipmentFailedToInsureWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
+            shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
             testObject.Void(shipmentForVoiding);
 
@@ -182,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_LogsMessage_WhenShipmentFailedToInsureWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
+            shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
             testObject.Void(shipmentForVoiding);
 
@@ -192,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_DoesNotMakeRequest_WhenShipmentWasNotInsuredWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.NotWithApi;
+            shipmentForVoiding.InsurancePolicy = null;
 
             testObject.Void(shipmentForVoiding);
 
@@ -203,7 +206,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_LogsMessage_WhenShipmentWasNotInsuredWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.NotWithApi;
+            shipmentForVoiding.InsurancePolicy = null;
 
             testObject.Void(shipmentForVoiding);
 
