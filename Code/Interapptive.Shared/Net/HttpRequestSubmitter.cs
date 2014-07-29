@@ -41,6 +41,8 @@ namespace Interapptive.Shared.Net
         // HttpStatusCodes which will be treated as "OK" when responses are received, no exception will be thrown
         private List<HttpStatusCode> allowableStatusCodes = new List<HttpStatusCode>();
 
+        private const string DefaultUserAgent = "shipworks";
+
         /// <summary>
         /// The headers to add to the request
         /// </summary>
@@ -102,7 +104,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         protected HttpRequestSubmitter(HttpVerb verb)
         {
-            this.requestVerb = verb;
+            this.requestVerb = verb;            
         }
 
         /// <summary>
@@ -140,6 +142,7 @@ namespace Interapptive.Shared.Net
             webRequest.Timeout = (int)Timeout.TotalMilliseconds;
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
+            webRequest.UserAgent = DefaultUserAgent;
 
             // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
             if (Verb != HttpVerb.Get)
