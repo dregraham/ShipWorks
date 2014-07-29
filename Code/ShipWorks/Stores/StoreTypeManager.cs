@@ -143,8 +143,6 @@ namespace ShipWorks.Stores
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
 				StoreTypeCode.LiveSite,
-                StoreTypeCode.SureDone,
-				StoreTypeCode.Fortune3,
                 StoreTypeCode.Zenventory
             };
 
