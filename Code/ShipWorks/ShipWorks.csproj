@@ -698,6 +698,18 @@
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
+    <Compile Include="Shipping\Insurance\InsuranceTabControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceTabControl.Designer.cs">
+      <DependentUpon>InsuranceTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.Designer.cs">
+      <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
@@ -7251,6 +7263,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceSelectionControl.resx">
       <DependentUpon>InsuranceSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsuranceTabControl.resx">
+      <DependentUpon>InsuranceTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
+      <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>
