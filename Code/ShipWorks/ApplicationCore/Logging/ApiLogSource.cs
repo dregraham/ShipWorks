@@ -111,5 +111,8 @@ namespace ShipWorks.ApplicationCore.Logging
 
         [ApiPrivateLogSource]
         SureDone,
+
+        [ApiPrivateLogSource]
+        nopCommerce,
     }
 }

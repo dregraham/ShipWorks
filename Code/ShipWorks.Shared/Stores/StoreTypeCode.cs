@@ -259,6 +259,11 @@ namespace ShipWorks.Stores
 		[Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
-        SureDone = 50
+        SureDone = 50,
+
+        [Description("nopCommerce")]
+        [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
+        [StoreTypeIcon("nopcommerce")]
+        nopCommerce = 52,
     }
 }
