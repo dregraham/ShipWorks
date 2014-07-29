@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Insurance
 
             messageLabel.Location = new Point(4, 8);
             insuranceViewClaimControl.Location = new Point(0, 4);
+            insuranceSubmitClaimControl.Location = new Point(0, 4);
         }
 
         /// <summary>
@@ -35,12 +36,15 @@ namespace ShipWorks.Shipping.Insurance
         /// <param name="shipments"></param>
         public void LoadClaim(List<ShipmentEntity> shipments)
         {
+            insuranceViewClaimControl.Visible = false;
+            insuranceSubmitClaimControl.Visible = false;
+            messageLabel.Visible = false;
+
             if (!IsValid(shipments))
             {
                 return;
             }
 
-            messageLabel.Visible = false;
 
             ShipmentEntity shipment = shipments.First();
             ShipmentTypeDataService.LoadInsuranceData(shipment);
@@ -48,9 +52,6 @@ namespace ShipWorks.Shipping.Insurance
             if (shipment.InsurancePolicy != null)
             {
                 ShowViewClaim(shipment);
-            }
-            else
-            {
                 ShowEditClaim(shipment);
             }
         }
@@ -66,7 +67,6 @@ namespace ShipWorks.Shipping.Insurance
             {
                 messageLabel.Text = "Multiple shipments are selected. Select a single shipment to view insurance information.";
                 messageLabel.Visible = true;
-                insuranceViewClaimControl.Visible = false;
                 return false;
             }
 
@@ -76,7 +76,6 @@ namespace ShipWorks.Shipping.Insurance
             {
                 messageLabel.Text = "The selected shipment has not been processed.";
                 messageLabel.Visible = true;
-                insuranceViewClaimControl.Visible = false;
                 return false;
             }
 
@@ -84,7 +83,6 @@ namespace ShipWorks.Shipping.Insurance
             {
                 messageLabel.Text = "This shipment has been voided and has no insurance claims.";
                 messageLabel.Visible = true;
-                insuranceViewClaimControl.Visible = false;
                 return false;
             }
 
@@ -92,7 +90,6 @@ namespace ShipWorks.Shipping.Insurance
             {
                 messageLabel.Text = "This shipment has not been insured.";
                 messageLabel.Visible = true;
-                insuranceViewClaimControl.Visible = false;
                 return false;
             }
 
@@ -123,6 +120,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void ShowEditClaim(ShipmentEntity shipment)
         {
+            insuranceSubmitClaimControl.LoadShipment(shipment);
+            insuranceSubmitClaimControl.ClaimSubmitted = () => LoadClaim(new List<ShipmentEntity>() {shipment});
         }
     }
 }

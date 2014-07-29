@@ -30,6 +30,7 @@
         {
             this.messageLabel = new System.Windows.Forms.Label();
             this.insuranceViewClaimControl = new ShipWorks.Shipping.Insurance.InsuranceViewClaimControl();
+            this.insuranceSubmitClaimControl = new ShipWorks.Shipping.Insurance.InsuranceSubmitClaimControl();
             this.SuspendLayout();
             // 
             // messageLabel
@@ -52,14 +53,22 @@
             this.insuranceViewClaimControl.Size = new System.Drawing.Size(461, 93);
             this.insuranceViewClaimControl.TabIndex = 0;
             // 
+            // insuranceSubmitClaimControl
+            // 
+            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(7, 124);
+            this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
+            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(287, 131);
+            this.insuranceSubmitClaimControl.TabIndex = 2;
+            // 
             // InsuranceTabControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.insuranceSubmitClaimControl);
             this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.insuranceViewClaimControl);
             this.Name = "InsuranceTabControl";
-            this.Size = new System.Drawing.Size(471, 119);
+            this.Size = new System.Drawing.Size(471, 302);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -69,5 +78,6 @@
 
         private InsuranceViewClaimControl insuranceViewClaimControl;
         private System.Windows.Forms.Label messageLabel;
+        private InsuranceSubmitClaimControl insuranceSubmitClaimControl;
     }
 }
