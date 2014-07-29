@@ -100,5 +100,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 return TimeSpan.FromHours(24);
             }
         }
+
+        /// <summary>
+        /// Gets the phone number that should be used for a customer to contact InsureShip.
+        /// </summary>
+        public string InsureShipPhoneNumber
+        {
+            get { return "1-866-701-3654"; }
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             {
                 // To keep the logic for submitting a claim simpler, don't allow any shipments through 
                 // that haven't had a claim submitted via the API.
-                const string message = "A claim cannot be made through ShipWorks for this shipment. Please contact InsureShip for help submitting a claim.";
+                string message = string.Format("A claim cannot be made through ShipWorks for this shipment. Please contact InsureShip at {0} for help submitting a claim.", settings.InsureShipPhoneNumber);
 
                 log.Error(message);
                 throw new InsureShipException(message);

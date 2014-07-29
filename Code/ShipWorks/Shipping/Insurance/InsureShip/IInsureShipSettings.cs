@@ -49,5 +49,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// Gets the maximum age of a policy that is allowed to be voided.
         /// </summary>
         TimeSpan VoidPolicyMaximumAge { get; }
+
+        /// <summary>
+        /// Gets the phone number that should be used for a customer to contact InsureShip.
+        /// </summary>
+        string InsureShipPhoneNumber { get; }
     }
 }
