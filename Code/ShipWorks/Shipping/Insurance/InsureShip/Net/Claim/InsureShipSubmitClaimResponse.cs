@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
-using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
 {
+    /// <summary>
+    /// Encapsulates the logic for inspeting/processing the response from InsureShip when a claim is submitted.
+    /// </summary>
     public class InsureShipSubmitClaimResponse : IInsureShipResponse
     {
         private readonly InsureShipRequestBase request;
@@ -119,6 +117,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             }
         }
 
+        /// <summary>
+        /// Handles the exception from reading the claim identifier.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        /// <exception cref="InsureShipException">An error occurred trying to submit a claim. Please try again or contact InsureShip to submit a claim.</exception>
         private void HandleExceptionFromReadingClaimID(Exception exception)
         {
             log.Error("The claim could not be parsed out of the response from InsureShip.", exception);
