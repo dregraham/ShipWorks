@@ -301,10 +301,17 @@ namespace :db do
 
 		dropSqlText = dropSqlText.gsub(/{DBNAME}/, databaseName)
 		File.open("./DropSeedDatabase.sql", "w") {|file| file.puts dropSqlText}
-		sh "sqlcmd -S " + instanceName + " -i DropSeedDatabase.sql"
+		
+		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+		# exit code and $?.success which is checked later
+		command = "sqlcmd -S " + instanceName + " -i DropSeedDatabase.sql -b"
+		system(command)
 
 		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
 		
+		if (!$?.success?)
+			abort("Task to create the database failed when attempting to drop database " + databaseName + ".")
+		end
 
 		# We're good to create a new seed database
 
@@ -360,10 +367,18 @@ namespace :db do
 
 		# Write the script to disk, so we can execute it via shell
 		File.open("./CreateSeedDatabase.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S " + instanceName + " -i CreateSeedDatabase.sql"
+		
+		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+		# exit code and $?.success which is checked later
+		command = "sqlcmd -S " + instanceName + " -i CreateSeedDatabase.sql -b"
+		system(command)
 
 		# Clean up the temporary script
 		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
+		
+		if (!$?.success?)
+			abort("Task to create the database failed when attempting to create database " + databaseName + ".")
+		end
 	end
 
 	desc "Build the ShipWorks_SeedData database schema from scratch"
@@ -415,10 +430,18 @@ namespace :db do
 		
 		# Write our script to a temporary file and execute the SQL
 		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S " + instanceName + " -i CreateSeedSchema.sql"
+		
+		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+		# exit code and $?.success which is checked later
+		command = "sqlcmd -S " + instanceName + " -i CreateSeedSchema.sql -b"
+		system(command)
 
 		# Clean up the temporary script
 		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
+		
+		if (!$?.success?)
+			abort("Task to create the database schema failed.")
+		end
 	end
 
 	desc "Populate the ShipWorks_SeedData database with order, shipment, and carrier account data"
@@ -455,10 +478,18 @@ namespace :db do
 
 		# Write our script to a temporary file and execute the SQL
 		File.open("./TempSeedData.sql", "w") {|file| file.puts sqlText}
-		sh "sqlcmd -S " + instanceName + " -i TempSeedData.sql"
-
+		
+		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+		# exit code and $?.success which is checked later
+		command = "sqlcmd -S " + instanceName + " -i TempSeedData.sql -b"
+		system(command)
+		
 		# Clean up the temporary script
 		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
+		
+		if (!$?.success?)
+			abort("Task to seed database failed. Make sure the SeedData.sql script has been updated to match any schema changes.")
+		end
 	end
 	
 	desc "Switch the ShipWorks settings to point to a given database"

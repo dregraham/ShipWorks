@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Logging;
@@ -35,6 +36,8 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public static class TangoWebClient
     {
+        private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
+
         /// <summary>
         /// Activate the given license key to the specified store identifier
         /// </summary>
@@ -68,7 +71,36 @@ namespace ShipWorks.ApplicationCore.Licensing
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
             postRequest.Variables.Add("action", "getstatus");
 
-            return ProcessAccountRequest(postRequest, store, license);
+            LicenseAccountDetail licenseAccountDetail = ProcessAccountRequest(postRequest, store, license);
+
+            InsureShipAffiliate insureShipAffiliate = new InsureShipAffiliate(licenseAccountDetail.TangoStoreID, licenseAccountDetail.TangoCustomerID);
+            insureShipAffiliateProvider.Add(store.StoreID, insureShipAffiliate);
+
+            return licenseAccountDetail;
+        }
+
+        /// <summary>
+        /// Returns an InsureShipAffiliate for the specified store.
+        /// If one cannot be found, an InsureShipException is thrown.
+        /// </summary>
+        public static InsureShipAffiliate GetInsureShipAffiliate(StoreEntity store)
+        {
+            InsureShipAffiliate insureShipAffiliate = insureShipAffiliateProvider.GetInsureShipAffiliate(store.StoreID);
+
+            // If it's null, try one more time to populate it.
+            if (insureShipAffiliate == null)
+            {
+                GetLicenseStatus(store.License, store);
+                insureShipAffiliate = insureShipAffiliateProvider.GetInsureShipAffiliate(store.StoreID);
+
+                // If it's still null, throw
+                if (insureShipAffiliate == null)
+                {
+                    throw new InsureShipException(string.Format("ShipWorks was unable to determine the Insurance Affiliate for store '{0}'", store.StoreName));
+                }
+            }
+
+            return insureShipAffiliate;
         }
 
         /// <summary>
@@ -180,6 +212,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCounterRatesCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
 
             return results;
         }
@@ -382,8 +415,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     carrierInsured = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
                         .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                        .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier && choice.InsuranceValue > 0)
-                        .Any();
+                        .Any(
+                            choice =>
+                                choice.Insured && choice.InsuranceProvider == InsuranceProvider.Carrier &&
+                                choice.InsuranceValue > 0);
                 }
 
                 if (isRetry)
@@ -398,6 +433,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
                 postRequest.Variables.Add("swtype", shipment.ShipmentType.ToString());
                 postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
+                postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue((InsuredWith) shipment.InsuredWith));
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));

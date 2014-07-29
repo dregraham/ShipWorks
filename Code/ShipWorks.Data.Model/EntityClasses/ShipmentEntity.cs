@@ -1064,6 +1064,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("InsuredWith", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ShipNameParseStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -2163,6 +2166,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.InsuranceProvider, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.InsuranceProvider, value); }
+		}
+
+		/// <summary> The InsuredWith property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."InsuredWith"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 InsuredWith
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.InsuredWith, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.InsuredWith, value); }
 		}
 
 		/// <summary> The ShipNameParseStatus property of the Entity Shipment<br/><br/>

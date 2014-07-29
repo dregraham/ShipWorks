@@ -96,7 +96,13 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Edition
             edition = DetermineEdition(xpath);
-        }
+
+            // Get the Tango store ID
+            TangoStoreID = XPathUtility.Evaluate(xpath, "//StoreID", "");
+
+            // Get the Tango CustomerID
+            TangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", "");
+		}
 
         /// <summary>
         /// Determine the edition this license represents
@@ -355,5 +361,23 @@ namespace ShipWorks.ApplicationCore.Licensing
 				return disabledReason;
 			}
 		}
+
+        /// <summary>
+        /// The Tango StoreID associated with this license
+        /// </summary>
+        public string TangoStoreID
+        {
+            get; 
+            private set;
+        }
+
+        /// <summary>
+        /// The Tango CustomerID associated with this license
+        /// </summary>
+        public string TangoCustomerID
+        {
+            get;
+            private set;
+        }
     }
 }

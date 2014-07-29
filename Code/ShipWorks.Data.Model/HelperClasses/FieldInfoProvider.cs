@@ -2073,6 +2073,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ReturnShipment", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.ReturnShipment, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.Insurance, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "InsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.InsuranceProvider, 0, 0, 10);
+			base.AddElementFieldInfo("ShipmentEntity", "InsuredWith", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.InsuredWith, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipNameParseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipUnparsedName", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "OriginNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.OriginNameParseStatus, 0, 0, 10);

@@ -7193,6 +7193,8 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>InsuranceProvider. </summary>
 		InsuranceProvider,
+		///<summary>InsuredWith. </summary>
+		InsuredWith,
 		///<summary>ShipNameParseStatus. </summary>
 		ShipNameParseStatus,
 		///<summary>ShipUnparsedName. </summary>
