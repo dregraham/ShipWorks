@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="items">The items.</param>
         /// <param name="damageAmount">The damage amount.</param>
         public void Submit(InsureShipClaimType claimType, string items, decimal damageAmount)
-        {            
+        {   
             if (IsShipmentEligibleToSubmitClaim())
             {
                 shipment.InsurancePolicy.ClaimType = (int) claimType;
@@ -137,6 +137,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <returns></returns>
         private bool IsShipmentEligibleToSubmitClaim()
         {
+            if (shipment.InsurancePolicy.ClaimID.HasValue)
+            {
+                log.ErrorFormat("A claim has already been submitted for shipment {0}", shipment.ShipmentID);
+                throw new InsureShipException("A claim has already been made for this shipment.");
+            }
+
             bool isEligible = false;
 
             if (shipment.Processed)

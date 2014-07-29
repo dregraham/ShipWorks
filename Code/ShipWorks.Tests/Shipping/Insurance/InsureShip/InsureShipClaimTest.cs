@@ -75,6 +75,30 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipException))]
+        public void Submit_ThrowsInsureShipException_WhenClaimHasAlreadyBeenMade_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 1;
+
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+        }
+
+        [TestMethod]
+        public void Submit_LogsMessage_WhenClaimHasAlreadyBeenMade_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 1;
+
+            try
+            {
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            }
+            catch(InsureShipException)
+            { }
+
+            log.Verify(l => l.ErrorFormat("A claim has already been submitted for shipment {0}", shipment.ShipmentID), Times.Once());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
         public void Submit_ThrowsInsureShipException_WhenShipmentIsProcessed_Test()
         {
             shipment.Processed = false;
