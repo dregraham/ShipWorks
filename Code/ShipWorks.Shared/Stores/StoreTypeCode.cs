@@ -264,6 +264,11 @@ namespace ShipWorks.Stores
         [Description("Zenventory")]
         [StoreTypeIdentity("ZENVENTORY", "ZVN")]
         [StoreTypeIcon("zenventory")]
-        Zenventory = 51
+        Zenventory = 51,
+
+        [Description("OpenCart")]
+        [StoreTypeIdentity("OPENCART", "OCT")]
+        [StoreTypeIcon("opencart")]
+        OpenCart = 54
     }
 }

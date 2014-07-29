@@ -127,6 +127,7 @@ namespace ShipWorks.Stores
 				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
                 case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
 				case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
+                case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
