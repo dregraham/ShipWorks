@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.LimeLightCRM
         }
 
         /// <summary>
-        /// Log request/responses as Jigoshop
+        /// Log request/responses as Lime Light CRM
         /// </summary>
         public override ApiLogSource LogSource
         {
