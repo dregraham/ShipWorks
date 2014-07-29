@@ -259,6 +259,11 @@ namespace ShipWorks.Stores
 		[Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
-        SureDone = 50
+        SureDone = 50,
+
+        [Description("Lime Light CRM")]
+        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
+        [StoreTypeIcon("limelightcrm")]
+        LimeLightCRM = 51,
     }
 }
