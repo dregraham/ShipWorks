@@ -16,17 +16,17 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.Stores.Platforms.BrightPearl
+namespace ShipWorks.Stores.Platforms.Brightpearl
 {
     /// <summary>
     /// Account settings for GenericStore
     /// </summary>
-    public partial class BrightPearlStoreAccountSettingsControl : AccountSettingsControlBase
+    public partial class BrightpearlStoreAccountSettingsControl : AccountSettingsControlBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public BrightPearlStoreAccountSettingsControl()
+        public BrightpearlStoreAccountSettingsControl()
         {
             InitializeComponent();
         }
@@ -46,8 +46,8 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
             username.Text = genericStore.ModuleUsername;
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
 
-            timeZone.SelectedValue = BrightPearlUtility.GetTimeZone(genericStore.ModuleUrl);
-            accountID.Text = BrightPearlUtility.GetAccountId(genericStore.ModuleUrl);
+            timeZone.SelectedValue = BrightpearlUtility.GetTimeZone(genericStore.ModuleUrl);
+            accountID.Text = BrightpearlUtility.GetAccountId(genericStore.ModuleUrl);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         /// </summary>
         public void LoadControl()
         {
-            EnumHelper.BindComboBox<BrightPearlServerTimeZoneType>(timeZone);            
+            EnumHelper.BindComboBox<BrightpearlServerTimeZoneType>(timeZone);            
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
             }
 
             // url to the module
-            string url = BrightPearlUtility.GetModuleUrl(accountID.Text, (BrightPearlServerTimeZoneType)timeZone.SelectedValue);
+            string url = BrightpearlUtility.GetModuleUrl(accountID.Text, (BrightpearlServerTimeZoneType)timeZone.SelectedValue);
 
             // check valid
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
