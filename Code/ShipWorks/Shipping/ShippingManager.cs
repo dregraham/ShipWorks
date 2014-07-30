@@ -359,6 +359,9 @@ namespace ShipWorks.Shipping
             // clone the entity tree
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
 
+            // No insurance policy yet.
+            clonedShipment.InsurancePolicy = null;
+
             // this is now a new shipment to be inserted
             MarkAsNew(clonedShipment);
 

@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void LoadClaim(ShipmentEntity shipment)
         {
-            if (shipment.Voided || shipment.InsurancePolicy == null || shipment.InsurancePolicy.ClaimType == null || shipment.InsurancePolicy.DamageValue == null)
+            if (shipment.Voided || shipment.InsurancePolicy == null || !shipment.InsurancePolicy.ClaimID.HasValue)
             {
                 Visible = false;
                 return;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.IdentityModel.Claims;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -49,6 +50,24 @@ namespace ShipWorks.Shipping.Insurance
         public void LoadShipment(ShipmentEntity shipment)
         {
             this.shipment = shipment;
+
+            bool show = !shipment.Voided && shipment.InsurancePolicy != null && !shipment.InsurancePolicy.ClaimID.HasValue;
+            Visible = show;
+
+            if (show)
+            {
+                if (shipment.InsurancePolicy.ClaimType.HasValue)
+                {
+                    claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType;
+                }
+
+                if (shipment.InsurancePolicy.DamageValue.HasValue)
+                {
+                    damageValue.Amount = shipment.InsurancePolicy.DamageValue.Value;
+                }
+
+                itemName.Text = shipment.InsurancePolicy.ItemName;
+            }
         }
 
         /// <summary>
