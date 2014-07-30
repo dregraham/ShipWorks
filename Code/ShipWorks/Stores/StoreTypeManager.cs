@@ -142,9 +142,6 @@ namespace ShipWorks.Stores
         //    // materials are ready to go
         //    List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
         //    {
-        //        //StoreTypeCode.LiveSite,
-        //        //StoreTypeCode.SureDone,
-		//		StoreTypeCode.Fortune3
         //        StoreTypeCode.Zenventory
         //    };
 
