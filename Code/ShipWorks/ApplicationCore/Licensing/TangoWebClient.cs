@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
@@ -329,7 +330,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("password", password);
 
-            ProcessRequest(postRequest);
+            ProcessRequest(postRequest, "SendAccountPassword");
         }
 
         /// <summary>
@@ -343,7 +344,54 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("username", username);
 
-            ProcessRequest(postRequest);
+            ProcessRequest(postRequest, "SendAccountUsername");
+        }
+
+        /// <summary>
+        /// Log the given insurance claim to Tango.  
+        /// </summary>
+        public static void LogSubmitInsuranceClaim(ShipmentEntity shipment)
+        {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            // The shipment wasn't insured or it's carrier declared value, just return.
+            if (!shipment.Insurance || shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks)
+            {
+                return;
+            }
+
+            // Load the insurance policy if it's null.
+            if (shipment.InsurancePolicy == null)
+            {
+                ShipmentTypeDataService.LoadInsuranceData(shipment);
+            }
+
+            // If there is no insurance policy, just return.
+            if (shipment.InsurancePolicy == null)
+            {
+                throw new InsureShipException(string.Format("No insurance policy was found for ShipmentID: {0}.", shipment.ShipmentID));
+            }
+
+            InsurancePolicyEntity insurancePolicy = shipment.InsurancePolicy;
+            if (!insurancePolicy.ClaimID.HasValue || !insurancePolicy.ClaimType.HasValue || !insurancePolicy.DamageValue.HasValue || !insurancePolicy.SubmissionDate.HasValue)
+            {
+                throw new InsureShipException(string.Format("Missing insurance claim values for ShipmentID: {0}.", shipment.ShipmentID));
+            }
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            postRequest.Variables.Add("action", "submitinsuranceclaim");
+            postRequest.Variables.Add("insureshipstorename", insurancePolicy.InsureShipStoreName);
+            postRequest.Variables.Add("createdwithapi", insurancePolicy.CreatedWithApi.ToString());
+            postRequest.Variables.Add("itemname", insurancePolicy.ItemName);
+            postRequest.Variables.Add("claimtype", insurancePolicy.ClaimType.Value.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("damagevalue", insurancePolicy.DamageValue.Value.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("submissiondate", insurancePolicy.SubmissionDate.Value.ToString("yyyy-MM-dd HH:mm:ss"));
+            postRequest.Variables.Add("claimid", insurancePolicy.ClaimID.Value.ToString(CultureInfo.InvariantCulture));
+
+            ProcessRequest(postRequest, "SubmitInsuranceClaim");
         }
 
         /// <summary>
@@ -379,7 +427,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("storecode", storeType.TangoCode);
                 postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
-                ProcessRequest(postRequest);
+                ProcessRequest(postRequest, "LogTrialShipments");
             }
             // Regular shipment logging
             else
@@ -481,7 +529,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
                 postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
 
-                XmlDocument xmlResponse = ProcessRequest(postRequest);
+                XmlDocument xmlResponse = ProcessRequest(postRequest, "LogShipmentDetails");
 
                 // Check for error
                 XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -514,7 +562,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
                 postRequest.Variables.Add("license", license.Key);
 
-                ProcessRequest(postRequest);
+                ProcessRequest(postRequest, "LogShipmentVoided");
             }
         }
 
@@ -544,7 +592,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "UpicPolicy");
 
             // check for errors
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -566,7 +614,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", store.EBayUserID);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "FreemiumStatus");
 
             return new LicenseAccountDetail(xmlResponse, store);
         }
@@ -610,7 +658,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("pay_zip", paymentInfo.CardBillingAddress.PostalCode);
             postRequest.Variables.Add("pay_country", "US");
 
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "FreemiumCreate");
             LicenseAccountDetail accountDetail = new LicenseAccountDetail(xmlResponse, store);
 
             UpdateLicense(store, accountDetail);
@@ -663,7 +711,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("action", "updateTrialGenericModuleInfo");
                 postRequest.Variables.Add("license", store.License);
 
-                ProcessRequest(postRequest);
+                ProcessRequest(postRequest, "UpdateTrialGenericModuleInfo");
             }
             else
             {
@@ -753,7 +801,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "AccountRequest");
 
             return new LicenseAccountDetail(xmlResponse, store);
         }
@@ -770,20 +818,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "ProcessTrialRequest");
 
             // Create the details
             TrialDetail trialDetail = new TrialDetail(xmlResponse, store);
 
             return trialDetail;
-        }
-
-        /// <summary>
-        /// Process the given request against the interapptive license server
-        /// </summary>
-        private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest)
-        {
-            return ProcessRequest(postRequest, "License");
         }
 
         /// <summary>

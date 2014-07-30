@@ -65,6 +65,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 Processed = true,
                 ProcessedDate = DateTime.UtcNow,
+                ShipDate = DateTime.UtcNow,
                 InsurancePolicy = new InsurancePolicyEntity
                 {
                     CreatedWithApi = true
@@ -217,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 
@@ -229,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 
@@ -240,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_UsesInsureShipSettings_ToDetermineEligibility_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 

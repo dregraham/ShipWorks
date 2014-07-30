@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 // Shipment was insured with the API, so check whether the age of the policy falls within the 
                 // grace period for voiding
                 TimeSpan gracePeriod = insureShipSettings.VoidPolicyMaximumAge;
-                if (shipment.ProcessedDate != null && DateTime.UtcNow.Subtract(shipment.ProcessedDate.Value) < gracePeriod)
+                if (DateTime.UtcNow.Subtract(shipment.ShipDate) < gracePeriod)
                 {
                     log.InfoFormat("The policy for shipment {0} is eligible for voiding with the InsureShip API.", shipment.ShipmentID);
                     voidable = true;
