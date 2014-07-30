@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.BrightPearl
+﻿namespace ShipWorks.Stores.Platforms.Brightpearl
 {
-    partial class BrightPearlAddStoreWizardPage
+    partial class BrightpearlAddStoreWizardPage
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.accountSettingsControl = new ShipWorks.Stores.Platforms.BrightPearl.BrightPearlStoreAccountSettingsControl();
+            this.accountSettingsControl = new ShipWorks.Stores.Platforms.Brightpearl.BrightpearlStoreAccountSettingsControl();
             this.SuspendLayout();
             // 
             // accountSettingsControl
@@ -53,7 +53,7 @@
 
         #endregion
 
-        private BrightPearlStoreAccountSettingsControl accountSettingsControl;
+        private BrightpearlStoreAccountSettingsControl accountSettingsControl;
 
     }
 }
