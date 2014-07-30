@@ -30,3 +30,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopperpress", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Shopperpress")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pe", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#WPeCommerce")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Zenventory", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Zenventory")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CRM", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#LimeLightCRM")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "LimeLight", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#LimeLightCRM")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Brightpearl", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Brightpearl")]

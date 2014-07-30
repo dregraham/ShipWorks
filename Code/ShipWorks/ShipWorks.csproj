@@ -2085,6 +2085,8 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
@@ -2213,21 +2215,21 @@
     <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.cs">
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.Designer.cs">
-      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.Designer.cs">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlServerTimeZoneType.cs" />
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreType.cs" />
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlServerTimeZoneType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.Designer.cs">
-      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlUtility.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlUtility.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7334,11 +7336,11 @@
     <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.resx">
-      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.resx">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.resx">
-      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.resx">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.resx">
       <DependentUpon>BuyDotComAccountSettingsControl.cs</DependentUpon>
@@ -10710,6 +10712,7 @@
     <None Include="Resources\solidcommerce.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
+    <Content Include="Resources\Stores\Icons\limelightcrm.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
     <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Resources\Stores\Icons\shopperpress.png" />
@@ -12298,7 +12301,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

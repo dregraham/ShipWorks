@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Sears,
         SolidCommerce,
         WebRequestTask,
-        BrightPearl,
+        Brightpearl,
         OrderDeskCart,
         LiveSite,
         Zenventory,
@@ -112,5 +112,8 @@ namespace ShipWorks.ApplicationCore.Logging
 
         [ApiPrivateLogSource]
         SureDone,
+
+        [ApiPrivateLogSource]
+        LimeLightCRM,
     }
 }
