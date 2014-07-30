@@ -67,6 +67,8 @@ namespace ShipWorks.Shipping.Insurance
                 }
 
                 itemName.Text = shipment.InsurancePolicy.ItemName;
+
+                description.Text = shipment.InsurancePolicy.Description;
             }
         }
 
@@ -86,7 +88,7 @@ namespace ShipWorks.Shipping.Insurance
                 InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(storeEntity);
                 InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
 
-                claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, damageValue.Amount);
+                claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

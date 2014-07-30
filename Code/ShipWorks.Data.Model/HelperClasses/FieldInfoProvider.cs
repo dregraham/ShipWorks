@@ -1370,6 +1370,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipStoreName", typeof(System.String), false, false, false, false,  (int)InsurancePolicyFieldIndex.InsureShipStoreName, 75, 0, 0);
 			base.AddElementFieldInfo("InsurancePolicyEntity", "CreatedWithApi", typeof(System.Boolean), false, false, false, false,  (int)InsurancePolicyFieldIndex.CreatedWithApi, 0, 0, 0);
 			base.AddElementFieldInfo("InsurancePolicyEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.ItemName, 255, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "Description", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.Description, 255, 0, 0);
 			base.AddElementFieldInfo("InsurancePolicyEntity", "ClaimType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimType, 0, 0, 10);
 			base.AddElementFieldInfo("InsurancePolicyEntity", "DamageValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InsurancePolicyFieldIndex.DamageValue, 0, 4, 19);
 			base.AddElementFieldInfo("InsurancePolicyEntity", "SubmissionDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.SubmissionDate, 0, 0, 0);

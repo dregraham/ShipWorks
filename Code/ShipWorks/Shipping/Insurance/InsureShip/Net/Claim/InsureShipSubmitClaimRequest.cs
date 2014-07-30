@@ -51,13 +51,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             postData.Add("distributor_id", Settings.DistributorID);
             postData.Add("store_id", Affiliate.InsureShipStoreID);
             postData.Add("store_name", Affiliate.InsureShipPolicyID);
-            postData.Add("email", Shipment.OriginEmail);
+            postData.Add("email", Shipment.ShipEmail);
             postData.Add("firstname", Shipment.ShipFirstName);
             postData.Add("lastname", Shipment.ShipLastName);
             postData.Add("item_name", Shipment.InsurancePolicy.ItemName);
+            postData.Add("description", Shipment.InsurancePolicy.Description);
             postData.Add("type", Shipment.InsurancePolicy.ClaimType.Value.ToString());
             postData.Add("damage_value", Shipment.InsurancePolicy.DamageValue.Value.ToString());
-            postData.Add("shipping_date", Shipment.ShipDate.ToString("d"));
+            postData.Add("shipping_date", Shipment.ShipDate.ToString("MM/dd/yyyy"));
             postData.Add("shipping_city", Shipment.ShipCity);
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);

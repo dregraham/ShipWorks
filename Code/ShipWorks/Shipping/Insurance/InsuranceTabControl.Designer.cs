@@ -55,9 +55,10 @@
             // 
             // insuranceSubmitClaimControl
             // 
+            this.insuranceSubmitClaimControl.ClaimSubmitted = null;
             this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(7, 124);
             this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
-            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(287, 131);
+            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(287, 255);
             this.insuranceSubmitClaimControl.TabIndex = 2;
             // 
             // InsuranceTabControl
@@ -68,7 +69,7 @@
             this.Controls.Add(this.messageLabel);
             this.Controls.Add(this.insuranceViewClaimControl);
             this.Name = "InsuranceTabControl";
-            this.Size = new System.Drawing.Size(471, 302);
+            this.Size = new System.Drawing.Size(471, 398);
             this.ResumeLayout(false);
             this.PerformLayout();
 

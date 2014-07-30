@@ -592,7 +592,7 @@ namespace ShipWorks.Shipping
             this.insuranceTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.insuranceTabControl.Location = new System.Drawing.Point(3, 3);
             this.insuranceTabControl.Name = "insuranceTabControl1";
-            this.insuranceTabControl.Size = new System.Drawing.Size(342, 317);
+            this.insuranceTabControl.Size = new System.Drawing.Size(342, 517);
             this.insuranceTabControl.TabIndex = 0;
             // 
             // ShippingDlg

@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             shipment.InsurancePolicy.ClaimID = 1;
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M);
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             try
             {
-                testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
             }
             catch(InsureShipException)
             { }
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             shipment.Processed = false;
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
         }
 
         [TestMethod]
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             try
             {
-                testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
             }
             catch(InsureShipException)
             { }
@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
         }
 
         [TestMethod]
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             try
             {
-                testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
             }
             catch (InsureShipException)
             { }
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_LogsMessage_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             log.Verify(l => l.InfoFormat("Shipment {0} is eligible for submitting a claim to InsureShip.", shipment.ShipmentID), Times.Once());
         }
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_SetsClaimType_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             Assert.AreEqual((int)InsureShipClaimType.Damage, shipment.InsurancePolicy.ClaimType);
         }
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_SetsItemName_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             Assert.AreEqual("item 1", shipment.InsurancePolicy.ItemName);
         }
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_SetsDamageValue_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             Assert.AreEqual(1.00M, shipment.InsurancePolicy.DamageValue);
         }
@@ -183,7 +183,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Submit_SetsSubmissionDate_WhenShipmentIsEligible_Test()
         {
             DateTime testBegin = DateTime.UtcNow;
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             DateTime testEnd = DateTime.UtcNow;
 
@@ -195,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_LogsMessage_WhenSubmittingRequest_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             log.Verify(l => l.InfoFormat("Submitting claim to InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
         }
@@ -203,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_DelegatesToRequestFactory_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             requestFactory.Verify(f => f.CreateSubmitClaimRequest(shipment, affiliate), Times.Once());
         }
@@ -211,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_DelegatesToRequest_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             request.Verify(r => r.Submit(), Times.Once());
         }
@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_LogsMessage_WhenProcessingResponse_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             log.Verify(l => l.InfoFormat("Processing claim response from InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
         }
@@ -227,7 +227,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_DelegatesToResponse_WhenShipmentIsEligible_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             response.Verify(r => r.Process(), Times.Once());
         }
@@ -235,7 +235,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Submit_LogsMessage_WhenProcessingIsSuccessful_Test()
         {
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
 
             log.Verify(l => l.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
                                    shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
@@ -248,7 +248,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
             response.Setup(r => r.Process()).Throws(responseException);
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
         }
 
         [TestMethod]
@@ -259,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             try
             {
-                testObject.Submit(InsureShipClaimType.Damage, "item 1", 1.00M);
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc",  1.00M);
             }
             catch(InsureShipException)
             { }

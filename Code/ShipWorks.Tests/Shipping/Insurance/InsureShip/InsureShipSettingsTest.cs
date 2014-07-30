@@ -13,6 +13,19 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
     public class InsureShipSettingsTest
     {
         InsureShipSettings testObject = new InsureShipSettings();
+        private bool initialUseTestServer;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            initialUseTestServer = testObject.UseTestServer;
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            testObject.UseTestServer = initialUseTestServer;
+        }
 
         [TestMethod]
         public void UseTestServer_SavesAsTrue()
@@ -37,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("test2", testObject.Username);
+            Assert.AreEqual("shipworks", testObject.Username);
         }
 
         [TestMethod]
@@ -53,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("password", testObject.Password);
+            Assert.AreEqual("shipworks123", testObject.Password);
         }
 
         [TestMethod]
@@ -69,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("D00002", testObject.DistributorID);
+            Assert.AreEqual("D00050", testObject.DistributorID);
         }
 
         [TestMethod]

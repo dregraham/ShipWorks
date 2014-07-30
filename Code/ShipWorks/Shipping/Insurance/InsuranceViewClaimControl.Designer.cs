@@ -36,6 +36,8 @@
             this.itemName = new System.Windows.Forms.Label();
             this.labelSubmissionDate = new System.Windows.Forms.Label();
             this.submittedOn = new System.Windows.Forms.Label();
+            this.descriptionLabel = new System.Windows.Forms.Label();
+            this.description = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // claimTypeLabel
@@ -92,7 +94,7 @@
             // labelSubmissionDate
             // 
             this.labelSubmissionDate.AutoSize = true;
-            this.labelSubmissionDate.Location = new System.Drawing.Point(7, 72);
+            this.labelSubmissionDate.Location = new System.Drawing.Point(7, 94);
             this.labelSubmissionDate.Name = "labelSubmissionDate";
             this.labelSubmissionDate.Size = new System.Drawing.Size(74, 13);
             this.labelSubmissionDate.TabIndex = 6;
@@ -101,15 +103,34 @@
             // submittedOn
             // 
             this.submittedOn.AutoSize = true;
-            this.submittedOn.Location = new System.Drawing.Point(88, 72);
+            this.submittedOn.Location = new System.Drawing.Point(88, 94);
             this.submittedOn.Name = "submittedOn";
             this.submittedOn.Size = new System.Drawing.Size(0, 13);
             this.submittedOn.TabIndex = 7;
+            // 
+            // descriptionLabel
+            // 
+            this.descriptionLabel.AutoSize = true;
+            this.descriptionLabel.Location = new System.Drawing.Point(18, 72);
+            this.descriptionLabel.Name = "descriptionLabel";
+            this.descriptionLabel.Size = new System.Drawing.Size(63, 13);
+            this.descriptionLabel.TabIndex = 8;
+            this.descriptionLabel.Text = "Description:";
+            // 
+            // description
+            // 
+            this.description.AutoSize = true;
+            this.description.Location = new System.Drawing.Point(87, 72);
+            this.description.Name = "description";
+            this.description.Size = new System.Drawing.Size(0, 13);
+            this.description.TabIndex = 9;
             // 
             // InsuranceViewClaimControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.description);
+            this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.submittedOn);
             this.Controls.Add(this.labelSubmissionDate);
             this.Controls.Add(this.itemName);
@@ -119,7 +140,7 @@
             this.Controls.Add(this.damageValueLabel);
             this.Controls.Add(this.claimTypeLabel);
             this.Name = "InsuranceViewClaimControl";
-            this.Size = new System.Drawing.Size(332, 93);
+            this.Size = new System.Drawing.Size(332, 319);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,5 +156,7 @@
         private System.Windows.Forms.Label itemName;
         private System.Windows.Forms.Label labelSubmissionDate;
         private System.Windows.Forms.Label submittedOn;
+        private System.Windows.Forms.Label descriptionLabel;
+        private System.Windows.Forms.Label description;
     }
 }

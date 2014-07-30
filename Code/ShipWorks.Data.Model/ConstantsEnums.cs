@@ -4010,6 +4010,8 @@ namespace ShipWorks.Data.Model
 		CreatedWithApi,
 		///<summary>ItemName. </summary>
 		ItemName,
+		///<summary>Description. </summary>
+		Description,
 		///<summary>ClaimType. </summary>
 		ClaimType,
 		///<summary>DamageValue. </summary>

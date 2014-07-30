@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Insurance
 
             claimType.Text = EnumHelper.GetDescription((InsureShipClaimType) insurancePolicy.ClaimType);
             itemName.Text = insurancePolicy.ItemName;
+            description.Text = insurancePolicy.Description;
             damageValue.Text = insurancePolicy.DamageValue.Value.ToString("C");
             submittedOn.Text = insurancePolicy.SubmissionDate.Value.ToLocalTime().ToString("g");
 
@@ -51,6 +52,7 @@ namespace ShipWorks.Shipping.Insurance
             itemName.Text = string.Empty;
             damageValue.Text = string.Empty;
             submittedOn.Text = string.Empty;
+            description.Text = string.Empty;
         }
     }
 }

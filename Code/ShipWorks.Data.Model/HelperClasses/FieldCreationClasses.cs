@@ -8487,6 +8487,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ItemName);}
 		}
+		/// <summary>Creates a new InsurancePolicyEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.Description);}
+		}
 		/// <summary>Creates a new InsurancePolicyEntity.ClaimType field instance</summary>
 		public static EntityField2 ClaimType
 		{

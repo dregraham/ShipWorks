@@ -90,9 +90,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// constructor with he updated claim data.
         /// </summary>
         /// <param name="claimType">Type of the claim.</param>
+        /// <param name="text"></param>
         /// <param name="items">The items.</param>
         /// <param name="damageAmount">The damage amount.</param>
-        public void Submit(InsureShipClaimType claimType, string items, decimal damageAmount)
+        public void Submit(InsureShipClaimType claimType, string items, string description, decimal damageAmount)
         {   
             if (IsShipmentEligibleToSubmitClaim())
             {
@@ -100,6 +101,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 shipment.InsurancePolicy.ItemName = items;
                 shipment.InsurancePolicy.DamageValue = damageAmount;
                 shipment.InsurancePolicy.SubmissionDate = DateTime.UtcNow;
+                shipment.InsurancePolicy.Description = description;
+
                 try
                 {
                     log.InfoFormat("Submitting claim to InsureShip for shipment {0}.", shipment.ShipmentID);

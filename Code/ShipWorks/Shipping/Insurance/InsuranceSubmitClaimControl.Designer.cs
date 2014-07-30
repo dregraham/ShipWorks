@@ -35,6 +35,8 @@
             this.submitClaim = new System.Windows.Forms.Button();
             this.claimType = new System.Windows.Forms.ComboBox();
             this.damageValue = new ShipWorks.UI.Controls.MoneyTextBox();
+            this.description = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // itemNameLabel
@@ -68,15 +70,15 @@
             // 
             this.itemName.Location = new System.Drawing.Point(87, 55);
             this.itemName.Name = "itemName";
-            this.itemName.Size = new System.Drawing.Size(121, 20);
-            this.itemName.TabIndex = 7;
+            this.itemName.Size = new System.Drawing.Size(180, 20);
+            this.itemName.TabIndex = 2;
             // 
             // submitClaim
             // 
-            this.submitClaim.Location = new System.Drawing.Point(133, 81);
+            this.submitClaim.Location = new System.Drawing.Point(192, 200);
             this.submitClaim.Name = "submitClaim";
             this.submitClaim.Size = new System.Drawing.Size(75, 23);
-            this.submitClaim.TabIndex = 9;
+            this.submitClaim.TabIndex = 4;
             this.submitClaim.Text = "Submit Claim";
             this.submitClaim.UseVisualStyleBackColor = true;
             this.submitClaim.Click += new System.EventHandler(this.OnSubmitClaimClick);
@@ -88,7 +90,7 @@
             this.claimType.Location = new System.Drawing.Point(87, 3);
             this.claimType.Name = "claimType";
             this.claimType.Size = new System.Drawing.Size(121, 21);
-            this.claimType.TabIndex = 10;
+            this.claimType.TabIndex = 0;
             // 
             // damageValue
             // 
@@ -100,14 +102,33 @@
             this.damageValue.IgnoreSet = false;
             this.damageValue.Location = new System.Drawing.Point(87, 29);
             this.damageValue.Name = "damageValue";
-            this.damageValue.Size = new System.Drawing.Size(121, 20);
-            this.damageValue.TabIndex = 11;
+            this.damageValue.Size = new System.Drawing.Size(180, 20);
+            this.damageValue.TabIndex = 1;
             this.damageValue.Text = "$0.00";
+            // 
+            // description
+            // 
+            this.description.Location = new System.Drawing.Point(87, 81);
+            this.description.Multiline = true;
+            this.description.Name = "description";
+            this.description.Size = new System.Drawing.Size(180, 113);
+            this.description.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(20, 84);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Description:";
             // 
             // InsuranceSubmitClaimControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.description);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.damageValue);
             this.Controls.Add(this.claimType);
             this.Controls.Add(this.submitClaim);
@@ -116,7 +137,7 @@
             this.Controls.Add(this.damageValueLabel);
             this.Controls.Add(this.claimTypeLabel);
             this.Name = "InsuranceSubmitClaimControl";
-            this.Size = new System.Drawing.Size(287, 131);
+            this.Size = new System.Drawing.Size(287, 235);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,5 +152,7 @@
         private System.Windows.Forms.Button submitClaim;
         private System.Windows.Forms.ComboBox claimType;
         private UI.Controls.MoneyTextBox damageValue;
+        private System.Windows.Forms.TextBox description;
+        private System.Windows.Forms.Label label1;
     }
 }

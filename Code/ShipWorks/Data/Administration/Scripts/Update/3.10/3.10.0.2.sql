@@ -20,6 +20,7 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [InsureShipStoreName] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CreatedWithApi] [bit] NOT NULL,
 [ItemName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ClaimType] [int] NULL,
 [DamageValue] [money] NULL,
 [SubmissionDate] [datetime] NULL,

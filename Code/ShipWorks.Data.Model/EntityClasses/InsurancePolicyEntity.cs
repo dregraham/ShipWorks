@@ -26,7 +26,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 
 	/// <summary>
 	/// Entity class which represents the entity 'InsurancePolicy'.<br/><br/>
@@ -35,8 +34,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	[Serializable]
 	public partial class InsurancePolicyEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
@@ -46,7 +44,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -132,7 +129,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -317,7 +313,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -458,7 +453,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -482,6 +476,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ItemName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Description", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ClaimType", fieldHashtable);
@@ -545,7 +542,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 		}
@@ -645,6 +641,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.ItemName, true); }
 			set	{ SetValue((int)InsurancePolicyFieldIndex.ItemName, value); }
+		}
+
+		/// <summary> The Description property of the Entity InsurancePolicy<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "InsurancePolicy"."Description"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Description
+		{
+			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.Description, true); }
+			set	{ SetValue((int)InsurancePolicyFieldIndex.Description, value); }
 		}
 
 		/// <summary> The ClaimType property of the Entity InsurancePolicy<br/><br/>
@@ -763,7 +770,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code
