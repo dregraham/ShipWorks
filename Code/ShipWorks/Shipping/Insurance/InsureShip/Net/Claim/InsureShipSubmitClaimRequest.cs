@@ -71,12 +71,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("carrier", shipmentType.ShipmentTypeName);
 
-            // If using the test server, append the test affiliate.
-            if (Settings.UseTestServer)
-            {
-                postData.Add("affiliate_id", "A0000000003");
-            }
-
             return postData;
         }
     }

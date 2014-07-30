@@ -70,12 +70,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("item_name", string.Join(",", Shipment.Order.OrderItems.Select(oi => oi.Name)));
             postData.Add("carrier", shipmentType.ShipmentTypeName);
             postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment));
-            
-            // If using the test server, append the test affiliate.
-            if (Settings.UseTestServer)
-            {            
-                postData.Add("affiliate_id", "A0000000003");
-            }
 
             return postData;
         }
