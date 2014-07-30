@@ -51,12 +51,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
             postData.Add("firstname", Shipment.ShipFirstName);
             postData.Add("lastname", Shipment.ShipLastName);
             
-            // If using the test server, append the test affiliate.
-            if (Settings.UseTestServer)
-            {            
-                postData.Add("affiliate_id", "A0000000003");
-            }
-
             return postData;
         }
     }
