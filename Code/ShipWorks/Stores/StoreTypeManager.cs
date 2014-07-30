@@ -144,7 +144,8 @@ namespace ShipWorks.Stores
             {
 				StoreTypeCode.LiveSite,
                 StoreTypeCode.SureDone,
-				StoreTypeCode.Fortune3
+				StoreTypeCode.Fortune3,
+                StoreTypeCode.LimeLightCRM,
             };
 
             return disabledTypes.Contains(typeCode);
