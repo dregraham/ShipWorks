@@ -17,6 +17,8 @@ namespace ShipWorks.Shipping.Insurance
     /// </summary>
     public partial class InsuranceTabControl : UserControl
     {
+        private ShipmentEntity loadedShipment;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -30,7 +32,7 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
-        /// Load claim data into the control.  If multiple shipments are passed, an message is displayed informing
+        /// Load claim data into the control.  If multiple shipments are passed, a message is displayed informing
         /// the user to select a single shipment to see insurance info.
         /// </summary>
         /// <param name="shipments"></param>
@@ -42,17 +44,22 @@ namespace ShipWorks.Shipping.Insurance
 
             if (!IsValid(shipments))
             {
+                loadedShipment = null;
                 return;
             }
 
+            loadedShipment = shipments.First();
 
-            ShipmentEntity shipment = shipments.First();
-            ShipmentTypeDataService.LoadInsuranceData(shipment);
-
-            if (shipment.InsurancePolicy != null)
+            if (loadedShipment.InsurancePolicy == null)
             {
-                ShowViewClaim(shipment);
-                ShowEditClaim(shipment);
+                // Only load insurance data if it is not already loaded so that in-memory changes are not overwritten
+                ShipmentTypeDataService.LoadInsuranceData(loadedShipment);   
+            }
+
+            if (loadedShipment.InsurancePolicy != null)
+            {
+                ShowViewClaim(loadedShipment);
+                ShowEditClaim(loadedShipment);
             }
         }
 
@@ -63,6 +70,13 @@ namespace ShipWorks.Shipping.Insurance
         /// <returns>True if the the view or edit control can be shown.  False otherwise.</returns>
         private bool IsValid(List<ShipmentEntity> shipments)
         {
+            if (!shipments.Any())
+            {
+                messageLabel.Text = "No shipments are selected. Select a single shipment to view insurance information.";
+                messageLabel.Visible = true;
+                return false; 
+            }
+
             if (shipments.Count > 1)
             {
                 messageLabel.Text = "Multiple shipments are selected. Select a single shipment to view insurance information.";
@@ -153,6 +167,17 @@ namespace ShipWorks.Shipping.Insurance
                     // Show the amount of savings if ShipWorks insurance was used.
                     messageLabel.Text += string.Format("You could have saved ${0:0.00} using ShipWorks insurance.", cost.Carrier - cost.ShipWorks);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Save any changes to the shipment
+        /// </summary>
+        public void SaveToShipments()
+        {
+            if (insuranceSubmitClaimControl.Visible && loadedShipment != null)
+            {
+                insuranceSubmitClaimControl.SaveToPolicy(loadedShipment.InsurancePolicy);
             }
         }
     }

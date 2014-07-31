@@ -56,18 +56,10 @@ namespace ShipWorks.Shipping.Insurance
 
             if (show)
             {
-                if (shipment.InsurancePolicy.ClaimType.HasValue)
-                {
-                    claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType;
-                }
-
-                if (shipment.InsurancePolicy.DamageValue.HasValue)
-                {
-                    damageValue.Amount = shipment.InsurancePolicy.DamageValue.Value;
-                }
-
+                // Make sure that controls are reset even if the data is empty
+                claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
+                damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(0);
                 itemName.Text = shipment.InsurancePolicy.ItemName;
-
                 description.Text = shipment.InsurancePolicy.Description;
             }
         }
@@ -104,6 +96,17 @@ namespace ShipWorks.Shipping.Insurance
                 log.Error(ex);
                 MessageHelper.ShowError(this, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Save any changes to the specified policy
+        /// </summary>
+        public void SaveToPolicy(InsurancePolicyEntity insurancePolicy)
+        {
+            insurancePolicy.ClaimType = (int) claimType.SelectedValue;
+            insurancePolicy.DamageValue = damageValue.Amount;
+            insurancePolicy.ItemName = itemName.Text;
+            insurancePolicy.Description = description.Text;
         }
     }
 }

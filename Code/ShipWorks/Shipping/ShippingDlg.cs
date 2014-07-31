@@ -1353,6 +1353,12 @@ namespace ShipWorks.Shipping
                     }                    
                 }
             }
+
+            // Save the insurance data if we're switching away from the insurance tab
+            if (tabControl.SelectedTab == tabPageInsurance)
+            {
+                insuranceTabControl.SaveToShipments();
+            }
         }
 
         /// <summary>
@@ -1384,6 +1390,8 @@ namespace ShipWorks.Shipping
             {
                 ServiceControl.SaveToShipments();
             }
+
+            insuranceTabControl.SaveToShipments();
 
             foreach (ShipmentEntity shipment in shipments)
             {
