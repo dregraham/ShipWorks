@@ -8,20 +8,17 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.Brightpearl
+namespace ShipWorks.Stores.Platforms.Zenventory
 {
-    /// <summary>
-    /// BrightPearlStoreType
-    /// </summary>
-    public class BrightpearlStoreType : GenericModuleStoreType
+    public class ZenventoryStoreType : GenericModuleStoreType
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrightpearlStoreType"/> class.
+        /// Initializes a new instance of the <see cref="ZenventoryStoreType"/> class.
         /// </summary>
-        /// <param name="store"></param>
-        public BrightpearlStoreType(StoreEntity store)
+        public ZenventoryStoreType(StoreEntity store) 
             : base(store)
         {
+
         }
 
         /// <summary>
@@ -31,9 +28,10 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         {
             get
             {
-                return StoreTypeCode.Brightpearl;
+                return StoreTypeCode.Zenventory;
             }
         }
+
 
         /// <summary>
         /// Get the log source
@@ -42,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         {
             get
             {
-                return ApiLogSource.Brightpearl;
+                return ApiLogSource.Zenventory;
             }
         }
 
@@ -51,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new BrightpearlStoreAccountSettingsControl();
+            return new ZenventoryStoreAccountSettingsControl();
         }
 
         /// <summary>
@@ -59,11 +57,20 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
-            List<WizardPage> pages = new List<WizardPage>();
-
-            pages.Add(new BrightpearlAddStoreWizardPage());
+            List<WizardPage> pages = new List<WizardPage> {new ZenventoryAddStoreWizardPage()};
 
             return pages;
+        }
+
+        /// <summary>
+        /// Identifies this store type
+        /// </summary>
+        protected override string InternalLicenseIdentifier
+        {
+            get
+            {
+                return ((GenericModuleStoreEntity)Store).ModuleUsername;
+            }
         }
     }
 }
