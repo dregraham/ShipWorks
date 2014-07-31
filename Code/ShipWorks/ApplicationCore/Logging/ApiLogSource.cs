@@ -52,6 +52,7 @@ namespace ShipWorks.ApplicationCore.Logging
         LiveSite,
         Zenventory,
 		Fortune3,
+        OpenCart,
 		
         [ApiPrivateLogSource]
         UspsNoPostage,
