@@ -270,5 +270,10 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
         [StoreTypeIcon("limelightcrm")]
         LimeLightCRM = 53,
+
+        [Description("OpenCart")]
+        [StoreTypeIdentity("OPENCART", "OCT")]
+        [StoreTypeIcon("opencart")]
+        OpenCart = 54,
     }
 }
