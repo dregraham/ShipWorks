@@ -45,8 +45,18 @@
     </hudson.triggers.SCMTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>E:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
+	<hudson.tasks.Shell>
+      <command># Use the current branch name to make sure the registry key is added since this could be kicked off from multiple nodes
+# It may be worthwhile to move this to its own job at some point.
+KEY=$(echo C:\\\\jenkins-builds\\\\${GIT_BRANCH#*/}\\\\Artifacts\\\\Application)
+
+echo $KEY
+# Use the rake task to add the registry key with a randomly generated GUID value
+# and write out the SQL session file to point to the seed database
+rake setup:registry[$KEY] &quot;setup:sqlSession[$KEY,ShipWorks_SeedData]&quot;</command>
+    </hudson.tasks.Shell>
     <hudson.tasks.Shell>
       <command>rake rebuild[true]</command>
     </hudson.tasks.Shell>
@@ -58,7 +68,7 @@
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
-      <parsingRulesPath>e:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
       <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>

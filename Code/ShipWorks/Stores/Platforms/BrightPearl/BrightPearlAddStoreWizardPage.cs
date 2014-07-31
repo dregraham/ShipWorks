@@ -12,17 +12,17 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.BrightPearl
+namespace ShipWorks.Stores.Platforms.Brightpearl
 {
     /// <summary>
     /// Add Store Wizard page for configuring BrightPearl credentials
     /// </summary>
-    public partial class BrightPearlAddStoreWizardPage : AddStoreWizardPage
+    public partial class BrightpearlAddStoreWizardPage : AddStoreWizardPage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrightPearlAddStoreWizardPage"/> class.
+        /// Initializes a new instance of the <see cref="BrightpearlAddStoreWizardPage"/> class.
         /// </summary>
-        public BrightPearlAddStoreWizardPage()
+        public BrightpearlAddStoreWizardPage()
         {
             InitializeComponent();
             

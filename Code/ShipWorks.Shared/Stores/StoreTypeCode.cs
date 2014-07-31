@@ -201,10 +201,10 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
-		[Description("BrightPearl")]
+		[Description("Brightpearl")]
         [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
         [StoreTypeIcon("brightpearl")]
-        BrightPearl = 38,
+        Brightpearl = 38,
 		
 		[Description("OrderDesk")]
         [StoreTypeIdentity("ORDERDESK", "ORD")]
@@ -264,6 +264,16 @@ namespace ShipWorks.Stores
         [Description("Zenventory")]
         [StoreTypeIdentity("ZENVENTORY", "ZVN")]
         [StoreTypeIcon("zenventory")]
-        Zenventory = 51
+        Zenventory = 51,
+
+        [Description("Lime Light CRM")]
+        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
+        [StoreTypeIcon("limelightcrm")]
+        LimeLightCRM = 53,
+
+        [Description("OpenCart")]
+        [StoreTypeIdentity("OPENCART", "OCT")]
+        [StoreTypeIcon("opencart")]
+        OpenCart = 54,
     }
 }

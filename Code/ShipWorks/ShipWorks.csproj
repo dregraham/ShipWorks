@@ -2109,7 +2109,10 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
@@ -2237,21 +2240,21 @@
     <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.cs">
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.Designer.cs">
-      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.Designer.cs">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlServerTimeZoneType.cs" />
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreType.cs" />
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlServerTimeZoneType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.Designer.cs">
-      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\BrightPearl\BrightPearlUtility.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlUtility.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7358,11 +7361,11 @@
     <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlAddStoreWizardPage.resx">
-      <DependentUpon>BrightPearlAddStoreWizardPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.resx">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\BrightPearl\BrightPearlStoreAccountSettingsControl.resx">
-      <DependentUpon>BrightPearlStoreAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.resx">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.resx">
       <DependentUpon>BuyDotComAccountSettingsControl.cs</DependentUpon>
@@ -10735,6 +10738,8 @@
     <None Include="Resources\solidcommerce.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
+    <Content Include="Resources\Stores\Icons\limelightcrm.png" />
+    <Content Include="Resources\Stores\Icons\opencart.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
     <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Resources\Stores\Icons\shopperpress.png" />

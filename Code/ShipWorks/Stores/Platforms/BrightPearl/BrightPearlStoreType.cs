@@ -8,18 +8,18 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.BrightPearl
+namespace ShipWorks.Stores.Platforms.Brightpearl
 {
     /// <summary>
     /// BrightPearlStoreType
     /// </summary>
-    public class BrightPearlStoreType : GenericModuleStoreType
+    public class BrightpearlStoreType : GenericModuleStoreType
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrightPearlStoreType"/> class.
+        /// Initializes a new instance of the <see cref="BrightpearlStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public BrightPearlStoreType(StoreEntity store)
+        public BrightpearlStoreType(StoreEntity store)
             : base(store)
         {
         }
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         {
             get
             {
-                return StoreTypeCode.BrightPearl;
+                return StoreTypeCode.Brightpearl;
             }
         }
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         {
             get
             {
-                return ApiLogSource.BrightPearl;
+                return ApiLogSource.Brightpearl;
             }
         }
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new BrightPearlStoreAccountSettingsControl();
+            return new BrightpearlStoreAccountSettingsControl();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         {
             List<WizardPage> pages = new List<WizardPage>();
 
-            pages.Add(new BrightPearlAddStoreWizardPage());
+            pages.Add(new BrightpearlAddStoreWizardPage());
 
             return pages;
         }
