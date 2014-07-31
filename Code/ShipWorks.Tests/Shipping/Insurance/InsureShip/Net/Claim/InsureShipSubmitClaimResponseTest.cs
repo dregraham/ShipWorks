@@ -23,13 +23,12 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         private Mock<InsureShipRequestBase> request;
 
         private Mock<IInsureShipResponseFactory> responseFactory;
-        private Mock<HttpWebResponse> response = new Mock<HttpWebResponse>();
 
         private Mock<ILog> log;
 
         private ShipmentEntity shipment;
 
-        private MemoryStream responseStream;
+
         private StreamWriter writer;
 
         [TestInitialize]
@@ -54,14 +53,10 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
             // Setup the simulated response from the request
             string simulatedResponseBody = "{\"claim_id\":\"312\",\"message\":\"Claim created successfully with claim_id 312\"}";
-            responseStream = new MemoryStream(Encoding.UTF8.GetBytes(simulatedResponseBody));
-
-            response = new Mock<HttpWebResponse>();
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
-            response.Setup(r => r.GetResponseStream()).Returns(responseStream);
 
             request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object, "Sample");
-            request.Setup(r => r.RawResponse).Returns(response.Object);
+            request.Setup(r => r.ResponseContent).Returns(simulatedResponseBody);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.OK);
 
             testObject = new InsureShipSubmitClaimResponse(request.Object, log.Object);
         }
@@ -75,12 +70,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
                 writer.Close();
                 writer.Dispose();
             }
-
-            if (responseStream != null)
-            {
-                responseStream.Close();
-                responseStream.Dispose();
-            }
         }
 
         [TestMethod]
@@ -88,14 +77,14 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             testObject.Process();
 
-            request.Verify(r => r.RawResponse, Times.Once());
+            request.Verify(r => r.ResponseContent, Times.Once());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
             testObject.Process();
         }
@@ -103,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         [TestMethod]
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
             try
             {
@@ -119,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
             testObject.Process();
         }
@@ -129,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
             testObject.Process();
         }
@@ -138,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
             try
             {
@@ -153,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         [TestMethod]
         public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
             try
             {
@@ -169,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         public void Process_SuccessfulResponse_Test()
         {
             // Response code of 200 is success
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.OK);
 
             testObject.Process();
         }
@@ -188,20 +177,17 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             // Setup the simulated response from the request
             const string simulatedResponseBody = "{\"claim_id\":\"\",\"message\":\"Claim created successfully with claim_id 312\"}";
-
-            responseStream = new MemoryStream(Encoding.UTF8.GetBytes(simulatedResponseBody));
-            response.Setup(r => r.GetResponseStream()).Returns(responseStream);
+            request.Setup(r => r.ResponseContent).Returns(simulatedResponseBody);
 
             testObject.Process();            
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipException))]
-        public void Process_ThrowsInsureShipException_WhenResponseStreamIsEmpty_Test()
+        public void Process_ThrowsInsureShipException_WhenResponseContentIsEmpty_Test()
         {
             // Setup the simulated response from the request
-            responseStream = new MemoryStream(Encoding.UTF8.GetBytes(string.Empty));
-            response.Setup(r => r.GetResponseStream()).Returns(responseStream);
+            request.Setup(r => r.ResponseContent).Returns(string.Empty);
 
             testObject.Process();
         }
@@ -210,7 +196,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         [ExpectedException(typeof(InsureShipException))]
         public void Process_ThrowsInsureShipException_WhenResponseStreamIsNull_Test()
         {
-            response.Setup(r => r.GetResponseStream()).Returns((Stream)null);
+            request.Setup(r => r.ResponseContent).Returns((string) null);
 
             testObject.Process();
         }

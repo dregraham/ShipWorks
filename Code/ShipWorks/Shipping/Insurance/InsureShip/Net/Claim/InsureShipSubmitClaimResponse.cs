@@ -37,10 +37,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// <exception cref="InsureShipResponseException"></exception>
         public InsureShipResponseCode Process()
         {
-            HttpWebResponse rawResponse = request.RawResponse;
-
-            InsureShipResponseCode responseCode = ValidateInsureShipResponse(rawResponse);
-            SaveToShipment(rawResponse);
+            InsureShipResponseCode responseCode = ValidateInsureShipResponse(request.ResponseStatusCode);
+            SaveToShipment(request.ResponseContent);
 
             return responseCode;
         }
@@ -48,20 +46,18 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// <summary>
         /// Validates the response making sure the claim was submitted correctly.
         /// </summary>
-        /// <param name="rawResponse">The raw response.</param>
         /// <returns>The InsureShipResponseCode value based on the HttpWebResponse.</returns>
-        private InsureShipResponseCode ValidateInsureShipResponse(HttpWebResponse rawResponse)
+        private InsureShipResponseCode ValidateInsureShipResponse(HttpStatusCode responseStatusCode)
         {
             InsureShipResponseCode responseCode;
 
             try
             {
-                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)rawResponse.StatusCode).ToString(CultureInfo.InvariantCulture));
+                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int) responseStatusCode).ToString(CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {
-                int statusCode = request.RawResponse != null ? (int)rawResponse.StatusCode : -0;
-                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, statusCode);
+                string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, (int) responseStatusCode);
 
                 log.Error(message);
                 throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message);
@@ -71,8 +67,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             if (responseCode != InsureShipResponseCode.OK)
             {
                 // Response code indicates the claim did not go through
-                int statusCode = request.RawResponse != null ? (int)rawResponse.StatusCode : -0;
-                string message = string.Format("An error occurred trying to submit a claim for shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, statusCode);
+                string message = string.Format("An error occurred trying to submit a claim for shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, (int) responseStatusCode);
 
                 log.Error(message);
                 throw new InsureShipResponseException(responseCode, message);
@@ -84,23 +79,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         /// <summary>
         /// Reads the response and assigns the claim identifier on the shipment's insurance policy.
         /// </summary>
-        /// <param name="rawResponse">The raw response.</param>
-        private void SaveToShipment(HttpWebResponse rawResponse)
+        /// <param name="responseContent">The raw response.</param>
+        private void SaveToShipment(string responseContent)
         {
             try
             {
-                string responseBody = string.Empty;
-                using (Stream responseStream = rawResponse.GetResponseStream())
-                {
-                    using (StreamReader reader = new StreamReader(responseStream))
-                    {
-                        responseBody = reader.ReadToEnd();
-                    }
-                }
-
                 // Response comes back in the format of: {"claim_id":"312","message":"Claim created successfully with claim_id 312"}
-                string claimID = (string) JObject.Parse(responseBody).SelectToken("claim_id");
-                request.Shipment.InsurancePolicy.ClaimID = long.Parse(claimID);
+                string claimId = (string)JObject.Parse(responseContent).SelectToken("claim_id");
+                request.Shipment.InsurancePolicy.ClaimID = long.Parse(claimId);
             }
             catch (FormatException exception)
             {

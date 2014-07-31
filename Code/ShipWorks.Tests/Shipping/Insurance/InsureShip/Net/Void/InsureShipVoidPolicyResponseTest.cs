@@ -19,7 +19,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         private Mock<InsureShipRequestBase> request;
 
         private Mock<IInsureShipResponseFactory> responseFactory;
-        Mock<HttpWebResponse> response = new Mock<HttpWebResponse>();
 
         private Mock<ILog> log;
 
@@ -42,11 +41,8 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
 
             responseFactory = new Mock<IInsureShipResponseFactory>();
 
-            response = new Mock<HttpWebResponse>();
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
-
             request = new Mock<InsureShipRequestBase>(responseFactory.Object, shipment, new InsureShipAffiliate("test", "test"), settings.Object, log.Object, "VoidPolicy");
-            request.Setup(r => r.RawResponse).Returns(response.Object);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.NoContent);
 
             testObject = new InsureShipVoidPolicyResponse(request.Object, log.Object);
         }
@@ -56,14 +52,14 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         {
             testObject.Process();
 
-            request.Verify(r => r.RawResponse, Times.Once());
+            request.Verify(r => r.ResponseStatusCode, Times.Once());
         }
 
         [TestMethod]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
             testObject.Process();
         }
@@ -71,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         [TestMethod]        
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Found);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
             try
             {
@@ -87,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
             testObject.Process();
         }
@@ -97,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
             testObject.Process();
         }
@@ -106,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
-            response.Setup(r => r.StatusCode).Returns((HttpStatusCode)419);
+            request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
             try
             {
@@ -121,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         [TestMethod]
         public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.Conflict);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
             try
             {
@@ -137,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         public void Process_SuccessfulResponse_Test()
         {
             // Response code of 204 is success
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.NoContent);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.NoContent);
 
             testObject.Process();
         }
@@ -146,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
         public void Process_SuccessfulResponseWith200_Test()
         {
             // Response code of 200 is success as well
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
+            request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.OK);
 
             testObject.Process();
         }

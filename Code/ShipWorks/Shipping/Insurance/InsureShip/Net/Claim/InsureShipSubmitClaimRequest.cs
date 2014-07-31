@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         {
             Uri uri = new Uri(string.Format("{0}claims/submit/{1}", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID));
             SubmitPost(uri, CreatePostData());
-            return ResponseFactory.CreateVoidPolicyResponse(this);
+            return ResponseFactory.CreateSubmitClaimResponse(this);
         }
 
         /// <summary>

@@ -66,7 +66,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Gets or sets the raw response.
         /// </summary>
-        public virtual HttpWebResponse RawResponse { get; private set; }
+        public virtual string ResponseContent { get; private set; }  // This is virtual because Moq overrides this in a test
+
+        /// <summary>
+        /// Gets the response status code.
+        /// </summary>
+        public virtual HttpStatusCode ResponseStatusCode { get; private set; }  // This is virtual because Moq overrides this in a test
 
         /// <summary>
         /// Gets or sets the settings.
@@ -122,15 +127,18 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
             {
                 LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
 
-                RawResponse = RequestSubmitter.GetResponse().HttpWebResponse;
-                LogInsureShipResponse(RawResponse);
+                HttpWebResponse httpWebResponse = RequestSubmitter.GetResponse().HttpWebResponse;
+                ResponseContent = GetResponseContent(httpWebResponse);
+                ResponseStatusCode = httpWebResponse.StatusCode;
+                LogInsureShipResponse(httpWebResponse, ResponseContent);
             }
             catch (WebException ex)
             {
                 Log.Error(ex);
-                LogInsureShipResponse(ex.Response as HttpWebResponse);
-
-                RawResponse = ex.Response as HttpWebResponse;
+                HttpWebResponse httpWebResponse = ex.Response as HttpWebResponse;
+                ResponseContent = GetResponseContent(httpWebResponse);
+                ResponseStatusCode = (httpWebResponse == null) ? 0 : httpWebResponse.StatusCode;
+                LogInsureShipResponse(httpWebResponse, ResponseContent);
             }
         }
 
@@ -151,31 +159,44 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         }
 
         /// <summary>
-        /// Logs the response from InsureShip.
+        /// Gets the content of the response.
         /// </summary>
-        /// <param name="response">The response.</param>
-        private void LogInsureShipResponse(HttpWebResponse response)
+        private static string GetResponseContent(HttpWebResponse response)
         {
+            string content = string.Empty;
+
             if (response != null)
             {
-                StringBuilder responseText = new StringBuilder();
-                responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
-                responseText.AppendLine(response.Headers.ToString());
-
                 using (Stream responseStream = response.GetResponseStream())
                 {
                     if (responseStream != null)
                     {
                         using (StreamReader reader = new StreamReader(responseStream))
                         {
-                            responseText.AppendLine(reader.ReadToEnd());
+                            content = reader.ReadToEnd();
                             reader.Close();
                         }
-
                         responseStream.Close();
                     }
                 }
+            }
 
+            return content;
+        }
+
+        /// <summary>
+        /// Logs the response from InsureShip.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        private void LogInsureShipResponse(HttpWebResponse response, string content)
+        {
+            if (response != null)
+            {
+                StringBuilder responseText = new StringBuilder();
+                responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
+                responseText.AppendLine(response.Headers.ToString());
+                responseText.AppendLine(content);
+                
                 LogResponse(responseText.ToString(), "log");
             }
         }
