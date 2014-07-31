@@ -144,7 +144,8 @@ namespace ShipWorks.Stores
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
 				StoreTypeCode.LiveSite,
-                StoreTypeCode.Zenventory
+                StoreTypeCode.Zenventory,
+                StoreTypeCode.OpenCart,
             };
 
             return disabledTypes.Contains(typeCode);
