@@ -534,16 +534,34 @@ namespace :setup do
 	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
 	task :registry, :instancePath do |t, args|
 	
-		instanceGuid = SecureRandom.uuid
-		puts instanceGuid
+		instanceGuid = ""
 		
-		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
-			# Create the ShipWorks instance value based on the registryKey name provided
-			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
-				reg[args.instancePath] = '{' + instanceGuid + '}'
+		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
+		# registry otherwise the key will not be found
+		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			begin
+				# Read the instance GUID from the registry
+				instanceGuid = reg[args.instancePath]		
+				puts "Found instance GUID for this path: " + instanceGuid				
+			rescue	
+				instanceGuid = ""
 			end
-		end		
+		end
+		
+		if (instanceGuid == "")	
+			# No instance GUID was found in the registry, so we need to create an entry for this path provided
+			instanceGuid = SecureRandom.uuid
+			puts instanceGuid
+			
+			if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
+				# Create the ShipWorks instance value based on the registryKey name provided
+				keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
+				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
+					reg[args.instancePath] = '{' + instanceGuid + '}'
+				end
+			end		
+		end
 	end
 	
 	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
