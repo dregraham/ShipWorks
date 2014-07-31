@@ -93,6 +93,15 @@ namespace ShipWorks.Shipping.Insurance
                 return false;
             }
 
+            if (shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks)
+            {
+                messageLabel.Text = "This shipment was not insured with ShipWorks insurance. ";
+                AppendPotentialSavingsAmount(shipment);
+                messageLabel.Visible = true;
+
+                return false;
+            }
+
             InsureShipSettings insureShipSettings = new InsureShipSettings();
             DateTime allowedSubmitClaimDateUtc = shipment.ShipDate + insureShipSettings.ClaimSubmissionWaitingPeriod;
 
@@ -122,6 +131,29 @@ namespace ShipWorks.Shipping.Insurance
         {
             insuranceSubmitClaimControl.LoadShipment(shipment);
             insuranceSubmitClaimControl.ClaimSubmitted = () => LoadClaim(new List<ShipmentEntity>() {shipment});
+        }
+
+        /// <summary>
+        /// Appends the potential savings amount to the message label if ShipWorks insurance was not used and is 
+        /// cheaper than the carrier insurance.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        private void AppendPotentialSavingsAmount(ShipmentEntity shipment)
+        {
+            if (shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks)
+            {
+                // Get the cost 
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+                InsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
+                InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, insuranceChoice.InsuranceValue);
+
+                if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
+                {
+                    // Show the amount of savings if ShipWorks insurance was used.
+                    messageLabel.Text += string.Format("You could have saved ${0:0.00} using ShipWorks insurance.", cost.Carrier - cost.ShipWorks);
+                }
+            }
         }
     }
 }
