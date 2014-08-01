@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Quartz;
 using log4net;
 using System.Reflection;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using System.Collections.Generic;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
@@ -68,6 +72,15 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                     // Delete Quartz job so it does not continue to run.
                     context.Scheduler.DeleteJob(context.JobDetail.Key);
 
+                    return;
+                }
+
+                // If the last purge hasn't finished, don't add another one.
+                ActionEntity action = ActionManager.GetAction(actionId);
+                List<ActionTask> tasks = ActionManager.LoadTasks(action);
+                if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                {
+                    log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
                     return;
                 }
 
