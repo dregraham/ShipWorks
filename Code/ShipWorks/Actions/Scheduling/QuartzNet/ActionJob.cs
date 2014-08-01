@@ -3,9 +3,13 @@ using System.Linq;
 using Quartz;
 using log4net;
 using System.Reflection;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet
 {
@@ -76,12 +80,17 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 }
 
                 // If the last purge hasn't finished, don't add another one.
-                ActionEntity action = ActionManager.GetAction(actionId);
-                List<ActionTask> tasks = ActionManager.LoadTasks(action);
-                if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                ActionQueueCollection actionQueueCollection = new ActionQueueCollection();
+                SqlAdapter.Default.FetchEntityCollection(actionQueueCollection, new RelationPredicateBucket(ActionQueueFields.ActionID == actionId));
+                if (actionQueueCollection.Any())
                 {
-                    log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
-                    return;
+                    ActionEntity action = ActionManager.GetAction(actionId);
+                    List<ActionTask> tasks = ActionManager.LoadTasks(action);
+                    if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                    {
+                        log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
+                        return;
+                    }
                 }
 
                 // Dispatch the action
