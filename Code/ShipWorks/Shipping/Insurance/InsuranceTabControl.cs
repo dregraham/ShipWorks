@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Insurance
         {
             InitializeComponent();
 
-            messageLabel.Location = new Point(4, 8);
+            messageLabel.Location = new Point(8, 7);
             insuranceViewClaimControl.Location = new Point(0, 4);
             insuranceSubmitClaimControl.Location = new Point(0, 4);
         }

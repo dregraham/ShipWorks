@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                         shipment.ShipmentID, exception.InsureShipResponseCode);
 
                     log.Error(message, exception);
-                    throw new InsureShipException("ShipWorks was not able to submit a claim for on this shipment. Please try again or contact InsureShip to file a claim.", exception);
+                    throw new InsureShipException("ShipWorks was not able to submit a claim for this shipment. Please try again or contact InsureShip to file a claim.", exception);
                 }
             }
             else
