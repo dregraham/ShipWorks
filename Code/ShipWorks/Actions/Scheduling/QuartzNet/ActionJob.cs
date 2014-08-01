@@ -80,16 +80,18 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                 }
 
                 // If the last purge hasn't finished, don't add another one.
-                ActionQueueCollection actionQueueCollection = new ActionQueueCollection();
-                SqlAdapter.Default.FetchEntityCollection(actionQueueCollection, new RelationPredicateBucket(ActionQueueFields.ActionID == actionId));
-                if (actionQueueCollection.Any())
+                using (ActionQueueCollection actionQueueCollection = new ActionQueueCollection())
                 {
-                    ActionEntity action = ActionManager.GetAction(actionId);
-                    List<ActionTask> tasks = ActionManager.LoadTasks(action);
-                    if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                    SqlAdapter.Default.FetchEntityCollection(actionQueueCollection, new RelationPredicateBucket(ActionQueueFields.ActionID == actionId));
+                    if (actionQueueCollection.Any())
                     {
-                        log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
-                        return;
+                        ActionEntity action = ActionManager.GetAction(actionId);
+                        List<ActionTask> tasks = ActionManager.LoadTasks(action);
+                        if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                        {
+                            log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
+                            return;
+                        }
                     }
                 }
 
