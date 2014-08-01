@@ -28,9 +28,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
         private ShipmentEntity shipment;
 
-
-        private StreamWriter writer;
-
         [TestInitialize]
         public void Initialize()
         {
@@ -59,17 +56,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.OK);
 
             testObject = new InsureShipSubmitClaimResponse(request.Object, log.Object);
-        }
-
-        [TestCleanup]
-        public void Cleanup()
-        {
-            // Dispose of the stream related resources after each test run
-            if (writer != null)
-            {
-                writer.Close();
-                writer.Dispose();
-            }
         }
 
         [TestMethod]
