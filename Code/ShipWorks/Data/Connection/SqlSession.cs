@@ -529,5 +529,35 @@ namespace ShipWorks.Data.Connection
                 return SqlSession.Current != null;
             }
         }
+
+        /// <summary>
+        /// Gets a connection string, based on specified ConnectionString, and modifies it to have a new
+        /// number of minutes for the timeout.
+        /// </summary>
+        public static string ConnectionStringWithTimeout(string sqlConnectionString, int timeoutSeconds)
+        {
+            if (string.IsNullOrWhiteSpace(sqlConnectionString))
+            {
+                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(SqlAdapter.Default.ConnectionString)
+                {
+                    ConnectTimeout = timeoutSeconds
+                };
+
+                sqlConnectionString = sqlConnectionStringBuilder.ConnectionString;
+            }
+
+            return sqlConnectionString;
+        }
+
+        /// <summary>
+        /// Gets a connection string, based on SqlSession.Current.Configuration.GetConnectionString(), and modifies it to have a new
+        /// number of minutes for the timeout.
+        /// </summary>
+        public static string ConnectionStringWithTimeout(int timeoutSeconds)
+        {
+            string sqlConnectionString = Current.Configuration.GetConnectionString();
+
+            return ConnectionStringWithTimeout(sqlConnectionString, timeoutSeconds);
+        }
     }
 }
