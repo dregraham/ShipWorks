@@ -536,7 +536,7 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public static string ConnectionStringWithTimeout(string sqlConnectionString, int timeoutSeconds)
         {
-            if (string.IsNullOrWhiteSpace(sqlConnectionString))
+            if (!string.IsNullOrWhiteSpace(sqlConnectionString))
             {
                 SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(SqlAdapter.Default.ConnectionString)
                 {
