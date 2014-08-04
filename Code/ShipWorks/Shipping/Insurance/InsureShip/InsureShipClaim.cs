@@ -116,15 +116,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     // This should never actually get here unless the response was successful, but log it just in case.
                     log.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
                                    shipment.ShipmentID, responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", EnumHelper.GetApiValue(responseCode));
-
-                    try
-                    {
-                        TangoWebClient.LogSubmitInsuranceClaim(shipment);
-                    }
-                    catch (InsureShipException ex)
-                    {
-                        log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
-                    }
                 }
                 catch (InsureShipResponseException exception)
                 {

@@ -91,6 +91,7 @@ namespace ShipWorks.Shipping.Insurance
                 InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
 
                 claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount);
+                LogClaimToTango();
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -121,6 +122,21 @@ namespace ShipWorks.Shipping.Insurance
             insurancePolicy.DamageValue = damageValue.Amount;
             insurancePolicy.ItemName = itemName.Text;
             insurancePolicy.Description = description.Text;
+        }
+
+        /// <summary>
+        /// Logs the claim to tango.
+        /// </summary>
+        public void LogClaimToTango()
+        {
+            try
+            {
+                TangoWebClient.LogSubmitInsuranceClaim(shipment);
+            }
+            catch (InsureShipException ex)
+            {
+                log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
+            }
         }
     }
 }
