@@ -56,10 +56,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
                 GenericStoreStatusCodeProvider statusProvider = ((GenericModuleStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
                 List<KeyValuePair<string, object>> statuses = statusProvider.CodeValues.Select(c => new KeyValuePair<string, object>(statusProvider.GetCodeName(c), c)).ToList();
 
+                // Set before we add the please select an order status entry.
+                bool hasStatuses = statuses.Any();
+
                 KeyValuePair<string, object> pleaseSelectStatus = new KeyValuePair<string, object>("Please select an order status.", -1);
                 statuses.Insert(0, pleaseSelectStatus);
 
-                bool hasStatuses = statuses.Any();
                 int selectedIndex = 0;
 
                 // Try to revert back to what was selected before
