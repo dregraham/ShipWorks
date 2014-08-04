@@ -39,5 +39,13 @@ namespace ShipWorks.Stores.Platforms.Cart66
                 return ApiLogSource.Cart66Pro;
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the setup wizard.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000022265-connecting-cart66-lite-or-pro-with"; }
+        }
     }
 }

@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Stores.Platforms.BrightPearl
+namespace ShipWorks.Stores.Platforms.Brightpearl
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum BrightPearlServerTimeZoneType
+    public enum BrightpearlServerTimeZoneType
     {
         [Description("GMT or CET")] 
         [ApiValue("eu1")]

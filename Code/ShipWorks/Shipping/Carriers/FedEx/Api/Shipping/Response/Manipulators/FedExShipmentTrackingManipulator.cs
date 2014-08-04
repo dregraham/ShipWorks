@@ -1,5 +1,6 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
@@ -40,6 +41,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 
             FedExPackageEntity fedExPackageEntity = shipment.FedEx.Packages[int.Parse(completedPackageDetail.SequenceNumber) - 1];
             fedExPackageEntity.TrackingNumber = completedPackageDetail.TrackingIds[0].TrackingNumber;
+
+            // To track SmartPost on USPS.com, we need the "92" prefix on the tracking number.  
+            if ((FedExServiceType)shipment.FedEx.Service == FedExServiceType.SmartPost)
+            {
+                fedExPackageEntity.TrackingNumber = completedPackageDetail.TrackingIds[0].UspsApplicationId + fedExPackageEntity.TrackingNumber;
+            }
         }
 
         /// <summary>
@@ -55,6 +62,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
             else
             {
                 shipment.TrackingNumber = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber;
+
+                // To track SmartPost on USPS.com, we need the "92" prefix on the tracking number.  
+                if ((FedExServiceType)shipment.FedEx.Service == FedExServiceType.SmartPost)
+                {
+                    shipment.TrackingNumber = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId + shipment.TrackingNumber;
+                }
+
                 shipment.FedEx.MasterFormID = "";
             }
         }

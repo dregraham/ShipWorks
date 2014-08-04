@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,19 +17,24 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.Stores.Platforms.Brightpearl
+namespace ShipWorks.Stores.Platforms.Zenventory
 {
     /// <summary>
     /// Account settings for GenericStore
     /// </summary>
-    public partial class BrightpearlStoreAccountSettingsControl : AccountSettingsControlBase
+    public partial class ZenventoryStoreAccountSettingsControl : AccountSettingsControlBase
     {
+        private const string TestUrl = "http://test.zenventory.com/zenventory/services/shipworks.php";
+        private const string LiveUrl = "http://www.zenventory.com/zenventory/services/shipworks.php";
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public BrightpearlStoreAccountSettingsControl()
+        public ZenventoryStoreAccountSettingsControl()
         {
             InitializeComponent();
+
+            useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
         }
 
         /// <summary>
@@ -36,7 +42,6 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
-            LoadControl();
             GenericModuleStoreEntity genericStore = store as GenericModuleStoreEntity;
             if (genericStore == null)
             {
@@ -45,17 +50,9 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
 
             username.Text = genericStore.ModuleUsername;
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
-
-            timeZone.SelectedValue = BrightpearlUtility.GetTimeZone(genericStore.ModuleUrl);
-            accountID.Text = BrightpearlUtility.GetAccountId(genericStore.ModuleUrl);
-        }
-
-        /// <summary>
-        /// Loads the control.
-        /// </summary>
-        public void LoadControl()
-        {
-            EnumHelper.BindComboBox<BrightpearlServerTimeZoneType>(timeZone);            
+            
+            useTestServer.Checked = genericStore.ModuleUrl.IndexOf("test", StringComparison.InvariantCultureIgnoreCase) > -1;
+            useTestServer.Visible = useTestServer.Checked || InterapptiveOnly.MagicKeysDown;
         }
 
         /// <summary>
@@ -69,19 +66,9 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
                 throw new ArgumentException("A non GenericStore store was passed to GenericStore account settings.");
             }
 
-            // url to the module
-            string url = BrightpearlUtility.GetModuleUrl(accountID.Text, (BrightpearlServerTimeZoneType)timeZone.SelectedValue);
-
-            // check valid
-            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-            {
-                MessageHelper.ShowError(this, "The specified URL is not a valid address.");
-                return false;
-            }
-
             genericStore.ModuleUsername = username.Text;
             genericStore.ModulePassword = SecureText.Encrypt(password.Text, username.Text);
-            genericStore.ModuleUrl = url;
+            genericStore.ModuleUrl = useTestServer.Checked ? TestUrl : LiveUrl;
 
             // see if we need to test the settings because they changed in some way
             if (ConnectionVerificationNeeded(genericStore))

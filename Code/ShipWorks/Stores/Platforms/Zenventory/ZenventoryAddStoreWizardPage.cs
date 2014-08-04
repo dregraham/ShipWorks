@@ -12,21 +12,19 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.Brightpearl
+namespace ShipWorks.Stores.Platforms.Zenventory
 {
     /// <summary>
-    /// Add Store Wizard page for configuring BrightPearl credentials
+    /// Add Store Wizard page for configuring Zenventory credentials
     /// </summary>
-    public partial class BrightpearlAddStoreWizardPage : AddStoreWizardPage
+    public partial class ZenventoryAddStoreWizardPage : AddStoreWizardPage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BrightpearlAddStoreWizardPage"/> class.
+        /// Initializes a new instance of the <see cref="ZenventoryAddStoreWizardPage"/> class.
         /// </summary>
-        public BrightpearlAddStoreWizardPage()
+        public ZenventoryAddStoreWizardPage()
         {
             InitializeComponent();
-            
-            accountSettingsControl.LoadControl();
         }
 
         /// <summary>

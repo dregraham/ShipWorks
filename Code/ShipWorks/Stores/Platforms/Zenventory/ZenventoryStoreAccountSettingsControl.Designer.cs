@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Brightpearl
+﻿namespace ShipWorks.Stores.Platforms.Zenventory
 {
-    partial class BrightpearlStoreAccountSettingsControl
+    partial class ZenventoryStoreAccountSettingsControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,10 +35,7 @@
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.timeZone = new System.Windows.Forms.ComboBox();
-            this.accountID = new System.Windows.Forms.TextBox();
+            this.useTestServer = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,55 +86,28 @@
             this.password.TabIndex = 4;
             this.password.UseSystemPasswordChar = true;
             // 
-            // label4
+            // useTestServer
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 82);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(108, 13);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "Time Zone of Server:";
+            this.useTestServer.AutoSize = true;
+            this.useTestServer.Location = new System.Drawing.Point(131, 80);
+            this.useTestServer.Name = "useTestServer";
+            this.useTestServer.Size = new System.Drawing.Size(103, 17);
+            this.useTestServer.TabIndex = 5;
+            this.useTestServer.Text = "Use Test Server";
+            this.useTestServer.UseVisualStyleBackColor = true;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(59, 109);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(64, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Account ID:";
-            // 
-            // timeZone
-            // 
-            this.timeZone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.timeZone.FormattingEnabled = true;
-            this.timeZone.Location = new System.Drawing.Point(131, 79);
-            this.timeZone.Name = "timeZone";
-            this.timeZone.Size = new System.Drawing.Size(230, 21);
-            this.timeZone.TabIndex = 7;
-            // 
-            // accountID
-            // 
-            this.accountID.Location = new System.Drawing.Point(131, 106);
-            this.accountID.Name = "accountID";
-            this.accountID.Size = new System.Drawing.Size(230, 21);
-            this.accountID.TabIndex = 8;
-            // 
-            // BrightPearlStoreAccountSettingsControl
+            // ZenventoryStoreAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.accountID);
-            this.Controls.Add(this.timeZone);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.useTestServer);
             this.Controls.Add(this.password);
             this.Controls.Add(this.username);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "BrightPearlStoreAccountSettingsControl";
-            this.Size = new System.Drawing.Size(482, 283);
+            this.Name = "ZenventoryStoreAccountSettingsControl";
+            this.Size = new System.Drawing.Size(482, 120);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -152,9 +122,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox username;
         private System.Windows.Forms.TextBox password;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox timeZone;
-        private System.Windows.Forms.TextBox accountID;
+        private System.Windows.Forms.CheckBox useTestServer;
     }
 }

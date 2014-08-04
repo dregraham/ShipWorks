@@ -2,17 +2,17 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
-namespace ShipWorks.Stores.Platforms.Shopp
+namespace ShipWorks.Stores.Platforms.OpenCart
 {
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
-    public class ShoppStoreType : GenericModuleStoreType
+    public class OpenCartStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShoppStoreType(StoreEntity store) :
+        public OpenCartStoreType(StoreEntity store) :
             base(store)
         {
 
@@ -25,27 +25,27 @@ namespace ShipWorks.Stores.Platforms.Shopp
         {
             get
             {
-                return StoreTypeCode.Shopp;
+                return StoreTypeCode.OpenCart;
             }
         }
 
         /// <summary>
-        /// Log request/responses as Shopp
+        /// Log request/responses as OpenCart
         /// </summary>
         public override ApiLogSource LogSource
         {
             get
             {
-                return ApiLogSource.Shopp;
+                return ApiLogSource.OpenCart;
             }
         }
 
         /// <summary>
-        /// Gets the help URL to use in the account settings.
+        /// Gets the account settings help URL.
         /// </summary>
         public override string AccountSettingsHelpUrl
         {
-            get { return "http://support.shipworks.com/solution/categories/105240/folders/261287/articles/4000022263-connecting-to"; }
+            get { return "http://support.shipworks.com/solution/articles/4000022741-connecting-opencart-with"; }
         }
     }
 }
