@@ -112,6 +112,9 @@ namespace ShipWorks.ApplicationCore.Logging
         Jigoshop,
 
         [ApiPrivateLogSource]
+        ChannelSale,
+
+        [ApiPrivateLogSource]
         SureDone,
 
         [ApiPrivateLogSource]
