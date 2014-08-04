@@ -407,7 +407,6 @@ namespace ShipWorks.Data
             {
                 // Set the timeout to unlimited.  The proc will take care of it's run time.
                 const int timeoutSeconds = 0;
-                string sqlConnectionString = SqlSession.ConnectionStringWithTimeout(timeoutSeconds);
                 string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
 
                 try
@@ -415,12 +414,10 @@ namespace ShipWorks.Data
                     // we always want this call to be the deadlock victim
                     using (new SqlDeadlockPriorityScope(-5))
                     {
-                        using (SqlConnection connection = new SqlConnection(sqlConnectionString))
+                        using (SqlConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
                         {
                             try
                             {
-                                connection.Open();
-                            
                                 using (SqlCommand command = connection.CreateCommand())
                                 {
                                     command.CommandType = CommandType.StoredProcedure;
