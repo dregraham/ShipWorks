@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         public InsureShipRequestBase CreateClaimStatusRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
         {
-            throw new System.NotImplementedException();
+            return new InsureShipClaimStatusRequest(shipmentEntity, insureShipAffiliate);
         }
     }
 }
