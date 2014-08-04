@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net;
 using Interapptive.Shared.Utility;
 using log4net;
-using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
 {
@@ -34,20 +33,19 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
         public InsureShipResponseCode Process()
         {            
             InsureShipResponseCode responseCode;
-            
+
+            HttpStatusCode statusCode = request.ResponseStatusCode;
+
             try
             {
-                HttpStatusCode status = request.RawResponse.StatusCode;
-
                 // It looks like the void request returns a 200 on success instead of a 204
-                responseCode = status == HttpStatusCode.OK ? 
+                responseCode = statusCode == HttpStatusCode.OK ? 
                     InsureShipResponseCode.Success :
-                    EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)status).ToString(CultureInfo.InvariantCulture));
+                    EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)statusCode).ToString(CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {
-                int statusCode = request.RawResponse != null ? (int) request.RawResponse.StatusCode : -0;
-                string message = string.Format("An unknown response code was received from the InsureShip API while attempting to void shipment {0}: {1}", request.Shipment.ShipmentID, statusCode);
+                string message = string.Format("An unknown response code was received from the InsureShip API while attempting to void shipment {0}: {1}", request.Shipment.ShipmentID, (int) statusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message);
@@ -56,8 +54,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Void
             // We have a recognizable response status code
             if (responseCode != InsureShipResponseCode.Success)
             {
-                int statusCode = request.RawResponse != null ? (int)request.RawResponse.StatusCode : -0;
-                string message = string.Format("An error occurred trying to void a policy for shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, statusCode);
+                string message = string.Format("An error occurred trying to void a policy for shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, (int) statusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(responseCode, message);

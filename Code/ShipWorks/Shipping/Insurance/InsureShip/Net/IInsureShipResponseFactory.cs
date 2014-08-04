@@ -11,6 +11,11 @@
         IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase);
 
         /// <summary>
+        /// Creates an instance of an IInsureShipResponse for submitting a claim to InsureShip.
+        /// </summary>
+        IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase);
+
+        /// <summary>
         /// Creates the void policy response.
         /// </summary>
         IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase);

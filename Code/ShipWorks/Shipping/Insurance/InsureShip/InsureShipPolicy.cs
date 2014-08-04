@@ -47,7 +47,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <exception cref="InsureShipException">This shipment was not insured. An error occurred trying to insure this shipment.</exception>
         public void Insure(ShipmentEntity shipment)
         {
-            bool success = false;
             try
             {
                 log.InfoFormat("Submitting shipment information to InsureShip for shipment {0}.", shipment.ShipmentID);
@@ -60,8 +59,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 // This should never actually get here unless the response was successful, but log it just in case.
                 log.InfoFormat("Response code from InsureShip was {0} successful (response code {1}).",
                     responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", responseCode);
-
-                success = responseCode == InsureShipResponseCode.Success;
             }
             catch (InsureShipResponseException exception)
             {
@@ -75,8 +72,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             {
                 log.Error(exception);
             }
-
-            shipment.InsuredWith = success ? (int) InsuredWith.SuccessfullyInsuredViaApi : (int) InsuredWith.FailedToInsureViaApi;
         }
 
         /// <summary>
@@ -119,12 +114,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             bool voidable = false;
             
-            if (shipment.Processed && shipment.InsuredWith == (int)InsuredWith.SuccessfullyInsuredViaApi)
+            if (shipment.Processed && shipment.InsurancePolicy != null && shipment.InsurancePolicy.CreatedWithApi)
             {
                 // Shipment was insured with the API, so check whether the age of the policy falls within the 
                 // grace period for voiding
                 TimeSpan gracePeriod = insureShipSettings.VoidPolicyMaximumAge;
-                if (shipment.ProcessedDate != null && DateTime.UtcNow.Subtract(shipment.ProcessedDate.Value) < gracePeriod)
+                if (DateTime.UtcNow.Subtract(shipment.ShipDate) < gracePeriod)
                 {
                     log.InfoFormat("The policy for shipment {0} is eligible for voiding with the InsureShip API.", shipment.ShipmentID);
                     voidable = true;

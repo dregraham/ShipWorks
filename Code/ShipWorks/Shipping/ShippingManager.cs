@@ -189,7 +189,6 @@ namespace ShipWorks.Shipping
             shipment.ReturnShipment = false;
             shipment.Insurance = false;
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
-            shipment.InsuredWith = (int) InsuredWith.NotWithApi;
             shipment.BestRateEvents = (int)BestRateEventTypes.None;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
@@ -360,6 +359,9 @@ namespace ShipWorks.Shipping
             // clone the entity tree
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
 
+            // No insurance policy yet.
+            clonedShipment.InsurancePolicy = null;
+
             // this is now a new shipment to be inserted
             MarkAsNew(clonedShipment);
 
@@ -376,7 +378,6 @@ namespace ShipWorks.Shipping
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
-            clonedShipment.InsuredWith = (int) InsuredWith.NotWithApi;
 
             // Clear out any old UPS tracking information
             if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
@@ -931,7 +932,8 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        throw new ShippingException("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at 1-866-701-3654.", voidInsuranceException);
+                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.", new InsureShipSettings().InsureShipPhoneNumber);
+                        throw new ShippingException(message, voidInsuranceException);
                     }
                 }
             }

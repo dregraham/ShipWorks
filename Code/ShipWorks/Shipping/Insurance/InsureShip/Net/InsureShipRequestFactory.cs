@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
 
@@ -15,6 +16,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         public InsureShipRequestBase CreateInsureShipmentRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
         {
             return new InsureShipInsureShipmentRequest(shipmentEntity, insureShipAffiliate);
+        }
+
+        /// <summary>
+        /// Creates the submit claim request.
+        /// </summary>
+        public InsureShipRequestBase CreateSubmitClaimRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
+        {
+            return new InsureShipSubmitClaimRequest(shipmentEntity, insureShipAffiliate);
         }
 
         /// <summary>

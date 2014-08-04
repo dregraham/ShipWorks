@@ -8464,6 +8464,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity InsurancePolicyEntity</summary>
+	public partial class InsurancePolicyFields
+	{
+		/// <summary>Creates a new InsurancePolicyEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.InsureShipStoreName field instance</summary>
+		public static EntityField2 InsureShipStoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.InsureShipStoreName);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.CreatedWithApi field instance</summary>
+		public static EntityField2 CreatedWithApi
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.CreatedWithApi);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ItemName field instance</summary>
+		public static EntityField2 ItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ItemName);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.Description);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ClaimType field instance</summary>
+		public static EntityField2 ClaimType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ClaimType);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.DamageValue field instance</summary>
+		public static EntityField2 DamageValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.DamageValue);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.SubmissionDate field instance</summary>
+		public static EntityField2 SubmissionDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.SubmissionDate);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ClaimID field instance</summary>
+		public static EntityField2 ClaimID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ClaimID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity IParcelAccountEntity</summary>
 	public partial class IParcelAccountFields
 	{
@@ -15341,11 +15391,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InsuranceProvider
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InsuranceProvider);}
-		}
-		/// <summary>Creates a new ShipmentEntity.InsuredWith field instance</summary>
-		public static EntityField2 InsuredWith
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.InsuredWith);}
 		}
 		/// <summary>Creates a new ShipmentEntity.ShipNameParseStatus field instance</summary>
 		public static EntityField2 ShipNameParseStatus

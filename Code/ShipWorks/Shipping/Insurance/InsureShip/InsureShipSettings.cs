@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             get
             {
-                return UseTestServer ? "D00002" : "D00050";
+                return "D00050";
             }
         }
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             get
             {
-                return UseTestServer ? SecureText.Decrypt("7fA9js5H7h4=", "InsureShip7458") : SecureText.Decrypt("xYGNUSctosMN3kr2vZw1cg==", "InsureShip7458");
+                return SecureText.Decrypt("xYGNUSctosMN3kr2vZw1cg==", "InsureShip7458");
             }
         }
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             get
             {
-                return UseTestServer ? SecureText.Decrypt("xreVCItexMlyOYE+edlqEg==", "InsureShip7458") : SecureText.Decrypt("byJ2OXi5odKK0PVy7VPB6zKGm6aI++SX", "InsureShip7458");
+                return UseTestServer ? SecureText.Decrypt("xYGNUSctosMiU8bYJtpOOA==", "InsureShip7458") : SecureText.Decrypt("byJ2OXi5odKK0PVy7VPB6zKGm6aI++SX", "InsureShip7458");
             }
         }
 
@@ -83,6 +83,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
+        /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
+        /// </summary>
+        public TimeSpan ClaimSubmissionWaitingPeriod
+        {
+            get { return TimeSpan.FromDays(7); }
+        }
+
+        /// <summary>
         /// Gets the maximum age of a policy that is allowed to be voided.
         /// </summary>
         public TimeSpan VoidPolicyMaximumAge
@@ -91,6 +99,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             {
                 return TimeSpan.FromHours(24);
             }
+        }
+
+        /// <summary>
+        /// Gets the phone number that should be used for a customer to contact InsureShip.
+        /// </summary>
+        public string InsureShipPhoneNumber
+        {
+            get { return "1-866-701-3654"; }
         }
     }
 }

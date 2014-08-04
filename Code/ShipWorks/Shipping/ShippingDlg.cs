@@ -702,6 +702,9 @@ namespace ShipWorks.Shipping
             // Load the tracking control
             LoadTrackingDisplay();
 
+            // Load the insurance control
+            LoadInsuranceDisplay();
+
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
@@ -1019,6 +1022,14 @@ namespace ShipWorks.Shipping
             }
 
             initialDisplayTracking = false;
+        }
+
+        /// <summary>
+        /// Load the insurance data from the selected shipments into the control
+        /// </summary>
+        private void LoadInsuranceDisplay()
+        {
+            insuranceTabControl.LoadClaim(uiDisplayedShipments);
         }
 
         /// <summary>
@@ -1342,6 +1353,12 @@ namespace ShipWorks.Shipping
                     }                    
                 }
             }
+
+            // Save the insurance data if we're switching away from the insurance tab
+            if (tabControl.SelectedTab == tabPageInsurance)
+            {
+                insuranceTabControl.SaveToShipments();
+            }
         }
 
         /// <summary>
@@ -1373,6 +1390,8 @@ namespace ShipWorks.Shipping
             {
                 ServiceControl.SaveToShipments();
             }
+
+            insuranceTabControl.SaveToShipments();
 
             foreach (ShipmentEntity shipment in shipments)
             {

@@ -73,6 +73,8 @@ namespace ShipWorks.Shipping
             this.processDropDownButton = new ShipWorks.UI.Controls.DropDownButton();
             this.applyProfile = new ShipWorks.UI.Controls.DropDownButton();
             this.shipmentControl = new ShipWorks.Shipping.Editing.ShipmentGridControl();
+            this.tabPageInsurance = new System.Windows.Forms.TabPage();
+            this.insuranceTabControl = new ShipWorks.Shipping.Insurance.InsuranceTabControl();
             this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.trackingControl = new ShipWorks.Shipping.Tracking.ShipmentTrackingControl();
             this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
@@ -94,6 +96,7 @@ namespace ShipWorks.Shipping
             this.tabPageTracking.SuspendLayout();
             this.panelTrackingData.SuspendLayout();
             this.panelTrackingMessage.SuspendLayout();
+            this.tabPageInsurance.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelProcessing
@@ -300,6 +303,7 @@ namespace ShipWorks.Shipping
             this.tabControl.Controls.Add(this.tabPageService);
             this.tabControl.Controls.Add(this.tabPageCustoms);
             this.tabControl.Controls.Add(this.tabPageTracking);
+            this.tabControl.Controls.Add(this.tabPageInsurance);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -571,6 +575,26 @@ namespace ShipWorks.Shipping
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
+            // tabPageInsurance
+            // 
+            this.tabPageInsurance.Controls.Add(this.insuranceTabControl);
+            this.tabPageInsurance.Location = new System.Drawing.Point(4, 22);
+            this.tabPageInsurance.Name = "tabPageInsurance";
+            this.tabPageInsurance.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageInsurance.Size = new System.Drawing.Size(348, 323);
+            this.tabPageInsurance.TabIndex = 4;
+            this.tabPageInsurance.Text = "Insurance";
+            this.tabPageInsurance.UseVisualStyleBackColor = true;
+            // 
+            // insuranceTabControl1
+            // 
+            this.insuranceTabControl.AutoSize = true;
+            this.insuranceTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.insuranceTabControl.Location = new System.Drawing.Point(3, 3);
+            this.insuranceTabControl.Name = "insuranceTabControl1";
+            this.insuranceTabControl.Size = new System.Drawing.Size(342, 517);
+            this.insuranceTabControl.TabIndex = 0;
+            // 
             // ShippingDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -616,6 +640,8 @@ namespace ShipWorks.Shipping
             this.panelTrackingData.ResumeLayout(false);
             this.panelTrackingData.PerformLayout();
             this.panelTrackingMessage.ResumeLayout(false);
+            this.tabPageInsurance.ResumeLayout(false);
+            this.tabPageInsurance.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -663,5 +689,7 @@ namespace ShipWorks.Shipping
         private RateControl rateControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelRates;
+        private System.Windows.Forms.TabPage tabPageInsurance;
+        private Insurance.InsuranceTabControl insuranceTabControl;
     }
 }

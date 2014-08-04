@@ -40,6 +40,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
         [Description("Unknown Failure")]
         [ApiValue("419")]
-        UnknownFailure = 7
+        UnknownFailure = 7,
+
+        [Description("Success")]
+        [ApiValue("200")]
+        OK = 8
     }
 }

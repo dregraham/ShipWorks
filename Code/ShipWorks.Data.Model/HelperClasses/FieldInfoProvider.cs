@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (162 + 0));
+			base.InitClass( (163 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -124,6 +124,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitGridColumnPositionEntityInfos();
 			InitInfopiaOrderItemEntityInfos();
 			InitInfopiaStoreEntityInfos();
+			InitInsurancePolicyEntityInfos();
 			InitIParcelAccountEntityInfos();
 			InitIParcelPackageEntityInfos();
 			InitIParcelProfileEntityInfos();
@@ -1362,6 +1363,19 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("InfopiaStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)InfopiaStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("InfopiaStoreEntity", "ApiToken", typeof(System.String), false, false, false, false,  (int)InfopiaStoreFieldIndex.ApiToken, 128, 0, 0);
 		}
+		/// <summary>Inits InsurancePolicyEntity's FieldInfo objects</summary>
+		private void InitInsurancePolicyEntityInfos()
+		{
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)InsurancePolicyFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipStoreName", typeof(System.String), false, false, false, false,  (int)InsurancePolicyFieldIndex.InsureShipStoreName, 75, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "CreatedWithApi", typeof(System.Boolean), false, false, false, false,  (int)InsurancePolicyFieldIndex.CreatedWithApi, 0, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.ItemName, 255, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "Description", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.Description, 255, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ClaimType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimType, 0, 0, 10);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "DamageValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InsurancePolicyFieldIndex.DamageValue, 0, 4, 19);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "SubmissionDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.SubmissionDate, 0, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ClaimID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimID, 0, 0, 19);
+		}
 		/// <summary>Inits IParcelAccountEntity's FieldInfo objects</summary>
 		private void InitIParcelAccountEntityInfos()
 		{
@@ -2073,7 +2087,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ReturnShipment", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.ReturnShipment, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.Insurance, 0, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "InsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.InsuranceProvider, 0, 0, 10);
-			base.AddElementFieldInfo("ShipmentEntity", "InsuredWith", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.InsuredWith, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipNameParseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipUnparsedName", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipUnparsedName, 100, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "OriginNameParseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.OriginNameParseStatus, 0, 0, 10);

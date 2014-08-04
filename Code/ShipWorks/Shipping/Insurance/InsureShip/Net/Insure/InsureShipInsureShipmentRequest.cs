@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             PopulateShipmentOrder();
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(Shipment);
+            string unqiueShipmentId = new InsureShipShipmentIdentifier(Shipment).GetUniqueShipmentId();
 
             Dictionary<string, string> postData = new Dictionary<string, string>();
             postData.Add("distributor_id", Settings.DistributorID);
@@ -61,20 +62,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipping_city", Shipment.ShipCity);
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);
-            postData.Add("shipping_country ", Shipment.ShipCountryCode);
+            postData.Add("shipping_country", Shipment.ShipCountryCode);
             postData.Add("shipment_value", GetInsuredValue().ToString(CultureInfo.InvariantCulture));
-            postData.Add("order_id", GetUniqueShipmentId());
-            postData.Add("shipment_id", GetUniqueShipmentId());
+            postData.Add("order_id", unqiueShipmentId);
+            postData.Add("shipment_id", unqiueShipmentId);
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("item_name", string.Join(",", Shipment.Order.OrderItems.Select(oi => oi.Name)));
             postData.Add("carrier", shipmentType.ShipmentTypeName);
             postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment));
-            
-            // If using the test server, append the test affiliate.
-            if (Settings.UseTestServer)
-            {            
-                postData.Add("affiliate_id", "A0000000003");
-            }
 
             return postData;
         }

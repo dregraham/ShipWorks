@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
+﻿using ShipWorks.Shipping.Insurance.InsureShip.Net.Claim;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
 using ShipWorks.Shipping.Insurance.InsureShip.Net.Void;
 
@@ -15,6 +16,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         public IInsureShipResponse CreateInsureShipmentResponse(InsureShipRequestBase insureShipRequestBase)
         {
             return new InsureShipInsureShipmentResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipInsureShipmentResponse)));
+        }
+
+        /// <summary>
+        /// Creates an instance of an IInsureShipResponse for submitting a claim to InsureShip.
+        /// </summary>
+        public IInsureShipResponse CreateSubmitClaimResponse(InsureShipRequestBase insureShipRequestBase)
+        {
+           return new InsureShipSubmitClaimResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipSubmitClaimResponse)));
         }
 
         /// <summary>

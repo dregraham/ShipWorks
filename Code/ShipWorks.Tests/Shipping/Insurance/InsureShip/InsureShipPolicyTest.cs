@@ -65,7 +65,11 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 Processed = true,
                 ProcessedDate = DateTime.UtcNow,
-                InsuredWith = (int) InsuredWith.SuccessfullyInsuredViaApi
+                ShipDate = DateTime.UtcNow,
+                InsurancePolicy = new InsurancePolicyEntity
+                {
+                    CreatedWithApi = true
+                }
             };
             
             testObject = new InsureShipPolicy(affiliate, requestFactory.Object, log.Object, settings.Object);
@@ -131,24 +135,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
-        public void Insure_InsuredWithIsFailed_WhenInsureShipResponseExceptionIsCaught_Test()
-        {
-            response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.UnknownFailure));
-
-            testObject.Insure(shipment);
-
-            Assert.AreEqual(InsuredWith.FailedToInsureViaApi, (InsuredWith) shipment.InsuredWith, "Expected Failed when error is thrown.");
-        }
-
-        [TestMethod]
-        public void Insure_InsuredWithIsSuccess_WhenNoErrorThrown_Test()
-        {
-            testObject.Insure(shipment);
-
-            Assert.AreEqual(InsuredWith.SuccessfullyInsuredViaApi, (InsuredWith)shipment.InsuredWith, "Expected Success when error is thrown.");
-        }
-
-        [TestMethod]
         public void Insure_LogsMessage_WhenInsureShipResponseExceptionIsCaught_Test()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.UnknownFailure);
@@ -189,7 +175,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_DoesNotMakeRequest_WhenShipmentFailedToInsureWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
+            shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
             testObject.Void(shipmentForVoiding);
 
@@ -200,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_LogsMessage_WhenShipmentFailedToInsureWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.FailedToInsureViaApi;
+            shipmentForVoiding.InsurancePolicy.CreatedWithApi = false;
 
             testObject.Void(shipmentForVoiding);
 
@@ -210,7 +196,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_DoesNotMakeRequest_WhenShipmentWasNotInsuredWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.NotWithApi;
+            shipmentForVoiding.InsurancePolicy = null;
 
             testObject.Void(shipmentForVoiding);
 
@@ -221,7 +207,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void Void_LogsMessage_WhenShipmentWasNotInsuredWithApi_Test()
         {
-            shipmentForVoiding.InsuredWith = (int)InsuredWith.NotWithApi;
+            shipmentForVoiding.InsurancePolicy = null;
 
             testObject.Void(shipmentForVoiding);
 
@@ -232,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 
@@ -244,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 
@@ -255,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Void_UsesInsureShipSettings_ToDetermineEligibility_Test()
         {
             // Grace period set to 24 hours in the initialize method above
-            shipmentForVoiding.ProcessedDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
+            shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
             testObject.Void(shipmentForVoiding);
 

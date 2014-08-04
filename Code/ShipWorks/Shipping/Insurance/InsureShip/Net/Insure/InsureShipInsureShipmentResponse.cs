@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 {
@@ -29,16 +31,23 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <returns></returns>
         /// <exception cref="InsureShipResponseException"></exception>
         public InsureShipResponseCode Process()
-        {            
+        {
+            request.Shipment.InsurancePolicy = request.Shipment.InsurancePolicy ?? new InsurancePolicyEntity
+            {
+                InsureShipStoreName = request.Affiliate.InsureShipPolicyID,
+                CreatedWithApi = false
+            };
+
             InsureShipResponseCode responseCode;
-            
+
+            int statusCode = (int) request.ResponseStatusCode;
+
             try
             {
-                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>(((int)request.RawResponse.StatusCode).ToString(CultureInfo.InvariantCulture));
+                responseCode = EnumHelper.GetEnumByApiValue<InsureShipResponseCode>((statusCode).ToString(CultureInfo.InvariantCulture));
             }
             catch (Exception)
             {
-                int statusCode = request.RawResponse != null ? (int) request.RawResponse.StatusCode : -0;
                 string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, statusCode);
                 log.Error(message);
 
@@ -48,12 +57,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             // We have a recognizable response status code
             if (responseCode != InsureShipResponseCode.Success)
             {
-                int statusCode = request.RawResponse != null ? (int)request.RawResponse.StatusCode : -0;
                 string message = string.Format("An error occurred trying to insure shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, statusCode);
                 log.Error(message);
 
                 throw new InsureShipResponseException(responseCode, message);
             }
+
+            request.Shipment.InsurancePolicy.CreatedWithApi = true;
 
             return responseCode;
         }
