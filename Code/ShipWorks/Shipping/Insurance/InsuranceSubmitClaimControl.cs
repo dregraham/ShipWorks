@@ -63,6 +63,18 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void OnSubmitClaimClick(object sender, EventArgs e)
         {
+            if (damageValue.Amount <= 0)
+            {
+                MessageHelper.ShowError(this, "A value greater than $0.00 must be supplied for damages when submitting a claim.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(itemName.Text))
+            {
+                MessageHelper.ShowError(this, "An item name must be provided when submitting a claim.");
+                return;
+            }
+
             try
             {
                 // Disable the button to provide some feedback to the user that something is happening.
