@@ -260,7 +260,7 @@ namespace :db do
 	end
 
 	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
-	task :populate, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed] do |t, args|
+	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed] do |t, args|
 	end
 	
 	desc "Drop and create the ShipWorks_SeedData database"
@@ -311,42 +311,52 @@ namespace :db do
 		puts "Finding SQL Server data path for " + instanceName + "..."
 		filePath = ""
 		
-		registryInstanceName = instanceName
-		backSlashIndex = registryInstanceName.index("\\")		
-		if !backSlashIndex.nil? && backSlashIndex > 0 
-			# Trim off "(local)\" portion of the instance name in order to query the 
-			# registry
-			registryInstanceName = registryInstanceName[backSlashIndex..-1]
+		if args != nil and args[:filePath] != nil and args[:filePath] != ""
+			# A database name was passed in, so use it for the target database
+			filePath = args[:filePath]
+			puts "File path set to " + filePath
 		end
 		
-		# Lookup the file path to use in the script based on the instance's data path in SQL Server; 
-		# pass in 0x100 to read from 64-bit registry otherwise the key will not be found			
-		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\MSSQLServer"
-		keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
-		puts "Looking for key " + keyName + "..."
-		begin		
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-				begin
-					filePath = reg["DefaultData"]
-				rescue
-					# Registry value DefaultData did not exist
-					filePath = ""
+		if filePath == ""
+			# A file path was not found in the argument list, so try to set it via the 
+			# SQLPath registry value
+			registryInstanceName = instanceName
+			backSlashIndex = registryInstanceName.index("\\")		
+			if !backSlashIndex.nil? && backSlashIndex > 0 
+				# Trim off "(local)\" portion of the instance name in order to query the 
+				# registry
+				registryInstanceName = registryInstanceName[backSlashIndex..-1]
+			end
+			
+			# Lookup the file path to use in the script based on the instance's data path in SQL Server; 
+			# pass in 0x100 to read from 64-bit registry otherwise the key will not be found			
+			keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\MSSQLServer"
+			keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
+			puts "Looking for key " + keyName + "..."
+			begin		
+				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+					begin
+						filePath = reg["DefaultData"]
+					rescue
+						# Registry value DefaultData did not exist
+						filePath = ""
+					end
+				end
+			rescue
+				filePath = ""
+			end
+					
+			if filePath == nil or filePath == ""
+				# Nothing useful was found in the DefaultData value, so fallback to appending
+				# "\Data" to the SQL path value for the instance
+				keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\Setup"
+				keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
+				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+					filePath = reg["SQLPath"] + "\\Data\\"
 				end
 			end
-		rescue
-			filePath = ""
-		end
-				
-		if filePath == nil or filePath == ""
-			# Nothing useful was found in the DefaultData value, so fallback to appending
-			# "\Data" to the SQL path value for the instance
-			keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\Setup"
-			keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-				filePath = reg["SQLPath"] + "\\Data\\"
-			end
-		end
-		puts "File path is " + filePath
+			puts "File path is " + filePath
+		end 
 		
 		puts "Creating the database...\r\n"
 		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
@@ -497,14 +507,21 @@ namespace :db do
 					puts "An instance name was provided: " + sqlInstanceName				
 				end
 
-				backSlashIndex = sqlInstanceName.index("\\")		
-				if backSlashIndex != nil and backSlashIndex > 0 
-					# Since we're building the instance name based on computer name, trim 
-					# off "(local)\" portion of the instance name in order to query the registry
-					sqlInstanceName = sqlInstanceName[backSlashIndex..-1]
+				if sqlInstanceName.include? "local"					
+					# The build is specifying the server instance, but if it is the 
+					# local server we want to use the computer name of the local machine
+					backSlashIndex = sqlInstanceName.index("\\")		
+					if backSlashIndex != nil and backSlashIndex > 0 
+						# Since we're building the instance name based on computer name, trim 
+						# off "(local)\" portion of the instance name in order to query the registry
+						sqlInstanceName = sqlInstanceName[backSlashIndex..-1]
+					end
+				
+					sqlServerInstanceName = ENV["COMPUTERNAME"] + "\\" + sqlInstanceName
+				else
+					# A server instance was provided that was not "local", so use the named instance
+					sqlServerInstanceName = sqlInstanceName
 				end
-			
-				sqlServerInstanceName = ENV["COMPUTERNAME"] + "\\" + sqlInstanceName
 				
 				# Replace the current instance and database name with that of the info provided
 				contents = File.read(fileName)				
@@ -534,16 +551,34 @@ namespace :setup do
 	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
 	task :registry, :instancePath do |t, args|
 	
-		instanceGuid = SecureRandom.uuid
-		puts instanceGuid
+		instanceGuid = ""
 		
-		if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
-			# Create the ShipWorks instance value based on the registryKey name provided
-			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
-				reg[args.instancePath] = '{' + instanceGuid + '}'
+		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
+		# registry otherwise the key will not be found
+		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			begin
+				# Read the instance GUID from the registry
+				instanceGuid = reg[args.instancePath]		
+				puts "Found instance GUID for this path: " + instanceGuid				
+			rescue	
+				instanceGuid = ""
 			end
-		end		
+		end
+		
+		if (instanceGuid == "")	
+			# No instance GUID was found in the registry, so we need to create an entry for this path provided
+			instanceGuid = SecureRandom.uuid
+			puts instanceGuid
+			
+			if args != nil and args[:instancePath] != nil and args[:instancePath] != ""			
+				# Create the ShipWorks instance value based on the registryKey name provided
+				keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"		
+				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_WRITE | 0x100) do |reg|
+					reg[args.instancePath] = '{' + instanceGuid + '}'
+				end
+			end		
+		end
 	end
 	
 	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"

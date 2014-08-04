@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Stores.Platforms.BrightPearl
+namespace ShipWorks.Stores.Platforms.Brightpearl
 {
-    public static class BrightPearlUtility
+    public static class BrightpearlUtility
     {
         /// <summary>
         /// Gets the account identifier from the moduleUrl
@@ -21,16 +21,16 @@ namespace ShipWorks.Stores.Platforms.BrightPearl
         /// <summary>
         /// Gets the time zone from the moduleUrl
         /// </summary>
-        public static BrightPearlServerTimeZoneType GetTimeZone(string moduleUrl)
+        public static BrightpearlServerTimeZoneType GetTimeZone(string moduleUrl)
         {
             string timeZoneCode = moduleUrl.Substring(11, 3);
-            return EnumHelper.GetEnumByApiValue<BrightPearlServerTimeZoneType>(timeZoneCode);
+            return EnumHelper.GetEnumByApiValue<BrightpearlServerTimeZoneType>(timeZoneCode);
         }
 
         /// <summary>
         /// Gets the module URL from the accountID and timeZone.
         /// </summary>
-        public static string GetModuleUrl(string accountID, BrightPearlServerTimeZoneType timeZone)
+        public static string GetModuleUrl(string accountID, BrightpearlServerTimeZoneType timeZone)
         {
             return string.Format(@"https://ws-{0}.brightpearl.com/external-request/{1}/shipworks-service/3.0/action",
                 EnumHelper.GetApiValue(timeZone),

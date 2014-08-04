@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Brightpearl
+﻿namespace ShipWorks.Stores.Platforms.Zenventory
 {
-    partial class BrightpearlAddStoreWizardPage
+    partial class ZenventoryAddStoreWizardPage
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.accountSettingsControl = new ShipWorks.Stores.Platforms.Brightpearl.BrightpearlStoreAccountSettingsControl();
+            this.accountSettingsControl = new ShipWorks.Stores.Platforms.Zenventory.ZenventoryStoreAccountSettingsControl();
             this.SuspendLayout();
             // 
             // accountSettingsControl
@@ -39,12 +39,12 @@
             this.accountSettingsControl.Size = new System.Drawing.Size(482, 188);
             this.accountSettingsControl.TabIndex = 1;
             // 
-            // BrightPearlAddStoreWizardPage
+            // ZenventoryAddStoreWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.accountSettingsControl);
-            this.Name = "BrightPearlAddStoreWizardPage";
+            this.Name = "ZenventoryAddStoreWizardPage";
             this.Size = new System.Drawing.Size(563, 203);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
@@ -53,7 +53,7 @@
 
         #endregion
 
-        private BrightpearlStoreAccountSettingsControl accountSettingsControl;
+        private ZenventoryStoreAccountSettingsControl accountSettingsControl;
 
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Stores.Platforms.BrightPearl;
+using ShipWorks.Stores.Platforms.Brightpearl;
 
-namespace ShipWorks.Tests.Stores.BrightPearl
+namespace ShipWorks.Tests.Stores.Brightpearl
 {
     [TestClass]
     public class BrightPearlUtilityTest
@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Stores.BrightPearl
         [TestMethod]
         public void GetAccountId_GetsAccountID_Test()
         {
-            string accountId = BrightPearlUtility.GetAccountId(testUrl);
+            string accountId = BrightpearlUtility.GetAccountId(testUrl);
 
             Assert.AreEqual("accountCode", accountId);
         }
@@ -23,15 +23,15 @@ namespace ShipWorks.Tests.Stores.BrightPearl
         [TestMethod]
         public void GetTimeZone_GetsGmtOrCet_Test()
         {
-            BrightPearlServerTimeZoneType timeZone = BrightPearlUtility.GetTimeZone(testUrl);
+            BrightpearlServerTimeZoneType timeZone = BrightpearlUtility.GetTimeZone(testUrl);
 
-            Assert.AreEqual(BrightPearlServerTimeZoneType.Eu1, timeZone);
+            Assert.AreEqual(BrightpearlServerTimeZoneType.Eu1, timeZone);
         }
 
         [TestMethod]
         public void GetModuleUrl_GetsModuleUrl_Test()
         {
-            string moduleUrl = BrightPearlUtility.GetModuleUrl("accountCode", BrightPearlServerTimeZoneType.Eu1);
+            string moduleUrl = BrightpearlUtility.GetModuleUrl("accountCode", BrightpearlServerTimeZoneType.Eu1);
 
             Assert.AreEqual(testUrl, moduleUrl);
         }
