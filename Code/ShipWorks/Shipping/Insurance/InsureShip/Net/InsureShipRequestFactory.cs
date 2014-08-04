@@ -33,5 +33,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipVoidPolicyRequest(shipmentEntity, insureShipAffiliate);
         }
+
+        /// <summary>
+        /// Creates the claim status request.
+        /// </summary>
+        public InsureShipRequestBase CreateClaimStatusRequest(ShipmentEntity shipmentEntity, InsureShipAffiliate insureShipAffiliate)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

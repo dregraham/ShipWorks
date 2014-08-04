@@ -33,5 +33,13 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         {
             return new InsureShipVoidPolicyResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipVoidPolicyResponse)));
         }
+
+        /// <summary>
+        /// Creates the claim status response.
+        /// </summary>
+        public IInsureShipResponse CreateClaimStatusResponse(InsureShipRequestBase insureShipRequestBase)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

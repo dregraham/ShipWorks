@@ -19,5 +19,10 @@
         /// Creates the void policy response.
         /// </summary>
         IInsureShipResponse CreateVoidPolicyResponse(InsureShipRequestBase insureShipRequestBase);
+
+        /// <summary>
+        /// Creates the claim status response.
+        /// </summary>
+        IInsureShipResponse CreateClaimStatusResponse(InsureShipRequestBase insureShipRequestBase);
     }
 }
