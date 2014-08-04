@@ -51,17 +51,11 @@ namespace ShipWorks.Shipping.Insurance
         {
             this.shipment = shipment;
 
-            bool show = !shipment.Voided && shipment.InsurancePolicy != null && !shipment.InsurancePolicy.ClaimID.HasValue;
-            Visible = show;
-
-            if (show)
-            {
-                // Make sure that controls are reset even if the data is empty
-                claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
-                damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(0);
-                itemName.Text = shipment.InsurancePolicy.ItemName;
-                description.Text = shipment.InsurancePolicy.Description;
-            }
+            // Make sure that controls are reset even if the data is empty
+            claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
+            damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(0);
+            itemName.Text = shipment.InsurancePolicy.ItemName;
+            description.Text = shipment.InsurancePolicy.Description;
         }
 
         /// <summary>
@@ -71,6 +65,10 @@ namespace ShipWorks.Shipping.Insurance
         {
             try
             {
+                // Disable the button to provide some feedback to the user that something is happening.
+                // Maybe change this to use a progress provider if it takes more than a few seconds.
+                submitClaim.Enabled = false;
+
                 StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
                 if (storeEntity == null)
                 {
@@ -85,7 +83,6 @@ namespace ShipWorks.Shipping.Insurance
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     adapter.SaveAndRefetch(shipment);
-
                     adapter.Commit();
                 }
 
@@ -95,6 +92,11 @@ namespace ShipWorks.Shipping.Insurance
             {
                 log.Error(ex);
                 MessageHelper.ShowError(this, ex.Message);
+            }
+            finally
+            {
+                // Renable the button in the event an error occurred
+                submitClaim.Enabled = true;
             }
         }
 

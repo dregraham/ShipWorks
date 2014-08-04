@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +18,6 @@ namespace ShipWorks.Shipping.Insurance
         public InsuranceViewClaimControl()
         {
             InitializeComponent();
-
             ClearValues();
         }
 
@@ -26,12 +26,6 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void LoadClaim(ShipmentEntity shipment)
         {
-            if (shipment.Voided || shipment.InsurancePolicy == null || !shipment.InsurancePolicy.ClaimID.HasValue)
-            {
-                Visible = false;
-                return;
-            }
-
             InsurancePolicyEntity insurancePolicy = shipment.InsurancePolicy;
 
             claimType.Text = EnumHelper.GetDescription((InsureShipClaimType) insurancePolicy.ClaimType);
@@ -39,8 +33,7 @@ namespace ShipWorks.Shipping.Insurance
             description.Text = insurancePolicy.Description;
             damageValue.Text = insurancePolicy.DamageValue.Value.ToString("C");
             submittedOn.Text = insurancePolicy.SubmissionDate.Value.ToLocalTime().ToString("g");
-
-            Visible = true;
+            claimID.Text = insurancePolicy.ClaimID.Value.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -53,6 +46,7 @@ namespace ShipWorks.Shipping.Insurance
             damageValue.Text = string.Empty;
             submittedOn.Text = string.Empty;
             description.Text = string.Empty;
+            claimID.Text = string.Empty;
         }
     }
 }

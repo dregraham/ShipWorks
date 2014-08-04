@@ -27,8 +27,8 @@ namespace ShipWorks.Shipping.Insurance
             InitializeComponent();
 
             messageLabel.Location = new Point(8, 7);
-            insuranceViewClaimControl.Location = new Point(0, 4);
-            insuranceSubmitClaimControl.Location = new Point(0, 4);
+            viewClaimPanel.Location = new Point(0, 4);
+            submitClaimPanel.Location = new Point(0, 4);
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace ShipWorks.Shipping.Insurance
         /// <param name="shipments"></param>
         public void LoadClaim(List<ShipmentEntity> shipments)
         {
-            insuranceViewClaimControl.Visible = false;
-            insuranceSubmitClaimControl.Visible = false;
+            viewClaimPanel.Visible = false;
+            submitClaimPanel.Visible = false;
             messageLabel.Visible = false;
 
             if (!IsValid(shipments))
@@ -135,7 +135,15 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void ShowViewClaim(ShipmentEntity shipment)
         {
-            insuranceViewClaimControl.LoadClaim(shipment);
+            if (shipment.Voided || shipment.InsurancePolicy == null || !shipment.InsurancePolicy.ClaimID.HasValue)
+            {
+                viewClaimPanel.Visible = false;
+            }
+            else
+            {
+                insuranceViewClaimControl.LoadClaim(shipment);
+                viewClaimPanel.Visible = true;
+            }
         }
 
         /// <summary>
@@ -143,6 +151,9 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void ShowEditClaim(ShipmentEntity shipment)
         {
+            bool show = !shipment.Voided && shipment.InsurancePolicy != null && !shipment.InsurancePolicy.ClaimID.HasValue;
+            submitClaimPanel.Visible = show;
+
             insuranceSubmitClaimControl.LoadShipment(shipment);
             insuranceSubmitClaimControl.ClaimSubmitted = () => LoadClaim(new List<ShipmentEntity>() {shipment});
         }
@@ -175,7 +186,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void SaveToShipments()
         {
-            if (insuranceSubmitClaimControl.Visible && loadedShipment != null)
+            if (submitClaimPanel.Visible && loadedShipment != null)
             {
                 insuranceSubmitClaimControl.SaveToPolicy(loadedShipment.InsurancePolicy);
             }
