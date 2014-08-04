@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// </summary>
         public IInsureShipResponse CreateClaimStatusResponse(InsureShipRequestBase insureShipRequestBase)
         {
-            throw new System.NotImplementedException();
+            return new InsureShipClaimStatusResponse(insureShipRequestBase, LogManager.GetLogger(typeof(InsureShipClaimStatusResponse)));
         }
     }
 }
