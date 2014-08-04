@@ -661,6 +661,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
             Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Stamps.RequireFullAddressValidation);
 
+            // If this is a return shipment, swap the to/from addresses
+            if (shipment.ReturnShipment)
+            {
+                Address tmpAddress = toAddress;
+                toAddress = fromAddress;
+                fromAddress = tmpAddress;
+            }
+
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
             PostageBalance postageBalance;
