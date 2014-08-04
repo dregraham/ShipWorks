@@ -115,6 +115,9 @@ namespace ShipWorks.ApplicationCore.Logging
         SureDone,
 
         [ApiPrivateLogSource]
+        nopCommerce,
+
+        [ApiPrivateLogSource]
         LimeLightCRM,
     }
 }

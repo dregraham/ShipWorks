@@ -266,6 +266,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("zenventory")]
         Zenventory = 51,
 
+        [Description("nopCommerce")]
+        [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
+        [StoreTypeIcon("nopcommerce")]
+        nopCommerce = 52,
+		
         [Description("Lime Light CRM")]
         [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
         [StoreTypeIcon("limelightcrm")]
