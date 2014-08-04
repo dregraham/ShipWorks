@@ -176,7 +176,7 @@ namespace ShipWorks.ApplicationCore.Services
         {
             try
             {
-                adapter.SaveEntity(serviceStatus);
+                adapter.SaveAndRefetch(serviceStatus);
             }
             catch (ORMConcurrencyException ex)
             {
