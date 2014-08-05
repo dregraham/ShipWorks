@@ -80,6 +80,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="shipment">The shipment being voided.</param>
         public void Void(ShipmentEntity shipment)
         {
+            if (shipment.InsurancePolicy == null)
+            {
+                ShipmentTypeDataService.LoadInsuranceData(shipment);
+            }
+
             if (IsVoidable(shipment))
             {
                 try
