@@ -67,6 +67,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             requestFactory = new Mock<IInsureShipRequestFactory>();
             requestFactory.Setup(f => f.CreateSubmitClaimRequest(It.IsAny<ShipmentEntity>(), It.IsAny<InsureShipAffiliate>())).Returns(request.Object);
+            requestFactory.Setup(f => f.CreateClaimStatusRequest(It.IsAny<ShipmentEntity>(), It.IsAny<InsureShipAffiliate>())).Returns(request.Object);
 
             response.Setup(r => r.Process()).Returns(InsureShipResponseCode.Success);
 
@@ -265,6 +266,132 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             { }
 
             log.Verify(l => l.Error("An error occurred trying to submit a claim to InsureShip on shipment 100031. A(n) MissingRequiredParameter response code was received from InsureShip.", responseException), Times.Once());
+        }        
+
+        [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
+        public void CheckStatus_ThrowsException_WhenClaimIDIsNull_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = null;
+            
+            testObject.CheckStatus();
+        }
+
+        [TestMethod]
+        public void CheckStatus_LogsMessage_WhenClaimIDIsNull_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = null;
+
+            try
+            {
+                testObject.CheckStatus();
+            }
+            catch (InsureShipException)
+            { }
+
+            log.Verify(l => l.Error("Unable to check claim status for shipment 100031. A claim has not been submitted yet."), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_LogsMessage_WhenMakingRequest_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            log.Verify(l => l.InfoFormat("Checking claim status with InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_DelegatesToRequestFactory_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            requestFactory.Verify(r => r.CreateClaimStatusRequest(shipment, affiliate), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_DelegatesToClaimStatusRequest_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            request.Verify(r => r.Submit(), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_LogsMessage_WhenProcessingResponse_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            log.Verify(l => l.InfoFormat("Processing claim status response from InsureShip for shipment {0}.", shipment.ShipmentID), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_DelegatesToResponse_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            response.Verify(r => r.Process(), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_LogsMessage_WhenProcessingIsSuccessful_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            testObject.CheckStatus();
+
+            log.Verify(l => l.InfoFormat("Response code from InsureShip for claim status on shipment {0} was {1} successful (response code {2}).",
+                                   shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
+        }
+
+        [TestMethod]
+        public void CheckStatus_LogsErrorMessage_WhenInsureShipResponseExceptionIsCaught_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
+            response.Setup(r => r.Process()).Throws(responseException);
+
+            try
+            {
+                testObject.CheckStatus();
+            }
+            catch (InsureShipException)
+            { }
+
+            log.Verify(l => l.Error("An error occurred trying to check the claim status with InsureShip on shipment 100031. A(n) MissingRequiredParameter response code was received from InsureShip.", responseException), Times.Once());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
+        public void CheckStatus_CatchesInsureShipResponseException_AndThrowsInsureShipException_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+
+            InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
+            response.Setup(r => r.Process()).Throws(responseException);
+
+            testObject.CheckStatus();
+        }
+
+        [TestMethod]
+        public void CheckStatus_ReturnsClaimStatusOnPolicy_Test()
+        {
+            shipment.InsurancePolicy.ClaimID = 939;
+            shipment.InsurancePolicy.ClaimStatus = "Created";
+
+            string status = testObject.CheckStatus();
+
+            Assert.AreEqual(shipment.InsurancePolicy.ClaimStatus, status);
         }
     }
 }

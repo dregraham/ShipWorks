@@ -720,6 +720,8 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaim.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />

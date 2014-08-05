@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.IdentityModel.Claims;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using Microsoft.Web.Services3.Referral;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -77,6 +68,8 @@ namespace ShipWorks.Shipping.Insurance
 
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 // Disable the button to provide some feedback to the user that something is happening.
                 // Maybe change this to use a progress provider if it takes more than a few seconds.
                 submitClaim.Enabled = false;
@@ -91,6 +84,7 @@ namespace ShipWorks.Shipping.Insurance
                 InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
 
                 claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount);
+                LogClaimToTango();
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
@@ -121,6 +115,21 @@ namespace ShipWorks.Shipping.Insurance
             insurancePolicy.DamageValue = damageValue.Amount;
             insurancePolicy.ItemName = itemName.Text;
             insurancePolicy.Description = description.Text;
+        }
+
+        /// <summary>
+        /// Logs the claim to tango.
+        /// </summary>
+        public void LogClaimToTango()
+        {
+            try
+            {
+                TangoWebClient.LogSubmitInsuranceClaim(shipment);
+            }
+            catch (InsureShipException ex)
+            {
+                log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
+            }
         }
     }
 }

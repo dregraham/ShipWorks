@@ -116,15 +116,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     // This should never actually get here unless the response was successful, but log it just in case.
                     log.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
                                    shipment.ShipmentID, responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", EnumHelper.GetApiValue(responseCode));
-
-                    try
-                    {
-                        TangoWebClient.LogSubmitInsuranceClaim(shipment);
-                    }
-                    catch (InsureShipException ex)
-                    {
-                        log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
-                    }
                 }
                 catch (InsureShipResponseException exception)
                 {
@@ -178,6 +169,49 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             }
 
             return isEligible;
+        }
+
+        /// <summary>
+        /// Checks the status of this claim by issuing a request to InsureShip.
+        /// </summary>
+        /// <returns>The status obtained from InsureShip.</returns>
+        /// <exception cref="InsureShipException">
+        /// ShipWorks was unable to check the claim status for this shipment. A claim needs to be submitted first.
+        /// or
+        /// ShipWorks was not able to check the claim status for this shipment. Please try again or contact InsureShip to check the claim status.
+        /// </exception>
+        public string CheckStatus()
+        {
+            if (!shipment.InsurancePolicy.ClaimID.HasValue)
+            {
+                log.Error(string.Format("Unable to check claim status for shipment {0}. A claim has not been submitted yet.", shipment.ShipmentID));
+                throw new InsureShipException("ShipWorks was unable to check the claim status for this shipment. A claim needs to be submitted first.");
+            }
+
+            try
+            {
+                log.InfoFormat("Checking claim status with InsureShip for shipment {0}.", shipment.ShipmentID);
+                InsureShipRequestBase request = requestFactory.CreateClaimStatusRequest(shipment, affiliate);
+                IInsureShipResponse response = request.Submit();
+
+                log.InfoFormat("Processing claim status response from InsureShip for shipment {0}.", shipment.ShipmentID);
+                InsureShipResponseCode responseCode = response.Process();
+
+                // This should never actually get here unless the response was successful, but log it just in case.
+                log.InfoFormat("Response code from InsureShip for claim status on shipment {0} was {1} successful (response code {2}).",
+                               shipment.ShipmentID, responseCode == InsureShipResponseCode.Success ? string.Empty : "not ", EnumHelper.GetApiValue(responseCode));
+            }
+            catch (InsureShipResponseException exception)
+            {
+                string message = string.Format(
+                    "An error occurred trying to check the claim status with InsureShip on shipment {0}. A(n) {1} response code was received from InsureShip.",
+                    shipment.ShipmentID, exception.InsureShipResponseCode);
+
+                log.Error(message, exception);
+                throw new InsureShipException("ShipWorks was not able to check the claim status for this shipment. Please try again or contact InsureShip to check the claim status.", exception);
+            }
+
+            return shipment.InsurancePolicy.ClaimStatus;
         }
     }
 }

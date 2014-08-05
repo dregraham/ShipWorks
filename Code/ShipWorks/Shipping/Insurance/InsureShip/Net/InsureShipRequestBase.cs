@@ -99,54 +99,96 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <param name="postData">The post data.</param>
         protected void SubmitPost(Uri postUri, Dictionary<string, string> postData)
         {
-            if (!IsTrustedCertificate())
-            {
-                string message = "A trusted connection to InsureShip could not be established.";
-
-                Log.Error(message);
-                throw new InsureShipException(message);
-            }
-
-            RequestSubmitter = new HttpVariableRequestSubmitter { Uri = postUri };
-
+            // Confirm that the connection with InsureShip has not been compromised
+            EnsureSecureConnection();
+            
+            // Create/configure a new HttpRequestSubmitter
+            ConfigureNewRequestSubmitter(postUri);
             foreach (string key in postData.Keys)
             {
                 RequestSubmitter.Variables.Add(key, postData[key]);
             }
 
+            try
+            {
+                // Log the request before submitting it to InsureShip
+                LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
+                HttpWebResponse httpWebResponse = RequestSubmitter.GetResponse().HttpWebResponse;
+
+                // Grab the response data and save it to the local instance properties and 
+                // log the response
+                ReadResponse(httpWebResponse);
+                LogInsureShipResponse(httpWebResponse);
+            }
+            catch (WebException ex)
+            {
+                Log.Error(ex);
+
+                HttpWebResponse httpWebResponse = ex.Response as HttpWebResponse;
+                ReadResponse(httpWebResponse);
+
+                LogInsureShipResponse(httpWebResponse);
+            }
+        }
+
+        /// <summary>
+        /// Configures a new request submitter for the given URI, setting up the common headers and
+        /// the allowable HTTP status codes.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        protected void ConfigureNewRequestSubmitter(Uri uri)
+        {
+            RequestSubmitter = new HttpVariableRequestSubmitter { Uri = uri };
+
+            AddHeaders();
+            AddAllowedHttpStatusCodes();
+        }
+
+        /// <summary>
+        /// Ensures that a secure connection is made with InsureShip.
+        /// </summary>
+        /// <exception cref="InsureShipException"></exception>
+        protected virtual void EnsureSecureConnection()
+        {
+            if (!IsTrustedCertificate())
+            {
+                const string message = "A trusted connection to InsureShip could not be established.";
+
+                Log.Error(message);
+                throw new InsureShipException(message);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the connection to InsureShip is secure by inspecting the certificate.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsTrustedCertificate()
+        {
+            ICertificateInspector certificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.InsureShipCertificateVerificationData);
+            CertificateRequest request = new CertificateRequest(Settings.CertificateUrl, certificateInspector);
+
+            return request.Submit() == CertificateSecurityLevel.Trusted;
+        }
+
+        /// <summary>
+        /// Adds the common headers to the request including authentication info and content type.
+        /// </summary>
+        protected void AddHeaders()
+        {
             string credentials = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Settings.Username, Settings.Password)));
             string auth = string.Format("Basic {0}", credentials);
 
             RequestSubmitter.ContentType = "application/x-www-form-urlencoded";
             RequestSubmitter.Headers.Add("Accept", "application/json");
             RequestSubmitter.Headers.Add("Authorization", auth);
-
-            AddAllowedHttpStatusCodes();
-
-            try
-            {
-                LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
-
-                HttpWebResponse httpWebResponse = RequestSubmitter.GetResponse().HttpWebResponse;
-                ResponseContent = GetResponseContent(httpWebResponse);
-                ResponseStatusCode = httpWebResponse.StatusCode;
-                LogInsureShipResponse(httpWebResponse, ResponseContent);
-            }
-            catch (WebException ex)
-            {
-                Log.Error(ex);
-                HttpWebResponse httpWebResponse = ex.Response as HttpWebResponse;
-                ResponseContent = GetResponseContent(httpWebResponse);
-                ResponseStatusCode = (httpWebResponse == null) ? 0 : httpWebResponse.StatusCode;
-                LogInsureShipResponse(httpWebResponse, ResponseContent);
-            }
         }
 
         /// <summary>
         /// Adds the allowed HTTP status codes to the request based on the response
         /// codes we are expecting from the InsureShip API.
         /// </summary>
-        private void AddAllowedHttpStatusCodes()
+        protected void AddAllowedHttpStatusCodes()
         {
             List<HttpStatusCode> allowedCodes = new List<HttpStatusCode>();
             foreach (Enum value in Enum.GetValues(typeof (InsureShipResponseCode)))
@@ -161,9 +203,9 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <summary>
         /// Gets the content of the response.
         /// </summary>
-        private static string GetResponseContent(HttpWebResponse response)
+        protected void ReadResponse(HttpWebResponse response)
         {
-            string content = string.Empty;
+            ResponseStatusCode = (response == null) ? 0 : response.StatusCode;
 
             if (response != null)
             {
@@ -173,44 +215,32 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                     {
                         using (StreamReader reader = new StreamReader(responseStream))
                         {
-                            content = reader.ReadToEnd();
+                            ResponseContent = reader.ReadToEnd();
                             reader.Close();
                         }
+
                         responseStream.Close();
                     }
                 }
             }
-
-            return content;
         }
 
         /// <summary>
         /// Logs the response from InsureShip.
         /// </summary>
         /// <param name="response">The response.</param>
-        private void LogInsureShipResponse(HttpWebResponse response, string content)
+        protected void LogInsureShipResponse(HttpWebResponse response)
         {
             if (response != null)
             {
                 StringBuilder responseText = new StringBuilder();
+
                 responseText.AppendLine(string.Format("{0} {1}", (int) response.StatusCode, response.StatusCode.ToString()));
                 responseText.AppendLine(response.Headers.ToString());
-                responseText.AppendLine(content);
+                responseText.AppendLine(ResponseContent);
                 
                 LogResponse(responseText.ToString(), "log");
             }
-        }
-
-        /// <summary>
-        /// Determines whether the connection to InsureShip is secure by inspecting the certificate.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsTrustedCertificate()
-        {
-            ICertificateInspector certificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.InsureShipCertificateVerificationData);
-            CertificateRequest request = new CertificateRequest(Settings.CertificateUrl, certificateInspector);
-
-            return request.Submit() == CertificateSecurityLevel.Trusted;
         }
     }
 }

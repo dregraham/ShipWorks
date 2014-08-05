@@ -366,6 +366,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponseTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponseTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponseTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
