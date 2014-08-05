@@ -93,6 +93,13 @@ namespace ShipWorks.Shipping.Insurance
                 return false;
             }
 
+            if (HasMultiplePackages(shipment))
+            {
+                messageLabel.Text = "ShipWorks insurance cannot be used with multi-package shipments.";
+                messageLabel.Visible = true;
+                return false;
+            }
+
             if (shipment.Voided)
             {
                 messageLabel.Text = "This shipment has been voided and has no insurance claims.";
@@ -128,6 +135,17 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Does the specified shipment have multiple packages
+        /// </summary>
+        private static bool HasMultiplePackages(ShipmentEntity shipment)
+        {
+            return ((shipment.ShipmentType == (int)ShipmentTypeCode.UpsOnLineTools || shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip) && 
+                        shipment.Ups != null && shipment.Ups.Packages.Count > 1) ||
+                   (shipment.ShipmentType == (int)ShipmentTypeCode.FedEx && shipment.FedEx != null && shipment.FedEx.Packages.Count > 1) ||
+                   (shipment.ShipmentType == (int)ShipmentTypeCode.iParcel && shipment.IParcel != null && shipment.IParcel.Packages.Count > 1);
         }
 
         /// <summary>
