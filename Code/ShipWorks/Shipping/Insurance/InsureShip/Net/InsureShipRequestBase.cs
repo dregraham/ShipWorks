@@ -112,7 +112,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
             try
             {
                 // Log the request before submitting it to InsureShip
-                LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
+                //LogRequest(Encoding.Default.GetString(RequestSubmitter.GetPostContent()), "log");
+                LogRequest(RequestSubmitter);
                 HttpWebResponse httpWebResponse = RequestSubmitter.GetResponse().HttpWebResponse;
 
                 // Grab the response data and save it to the local instance properties and 
