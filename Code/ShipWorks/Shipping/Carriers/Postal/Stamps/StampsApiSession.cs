@@ -279,6 +279,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
+            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
+            {
+                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+            }
+
             try
             {
                 List<RateResult> rates = new List<RateResult>();
@@ -667,6 +672,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Address tmpAddress = toAddress;
                 toAddress = fromAddress;
                 fromAddress = tmpAddress;
+            }
+
+            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(toAddress.Country) && PostalUtility.IsDomesticCountry(fromAddress.Country)))
+            {
+                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
