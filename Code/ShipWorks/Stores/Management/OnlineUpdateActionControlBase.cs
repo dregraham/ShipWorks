@@ -39,6 +39,5 @@ namespace ShipWorks.Stores.Management
         {
             throw new NotImplementedException();
         }
-
     }
 }

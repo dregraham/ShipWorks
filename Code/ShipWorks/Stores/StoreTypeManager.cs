@@ -123,12 +123,14 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
                 case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
+                case StoreTypeCode.ChannelSale: return new Platforms.ChannelSale.ChannelSaleStoreType(store);
                 case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
 				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
                 case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
                 case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
                 case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
-                case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
+				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
+                case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -144,6 +146,8 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
+                StoreTypeCode.ChannelSale,
+                StoreTypeCode.nopCommerce,
             };
 
             return disabledTypes.Contains(typeCode);

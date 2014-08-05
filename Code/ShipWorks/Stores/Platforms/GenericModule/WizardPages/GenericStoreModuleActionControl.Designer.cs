@@ -87,7 +87,7 @@
             this.comboStatus.FormattingEnabled = true;
             this.comboStatus.Location = new System.Drawing.Point(181, 5);
             this.comboStatus.Name = "comboStatus";
-            this.comboStatus.Size = new System.Drawing.Size(153, 21);
+            this.comboStatus.Size = new System.Drawing.Size(237, 21);
             this.comboStatus.TabIndex = 3;
             // 
             // commentToken
@@ -95,7 +95,7 @@
             this.commentToken.Location = new System.Drawing.Point(181, 32);
             this.commentToken.MaxLength = 32767;
             this.commentToken.Name = "commentToken";
-            this.commentToken.Size = new System.Drawing.Size(257, 21);
+            this.commentToken.Size = new System.Drawing.Size(237, 21);
             this.commentToken.TabIndex = 2;
             this.commentToken.Text = "{//ServiceUsed} - {//TrackingNumber}";
             // 
