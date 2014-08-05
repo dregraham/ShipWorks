@@ -908,6 +908,12 @@ namespace ShipWorks.Shipping
 
                             try
                             {
+                                if (shipment.InsurancePolicy == null)
+                                {
+                                    // Make sure the insurance policy has been loaded prior to voiding the policy
+                                    ShipmentTypeDataService.LoadInsuranceData(shipment);
+                                }
+
                                 insureShipPolicy.Void(shipment);
                             }
                             catch (InsureShipException ex)

@@ -75,16 +75,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         }
 
         /// <summary>
-        /// Voids the policy associated with the given shipment if it has been insured via the InsureShip API.
+        /// Voids the policy associated with the given shipment if it has been insured via the InsureShip API. The 
+        /// shipment should be fully populated prior to invoking this method.
         /// </summary>
         /// <param name="shipment">The shipment being voided.</param>
         public void Void(ShipmentEntity shipment)
         {
-            if (shipment.InsurancePolicy == null)
-            {
-                ShipmentTypeDataService.LoadInsuranceData(shipment);
-            }
-
             if (IsVoidable(shipment))
             {
                 try
