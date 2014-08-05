@@ -134,8 +134,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 return true;
             }
 
-            // The Stamps object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal.Stamps != null)
+            // The Stamps or Postal objects may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Stamps != null)
             {
                 StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
                 if (account == null)
