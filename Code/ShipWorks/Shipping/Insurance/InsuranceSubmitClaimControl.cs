@@ -66,6 +66,12 @@ namespace ShipWorks.Shipping.Insurance
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(description.Text))
+            {
+                MessageHelper.ShowError(this, "A description must be provided when submitting a claim.");
+                return;
+            }
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
