@@ -1172,6 +1172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             RateV11 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
+            rate.PrintLayout = "Normal";
 
             List<AddOnV4> addOns = new List<AddOnV4>();
 
@@ -1222,6 +1223,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
+            }
+
+            if (shipment.ReturnShipment)
+            {
+                // Swapping out Normal with Return indicates a return label
+                rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
             }
 
             return rate;
