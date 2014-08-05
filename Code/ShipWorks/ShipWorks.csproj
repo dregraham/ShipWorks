@@ -2066,6 +2066,7 @@
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
     <Compile Include="Stores\ComputerDownloadAllowed.cs" />
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
+    <Compile Include="Stores\Management\OnlineUpdateActionCreateException.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
     <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
