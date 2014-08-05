@@ -1100,19 +1100,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             RateV11 rate = new RateV11();
 
-            if (!string.IsNullOrEmpty(account.MailingPostalCode))
+            string fromZipCode = string.Empty;
+            string toZipCode = string.Empty;
+            string toCountry = string.Empty;
+
+            fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
+            toZipCode = shipment.ShipPostalCode;
+            toCountry = AdjustCountryCode(shipment.ShipCountryCode);
+
+            // Swap the to/from for return shipments.
+            if (shipment.ReturnShipment)
             {
-                // We have a mailing postal code defined, so we'll use this to get the rate
-                rate.FromZIPCode = account.MailingPostalCode;
+                rate.FromZIPCode = toZipCode;
+                rate.ToZIPCode = fromZipCode;
+                rate.ToCountry = AdjustCountryCode(shipment.OriginCountryCode);
             }
             else
             {
-                // There's no mailing postal code defined, so use the origin postal code
-                rate.FromZIPCode = shipment.OriginPostalCode;
+                rate.FromZIPCode = fromZipCode;
+                rate.ToZIPCode = toZipCode;
+                rate.ToCountry = toCountry;
             }
-
-            rate.ToZIPCode = shipment.ShipPostalCode;
-            rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
