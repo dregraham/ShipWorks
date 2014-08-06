@@ -201,22 +201,22 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
-		[Description("BrightPearl")]
+		[Description("Brightpearl")]
         [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
         [StoreTypeIcon("brightpearl")]
-        BrightPearl = 38,
+        Brightpearl = 38,
 		
 		[Description("OrderDesk")]
         [StoreTypeIdentity("ORDERDESK", "ORD")]
         [StoreTypeIcon("orderdesk")]
         OrderDesk = 39,
-		
+
         [Description("Cart66 Lite")]
         [StoreTypeIdentity("CART66LITE", "C6L")]
         [StoreTypeIcon("cart66")]
         Cart66Lite = 40,
 
-		[Description("Cart66 Pro")]
+        [Description("Cart66 Pro")]
         [StoreTypeIdentity("CART66PRO", "C6P")]
         [StoreTypeIcon("cart66")]
         Cart66Pro = 41,
@@ -226,11 +226,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("shopp")]
         Shopp = 42,
 
-		[Description("Shopperpress")]
+        [Description("Shopperpress")]
         [StoreTypeIdentity("SHOPPERPRESS", "SHP")]
         [StoreTypeIcon("shopperpress")]
         Shopperpress = 43,
-		
+
         [Description("WP eCommerce")]
         [StoreTypeIdentity("WPECOMMERCE", "WPE")]
         [StoreTypeIcon("wpecommerce")]
@@ -246,6 +246,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("woocommerce")]
         WooCommerce = 46,
 
+        [Description("ChannelSale")]
+        [StoreTypeIdentity("CHANNELSALE", "CHS")]
+        [StoreTypeIcon("channelsale")]
+        ChannelSale = 47,
+
 		[Description("Fortune3")]
         [StoreTypeIdentity("FORTUNE3", "FT3")]
         [StoreTypeIcon("fortune3")]
@@ -259,6 +264,26 @@ namespace ShipWorks.Stores
 		[Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
-        SureDone = 50
+        SureDone = 50,
+
+        [Description("Zenventory")]
+        [StoreTypeIdentity("ZENVENTORY", "ZVN")]
+        [StoreTypeIcon("zenventory")]
+        Zenventory = 51,
+
+        [Description("Lime Light CRM")]
+        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
+        [StoreTypeIcon("limelightcrm")]
+        LimeLightCRM = 53,
+		
+        [Description("nopCommerce")]
+        [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
+        [StoreTypeIcon("nopcommerce")]
+        nopCommerce = 52,
+
+        [Description("OpenCart")]
+        [StoreTypeIdentity("OPENCART", "OCT")]
+        [StoreTypeIcon("opencart")]
+        OpenCart = 54,
     }
 }

@@ -14,21 +14,17 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// </summary>
     public class MagentoOrderIdentifier : OrderNumberIdentifier
     {
-
         // the postfix on the order number
-        string orderPostfix = "";
-
-        public string PostFix
-        {
-            get { return orderPostfix;}
-        }
+        readonly string postfix = "";
+        readonly string prefix = "";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MagentoOrderIdentifier(long orderNumber, string postFix) : base (orderNumber)
+        public MagentoOrderIdentifier(long orderNumber, string prefix, string postfix) : base (orderNumber)
         {
-            this.orderPostfix = postFix;
+            this.postfix = postfix;
+            this.prefix = prefix;
         }
         
         /// <summary>
@@ -38,22 +34,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             base.ApplyTo(order);
 
-            if (orderPostfix.Length > 0)
+            if (postfix.Length > 0)
             {
-                order.ApplyOrderNumberPostfix(orderPostfix);
+                order.ApplyOrderNumberPostfix(postfix);
             }
-        }
 
-        /// <summary>
-        /// Apply the order number and postfix to the supplied download detail entity
-        /// </summary>
-        public override void ApplyTo(DownloadDetailEntity downloadDetail)
-        {
-            // using the base behavior
-            base.ApplyTo(downloadDetail);
-
-            // not applying the postfix because when magento orders get a postfix, it's from
-            // the order being edited on the site.  It's really not a whole new order being downloaded.
+            if (prefix.Length>0)
+            {
+                order.ApplyOrderNumberPrefix(prefix);
+            }
         }
     }
 }

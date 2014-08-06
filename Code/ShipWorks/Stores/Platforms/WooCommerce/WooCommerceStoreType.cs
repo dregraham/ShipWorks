@@ -39,5 +39,13 @@ namespace ShipWorks.Stores.Platforms.WooCommerce
                 return ApiLogSource.WooCommerce;
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000022264-connecting-woocommerce-to"; }
+        }
     }
 }

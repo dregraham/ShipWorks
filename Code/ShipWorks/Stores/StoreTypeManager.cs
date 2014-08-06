@@ -114,7 +114,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
                 case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
-                case StoreTypeCode.BrightPearl: return new Platforms.BrightPearl.BrightPearlStoreType(store);
+                case StoreTypeCode.Brightpearl: return new Platforms.Brightpearl.BrightpearlStoreType(store);
                 case StoreTypeCode.OrderDesk: return new Platforms.OrderDesk.OrderDeskStoreType(store);
                 case StoreTypeCode.WooCommerce: return new Platforms.WooCommerce.WooCommerceStoreType(store);
                 case StoreTypeCode.Cart66Lite: return new Platforms.Cart66.Cart66LiteStoreType(store);
@@ -123,9 +123,14 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
                 case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
                 case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
+                case StoreTypeCode.ChannelSale: return new Platforms.ChannelSale.ChannelSaleStoreType(store);
                 case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
 				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
-				case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
+                case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
+                case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
+                case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
+				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
+                case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -141,18 +146,8 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.BrightPearl,
-                StoreTypeCode.OrderDesk,
-                StoreTypeCode.WooCommerce,
-                StoreTypeCode.Cart66Lite,
-                StoreTypeCode.Cart66Pro,
-                StoreTypeCode.Shopp,
-                StoreTypeCode.Shopperpress,
-                StoreTypeCode.WPeCommerce,
-                StoreTypeCode.Jigoshop,
-				StoreTypeCode.LiveSite,
-                StoreTypeCode.SureDone,
-				StoreTypeCode.Fortune3
+                StoreTypeCode.ChannelSale,
+                StoreTypeCode.nopCommerce,
             };
 
             return disabledTypes.Contains(typeCode);

@@ -39,5 +39,13 @@ namespace ShipWorks.Stores.Platforms.Shopp
                 return ApiLogSource.Shopp;
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/categories/105240/folders/261287/articles/4000022263-connecting-to"; }
+        }
     }
 }
