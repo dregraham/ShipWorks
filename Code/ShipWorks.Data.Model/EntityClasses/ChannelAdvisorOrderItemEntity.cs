@@ -585,7 +585,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The MarketplaceStoreName property of the Entity ChannelAdvisorOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceStoreName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NChar, 0, 0, 100<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String MarketplaceStoreName
 		{

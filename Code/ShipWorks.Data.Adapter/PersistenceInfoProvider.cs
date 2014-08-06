@@ -507,7 +507,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "ChannelAdvisorOrderItemEntity", "ShipWorksLocal", @"dbo", "ChannelAdvisorOrderItem", 10 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceName", "MarketplaceName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceStoreName", "MarketplaceStoreName", false, (int)SqlDbType.NChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceStoreName", "MarketplaceStoreName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceBuyerID", "MarketplaceBuyerID", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceSalesID", "MarketplaceSalesID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "Classification", "Classification", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
