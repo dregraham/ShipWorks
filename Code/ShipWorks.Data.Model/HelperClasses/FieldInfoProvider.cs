@@ -501,6 +501,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AccountKey", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AccountKey, 50, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadCriteria", typeof(System.Int16), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, 0, 0, 5);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ProfileID", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ProfileID, 0, 0, 10);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AttributesToDownload", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()

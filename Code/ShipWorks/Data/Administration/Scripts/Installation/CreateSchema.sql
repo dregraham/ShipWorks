@@ -1042,7 +1042,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [StoreID] [bigint] NOT NULL,
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DownloadCriteria] [smallint] NOT NULL,
-[ProfileID] [int] NOT NULL
+[ProfileID] [int] NOT NULL,
+[AttributesToDownload] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'

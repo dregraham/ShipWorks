@@ -1305,6 +1305,8 @@ namespace ShipWorks.Data.Model
 		DownloadCriteria,
 		///<summary>ProfileID. </summary>
 		ProfileID,
+		///<summary>AttributesToDownload. </summary>
+		AttributesToDownload,
 		/// <summary></summary>
 		AmountOfFields
 	}
