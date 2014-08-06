@@ -277,9 +277,20 @@ namespace ShipWorks.Templates.Emailing
                         // Since it may be opened or viewed later in word, we have to do this, since word screws up without it
                         HtmlUtility.SetExplicitImageSizes(htmlControl);
 
-                        // The final html is the content to save
-                        htmlContent = htmlControl.Html;
-                        endResult = formatSettings.NextResultIndex;
+                        try
+                        {
+                            // The final html is the content to save
+                            htmlContent = htmlControl.Html;
+                            endResult = formatSettings.NextResultIndex;
+                        }
+                        catch (InvalidCastException ex)
+                        {
+                            // In certain situations, getting the HTML from the control fails. In this case,
+                            // it seems better to notify the user that the template failed instead of crashing ShipWorks since
+                            // we had a customer who could no longer run ShipWorks because an action that used a template would
+                            // run at startup and crash immediately.
+                            throw new TemplateException("Could not generate template", ex);
+                        }
                     }
                     // Otherwise just determine the results to use ourself
                     else
