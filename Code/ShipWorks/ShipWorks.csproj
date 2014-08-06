@@ -2069,6 +2069,7 @@
     <Compile Include="Stores\Management\OnlineUpdateActionCreateException.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorMarketplaceStoreNameCondition.cs" />
     <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
