@@ -18,11 +18,11 @@ CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DownloadCriteria] [smallint] NOT NULL,
 [ProfileID] [int] NOT NULL,
-[AttributesToDownload] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AttributesToDownload] [xml] NOT NULL
 )
 GO
 INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [DownloadCriteria], [ProfileID],[AttributesToDownload]) 
-	SELECT [StoreID], [AccountKey], [DownloadCriteria], [ProfileID], 'some array that doesnt exist yet.  update the update script.'
+	SELECT [StoreID], [AccountKey], [DownloadCriteria], [ProfileID], '<x>some array that doesnt exist yet.  update the update script.</x>'
 	FROM [dbo].[ChannelAdvisorStore]
 GO
 DROP TABLE [dbo].[ChannelAdvisorStore]

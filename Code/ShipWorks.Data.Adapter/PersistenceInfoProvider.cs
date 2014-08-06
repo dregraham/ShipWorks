@@ -523,7 +523,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "DownloadCriteria", "DownloadCriteria", false, (int)SqlDbType.SmallInt, 0, 0, 5, false, "", null, typeof(System.Int16), 2 );
 			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
-			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "AttributesToDownload", "AttributesToDownload", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "AttributesToDownload", "AttributesToDownload", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
 		}
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
 		private void InitClickCartProOrderEntityMappings()
