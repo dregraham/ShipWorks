@@ -486,6 +486,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MarketplaceName", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MarketplaceName, 50, 0, 0);
+			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MarketplaceStoreName", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName, 100, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MarketplaceBuyerID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MarketplaceBuyerID, 80, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "MarketplaceSalesID", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.MarketplaceSalesID, 50, 0, 0);
 			base.AddElementFieldInfo("ChannelAdvisorOrderItemEntity", "Classification", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorOrderItemFieldIndex.Classification, 30, 0, 0);

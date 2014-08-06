@@ -1214,6 +1214,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
 		MarketplaceName,
+		///<summary>MarketplaceStoreName. </summary>
+		MarketplaceStoreName,
 		///<summary>MarketplaceBuyerID. </summary>
 		MarketplaceBuyerID,
 		///<summary>MarketplaceSalesID. </summary>

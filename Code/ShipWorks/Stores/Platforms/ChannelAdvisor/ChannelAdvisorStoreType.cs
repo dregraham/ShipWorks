@@ -111,6 +111,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             ChannelAdvisorOrderItemEntity entity = new ChannelAdvisorOrderItemEntity();
 
             entity.MarketplaceName = "";
+            entity.MarketplaceStoreName = "";
             entity.MarketplaceBuyerID = "";
             entity.MarketplaceSalesID = "";
             entity.Classification = "";

@@ -504,16 +504,17 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ChannelAdvisorOrderItemEntity's mappings</summary>
 		private void InitChannelAdvisorOrderItemEntityMappings()
 		{
-			base.AddElementMapping( "ChannelAdvisorOrderItemEntity", "ShipWorksLocal", @"dbo", "ChannelAdvisorOrderItem", 9 );
+			base.AddElementMapping( "ChannelAdvisorOrderItemEntity", "ShipWorksLocal", @"dbo", "ChannelAdvisorOrderItem", 10 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceName", "MarketplaceName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceBuyerID", "MarketplaceBuyerID", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceSalesID", "MarketplaceSalesID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "Classification", "Classification", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "DistributionCenter", "DistributionCenter", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "IsFBA", "IsFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 7 );
-			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MPN", "MPN", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceStoreName", "MarketplaceStoreName", false, (int)SqlDbType.NChar, 100, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceBuyerID", "MarketplaceBuyerID", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MarketplaceSalesID", "MarketplaceSalesID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "Classification", "Classification", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "DistributionCenter", "DistributionCenter", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "IsFBA", "IsFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
+			base.AddElementFieldMapping( "ChannelAdvisorOrderItemEntity", "MPN", "MPN", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 9 );
 		}
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>
 		private void InitChannelAdvisorStoreEntityMappings()
@@ -2363,7 +2364,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()
 		{
-			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgebase", 2 );
+			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgeBase", 2 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Entry", "Entry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 		}
