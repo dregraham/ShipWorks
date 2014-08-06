@@ -2038,12 +2038,6 @@
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2803,6 +2797,18 @@
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextboxWithDeleteButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextboxWithDeleteButton.Designer.cs">
+      <DependentUpon>TextboxWithDeleteButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\StringList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StringList.Designer.cs">
+      <DependentUpon>StringList.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
@@ -7241,9 +7247,6 @@
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
       <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7519,6 +7522,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\TextboxWithDeleteButton.resx">
+      <DependentUpon>TextboxWithDeleteButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StringList.resx">
+      <DependentUpon>StringList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TimeZoneSelection.resx">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
