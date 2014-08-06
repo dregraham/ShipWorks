@@ -249,6 +249,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // These are a child of the "ChannelAdvisor" element
             ElementOutline marketplace = outline.AddElement("Marketplace");
             marketplace.AddElement("Name", () => item.Value.MarketplaceName);
+            marketplace.AddElement("StoreName", () => item.Value.MarketplaceStoreName);
             marketplace.AddElement("BuyerID", () => item.Value.MarketplaceBuyerID);
             marketplace.AddElement("SalesID", () => item.Value.MarketplaceSalesID);
 
@@ -256,6 +257,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             ElementOutline legacy = container.AddElement("Marketplace");
             legacy.AddAttributeLegacy2x();
             legacy.AddElement("Name", () => item.Value.MarketplaceName);
+            legacy.AddElement("StoreName", () => item.Value.MarketplaceStoreName);
             legacy.AddElement("BuyerID", () => item.Value.MarketplaceBuyerID);
             legacy.AddElement("ItemID", () => item.Value.MarketplaceSalesID);
         }
