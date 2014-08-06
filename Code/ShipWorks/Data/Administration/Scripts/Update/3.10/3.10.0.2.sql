@@ -22,7 +22,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 )
 GO
 INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [DownloadCriteria], [ProfileID],[AttributesToDownload]) 
-	SELECT [StoreID], [AccountKey], [DownloadCriteria], [ProfileID], '<x>some array that doesnt exist yet.  update the update script.</x>'
+	SELECT [StoreID], [AccountKey], [DownloadCriteria], [ProfileID], '<Attributes></Attributes>'
 	FROM [dbo].[ChannelAdvisorStore]
 GO
 DROP TABLE [dbo].[ChannelAdvisorStore]
