@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
         // Will be non-null if we are in freemium signup mode
         FreemiumFreeEdition freemiumEdition = null;
+        private bool planTypeWasShown = false;
 
         /// <summary>
         /// Constructor
@@ -308,8 +309,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnPlanTypeShown(object sender, EventArgs e)
         {
-            // Due to the way control activation and RadioButton's work, the first one gets automatically checked when we want none to be checked when the page opens.
-            radioPlanStandard.Checked = false;
+            // Due to the way control activation and RadioButton's work, the first one gets automatically checked 
+            // when we want none to be checked when the page opens. Don't change the selection after the page is first
+            // shown, however.
+            if (!planTypeWasShown)
+            {
+                radioPlanStandard.Checked = false;
+                planTypeWasShown = true;
+            }
         }
 
         /// <summary>
