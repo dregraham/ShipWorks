@@ -1301,8 +1301,6 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>AccountKey. </summary>
 		AccountKey,
-		///<summary>DownloadCriteria. </summary>
-		DownloadCriteria,
 		///<summary>ProfileID. </summary>
 		ProfileID,
 		///<summary>AttributesToDownload. </summary>

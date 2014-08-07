@@ -16,13 +16,12 @@ CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 (
 [StoreID] [bigint] NOT NULL,
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadCriteria] [smallint] NOT NULL,
 [ProfileID] [int] NOT NULL,
 [AttributesToDownload] [xml] NOT NULL
 )
 GO
-INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [DownloadCriteria], [ProfileID],[AttributesToDownload]) 
-	SELECT [StoreID], [AccountKey], [DownloadCriteria], [ProfileID], '<Attributes></Attributes>'
+INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [ProfileID],[AttributesToDownload]) 
+	SELECT [StoreID], [AccountKey], [ProfileID], '<Attributes></Attributes>'
 	FROM [dbo].[ChannelAdvisorStore]
 GO
 DROP TABLE [dbo].[ChannelAdvisorStore]

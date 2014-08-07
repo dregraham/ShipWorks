@@ -478,9 +478,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AccountKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DownloadCriteria", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -567,17 +564,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AccountKey, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AccountKey, value); }
-		}
-
-		/// <summary> The DownloadCriteria property of the Entity ChannelAdvisorStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."DownloadCriteria"<br/>
-		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int16 DownloadCriteria
-		{
-			get { return (System.Int16)GetValue((int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, true); }
-			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, value); }
 		}
 
 		/// <summary> The ProfileID property of the Entity ChannelAdvisorStore<br/><br/>
