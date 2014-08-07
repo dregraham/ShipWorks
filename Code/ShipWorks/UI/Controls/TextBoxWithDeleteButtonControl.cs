@@ -5,9 +5,9 @@ using ShipWorks.UI.Utility;
 namespace ShipWorks.UI.Controls
 {
     /// <summary>
-    /// 
+    /// A textbox with a delete button control. Delete event is raised when delete is clicked.
     /// </summary>
-    public partial class TextBoxWithDeleteButton : UserControl
+    public partial class TextBoxWithDeleteButtonControl : UserControl
     {
         /// <summary>
         /// Occurs when the delete/remove button is clicked to notify interested listeners.
@@ -15,9 +15,9 @@ namespace ShipWorks.UI.Controls
         public event EventHandler DeleteClick;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TextBoxWithDeleteButton"/> class.
+        /// Initializes a new instance of the <see cref="TextBoxWithDeleteButtonControl"/> class.
         /// </summary>
-        public TextBoxWithDeleteButton(string value)
+        public TextBoxWithDeleteButtonControl(string value)
         {
             InitializeComponent();
 
@@ -40,7 +40,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public void OnDelete(object sender, EventArgs e)
+        private void OnDelete(object sender, EventArgs e)
         {
             if (DeleteClick != null)
             {

@@ -2798,17 +2798,17 @@
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\TextboxWithDeleteButton.cs">
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\TextboxWithDeleteButton.Designer.cs">
-      <DependentUpon>TextboxWithDeleteButton.cs</DependentUpon>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.Designer.cs">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Controls\StringList.cs">
+    <Compile Include="UI\Controls\StringListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Controls\StringList.Designer.cs">
-      <DependentUpon>StringList.cs</DependentUpon>
+    <Compile Include="UI\Controls\StringListControl.Designer.cs">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
@@ -7523,11 +7523,11 @@
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\TextboxWithDeleteButton.resx">
-      <DependentUpon>TextboxWithDeleteButton.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Controls\StringList.resx">
-      <DependentUpon>StringList.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\StringListControl.resx">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TimeZoneSelection.resx">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
@@ -10418,7 +10418,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

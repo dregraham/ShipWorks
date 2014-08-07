@@ -10,9 +10,9 @@ namespace ShipWorks.UI.Controls
     /// <summary>
     /// A control that prompts a user to administer a list of strings.
     /// </summary>
-    public partial class StringList : UserControl
+    public partial class StringListControl : UserControl
     {
-        public StringList()
+        public StringListControl()
         {
             InitializeComponent();
 
@@ -36,7 +36,7 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                return panelValues.Controls.OfType<TextBoxWithDeleteButton>()
+                return panelValues.Controls.OfType<TextBoxWithDeleteButtonControl>()
                     .Where(c => !string.IsNullOrWhiteSpace(c.Value))
                     .Select(c => c.Value).Reverse();
             }
@@ -60,7 +60,7 @@ namespace ShipWorks.UI.Controls
         private void AddValueControl(string value)
         {
             // Add a new value control to the UI
-            TextBoxWithDeleteButton valueControl = new TextBoxWithDeleteButton(value);
+            TextBoxWithDeleteButtonControl valueControl = new TextBoxWithDeleteButtonControl(value);
             valueControl.Width = Width;
             valueControl.Dock = DockStyle.Top;
             valueControl.DeleteClick += OnDelete;
@@ -79,7 +79,7 @@ namespace ShipWorks.UI.Controls
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnDelete(object sender, EventArgs e)
         {
-            TextBoxWithDeleteButton valueControl = (TextBoxWithDeleteButton)sender;
+            TextBoxWithDeleteButtonControl valueControl = (TextBoxWithDeleteButtonControl)sender;
 
             valueControl.DeleteClick -= OnDelete;
             panelValues.Controls.Remove(valueControl);

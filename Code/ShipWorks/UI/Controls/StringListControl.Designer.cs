@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.UI.Controls
 {
-    partial class StringList
+    partial class StringListControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -77,14 +77,14 @@
             this.addValueLine.Text = "Add Attribute";
             this.addValueLine.Click += new System.EventHandler(this.OnAddValue);
             // 
-            // StringList
+            // StringListControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.panelValues);
             this.Controls.Add(this.panelBottom);
-            this.Name = "StringList";
+            this.Name = "StringListControl";
             this.Size = new System.Drawing.Size(568, 68);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();

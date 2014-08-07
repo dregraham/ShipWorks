@@ -32,7 +32,7 @@
             this.panelProperties = new System.Windows.Forms.Panel();
             this.labelAttributeInstructions = new System.Windows.Forms.Label();
             this.labelItemPropertiesInstructions = new System.Windows.Forms.Label();
-            this.attributes = new ShipWorks.UI.Controls.StringList();
+            this.attributes = new ShipWorks.UI.Controls.StringListControl();
             this.sectionAddressCasing = new ShipWorks.UI.Controls.SectionTitle();
             this.itemPropertiesSection = new ShipWorks.UI.Controls.SectionTitle();
             this.itemProperties = new ShipWorks.Shipping.ShipSense.Settings.ShipSenseItemPropertyControl();
@@ -131,6 +131,6 @@
         private System.Windows.Forms.Label labelItemPropertiesInstructions;
         private UI.Controls.SectionTitle itemPropertiesSection;
         private UI.Controls.SectionTitle sectionAddressCasing;
-        private UI.Controls.StringList attributes;
+        private UI.Controls.StringListControl attributes;
     }
 }
