@@ -268,20 +268,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // There were many bugs related to users choosing the other critiera. If payment hadn't cleared, order details would be incomplete.
             // If we filtered the shipping status to unshipped, we'd never pickup historic shipped orders, or changes to shipped orders online status
             criteria.PaymentStatusFilter = PaymentStatusCodes.Cleared;
-
-            /*switch ((ChannelAdvisorDownloadCriteria)store.DownloadCriteria)
-            {
-                case ChannelAdvisorDownloadCriteria.NotShipped:
-                    criteria.ShippingStatusFilter = caOrderService.ShippingStatusCode.Unshipped;
-                    break;
-                case ChannelAdvisorDownloadCriteria.Paid:
-                    criteria.PaymentStatusFilter = caOrderService.PaymentStatusCode.Cleared;
-                    break;
-                case ChannelAdvisorDownloadCriteria.PaidNotShipped:
-                    criteria.PaymentStatusFilter = caOrderService.PaymentStatusCode.Cleared;
-                    criteria.ShippingStatusFilter = caOrderService.ShippingStatusCode.Unshipped;
-                    break;
-            }*/
         }
 
         /// <summary>

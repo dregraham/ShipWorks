@@ -4634,7 +4634,6 @@
       <DependentUpon>ChannelAdvisorStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadCriteria.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

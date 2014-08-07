@@ -145,10 +145,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return new List<WizardPage>
             {
                 new ChannelAdvisorAccountPage(),
-
-                // BN: We are experimenting with removing the Download Criteria for CA.  Leaving the control class in the code, but just 
-                // not returning it here.
-                // new ChannelAdvisorDownloadCriteriaPage()
             };
         }
 
