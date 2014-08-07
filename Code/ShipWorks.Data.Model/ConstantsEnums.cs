@@ -3316,6 +3316,8 @@ namespace ShipWorks.Data.Model
 		SmartPostCustomerManifest,
 		///<summary>SmartPostHubID. </summary>
 		SmartPostHubID,
+		///<summary>SmartPostUspsApplicationId. </summary>
+		SmartPostUspsApplicationId,
 		///<summary>DropoffType. </summary>
 		DropoffType,
 		///<summary>OriginResidentialDetermination. </summary>
