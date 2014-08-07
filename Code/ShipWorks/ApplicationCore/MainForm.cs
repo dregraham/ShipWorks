@@ -861,6 +861,10 @@ namespace ShipWorks
             panelDockingArea.Visible = false;
             DashboardManager.CloseDashboard();
 
+            // Take focus away from other controls after we've logged out. The grid control was setting focus on its search box when
+            // it reset, which was causing a crash when any key was pressed after a user logged out.
+            Focus();
+
             log.InfoFormat("UI hidden");
         }
 
