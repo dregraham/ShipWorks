@@ -370,6 +370,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
+            shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
+
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
 
@@ -920,7 +922,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (fedex.Packages.Count == 1)
             {
-                return base.GetTrackingNumbers(shipment);
+                return new List<string> { FedExUtility.BuildTrackingNumber(shipment.TrackingNumber, fedex) };
             }
             else
             {
@@ -928,7 +930,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 for (int i = 0; i < fedex.Packages.Count; i++)
                 {
-                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, fedex.Packages[i].TrackingNumber));
+                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, FedExUtility.BuildTrackingNumber(fedex.Packages[i].TrackingNumber, fedex)));
                 }
 
                 return trackingList;
