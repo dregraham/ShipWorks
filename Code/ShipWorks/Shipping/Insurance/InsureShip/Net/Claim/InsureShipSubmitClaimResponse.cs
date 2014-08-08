@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
                 string message = string.Format("An unknown response code was received from the InsureShip API for shipment {0}: {1}", request.Shipment.ShipmentID, (int) responseStatusCode);
 
                 log.Error(message);
-                throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message);
+                throw new InsureShipResponseException(InsureShipResponseCode.UnknownFailure, message) { MessageFromInsureShip = request.ResponseContent };
             }
 
             // We have a recognizable response code
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
                 string message = string.Format("An error occurred trying to submit a claim for shipment {0} with the InsureShip API: {1}", request.Shipment.ShipmentID, (int) responseStatusCode);
 
                 log.Error(message);
-                throw new InsureShipResponseException(responseCode, message);
+                throw new InsureShipResponseException(responseCode, message) { MessageFromInsureShip = request.ResponseContent };
             }
 
             return responseCode;

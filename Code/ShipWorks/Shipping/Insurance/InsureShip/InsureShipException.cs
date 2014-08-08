@@ -32,5 +32,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             : base(message, inner)
         {
         }
+
+        /// <summary>
+        /// Gets or sets the message from InsureShip.
+        /// </summary>
+        public string MessageFromInsureShip { get; set; }
     }
 }

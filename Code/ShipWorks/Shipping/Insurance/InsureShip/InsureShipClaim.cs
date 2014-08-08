@@ -124,7 +124,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                         shipment.ShipmentID, exception.InsureShipResponseCode);
 
                     log.Error(message, exception);
-                    throw new InsureShipException("ShipWorks was not able to submit a claim for this shipment. Please try again or contact InsureShip to file a claim.", exception);
+
+                    string messageToUser = "ShipWorks was not able to submit a claim for this shipment. Please try again or contact InsureShip to file a claim.";
+
+                    if (!string.IsNullOrEmpty(exception.MessageFromInsureShip))
+                    {
+                        messageToUser = string.Format("{0}\r\n\r\n{1}", messageToUser, exception.MessageFromInsureShip);
+                    }
+
+                    throw new InsureShipException(messageToUser, exception);
                 }
             }
             else
