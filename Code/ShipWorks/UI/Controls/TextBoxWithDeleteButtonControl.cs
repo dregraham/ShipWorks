@@ -2,38 +2,37 @@
 using System.Windows.Forms;
 using ShipWorks.UI.Utility;
 
-namespace ShipWorks.Shipping.ShipSense.Settings
+namespace ShipWorks.UI.Controls
 {
     /// <summary>
-    /// 
+    /// A textbox with a delete button control. Delete event is raised when delete is clicked.
     /// </summary>
-    public partial class ShipSenseItemAttributeControl : UserControl
+    public partial class TextBoxWithDeleteButtonControl : UserControl
     {
         /// <summary>
         /// Occurs when the delete/remove button is clicked to notify interested listeners.
         /// </summary>
-        public event EventHandler DeleteAttributeClick;
+        public event EventHandler DeleteClick;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShipSenseItemAttributeControl"/> class.
+        /// Initializes a new instance of the <see cref="TextBoxWithDeleteButtonControl"/> class.
         /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        public ShipSenseItemAttributeControl(string attributeName)
+        public TextBoxWithDeleteButtonControl(string value)
         {
             InitializeComponent();
 
-            attribute.Text = attributeName;
+            textBox.Text = value;
 
             // Get rid of the ugly bottom border on the toolstrip control
             toolStripDelete.Renderer = new NoBorderToolStripRenderer();
         }
 
         /// <summary>
-        /// Gets the name of the attribute in the text box.
+        /// Gets the value in the value box.
         /// </summary>
-        public string AttributeName
+        public string Value
         {
-            get { return attribute.Text; }
+            get { return textBox.Text; }
         }
 
         /// <summary>
@@ -41,11 +40,11 @@ namespace ShipWorks.Shipping.ShipSense.Settings
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public void OnDelete(object sender, EventArgs e)
+        private void OnDelete(object sender, EventArgs e)
         {
-            if (DeleteAttributeClick != null)
+            if (DeleteClick != null)
             {
-                DeleteAttributeClick(this, EventArgs.Empty);
+                DeleteClick(this, EventArgs.Empty);
             }
         }
     }

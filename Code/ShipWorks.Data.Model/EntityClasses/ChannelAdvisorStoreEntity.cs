@@ -478,10 +478,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AccountKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DownloadCriteria", fieldHashtable);
+			_fieldsCustomProperties.Add("ProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ProfileID", fieldHashtable);
+			_fieldsCustomProperties.Add("AttributesToDownload", fieldHashtable);
 		}
 		#endregion
 
@@ -566,17 +566,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AccountKey, value); }
 		}
 
-		/// <summary> The DownloadCriteria property of the Entity ChannelAdvisorStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."DownloadCriteria"<br/>
-		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int16 DownloadCriteria
-		{
-			get { return (System.Int16)GetValue((int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, true); }
-			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, value); }
-		}
-
 		/// <summary> The ProfileID property of the Entity ChannelAdvisorStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ProfileID"<br/>
@@ -586,6 +575,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorStoreFieldIndex.ProfileID, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.ProfileID, value); }
+		}
+
+		/// <summary> The AttributesToDownload property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AttributesToDownload"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AttributesToDownload
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, value); }
 		}
 
 

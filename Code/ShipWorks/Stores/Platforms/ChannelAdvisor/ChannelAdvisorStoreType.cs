@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             caStore.AccountKey = "";
             caStore.ProfileID = 0;
-            caStore.DownloadCriteria = (int) ChannelAdvisorDownloadCriteria.Paid;
+            caStore.AttributesToDownload = "<Attributes></Attributes>";
 
             return caStore; 
         }
@@ -145,10 +145,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return new List<WizardPage>
             {
                 new ChannelAdvisorAccountPage(),
-
-                // BN: We are experimenting with removing the Download Criteria for CA.  Leaving the control class in the code, but just 
-                // not returning it here.
-                // new ChannelAdvisorDownloadCriteriaPage()
             };
         }
 
@@ -173,9 +169,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
-            // BN: We are experimenting with removing the Download Criteria for CA.  Leaving the control class in the code, but just 
-            // not returning it here.
-            return null;
+            return new ChannelAdvisorStoreSettingsControl();
         }
 
         /// <summary>
