@@ -219,18 +219,25 @@
             // 
             // storeSettings
             // 
+            this.storeSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.storeSettings.Controls.Add(this.storeCheckBoxPanel);
             this.storeSettings.Controls.Add(this.storeLimited);
             this.storeSettings.Location = new System.Drawing.Point(6, 119);
             this.storeSettings.Name = "storeSettings";
-            this.storeSettings.Size = new System.Drawing.Size(411, 221);
+            this.storeSettings.Size = new System.Drawing.Size(526, 307);
             this.storeSettings.TabIndex = 9;
             // 
             // storeCheckBoxPanel
             // 
+            this.storeCheckBoxPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.storeCheckBoxPanel.AutoScroll = true;
             this.storeCheckBoxPanel.Location = new System.Drawing.Point(21, 26);
-            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";            
-            this.storeCheckBoxPanel.Size = new System.Drawing.Size(371, 57);
+            this.storeCheckBoxPanel.Name = "storeCheckBoxPanel";
+            this.storeCheckBoxPanel.Size = new System.Drawing.Size(505, 278);
             this.storeCheckBoxPanel.TabIndex = 4;
             // 
             // storeLimited
@@ -265,7 +272,6 @@
             // 
             // runOnSpecificComputersList
             // 
-            this.runOnSpecificComputersList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.runOnSpecificComputersList.Enabled = false;
             this.runOnSpecificComputersList.FormattingEnabled = true;
             this.runOnSpecificComputersList.IntegralHeight = false;

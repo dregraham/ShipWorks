@@ -58,7 +58,12 @@ namespace ShipWorks.Actions.UI
             }
 
             panelStores.Height = location.Y + 4;
-            Height = panelStores.Height + 4;
+
+            // If this control is going to be scrolled, we don't want to resize it.
+            if (!AutoScroll)
+            {
+                Height = panelStores.Height + 4;   
+            }
         }
 
         /// <summary>
