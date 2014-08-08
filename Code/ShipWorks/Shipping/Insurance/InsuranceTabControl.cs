@@ -124,11 +124,11 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             InsureShipSettings insureShipSettings = new InsureShipSettings();
-            DateTime allowedSubmitClaimDateUtc = shipment.ShipDate + insureShipSettings.ClaimSubmissionWaitingPeriod;
+            DateTime allowedSubmitClaimDate = shipment.ShipDate + insureShipSettings.ClaimSubmissionWaitingPeriod;
 
-            if (DateTime.UtcNow < allowedSubmitClaimDateUtc)
+            if (DateTime.Now < allowedSubmitClaimDate)
             {
-                messageLabel.Text = string.Format("You may submit a claim on or after {0}.", allowedSubmitClaimDateUtc.ToLocalTime());
+                messageLabel.Text = string.Format("You may submit a claim on or after {0}.", allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
                 messageLabel.Visible = true;
                 insuranceViewClaimControl.Visible = false;
                 return false;
