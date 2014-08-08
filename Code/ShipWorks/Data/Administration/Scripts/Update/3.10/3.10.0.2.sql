@@ -24,7 +24,8 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [ClaimType] [int] NULL,
 [DamageValue] [money] NULL,
 [SubmissionDate] [datetime] NULL,
-[ClaimID] [bigint] NULL
+[ClaimID] [bigint] NULL,
+[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION

@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);
             postData.Add("shipping_country", Shipment.ShipCountryCode);
-            postData.Add("shipment_value", GetInsuredValue().ToString(CultureInfo.InvariantCulture));
+            postData.Add("shipment_value", InsuranceUtility.GetInsuredValue(Shipment).ToString(CultureInfo.InvariantCulture));
             postData.Add("order_id", unqiueShipmentId);
             postData.Add("shipment_id", unqiueShipmentId);
             postData.Add("tracking_id", Shipment.TrackingNumber);
@@ -74,23 +74,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             return postData;
         }
 
-        /// <summary>
-        /// Determines the insured value for the shipment.
-        /// </summary>
-        private decimal GetInsuredValue()
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(Shipment);
 
-            return
-                Enumerable.Range(0, shipmentType.GetParcelCount(Shipment))
-                    .Select(parcelIndex => shipmentType.GetParcelDetail(Shipment, parcelIndex).Insurance)
-                    .Where(
-                        choice =>
-                            choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                            choice.InsuranceValue > 0)
-                    .Select(insuredPackages => insuredPackages.InsuranceValue)
-                    .DefaultIfEmpty(0)
-                    .Sum();
-        }
     }
 }

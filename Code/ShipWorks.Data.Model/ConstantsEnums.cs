@@ -4020,6 +4020,8 @@ namespace ShipWorks.Data.Model
 		SubmissionDate,
 		///<summary>ClaimID. </summary>
 		ClaimID,
+		///<summary>EmailAddress. </summary>
+		EmailAddress,
 		/// <summary></summary>
 		AmountOfFields
 	}

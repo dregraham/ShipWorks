@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             postData.Add("distributor_id", Settings.DistributorID);
             postData.Add("store_id", Affiliate.InsureShipStoreID);
             postData.Add("store_name", Affiliate.InsureShipPolicyID);
-            postData.Add("email", Shipment.ShipEmail);
+            postData.Add("email", Shipment.InsurancePolicy.EmailAddress);
             postData.Add("firstname", Shipment.ShipFirstName);
             postData.Add("lastname", Shipment.ShipLastName);
             postData.Add("item_name", Shipment.InsurancePolicy.ItemName);

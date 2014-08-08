@@ -38,7 +38,8 @@ namespace ShipWorks.Shipping.Insurance
             
             itemName.Text = insurancePolicy.ItemName;
             description.Text = insurancePolicy.Description;
-            
+            email.Text = insurancePolicy.EmailAddress;
+
             damageValue.Text = insurancePolicy.DamageValue.Value.ToString("C");
             submittedOn.Text = insurancePolicy.SubmissionDate.Value.ToLocalTime().ToString("g");
             

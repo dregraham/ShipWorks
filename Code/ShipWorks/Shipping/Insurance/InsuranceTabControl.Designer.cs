@@ -30,9 +30,9 @@
         {
             this.messageLabel = new System.Windows.Forms.Label();
             this.submitClaimPanel = new System.Windows.Forms.Panel();
+            this.insuranceSubmitClaimControl = new ShipWorks.Shipping.Insurance.InsuranceSubmitClaimControl();
             this.viewClaimPanel = new System.Windows.Forms.Panel();
             this.insuranceViewClaimControl = new ShipWorks.Shipping.Insurance.InsuranceViewClaimControl();
-            this.insuranceSubmitClaimControl = new ShipWorks.Shipping.Insurance.InsuranceSubmitClaimControl();
             this.submitClaimPanel.SuspendLayout();
             this.viewClaimPanel.SuspendLayout();
             this.SuspendLayout();
@@ -53,8 +53,17 @@
             this.submitClaimPanel.Controls.Add(this.insuranceSubmitClaimControl);
             this.submitClaimPanel.Location = new System.Drawing.Point(8, 283);
             this.submitClaimPanel.Name = "submitClaimPanel";
-            this.submitClaimPanel.Size = new System.Drawing.Size(450, 250);
+            this.submitClaimPanel.Size = new System.Drawing.Size(450, 302);
             this.submitClaimPanel.TabIndex = 3;
+            // 
+            // insuranceSubmitClaimControl
+            // 
+            this.insuranceSubmitClaimControl.ClaimSubmitted = null;
+            this.insuranceSubmitClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(6, 3);
+            this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
+            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(441, 265);
+            this.insuranceSubmitClaimControl.TabIndex = 3;
             // 
             // viewClaimPanel
             // 
@@ -73,15 +82,6 @@
             this.insuranceViewClaimControl.Name = "insuranceViewClaimControl";
             this.insuranceViewClaimControl.Size = new System.Drawing.Size(441, 250);
             this.insuranceViewClaimControl.TabIndex = 1;
-            // 
-            // insuranceSubmitClaimControl
-            // 
-            this.insuranceSubmitClaimControl.ClaimSubmitted = null;
-            this.insuranceSubmitClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(6, 3);
-            this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
-            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(441, 230);
-            this.insuranceSubmitClaimControl.TabIndex = 3;
             // 
             // InsuranceTabControl
             // 

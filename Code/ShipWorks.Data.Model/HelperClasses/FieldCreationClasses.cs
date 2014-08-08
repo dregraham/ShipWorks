@@ -8512,6 +8512,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ClaimID);}
 		}
+		/// <summary>Creates a new InsurancePolicyEntity.EmailAddress field instance</summary>
+		public static EntityField2 EmailAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.EmailAddress);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity IParcelAccountEntity</summary>

@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="description"></param>
         /// <param name="items">The items.</param>
         /// <param name="damageAmount">The damage amount.</param>
-        public void Submit(InsureShipClaimType claimType, string items, string description, decimal damageAmount)
+        public void Submit(InsureShipClaimType claimType, string items, string description, decimal damageAmount, string billingEmailAddress)
         {   
             if (IsShipmentEligibleToSubmitClaim())
             {
@@ -103,6 +103,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 shipment.InsurancePolicy.DamageValue = damageAmount;
                 shipment.InsurancePolicy.SubmissionDate = DateTime.UtcNow;
                 shipment.InsurancePolicy.Description = description;
+                shipment.InsurancePolicy.EmailAddress = billingEmailAddress;
 
                 try
                 {

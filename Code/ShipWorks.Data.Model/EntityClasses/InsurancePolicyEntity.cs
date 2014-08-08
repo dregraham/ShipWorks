@@ -491,6 +491,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ClaimID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("EmailAddress", fieldHashtable);
 		}
 		#endregion
 
@@ -696,6 +699,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)InsurancePolicyFieldIndex.ClaimID, false); }
 			set	{ SetValue((int)InsurancePolicyFieldIndex.ClaimID, value); }
+		}
+
+		/// <summary> The EmailAddress property of the Entity InsurancePolicy<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "InsurancePolicy"."EmailAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String EmailAddress
+		{
+			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.EmailAddress, true); }
+			set	{ SetValue((int)InsurancePolicyFieldIndex.EmailAddress, value); }
 		}
 
 

@@ -8,6 +8,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -44,9 +45,10 @@ namespace ShipWorks.Shipping.Insurance
 
             // Make sure that controls are reset even if the data is empty
             claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
-            damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(0);
+            damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(InsuranceUtility.GetInsuredValue(shipment));
             itemName.Text = shipment.InsurancePolicy.ItemName;
             description.Text = shipment.InsurancePolicy.Description;
+            email.Text = shipment.InsurancePolicy.EmailAddress ?? shipment.OriginEmail;
         }
 
         /// <summary>
@@ -89,7 +91,7 @@ namespace ShipWorks.Shipping.Insurance
                 InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(storeEntity);
                 InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
 
-                claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount);
+                claim.Submit((InsureShipClaimType) claimType.SelectedValue, itemName.Text, description.Text, damageValue.Amount, email.Text);
                 LogClaimToTango();
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
@@ -121,6 +123,7 @@ namespace ShipWorks.Shipping.Insurance
             insurancePolicy.DamageValue = damageValue.Amount;
             insurancePolicy.ItemName = itemName.Text;
             insurancePolicy.Description = description.Text;
+            insurancePolicy.EmailAddress = email.Text;
         }
 
         /// <summary>
