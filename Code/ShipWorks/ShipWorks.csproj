@@ -2039,12 +2039,6 @@
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2834,6 +2828,18 @@
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.Designer.cs">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.Designer.cs">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
@@ -4659,18 +4665,11 @@
       <DependentUpon>ChannelAdvisorStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadCriteria.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\CreLoaded\CreLoadedStoreType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackConditionStatusType.cs" />
@@ -7272,9 +7271,6 @@
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
       <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7562,6 +7558,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StringListControl.resx">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TimeZoneSelection.resx">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
@@ -9455,9 +9457,6 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.resx">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.resx">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.resx">
       <DependentUpon>EbayAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10452,6 +10451,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
