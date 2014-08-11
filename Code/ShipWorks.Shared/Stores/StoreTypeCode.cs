@@ -285,5 +285,10 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("OPENCART", "OCT")]
         [StoreTypeIcon("opencart")]
         OpenCart = 54,
+
+        [Description("sellerexpress")]
+        [StoreTypeIdentity("SELLEREXPRESS", "SEE")]
+        [StoreTypeIcon("sellerexpress")]
+        SellerExpress = 55,
     }
 }
