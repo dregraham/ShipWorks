@@ -2099,6 +2099,19 @@
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.Designer.cs">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.Designer.cs">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
@@ -7393,6 +7406,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.resx">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.resx">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.resx">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyAccountSettingsControl.resx">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
