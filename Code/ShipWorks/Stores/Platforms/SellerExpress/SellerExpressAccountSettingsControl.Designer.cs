@@ -45,7 +45,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(396, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Enter the administrator username and password you use to login to ChannelSale:";
+            this.label1.Text = "Enter the administrator username and password you use to login to sellerexpress:";
             // 
             // label2
             // 
