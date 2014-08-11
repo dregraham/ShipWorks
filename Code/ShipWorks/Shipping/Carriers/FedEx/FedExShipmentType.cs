@@ -1170,6 +1170,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.FedEx != null)
+            {
+                shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
