@@ -101,5 +101,6 @@ namespace ShipWorks.ApplicationCore.Logging
         SureDone,
         nopCommerce,
         LimeLightCRM,
+        PowersportsSupport,
     }
 }
