@@ -109,6 +109,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.description.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.description.Location = new System.Drawing.Point(87, 81);
+            this.description.MaxLength = 255;
             this.description.Multiline = true;
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(180, 113);
