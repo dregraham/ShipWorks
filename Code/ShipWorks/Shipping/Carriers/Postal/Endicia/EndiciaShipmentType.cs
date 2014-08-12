@@ -866,6 +866,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Endicia != null)
+            {
+                shipment.Postal.Endicia.TransactionID = null;
+                shipment.Postal.Endicia.RefundFormID = null;
+                shipment.Postal.Endicia.ScanFormBatchID = null;
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         /// <param name="shipment"></param>
