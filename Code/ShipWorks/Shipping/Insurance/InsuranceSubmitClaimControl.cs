@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.IdentityModel.Claims;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using Microsoft.Web.Services3.Referral;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -77,6 +68,8 @@ namespace ShipWorks.Shipping.Insurance
 
             try
             {
+                Cursor.Current = Cursors.WaitCursor;
+
                 // Disable the button to provide some feedback to the user that something is happening.
                 // Maybe change this to use a progress provider if it takes more than a few seconds.
                 submitClaim.Enabled = false;
