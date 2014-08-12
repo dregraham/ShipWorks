@@ -40,12 +40,15 @@
             this.claimID = new System.Windows.Forms.Label();
             this.claimIDLabel = new System.Windows.Forms.Label();
             this.description = new System.Windows.Forms.Label();
+            this.claimStatus = new System.Windows.Forms.TextBox();
+            this.claimStatusLabel = new System.Windows.Forms.Label();
+            this.checkStatus = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // claimTypeLabel
             // 
             this.claimTypeLabel.AutoSize = true;
-            this.claimTypeLabel.Location = new System.Drawing.Point(14, 53);
+            this.claimTypeLabel.Location = new System.Drawing.Point(14, 78);
             this.claimTypeLabel.Name = "claimTypeLabel";
             this.claimTypeLabel.Size = new System.Drawing.Size(63, 13);
             this.claimTypeLabel.TabIndex = 0;
@@ -54,7 +57,7 @@
             // damageValueLabel
             // 
             this.damageValueLabel.AutoSize = true;
-            this.damageValueLabel.Location = new System.Drawing.Point(2, 78);
+            this.damageValueLabel.Location = new System.Drawing.Point(2, 103);
             this.damageValueLabel.Name = "damageValueLabel";
             this.damageValueLabel.Size = new System.Drawing.Size(79, 13);
             this.damageValueLabel.TabIndex = 1;
@@ -63,7 +66,7 @@
             // itemNameLabel
             // 
             this.itemNameLabel.AutoSize = true;
-            this.itemNameLabel.Location = new System.Drawing.Point(15, 103);
+            this.itemNameLabel.Location = new System.Drawing.Point(15, 128);
             this.itemNameLabel.Name = "itemNameLabel";
             this.itemNameLabel.Size = new System.Drawing.Size(63, 13);
             this.itemNameLabel.TabIndex = 2;
@@ -74,7 +77,7 @@
             this.claimType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.claimType.AutoSize = true;
-            this.claimType.Location = new System.Drawing.Point(82, 53);
+            this.claimType.Location = new System.Drawing.Point(82, 78);
             this.claimType.Name = "claimType";
             this.claimType.Size = new System.Drawing.Size(106, 13);
             this.claimType.TabIndex = 3;
@@ -85,7 +88,7 @@
             this.damageValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.damageValue.AutoSize = true;
-            this.damageValue.Location = new System.Drawing.Point(82, 78);
+            this.damageValue.Location = new System.Drawing.Point(82, 103);
             this.damageValue.Name = "damageValue";
             this.damageValue.Size = new System.Drawing.Size(125, 13);
             this.damageValue.TabIndex = 4;
@@ -97,7 +100,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.itemName.AutoEllipsis = true;
             this.itemName.AutoSize = true;
-            this.itemName.Location = new System.Drawing.Point(82, 103);
+            this.itemName.Location = new System.Drawing.Point(82, 128);
             this.itemName.Name = "itemName";
             this.itemName.Size = new System.Drawing.Size(107, 13);
             this.itemName.TabIndex = 5;
@@ -106,7 +109,7 @@
             // descriptionLabel
             // 
             this.descriptionLabel.AutoSize = true;
-            this.descriptionLabel.Location = new System.Drawing.Point(13, 128);
+            this.descriptionLabel.Location = new System.Drawing.Point(13, 153);
             this.descriptionLabel.Name = "descriptionLabel";
             this.descriptionLabel.Size = new System.Drawing.Size(64, 13);
             this.descriptionLabel.TabIndex = 8;
@@ -156,16 +159,50 @@
             // 
             this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.description.Location = new System.Drawing.Point(82, 128);
+            this.description.Location = new System.Drawing.Point(82, 153);
             this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(231, 113);
+            this.description.Size = new System.Drawing.Size(300, 113);
             this.description.TabIndex = 14;
             this.description.Text = "description text goes here";
+            // 
+            // claimStatus
+            // 
+            this.claimStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.claimStatus.Location = new System.Drawing.Point(82, 50);
+            this.claimStatus.Name = "claimStatus";
+            this.claimStatus.ReadOnly = true;
+            this.claimStatus.Size = new System.Drawing.Size(201, 21);
+            this.claimStatus.TabIndex = 16;
+            this.claimStatus.Text = "claim status goes here";
+            // 
+            // claimStatusLabel
+            // 
+            this.claimStatusLabel.AutoSize = true;
+            this.claimStatusLabel.Location = new System.Drawing.Point(35, 53);
+            this.claimStatusLabel.Name = "claimStatusLabel";
+            this.claimStatusLabel.Size = new System.Drawing.Size(42, 13);
+            this.claimStatusLabel.TabIndex = 15;
+            this.claimStatusLabel.Text = "Status:";
+            // 
+            // checkStatus
+            // 
+            this.checkStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkStatus.Location = new System.Drawing.Point(289, 48);
+            this.checkStatus.Name = "checkStatus";
+            this.checkStatus.Size = new System.Drawing.Size(109, 23);
+            this.checkStatus.TabIndex = 17;
+            this.checkStatus.Text = "Check Status";
+            this.checkStatus.UseVisualStyleBackColor = true;
+            this.checkStatus.Click += new System.EventHandler(this.OnStatusButtonClick);
             // 
             // InsuranceViewClaimControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkStatus);
+            this.Controls.Add(this.claimStatus);
+            this.Controls.Add(this.claimStatusLabel);
             this.Controls.Add(this.description);
             this.Controls.Add(this.claimID);
             this.Controls.Add(this.claimIDLabel);
@@ -180,7 +217,7 @@
             this.Controls.Add(this.claimTypeLabel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "InsuranceViewClaimControl";
-            this.Size = new System.Drawing.Size(332, 252);
+            this.Size = new System.Drawing.Size(401, 300);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,5 +237,8 @@
         private System.Windows.Forms.Label claimID;
         private System.Windows.Forms.Label claimIDLabel;
         private System.Windows.Forms.Label description;
+        private System.Windows.Forms.TextBox claimStatus;
+        private System.Windows.Forms.Label claimStatusLabel;
+        private System.Windows.Forms.Button checkStatus;
     }
 }

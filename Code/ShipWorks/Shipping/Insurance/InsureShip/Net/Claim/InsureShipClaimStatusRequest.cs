@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
         public InsureShipClaimStatusRequest(IInsureShipResponseFactory responseFactory, ShipmentEntity shipment, InsureShipAffiliate affiliate, IInsureShipSettings insureShipSettings, ILog log)
             : base(responseFactory, shipment, affiliate, insureShipSettings, log, "ClaimStatus")
         {
-            uri = new Uri(string.Format("{0}/claims/status{1}/{2}", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID, Shipment.InsurancePolicy.ClaimID));
+            uri = new Uri(string.Format("{0}claims/status/{1}/{2}", Settings.ApiUrl.AbsoluteUri, Settings.DistributorID, Shipment.InsurancePolicy.ClaimID));
         }
 
         /// <summary>
