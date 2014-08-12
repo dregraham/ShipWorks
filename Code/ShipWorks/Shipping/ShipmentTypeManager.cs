@@ -281,6 +281,7 @@ namespace ShipWorks.Shipping
                 case PostalServiceType.ConsolidatorInternational:
                 case PostalServiceType.ConsolidatorIpa:
                 case PostalServiceType.ConsolidatorIsal:
+                case PostalServiceType.CommercialePacket:
                     return true;
             }
 
