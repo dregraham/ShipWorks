@@ -252,7 +252,7 @@ namespace ShipWorks.Actions.Tasks.Common
                     if (CanTimeout && stopAfter < dateProvider.UtcNow)
                     {
                         log.Info("Stopping purge because it has exceeded the maximum allowed time.");
-                        break;
+                        return;
                     }
                 }
 

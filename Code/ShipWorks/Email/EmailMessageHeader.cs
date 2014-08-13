@@ -89,14 +89,14 @@ namespace ShipWorks.Email
         {
             if (EmailAccountID == -1)
             {
-                throw new EmailException("No email accounts have been configured.");
+                throw new EmailException("No email accounts have been configured.", EmailExceptionErrorNumber.NoEmailAccountsConfigured);
             }
 
             EmailAccountEntity account = EmailAccountManager.GetAccount(EmailAccountID);
             if (account == null)
             {
                 log.ErrorFormat("EmailAccount {0} no longer exists.", EmailAccountID);
-                throw new EmailException("The requested email account no longer exists.");
+                throw new EmailException("The requested email account no longer exists.", EmailExceptionErrorNumber.InvalidEmailAccount);
             }
 
             EmailOutboundEntity emailOutbound = new EmailOutboundEntity();

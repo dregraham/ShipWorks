@@ -132,22 +132,29 @@ namespace ShipWorks.Stores.Management
             // Initialize the session
             UserSession.InitializeForCurrentDatabase();
 
-            // Logon the user
-            UserSession.Logon(username, password, true);
+            bool complete = false;
 
-            // Initialize the session
-            UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentSession();
-
-            originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
-
-            // Run the setup wizard
-            bool complete = RunWizard(originalWizard);
-
-            // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
-            if (!complete)
+            // Logon the user - this has failed in the wild (FB 275179), so instead of crashing, we'll ask them to log in again
+            if (UserSession.Logon(username, password, true))
             {
-                UserSession.Logoff(false);
+                // Initialize the session
+                UserManager.InitializeForCurrentUser();
+                UserSession.InitializeForCurrentSession();
+
+                originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
+
+                // Run the setup wizard
+                complete = RunWizard(originalWizard);
+
+                // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
+                if (!complete)
+                {
+                    UserSession.Logoff(false);
+                }
+            }
+            else
+            {
+                MessageHelper.ShowWarning(originalWizard.Owner, "There was a problem while logging in. Please try again.");
             }
 
             // Counts as a cancel on the original wizard if they didn't complete the setup.
@@ -684,7 +691,11 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            SaveSettingsActions();
+            if (!SaveSettingsActions())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
         }
 
         /// <summary>
@@ -765,20 +776,30 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Save the settings from the actions ui
         /// </summary>
-        private void SaveSettingsActions()
+        private bool SaveSettingsActions()
         {
             // If this store does not support uploads, the online update placeholder will have no controls so just return.
             if (panelOnlineUpdatePlaceholder.Controls.Count == 0)
             {
-                return;
+                return true;
             }
 
             OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
 
-            // See what tasks are configured to be created
-            List<ActionTask> tasks = control.CreateActionTasks(store);
+            List<ActionTask> tasks;
 
-            // If there are any, we need to create the action for ti
+            try
+            {
+                // See what tasks are configured to be created
+                tasks = control.CreateActionTasks(store);
+            }
+            catch (OnlineUpdateActionCreateException ex)
+            {
+                MessageHelper.ShowInformation(this, ex.Message);
+                return false;
+            }
+
+            // If there are any, we need to create the action for it
             if (tasks != null && tasks.Count > 0)
             {
                 using (SqlAdapter adapter = new SqlAdapter(true))
@@ -817,6 +838,8 @@ namespace ShipWorks.Stores.Management
                     adapter.Commit();
                 }
             }
+
+            return true;
         }
 
         #endregion

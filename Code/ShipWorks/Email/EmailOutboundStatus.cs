@@ -29,10 +29,19 @@ namespace ShipWorks.Email
         Sent = 1,
 
         /// <summary>
-        /// The last attempt at sending the message failed.
+        /// The last attempt at sending the message failed for reasons that require user intervention, 
+        /// for example, the email message was missing the To field
         /// </summary>
         [Description("Error")]
         [ImageResource("mail_error")]
-        Failed = 2
+        Failed = 2,
+
+        /// <summary>
+        /// The last attempt at sending the message failed for transient reasons,
+        /// so it should be retried when possible
+        /// </summary>
+        [Description("Error")]
+        [ImageResource("mail_error")]
+        Retry = 3
     }
 }

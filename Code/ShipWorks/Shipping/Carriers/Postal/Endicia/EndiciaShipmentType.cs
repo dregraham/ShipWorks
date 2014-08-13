@@ -330,8 +330,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return true;
             }
 
-            // The Endicia object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal.Endicia != null)
+            // The Endicia or Postal object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
             {
                 EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
                 if (account == null)

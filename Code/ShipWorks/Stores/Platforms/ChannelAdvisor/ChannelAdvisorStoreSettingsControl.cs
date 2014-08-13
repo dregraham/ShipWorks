@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
@@ -23,17 +24,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         public ChannelAdvisorStoreSettingsControl()
         {
             InitializeComponent();
-
-            // prepare the dropdown
-            criteriaComboBox.DisplayMember = "Text";
-            criteriaComboBox.ValueMember = "Criteria";
-
-            criteriaComboBox.DataSource = new List<object> {
-                new { Text = "Payment has cleared, not yet shipped", Criteria = ChannelAdvisorDownloadCriteria.PaidNotShipped},
-                new { Text = "Payment has cleared, any shipping status", Criteria = ChannelAdvisorDownloadCriteria.Paid},
-                new { Text = "Any Payment status, any shipping status", Criteria = ChannelAdvisorDownloadCriteria.All},
-                new { Text = "Any payment status, not yet shipped", Criteria = ChannelAdvisorDownloadCriteria.NotShipped}
-            };
+            
+            attributes.AddButtonText = "Add Attributes";
         }
 
         /// <summary>
@@ -47,7 +39,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 throw new InvalidOperationException("A non Channel Advisor store was passed to the Channel Advisor store settings control.");
             }
 
-            criteriaComboBox.SelectedValue = (ChannelAdvisorDownloadCriteria)caStore.DownloadCriteria;
+            XDocument attributesToDownload = XDocument.Parse(caStore.AttributesToDownload);
+            attributes.LoadValues(attributesToDownload.Descendants("Attribute").Select(a => a.Value));
         }
 
         /// <summary>
@@ -60,22 +53,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 throw new InvalidOperationException("A non Channel Advisor store was passed to the Channel Advisor store settings control.");
             }
-
-            ChannelAdvisorDownloadCriteria selected = criteriaComboBox.SelectedValue == null ? ChannelAdvisorDownloadCriteria.All : (ChannelAdvisorDownloadCriteria)criteriaComboBox.SelectedValue;
-            caStore.DownloadCriteria = (short)selected;
+            
+            caStore.AttributesToDownload = GenerateAttributeXml();
 
             return true;
         }
 
         /// <summary>
-        /// Allows turning off the section header.  This is hear b\c the StoreWizard reuses this control.
+        /// Generates the attribute XML.
         /// </summary>
-        [Category("Appearance")]
-        [DefaultValue(true)]
-        public bool ShowHeader
+        private string GenerateAttributeXml()
         {
-            get { return sectionHeader.Visible; }
-            set { sectionHeader.Visible = value; }
+            XElement attributesXml = new XElement("Attributes");
+
+            foreach (string attributeName in attributes.Values)
+            {
+                attributesXml.Add(new XElement("Attribute", attributeName));
+            }
+
+            return attributesXml.ToString();
         }
     }
 }
