@@ -1572,6 +1572,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [SmartPostConfirmation] [bit] NOT NULL,
 [SmartPostCustomerManifest] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SmartPostHubID] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SmartPostUspsApplicationId] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DropoffType] [int] NOT NULL,
 [OriginResidentialDetermination] [int] NOT NULL,
 [FedExHoldAtLocationEnabled] [bit] NOT NULL,

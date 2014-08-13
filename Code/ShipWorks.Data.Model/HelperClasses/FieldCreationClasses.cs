@@ -7112,6 +7112,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostHubID);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.SmartPostUspsApplicationId field instance</summary>
+		public static EntityField2 SmartPostUspsApplicationId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostUspsApplicationId);}
+		}
 		/// <summary>Creates a new FedExShipmentEntity.DropoffType field instance</summary>
 		public static EntityField2 DropoffType
 		{

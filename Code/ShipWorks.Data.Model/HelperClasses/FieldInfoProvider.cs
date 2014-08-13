@@ -1151,6 +1151,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostConfirmation", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostConfirmation, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostCustomerManifest", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostCustomerManifest, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostHubID", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostHubID, 10, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostUspsApplicationId", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostUspsApplicationId, 10, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "DropoffType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.DropoffType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "OriginResidentialDetermination", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.OriginResidentialDetermination, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "FedExHoldAtLocationEnabled", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.FedExHoldAtLocationEnabled, 0, 0, 0);

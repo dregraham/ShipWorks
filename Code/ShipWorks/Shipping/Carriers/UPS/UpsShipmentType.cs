@@ -1086,6 +1086,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Ups != null && shipment.Ups.Packages != null)
+            {
+                shipment.Ups.UspsTrackingNumber = String.Empty;
+                shipment.Ups.Cn22Number = String.Empty;
+                foreach (UpsPackageEntity package in shipment.Ups.Packages)
+                {
+                    package.TrackingNumber = String.Empty;
+                    package.UspsTrackingNumber = String.Empty;
+                    EntityUtility.MarkAsNew(package);
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
