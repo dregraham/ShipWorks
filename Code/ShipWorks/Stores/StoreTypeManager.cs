@@ -131,6 +131,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
 				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
                 case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
+                case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
                 case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
             }
 
@@ -148,6 +149,7 @@ namespace ShipWorks.Stores
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
                 StoreTypeCode.nopCommerce,
+                StoreTypeCode.SellerExpress,
                 StoreTypeCode.PowersportsSupport,
             };
 
