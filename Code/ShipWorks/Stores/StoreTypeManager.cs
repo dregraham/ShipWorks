@@ -146,7 +146,6 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.ChannelSale,
                 StoreTypeCode.nopCommerce,
             };
 
