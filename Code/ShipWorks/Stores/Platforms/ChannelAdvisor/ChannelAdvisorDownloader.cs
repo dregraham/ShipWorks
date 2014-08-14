@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -24,13 +25,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         // total download count
         private int totalCount;
 
+        private List<string> itemAttributesToDownload = new List<string>(); 
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="store"></param>
         public ChannelAdvisorDownloader(StoreEntity store)
             : base(store)
-        {}
+        {
+            XDocument attributesToDownload = XDocument.Parse(ChannelAdvisorStore.AttributesToDownload);
+
+            itemAttributesToDownload.AddRange(attributesToDownload.Descendants("Attribute").Select(a => a.Value.ToUpperInvariant()));
+
+            ItemAttributesEnabled = itemAttributesToDownload.Any();
+        }
 
         /// <summary>
         /// Convenience property for quick access to the specific store entity
@@ -38,6 +47,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private ChannelAdvisorStoreEntity ChannelAdvisorStore
         {
             get { return (ChannelAdvisorStoreEntity)Store; }
+        }
+
+        /// <summary>
+        /// Property to hold whether or not the user has selected any item attributes to download
+        /// </summary>
+        private bool ItemAttributesEnabled
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -468,13 +486,42 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             orderItem.UPC = matchingItem.UPC;
                         }
 
+                        // MPN
                         if (!String.IsNullOrEmpty(matchingItem.MPN))
                         {
                             orderItem.MPN = matchingItem.MPN;
                         }
-
+                        
+                        PopulateItemAttributes(client, orderItem);
                         PopulateImages(client, orderItem);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the attribute information from ChannelAdvisor and populates the order item attributes appropriately.
+        /// </summary>
+        private void PopulateItemAttributes(ChannelAdvisorClient client, ChannelAdvisorOrderItemEntity orderItem)
+        {
+            // Only add item attributes if the user has specified ones they want to download.
+            if (ItemAttributesEnabled)
+            {
+                IEnumerable<AttributeInfo> attributes = client.GetInventoryItemAttributes(orderItem.SKU);
+
+                // ItemAttributesEnabled is true so we have at least one attribute to download.  
+                // Filter out all the others that don't match.
+                attributes = attributes.Where(a => itemAttributesToDownload.Contains(a.Name.ToUpperInvariant()));
+
+                foreach (AttributeInfo caAttribute in attributes)
+                {
+                    OrderItemAttributeEntity orderItemAttribute = StoreType.CreateOrderItemAttributeInstance();
+                    orderItemAttribute.Name = caAttribute.Name ?? string.Empty;
+                    orderItemAttribute.Description = caAttribute.Value ?? string.Empty;
+                    orderItemAttribute.UnitPrice = 0;
+                    orderItemAttribute.IsManual = false;
+
+                    orderItem.OrderItemAttributes.Add(orderItemAttribute);
                 }
             }
         }

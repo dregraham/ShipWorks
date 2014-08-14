@@ -35,7 +35,7 @@
         </xsl:if>
 
         <xsl:if test="not(contains(ServiceUsed, 'DHL GM SM'))">
-          <a href="http://trkcnfrm1.smi.usps.com/PTSInternetWeb/InterLabelInquiry.do?origTrackNum={TrackingNumber}">
+          <a href="https://tools.usps.com/go/TrackConfirmAction.action?tLabels={TrackingNumber}">
             <xsl:value-of select="TrackingNumber"/>
           </a>
         </xsl:if>

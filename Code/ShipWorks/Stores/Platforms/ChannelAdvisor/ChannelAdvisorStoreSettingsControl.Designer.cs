@@ -28,71 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ordersLabel = new System.Windows.Forms.Label();
-            this.criteriaComboBox = new System.Windows.Forms.ComboBox();
-            this.sectionHeader = new ShipWorks.UI.Controls.SectionTitle();
-            this.panelContent = new System.Windows.Forms.Panel();
-            this.panelContent.SuspendLayout();
+            this.attributes = new ShipWorks.UI.Controls.StringListControl();
+            this.attributesTitle = new ShipWorks.UI.Controls.SectionTitle();
+            this.labelAttributeInstructions = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // ordersLabel
+            // attributes
             // 
-            this.ordersLabel.AutoSize = true;
-            this.ordersLabel.Location = new System.Drawing.Point(9, 7);
-            this.ordersLabel.Name = "ordersLabel";
-            this.ordersLabel.Size = new System.Drawing.Size(193, 13);
-            this.ordersLabel.TabIndex = 1;
-            this.ordersLabel.Text = "Download orders which are marked as:";
+            this.attributes.AddButtonText = "Add Attribute";
+            this.attributes.AutoSize = true;
+            this.attributes.Location = new System.Drawing.Point(3, 58);
+            this.attributes.Name = "attributes";
+            this.attributes.Size = new System.Drawing.Size(530, 38);
+            this.attributes.TabIndex = 15;
             // 
-            // criteriaComboBox
+            // attributesTitle
             // 
-            this.criteriaComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.criteriaComboBox.FormattingEnabled = true;
-            this.criteriaComboBox.Location = new System.Drawing.Point(10, 26);
-            this.criteriaComboBox.Name = "criteriaComboBox";
-            this.criteriaComboBox.Size = new System.Drawing.Size(294, 21);
-            this.criteriaComboBox.TabIndex = 2;
+            this.attributesTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.attributesTitle.Location = new System.Drawing.Point(0, 0);
+            this.attributesTitle.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
+            this.attributesTitle.Name = "attributesTitle";
+            this.attributesTitle.Size = new System.Drawing.Size(558, 22);
+            this.attributesTitle.TabIndex = 16;
+            this.attributesTitle.Text = "Attributes";
             // 
-            // sectionHeader
+            // labelAttributeInstructions
             // 
-            this.sectionHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.sectionHeader.Location = new System.Drawing.Point(0, 0);
-            this.sectionHeader.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
-            this.sectionHeader.Name = "sectionHeader";
-            this.sectionHeader.Size = new System.Drawing.Size(440, 22);
-            this.sectionHeader.TabIndex = 13;
-            this.sectionHeader.Text = "Order Downloads";
-            // 
-            // panelContent
-            // 
-            this.panelContent.Controls.Add(this.ordersLabel);
-            this.panelContent.Controls.Add(this.criteriaComboBox);
-            this.panelContent.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelContent.Location = new System.Drawing.Point(0, 22);
-            this.panelContent.Name = "panelContent";
-            this.panelContent.Size = new System.Drawing.Size(440, 52);
-            this.panelContent.TabIndex = 14;
+            this.labelAttributeInstructions.Location = new System.Drawing.Point(3, 25);
+            this.labelAttributeInstructions.Name = "labelAttributeInstructions";
+            this.labelAttributeInstructions.Size = new System.Drawing.Size(474, 30);
+            this.labelAttributeInstructions.TabIndex = 17;
+            this.labelAttributeInstructions.Text = "An item attribute is something specific about the items you’re shipping. For exam" +
+    "ple, a color. If you want ShipWorks to download the color of the product ordere" +
+    "d, add an attribute.";
             // 
             // ChannelAdvisorStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelContent);
-            this.Controls.Add(this.sectionHeader);
+            this.AutoSize = true;
+            this.Controls.Add(this.labelAttributeInstructions);
+            this.Controls.Add(this.attributesTitle);
+            this.Controls.Add(this.attributes);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "ChannelAdvisorStoreSettingsControl";
-            this.Size = new System.Drawing.Size(440, 82);
-            this.panelContent.ResumeLayout(false);
-            this.panelContent.PerformLayout();
+            this.Size = new System.Drawing.Size(558, 99);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label ordersLabel;
-        private System.Windows.Forms.ComboBox criteriaComboBox;
-        private ShipWorks.UI.Controls.SectionTitle sectionHeader;
-        private System.Windows.Forms.Panel panelContent;
+        private UI.Controls.StringListControl attributes;
+        private UI.Controls.SectionTitle attributesTitle;
+        private System.Windows.Forms.Label labelAttributeInstructions;
     }
 }

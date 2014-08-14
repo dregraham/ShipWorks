@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 
 namespace ShipWorks.Email.Accounts
 {
@@ -12,17 +13,17 @@ namespace ShipWorks.Email.Accounts
     {
         public EmailLogonException()
         {
-
+            ErrorNumber = EmailExceptionErrorNumber.LogonFailed;
         }
 
         public EmailLogonException(string message)
-            : base(message)
+            : base(message, EmailExceptionErrorNumber.LogonFailed)
         {
 
         }
 
         public EmailLogonException(string message, Exception inner)
-            : base(message, inner)
+            : base(message, inner, EmailExceptionErrorNumber.LogonFailed)
         {
 
         }

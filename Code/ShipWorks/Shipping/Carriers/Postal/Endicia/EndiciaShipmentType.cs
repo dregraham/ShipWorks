@@ -330,8 +330,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return true;
             }
 
-            // The Endicia object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal.Endicia != null)
+            // The Endicia or Postal object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
             {
                 EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
                 if (account == null)
@@ -863,6 +863,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // It's allowed, so show the scan based returns control.
             return new EndiciaReturnsControl();
+        }
+
+        /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Endicia != null)
+            {
+                shipment.Postal.Endicia.TransactionID = null;
+                shipment.Postal.Endicia.RefundFormID = null;
+                shipment.Postal.Endicia.ScanFormBatchID = null;
+            }
         }
 
         /// <summary>

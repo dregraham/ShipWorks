@@ -35,7 +35,7 @@
       <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.plugins.mstest.MSTestPublisher plugin="mstest@0.7">
-      <testResultsFile>TestResults/*results.trx</testResultsFile>
+      <testResultsFile>TestResults/units-results.trx</testResultsFile>
     </hudson.plugins.mstest.MSTestPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
       <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>

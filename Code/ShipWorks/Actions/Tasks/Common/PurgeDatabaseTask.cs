@@ -215,6 +215,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             while (true)
             {
+                // <orderID, customerID>
                 List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);
@@ -252,7 +253,7 @@ namespace ShipWorks.Actions.Tasks.Common
                     if (CanTimeout && stopAfter < dateProvider.UtcNow)
                     {
                         log.Info("Stopping purge because it has exceeded the maximum allowed time.");
-                        break;
+                        return;
                     }
                 }
 

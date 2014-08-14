@@ -43,5 +43,13 @@ namespace ShipWorks.Stores.Platforms.WPeCommerce
                 return ApiLogSource.WPeCommerce;
             }
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000022267-connecting-wp-ecommerce-with"; }
+        }
     }
 }

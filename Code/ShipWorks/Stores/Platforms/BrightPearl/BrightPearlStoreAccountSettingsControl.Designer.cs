@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.BrightPearl
+﻿namespace ShipWorks.Stores.Platforms.Brightpearl
 {
-    partial class BrightPearlStoreAccountSettingsControl
+    partial class BrightpearlStoreAccountSettingsControl
     {
         /// <summary> 
         /// Required designer variable.

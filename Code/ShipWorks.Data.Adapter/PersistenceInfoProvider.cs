@@ -521,8 +521,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementMapping( "ChannelAdvisorStoreEntity", "ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 4 );
 			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "DownloadCriteria", "DownloadCriteria", false, (int)SqlDbType.SmallInt, 0, 0, 5, false, "", null, typeof(System.Int16), 2 );
-			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
+			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
+			base.AddElementFieldMapping( "ChannelAdvisorStoreEntity", "AttributesToDownload", "AttributesToDownload", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
 		private void InitClickCartProOrderEntityMappings()
@@ -1097,7 +1097,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExShipmentEntity's mappings</summary>
 		private void InitFedExShipmentEntityMappings()
 		{
-			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 147 );
+			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 148 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "FedExAccountID", "FedExAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "MasterFormID", "MasterFormID", false, (int)SqlDbType.VarChar, 4, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1205,46 +1205,47 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExShipmentEntity", "SmartPostConfirmation", "SmartPostConfirmation", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 104 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "SmartPostCustomerManifest", "SmartPostCustomerManifest", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 105 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "SmartPostHubID", "SmartPostHubID", false, (int)SqlDbType.VarChar, 10, 0, 0, false, "", null, typeof(System.String), 106 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "DropoffType", "DropoffType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 107 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "OriginResidentialDetermination", "OriginResidentialDetermination", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 108 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "FedExHoldAtLocationEnabled", "FedExHoldAtLocationEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 109 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldLocationId", "HoldLocationId", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 110 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldLocationType", "HoldLocationType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 111 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldContactId", "HoldContactId", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 112 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPersonName", "HoldPersonName", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 113 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldTitle", "HoldTitle", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 114 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCompanyName", "HoldCompanyName", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 115 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPhoneNumber", "HoldPhoneNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 116 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPhoneExtension", "HoldPhoneExtension", true, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 117 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPagerNumber", "HoldPagerNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 118 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldFaxNumber", "HoldFaxNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 119 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldEmailAddress", "HoldEmailAddress", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 120 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet1", "HoldStreet1", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 121 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet2", "HoldStreet2", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 122 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet3", "HoldStreet3", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 123 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCity", "HoldCity", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 124 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStateOrProvinceCode", "HoldStateOrProvinceCode", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 125 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPostalCode", "HoldPostalCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 126 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldUrbanizationCode", "HoldUrbanizationCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 127 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCountryCode", "HoldCountryCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 128 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldResidential", "HoldResidential", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 129 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaEnabled", "CustomsNaftaEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 130 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaPreferenceType", "CustomsNaftaPreferenceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 131 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaDeterminationCode", "CustomsNaftaDeterminationCode", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 132 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaProducerId", "CustomsNaftaProducerId", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 133 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaNetCostMethod", "CustomsNaftaNetCostMethod", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 134 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnType", "ReturnType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 135 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "RmaNumber", "RmaNumber", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 136 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "RmaReason", "RmaReason", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 137 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnSaturdayPickup", "ReturnSaturdayPickup", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 138 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "TrafficInArmsLicenseNumber", "TrafficInArmsLicenseNumber", false, (int)SqlDbType.NVarChar, 32, 0, 0, false, "", null, typeof(System.String), 139 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailType", "IntlExportDetailType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 140 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailForeignTradeZoneCode", "IntlExportDetailForeignTradeZoneCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 141 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailEntryNumber", "IntlExportDetailEntryNumber", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 142 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailLicenseOrPermitNumber", "IntlExportDetailLicenseOrPermitNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 143 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailLicenseOrPermitExpirationDate", "IntlExportDetailLicenseOrPermitExpirationDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 144 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "WeightUnitType", "WeightUnitType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 145 );
-			base.AddElementFieldMapping( "FedExShipmentEntity", "LinearUnitType", "LinearUnitType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 146 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "SmartPostUspsApplicationId", "SmartPostUspsApplicationId", false, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 107 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "DropoffType", "DropoffType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 108 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "OriginResidentialDetermination", "OriginResidentialDetermination", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 109 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "FedExHoldAtLocationEnabled", "FedExHoldAtLocationEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 110 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldLocationId", "HoldLocationId", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 111 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldLocationType", "HoldLocationType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 112 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldContactId", "HoldContactId", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 113 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPersonName", "HoldPersonName", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 114 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldTitle", "HoldTitle", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 115 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCompanyName", "HoldCompanyName", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 116 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPhoneNumber", "HoldPhoneNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 117 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPhoneExtension", "HoldPhoneExtension", true, (int)SqlDbType.NVarChar, 10, 0, 0, false, "", null, typeof(System.String), 118 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPagerNumber", "HoldPagerNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 119 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldFaxNumber", "HoldFaxNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 120 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldEmailAddress", "HoldEmailAddress", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 121 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet1", "HoldStreet1", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 122 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet2", "HoldStreet2", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 123 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStreet3", "HoldStreet3", true, (int)SqlDbType.NVarChar, 250, 0, 0, false, "", null, typeof(System.String), 124 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCity", "HoldCity", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 125 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldStateOrProvinceCode", "HoldStateOrProvinceCode", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 126 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldPostalCode", "HoldPostalCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 127 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldUrbanizationCode", "HoldUrbanizationCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 128 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldCountryCode", "HoldCountryCode", true, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 129 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "HoldResidential", "HoldResidential", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 130 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaEnabled", "CustomsNaftaEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 131 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaPreferenceType", "CustomsNaftaPreferenceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 132 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaDeterminationCode", "CustomsNaftaDeterminationCode", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 133 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaProducerId", "CustomsNaftaProducerId", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 134 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "CustomsNaftaNetCostMethod", "CustomsNaftaNetCostMethod", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 135 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnType", "ReturnType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 136 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "RmaNumber", "RmaNumber", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 137 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "RmaReason", "RmaReason", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 138 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnSaturdayPickup", "ReturnSaturdayPickup", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 139 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "TrafficInArmsLicenseNumber", "TrafficInArmsLicenseNumber", false, (int)SqlDbType.NVarChar, 32, 0, 0, false, "", null, typeof(System.String), 140 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailType", "IntlExportDetailType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 141 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailForeignTradeZoneCode", "IntlExportDetailForeignTradeZoneCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 142 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailEntryNumber", "IntlExportDetailEntryNumber", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 143 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailLicenseOrPermitNumber", "IntlExportDetailLicenseOrPermitNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 144 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "IntlExportDetailLicenseOrPermitExpirationDate", "IntlExportDetailLicenseOrPermitExpirationDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 145 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "WeightUnitType", "WeightUnitType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 146 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "LinearUnitType", "LinearUnitType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 147 );
 		}
 		/// <summary>Inits FilterEntity's mappings</summary>
 		private void InitFilterEntityMappings()
@@ -2366,7 +2367,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()
 		{
-			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgeBase", 2 );
+			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgebase", 2 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Entry", "Entry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 		}

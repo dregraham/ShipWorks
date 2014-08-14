@@ -1301,10 +1301,10 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>AccountKey. </summary>
 		AccountKey,
-		///<summary>DownloadCriteria. </summary>
-		DownloadCriteria,
 		///<summary>ProfileID. </summary>
 		ProfileID,
+		///<summary>AttributesToDownload. </summary>
+		AttributesToDownload,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3322,6 +3322,8 @@ namespace ShipWorks.Data.Model
 		SmartPostCustomerManifest,
 		///<summary>SmartPostHubID. </summary>
 		SmartPostHubID,
+		///<summary>SmartPostUspsApplicationId. </summary>
+		SmartPostUspsApplicationId,
 		///<summary>DropoffType. </summary>
 		DropoffType,
 		///<summary>OriginResidentialDetermination. </summary>

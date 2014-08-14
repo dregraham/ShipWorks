@@ -21,6 +21,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -35,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         // Cache of inventory items we've already looked up
         static LruCache<string, caInventoryService.InventoryItemResponse> inventoryItemCache = new LruCache<string, caInventoryService.InventoryItemResponse>(1000);
         static LruCache<string, caInventoryService.ImageInfoResponse[]> inventoryImageCache = new LruCache<string, caInventoryService.ImageInfoResponse[]>(1000);
+        static LruCache<string, List<AttributeInfo>> inventoryItemAttributeCache = new LruCache<string, List<AttributeInfo>>(1000);
 						  
         // store this client is interacting on behalf of 
         ChannelAdvisorStoreEntity store = null;
@@ -266,20 +268,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // There were many bugs related to users choosing the other critiera. If payment hadn't cleared, order details would be incomplete.
             // If we filtered the shipping status to unshipped, we'd never pickup historic shipped orders, or changes to shipped orders online status
             criteria.PaymentStatusFilter = PaymentStatusCodes.Cleared;
-
-            /*switch ((ChannelAdvisorDownloadCriteria)store.DownloadCriteria)
-            {
-                case ChannelAdvisorDownloadCriteria.NotShipped:
-                    criteria.ShippingStatusFilter = caOrderService.ShippingStatusCode.Unshipped;
-                    break;
-                case ChannelAdvisorDownloadCriteria.Paid:
-                    criteria.PaymentStatusFilter = caOrderService.PaymentStatusCode.Cleared;
-                    break;
-                case ChannelAdvisorDownloadCriteria.PaidNotShipped:
-                    criteria.PaymentStatusFilter = caOrderService.PaymentStatusCode.Cleared;
-                    criteria.ShippingStatusFilter = caOrderService.ShippingStatusCode.Unshipped;
-                    break;
-            }*/
         }
 
         /// <summary>
@@ -386,6 +374,73 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             return foundItems.ToArray();
+        }
+
+        /// <summary>
+        /// Gets the item attributes for a given SKU
+        /// </summary>
+        /// <param name="sku">The SKU of the order item.</param>
+        /// <returns>A collection of ChannelAdvisor AttributeInfo objects.</returns>
+        /// <exception cref="System.ArgumentNullException">sku</exception>
+        public IEnumerable<AttributeInfo> GetInventoryItemAttributes(string sku)
+        {
+            if (sku == null)
+            {
+                throw new ArgumentNullException("sku");
+            }
+
+            string lookupKey = GetInventoryCacheKey(sku);
+
+            if (!inventoryItemAttributeCache.Contains(lookupKey))
+            {
+                // We don't have this SKU/key in the cache; grab the item attributes from the 
+                // ChannelAdvisor API and add them to the cache (even if the list is empty) 
+                // for any future requests for the same SKU
+                List<AttributeInfo> attributes = FetchItemAttributes(sku);
+                inventoryItemAttributeCache[lookupKey] = attributes;
+            }
+
+            // The attributes should be in the cache at this point
+            return inventoryItemAttributeCache[lookupKey];
+        }
+
+        /// <summary>
+        /// Fetches the item attributes for the SKU from the ChannelAdvisor API.
+        /// </summary>
+        /// <param name="sku">The SKU.</param>
+        /// <returns>A List of ChannelAdvisor AttributeInfo objects.</returns>
+        private List<AttributeInfo> FetchItemAttributes(string sku)
+        {
+            try
+            {
+                List<AttributeInfo> attributes = new List<AttributeInfo>();
+                using (InventoryService service = CreateInventoryService("GetInventoryItemItemAttributeList"))
+                {
+                    service.APICredentialsValue = GetInventoryCredentials();
+                    APIResultOfArrayOfAttributeInfo response = service.GetInventoryItemAttributeList(store.AccountKey, sku);
+
+                    if (response.ResultData != null)
+                    {
+                        // We have data, so add each attribute to our list
+                        foreach (AttributeInfo result in response.ResultData)
+                        {
+                            attributes.Add(result);
+                        }
+                    }
+
+                    if (response.Status == ResultStatus.Failure || !string.IsNullOrEmpty(response.Message) || response.ResultData == null)
+                    {
+                        log.WarnFormat("Problem getting item attribute results. '{0}', '{1}', '{2}'", response.Status,
+                                       response.Message, (response.ResultData == null) ? "null" : response.ResultData.Length.ToString(CultureInfo.InvariantCulture));
+                    }
+                }
+
+                return attributes;
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(ChannelAdvisorException));
+            }
         }
 
         /// <summary>

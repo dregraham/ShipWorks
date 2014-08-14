@@ -531,12 +531,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
             if (shipment.Processed)
             {
                 return true;
             }
 
-            if (originID == (int)ShipmentOriginSource.Account)
+            // The Ups object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Ups != null)
             {
                 UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
                 if (account == null)
@@ -1082,6 +1088,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return GetServiceLevel(serviceRate.Service, expectedDays);
+        }
+
+        /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Ups != null && shipment.Ups.Packages != null)
+            {
+                shipment.Ups.UspsTrackingNumber = String.Empty;
+                shipment.Ups.Cn22Number = String.Empty;
+                foreach (UpsPackageEntity package in shipment.Ups.Packages)
+                {
+                    package.TrackingNumber = String.Empty;
+                    package.UspsTrackingNumber = String.Empty;
+                    EntityUtility.MarkAsNew(package);
+                }
+            }
         }
 
         /// <summary>

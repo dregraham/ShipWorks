@@ -1,6 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <project>
-  <actions/>
+  <actions />
   <description></description>
   <logRotator class="hudson.tasks.LogRotator">
     <daysToKeep>21</daysToKeep>
@@ -15,17 +15,17 @@
       <stageName>Stage 2: Integration test</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
-  <scm class="hudson.scm.NullSCM"/>
+  <scm class="hudson.scm.NullSCM" />
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers />
   <concurrentBuild>false</concurrentBuild>
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake "db:switch[INTJENKINS\\\\Jenkins, ShipWorks_SeedData]" db:deploy</command>
+      <command>rake &quot;db:switch[INTJENKINS\\\\Jenkins, ShipWorks_SeedData]&quot; db:deploy</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -49,5 +49,5 @@
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers />
 </project>

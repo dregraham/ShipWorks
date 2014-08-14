@@ -436,7 +436,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             File.AppendAllText(debugResponseFilename, rawSoap.ResponseXml);
         }
 
-
         /// <summary>
         /// Builds a filename for saving a certification file. If the isForDebugging is true, the unique ID will be 
         /// used to build the file name for easier troubleshooting purposes
@@ -476,6 +475,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return isEnabled;
+        }
+
+        /// <summary>
+        /// Builds a valid tracking number from the passed in number and any relevant shipment data (like the USPS Application Id)
+        /// </summary>
+        public static string BuildTrackingNumber(string trackingNumber, FedExShipmentEntity fedexShipment)
+        {
+            return fedexShipment != null && (FedExServiceType)fedexShipment.Service == FedExServiceType.SmartPost ?
+                fedexShipment.SmartPostUspsApplicationId + trackingNumber :
+                trackingNumber;
         }
     }
 }

@@ -134,8 +134,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 return true;
             }
 
-            // The Stamps object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal.Stamps != null)
+            // The Stamps or Postal objects may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Stamps != null)
             {
                 StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
                 if (account == null)
@@ -617,6 +617,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
             return counterBroker is NullShippingBroker ? new StampsBestRateBroker() : counterBroker;
+        }
+
+        /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                shipment.Postal.Stamps.ScanFormBatchID = null;
+            }
         }
 
         /// <summary>
