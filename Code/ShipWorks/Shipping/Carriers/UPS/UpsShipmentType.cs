@@ -531,6 +531,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
             if (shipment.Processed)
             {
                 return true;
