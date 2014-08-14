@@ -63,6 +63,17 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         }
 
         /// <summary>
+        /// Get the account settings help url
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get
+            {
+                return "http://support.shipworks.com/solution/articles/4000023678-connecting-channelsale-with";
+            }
+        }
+
+        /// <summary>
         /// Use the username, since the integration url will be the same for all customers.
         /// </summary>
         protected override string InternalLicenseIdentifier
