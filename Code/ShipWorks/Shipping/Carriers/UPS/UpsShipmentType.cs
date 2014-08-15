@@ -181,6 +181,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            if (shipment.Ups == null)
+            {
+                throw new NullReferenceException("shipment.Ups cannot be null.");
+            }
+
+            if (shipment.Order == null)
+            {
+                throw new NullReferenceException("shipment.Order cannot be null.");
+            }
+
+            if (shipment.Ups.Packages == null)
+            {
+                throw new NullReferenceException("shipment.Ups.Packages cannot be null.");
+            }
+
             shipment.Ups.CodEnabled = false;
             shipment.Ups.CodAmount = shipment.Order.OrderTotal;
             shipment.Ups.CodPaymentType = (int)UpsCodPaymentType.Cash;

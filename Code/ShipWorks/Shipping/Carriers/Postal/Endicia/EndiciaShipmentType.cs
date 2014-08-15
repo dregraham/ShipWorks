@@ -325,6 +325,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
+            
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
             if (shipment.Processed)
             {
                 return true;
@@ -336,6 +344,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 EndiciaAccountEntity account = EndiciaAccountManager.GetAccount(shipment.Postal.Endicia.EndiciaAccountID);
                 if (account == null)
                 {
+                    if (Accounts == null)
+                    {
+                        throw new NullReferenceException("Account cannot be null.");
+                    }
+
                     account = Accounts.FirstOrDefault();
                 }
 
