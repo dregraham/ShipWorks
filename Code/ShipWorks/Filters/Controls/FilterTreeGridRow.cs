@@ -115,6 +115,23 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
+                // A null reference error was being thrown.  Discoverred by Crash Reports.
+                // Let's figure out what is null....
+                if (FilterNode == null)
+                {
+                    throw new NullReferenceException("FilterNode cannot be null.");
+                }
+
+                if (FilterCount == null)
+                {
+                    throw new NullReferenceException("FilterCount cannot be null.");
+                }
+
+                if (FilterNode.Filter == null)
+                {
+                    throw new NullReferenceException(("FilterNode.Filter cannot be null."));
+                }
+
                 // Make a note whether the filter was already flagged as a slow running filter
                 bool previousFlag = IsFlaggedAsSlowRunning;
 

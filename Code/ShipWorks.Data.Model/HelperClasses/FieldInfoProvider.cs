@@ -499,8 +499,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AccountKey", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AccountKey, 50, 0, 0);
-			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadCriteria", typeof(System.Int16), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadCriteria, 0, 0, 5);
 			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ProfileID", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ProfileID, 0, 0, 10);
+			base.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AttributesToDownload", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, 2147483647, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -1151,6 +1151,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostConfirmation", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostConfirmation, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostCustomerManifest", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostCustomerManifest, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostHubID", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostHubID, 10, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "SmartPostUspsApplicationId", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.SmartPostUspsApplicationId, 10, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "DropoffType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.DropoffType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "OriginResidentialDetermination", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.OriginResidentialDetermination, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "FedExHoldAtLocationEnabled", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.FedExHoldAtLocationEnabled, 0, 0, 0);

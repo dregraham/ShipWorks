@@ -303,9 +303,9 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap opencart {
+        internal static System.Drawing.Bitmap nopcommerce {
             get {
-                object obj = ResourceManager.GetObject("opencart", resourceCulture);
+                object obj = ResourceManager.GetObject("nopcommerce", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -313,9 +313,9 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap nopcommerce {
+        internal static System.Drawing.Bitmap opencart {
             get {
-                object obj = ResourceManager.GetObject("nopcommerce", resourceCulture);
+                object obj = ResourceManager.GetObject("opencart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -373,6 +373,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap powersportssupport {
+            get {
+                object obj = ResourceManager.GetObject("powersportssupport", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap prostores {
             get {
                 object obj = ResourceManager.GetObject("prostores", resourceCulture);
@@ -406,6 +416,16 @@ namespace ShipWorks.Properties {
         internal static System.Drawing.Bitmap sears {
             get {
                 object obj = ResourceManager.GetObject("sears", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sellerexpress {
+            get {
+                object obj = ResourceManager.GetObject("sellerexpress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

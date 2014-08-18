@@ -2727,15 +2727,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AccountKey);}
 		}
-		/// <summary>Creates a new ChannelAdvisorStoreEntity.DownloadCriteria field instance</summary>
-		public static EntityField2 DownloadCriteria
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadCriteria);}
-		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.ProfileID field instance</summary>
 		public static EntityField2 ProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ProfileID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.AttributesToDownload field instance</summary>
+		public static EntityField2 AttributesToDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AttributesToDownload);}
 		}
 	}
 
@@ -7111,6 +7111,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SmartPostHubID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostHubID);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.SmartPostUspsApplicationId field instance</summary>
+		public static EntityField2 SmartPostUspsApplicationId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostUspsApplicationId);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.DropoffType field instance</summary>
 		public static EntityField2 DropoffType

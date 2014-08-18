@@ -579,6 +579,7 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
+    <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
@@ -2038,12 +2039,6 @@
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2104,6 +2099,20 @@
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.Designer.cs">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.Designer.cs">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\PowersportsSupport\PowersportsSupportStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
@@ -2833,6 +2842,18 @@
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.Designer.cs">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.Designer.cs">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
@@ -4658,18 +4679,11 @@
       <DependentUpon>ChannelAdvisorStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadCriteria.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\CreLoaded\CreLoadedStoreType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackConditionStatusType.cs" />
@@ -7271,9 +7285,6 @@
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
       <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7396,6 +7407,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.resx">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.resx">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.resx">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyAccountSettingsControl.resx">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
@@ -7561,6 +7578,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StringListControl.resx">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TimeZoneSelection.resx">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
@@ -9454,9 +9477,6 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.resx">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.resx">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.resx">
       <DependentUpon>EbayAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10451,6 +10471,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10738,6 +10760,8 @@
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />
     <Content Include="Resources\Stores\Icons\opencart.png" />
+    <Content Include="Resources\Stores\Icons\sellerexpress.png" />
+    <Content Include="Resources\Stores\Icons\powersportssupport.png" />
     <Content Include="Resources\Stores\Icons\shopp.png" />
     <Content Include="Resources\Stores\Icons\orderdesk.png" />
     <Content Include="Resources\Stores\Icons\shopperpress.png" />
@@ -12326,7 +12350,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Shipping.ShipSense.Settings
+﻿namespace ShipWorks.UI.Controls
 {
-    partial class ShipSenseItemAttributeControl
+    partial class TextBoxWithDeleteButtonControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,7 +31,7 @@
             this.labelName = new System.Windows.Forms.Label();
             this.toolStripDelete = new System.Windows.Forms.ToolStrip();
             this.buttonDelete = new System.Windows.Forms.ToolStripButton();
-            this.attribute = new System.Windows.Forms.TextBox();
+            this.textBox = new System.Windows.Forms.TextBox();
             this.toolStripDelete.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,22 +71,22 @@
             this.buttonDelete.Text = "Remove Line";
             this.buttonDelete.Click += new System.EventHandler(this.OnDelete);
             // 
-            // attribute
+            // textBox
             // 
-            this.attribute.Location = new System.Drawing.Point(112, 6);
-            this.attribute.Name = "attribute";
-            this.attribute.Size = new System.Drawing.Size(185, 21);
-            this.attribute.TabIndex = 2;
+            this.textBox.Location = new System.Drawing.Point(112, 6);
+            this.textBox.Name = "textBox";
+            this.textBox.Size = new System.Drawing.Size(185, 21);
+            this.textBox.TabIndex = 2;
             // 
-            // ShipSenseItemAttributeControl
+            // TextBoxWithDeleteButtonControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.attribute);
+            this.Controls.Add(this.textBox);
             this.Controls.Add(this.toolStripDelete);
             this.Controls.Add(this.labelName);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "ShipSenseItemAttributeControl";
+            this.Name = "TextBoxWithDeleteButtonControl";
             this.Size = new System.Drawing.Size(312, 33);
             this.toolStripDelete.ResumeLayout(false);
             this.toolStripDelete.PerformLayout();
@@ -100,6 +100,6 @@
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.ToolStrip toolStripDelete;
         private System.Windows.Forms.ToolStripButton buttonDelete;
-        private System.Windows.Forms.TextBox attribute;
+        private System.Windows.Forms.TextBox textBox;
     }
 }

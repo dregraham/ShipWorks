@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Data;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.SqlServer.General;
 using ShipWorks.Users;
 using ShipWorks.Filters.Content.SqlGeneration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -393,7 +394,23 @@ namespace ShipWorks.Filters
             // Create a new connection
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                ActionProcedures.DeleteAbandonedFilterCounts(adapter);
+                try
+                {
+                    ActionProcedures.DeleteAbandonedFilterCounts(adapter);
+                }
+                catch (SqlException ex)
+                {
+                    // The constraint exception happens rarely, but we don't want it to crash ShipWorks since we can just 
+                    // try to delete the filter counts again later.
+                    if (UtilityFunctions.IsConstraintException(ex) || UtilityFunctions.IsDeadlockException(ex))
+                    {
+                        log.Warn("Could not delete abandoned filter counts", ex);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
 

@@ -276,14 +276,15 @@ namespace ShipWorks.SqlServer.General
         /// </summary>
         public static bool IsDeadlockException(SqlException ex)
         {
-            if (ex == null || ex.Errors.Count == 0)
-            {
-                return false;
-            }
+            return IsSpecificSqlException(ex, 1205, "deadlock victim");
+        }
 
-            SqlError error = ex.Errors[0];
-
-            return error.Number == 1205 || ex.Message.Contains("deadlock victim");
+        /// <summary>
+        /// Indicates if the given exception represents a constraint exception
+        /// </summary>
+        public static bool IsConstraintException(SqlException ex)
+        {
+            return IsSpecificSqlException(ex, 547, "statement conflicted with");
         }
 
         /// <summary>
@@ -294,6 +295,21 @@ namespace ShipWorks.SqlServer.General
             SqlCommand cmd = con.CreateCommand();
             cmd.CommandText = string.Format("SET DEADLOCK_PRIORITY {0}", priority);
             cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Checks whether the SqlException is what we expect, either by the error number or by an error message
+        /// </summary>
+        private static bool IsSpecificSqlException(SqlException ex, int errorNumber, string errorMessage)
+        {
+            if (ex == null || ex.Errors.Count == 0)
+            {
+                return false;
+            }
+
+            SqlError error = ex.Errors[0];
+
+            return error.Number == errorNumber || ex.Message.Contains(errorMessage);
         }
     }
 }

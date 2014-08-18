@@ -132,22 +132,29 @@ namespace ShipWorks.Stores.Management
             // Initialize the session
             UserSession.InitializeForCurrentDatabase();
 
-            // Logon the user
-            UserSession.Logon(username, password, true);
+            bool complete = false;
 
-            // Initialize the session
-            UserManager.InitializeForCurrentUser();
-            UserSession.InitializeForCurrentSession();
-
-            originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
-
-            // Run the setup wizard
-            bool complete = RunWizard(originalWizard);
-
-            // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
-            if (!complete)
+            // Logon the user - this has failed in the wild (FB 275179), so instead of crashing, we'll ask them to log in again
+            if (UserSession.Logon(username, password, true))
             {
-                UserSession.Logoff(false);
+                // Initialize the session
+                UserManager.InitializeForCurrentUser();
+                UserSession.InitializeForCurrentSession();
+
+                originalWizard.BeginInvoke(new MethodInvoker(originalWizard.Hide));
+
+                // Run the setup wizard
+                complete = RunWizard(originalWizard);
+
+                // If the wizard didn't complete, then the we can't exit this with the user still looking like they were logged in
+                if (!complete)
+                {
+                    UserSession.Logoff(false);
+                }
+            }
+            else
+            {
+                MessageHelper.ShowWarning(originalWizard.Owner, "There was a problem while logging in. Please try again.");
             }
 
             // Counts as a cancel on the original wizard if they didn't complete the setup.
