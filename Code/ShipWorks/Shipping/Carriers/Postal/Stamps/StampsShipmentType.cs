@@ -648,5 +648,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             return fields;
         }
+
+        /// <summary>
+        /// Indicates if the shipment service type supports return shipments
+        /// </summary>
+        public override bool SupportsReturns
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
