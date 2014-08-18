@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new CancelPendingShipmentRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             testObject.Manipulate(carrierRequest.Object);
         }
@@ -182,10 +182,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
             CustomerSpecifiedLabelDetail labelDetail = labelSpecification.CustomerSpecifiedDetail;
 
-            Assert.AreEqual(3, labelDetail.MaskedData.Length);
+            Assert.AreEqual(4, labelDetail.MaskedData.Length);
             Assert.AreEqual(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
             Assert.AreEqual(LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[1]);
             Assert.AreEqual(LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[2]);
+            Assert.AreEqual(LabelMaskableDataType.CUSTOMS_VALUE, labelSpecification.CustomerSpecifiedDetail.MaskedData[3]);
         }
 
 

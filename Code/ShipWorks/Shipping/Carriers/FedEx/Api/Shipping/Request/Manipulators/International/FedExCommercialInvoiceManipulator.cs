@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -47,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shipmentCurrencyType = GetShipmentCurrencyType(fedExShipment.Shipment);
 
-            if (fedExShipment.CommercialInvoice)
+            if (fedExShipment.CommercialInvoice && !new FedExShipmentType().IsDomestic(request.ShipmentEntity))
             {
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
 
@@ -55,13 +57,91 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 ConfigureImporter(fedExShipment, customsDetail);
 
                 customsDetail.InsuranceCharges = new Money
-                    {
-                        Amount = fedExShipment.CommercialInvoiceInsurance,
-                        Currency = shipmentCurrencyType 
-                    };
+                {
+                    Amount = fedExShipment.CommercialInvoiceInsurance,
+                    Currency = shipmentCurrencyType
+                };
                 nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
+
+                ConfigureEtd(fedExShipment, nativeRequest);
+            }
+        }
+
+        /// <summary>
+        /// Add Etd fields
+        /// </summary>
+        private static void ConfigureEtd(FedExShipmentEntity fedExShipment, IFedExNativeShipmentRequest nativeRequest)
+        {
+            // Return if the user chose no commercial invoice or not to file electronically.
+            if (!fedExShipment.CommercialInvoice || !fedExShipment.CommercialInvoiceFileElectronically)
+            {
+                return;
             }
 
+            // Only set the shipping document specification if we are not SmartPost
+            if ((FedExServiceType) fedExShipment.Service == FedExServiceType.SmartPost)
+            {
+                return;
+            }
+
+            List<RequestedShippingDocumentType> requestedEtdDocTypes = new List<RequestedShippingDocumentType>() { RequestedShippingDocumentType.COMMERCIAL_INVOICE };
+
+            EtdDetail etdDetail = new EtdDetail();
+            etdDetail.RequestedDocumentCopies = requestedEtdDocTypes.ToArray();
+
+            List<ShipmentSpecialServiceType> shipmentSpecialServiceTypes = new List<ShipmentSpecialServiceType>();
+            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes != null)
+            {
+                shipmentSpecialServiceTypes.AddRange(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            }
+            shipmentSpecialServiceTypes.Add(ShipmentSpecialServiceType.ELECTRONIC_TRADE_DOCUMENTS);
+
+            ConfigureCustomsShippingDocumentSpecs(nativeRequest);
+
+            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes.ToArray();
+            nativeRequest.RequestedShipment.SpecialServicesRequested.EtdDetail = etdDetail;
+        }
+
+        /// <summary>
+        /// Add ShippingDocumentSpecification if needed
+        /// </summary>
+        private static void ConfigureCustomsShippingDocumentSpecs(IFedExNativeShipmentRequest nativeRequest)
+        {
+            ShippingDocumentSpecification shippingDocumentSpecification = nativeRequest.RequestedShipment.ShippingDocumentSpecification;
+
+            // Make sure the ShippingDocumentSpecification is there
+            if (shippingDocumentSpecification == null)
+            {
+                shippingDocumentSpecification = new ShippingDocumentSpecification();
+            }
+
+            // Make sure the ShippingDocumentTypes is there
+            if (shippingDocumentSpecification.ShippingDocumentTypes == null)
+            {
+                shippingDocumentSpecification.ShippingDocumentTypes = new RequestedShippingDocumentType[0];
+            }
+
+            List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>(shippingDocumentSpecification.ShippingDocumentTypes);
+            shippingDocumentTypes.Add(RequestedShippingDocumentType.COMMERCIAL_INVOICE);
+            shippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
+            
+            CommercialInvoiceDetail commercialInvoiceDetail = shippingDocumentSpecification.CommercialInvoiceDetail;
+            if (commercialInvoiceDetail == null)
+            {
+                commercialInvoiceDetail = new CommercialInvoiceDetail();
+            }
+
+            commercialInvoiceDetail.Format = new ShippingDocumentFormat()
+            {
+                ImageType = ShippingDocumentImageType.PDF,
+                ImageTypeSpecified = true,
+                StockType = ShippingDocumentStockType.PAPER_LETTER,
+                StockTypeSpecified = true
+            };
+
+            shippingDocumentSpecification.CommercialInvoiceDetail = commercialInvoiceDetail;
+
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification = shippingDocumentSpecification;
         }
 
         /// <summary>
@@ -94,7 +174,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         {
             CommercialInvoice invoice = new CommercialInvoice();
             invoice.TermsOfSale = GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale);
-            invoice.TermsOfSaleSpecified = true;
 
             invoice.Purpose = GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose);
             invoice.PurposeSpecified = true;
@@ -138,16 +217,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private TermsOfSaleType GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
+        private string GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
         {
+            // TODO: We need to determine if the "or" types need to be split into individual types.
+            // TODO: We need to determine the actual values for the rest.
+            // TODO: May need to verify the DAP and DAT get added to the drop down, and determine if there's other info they need.
             switch (termsOfSale)
             {
-                case FedExTermsOfSale.FOB_or_FCA: return TermsOfSaleType.FOB_OR_FCA;
-                case FedExTermsOfSale.CFR_or_CPT: return TermsOfSaleType.CFR_OR_CPT;
-                case FedExTermsOfSale.CIF_or_CIP: return TermsOfSaleType.CIF_OR_CIP;
-                case FedExTermsOfSale.EXW: return TermsOfSaleType.EXW;
-                case FedExTermsOfSale.DDP: return TermsOfSaleType.DDP;
-                case FedExTermsOfSale.DDU: return TermsOfSaleType.DDU;
+                case FedExTermsOfSale.FOB_or_FCA: return "FCA";
+                case FedExTermsOfSale.CFR_or_CPT: return "CPT/C&F";
+                case FedExTermsOfSale.CIF_or_CIP: return "CIP/CIF";
+                case FedExTermsOfSale.EXW: return "EXW";
+                case FedExTermsOfSale.DDP: return "DDP";
+                case FedExTermsOfSale.DDU: return "DDU";
+                case FedExTermsOfSale.DAP: return "DAP";
+                case FedExTermsOfSale.DAT: return "DAT";
             }
 
             throw new InvalidOperationException("Invalid FedEx TermsOfSale: " + termsOfSale);
@@ -198,6 +282,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 // We'll be manipulating properties of the requested shipment, so make sure it's been created
                 nativeRequest.RequestedShipment = new RequestedShipment();
             }
+            // Make sure the RequestedShipment is there
+            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
+            {
+                // We'll be manipulating properties of the special services, so make sure it's been created
+                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
+            }
+
         }
     }
 }

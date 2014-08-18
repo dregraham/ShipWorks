@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
 
             // If we aren't SmartPost, set the packaging type
-            if ((FedExServiceType) fedExShipment.Service != FedExServiceType.SmartPost)
+            if ((FedExServiceType)fedExShipment.Service != FedExServiceType.SmartPost)
             {
                 // Set the packaging type for the shipment
                 requestedShipment.PackagingType = GetApiPackagingType((FedExPackagingType) fedExShipment.PackagingType);
@@ -59,13 +59,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         {
             switch (packagingType)
             {
-                case FedExPackagingType.Box: return PackagingType.FEDEX_BOX;
-                case FedExPackagingType.Box10Kg: return PackagingType.FEDEX_10KG_BOX;
-                case FedExPackagingType.Box25Kg: return PackagingType.FEDEX_25KG_BOX;
-                case FedExPackagingType.Custom: return PackagingType.YOUR_PACKAGING;
-                case FedExPackagingType.Envelope: return PackagingType.FEDEX_ENVELOPE;
-                case FedExPackagingType.Pak: return PackagingType.FEDEX_PAK;
-                case FedExPackagingType.Tube: return PackagingType.FEDEX_TUBE;
+                case FedExPackagingType.Box: 
+                    return PackagingType.FEDEX_BOX;
+                case FedExPackagingType.Box10Kg: 
+                    return PackagingType.FEDEX_10KG_BOX;
+                case FedExPackagingType.Box25Kg: 
+                    return PackagingType.FEDEX_25KG_BOX;
+                case FedExPackagingType.Custom: 
+                    return PackagingType.YOUR_PACKAGING;
+                case FedExPackagingType.Envelope: 
+                    return PackagingType.FEDEX_ENVELOPE;
+                case FedExPackagingType.Pak: 
+                    return PackagingType.FEDEX_PAK;
+                case FedExPackagingType.Tube: 
+                    return PackagingType.FEDEX_TUBE;
+                case FedExPackagingType.SmallBox:
+                    return PackagingType.FEDEX_SMALL_BOX;
+                case FedExPackagingType.MediumBox:
+                    return PackagingType.FEDEX_MEDIUM_BOX;
+                case FedExPackagingType.LargeBox:
+                    return PackagingType.FEDEX_LARGE_BOX;
+                case FedExPackagingType.ExtraLargeBox:
+                    return PackagingType.FEDEX_EXTRA_LARGE_BOX;
             }
 
             throw new InvalidOperationException("Invalid FedEx Packaging Type");

@@ -49,7 +49,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     ImporterStateProvCode = "MO",
                     ImporterStreet1 = "1 Memorial Drive",
                     ImporterStreet2 = "Suite 2000",                    
-                }
+                },
+                OriginCountryCode = "US",
+                ShipCountryCode = "GB"
             };
 
             nativeRequest = new ProcessShipmentRequest()
@@ -94,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new CancelPendingShipmentRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             testObject.Manipulate(carrierRequest.Object);
         }
@@ -104,6 +106,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // setup the test by setting the requested shipment to null
             nativeRequest.RequestedShipment = null;
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.IsNotNull(nativeRequest.RequestedShipment);
+        }
+
+        [TestMethod]
+        public void Manipulate_AccountsForNullSpecialServices_Test()
+        {
+            // setup the test by setting the requested shipment to null
+            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
             testObject.Manipulate(carrierRequest.Object);
@@ -148,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsFobOrFca_Test()
+        public void Manipulate_TermsOfSaleIsFca_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
@@ -156,11 +170,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.FOB_OR_FCA, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("FCA", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsCfrOrCpt_Test()
+        public void Manipulate_TermsOfSaleIsCptOrCf_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.CFR_or_CPT;
@@ -168,11 +182,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.CFR_OR_CPT, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("CPT/C&F", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
-        public void Manipulate_TermsOfSaleIsCifOrCip_Test()
+        public void Manipulate_TermsOfSaleIsCipOrCif_Test()
         {
             shipmentEntity.FedEx.CommercialInvoice = true;
             shipmentEntity.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CIF_or_CIP;
@@ -180,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.CIF_OR_CIP, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("CIP/CIF", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
@@ -192,7 +206,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.EXW, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("EXW", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
@@ -204,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.DDP, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("DDP", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
@@ -216,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(TermsOfSaleType.DDU, customsDetail.CommercialInvoice.TermsOfSale);
+            Assert.AreEqual("DDU", customsDetail.CommercialInvoice.TermsOfSale);
         }
 
         [TestMethod]
@@ -228,18 +242,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
         }
-
-        [TestMethod]
-        public void Manipulate_TermsOfSaleSpecifiedIsTrue_WhenCommercialInvoiceIsTrue_Test()
-        {
-            shipmentEntity.FedEx.CommercialInvoice = true;
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.IsTrue(customsDetail.CommercialInvoice.TermsOfSaleSpecified);
-        }
-
 
         [TestMethod]
         public void Manipulate_PurposeIsSold_Test()

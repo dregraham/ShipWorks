@@ -173,6 +173,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dryIceWeight.Size = new System.Drawing.Size(218, 21);
             this.dryIceWeight.TabIndex = 18;
             this.dryIceWeight.Weight = 0D;
+            this.dryIceWeight.WeightChanged += new System.EventHandler(this.OnPackageDetailsChanged);
             // 
             // dangerousGoodsControl
             // 

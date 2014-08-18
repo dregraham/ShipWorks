@@ -520,6 +520,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferencePO", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ReferenceShipmentIntegrity", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("PayorTransportType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -725,6 +728,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CommercialInvoice", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CommercialInvoiceFileElectronically", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CommercialInvoiceTermsOfSale", fieldHashtable);
@@ -1153,6 +1159,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferencePO, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.ReferencePO, value); }
+		}
+
+		/// <summary> The ReferenceShipmentIntegrity property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReferenceShipmentIntegrity"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceShipmentIntegrity
+		{
+			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.ReferenceShipmentIntegrity, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReferenceShipmentIntegrity, value); }
 		}
 
 		/// <summary> The PayorTransportType property of the Entity FedExShipment<br/><br/>
@@ -1912,6 +1929,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.CommercialInvoice, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.CommercialInvoice, value); }
+		}
+
+		/// <summary> The CommercialInvoiceFileElectronically property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."CommercialInvoiceFileElectronically"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean CommercialInvoiceFileElectronically
+		{
+			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.CommercialInvoiceFileElectronically, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.CommercialInvoiceFileElectronically, value); }
 		}
 
 		/// <summary> The CommercialInvoiceTermsOfSale property of the Entity FedExShipment<br/><br/>

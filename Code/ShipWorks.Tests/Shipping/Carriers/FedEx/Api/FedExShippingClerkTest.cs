@@ -1127,7 +1127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity);
 
-            rateRequest.Verify(r => r.Submit(), Times.Exactly(2));
+            rateRequest.Verify(r => r.Submit(), Times.Exactly(3));
         }
 
         [TestMethod]
@@ -1135,7 +1135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity);
 
-            rateResponse.Verify(r => r.Process(), Times.Exactly(2));
+            rateResponse.Verify(r => r.Process(), Times.Exactly(3));
         }
 
         [TestMethod]
@@ -1223,8 +1223,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            // We should get rates back (priority overnight for both basic and smart post)
-            Assert.AreEqual(2, rates.Rates.Count);
+            // We should get rates back (priority overnight for basic, smart post, and One Rate)
+            Assert.AreEqual(3, rates.Rates.Count);
         }
 
         [TestMethod]
@@ -1272,8 +1272,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            // We should get rates back (priority overnight for both basic and smart post)
-            Assert.AreEqual(2, rates.Rates.Count);
+            // We should get rates back (priority overnight for basic, smart post, and One Rate)
+            Assert.AreEqual(3, rates.Rates.Count);
         }
 
 
@@ -1295,8 +1295,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             
             RateGroup rates = testObject.GetRates(shipmentEntity);
 
-            // Multiply by two to account for the basic rates and smart post rates
-            Assert.AreEqual(nativeRateReply.RateReplyDetails.Length * 2, rates.Rates.Count);
+            // Multiply by two to account for the basic rate, smart post rates, and One Rate rates
+            Assert.AreEqual(nativeRateReply.RateReplyDetails.Length * 3, rates.Rates.Count);
         }
 
 
@@ -1310,7 +1310,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
                 (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateSmartPostManipulator))), Times.Once());
         }
-        
+
+        [TestMethod]
+        public void GetRates_CreatesOneRateRequest_WithRequestFactory_Test()
+        {
+            testObject.GetRates(shipmentEntity);
+
+            // Check that a rate request was created that supplied a list of specialized manipulators 
+            // containing one manipulator that was the One Rate manipulator
+            requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
+                (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateOneRateManipulator))), Times.Once());
+        }
+
         [TestMethod]
         [ExpectedException(typeof(FedExSoapCarrierException))]
         public void GetRates_CatchesSoapException_AndThrowsFedExSoapException_Test()

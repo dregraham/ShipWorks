@@ -63,6 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             request.ShipmentEntity.FedEx.ReferenceCustomer = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceCustomer, CustomerReferenceType.CUSTOMER_REFERENCE);
             request.ShipmentEntity.FedEx.ReferenceInvoice = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceInvoice, CustomerReferenceType.INVOICE_NUMBER);
             request.ShipmentEntity.FedEx.ReferencePO = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferencePO, CustomerReferenceType.P_O_NUMBER);
+            request.ShipmentEntity.FedEx.ReferenceShipmentIntegrity = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceShipmentIntegrity, CustomerReferenceType.SHIPMENT_INTEGRITY);
 
             if (customerReferences.Count > 0)
             {
@@ -133,14 +134,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     throw new FedExException(string.Format("FedEx does not allow references to exceed 30 characters in length. The reference value of \"{0}\" will exceed the 30 character limit. Please shorten the value and try again.", referenceToken));
                 }
 
-                references.Add
-                    (
-                        new CustomerReference
-                        {
-                            CustomerReferenceType = referenceType,
-                            Value = referenceValue
-                        }
-                    );
+                references.Add(new CustomerReference { CustomerReferenceType = referenceType, Value = referenceValue });
             }
 
             return referenceValue;

@@ -108,6 +108,50 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [TestMethod]
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsSmallBox_Test()
+        {
+            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.SmallBox;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Make sure we got a the same values back
+            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_SMALL_BOX);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsMediumBox_Test()
+        {
+            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.MediumBox;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Make sure we got a the same values back
+            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_MEDIUM_BOX);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsLargeBox_Test()
+        {
+            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.LargeBox;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Make sure we got a the same values back
+            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_LARGE_BOX);
+        }
+
+        [TestMethod]
+        public void Manipulate_SetFedExPackagingType_WhenPackageIsExtraLargeBox_Test()
+        {
+            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.ExtraLargeBox;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            // Make sure we got a the same values back
+            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_EXTRA_LARGE_BOX);
+        }
+
+        [TestMethod]
         public void Manipulate_PackagingTypeSpecifiedIsTrue_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;

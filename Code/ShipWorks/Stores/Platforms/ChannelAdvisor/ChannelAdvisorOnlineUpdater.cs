@@ -195,18 +195,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return "GROUND";
 
                         case FedExServiceType.FedEx2Day:
+                        case FedExServiceType.OneRate2Day:
                             return "2Day";
 
                         case FedExServiceType.PriorityOvernight:
+                        case FedExServiceType.OneRatePriorityOvernight:
                             return "PRIORITY";
 
                         case FedExServiceType.FirstOvernight:
+                        case FedExServiceType.OneRateFirstOvernight:
                             return "1STOVERNIGHT";
 
                         case FedExServiceType.StandardOvernight:
+                        case FedExServiceType.OneRateStandardOvernight:
                             return "OVERNIGHT";
 
                         case FedExServiceType.FedExExpressSaver:
+                        case FedExServiceType.OneRateExpressSaver:
                             return "EXPSAVER";
 
                         case FedExServiceType.FirstFreight:
