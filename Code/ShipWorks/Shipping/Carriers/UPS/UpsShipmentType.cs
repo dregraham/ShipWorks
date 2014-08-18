@@ -536,7 +536,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return true;
             }
 
-            if (originID == (int)ShipmentOriginSource.Account)
+            // The Ups object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Ups != null)
             {
                 UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
                 if (account == null)

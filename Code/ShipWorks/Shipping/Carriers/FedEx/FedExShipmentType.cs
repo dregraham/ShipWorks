@@ -681,7 +681,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return true;
             }
 
-            if (originID == (int) ShipmentOriginSource.Account)
+            // The FedEx object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.FedEx != null)
             {
                 FedExAccountEntity account = FedExAccountManager.GetAccount(shipment.FedEx.FedExAccountID);
                 if (account == null)

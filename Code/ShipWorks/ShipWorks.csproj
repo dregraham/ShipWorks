@@ -2066,9 +2066,23 @@
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
     <Compile Include="Stores\ComputerDownloadAllowed.cs" />
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
+    <Compile Include="Stores\Management\OnlineUpdateActionCreateException.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
     <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelSaleAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.Designer.cs">
+      <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -7353,6 +7367,12 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Grid\GridChannelAdvisorFlagDisplayEditor.resx">
       <DependentUpon>GridChannelAdvisorFlagDisplayEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.resx">
+      <DependentUpon>ChannelSaleAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.resx">
+      <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.resx">
       <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -10713,6 +10733,7 @@
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
+    <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
     <Content Include="Resources\Stores\Icons\nopcommerce.png" />
     <Content Include="Resources\Stores\Icons\limelightcrm.png" />

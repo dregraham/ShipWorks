@@ -684,7 +684,11 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            SaveSettingsActions();
+            if (!SaveSettingsActions())
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
         }
 
         /// <summary>
@@ -765,20 +769,30 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Save the settings from the actions ui
         /// </summary>
-        private void SaveSettingsActions()
+        private bool SaveSettingsActions()
         {
             // If this store does not support uploads, the online update placeholder will have no controls so just return.
             if (panelOnlineUpdatePlaceholder.Controls.Count == 0)
             {
-                return;
+                return true;
             }
 
             OnlineUpdateActionControlBase control = (OnlineUpdateActionControlBase) panelOnlineUpdatePlaceholder.Controls[0];
 
-            // See what tasks are configured to be created
-            List<ActionTask> tasks = control.CreateActionTasks(store);
+            List<ActionTask> tasks;
 
-            // If there are any, we need to create the action for ti
+            try
+            {
+                // See what tasks are configured to be created
+                tasks = control.CreateActionTasks(store);
+            }
+            catch (OnlineUpdateActionCreateException ex)
+            {
+                MessageHelper.ShowInformation(this, ex.Message);
+                return false;
+            }
+
+            // If there are any, we need to create the action for it
             if (tasks != null && tasks.Count > 0)
             {
                 using (SqlAdapter adapter = new SqlAdapter(true))
@@ -817,6 +831,8 @@ namespace ShipWorks.Stores.Management
                     adapter.Commit();
                 }
             }
+
+            return true;
         }
 
         #endregion
