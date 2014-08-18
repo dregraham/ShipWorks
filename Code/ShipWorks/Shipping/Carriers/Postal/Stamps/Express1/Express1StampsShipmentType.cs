@@ -179,5 +179,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get { return true; }
         }
+
+        /// <summary>
+        /// Indicates if the shipment service type supports return shipments
+        /// </summary>
+        public override bool SupportsReturns
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }
