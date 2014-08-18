@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            nativeRequest = new CancelPendingShipmentRequest();
+            nativeRequest = new object();
             SetUpNewCarrierRequest();
 
             testObject.Manipulate(carrierRequest.Object);

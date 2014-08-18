@@ -41,7 +41,7 @@
             this.labelSuccess.Name = "labelSuccess";
             this.labelSuccess.Size = new System.Drawing.Size(235, 13);
             this.labelSuccess.TabIndex = 3;
-            this.labelSuccess.Text = "ShipWorks is now setup to ship with {0}!";
+            this.labelSuccess.Text = "ShipWorks is now set up to ship with {0}!";
             // 
             // pictureSuccess
             // 
@@ -59,7 +59,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelSuccess);
             this.Controls.Add(this.pictureSuccess);
-            this.Description = "ShipWorks is now setup to ship with {0}.";
+            this.Description = "ShipWorks is now set up to ship with {0}.";
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "ShippingWizardPageFinish";
             this.Size = new System.Drawing.Size(486, 186);

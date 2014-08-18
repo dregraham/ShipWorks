@@ -81,6 +81,7 @@ namespace ShipWorks.Editions
                 case "freemiumPaid": return new FreemiumPaidEdition(store);
                 case "upsDiscounted": return RestoreBrownDiscounted(xMemento, store);
                 case "upsSubsidized": return RestoreBrownSubsidized(xMemento, store);
+                case "upsCtp2014": return RestoreBrownCtp2014(xMemento, store);
                 case "srendicia": return new ShipRushEndiciaEdition(store);
             }
 
@@ -125,6 +126,7 @@ namespace ShipWorks.Editions
             if (type == typeof(FreemiumPaidEdition))    return "freemiumPaid";
             if (type == typeof(BrownDiscountedEdition)) return "upsDiscounted";
             if (type == typeof(BrownSubsidizedEdition)) return "upsSubsidized";
+            if (type == typeof(BrownCtp2014Edition))    return "upsCtp2014";
             if (type == typeof(ShipRushEndiciaEdition)) return "srendicia";
 
             throw new InvalidOperationException("Unhandled Edition type: " + type);
@@ -150,6 +152,7 @@ namespace ShipWorks.Editions
 
                 case "upsSubsidized":
                 case "upsDiscounted":
+                case "upsCtp2014":
 
                     BrownSubsidizedEdition subsidized = edition as BrownSubsidizedEdition;
                     if (subsidized != null)
@@ -205,6 +208,22 @@ namespace ShipWorks.Editions
             }
 
             return new BrownDiscountedEdition(store, postalAvailability);
+        }
+
+        /// <summary>
+        /// Restore the BrownCtp2014 edition from the given memento
+        /// </summary>
+        private static Edition RestoreBrownCtp2014(IEnumerable<XElement> memento, StoreEntity store)
+        {
+            BrownPostalAvailability postalAvailability = BrownPostalAvailability.ApoFpoPobox;
+
+            XElement xPostal = memento.SingleOrDefault(x => x.Name == "PostalAvailability");
+            if (xPostal != null)
+            {
+                postalAvailability = (BrownPostalAvailability) (int) xPostal;
+            }
+
+            return new BrownCtp2014Edition(store, postalAvailability);
         }
 
         /// <summary>

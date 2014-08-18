@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
             return new VersionId
             {
                 ServiceId = "trck",
-                Major = 8,
+                Major = 9,
                 Intermediate = 0,
                 Minor = 0
             };

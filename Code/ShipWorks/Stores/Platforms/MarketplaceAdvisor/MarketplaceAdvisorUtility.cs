@@ -141,11 +141,26 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     {
                         switch ((FedExServiceType) shipment.FedEx.Service)
                         {
-                            case FedExServiceType.PriorityOvernight: return 65545;
-                            case FedExServiceType.StandardOvernight: return 65546;
-                            case FedExServiceType.FirstOvernight: return 65529;
-                            case FedExServiceType.FedEx2Day: return 65532;
-                            case FedExServiceType.FedExExpressSaver: return 65547;
+                            case FedExServiceType.PriorityOvernight:
+                            case FedExServiceType.OneRatePriorityOvernight: 
+                                return 65545;
+
+                            case FedExServiceType.StandardOvernight:
+                            case FedExServiceType.OneRateStandardOvernight: 
+                                return 65546;
+
+                            case FedExServiceType.FirstOvernight:
+                            case FedExServiceType.OneRateFirstOvernight: 
+                                return 65529;
+
+                            case FedExServiceType.FedEx2Day:
+                            case FedExServiceType.OneRate2Day: 
+                                return 65532;
+
+                            case FedExServiceType.FedExExpressSaver:
+                            case FedExServiceType.OneRateExpressSaver: 
+                                return 65547;
+
                             case FedExServiceType.InternationalPriority: return 65544;
                             case FedExServiceType.InternationalEconomy: return 65543;
                             case FedExServiceType.InternationalFirst: return 65557;

@@ -87,6 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     electronicExportInfo.ApplyMultiText(shipment.FedEx.CustomsAESEEI);
 
                     commercialInvoice.ApplyMultiCheck(shipment.FedEx.CommercialInvoice);
+                    electronicTradeDocuments.ApplyMultiCheck(shipment.FedEx.CommercialInvoiceFileElectronically);
                     ciTermsOfSale.ApplyMultiValue((FedExTermsOfSale) shipment.FedEx.CommercialInvoiceTermsOfSale);
                     ciPurpose.ApplyMultiValue((FedExCommercialInvoicePurpose) shipment.FedEx.CommercialInvoicePurpose);
                     ciComments.ApplyMultiText(shipment.FedEx.CommercialInvoiceComments);
@@ -231,6 +232,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 electronicExportInfo.ReadMultiText(t => shipment.FedEx.CustomsAESEEI = t);
 
                 commercialInvoice.ReadMultiCheck(c => shipment.FedEx.CommercialInvoice = c);
+                electronicTradeDocuments.ReadMultiCheck(c => shipment.FedEx.CommercialInvoiceFileElectronically = c);
                 ciTermsOfSale.ReadMultiValue(v => shipment.FedEx.CommercialInvoiceTermsOfSale = (int) v);
                 ciPurpose.ReadMultiValue(v => shipment.FedEx.CommercialInvoicePurpose = (int) v);
                 ciComments.ReadMultiText(t => shipment.FedEx.CommercialInvoiceComments = t);

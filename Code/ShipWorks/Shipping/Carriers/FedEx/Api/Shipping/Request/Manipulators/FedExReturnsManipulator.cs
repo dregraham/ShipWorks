@@ -106,17 +106,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                         ReturnEMailAllowedSpecialServiceType.SATURDAY_PICKUP
                     };
                 }
-
-                nativeRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail = new PendingShipmentDetail
+                EMailRecipient eMailRecipient = new EMailRecipient
                 {
-                    Type = PendingShipmentType.EMAIL,
-                    ExpirationDate = DateTime.Today.AddDays(30),
-                    ExpirationDateSpecified = true,
-                    EmailLabelDetail = new EMailLabelDetail
-                    {
-                        NotificationEMailAddress = request.ShipmentEntity.ShipEmail
-                    }
+                    EmailAddress = request.ShipmentEntity.ShipEmail
                 };
+
+                PendingShipmentDetail pendingShipmentDetail = new PendingShipmentDetail
+                {
+                    Type = PendingShipmentType.EMAIL, 
+                    ExpirationDate = DateTime.Today.AddDays(30), 
+                    ExpirationDateSpecified = true
+                };
+
+                EMailLabelDetail emailLabelDetail = new EMailLabelDetail
+                {
+                    Recipients = new EMailRecipient[1] {eMailRecipient}
+                };
+
+                //NotificationEMailAddress = request.ShipmentEntity.ShipEmail
+
+                pendingShipmentDetail.EmailLabelDetail = emailLabelDetail;
+                nativeRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail = pendingShipmentDetail;
             }
         }
 

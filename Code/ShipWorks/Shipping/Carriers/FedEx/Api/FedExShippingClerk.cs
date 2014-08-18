@@ -156,17 +156,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             switch (serviceType)
             {
                 case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.OneRatePriorityOvernight:
                 case FedExServiceType.StandardOvernight:
+                case FedExServiceType.OneRateStandardOvernight:
                 case FedExServiceType.FirstOvernight:
+                case FedExServiceType.OneRateFirstOvernight:
                 case FedExServiceType.FedEx2Day:
+                case FedExServiceType.OneRate2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.OneRateExpressSaver:
+                case FedExServiceType.FedEx2DayAM:
+                case FedExServiceType.OneRate2DayAM:
                 case FedExServiceType.InternationalPriority:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
-                case FedExServiceType.FedEx2DayAM:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -563,6 +569,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Retrieve the rates from FedEx
                 overallResults.AddRange(GetBasicRates(shipment));
                 overallResults.AddRange(GetSmartPostRates(shipment));
+                overallResults.AddRange(GetOneRateRates(shipment));
 
                 return new RateGroup(overallResults);
             }
@@ -577,7 +584,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> GetBasicRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetBasicRates(ShipmentEntity shipment)
         {
             List<RateResult> rates = new List<RateResult>();
 
@@ -606,7 +613,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> GetSmartPostRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetSmartPostRates(ShipmentEntity shipment)
         {
             List<RateResult> rates = new List<RateResult>();
 
@@ -647,6 +654,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
+        /// Gets the one rate rates for the given shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>A List of RateResult objects.</returns>
+        private IEnumerable<RateResult> GetOneRateRates(ShipmentEntity shipment)
+        {
+            List<RateResult> rates = new List<RateResult>();
+
+            try
+            {
+                // Create a request that will retrieve one rate rates by supplying a one rate manipulator
+                CarrierRequest oneRateRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> { new FedExRateOneRateManipulator() });
+                ICarrierResponse oneRateResponse = oneRateRequest.Submit();
+                oneRateResponse.Process();
+
+                RateReply oneRateNativeResponse = oneRateResponse.NativeResponse as RateReply;
+                if (oneRateNativeResponse == null)
+                {
+                    // We don't have the correct response type to continue processing
+                    log.Info(string.Format("An unexpected response type was received when trying to get results for One Rate: {0} type was received.", oneRateResponse.GetType().FullName));
+                }
+                else
+                {
+                    // We have the appropriate response type, so we can build the list of rate results
+                    rates = BuildRateResults(shipment, new List<RateReplyDetail>(oneRateNativeResponse.RateReplyDetails));
+                }
+            }
+            catch (FedExException ex)
+            {
+                // Just eat any FedEx exception, so we can still display the basic rates
+                log.Warn("Error getting One Rate rates: " + ex.Message);
+            }
+            catch (FedExApiCarrierException ex)
+            {
+                // Just eat the FedEx API exception, so we can still display the basic rates
+                log.Warn("Error getting One Rate rates: " + ex.Message);
+            }
+
+            return rates;
+        }
+
+        /// <summary>
         /// Builds a list of ShipWorks RateResult objects from the FedEx rate details.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -664,7 +713,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 FedExServiceType serviceType;
 
-                serviceType = GetFedExServiceType(rateDetail.ServiceType);
+                serviceType = GetFedExServiceType(rateDetail);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
@@ -786,17 +835,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Get our own FedExServiceType value for the given rate ServiceType
+        /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        private static FedExServiceType GetFedExServiceType(ServiceType serviceType)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail)
         {
-            switch (serviceType)
+            switch (rateDetail.ServiceType)
             {
-                case ServiceType.PRIORITY_OVERNIGHT: return FedExServiceType.PriorityOvernight;
-                case ServiceType.STANDARD_OVERNIGHT: return FedExServiceType.StandardOvernight;
-                case ServiceType.FIRST_OVERNIGHT: return FedExServiceType.FirstOvernight;
-                case ServiceType.FEDEX_2_DAY: return FedExServiceType.FedEx2Day;
-                case ServiceType.FEDEX_EXPRESS_SAVER: return FedExServiceType.FedExExpressSaver;
+                case ServiceType.PRIORITY_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRatePriorityOvernight : FedExServiceType.PriorityOvernight;
+                }
+
+                case ServiceType.STANDARD_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateStandardOvernight : FedExServiceType.StandardOvernight;
+                }
+
+                case ServiceType.FIRST_OVERNIGHT:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateFirstOvernight : FedExServiceType.FirstOvernight;
+                }
+
+                case ServiceType.FEDEX_2_DAY:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2Day : FedExServiceType.FedEx2Day;
+                }
+
+                case ServiceType.FEDEX_2_DAY_AM:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRate2DayAM : FedExServiceType.FedEx2DayAM;
+                }
+
+                case ServiceType.FEDEX_EXPRESS_SAVER:
+                {
+                    return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
+                }
+
                 case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
                 case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
                 case ServiceType.INTERNATIONAL_FIRST: return FedExServiceType.InternationalFirst;
@@ -808,12 +882,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
                 case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
                 case ServiceType.SMART_POST: return FedExServiceType.SmartPost;
-                case ServiceType.FEDEX_2_DAY_AM: return FedExServiceType.FedEx2DayAM;
+                
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
                 case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
             }
 
-            throw new CarrierException("Invalid FedEx Service Type " + serviceType);
+            throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);
+        }
+
+        /// <summary>
+        /// Determines whether the rate result is for FedEx One Rate
+        /// </summary>
+        private static bool IsOneRateResult(RateReplyDetail rateDetail)
+        {
+            bool isOneRate = false;
+
+            if (rateDetail != null && rateDetail.RatedShipmentDetails != null)
+            {
+                // Consider this a One Rate result if the detail has FEDEX_ONE_RATE applied
+                isOneRate = rateDetail.RatedShipmentDetails.Where(detail => detail.ShipmentRateDetail != null)
+                                                           .Any(d => d.ShipmentRateDetail != null && d.ShipmentRateDetail.SpecialRatingApplied != null && d.ShipmentRateDetail.SpecialRatingApplied.Any(r => r == SpecialRatingAppliedType.FEDEX_ONE_RATE));
+            }
+
+            return isOneRate;
         }
 
         /// <summary>
@@ -877,7 +968,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw (HandleException(ex));
             }
 		}
-		
-		
+
+        /// <summary>
+        /// Gets the major version of the Ship WebService
+        /// </summary>
+        public static string ShipWebServiceVersion
+        {
+            get
+            {
+                WebServices.Ship.VersionId version = new WebServices.Ship.VersionId();
+                return version.Major.ToString();
+            }
+        }
     }
 }

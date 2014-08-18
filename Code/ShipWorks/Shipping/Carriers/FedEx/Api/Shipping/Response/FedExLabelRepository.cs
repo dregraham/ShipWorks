@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -44,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             // Save the label iamges
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                foreach (var packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
+                foreach (CompletedPackageDetail packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
                 {
                     FedExPackageEntity package = shipment.FedEx.Packages[int.Parse(packageReply.SequenceNumber) - 1];
 
@@ -63,8 +66,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     // Save all the additional labels
                     if (packageReply.PackageDocuments != null)
                     {
-                        foreach (ShippingDocument document in packageReply.PackageDocuments
-                                                                          .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS))
+                        IEnumerable<ShippingDocument> shippingDocs = packageReply.PackageDocuments
+                                                                          .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS);
+
+                        // Save off any alcohol stickers
+                        foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL"))
+                        {
+                            SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
+                        }
+
+                        // Save off non alcohol labels that have an AccessReference value
+                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
+                        {
+                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
+                        }
+
+                        // Save off the OP-900 document (AccessReference is null, so it's not captured in the section above)
+                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.OP_900))
                         {
                             SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                         }
@@ -124,19 +142,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                 throw new ShippingException("Multiple parts returned for label. " + labelDocument);
             }
 
-            // Convert the string into an image stream
-            using (MemoryStream imageStream = new MemoryStream(labelDocument.Parts[0].Image))
+            if (labelDocument.ImageType == ShippingDocumentImageType.PDF)
             {
-                // Save the label image
-                DataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
-
-                if (InterapptiveOnly.IsInterapptiveUser)
+                using (MemoryStream pdfBytes = new MemoryStream(labelDocument.Parts[0].Image))
                 {
-                    string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, name + "_" + ownerID, "PNG", false);
-                    File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
+                    using (PdfDocument pdf = new PdfDocument(pdfBytes))
+                    {
+                        DataResourceManager.CreateFromPdf(pdf, ownerID, name);
+                    }
                 }
+            }
+            else
+            {
+                // Convert the string into an image stream
+                using (MemoryStream imageStream = new MemoryStream(labelDocument.Parts[0].Image))
+                {
+                    // Save the label image
+                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
 
-                // File.WriteAllBytes(string.Format(@"D:\Vista Folders\Desktop\Random\{0}.png", name), labelDocument.Parts[0].Image);
+                    if (InterapptiveOnly.IsInterapptiveUser)
+                    {
+                        string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, name + "_" + ownerID, "PNG", false);
+                        File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
+                    }
+                }
             }
         }
 
@@ -149,10 +178,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             {
                 case ReturnedShippingDocumentType.AUXILIARY_LABEL:
                     return "DocumentAuxiliaryLabel";
+
                 case ReturnedShippingDocumentType.TERMS_AND_CONDITIONS:
                     return "DocumentTermsAndConditions";
+
                 case ReturnedShippingDocumentType.COD_RETURN_LABEL:
                     return "COD";
+
+                case ReturnedShippingDocumentType.OP_900:
+                    return "OP-900";
+
+                case ReturnedShippingDocumentType.COMMERCIAL_INVOICE:
+                    return "CommercialInvoice";
             }
 
             throw new InvalidOperationException("Unhandled label document type: " + documentType);
