@@ -1022,6 +1022,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [MarketplaceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MarketplaceStoreName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceBuyerID] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceSalesID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Classification] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1034,6 +1035,14 @@ GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] ADD CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketPlaceName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceName])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
