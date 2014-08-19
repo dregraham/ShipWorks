@@ -249,12 +249,16 @@ namespace ShipWorks.Shipping.Editing
             List<int> selectedIndexesInGrid = selectedRows.Select(r => r.IndexInGrid).ToList();
             LoadShipments(loadedShipments, loadedShipments.All(s => !s.Processed), false);
 
-            // Select the rows that were originally selected. The row counts should
-            // not have changed, so we shouldn't get index out of range exceptions
+            // Select the rows that were originally selected. Even though the rows should not have
+            // changed, we got an IndexOutOfRangeException after this was released. So we'll ensure
+            // that the selected index still exists before trying to select it.
             selectedIndexesInGrid.ForEach(i => 
-            { 
-                selectedRows.Add(sandGrid.Rows[i]);
-                sandGrid.Rows[i].Selected = true;
+            {
+                if (sandGrid.Rows.Count > i)
+                {
+                    selectedRows.Add(sandGrid.Rows[i]);
+                    sandGrid.Rows[i].Selected = true;   
+                }
             });
         }
 

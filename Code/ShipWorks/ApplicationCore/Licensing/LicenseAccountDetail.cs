@@ -160,16 +160,20 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 BrownPostalAvailability postalAvailability = (BrownPostalAvailability) XPathUtility.Evaluate(xpath, "//UpsOnly/@postal", (int) BrownPostalAvailability.ApoFpoPobox);
 
-                // In Tango, 1 is Discount, 2 is Subsidized, and 3 is Subsidy+Postal
+                // In Tango, 1 is Discount, 2 is Subsidized, and 3 is tier1, 4 is tier2, 5 is tier3
                 if (upsStatus == 1)
                 {
                     return new BrownDiscountedEdition(store, postalAvailability);
                 }
-                else
+                else if (upsStatus == 2)
                 {
                     string accounts = XPathUtility.Evaluate(xpath, "//UpsOnly", "");
 
                     return new BrownSubsidizedEdition(store, accounts.Split(';'), postalAvailability);
+                }
+                else if (upsStatus == 3 || upsStatus == 4 || upsStatus == 5)
+                {
+                    return new BrownCtp2014Edition(store, postalAvailability);
                 }
             }
 

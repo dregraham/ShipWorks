@@ -101,10 +101,10 @@ namespace ShipWorks.Email
         /// </summary>
         private IPredicateExpression CreateOutboxQueryPredicate()
         {
-            // We want all messages that are not yet sent
+            // We want all messages that are Ready to be sent.  Ignore failed emails; the customer needs to fix them before retrying.
             IPredicateExpression statusPredicate = new PredicateExpression(
                 EmailOutboundFields.SendStatus == (int) EmailOutboundStatus.Ready |
-                EmailOutboundFields.SendStatus == (int) EmailOutboundStatus.Failed);
+                EmailOutboundFields.SendStatus == (int) EmailOutboundStatus.Retry);
 
             // We only want messages from this account
             IPredicateExpression predicate = new PredicateExpression(EmailOutboundFields.AccountID == account.EmailAccountID);

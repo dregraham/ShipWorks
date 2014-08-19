@@ -114,6 +114,7 @@ Source: {#AppArtifacts}\Rebex.Security.dll; DestDir: {app}; Flags: overwriteread
 Source: {#AppArtifacts}\SpreadsheetGear.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Newtonsoft.Json.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\RestSharp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Apitron.PDF.Rasterizer.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Microsoft.Web.Services3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Quartz.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\NAudio.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion

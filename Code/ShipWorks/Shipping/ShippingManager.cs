@@ -363,12 +363,12 @@ namespace ShipWorks.Shipping
             clonedShipment.InsurancePolicy = null;
 
             // this is now a new shipment to be inserted
-            MarkAsNew(clonedShipment);
+            EntityUtility.MarkAsNew(clonedShipment);
 
             // all carrier data is New as well
             foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
             {
-                MarkAsNew(customsItem);
+                EntityUtility.MarkAsNew(customsItem);
             }
 
             clonedShipment.Processed = false;
@@ -379,57 +379,10 @@ namespace ShipWorks.Shipping
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
 
-            // Clear out any old UPS tracking information
-            if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
-            {
-                clonedShipment.Ups.UspsTrackingNumber = String.Empty;
-                clonedShipment.Ups.Cn22Number = String.Empty;
-                foreach (UpsPackageEntity package in clonedShipment.Ups.Packages)
-                {
-                    package.TrackingNumber = String.Empty;
-                    package.UspsTrackingNumber = String.Empty;
-                    MarkAsNew(package);
-                }
-            }
-
-            // Clear out post-processed data on a per shipment-type basis.  could probably be factored out into base classes per shipment type if 
-            // we expand this past endicia
-            if (clonedShipment.Postal != null && clonedShipment.Postal.Endicia != null)
-            {
-                clonedShipment.Postal.Endicia.TransactionID = null;
-                clonedShipment.Postal.Endicia.RefundFormID = null;
-                clonedShipment.Postal.Endicia.ScanFormBatchID = null;
-            }
-
-            if (clonedShipment.Postal != null && clonedShipment.Postal.Stamps != null)
-            {
-                clonedShipment.Postal.Stamps.ScanFormBatchID = null;
-            }
+            // Clear out post-processed data on a per shipment-type basis.
+            ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
 
             return clonedShipment;
-        }
-
-        /// <summary>
-        /// Mark all fields as changed for LLBL's sake
-        /// </summary>
-        private static void MarkAsNew(IEntity2 entity)
-        {
-            entity.IsNew = true;
-
-            foreach (IEntityField2 field in entity.Fields)
-            {
-                field.IsChanged = true;
-            }
-
-            entity.GetDependingRelatedEntities().ForEach(e => MarkAsNew(e));
-
-            entity.GetMemberEntityCollections().ForEach(c =>
-            {
-                foreach (IEntity2 e2 in c)
-                {
-                    MarkAsNew(e2);
-                }
-            });
         }
 
         /// <summary>

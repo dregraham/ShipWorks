@@ -170,15 +170,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.ExpirationDate);
         }
 
-        [TestMethod]
-        public void Manipulate_PendingShipmentEmailSet_ShipmentEmailReturnLabel_Test()
-        {
-            testObject.Manipulate(shipRequest);
+        //[TestMethod]
+        //public void Manipulate_PendingShipmentEmailSet_ShipmentEmailReturnLabel_Test()
+        //{
+        //    testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(
-                shipmentEntity.ShipEmail,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.EmailLabelDetail.NotificationEMailAddress);
-        }
+        //    Assert.AreEqual(
+        //        shipmentEntity.ShipEmail,
+        //        processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.EmailLabelDetail.NotificationEMailAddress);
+        //}
 
         [TestMethod]
         public void Manipulate_SautrdayPickupSet_ShipmentEmailReturnLabelWithSaturdayPickup_Test()

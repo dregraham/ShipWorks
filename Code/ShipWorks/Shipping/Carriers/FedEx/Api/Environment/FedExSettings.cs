@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "bSOSlZqj6TCaKrAv";
+                return "fOilEsjTTKLzuwNi";
             }
         }
 
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return SecureText.Decrypt("BKRdYnlc8rjM4IYwWxdz3tYZ9IXSFg6FJGkjW72d5Ew=", "apptive");
+                return SecureText.Decrypt("ED92wCRD8FOLC7+3XBElFwZiMTc3af91XMaxrxLLF4g=", "apptive");
             }
         }
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "DYJU";
+                return "ITSW";
             }
         }
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "2272";
+                return "5236";
             }
         }
 

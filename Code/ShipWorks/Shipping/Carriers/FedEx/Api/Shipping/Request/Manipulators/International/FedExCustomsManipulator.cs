@@ -209,7 +209,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 nativeRequest.RequestedShipment.Recipient.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
             }
 
+            // TODO: We may need to set shipping/recipeint based on who's paying.  See ETD_Request.xml where The Tins info
+            // is on Shipper.
             nativeRequest.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() {Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE};
+
         }
 
         /// <summary>
@@ -292,8 +295,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 Commodity commodity = new Commodity
                 {
                     Description = customsItem.Description,
-                    Quantity = Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
-                    QuantityUnits = "EA",
+                    Quantity = (decimal)customsItem.Quantity, //Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
+                    QuantitySpecified = true,
+                    QuantityUnits = "EA", 
                     NumberOfPieces = customsItem.NumberOfPieces.ToString(CultureInfo.InvariantCulture),
                     Weight = new Weight { Value = (decimal) customsItem.Weight, Units = GetApiWeightUnits(shipment) },
                     UnitPrice = new Money { Amount = customsItem.UnitPriceAmount, Currency = shipmentCurrencyType },

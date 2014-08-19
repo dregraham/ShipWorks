@@ -36,6 +36,8 @@
             // 
             // panelStores
             // 
+            this.panelStores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelStores.Controls.Add(this.checkBoxSample1);
             this.panelStores.Controls.Add(this.checkBoxSample2);
             this.panelStores.Location = new System.Drawing.Point(0, 0);

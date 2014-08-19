@@ -10,19 +10,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExSmartPostIndicia
     {
-        [Description("Parcel Select")]
+        [Description("FedEx SmartPost Parcel Select")]
         ParcelSelect = 0,
 
-        [Description("Media Mail")]
+        [Description("FedEx SmartPost® Media")]
         MediaMail = 1,
 
-        [Description("Bound Printed Matter")]
+        [Description("FedEx SmartPost® Bound Printed Matter")]
         BoundPrintedMatter = 2,
 
-        [Description("Presorted Standard")]
+        [Description("FedEx SmartPost Presorted Standard")]
         PresortedStandard = 3,
 
-        [Description("Parcel Return")]
+        [Description("FedEx SmartPost® Returns")]
         ParcelReturn = 4,
     }
 }

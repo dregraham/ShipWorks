@@ -48,7 +48,7 @@
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 499);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(592, 57);
+            this.panelBottom.Size = new System.Drawing.Size(619, 57);
             this.panelBottom.TabIndex = 1;
             // 
             // buttonCancel
@@ -78,7 +78,7 @@
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMain.Location = new System.Drawing.Point(0, 0);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(592, 499);
+            this.panelMain.Size = new System.Drawing.Size(619, 499);
             this.panelMain.TabIndex = 2;
             // 
             // panelConfiguration
@@ -91,7 +91,7 @@
             this.panelConfiguration.Controls.Add(this.configurationControl);
             this.panelConfiguration.Location = new System.Drawing.Point(13, 12);
             this.panelConfiguration.Name = "panelConfiguration";
-            this.panelConfiguration.Size = new System.Drawing.Size(567, 481);
+            this.panelConfiguration.Size = new System.Drawing.Size(594, 481);
             this.panelConfiguration.TabIndex = 1;
             // 
             // labelDescription
@@ -115,11 +115,12 @@
             // 
             // configurationControl
             // 
+            this.configurationControl.AutoSize = true;
             this.configurationControl.BackColor = System.Drawing.Color.White;
             this.configurationControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.configurationControl.Location = new System.Drawing.Point(13, 65);
             this.configurationControl.Name = "configurationControl";
-            this.configurationControl.Size = new System.Drawing.Size(524, 382);
+            this.configurationControl.Size = new System.Drawing.Size(553, 396);
             this.configurationControl.TabIndex = 0;
             // 
             // ShipSenseUniquenessSettingsDlg
@@ -128,7 +129,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(592, 556);
+            this.ClientSize = new System.Drawing.Size(619, 556);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelBottom);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);

@@ -959,6 +959,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public virtual void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            
+        }
+
+        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         public abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();

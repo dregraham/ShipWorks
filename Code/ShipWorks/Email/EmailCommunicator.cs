@@ -420,13 +420,13 @@ namespace ShipWorks.Email
                                 {
                                     if (outboxItem.AccountID != throttler.EmailAccount.EmailAccountID)
                                     {
-                                        throw new EmailException("The email account to be used has changed. The message will be sent during the next of the updated account.");
+                                        throw new EmailException("The email account to be used has changed. The message will be sent during the next of the updated account.", EmailExceptionErrorNumber.EmailAccountChanged);
                                     }
 
                                     // Somehow this snuck in
                                     if (outboxItem.DontSendBefore != null && outboxItem.DontSendBefore > DateTime.UtcNow)
                                     {
-                                        throw new EmailException("The message is configured to not be sent until " + StringUtility.FormatFriendlyDateTime(outboxItem.DontSendBefore.Value) + ".");
+                                        throw new EmailException("The message is configured to not be sent until " + StringUtility.FormatFriendlyDateTime(outboxItem.DontSendBefore.Value) + ".", EmailExceptionErrorNumber.DelaySending);
                                     }
 
                                     // Need to create a Rebex message from our outbox definition
@@ -443,7 +443,7 @@ namespace ShipWorks.Email
                                 {
                                     log.Error("Failed sending mail message", ex);
 
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Failed;
+                                    outboxItem.SendStatus = ex.RetryAllowed ? (int) EmailOutboundStatus.Retry : (int) EmailOutboundStatus.Failed;
                                     outboxItem.SendAttemptLastError = ex.Message;
 
                                     // If its a logon or throttle exception we don't keep going
@@ -456,7 +456,7 @@ namespace ShipWorks.Email
                                 {
                                     log.Error("Failed sending mail message", ex);
 
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Failed;
+                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
                                     outboxItem.SendAttemptLastError = ex.Message;
 
                                     // If we are now disconnected, stop
@@ -469,7 +469,7 @@ namespace ShipWorks.Email
                                 {
                                     log.Error("Failed sending mail message", ex);
 
-                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Failed;
+                                    outboxItem.SendStatus = (int) EmailOutboundStatus.Retry;
                                     outboxItem.SendAttemptLastError = ex.Message;
 
                                     // Go ahead and stop
@@ -479,7 +479,7 @@ namespace ShipWorks.Email
                                 {
                                     log.Error("Failed sending mail message", ex);
 
-                                    outboxItem.SendStatus = (int)EmailOutboundStatus.Failed;
+                                    outboxItem.SendStatus = (int)EmailOutboundStatus.Retry;
                                     outboxItem.SendAttemptLastError = ex.Message;
 
                                     // Go ahead and stop
@@ -570,7 +570,7 @@ namespace ShipWorks.Email
             if (plainEmailTextDataResourceReference == null)
             {
                 log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for PlainPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.PlainPartResourceID);
-                throw new EmailException("An error has occurred retrieving the body of the email.");
+                throw new EmailException("An error has occurred retrieving the body of the email.", EmailExceptionErrorNumber.EmailBodyProcessingFailed);
             }
 
             string plainEmailText = LoadDataResourceReferenceText(plainEmailTextDataResourceReference, outboxItem.EmailOutboundID);
@@ -608,7 +608,7 @@ namespace ShipWorks.Email
             if (htmlTextDataResourceReference == null)
             {
                 log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for HtmlPartResourceID {1}.", outboxItem.EmailOutboundID, outboxItem.HtmlPartResourceID);
-                throw new EmailException("An error has occurred retrieving the body of the email.");
+                throw new EmailException("An error has occurred retrieving the body of the email.", EmailExceptionErrorNumber.EmailBodyProcessingFailed);
             }
 
             // Try to get the html text for the email
@@ -676,7 +676,7 @@ namespace ShipWorks.Email
                 if (ex.Message.ToUpperInvariant().Contains("being used by another process".ToUpperInvariant()))
                 {
                     log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for ReferenceID {1}.", emailOutboundID, dataResourceReference.ReferenceID);
-                    throw new EmailException("An error has occurred retrieving the body of the email.", ex);
+                    throw new EmailException("An error has occurred retrieving the body of the email.", ex, EmailExceptionErrorNumber.EmailBodyProcessingFailed);
                 }
 
                 throw;
@@ -684,7 +684,7 @@ namespace ShipWorks.Email
             catch (UnauthorizedAccessException ex)
             {
                 log.ErrorFormat("An error has occurred processing EmailOutboundEntity with ID of {0}. Could not get Resource for ReferenceID {1}.", emailOutboundID, dataResourceReference.ReferenceID);
-                throw new EmailException("An error has occurred retrieving the body of the email.", ex);
+                throw new EmailException("An error has occurred retrieving the body of the email.", ex, EmailExceptionErrorNumber.EmailBodyProcessingFailed);
             }
 
             return htmlText;

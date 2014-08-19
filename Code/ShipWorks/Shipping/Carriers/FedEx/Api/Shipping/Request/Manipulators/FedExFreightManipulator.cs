@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     specialServiceTypes.Add(ShipmentSpecialServiceType.INSIDE_PICKUP);
                 }
             }
-            else
+            else if (fedex.FreightLoadAndCount > 0)
             {
                 expressFreightDetail.ShippersLoadAndCount = fedex.FreightLoadAndCount.ToString();
             }

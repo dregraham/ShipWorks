@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new CancelPendingShipmentRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new object());
 
             testObject.Manipulate(carrierRequest.Object);
         }
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(13, version.Major);
+            Assert.AreEqual(15, version.Major);
         }
 
         [TestMethod]

@@ -2,57 +2,38 @@ SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-IF EXISTS (SELECT * FROM tempdb..sysobjects WHERE id=OBJECT_ID('tempdb..#tmpErrors')) DROP TABLE #tmpErrors
+PRINT N'Dropping foreign keys from [dbo].[ChannelAdvisorStore]'
 GO
-CREATE TABLE #tmpErrors (Error int)
+ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT[FK_ChannelAdvisorStore_Store]
 GO
-SET XACT_ABORT ON
+PRINT N'Dropping constraints from [dbo].[ChannelAdvisorStore]'
 GO
-SET TRANSACTION ISOLATION LEVEL SERIALIZABLE
+ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [PK_ChannelAdvisorStore]
 GO
-BEGIN TRANSACTION
+PRINT N'Rebuilding [dbo].[ChannelAdvisorStore]'
 GO
-PRINT N'Creating [dbo].[InsurancePolicy]'
-GO
-CREATE TABLE [dbo].[InsurancePolicy]
+CREATE TABLE [dbo].[tmp_rg_xx_ChannelAdvisorStore]
 (
-[ShipmentID] [bigint] NOT NULL,
-[InsureShipStoreName] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CreatedWithApi] [bit] NOT NULL,
-[ItemName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ClaimType] [int] NULL,
-[DamageValue] [money] NULL,
-[SubmissionDate] [datetime] NULL,
-[ClaimID] [bigint] NULL,
-[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[StoreID] [bigint] NOT NULL,
+[AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ProfileID] [int] NOT NULL,
+[AttributesToDownload] [xml] NOT NULL
 )
 GO
-IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
+INSERT INTO [dbo].[tmp_rg_xx_ChannelAdvisorStore]([StoreID], [AccountKey], [ProfileID],[AttributesToDownload]) 
+	SELECT [StoreID], [AccountKey], [ProfileID], '<Attributes></Attributes>'
+	FROM [dbo].[ChannelAdvisorStore]
 GO
-IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+DROP TABLE [dbo].[ChannelAdvisorStore]
 GO
-PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
+EXEC sp_rename N'[dbo].[tmp_rg_xx_ChannelAdvisorStore]', N'ChannelAdvisorStore'
 GO
-ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [PK_InsurancePolicy] PRIMARY KEY CLUSTERED  ([ShipmentID])
+PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
 GO
-IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [PK_ChannelAdvisorStore] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
-IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
+PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorStore]'
 GO
-ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [FK_InsurancePolicy_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [FK_ChannelAdvisorStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
-IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
-GO
-IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
-GO
-IF EXISTS (SELECT * FROM #tmpErrors) ROLLBACK TRANSACTION
-GO
-IF @@TRANCOUNT>0 BEGIN
-PRINT 'The database update succeeded'
-COMMIT TRANSACTION
-END
-ELSE PRINT 'The database update failed'
-GO
-DROP TABLE #tmpErrors
-GO
+

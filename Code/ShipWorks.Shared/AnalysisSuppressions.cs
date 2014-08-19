@@ -34,3 +34,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "LimeLight", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#LimeLightCRM")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Brightpearl", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Brightpearl")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "nop", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#nopCommerce")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Powersports", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#PowersportsSupport")]
