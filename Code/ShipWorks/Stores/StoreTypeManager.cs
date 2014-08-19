@@ -152,6 +152,7 @@ namespace ShipWorks.Stores
                 StoreTypeCode.nopCommerce,
                 StoreTypeCode.SellerExpress,
                 StoreTypeCode.PowersportsSupport,
+                StoreTypeCode.CloudConversion
             };
 
             return disabledTypes.Contains(typeCode);
