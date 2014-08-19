@@ -413,6 +413,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // CA-specific
                 item.MarketplaceName = caItem.ItemSaleSource;
+                item.MarketplaceStoreName = !string.IsNullOrWhiteSpace(caItem.UserName) ? caItem.UserName : string.Empty;
                 item.MarketplaceBuyerID = caItem.BuyerUserID;
                 item.MarketplaceSalesID = caItem.SalesSourceID;
 

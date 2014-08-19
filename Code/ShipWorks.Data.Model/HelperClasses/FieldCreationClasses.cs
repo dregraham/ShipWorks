@@ -2532,6 +2532,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MarketplaceName);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.MarketplaceStoreName field instance</summary>
+		public static EntityField2 MarketplaceStoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.MarketplaceBuyerID field instance</summary>
 		public static EntityField2 MarketplaceBuyerID
 		{

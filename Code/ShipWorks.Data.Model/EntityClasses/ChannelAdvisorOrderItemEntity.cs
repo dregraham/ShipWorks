@@ -476,6 +476,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MarketplaceName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("MarketplaceStoreName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("MarketplaceBuyerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -577,6 +580,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceName, true); }
 			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceName, value); }
+		}
+
+		/// <summary> The MarketplaceStoreName property of the Entity ChannelAdvisorOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceStoreName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String MarketplaceStoreName
+		{
+			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName, true); }
+			set	{ SetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName, value); }
 		}
 
 		/// <summary> The MarketplaceBuyerID property of the Entity ChannelAdvisorOrderItem<br/><br/>
