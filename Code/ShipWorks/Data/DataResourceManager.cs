@@ -29,6 +29,7 @@ using System.Data.SqlClient;
 using Interapptive.Shared.IO.Zip;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
+using Interapptive.Shared.Pdf;
 
 namespace ShipWorks.Data
 {
@@ -109,11 +110,34 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Regsister the data as a resource in the database.  If already present, the existing reference is returned.
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
         public static DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label)
         {
             return InstantiateResource(data, consumerID, label, false);
+        }
+
+        /// <summary>
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
+        /// </summary>
+        public static IEnumerable<DataResourceReference> CreateFromPdf(PdfDocument pdf, long consumerID, string label)
+        {
+            List<DataResourceReference> resourceReferences = new List<DataResourceReference>();
+
+            // We need to convert the PDF into images and register each image as a resource in the database
+            List<Stream> images = pdf.ToImages().ToList();
+            for (int i = 0; i < images.Count; i++)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    images[i].CopyTo(memoryStream);
+
+                    // Adjust the resource label in the event that there are multiple pages in the PDF
+                    resourceReferences.Add(InstantiateResource(memoryStream.ToArray(), consumerID, string.Format("{0}{1}", label, images.Count > 1 ? "-" + i.ToString() : string.Empty), false));
+                }
+            }
+
+            return resourceReferences;
         }
 
         /// <summary>

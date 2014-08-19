@@ -340,6 +340,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.FedExReferenceCustomer: return FedExShipmentFields.ReferenceCustomer;
                 case EntityFieldLengthSource.FedExReferenceInvoice: return FedExShipmentFields.ReferenceInvoice;
                 case EntityFieldLengthSource.FedExReferencePO: return FedExShipmentFields.ReferencePO;
+                case EntityFieldLengthSource.FedExReferenceShipmentIntegrity: return FedExShipmentFields.ReferenceShipmentIntegrity;
                 case EntityFieldLengthSource.FedExHomeDeliveryInstructions: return FedExShipmentFields.HomeDeliveryInstructions;
                 case EntityFieldLengthSource.FedExHomeDeliveryPhone: return FedExShipmentFields.HomeDeliveryPhone;
                 case EntityFieldLengthSource.FedExFreightBookingNumber: return FedExShipmentFields.FreightBookingNumber;

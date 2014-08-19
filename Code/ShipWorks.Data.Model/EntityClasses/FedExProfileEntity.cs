@@ -517,6 +517,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferencePO", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ReferenceShipmentIntegrity", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("PayorTransportType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -803,6 +806,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferencePO, true); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReferencePO, value); }
+		}
+
+		/// <summary> The ReferenceShipmentIntegrity property of the Entity FedExProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."ReferenceShipmentIntegrity"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceShipmentIntegrity
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, value); }
 		}
 
 		/// <summary> The PayorTransportType property of the Entity FedExProfile<br/><br/>

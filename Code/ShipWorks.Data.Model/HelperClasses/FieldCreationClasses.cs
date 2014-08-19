@@ -6322,6 +6322,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferencePO);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceShipmentIntegrity);}
+		}
 		/// <summary>Creates a new FedExProfileEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
 		{
@@ -6636,6 +6641,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferencePO
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferencePO);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceShipmentIntegrity);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
@@ -6982,6 +6992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoice);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceFileElectronically field instance</summary>
+		public static EntityField2 CommercialInvoiceFileElectronically
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoiceFileElectronically);}
+		}
 		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceTermsOfSale field instance</summary>
 		public static EntityField2 CommercialInvoiceTermsOfSale
 		{
@@ -7111,6 +7126,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SmartPostHubID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostHubID);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.SmartPostUspsApplicationId field instance</summary>
+		public static EntityField2 SmartPostUspsApplicationId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostUspsApplicationId);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.DropoffType field instance</summary>
 		public static EntityField2 DropoffType

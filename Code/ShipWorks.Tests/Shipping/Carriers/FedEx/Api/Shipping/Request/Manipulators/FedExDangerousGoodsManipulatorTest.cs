@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -9,6 +10,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -35,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible,
                 DangerousGoodsEmergencyContactPhone = "555-555-5555",
                 DangerousGoodsOfferor = "some offeror",
-                DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries,
+                DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries,
                 DangerousGoodsCargoAircraftOnly = false,                
             };
 
@@ -86,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new CancelPendingShipmentRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             testObject.Manipulate(carrierRequest.Object);
         }
@@ -238,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilityTypeIsAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -250,7 +252,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilityTypeIsInAccessible_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -262,7 +264,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_AccessibilitySpecifiedIsTrue_WhenDangerousGoodsTypeIsLithiumBatteries_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
             shipmentEntity.FedEx.Packages[0].DangerousGoodsAccessibilityType = (int)FedExDangerousGoodsAccessibilityType.Inaccessible;
 
             testObject.Manipulate(carrierRequest.Object);
@@ -396,12 +398,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_OptionIsLithiumBattery_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 
             DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
-            Assert.AreEqual(HazardousCommodityOptionType.LITHIUM_BATTERY_EXCEPTION, dangerousGoods.Options[0]);
+            Assert.AreEqual(HazardousCommodityOptionType.BATTERY, dangerousGoods.Options[0]);
         }
 
         [TestMethod]
@@ -610,12 +612,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_ContainerIsNull_WhenOptionIsNotHazardousMaterials_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 
             DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
             Assert.IsNull(dangerousGoods.Containers);
+        }
+
+        [TestMethod]
+        public void Manipulate_OP900Set_WhenDangerousGoodsSet_Test()
+        {
+            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.IsTrue(nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes.Contains(RequestedShippingDocumentType.OP_900));
+            Assert.AreEqual(ShippingDocumentImageType.PDF, nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail.Format.ImageType);
+            Assert.AreEqual(ShippingDocumentStockType.OP_900_LL_B, nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail.Format.StockType);
+            Assert.IsTrue(nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail.Format.ImageTypeSpecified);
+            Assert.IsTrue(nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail.Format.StockTypeSpecified);            
         }
 
         [TestMethod]
@@ -839,7 +853,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [TestMethod]
         public void Manipulate_PackagingIsNull_WhenOptionIsNotHazardousMaterials_Test()
         {
-            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
 
             testObject.Manipulate(carrierRequest.Object);
 

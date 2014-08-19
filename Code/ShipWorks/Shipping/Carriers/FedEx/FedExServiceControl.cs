@@ -318,6 +318,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     referenceCustomer.ApplyMultiText(shipment.FedEx.ReferenceCustomer);
                     referenceInvoice.ApplyMultiText(shipment.FedEx.ReferenceInvoice);
                     referencePO.ApplyMultiText(shipment.FedEx.ReferencePO);
+                    referenceShipmentIntegrity.ApplyMultiText(shipment.FedEx.ReferenceShipmentIntegrity);
 
                     payorTransport.ApplyMultiValue((FedExPayorType) shipment.FedEx.PayorTransportType);
                     transportAccount.ApplyMultiText(shipment.FedEx.PayorTransportAccount);
@@ -541,6 +542,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 referenceCustomer.ReadMultiText(t => shipment.FedEx.ReferenceCustomer = t);
                 referenceInvoice.ReadMultiText(t => shipment.FedEx.ReferenceInvoice = t);
                 referencePO.ReadMultiText(t => shipment.FedEx.ReferencePO = t);
+                referenceShipmentIntegrity.ReadMultiText(t => shipment.FedEx.ReferenceShipmentIntegrity = t);
 
                 payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
                 transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);
@@ -642,6 +644,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     serviceType == FedExServiceType.GroundHomeDelivery ||
                     serviceType == FedExServiceType.FedExGround;
 
+                RaiseRateCriteriaChanged();
                 SyncSelectedRate();
             }
             else
@@ -654,8 +657,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
-
-            
         }
 
         /// <summary>
@@ -1070,6 +1071,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx 2Day® A.M.\n" +
                 "FedEx Express Saver®\n" +
                 "FedEx Ground®\n" +
+
+                "FedEx One Rate\u2120\n" +
+
                 "FedEx Home Delivery®\n" +
                 "FedEx Ground® C.O.D.\n" +
                 "FedEx International First®\n" +
@@ -1088,11 +1092,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" + 
-                "FedEx SmartPost® Standard A\n" + 
-                "FedEx SmartPost® Standard B\n" + 
+                "FedEx SmartPost Standard A\n" + 
+                "FedEx SmartPost Standard B\n" + 
                 "FedEx SmartPost® Bound Printed Matter\n" + 
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost® Parcel Select\n" + 
+                "FedEx SmartPost Parcel Select\n" + 
                 "FedEx ShipAlert® (Email ID)\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 

@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             registrationVersionInfo = new VersionId
             {
                 ServiceId = "fcas",
-                Major = 3,
+                Major = 6,
                 Intermediate = 1,
                 Minor = 0
             };

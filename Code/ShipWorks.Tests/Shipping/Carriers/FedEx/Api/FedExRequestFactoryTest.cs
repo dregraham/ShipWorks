@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
-            Assert.AreEqual(35, request.Manipulators.Count());
+            Assert.AreEqual(36, request.Manipulators.Count());
         }
 
         [TestMethod]
@@ -332,6 +332,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             CarrierRequest request = testObject.CreateShipRequest(new ShipmentEntity()) as FedExShipRequest;
 
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExTrafficInArmsManipulator)) == 1);
+        }
+
+        [TestMethod]
+        public void CreateShipRequest_FedExOneRateManipulator_Test()
+        {
+            CarrierRequest request = testObject.CreateShipRequest(new ShipmentEntity()) as FedExShipRequest;
+
+            Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExOneRateManipulator)) == 1);
         }
 
         #endregion CreateShipRequest Tests
@@ -603,7 +611,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
 
-            Assert.AreEqual(14, request.Manipulators.Count());
+            Assert.AreEqual(17, request.Manipulators.Count());
         }
 
         [TestMethod]
@@ -620,7 +628,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), specializedList);
 
-            Assert.AreEqual(16, request.Manipulators.Count());
+            Assert.AreEqual(19, request.Manipulators.Count());
         }
 
         [TestMethod]
@@ -628,7 +636,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), new List<ICarrierRequestManipulator>());
 
-            Assert.AreEqual(14, request.Manipulators.Count());
+            Assert.AreEqual(17, request.Manipulators.Count());
         }
 
         [TestMethod]

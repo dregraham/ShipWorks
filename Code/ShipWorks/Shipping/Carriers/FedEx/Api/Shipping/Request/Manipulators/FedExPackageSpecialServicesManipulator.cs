@@ -72,6 +72,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             if (package.ContainsAlcohol)
             {
                 specialServices.Add(PackageSpecialServiceType.ALCOHOL);
+                specialServicesRequested.AlcoholDetail = new AlcoholDetail()
+                {
+                    // TODO: Will this always be Consumer?  Or do we need a setting?
+                    // TODO: If it's a return, would it need to be LICENSEE?
+                    RecipientType = AlcoholRecipientType.CONSUMER,
+                    RecipientTypeSpecified = true,
+                };
             }
 
             // Set the special service type flags

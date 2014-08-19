@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             nativeRequest.Version = new VersionId
             {
                 ServiceId = "ship",
-                Major = 13,
+                Major = 15,
                 Minor = 0,
                 Intermediate = 0
             };

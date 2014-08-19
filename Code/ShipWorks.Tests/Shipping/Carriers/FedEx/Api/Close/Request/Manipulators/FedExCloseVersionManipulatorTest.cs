@@ -69,12 +69,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [TestMethod]
-        public void Manipulate_SetsMajorTo2_ForGroundClose_Test()
+        public void Manipulate_SetsMajorTo3_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
 
             VersionId version = ((GroundCloseRequest)groundCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(2, version.Major);
+            Assert.AreEqual(3, version.Major);
         }
 
         [TestMethod]
@@ -107,12 +107,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [TestMethod]
-        public void Manipulate_SetsMajorTo2_ForSmartPostClose_Test()
+        public void Manipulate_SetsMajorTo3_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
             VersionId version = ((SmartPostCloseRequest)smartPostCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(2, version.Major);
+            Assert.AreEqual(3, version.Major);
         }
 
         [TestMethod]
