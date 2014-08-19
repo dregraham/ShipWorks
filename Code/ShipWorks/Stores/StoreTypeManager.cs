@@ -133,6 +133,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
                 case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
                 case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
+                case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -151,6 +152,7 @@ namespace ShipWorks.Stores
                 StoreTypeCode.nopCommerce,
                 StoreTypeCode.SellerExpress,
                 StoreTypeCode.PowersportsSupport,
+                StoreTypeCode.CloudConversion
             };
 
             return disabledTypes.Contains(typeCode);

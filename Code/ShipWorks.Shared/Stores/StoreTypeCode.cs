@@ -295,5 +295,10 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("POWERSPORTSSUPPORT", "PSS")]
         [StoreTypeIcon("powersportssupport")]
         PowersportsSupport = 56,
+
+        [Description("Cloud Conversion")]
+        [StoreTypeIdentity("CLOUDCONVERSION", "CLC")]
+        [StoreTypeIcon("cloudconversion")]
+        CloudConversion = 57
     }
 }
