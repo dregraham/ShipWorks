@@ -819,7 +819,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             SaveLabelImages(shipment, labelUrls);
         }
 
-        private bool UseThermal(bool domesticThermal, InternationalLabelType internationalLabelType, ShipmentEntity shipment)
+        private static bool UseThermal(bool domesticThermal, InternationalLabelType internationalLabelType, ShipmentEntity shipment)
         {
             bool useThermal = domesticThermal;
 
