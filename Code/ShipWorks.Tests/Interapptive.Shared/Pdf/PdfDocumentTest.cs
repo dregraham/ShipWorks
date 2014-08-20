@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,9 +24,9 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         {
             List<Stream> images;
             Assembly assembly = Assembly.GetExecutingAssembly();
-            string resourceName = "ShipWorks.Tests.Resources.SinglePagePdf.pdf";
-    
-            using (Stream pdfFileStream = assembly.GetManifestResourceStream(resourceName))
+            const string ResourceName = "ShipWorks.Tests.Resources.SinglePagePdf.pdf";
+
+            using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
             {
                 using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
                 {
@@ -69,6 +70,33 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                     images.First().Dispose();
                 }
             }
+        }
+
+        [TestMethod]
+        public void ToImages_ReturnsPngImages_Test()
+        {
+            List<ImageFormat> formats;
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            const string ResourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";
+            
+
+            using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
+            {
+                using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
+                {
+                    List<Stream> images = pdfDocument.ToImages().ToList();
+                    formats = images.Select(i =>
+                    {
+                        Bitmap bitmap = new Bitmap(i);
+                        ImageFormat format = bitmap.RawFormat;
+                        bitmap.Dispose();
+
+                        return format;
+                    }).ToList();
+                }
+            }
+
+            Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
         }
     }
 }
