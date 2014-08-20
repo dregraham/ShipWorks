@@ -39,12 +39,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if(IsExpress1)
             {
-                thermalPrinter.Checked = settings.Express1StampsThermal;
+                thermalPrinter.Checked = settings.Express1StampsDomesticThermal;
                 thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
             }
             else
             {
-                thermalPrinter.Checked = settings.StampsThermal;
+                thermalPrinter.Checked = settings.StampsDomesticThermal;
                 thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
             }
         }
@@ -65,12 +65,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             if(IsExpress1)
             {
-                settings.Express1StampsThermal = thermalPrinter.Checked;
+                settings.Express1StampsDomesticThermal = thermalPrinter.Checked;
                 settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
             }
             else
             {
-                settings.StampsThermal = thermalPrinter.Checked;
+                settings.StampsDomesticThermal = thermalPrinter.Checked;
                 settings.StampsThermalType = (int)thermalType.SelectedValue;    
             }
         }

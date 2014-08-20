@@ -18,6 +18,42 @@ PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrde
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+PRINT N'Creating [dbo].[ActionQueue]'
+GO
+CREATE TABLE [dbo].[ActionQueue]
+(
+[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ActionID] [bigint] NOT NULL,
+[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
+[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
+[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
+[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
+[TriggerComputerID] [bigint] NOT NULL,
+[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ObjectID] [bigint] NULL,
+[Status] [int] NOT NULL,
+[NextStep] [int] NOT NULL,
+[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
+GO
+ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
+GO
+PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
+GO
+PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
+GO
+ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ActionQueue]'
+GO
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
 CREATE TABLE [dbo].[FedExPackage]
@@ -334,7 +370,7 @@ CREATE TABLE [dbo].[AmazonStore]
 (
 [StoreID] [bigint] NOT NULL,
 [AmazonApi] [int] NOT NULL,
-[AmazonApiRegion] [char](2) NOT NULL,
+[AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellerCentralUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellerCentralPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MerchantName] [varchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -430,7 +466,7 @@ CREATE TABLE [dbo].[Order]
 [ShipNameParseStatus] [int] NOT NULL,
 [ShipUnparsedName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseHashKey] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-[ShipSenseRecognitionStatus] int NOT NULL
+[ShipSenseRecognitionStatus] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -549,13 +585,13 @@ PRINT N'Creating index [IX_Auto_RollupNoteCount] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RollupNoteCount] ON [dbo].[Order] ([RollupNoteCount])
 GO
-PRINT N'Adding [Order].[IX_Auto_ShipSenseRecognitionStatus] Index'
-GO
-CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
-GO
-PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
+PRINT N'Creating index [IX_Auto_ShipSenseHashKey] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
+GO
+PRINT N'Creating index [IX_Auto_ShipSenseRecognitionStatus] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order] ([ShipSenseRecognitionStatus])
 GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
@@ -836,7 +872,6 @@ PRINT N'Creating primary key [PK_BestRateProfile] on [dbo].[BestRateProfile]'
 GO
 ALTER TABLE [dbo].[BestRateProfile] ADD CONSTRAINT [PK_BestRateProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
-
 PRINT N'Creating [dbo].[Shipment]'
 GO
 CREATE TABLE [dbo].[Shipment]
@@ -913,18 +948,13 @@ PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment] ([OrderID])
 GO
-PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
-GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID]) WITH (FILLFACTOR = 75)
-GO
 PRINT N'Creating index [IX_Shipment_OrderID_ShipSenseStatus] on [dbo].[Shipment]'
 GO
-CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] 
-(
-	[OrderID] ASC,
-	[Processed] ASC,
-	[ShipSenseStatus] ASC
-)
+CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment] ([OrderID], [Processed], [ShipSenseStatus])
+GO
+PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID])
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
@@ -1036,13 +1066,21 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvis
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] ADD CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
+PRINT N'Creating index [IX_ChannelAdvisorOrderItem_MarketPlaceName] on [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketPlaceName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceName])
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
+PRINT N'Creating index [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] on [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
+GO
+PRINT N'Creating index [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] on [dbo].[ChannelAdvisorOrderItem]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
+GO
+PRINT N'Creating index [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] on [dbo].[ChannelAdvisorOrderItem]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
@@ -1822,7 +1860,7 @@ CREATE TABLE [dbo].[GridColumnLayout]
 [DetailViewSettings] [xml] NULL
 )
 GO
-PRINT N'Creating primary key PK_GridColumnLayout on [dbo].[GridColumnLayout]'
+PRINT N'Creating primary key [PK_GridColumnLayout] on [dbo].[GridColumnLayout]'
 GO
 ALTER TABLE [dbo].[GridColumnLayout] ADD CONSTRAINT [PK_GridColumnLayout] PRIMARY KEY CLUSTERED  ([GridColumnLayoutID])
 GO
@@ -1913,11 +1951,11 @@ CREATE TABLE [dbo].[GridColumnPosition]
 [Position] [int] NOT NULL
 )
 GO
-PRINT N'Creating primary key PK_GridColumnPosition on [dbo].[GridColumnPosition]'
+PRINT N'Creating primary key [PK_GridColumnPosition] on [dbo].[GridColumnPosition]'
 GO
-ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT PK_GridColumnPosition PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
+ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT [PK_GridColumnPosition] PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
 GO
-PRINT N'Creating index [IX_GridLayoutColumn] on [dbo].[GridColumnPosition]'
+PRINT N'Creating index [IX_GridColumnPosition_GridColumnLayoutIdColumn] on [dbo].[GridColumnPosition]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_GridColumnPosition_GridColumnLayoutIdColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
 GO
@@ -3632,42 +3670,6 @@ PRINT N'Creating primary key [PK_YahooProduct_1] on [dbo].[YahooProduct]'
 GO
 ALTER TABLE [dbo].[YahooProduct] ADD CONSTRAINT [PK_YahooProduct_1] PRIMARY KEY CLUSTERED  ([StoreID], [YahooProductID])
 GO
-PRINT N'Creating [dbo].[ActionQueue]'
-GO
-CREATE TABLE [dbo].[ActionQueue]
-(
-[ActionQueueID] [bigint] NOT NULL IDENTITY(1041, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[ActionID] [bigint] NOT NULL,
-[ActionName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ActionQueueType] [int] NOT NULL CONSTRAINT [DF_ActionQueue_ActionQueueType] DEFAULT ((0)),
-[ActionVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_ActionVersion] DEFAULT ((0)),
-[QueueVersion] [binary] (8) NOT NULL CONSTRAINT [DF_ActionQueue_QueueVersion] DEFAULT (@@dbts),
-[TriggerDate] [datetime] NOT NULL CONSTRAINT [DF_ActionQueue_QueuedDate] DEFAULT (getutcdate()),
-[TriggerComputerID] [bigint] NOT NULL,
-[ComputerLimitedList] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ObjectID] [bigint] NULL,
-[Status] [int] NOT NULL,
-[NextStep] [int] NOT NULL,
-[ContextLock] [nvarchar] (36) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-)
-GO
-PRINT N'Creating primary key [PK_ActionQueue] on [dbo].[ActionQueue]'
-GO
-ALTER TABLE [dbo].[ActionQueue] ADD CONSTRAINT [PK_ActionQueue] PRIMARY KEY CLUSTERED  ([ActionQueueID])
-GO
-PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([ActionQueueID], [ActionQueueType], [Status])
-GO
-PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock])
-GO
-ALTER TABLE [dbo].[ActionQueue] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Altering [dbo].[ActionQueue]'
-GO
 PRINT N'Creating [dbo].[Configuration]'
 GO
 CREATE TABLE [dbo].[Configuration]
@@ -3712,12 +3714,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_DimensionsProfile_Name] ON [dbo].[Dimension
 GO
 ALTER TABLE [dbo].[DimensionsProfile] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[Dirty]'
-GO
-CREATE TABLE [dbo].[Dirty]
-(
-[RowVersion] [timestamp] NOT NULL
-)
+PRINT N'Altering [dbo].[DimensionsProfile]'
 GO
 PRINT N'Creating [dbo].[EmailAccount]'
 GO
@@ -3758,74 +3755,7 @@ ALTER TABLE [dbo].[EmailAccount] ADD CONSTRAINT [PK_EmailAccount] PRIMARY KEY CL
 GO
 ALTER TABLE [dbo].[EmailAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[EndiciaAccount]'
-GO
-CREATE TABLE [dbo].[EndiciaAccount]
-(
-[EndiciaAccountID] [bigint] NOT NULL IDENTITY(1066, 1000),
-[EndiciaReseller] [int] NOT NULL,
-[AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[SignupConfirmation] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[WebPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ApiInitialPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ApiUserPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AccountType] [int] NOT NULL,
-[TestAccount] [bit] NOT NULL,
-[CreatedByShipWorks] [bit] NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormAddressSource] [int] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_EndiciaAccount] on [dbo].[EndiciaAccount]'
-GO
-ALTER TABLE [dbo].[EndiciaAccount] ADD CONSTRAINT [PK_EndiciaAccount] PRIMARY KEY CLUSTERED  ([EndiciaAccountID])
-GO
-ALTER TABLE [dbo].[EndiciaAccount] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[EquaShipAccount]'
-GO
-CREATE TABLE [dbo].[EquaShipAccount]
-(
-[EquaShipAccountID] [bigint] NOT NULL IDENTITY(1067, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_EquahipAccount] on [dbo].[EquaShipAccount]'
-GO
-ALTER TABLE [dbo].[EquaShipAccount] ADD CONSTRAINT [PK_EquahipAccount] PRIMARY KEY CLUSTERED  ([EquaShipAccountID])
-GO
-ALTER TABLE [dbo].[EquaShipAccount] ENABLE CHANGE_TRACKING
+PRINT N'Altering [dbo].[EmailAccount]'
 GO
 PRINT N'Creating [dbo].[FedExAccount]'
 GO
@@ -3859,6 +3789,8 @@ ALTER TABLE [dbo].[FedExAccount] ADD CONSTRAINT [PK_FedExAccount] PRIMARY KEY CL
 GO
 ALTER TABLE [dbo].[FedExAccount] ENABLE CHANGE_TRACKING
 GO
+PRINT N'Altering [dbo].[FedExAccount]'
+GO
 PRINT N'Creating [dbo].[FedExEndOfDayClose]'
 GO
 CREATE TABLE [dbo].[FedExEndOfDayClose]
@@ -3877,27 +3809,6 @@ GO
 PRINT N'Creating index [IX_FedExEndOfDayClose_CloseDate] on [dbo].[FedExEndOfDayClose]'
 GO
 CREATE NONCLUSTERED INDEX [IX_FedExEndOfDayClose_CloseDate] ON [dbo].[FedExEndOfDayClose] ([CloseDate]) INCLUDE ([FedExAccountID])
-GO
-PRINT N'Creating [dbo].[FilterNodeContentDirty]'
-GO
-CREATE TABLE [dbo].[FilterNodeContentDirty]
-(
-[FilterNodeContentDirtyID] [bigint] NOT NULL IDENTITY(1, 1),
-[RowVersion] [timestamp] NOT NULL,
-[ObjectID] [bigint] NOT NULL,
-[ParentID] [bigint] NULL,
-[ObjectType] [int] NOT NULL,
-[ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
-GO
-ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
-GO
-PRINT N'Creating index [IX_FilterNodeCountDirty] on [dbo].[FilterNodeContentDirty]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNodeCountDirty] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
 GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
@@ -3985,6 +3896,39 @@ PRINT N'Creating index [IX_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateS
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateShipment] ON [dbo].[FilterNodeUpdateShipment] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
+PRINT N'Creating [dbo].[EquaShipAccount]'
+GO
+CREATE TABLE [dbo].[EquaShipAccount]
+(
+[EquaShipAccountID] [bigint] NOT NULL IDENTITY(1067, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_EquahipAccount] on [dbo].[EquaShipAccount]'
+GO
+ALTER TABLE [dbo].[EquaShipAccount] ADD CONSTRAINT [PK_EquahipAccount] PRIMARY KEY CLUSTERED  ([EquaShipAccountID])
+GO
+ALTER TABLE [dbo].[EquaShipAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[EquaShipAccount]'
+GO
 PRINT N'Creating [dbo].[FtpAccount]'
 GO
 CREATE TABLE [dbo].[FtpAccount]
@@ -4004,6 +3948,129 @@ GO
 ALTER TABLE [dbo].[FtpAccount] ADD CONSTRAINT [PK_FtpAccount] PRIMARY KEY CLUSTERED  ([FtpAccountID])
 GO
 ALTER TABLE [dbo].[FtpAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[FtpAccount]'
+GO
+PRINT N'Creating [dbo].[LabelSheet]'
+GO
+CREATE TABLE [dbo].[LabelSheet]
+(
+[LabelSheetID] [bigint] NOT NULL IDENTITY(1027, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[Name] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PaperSizeHeight] [float] NOT NULL,
+[PaperSizeWidth] [float] NOT NULL,
+[MarginTop] [float] NOT NULL,
+[MarginLeft] [float] NOT NULL,
+[LabelHeight] [float] NOT NULL,
+[LabelWidth] [float] NOT NULL,
+[VerticalSpacing] [float] NOT NULL,
+[HorizontalSpacing] [float] NOT NULL,
+[Rows] [int] NOT NULL,
+[Columns] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_LabelSheet] on [dbo].[LabelSheet]'
+GO
+ALTER TABLE [dbo].[LabelSheet] ADD CONSTRAINT [PK_LabelSheet] PRIMARY KEY CLUSTERED  ([LabelSheetID])
+GO
+PRINT N'Creating index [IX_LabelSheet_Name] on [dbo].[LabelSheet]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_LabelSheet_Name] ON [dbo].[LabelSheet] ([Name])
+GO
+ALTER TABLE [dbo].[LabelSheet] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[LabelSheet]'
+GO
+PRINT N'Creating [dbo].[EndiciaAccount]'
+GO
+CREATE TABLE [dbo].[EndiciaAccount]
+(
+[EndiciaAccountID] [bigint] NOT NULL IDENTITY(1066, 1000),
+[EndiciaReseller] [int] NOT NULL,
+[AccountNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[SignupConfirmation] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WebPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ApiInitialPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ApiUserPassword] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AccountType] [int] NOT NULL,
+[TestAccount] [bit] NOT NULL,
+[CreatedByShipWorks] [bit] NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ScanFormAddressSource] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_EndiciaAccount] on [dbo].[EndiciaAccount]'
+GO
+ALTER TABLE [dbo].[EndiciaAccount] ADD CONSTRAINT [PK_EndiciaAccount] PRIMARY KEY CLUSTERED  ([EndiciaAccountID])
+GO
+ALTER TABLE [dbo].[EndiciaAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[EndiciaAccount]'
+GO
+PRINT N'Creating [dbo].[OnTracAccount]'
+GO
+CREATE TABLE [dbo].[OnTracAccount]
+(
+[OnTracAccountID] [bigint] NOT NULL IDENTITY(1090, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[AccountNumber] [int] NOT NULL,
+[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (43) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_OnTracAccount] on [dbo].[OnTracAccount]'
+GO
+ALTER TABLE [dbo].[OnTracAccount] ADD CONSTRAINT [PK_OnTracAccount] PRIMARY KEY CLUSTERED  ([OnTracAccountID])
+GO
+ALTER TABLE [dbo].[OnTracAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[OnTracAccount]'
+GO
+PRINT N'Creating [dbo].[ObjectLabel]'
+GO
+CREATE TABLE [dbo].[ObjectLabel]
+(
+[ObjectID] [bigint] NOT NULL,
+[RowVersion] [timestamp] NOT NULL,
+[ObjectType] [int] NOT NULL,
+[ParentID] [bigint] NULL,
+[Label] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[IsDeleted] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ObjectLabel] on [dbo].[ObjectLabel]'
+GO
+ALTER TABLE [dbo].[ObjectLabel] ADD CONSTRAINT [PK_ObjectLabel] PRIMARY KEY CLUSTERED  ([ObjectID])
+GO
+PRINT N'Creating index [IX_ObjectLabel] on [dbo].[ObjectLabel]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ObjectLabel] ON [dbo].[ObjectLabel] ([ObjectType], [IsDeleted])
 GO
 PRINT N'Creating [dbo].[iParcelAccount]'
 GO
@@ -4035,82 +4102,14 @@ ALTER TABLE [dbo].[iParcelAccount] ADD CONSTRAINT [PK_iParcelAccount] PRIMARY KE
 GO
 ALTER TABLE [dbo].[iParcelAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[LabelSheet]'
+PRINT N'Altering [dbo].[iParcelAccount]'
 GO
-CREATE TABLE [dbo].[LabelSheet]
+PRINT N'Creating [dbo].[Dirty]'
+GO
+CREATE TABLE [dbo].[Dirty]
 (
-[LabelSheetID] [bigint] NOT NULL IDENTITY(1027, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Name] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PaperSizeHeight] [float] NOT NULL,
-[PaperSizeWidth] [float] NOT NULL,
-[MarginTop] [float] NOT NULL,
-[MarginLeft] [float] NOT NULL,
-[LabelHeight] [float] NOT NULL,
-[LabelWidth] [float] NOT NULL,
-[VerticalSpacing] [float] NOT NULL,
-[HorizontalSpacing] [float] NOT NULL,
-[Rows] [int] NOT NULL,
-[Columns] [int] NOT NULL
+[RowVersion] [timestamp] NOT NULL
 )
-GO
-PRINT N'Creating primary key [PK_LabelSheet] on [dbo].[LabelSheet]'
-GO
-ALTER TABLE [dbo].[LabelSheet] ADD CONSTRAINT [PK_LabelSheet] PRIMARY KEY CLUSTERED  ([LabelSheetID])
-GO
-PRINT N'Creating index [IX_LabelSheet_Name] on [dbo].[LabelSheet]'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_LabelSheet_Name] ON [dbo].[LabelSheet] ([Name])
-GO
-ALTER TABLE [dbo].[LabelSheet] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[ObjectLabel]'
-GO
-CREATE TABLE [dbo].[ObjectLabel]
-(
-[ObjectID] [bigint] NOT NULL,
-[RowVersion] [timestamp] NOT NULL,
-[ObjectType] [int] NOT NULL,
-[ParentID] [bigint] NULL,
-[Label] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsDeleted] [bit] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ObjectLabel] on [dbo].[ObjectLabel]'
-GO
-ALTER TABLE [dbo].[ObjectLabel] ADD CONSTRAINT [PK_ObjectLabel] PRIMARY KEY CLUSTERED  ([ObjectID])
-GO
-PRINT N'Creating index [IX_ObjectLabel] on [dbo].[ObjectLabel]'
-GO
-CREATE NONCLUSTERED INDEX [IX_ObjectLabel] ON [dbo].[ObjectLabel] ([ObjectType], [IsDeleted])
-GO
-PRINT N'Creating [dbo].[OnTracAccount]'
-GO
-CREATE TABLE [dbo].[OnTracAccount]
-(
-[OnTracAccountID] [bigint] NOT NULL IDENTITY(1090, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[AccountNumber] [int] NOT NULL,
-[Password] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (43) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_OnTracAccount] on [dbo].[OnTracAccount]'
-GO
-ALTER TABLE [dbo].[OnTracAccount] ADD CONSTRAINT [PK_OnTracAccount] PRIMARY KEY CLUSTERED  ([OnTracAccountID])
-GO
-ALTER TABLE [dbo].[OnTracAccount] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[Resource]'
 GO
@@ -4134,6 +4133,301 @@ GO
 PRINT N'Creating index [IX_Resource_Filename] on [dbo].[Resource]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_Resource_Filename] ON [dbo].[Resource] ([Filename])
+GO
+PRINT N'Creating [dbo].[Scheduling_LOCKS]'
+GO
+CREATE TABLE [dbo].[Scheduling_LOCKS]
+(
+[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LOCK_NAME] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Scheduling_LOCKS] on [dbo].[Scheduling_LOCKS]'
+GO
+ALTER TABLE [dbo].[Scheduling_LOCKS] ADD CONSTRAINT [PK_Scheduling_LOCKS] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [LOCK_NAME])
+GO
+PRINT N'Creating [dbo].[Search]'
+GO
+CREATE TABLE [dbo].[Search]
+(
+[SearchID] [bigint] NOT NULL IDENTITY(1069, 1000),
+[Started] [datetime] NOT NULL,
+[Pinged] [datetime] NOT NULL,
+[FilterNodeID] [bigint] NOT NULL,
+[UserID] [bigint] NOT NULL,
+[ComputerID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Search] on [dbo].[Search]'
+GO
+ALTER TABLE [dbo].[Search] ADD CONSTRAINT [PK_Search] PRIMARY KEY CLUSTERED  ([SearchID])
+GO
+PRINT N'Creating [dbo].[ShippingDefaultsRule]'
+GO
+CREATE TABLE [dbo].[ShippingDefaultsRule]
+(
+[ShippingDefaultsRuleID] [bigint] NOT NULL IDENTITY(1057, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ShipmentType] [int] NOT NULL,
+[FilterNodeID] [bigint] NOT NULL,
+[ShippingProfileID] [bigint] NOT NULL,
+[Position] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShippingDefaultsRule] on [dbo].[ShippingDefaultsRule]'
+GO
+ALTER TABLE [dbo].[ShippingDefaultsRule] ADD CONSTRAINT [PK_ShippingDefaultsRule] PRIMARY KEY CLUSTERED  ([ShippingDefaultsRuleID])
+GO
+ALTER TABLE [dbo].[ShippingDefaultsRule] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ShippingDefaultsRule]'
+GO
+PRINT N'Creating [dbo].[ShippingOrigin]'
+GO
+CREATE TABLE [dbo].[ShippingOrigin]
+(
+[ShippingOriginID] [bigint] NOT NULL IDENTITY(1050, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShippingOrigin] on [dbo].[ShippingOrigin]'
+GO
+ALTER TABLE [dbo].[ShippingOrigin] ADD CONSTRAINT [PK_ShippingOrigin] PRIMARY KEY CLUSTERED  ([ShippingOriginID])
+GO
+PRINT N'Creating index [IX_ShippingOrigin_Description] on [dbo].[ShippingOrigin]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ShippingOrigin_Description] ON [dbo].[ShippingOrigin] ([Description])
+GO
+ALTER TABLE [dbo].[ShippingOrigin] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ShippingOrigin]'
+GO
+PRINT N'Creating [dbo].[ShippingSettings]'
+GO
+CREATE TABLE [dbo].[ShippingSettings]
+(
+[ShippingSettingsID] [bit] NOT NULL,
+[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DefaultType] [int] NOT NULL,
+[BlankPhoneOption] [int] NOT NULL,
+[BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[InsurancePolicy] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[InsuranceLastAgreed] [datetime] NULL,
+[FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FedExMaskAccount] [bit] NOT NULL,
+[FedExThermal] [bit] NOT NULL,
+[FedExThermalType] [int] NOT NULL,
+[FedExThermalDocTab] [bit] NOT NULL,
+[FedExThermalDocTabType] [int] NOT NULL,
+[FedExInsuranceProvider] [int] NOT NULL,
+[FedExInsurancePennyOne] [bit] NOT NULL,
+[UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[UpsThermal] [bit] NOT NULL,
+[UpsThermalType] [int] NOT NULL,
+[UpsInsuranceProvider] [int] NOT NULL,
+[UpsInsurancePennyOne] [bit] NOT NULL,
+[EndiciaThermal] [bit] NOT NULL,
+[EndiciaThermalType] [int] NOT NULL,
+[EndiciaCustomsCertify] [bit] NOT NULL,
+[EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[EndiciaThermalDocTab] [bit] NOT NULL,
+[EndiciaThermalDocTabType] [int] NOT NULL,
+[EndiciaAutomaticExpress1] [bit] NOT NULL,
+[EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
+[EndiciaInsuranceProvider] [int] NOT NULL,
+[WorldShipLaunch] [bit] NOT NULL,
+[StampsDomesticThermal] [bit] NOT NULL,
+[StampsThermalType] [int] NOT NULL,
+[StampsInternationalLabelType] [int] NOT NULL,
+[StampsAutomaticExpress1] [bit] NOT NULL,
+[StampsAutomaticExpress1Account] [bigint] NOT NULL,
+[Express1EndiciaThermal] [bit] NOT NULL,
+[Express1EndiciaThermalType] [int] NOT NULL,
+[Express1EndiciaCustomsCertify] [bit] NOT NULL,
+[Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Express1EndiciaThermalDocTab] [bit] NOT NULL,
+[Express1EndiciaThermalDocTabType] [int] NOT NULL,
+[Express1EndiciaSingleSource] [bit] NOT NULL,
+[EquaShipThermal] [bit] NOT NULL,
+[EquaShipThermalType] [int] NOT NULL,
+[OnTracThermal] [bit] NOT NULL,
+[OnTracThermalType] [int] NOT NULL,
+[OnTracInsuranceProvider] [int] NOT NULL,
+[OnTracInsurancePennyOne] [bit] NOT NULL,
+[iParcelThermal] [bit] NOT NULL,
+[iParcelThermalType] [int] NOT NULL,
+[iParcelInsuranceProvider] [int] NOT NULL,
+[iParcelInsurancePennyOne] [bit] NOT NULL,
+[Express1StampsDomesticThermal] [bit] NOT NULL,
+[Express1StampsThermalType] [int] NOT NULL,
+[Express1StampsInternationalLabelType] [int] NOT NULL,
+[Express1StampsSingleSource] [bit] NOT NULL,
+[UpsMailInnovationsEnabled] [bit] NOT NULL,
+[WorldShipMailInnovationsEnabled] [bit] NOT NULL,
+[BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipSenseEnabled] [bit] NOT NULL,
+[ShipSenseUniquenessXml] [xml] NOT NULL,
+[ShipSenseProcessedShipmentID] [bigint] NOT NULL,
+[ShipSenseEndShipmentID] [bigint] NOT NULL,
+[AutoCreateShipments] [bit] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
+GO
+PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
+GO
+CREATE TABLE [dbo].[ShipSenseKnowledgebase]
+(
+[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
+[Entry] [varbinary] (max) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
+GO
+ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
+GO
+PRINT N'Creating [dbo].[ShippingProviderRule]'
+GO
+CREATE TABLE [dbo].[ShippingProviderRule]
+(
+[ShippingProviderRuleID] [bigint] NOT NULL IDENTITY(1060, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[FilterNodeID] [bigint] NOT NULL,
+[ShipmentType] [int] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShippingProviderRule] on [dbo].[ShippingProviderRule]'
+GO
+ALTER TABLE [dbo].[ShippingProviderRule] ADD CONSTRAINT [PK_ShippingProviderRule] PRIMARY KEY CLUSTERED  ([ShippingProviderRuleID])
+GO
+ALTER TABLE [dbo].[ShippingProviderRule] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[ShippingProviderRule]'
+GO
+PRINT N'Creating [dbo].[SystemData]'
+GO
+CREATE TABLE [dbo].[SystemData]
+(
+[SystemDataID] [bit] NOT NULL,
+[RowVersion] [timestamp] NOT NULL,
+[DatabaseID] [uniqueidentifier] NOT NULL,
+[DateFiltersLastUpdate] [datetime] NOT NULL,
+[TemplateVersion] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_SystemData] on [dbo].[SystemData]'
+GO
+ALTER TABLE [dbo].[SystemData] ADD CONSTRAINT [PK_SystemData] PRIMARY KEY CLUSTERED  ([SystemDataID])
+GO
+PRINT N'Creating [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]'
+GO
+CREATE TABLE [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]
+(
+[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[TRIGGER_GROUP] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Scheduling_PAUSED_TRIGGER_GRPS] on [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]'
+GO
+ALTER TABLE [dbo].[Scheduling_PAUSED_TRIGGER_GRPS] ADD CONSTRAINT [PK_Scheduling_PAUSED_TRIGGER_GRPS] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [TRIGGER_GROUP])
+GO
+PRINT N'Creating [dbo].[Scheduling_SCHEDULER_STATE]'
+GO
+CREATE TABLE [dbo].[Scheduling_SCHEDULER_STATE]
+(
+[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[INSTANCE_NAME] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LAST_CHECKIN_TIME] [bigint] NOT NULL,
+[CHECKIN_INTERVAL] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Scheduling_SCHEDULER_STATE] on [dbo].[Scheduling_SCHEDULER_STATE]'
+GO
+ALTER TABLE [dbo].[Scheduling_SCHEDULER_STATE] ADD CONSTRAINT [PK_Scheduling_SCHEDULER_STATE] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [INSTANCE_NAME])
+GO
+PRINT N'Creating [dbo].[WorldShipProcessed]'
+GO
+CREATE TABLE [dbo].[WorldShipProcessed]
+(
+[WorldShipProcessedID] [bigint] NOT NULL IDENTITY(1068, 1000),
+[ShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RowVersion] [timestamp] NOT NULL,
+[PublishedCharges] [float] NOT NULL,
+[NegotiatedCharges] [float] NOT NULL,
+[TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ServiceType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[PackageType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[UpsPackageID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[DeclaredValueAmount] [float] NULL,
+[DeclaredValueOption] [nchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[WorldShipShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[VoidIndicator] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NumberOfPackages] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[LeadTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
+)
+GO
+PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
+GO
+ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
+GO
+PRINT N'Creating [dbo].[UpsAccount]'
+GO
+CREATE TABLE [dbo].[UpsAccount]
+(
+[UpsAccountID] [bigint] NOT NULL IDENTITY(1056, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AccountNumber] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UserID] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Password] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RateType] [int] NOT NULL,
+[InvoiceAuth] [bit] NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'
+GO
+ALTER TABLE [dbo].[UpsAccount] ADD CONSTRAINT [PK_UpsAccount] PRIMARY KEY CLUSTERED  ([UpsAccountID])
+GO
+ALTER TABLE [dbo].[UpsAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Altering [dbo].[UpsAccount]'
 GO
 PRINT N'Creating [dbo].[Scheduling_BLOB_TRIGGERS]'
 GO
@@ -4204,215 +4498,6 @@ PRINT N'Creating index [IDX_Scheduling_FT_T_G] on [dbo].[Scheduling_FIRED_TRIGGE
 GO
 CREATE NONCLUSTERED INDEX [IDX_Scheduling_FT_T_G] ON [dbo].[Scheduling_FIRED_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP])
 GO
-PRINT N'Creating [dbo].[Scheduling_LOCKS]'
-GO
-CREATE TABLE [dbo].[Scheduling_LOCKS]
-(
-[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LOCK_NAME] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Scheduling_LOCKS] on [dbo].[Scheduling_LOCKS]'
-GO
-ALTER TABLE [dbo].[Scheduling_LOCKS] ADD CONSTRAINT [PK_Scheduling_LOCKS] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [LOCK_NAME])
-GO
-PRINT N'Creating [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]'
-GO
-CREATE TABLE [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]
-(
-[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[TRIGGER_GROUP] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Scheduling_PAUSED_TRIGGER_GRPS] on [dbo].[Scheduling_PAUSED_TRIGGER_GRPS]'
-GO
-ALTER TABLE [dbo].[Scheduling_PAUSED_TRIGGER_GRPS] ADD CONSTRAINT [PK_Scheduling_PAUSED_TRIGGER_GRPS] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [TRIGGER_GROUP])
-GO
-PRINT N'Creating [dbo].[Scheduling_SCHEDULER_STATE]'
-GO
-CREATE TABLE [dbo].[Scheduling_SCHEDULER_STATE]
-(
-[SCHED_NAME] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[INSTANCE_NAME] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LAST_CHECKIN_TIME] [bigint] NOT NULL,
-[CHECKIN_INTERVAL] [bigint] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Scheduling_SCHEDULER_STATE] on [dbo].[Scheduling_SCHEDULER_STATE]'
-GO
-ALTER TABLE [dbo].[Scheduling_SCHEDULER_STATE] ADD CONSTRAINT [PK_Scheduling_SCHEDULER_STATE] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [INSTANCE_NAME])
-GO
-PRINT N'Creating [dbo].[Search]'
-GO
-CREATE TABLE [dbo].[Search]
-(
-[SearchID] [bigint] NOT NULL IDENTITY(1069, 1000),
-[Started] [datetime] NOT NULL,
-[Pinged] [datetime] NOT NULL,
-[FilterNodeID] [bigint] NOT NULL,
-[UserID] [bigint] NOT NULL,
-[ComputerID] [bigint] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_Search] on [dbo].[Search]'
-GO
-ALTER TABLE [dbo].[Search] ADD CONSTRAINT [PK_Search] PRIMARY KEY CLUSTERED  ([SearchID])
-GO
-PRINT N'Creating [dbo].[ShippingDefaultsRule]'
-GO
-CREATE TABLE [dbo].[ShippingDefaultsRule]
-(
-[ShippingDefaultsRuleID] [bigint] NOT NULL IDENTITY(1057, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[ShipmentType] [int] NOT NULL,
-[FilterNodeID] [bigint] NOT NULL,
-[ShippingProfileID] [bigint] NOT NULL,
-[Position] [int] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ShippingDefaultsRule] on [dbo].[ShippingDefaultsRule]'
-GO
-ALTER TABLE [dbo].[ShippingDefaultsRule] ADD CONSTRAINT [PK_ShippingDefaultsRule] PRIMARY KEY CLUSTERED  ([ShippingDefaultsRuleID])
-GO
-ALTER TABLE [dbo].[ShippingDefaultsRule] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[ShippingOrigin]'
-GO
-CREATE TABLE [dbo].[ShippingOrigin]
-(
-[ShippingOriginID] [bigint] NOT NULL IDENTITY(1050, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ShippingOrigin] on [dbo].[ShippingOrigin]'
-GO
-ALTER TABLE [dbo].[ShippingOrigin] ADD CONSTRAINT [PK_ShippingOrigin] PRIMARY KEY CLUSTERED  ([ShippingOriginID])
-GO
-PRINT N'Creating index [IX_ShippingOrigin_Description] on [dbo].[ShippingOrigin]'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_ShippingOrigin_Description] ON [dbo].[ShippingOrigin] ([Description])
-GO
-ALTER TABLE [dbo].[ShippingOrigin] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[ShippingProviderRule]'
-GO
-CREATE TABLE [dbo].[ShippingProviderRule]
-(
-[ShippingProviderRuleID] [bigint] NOT NULL IDENTITY(1060, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[FilterNodeID] [bigint] NOT NULL,
-[ShipmentType] [int] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ShippingProviderRule] on [dbo].[ShippingProviderRule]'
-GO
-ALTER TABLE [dbo].[ShippingProviderRule] ADD CONSTRAINT [PK_ShippingProviderRule] PRIMARY KEY CLUSTERED  ([ShippingProviderRuleID])
-GO
-ALTER TABLE [dbo].[ShippingProviderRule] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[ShippingSettings]'
-GO
-CREATE TABLE [dbo].[ShippingSettings]
-(
-[ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DefaultType] [int] NOT NULL,
-[BlankPhoneOption] [int] NOT NULL,
-[BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsurancePolicy] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsuranceLastAgreed] [datetime] NULL,
-[FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[FedExMaskAccount] [bit] NOT NULL,
-[FedExThermal] [bit] NOT NULL,
-[FedExThermalType] [int] NOT NULL,
-[FedExThermalDocTab] [bit] NOT NULL,
-[FedExThermalDocTabType] [int] NOT NULL,
-[FedExInsuranceProvider] [int] NOT NULL,
-[FedExInsurancePennyOne] [bit] NOT NULL,
-[UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UpsThermal] [bit] NOT NULL,
-[UpsThermalType] [int] NOT NULL,
-[UpsInsuranceProvider] [int] NOT NULL,
-[UpsInsurancePennyOne] [bit] NOT NULL,
-[EndiciaThermal] [bit] NOT NULL,
-[EndiciaThermalType] [int] NOT NULL,
-[EndiciaCustomsCertify] [bit] NOT NULL,
-[EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[EndiciaThermalDocTab] [bit] NOT NULL,
-[EndiciaThermalDocTabType] [int] NOT NULL,
-[EndiciaAutomaticExpress1] [bit] NOT NULL,
-[EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
-[EndiciaInsuranceProvider] [int] NOT NULL,
-[WorldShipLaunch] [bit] NOT NULL,
-[StampsThermal] [bit] NOT NULL,
-[StampsThermalType] [int] NOT NULL,
-[StampsAutomaticExpress1] [bit] NOT NULL,
-[StampsAutomaticExpress1Account] [bigint] NOT NULL,
-[Express1EndiciaThermal] [bit] NOT NULL,
-[Express1EndiciaThermalType] [int] NOT NULL,
-[Express1EndiciaCustomsCertify] [bit] NOT NULL,
-[Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Express1EndiciaThermalDocTab] [bit] NOT NULL,
-[Express1EndiciaThermalDocTabType] [int] NOT NULL,
-[Express1EndiciaSingleSource] [bit] NOT NULL,
-[EquaShipThermal] [bit] NOT NULL,
-[EquaShipThermalType] [int] NOT NULL,
-[OnTracThermal] [bit] NOT NULL,
-[OnTracThermalType] [int] NOT NULL,
-[OnTracInsuranceProvider] [int] NOT NULL,
-[OnTracInsurancePennyOne] [bit] NOT NULL,
-[iParcelThermal] [bit] NOT NULL,
-[iParcelThermalType] [int] NOT NULL,
-[iParcelInsuranceProvider] [int] NOT NULL,
-[iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsThermal] [bit] NOT NULL,
-[Express1StampsThermalType] [int] NOT NULL,
-[Express1StampsSingleSource] [bit] NOT NULL,
-[UpsMailInnovationsEnabled] [bit] NOT NULL,
-[WorldShipMailInnovationsEnabled] [bit] NOT NULL,
-[BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseEnabled] [bit] NOT NULL,
-[ShipSenseUniquenessXml] [xml] NOT NULL,
-[ShipSenseProcessedShipmentID] [bigint] NOT NULL,
-[ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL,
-)
-GO
-PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
-GO
-ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
-GO
-PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
-GO
-CREATE TABLE [dbo].[ShipSenseKnowledgebase]
-(
-[Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
-[Entry] [varbinary] (max) NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
-GO
-ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
-GO
 PRINT N'Creating [dbo].[StampsAccount]'
 GO
 CREATE TABLE [dbo].[StampsAccount]
@@ -4445,109 +4530,28 @@ ALTER TABLE [dbo].[StampsAccount] ADD CONSTRAINT [PK_PostalStampsAccount] PRIMAR
 GO
 ALTER TABLE [dbo].[StampsAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[SystemData]'
-GO
-CREATE TABLE [dbo].[SystemData]
-(
-[SystemDataID] [bit] NOT NULL,
-[RowVersion] [timestamp] NOT NULL,
-[DatabaseID] [uniqueidentifier] NOT NULL,
-[DateFiltersLastUpdate] [datetime] NOT NULL,
-[TemplateVersion] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_SystemData] on [dbo].[SystemData]'
-GO
-ALTER TABLE [dbo].[SystemData] ADD CONSTRAINT [PK_SystemData] PRIMARY KEY CLUSTERED  ([SystemDataID])
-GO
-PRINT N'Creating [dbo].[UpsAccount]'
-GO
-CREATE TABLE [dbo].[UpsAccount]
-(
-[UpsAccountID] [bigint] NOT NULL IDENTITY(1056, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[AccountNumber] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UserID] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RateType] [int] NOT NULL,
-[InvoiceAuth] [bit] NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'
-GO
-ALTER TABLE [dbo].[UpsAccount] ADD CONSTRAINT [PK_UpsAccount] PRIMARY KEY CLUSTERED  ([UpsAccountID])
-GO
-ALTER TABLE [dbo].[UpsAccount] ENABLE CHANGE_TRACKING
-GO
-PRINT N'Creating [dbo].[WorldShipProcessed]'
-GO
-CREATE TABLE [dbo].[WorldShipProcessed]
-(
-[WorldShipProcessedID] [bigint] NOT NULL IDENTITY(1068, 1000),
-[ShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RowVersion] [timestamp] NOT NULL,
-[PublishedCharges] [float] NOT NULL,
-[NegotiatedCharges] [float] NOT NULL,
-[TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UspsTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ServiceType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[PackageType] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UpsPackageID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[DeclaredValueAmount] [float] NULL,
-[DeclaredValueOption] [nchar] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[WorldShipShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[VoidIndicator] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[NumberOfPackages] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[LeadTrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
-)
-GO
-PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
-GO
-ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
-GO
-PRINT N'Altering [dbo].[DimensionsProfile]'
-GO
-PRINT N'Altering [dbo].[EmailAccount]'
-GO
-PRINT N'Altering [dbo].[EndiciaAccount]'
-GO
-PRINT N'Altering [dbo].[EquaShipAccount]'
-GO
-PRINT N'Altering [dbo].[FedExAccount]'
-GO
-PRINT N'Altering [dbo].[FtpAccount]'
-GO
-PRINT N'Altering [dbo].[iParcelAccount]'
-GO
-PRINT N'Altering [dbo].[LabelSheet]'
-GO
-PRINT N'Altering [dbo].[OnTracAccount]'
-GO
-PRINT N'Altering [dbo].[ShippingDefaultsRule]'
-GO
-PRINT N'Altering [dbo].[ShippingOrigin]'
-GO
-PRINT N'Altering [dbo].[ShippingProviderRule]'
-GO
 PRINT N'Altering [dbo].[StampsAccount]'
 GO
-PRINT N'Altering [dbo].[UpsAccount]'
+PRINT N'Creating [dbo].[FilterNodeContentDirty]'
+GO
+CREATE TABLE [dbo].[FilterNodeContentDirty]
+(
+[FilterNodeContentDirtyID] [bigint] NOT NULL IDENTITY(1, 1),
+[RowVersion] [timestamp] NOT NULL,
+[ObjectID] [bigint] NOT NULL,
+[ParentID] [bigint] NULL,
+[ObjectType] [int] NOT NULL,
+[ComputerID] [bigint] NOT NULL,
+[ColumnsUpdated] [varbinary] (75) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
+GO
+ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([FilterNodeContentDirtyID])
+GO
+PRINT N'Creating index [IX_FilterNodeCountDirty] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeCountDirty] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
 GO
 PRINT N'Adding constraints to [dbo].[Computer]'
 GO
@@ -4570,10 +4574,6 @@ PRINT N'Adding foreign keys to [dbo].[ActionTask]'
 GO
 ALTER TABLE [dbo].[ActionTask] ADD CONSTRAINT [FK_ActionTask_Action] FOREIGN KEY ([ActionID]) REFERENCES [dbo].[Action] ([ActionID])
 GO
-PRINT N'Adding foreign keys to [dbo].[ActionQueueSelection]'
-GO
-ALTER TABLE [dbo].[ActionQueueSelection] ADD CONSTRAINT [FK_ActionQueueSelection_ActionQueue] FOREIGN KEY ([ActionQueueID]) REFERENCES [dbo].[ActionQueue] ([ActionQueueID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[ActionQueueStep]'
 GO
 ALTER TABLE [dbo].[ActionQueueStep] ADD CONSTRAINT [FK_ActionQueueStep_ActionQueue] FOREIGN KEY ([ActionQueueID]) REFERENCES [dbo].[ActionQueue] ([ActionQueueID]) ON DELETE CASCADE
@@ -4586,6 +4586,10 @@ PRINT N'Adding foreign keys to [dbo].[AmazonOrder]'
 GO
 ALTER TABLE [dbo].[AmazonOrder] ADD CONSTRAINT [FK_AmazonOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
+PRINT N'Adding foreign keys to [dbo].[ActionQueueSelection]'
+GO
+ALTER TABLE [dbo].[ActionQueueSelection] ADD CONSTRAINT [FK_ActionQueueSelection_ActionQueue] FOREIGN KEY ([ActionQueueID]) REFERENCES [dbo].[ActionQueue] ([ActionQueueID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[AmazonOrderItem]'
 GO
 ALTER TABLE [dbo].[AmazonOrderItem] ADD CONSTRAINT [FK_AmazonOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
@@ -4593,10 +4597,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AmazonStore]'
 GO
 ALTER TABLE [dbo].[AmazonStore] ADD CONSTRAINT [FK_AmazonStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[AmeriCommerceStore]'
-GO
-ALTER TABLE [dbo].[AmeriCommerceStore] ADD CONSTRAINT [FK_AmeriCommerceStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[AuditChange]'
 GO
@@ -4606,6 +4606,10 @@ PRINT N'Adding foreign keys to [dbo].[Audit]'
 GO
 ALTER TABLE [dbo].[Audit] ADD CONSTRAINT [FK_Audit_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
 ALTER TABLE [dbo].[Audit] ADD CONSTRAINT [FK_Audit_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
+GO
+PRINT N'Adding foreign keys to [dbo].[AmeriCommerceStore]'
+GO
+ALTER TABLE [dbo].[AmeriCommerceStore] ADD CONSTRAINT [FK_AmeriCommerceStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[AuditChangeDetail]'
 GO
@@ -4619,18 +4623,6 @@ PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
 GO
 ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[BigCommerceOrderItem]'
-GO
-ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [FK_BigCommerceOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[BigCommerceStore]'
-GO
-ALTER TABLE [dbo].[BigCommerceStore] ADD CONSTRAINT [FK_BigCommerceStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[BuyDotComOrderItem]'
-GO
-ALTER TABLE [dbo].[BuyDotComOrderItem] ADD CONSTRAINT [FK_BuyDotComOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
 PRINT N'Adding foreign keys to [dbo].[BuyDotComStore]'
 GO
 ALTER TABLE [dbo].[BuyDotComStore] ADD CONSTRAINT [FK_BuyComStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
@@ -4642,14 +4634,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorOrderItem]'
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] ADD CONSTRAINT [FK_ChannelAdvisorOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorStore]'
-GO
-ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [FK_ChannelAdvisorStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ClickCartProOrder]'
-GO
-ALTER TABLE [dbo].[ClickCartProOrder] ADD CONSTRAINT [FK_ClickCartProOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[CommerceInterfaceOrder]'
 GO
@@ -4696,6 +4680,35 @@ GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID])
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [FK_Order_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Adding foreign keys to [dbo].[EbayOrderItem]'
+GO
+ALTER TABLE [dbo].[EbayOrderItem] ADD CONSTRAINT [FK_EbayOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+ALTER TABLE [dbo].[EbayOrderItem] ADD CONSTRAINT [FK_EbayOrderItem_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EmailOutboundRelation]'
+GO
+ALTER TABLE [dbo].[EmailOutboundRelation] ADD CONSTRAINT [FK_EmailOutboundObject_EmailOutbound] FOREIGN KEY ([EmailOutboundID]) REFERENCES [dbo].[EmailOutbound] ([EmailOutboundID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[EbayStore]'
+GO
+ALTER TABLE [dbo].[EbayStore] ADD CONSTRAINT [FK_EbayStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EndiciaProfile]'
+GO
+ALTER TABLE [dbo].[EndiciaProfile] ADD CONSTRAINT [FK_EndiciaProfile_PostalProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[PostalProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[BigCommerceOrderItem]'
+GO
+ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [FK_BigCommerceOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EndiciaScanForm]'
+GO
+ALTER TABLE [dbo].[EndiciaScanForm] ADD CONSTRAINT [FK_EndiciaScanForm_EndiciaScanForm] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
+GO
+ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[DownloadDetail]'
 GO
 ALTER TABLE [dbo].[DownloadDetail] ADD CONSTRAINT [FK_DownloadDetail_Download] FOREIGN KEY ([DownloadID]) REFERENCES [dbo].[Download] ([DownloadID]) ON DELETE CASCADE
@@ -4704,39 +4717,10 @@ PRINT N'Adding foreign keys to [dbo].[EbayOrder]'
 GO
 ALTER TABLE [dbo].[EbayOrder] ADD CONSTRAINT [FK_EbayOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
-PRINT N'Adding foreign keys to [dbo].[EbayOrderItem]'
-GO
-ALTER TABLE [dbo].[EbayOrderItem] ADD CONSTRAINT [FK_EbayOrderItem_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID])
-ALTER TABLE [dbo].[EbayOrderItem] ADD CONSTRAINT [FK_EbayOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[EbayStore]'
-GO
-ALTER TABLE [dbo].[EbayStore] ADD CONSTRAINT [FK_EbayStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[EmailOutboundRelation]'
-GO
-ALTER TABLE [dbo].[EmailOutboundRelation] ADD CONSTRAINT [FK_EmailOutboundObject_EmailOutbound] FOREIGN KEY ([EmailOutboundID]) REFERENCES [dbo].[EmailOutbound] ([EmailOutboundID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EndiciaProfile]'
-GO
-ALTER TABLE [dbo].[EndiciaProfile] ADD CONSTRAINT [FK_EndiciaProfile_PostalProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[PostalProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EndiciaScanForm]'
-GO
-ALTER TABLE [dbo].[EndiciaScanForm] ADD CONSTRAINT [FK_EndiciaScanForm_EndiciaScanForm] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
-GO
 PRINT N'Adding foreign keys to [dbo].[EndiciaShipment]'
 GO
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [FK_EndiciaShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [FK_EndiciaShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
-GO
-ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[EtsyOrder]'
 GO
@@ -4750,10 +4734,6 @@ PRINT N'Adding foreign keys to [dbo].[FedExPackage]'
 GO
 ALTER TABLE [dbo].[FedExPackage] ADD CONSTRAINT [FK_FedExPackage_FedExShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[FedExShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[FedExProfile]'
-GO
-ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [FK_FedExProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
 PRINT N'Adding foreign keys to [dbo].[FedExProfilePackage]'
 GO
 ALTER TABLE [dbo].[FedExProfilePackage] ADD CONSTRAINT [FK_FedExProfilePackage_FedExProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[FedExProfile] ([ShippingProfileID]) ON DELETE CASCADE
@@ -4761,6 +4741,20 @@ GO
 PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
+GO
+ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[FilterNode]'
+GO
+ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_FilterNodeContent] FOREIGN KEY ([FilterNodeContentID]) REFERENCES [dbo].[FilterNodeContent] ([FilterNodeContentID])
+ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_FilterSequence] FOREIGN KEY ([FilterSequenceID]) REFERENCES [dbo].[FilterSequence] ([FilterSequenceID])
+ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_Parent] FOREIGN KEY ([ParentFilterNodeID]) REFERENCES [dbo].[FilterNode] ([FilterNodeID])
+GO
+PRINT N'Adding foreign keys to [dbo].[FilterNodeContentDetail]'
+GO
+ALTER TABLE [dbo].[FilterNodeContentDetail] ADD CONSTRAINT [FK_FilterNodeContentDetail_FilterNodeContent] FOREIGN KEY ([FilterNodeContentID]) REFERENCES [dbo].[FilterNodeContent] ([FilterNodeContentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[FilterSequence]'
 GO
@@ -4771,22 +4765,6 @@ PRINT N'Adding foreign keys to [dbo].[FilterLayout]'
 GO
 ALTER TABLE [dbo].[FilterLayout] ADD CONSTRAINT [FK_FilterLayout_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
 ALTER TABLE [dbo].[FilterLayout] ADD CONSTRAINT [FK_FilterLayout_FilterNode] FOREIGN KEY ([FilterNodeID]) REFERENCES [dbo].[FilterNode] ([FilterNodeID])
-GO
-PRINT N'Adding foreign keys to [dbo].[FilterNode]'
-GO
-ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_Parent] FOREIGN KEY ([ParentFilterNodeID]) REFERENCES [dbo].[FilterNode] ([FilterNodeID])
-ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_FilterSequence] FOREIGN KEY ([FilterSequenceID]) REFERENCES [dbo].[FilterSequence] ([FilterSequenceID])
-ALTER TABLE [dbo].[FilterNode] ADD CONSTRAINT [FK_FilterNode_FilterNodeContent] FOREIGN KEY ([FilterNodeContentID]) REFERENCES [dbo].[FilterNodeContent] ([FilterNodeContentID])
-GO
-PRINT N'Adding foreign keys to [dbo].[FilterNodeColumnSettings]'
-GO
-ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_FilterNode] FOREIGN KEY ([FilterNodeID]) REFERENCES [dbo].[FilterNode] ([FilterNodeID]) ON DELETE CASCADE
-ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
-ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_GridColumnLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID])
-GO
-PRINT N'Adding foreign keys to [dbo].[FilterNodeContentDetail]'
-GO
-ALTER TABLE [dbo].[FilterNodeContentDetail] ADD CONSTRAINT [FK_FilterNodeContentDetail_FilterNodeContent] FOREIGN KEY ([FilterNodeContentID]) REFERENCES [dbo].[FilterNodeContent] ([FilterNodeContentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[GenericFileStore]'
 GO
@@ -4808,26 +4786,17 @@ PRINT N'Adding foreign keys to [dbo].[GridColumnFormat]'
 GO
 ALTER TABLE [dbo].[GridColumnFormat] ADD CONSTRAINT [FK_GridColumnFormat_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
 GO
-PRINT N'Adding foreign keys to [dbo].[GridColumnPosition]'
+PRINT N'Adding foreign keys to [dbo].[ChannelAdvisorStore]'
 GO
-ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT [FK_GridLayoutColumn_GridLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UserColumnSettings]'
-GO
-ALTER TABLE [dbo].[UserColumnSettings] ADD CONSTRAINT [FK_UserColumnSettings_GridColumnLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID])
-ALTER TABLE [dbo].[UserColumnSettings] ADD CONSTRAINT [FK_UserColumnSettings_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD CONSTRAINT [FK_ChannelAdvisorStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaOrderItem]'
 GO
 ALTER TABLE [dbo].[InfopiaOrderItem] ADD CONSTRAINT [FK_InfopiaOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
 GO
-PRINT N'Adding foreign keys to [dbo].[InfopiaStore]'
+PRINT N'Adding foreign keys to [dbo].[ClickCartProOrder]'
 GO
-ALTER TABLE [dbo].[InfopiaStore] ADD CONSTRAINT [FK_InfopiaStore_InfopiaStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[iParcelPackage]'
-GO
-ALTER TABLE [dbo].[iParcelPackage] ADD CONSTRAINT [FK_iParcelPackage_iParcelShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[iParcelShipment] ([ShipmentID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[ClickCartProOrder] ADD CONSTRAINT [FK_ClickCartProOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[iParcelProfilePackage]'
 GO
@@ -4837,41 +4806,72 @@ PRINT N'Adding foreign keys to [dbo].[iParcelProfile]'
 GO
 ALTER TABLE [dbo].[iParcelProfile] ADD CONSTRAINT [FK_iParcelProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
+PRINT N'Adding foreign keys to [dbo].[iParcelPackage]'
+GO
+ALTER TABLE [dbo].[iParcelPackage] ADD CONSTRAINT [FK_iParcelPackage_iParcelShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[iParcelShipment] ([ShipmentID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[iParcelShipment]'
 GO
 ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [FK_iParcelShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[MagentoOrder]'
+PRINT N'Adding foreign keys to [dbo].[FilterNodeColumnSettings]'
 GO
-ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [FK_MagentoOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_GridColumnLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID])
+ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_FilterNode] FOREIGN KEY ([FilterNodeID]) REFERENCES [dbo].[FilterNode] ([FilterNodeID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[FilterNodeColumnSettings] ADD CONSTRAINT [FK_FilterNodeColumnSettings_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+GO
+PRINT N'Adding foreign keys to [dbo].[GridColumnPosition]'
+GO
+ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT [FK_GridLayoutColumn_GridLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[UserColumnSettings]'
+GO
+ALTER TABLE [dbo].[UserColumnSettings] ADD CONSTRAINT [FK_UserColumnSettings_GridColumnLayout] FOREIGN KEY ([GridColumnLayoutID]) REFERENCES [dbo].[GridColumnLayout] ([GridColumnLayoutID])
+ALTER TABLE [dbo].[UserColumnSettings] ADD CONSTRAINT [FK_UserColumnSettings_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
 GO
 PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorOrder]'
 GO
 ALTER TABLE [dbo].[MarketplaceAdvisorOrder] ADD CONSTRAINT [FK_MarketworksOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
-PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorStore]'
+PRINT N'Adding foreign keys to [dbo].[MagentoOrder]'
 GO
-ALTER TABLE [dbo].[MarketplaceAdvisorStore] ADD CONSTRAINT [FK_MarketworksStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+ALTER TABLE [dbo].[MagentoOrder] ADD CONSTRAINT [FK_MagentoOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[MivaOrderItemAttribute]'
 GO
 ALTER TABLE [dbo].[MivaOrderItemAttribute] ADD CONSTRAINT [FK_MivaOrderItemAttribute_OrderItemAttribute] FOREIGN KEY ([OrderItemAttributeID]) REFERENCES [dbo].[OrderItemAttribute] ([OrderItemAttributeID])
 GO
-PRINT N'Adding foreign keys to [dbo].[NetworkSolutionsOrder]'
-GO
-ALTER TABLE [dbo].[NetworkSolutionsOrder] ADD CONSTRAINT [FK_NetworkSolutionsOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[NetworkSolutionsStore]'
-GO
-ALTER TABLE [dbo].[NetworkSolutionsStore] ADD CONSTRAINT [FK_NetworkSolutionsStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
 PRINT N'Adding foreign keys to [dbo].[NeweggOrder]'
 GO
 ALTER TABLE [dbo].[NeweggOrder] ADD CONSTRAINT [FK_NeweggOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
+PRINT N'Adding foreign keys to [dbo].[FedExProfile]'
+GO
+ALTER TABLE [dbo].[FedExProfile] ADD CONSTRAINT [FK_FedExProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[NeweggOrderItem]'
 GO
 ALTER TABLE [dbo].[NeweggOrderItem] ADD CONSTRAINT [FK_NeweggOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OnTracProfile]'
+GO
+ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderItemAttribute]'
+GO
+ALTER TABLE [dbo].[OrderItemAttribute] ADD CONSTRAINT [FK_OrderItemAttribute_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderMotionOrder]'
+GO
+ALTER TABLE [dbo].[OrderMotionOrder] ADD CONSTRAINT [FK_OrderMotionOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderMotionStore]'
+GO
+ALTER TABLE [dbo].[OrderMotionStore] ADD CONSTRAINT [FK_OrderMotionStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[BigCommerceStore]'
+GO
+ALTER TABLE [dbo].[BigCommerceStore] ADD CONSTRAINT [FK_BigCommerceStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[NeweggStore]'
 GO
@@ -4881,74 +4881,6 @@ PRINT N'Adding foreign keys to [dbo].[Note]'
 GO
 ALTER TABLE [dbo].[Note] ADD CONSTRAINT [FK_Note_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
 GO
-PRINT N'Adding foreign keys to [dbo].[OnTracProfile]'
-GO
-ALTER TABLE [dbo].[OnTracProfile] ADD CONSTRAINT [FK_OnTracProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
-GO
-ALTER TABLE [dbo].[OnTracShipment] ADD CONSTRAINT [FK_OnTracShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderCharge]'
-GO
-ALTER TABLE [dbo].[OrderCharge] ADD CONSTRAINT [FK_OrderCharge_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderItem]'
-GO
-ALTER TABLE [dbo].[OrderItem] ADD CONSTRAINT [FK_OrderItem_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderMotionOrder]'
-GO
-ALTER TABLE [dbo].[OrderMotionOrder] ADD CONSTRAINT [FK_OrderMotionOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderPaymentDetail]'
-GO
-ALTER TABLE [dbo].[OrderPaymentDetail] ADD CONSTRAINT [FK_OrderPaymentDetail_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[PayPalOrder]'
-GO
-ALTER TABLE [dbo].[PayPalOrder] ADD CONSTRAINT [FK_PayPalOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ProStoresOrder]'
-GO
-ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [FK_ProStoresOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[SearsOrder]'
-GO
-ALTER TABLE [dbo].[SearsOrder] ADD CONSTRAINT [FK_SearsOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ShopifyOrder]'
-GO
-ALTER TABLE [dbo].[ShopifyOrder] ADD CONSTRAINT [FK_ShopifyOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[YahooOrder]'
-GO
-ALTER TABLE [dbo].[YahooOrder] ADD CONSTRAINT [FK_YahooOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderItemAttribute]'
-GO
-ALTER TABLE [dbo].[OrderItemAttribute] ADD CONSTRAINT [FK_OrderItemAttribute_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[SearsOrderItem]'
-GO
-ALTER TABLE [dbo].[SearsOrderItem] ADD CONSTRAINT [FK_SearsOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ShopifyOrderItem]'
-GO
-ALTER TABLE [dbo].[ShopifyOrderItem] ADD CONSTRAINT [FK_ShopifyOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[ThreeDCartOrderItem]'
-GO
-ALTER TABLE [dbo].[ThreeDCartOrderItem] ADD CONSTRAINT [FK_ThreeDCartOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[YahooOrderItem]'
-GO
-ALTER TABLE [dbo].[YahooOrderItem] ADD CONSTRAINT [FK_YahooOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
-GO
-PRINT N'Adding foreign keys to [dbo].[OrderMotionStore]'
-GO
-ALTER TABLE [dbo].[OrderMotionStore] ADD CONSTRAINT [FK_OrderMotionStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
 PRINT N'Adding foreign keys to [dbo].[OtherProfile]'
 GO
 ALTER TABLE [dbo].[OtherProfile] ADD CONSTRAINT [FK_OtherProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
@@ -4957,9 +4889,9 @@ PRINT N'Adding foreign keys to [dbo].[OtherShipment]'
 GO
 ALTER TABLE [dbo].[OtherShipment] ADD CONSTRAINT [FK_OtherShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[PayPalStore]'
+PRINT N'Adding foreign keys to [dbo].[InfopiaStore]'
 GO
-ALTER TABLE [dbo].[PayPalStore] ADD CONSTRAINT [FK_PayPalStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+ALTER TABLE [dbo].[InfopiaStore] ADD CONSTRAINT [FK_InfopiaStore_InfopiaStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[Permission]'
 GO
@@ -4982,6 +4914,10 @@ GO
 ALTER TABLE [dbo].[StampsShipment] ADD CONSTRAINT [FK_StampsShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE
 ALTER TABLE [dbo].[StampsShipment] ADD CONSTRAINT [FK_StampsShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
 GO
+PRINT N'Adding foreign keys to [dbo].[ProStoresOrder]'
+GO
+ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [FK_ProStoresOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
 PRINT N'Adding foreign keys to [dbo].[ProStoresStore]'
 GO
 ALTER TABLE [dbo].[ProStoresStore] ADD CONSTRAINT [FK_ProStoresStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
@@ -4990,9 +4926,17 @@ PRINT N'Adding foreign keys to [dbo].[StampsScanForm]'
 GO
 ALTER TABLE [dbo].[StampsScanForm] ADD CONSTRAINT [FK_StampsScanForm_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
 GO
-PRINT N'Adding foreign keys to [dbo].[Scheduling_CRON_TRIGGERS]'
+PRINT N'Adding foreign keys to [dbo].[NetworkSolutionsOrder]'
 GO
-ALTER TABLE [dbo].[Scheduling_CRON_TRIGGERS] ADD CONSTRAINT [FK_Scheduling_CRON_TRIGGERS_Scheduling_TRIGGERS] FOREIGN KEY ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) REFERENCES [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) ON DELETE CASCADE
+ALTER TABLE [dbo].[NetworkSolutionsOrder] ADD CONSTRAINT [FK_NetworkSolutionsOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[NetworkSolutionsStore]'
+GO
+ALTER TABLE [dbo].[NetworkSolutionsStore] ADD CONSTRAINT [FK_NetworkSolutionsStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[BuyDotComOrderItem]'
+GO
+ALTER TABLE [dbo].[BuyDotComOrderItem] ADD CONSTRAINT [FK_BuyDotComOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
 GO
 PRINT N'Adding foreign keys to [dbo].[Scheduling_TRIGGERS]'
 GO
@@ -5006,9 +4950,41 @@ PRINT N'Adding foreign keys to [dbo].[Scheduling_SIMPROP_TRIGGERS]'
 GO
 ALTER TABLE [dbo].[Scheduling_SIMPROP_TRIGGERS] ADD CONSTRAINT [FK_Scheduling_SIMPROP_TRIGGERS_Scheduling_TRIGGERS] FOREIGN KEY ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) REFERENCES [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) ON DELETE CASCADE
 GO
+PRINT N'Adding foreign keys to [dbo].[Scheduling_CRON_TRIGGERS]'
+GO
+ALTER TABLE [dbo].[Scheduling_CRON_TRIGGERS] ADD CONSTRAINT [FK_Scheduling_CRON_TRIGGERS_Scheduling_TRIGGERS] FOREIGN KEY ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) REFERENCES [dbo].[Scheduling_TRIGGERS] ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[SearsOrder]'
+GO
+ALTER TABLE [dbo].[SearsOrder] ADD CONSTRAINT [FK_SearsOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[SearsOrderItem]'
+GO
+ALTER TABLE [dbo].[SearsOrderItem] ADD CONSTRAINT [FK_SearsOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
+GO
+ALTER TABLE [dbo].[OnTracShipment] ADD CONSTRAINT [FK_OnTracShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[SearsStore]'
 GO
 ALTER TABLE [dbo].[SearsStore] ADD CONSTRAINT [FK_SearsStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[MarketplaceAdvisorStore]'
+GO
+ALTER TABLE [dbo].[MarketplaceAdvisorStore] ADD CONSTRAINT [FK_MarketworksStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderPaymentDetail]'
+GO
+ALTER TABLE [dbo].[OrderPaymentDetail] ADD CONSTRAINT [FK_OrderPaymentDetail_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsProfile]'
+GO
+ALTER TABLE [dbo].[UpsProfile] ADD CONSTRAINT [FK_UpsProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[ShopifyOrder]'
+GO
+ALTER TABLE [dbo].[ShopifyOrder] ADD CONSTRAINT [FK_ShopifyOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ShipmentCustomsItem]'
 GO
@@ -5018,25 +4994,21 @@ PRINT N'Adding foreign keys to [dbo].[UpsShipment]'
 GO
 ALTER TABLE [dbo].[UpsShipment] ADD CONSTRAINT [FK_UpsShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[ShippingPrintOutputRule]'
+PRINT N'Adding foreign keys to [dbo].[PayPalStore]'
 GO
-ALTER TABLE [dbo].[ShippingPrintOutputRule] ADD CONSTRAINT [FK_ShippingPrintOutputRule_ShippingPrintOutput] FOREIGN KEY ([ShippingPrintOutputID]) REFERENCES [dbo].[ShippingPrintOutput] ([ShippingPrintOutputID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UpsProfile]'
-GO
-ALTER TABLE [dbo].[UpsProfile] ADD CONSTRAINT [FK_UpsProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[PayPalStore] ADD CONSTRAINT [FK_PayPalStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ShopifyStore]'
 GO
 ALTER TABLE [dbo].[ShopifyStore] ADD CONSTRAINT [FK_ShopifyStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
-PRINT N'Adding foreign keys to [dbo].[ShopSiteStore]'
-GO
-ALTER TABLE [dbo].[ShopSiteStore] ADD CONSTRAINT [FK_StoreShopSite_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
-GO
 PRINT N'Adding foreign keys to [dbo].[StatusPreset]'
 GO
 ALTER TABLE [dbo].[StatusPreset] ADD CONSTRAINT [FK_StatusPreset_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[ShopSiteStore]'
+GO
+ALTER TABLE [dbo].[ShopSiteStore] ADD CONSTRAINT [FK_StoreShopSite_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ThreeDCartStore]'
 GO
@@ -5067,17 +5039,9 @@ PRINT N'Adding foreign keys to [dbo].[TemplateFolder]'
 GO
 ALTER TABLE [dbo].[TemplateFolder] ADD CONSTRAINT [FK_TemplateFolder_TemplateFolder] FOREIGN KEY ([ParentFolderID]) REFERENCES [dbo].[TemplateFolder] ([TemplateFolderID])
 GO
-PRINT N'Adding foreign keys to [dbo].[UpsPackage]'
+PRINT N'Adding foreign keys to [dbo].[ThreeDCartOrderItem]'
 GO
-ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [FK_UpsPackage_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UpsProfilePackage]'
-GO
-ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [FK_UpsProfilePackage_UpsProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[UpsProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[WorldShipShipment]'
-GO
-ALTER TABLE [dbo].[WorldShipShipment] ADD CONSTRAINT [FK_WorldShipShipment_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[ThreeDCartOrderItem] ADD CONSTRAINT [FK_ThreeDCartOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
 GO
 PRINT N'Adding foreign keys to [dbo].[UserSettings]'
 GO
@@ -5087,27 +5051,55 @@ PRINT N'Adding foreign keys to [dbo].[WorldShipGoods]'
 GO
 ALTER TABLE [dbo].[WorldShipGoods] ADD CONSTRAINT [FK_WorldShipGoods_WorldShipShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[WorldShipShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
+PRINT N'Adding foreign keys to [dbo].[ShippingPrintOutputRule]'
+GO
+ALTER TABLE [dbo].[ShippingPrintOutputRule] ADD CONSTRAINT [FK_ShippingPrintOutputRule_ShippingPrintOutput] FOREIGN KEY ([ShippingPrintOutputID]) REFERENCES [dbo].[ShippingPrintOutput] ([ShippingPrintOutputID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderCharge]'
+GO
+ALTER TABLE [dbo].[OrderCharge] ADD CONSTRAINT [FK_OrderCharge_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[OrderItem]'
+GO
+ALTER TABLE [dbo].[OrderItem] ADD CONSTRAINT [FK_OrderItem_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[PayPalOrder]'
+GO
+ALTER TABLE [dbo].[PayPalOrder] ADD CONSTRAINT [FK_PayPalOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[YahooOrder]'
+GO
+ALTER TABLE [dbo].[YahooOrder] ADD CONSTRAINT [FK_YahooOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ShopifyOrderItem]'
+GO
+ALTER TABLE [dbo].[ShopifyOrderItem] ADD CONSTRAINT [FK_ShopifyOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[YahooOrderItem]'
+GO
+ALTER TABLE [dbo].[YahooOrderItem] ADD CONSTRAINT [FK_YahooOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
 PRINT N'Adding foreign keys to [dbo].[WorldShipPackage]'
 GO
 ALTER TABLE [dbo].[WorldShipPackage] ADD CONSTRAINT [FK_WorldShipPackage_WorldShipShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[WorldShipShipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[WorldShipShipment]'
+GO
+ALTER TABLE [dbo].[WorldShipShipment] ADD CONSTRAINT [FK_WorldShipShipment_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[YahooProduct]'
 GO
 ALTER TABLE [dbo].[YahooProduct] ADD CONSTRAINT [FK_YahooProduct_YahooStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[YahooStore] ([StoreID]) ON DELETE CASCADE
 GO
+PRINT N'Adding foreign keys to [dbo].[UpsPackage]'
+GO
+ALTER TABLE [dbo].[UpsPackage] ADD CONSTRAINT [FK_UpsPackage_UpsShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[UpsShipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsProfilePackage]'
+GO
+ALTER TABLE [dbo].[UpsProfilePackage] ADD CONSTRAINT [FK_UpsProfilePackage_UpsProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[UpsProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
 PRINT N'Creating extended properties'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Api Token', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUrl'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Api Url', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUrl'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Api User Name', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Customer', 'COLUMN', N'BillCountryCode'
 GO
@@ -5154,26 +5146,6 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EndiciaShipment', 'COLUMN', N'RefundFormID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EndiciaShipment', 'COLUMN', N'TransactionID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DeclaredValue'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Description'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsProfileID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsWeight'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'EquaShipAccountID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'InsuranceValue'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'119', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'PackageType'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ReferenceNumber'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'118', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Service'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ShippingNotes'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'121', 'SCHEMA', N'dbo', 'TABLE', N'EtsyOrder', 'COLUMN', N'WasPaid'
 GO
@@ -5469,11 +5441,45 @@ EXEC sp_addextendedproperty N'AuditFormat', N'125', 'SCHEMA', N'dbo', 'TABLE', N
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Weight Units', 'SCHEMA', N'dbo', 'TABLE', N'FedExShipment', 'COLUMN', N'WeightUnitType'
 GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DeclaredValue'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Description'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsProfileID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsWeight'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'EquaShipAccountID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'InsuranceValue'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'119', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'PackageType'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ReferenceNumber'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'118', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Service'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ShippingNotes'
+GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'iParcelShipment', 'COLUMN', N'iParcelAccountID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'127', 'SCHEMA', N'dbo', 'TABLE', N'iParcelShipment', 'COLUMN', N'Service'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'iParcelShipment', 'COLUMN', N'TrackBySMS'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItemAttribute', 'COLUMN', N'UnitPrice'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Api Token', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUrl'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Api Url', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUrl'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Api User Name', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiUserName'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Note', 'COLUMN', N'ObjectID'
 GO
@@ -5484,54 +5490,6 @@ GO
 EXEC sp_addextendedproperty N'AuditName', N'Note', 'SCHEMA', N'dbo', 'TABLE', N'Note', 'COLUMN', N'Text'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'102', 'SCHEMA', N'dbo', 'TABLE', N'Note', 'COLUMN', N'Visibility'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillCountryCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'BillCountry', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillCountryCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillNameParseStatus'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'5', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillStateProvCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'BillState', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillStateProvCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'CustomerID'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Customer', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'CustomerID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OnlineCustomerID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OnlineStatusCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderNumber'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Order Number', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderNumberComplete'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderTotal'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipCountryCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'ShipCountry', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipCountryCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipNameParseStatus'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'5', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipStateProvCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'ShipState', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipStateProvCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Store', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderCharge', 'COLUMN', N'Amount'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'UnitCost'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'UnitPrice'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'Weight'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItemAttribute', 'COLUMN', N'UnitPrice'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OtherShipment', 'COLUMN', N'InsuranceValue'
 GO
@@ -5550,6 +5508,14 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'106', 'SCHEMA', N'dbo', 'TABLE', N'PostalShipment', 'COLUMN', N'PackagingType'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'104', 'SCHEMA', N'dbo', 'TABLE', N'PostalShipment', 'COLUMN', N'Service'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'122', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'FulfillmentStatusCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Fulfillment Status', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'FulfillmentStatusCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'121', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'PaymentStatusCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Fulfillment Status', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'PaymentStatusCode'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'ContentWeight'
 GO
@@ -5597,22 +5563,6 @@ EXEC sp_addextendedproperty N'AuditName', N'ShipState', 'SCHEMA', N'dbo', 'TABLE
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'TotalWeight'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'122', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'FulfillmentStatusCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Fulfillment Status', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'FulfillmentStatusCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'121', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'PaymentStatusCode'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Fulfillment Status', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyOrder', 'COLUMN', N'PaymentStatusCode'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyAccessToken'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Access Token', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyAccessToken'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyShopUrlName'
-GO
-EXEC sp_addextendedproperty N'AuditName', N'Shop Name', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyShopUrlName'
-GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'StampsShipment', 'COLUMN', N'IntegratorTransactionID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'StampsShipment', 'COLUMN', N'StampsAccountID'
@@ -5626,6 +5576,52 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ThreeDCartStore', 'COLUMN', N'StoreUrl'
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Store URL', 'SCHEMA', N'dbo', 'TABLE', N'ThreeDCartStore', 'COLUMN', N'StoreUrl'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillCountryCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'BillCountry', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillCountryCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillNameParseStatus'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'5', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillStateProvCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'BillState', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillStateProvCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'CustomerID'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Customer', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'CustomerID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OnlineCustomerID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OnlineStatusCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderNumber'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Order Number', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderNumberComplete'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'OrderTotal'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipCountryCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'ShipCountry', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipCountryCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipNameParseStatus'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'5', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipStateProvCode'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'ShipState', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'ShipStateProvCode'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Store', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderCharge', 'COLUMN', N'Amount'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'UnitCost'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'UnitPrice'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'Weight'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'CodAmount'
 GO
@@ -5684,4 +5680,12 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'UpsAccountID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UpsShipment', 'COLUMN', N'WorldShipStatus'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyAccessToken'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Access Token', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyAccessToken'
+GO
+EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyShopUrlName'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Shop Name', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyShopUrlName'
 GO

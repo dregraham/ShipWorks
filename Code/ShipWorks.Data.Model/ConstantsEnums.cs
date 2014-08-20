@@ -7487,10 +7487,12 @@ namespace ShipWorks.Data.Model
 		EndiciaInsuranceProvider,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>StampsThermal. </summary>
-		StampsThermal,
+		///<summary>StampsDomesticThermal. </summary>
+		StampsDomesticThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
+		///<summary>StampsInternationalLabelType. </summary>
+		StampsInternationalLabelType,
 		///<summary>StampsAutomaticExpress1. </summary>
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
@@ -7529,10 +7531,12 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>Express1StampsThermal. </summary>
-		Express1StampsThermal,
+		///<summary>Express1StampsDomesticThermal. </summary>
+		Express1StampsDomesticThermal,
 		///<summary>Express1StampsThermalType. </summary>
 		Express1StampsThermalType,
+		///<summary>Express1StampsInternationalLabelType. </summary>
+		Express1StampsInternationalLabelType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>
