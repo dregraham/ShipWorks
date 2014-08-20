@@ -695,11 +695,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
-                thermalType = settings.StampsDomesticThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
+                thermalType = UseThermal(settings.StampsDomesticThermal, (InternationalLabelType)settings.StampsInternationalLabelType, shipment) ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
             }
             else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
-                thermalType = settings.Express1StampsDomesticThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
+                thermalType = UseThermal(settings.Express1StampsDomesticThermal, (InternationalLabelType)settings.Express1StampsInternationalLabelType, shipment) ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
             }
             else
             {
@@ -817,6 +817,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string[] labelUrls = labelUrl.Split(' ');
 
             SaveLabelImages(shipment, labelUrls);
+        }
+
+        private bool UseThermal(bool domesticThermal, InternationalLabelType internationalLabelType, ShipmentEntity shipment)
+        {
+            bool useThermal = domesticThermal;
+
+            if (internationalLabelType != InternationalLabelType.SameAsDomestic &&
+                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+                !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            {
+                // International and overrides domestic value
+                useThermal = (internationalLabelType == InternationalLabelType.Thermal);
+            }
+
+            return useThermal;
         }
 
         /// <summary>
