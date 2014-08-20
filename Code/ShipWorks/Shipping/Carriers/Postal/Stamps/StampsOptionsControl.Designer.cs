@@ -35,8 +35,7 @@
             this.thermalPrinter = new System.Windows.Forms.CheckBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.infotipLabelType = new ShipWorks.UI.Controls.InfoTip();
-            this.labelLabelsInfo = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // thermalType
@@ -62,7 +61,7 @@
             // labelLabels
             // 
             this.labelLabels.AutoSize = true;
-            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelLabels.Location = new System.Drawing.Point(8, 6);
             this.labelLabels.Name = "labelLabels";
             this.labelLabels.Size = new System.Drawing.Size(43, 13);
@@ -89,30 +88,19 @@
             this.infotipLabelType.TabIndex = 46;
             this.infotipLabelType.Title = "Printer Type";
             // 
-            // labelLabelsInfo
-            // 
-            this.labelLabelsInfo.ForeColor = System.Drawing.Color.DimGray;
-            this.labelLabelsInfo.Location = new System.Drawing.Point(23, 77);
-            this.labelLabelsInfo.Name = "labelLabelsInfo";
-            this.labelLabelsInfo.Size = new System.Drawing.Size(409, 34);
-            this.labelLabelsInfo.TabIndex = 47;
-            this.labelLabelsInfo.Text = "Stamps.com does not support thermal labels for international shipments.  Internat" +
-                "ional shipments will print using a standard printer regardless of this setting.";
-            // 
             // StampsOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelLabelsInfo);
             this.Controls.Add(this.infotipLabelType);
             this.Controls.Add(this.thermalType);
             this.Controls.Add(this.labelThermalType);
             this.Controls.Add(this.labelLabels);
             this.Controls.Add(this.thermalPrinter);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "StampsOptionsControl";
-            this.Size = new System.Drawing.Size(435, 123);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            this.Size = new System.Drawing.Size(435, 75);
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -126,7 +114,6 @@
         private System.Windows.Forms.CheckBox thermalPrinter;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip infotipLabelType;
-        private System.Windows.Forms.Label labelLabelsInfo;
 
     }
 }

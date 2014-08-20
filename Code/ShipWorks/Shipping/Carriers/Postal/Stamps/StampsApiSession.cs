@@ -107,16 +107,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (isExpress1)
             {
                 webService = new Express1StampsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
-                    {
-                        Url = express1StampsConnectionDetails.ServiceUrl
-                    };
+                {
+                    Url = express1StampsConnectionDetails.ServiceUrl
+                };
             }
             else
             {
                 webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
-                    {
-                        Url = productionUrl
-                    };
+                {
+                    Url = productionUrl
+                };
             }
 
             return webService;
@@ -706,10 +706,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new InvalidOperationException("Unknown Stamps.com shipment type.");
             }
 
-            // However, Stamps.com doesn't currently support thermal internationals
-            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            // For international thermal labels, we need to set the print layout or else most service/package type combinations
+            // will fail with a "does not support Zebra printers" error
+            if (thermalType.HasValue &&
+                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+                !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
-                thermalType = null;
+                rate.PrintLayout = "Normal4X6CN22";
             }
 
             // Each request needs to get a new requestID.  If Stamps.com sees a duplicate, it thinks its the same request.  
@@ -851,14 +854,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // International services require some trickdickery
             else
             {
-                // As of now Stamps.com doesn't handle international thermals - so we aren't setup to handle it. Safeguard for if we ever add it..
+                // As of now Stamps.com doesnt handle international thermals - so we arent setup to handle it. Safeguard for if we ever add it..
                 if (shipment.ThermalType != null)
                 {
-                    throw new NotImplementedException();
+                    // If the labels are thermal, just save them all, marking the first as the primary
+                    for (int i = 0; i < labelUrls.Length; i++)
+                    {
+                        string labelName = i == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", i);
+                        SaveLabelImage(shipment, labelUrls[i], labelName, new Rectangle());
+                    }
                 }
-
                 // First-class labels are always a single label
-                if (serviceType == PostalServiceType.InternationalFirst ||
+                else if (serviceType == PostalServiceType.InternationalFirst ||
 
                     // International priority flat rate can be the same size as a first-class.  We can tell when this happens
                     // b\c we get only 2 URLs (instead of 4).  the 2nd is a duplicate of the first in the cases I've seen, and we don't need it
