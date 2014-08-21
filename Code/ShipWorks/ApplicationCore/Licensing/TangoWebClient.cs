@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Linq;
+using System.Web.UI.WebControls;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Net;
@@ -39,6 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     public static class TangoWebClient
     {
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
+        private static Dictionary<string, string> contentCache = new Dictionary<string, string>();
 
         /// <summary>
         /// Activate the given license key to the specified store identifier
@@ -142,7 +144,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Get the credentials from Tango
-            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "GetCounterRatesCreds");
+            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "GetCounterRatesCreds");
 
             // Pull the credentials from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
@@ -208,7 +210,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             // Get the certificate verification data from Tango
-            XmlDocument responseXmlDocument = ProcessRequest(postRequest, "CarrierCertificate");
+            XmlDocument responseXmlDocument = ProcessXmlRequest(postRequest, "CarrierCertificate");
 
             // Pull certificate verification data from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
@@ -333,7 +335,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("password", password);
 
-            ProcessRequest(postRequest, "SendAccountPassword");
+            ProcessXmlRequest(postRequest, "SendAccountPassword");
         }
 
         /// <summary>
@@ -347,7 +349,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("emailaddress", email);
             postRequest.Variables.Add("username", username);
 
-            ProcessRequest(postRequest, "SendAccountUsername");
+            ProcessXmlRequest(postRequest, "SendAccountUsername");
         }
 
         /// <summary>
@@ -394,7 +396,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("submissiondate", insurancePolicy.SubmissionDate.Value.ToString("yyyy-MM-dd HH:mm:ss"));
             postRequest.Variables.Add("claimid", insurancePolicy.ClaimID.Value.ToString(CultureInfo.InvariantCulture));
 
-            ProcessRequest(postRequest, "SubmitInsuranceClaim");
+            ProcessXmlRequest(postRequest, "SubmitInsuranceClaim");
         }
 
         /// <summary>
@@ -430,7 +432,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("storecode", storeType.TangoCode);
                 postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
-                ProcessRequest(postRequest, "LogTrialShipments");
+                ProcessXmlRequest(postRequest, "LogTrialShipments");
             }
             // Regular shipment logging
             else
@@ -532,7 +534,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
                 postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
 
-                XmlDocument xmlResponse = ProcessRequest(postRequest, "LogShipmentDetails");
+                XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogShipmentDetails");
 
                 // Check for error
                 XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -565,7 +567,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
                 postRequest.Variables.Add("license", license.Key);
 
-                ProcessRequest(postRequest, "LogShipmentVoided");
+                ProcessXmlRequest(postRequest, "LogShipmentVoided");
             }
         }
 
@@ -595,7 +597,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest, "UpicPolicy");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "UpicPolicy");
 
             // check for errors
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -617,7 +619,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", store.EBayUserID);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest, "FreemiumStatus");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumStatus");
 
             return new LicenseAccountDetail(xmlResponse, store);
         }
@@ -661,7 +663,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("pay_zip", paymentInfo.CardBillingAddress.PostalCode);
             postRequest.Variables.Add("pay_country", "US");
 
-            XmlDocument xmlResponse = ProcessRequest(postRequest, "FreemiumCreate");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "FreemiumCreate");
             LicenseAccountDetail accountDetail = new LicenseAccountDetail(xmlResponse, store);
 
             UpdateLicense(store, accountDetail);
@@ -714,7 +716,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("action", "updateTrialGenericModuleInfo");
                 postRequest.Variables.Add("license", store.License);
 
-                ProcessRequest(postRequest, "UpdateTrialGenericModuleInfo");
+                ProcessXmlRequest(postRequest, "UpdateTrialGenericModuleInfo");
             }
             else
             {
@@ -791,6 +793,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Gets content from tango.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetContent(string contentID)
+        {
+            if (contentCache.ContainsKey(contentID))
+            {
+                return contentCache[contentID];
+            }
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            postRequest.Variables.Add("action", "getscreen");
+            postRequest.Variables.Add("screen", contentID);
+
+            string response = ProcessRequest(postRequest, "GetContent");
+
+            contentCache.Add(contentID, response);
+
+            return response;
+        }
+
+        /// <summary>
         /// Process a request against a signed up customers interapptive account
         /// </summary>
         private static LicenseAccountDetail ProcessAccountRequest(HttpVariableRequestSubmitter postRequest, StoreEntity store, ShipWorksLicense license)
@@ -804,7 +828,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest, "AccountRequest");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "AccountRequest");
 
             return new LicenseAccountDetail(xmlResponse, store);
         }
@@ -821,7 +845,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
             // Process the request
-            XmlDocument xmlResponse = ProcessRequest(postRequest, "ProcessTrialRequest");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "ProcessTrialRequest");
 
             // Create the details
             TrialDetail trialDetail = new TrialDetail(xmlResponse, store);
@@ -832,7 +856,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Process the given request against the interapptive license server
         /// </summary>
-        private static XmlDocument ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
+        private static XmlDocument ProcessXmlRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
+        {
+            XmlDocument xmlResponse = new XmlDocument();
+
+            try
+            {
+                string resultXml = ProcessRequest(postRequest, logEntryName);
+                xmlResponse.LoadXml(resultXml);
+                return xmlResponse;
+            }
+            catch (XmlException ex)
+            {
+                throw new TangoException(
+                    "The ShipWorks server returned an invalid response. \n\n" +
+                    "Details: " + ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Process the given request against the interapptive license server
+        /// </summary>
+        private static string ProcessRequest(HttpVariableRequestSubmitter postRequest, string logEntryName)
         {
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(60);
@@ -867,24 +912,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                     // Ensure the site has a valid interapptive secure certificate
                     ValidateInterapptiveCertificate(postResponse.HttpWebRequest);
 
-                    XmlDocument xmlResponse = new XmlDocument();
+                    string result = postResponse.ReadResult().Trim();
 
-                    // Load the response
-                    try
-                    {
-                        string resultXml = postResponse.ReadResult().Trim();
-                        logEntry.LogResponse(resultXml);
+                    logEntry.LogResponse(result);
 
-                        xmlResponse.LoadXml(resultXml);
-                    }
-                    catch (XmlException ex)
-                    {
-                        throw new TangoException(
-                            "The ShipWorks server returned an invalid response. \n\n" +
-                            "Details: " + ex.Message, ex);
-                    }
-
-                    return xmlResponse;
+                    return result;
                 }
             }
             catch (Exception ex)
