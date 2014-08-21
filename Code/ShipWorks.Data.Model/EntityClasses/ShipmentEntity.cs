@@ -1131,6 +1131,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseEntry", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OnlineShipmentID", fieldHashtable);
 		}
 		#endregion
 
@@ -2341,6 +2344,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Byte[])GetValue((int)ShipmentFieldIndex.ShipSenseEntry, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseEntry, value); }
+		}
+
+		/// <summary> The OnlineShipmentID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."OnlineShipmentID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 OnlineShipmentID
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.OnlineShipmentID, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.OnlineShipmentID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.

@@ -1038,31 +1038,31 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExProfileEntity", "ReferenceCustomer", "ReferenceCustomer", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "ReferenceInvoice", "ReferenceInvoice", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 7 );
 			base.AddElementFieldMapping( "FedExProfileEntity", "ReferencePO", "ReferencePO", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportType", "PayorTransportType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportAccount", "PayorTransportAccount", true, (int)SqlDbType.VarChar, 12, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "PayorDutiesType", "PayorDutiesType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 11 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "PayorDutiesAccount", "PayorDutiesAccount", true, (int)SqlDbType.VarChar, 12, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SaturdayDelivery", "SaturdayDelivery", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 13 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifySender", "EmailNotifySender", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyRecipient", "EmailNotifyRecipient", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 15 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyOther", "EmailNotifyOther", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyOtherAddress", "EmailNotifyOtherAddress", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 17 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyMessage", "EmailNotifyMessage", true, (int)SqlDbType.VarChar, 120, 0, 0, false, "", null, typeof(System.String), 18 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "ResidentialDetermination", "ResidentialDetermination", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostIndicia", "SmartPostIndicia", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostEndorsement", "SmartPostEndorsement", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostConfirmation", "SmartPostConfirmation", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 22 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostCustomerManifest", "SmartPostCustomerManifest", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 23 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostHubID", "SmartPostHubID", true, (int)SqlDbType.VarChar, 10, 0, 0, false, "", null, typeof(System.String), 24 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyBroker", "EmailNotifyBroker", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 25 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "DropoffType", "DropoffType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 26 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "OriginResidentialDetermination", "OriginResidentialDetermination", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 27 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportName", "PayorTransportName", true, (int)SqlDbType.NChar, 60, 0, 0, false, "", null, typeof(System.String), 28 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnType", "ReturnType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 29 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "RmaNumber", "RmaNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 30 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "RmaReason", "RmaReason", true, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 31 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnSaturdayPickup", "ReturnSaturdayPickup", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 32 );
-			base.AddElementFieldMapping( "FedExProfileEntity", "ReferenceShipmentIntegrity", "ReferenceShipmentIntegrity", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 33 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "ReferenceShipmentIntegrity", "ReferenceShipmentIntegrity", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportType", "PayorTransportType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportAccount", "PayorTransportAccount", true, (int)SqlDbType.VarChar, 12, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "PayorDutiesType", "PayorDutiesType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 12 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "PayorDutiesAccount", "PayorDutiesAccount", true, (int)SqlDbType.VarChar, 12, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SaturdayDelivery", "SaturdayDelivery", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 14 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifySender", "EmailNotifySender", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 15 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyRecipient", "EmailNotifyRecipient", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyOther", "EmailNotifyOther", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyOtherAddress", "EmailNotifyOtherAddress", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyMessage", "EmailNotifyMessage", true, (int)SqlDbType.VarChar, 120, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "ResidentialDetermination", "ResidentialDetermination", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostIndicia", "SmartPostIndicia", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostEndorsement", "SmartPostEndorsement", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 22 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostConfirmation", "SmartPostConfirmation", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostCustomerManifest", "SmartPostCustomerManifest", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 24 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "SmartPostHubID", "SmartPostHubID", true, (int)SqlDbType.VarChar, 10, 0, 0, false, "", null, typeof(System.String), 25 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "EmailNotifyBroker", "EmailNotifyBroker", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 26 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "DropoffType", "DropoffType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 27 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "OriginResidentialDetermination", "OriginResidentialDetermination", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 28 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "PayorTransportName", "PayorTransportName", true, (int)SqlDbType.NChar, 60, 0, 0, false, "", null, typeof(System.String), 29 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnType", "ReturnType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 30 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "RmaNumber", "RmaNumber", true, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 31 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "RmaReason", "RmaReason", true, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 32 );
+			base.AddElementFieldMapping( "FedExProfileEntity", "ReturnSaturdayPickup", "ReturnSaturdayPickup", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 33 );
 		}
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>
 		private void InitFedExProfilePackageEntityMappings()
@@ -2155,7 +2155,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 62 );
+			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 63 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShipmentEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -2218,6 +2218,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseStatus", "ShipSenseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 59 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseChangeSets", "ShipSenseChangeSets", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 60 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseEntry", "ShipSenseEntry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 61 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 62 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()

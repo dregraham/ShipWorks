@@ -902,7 +902,8 @@ CREATE TABLE [dbo].[Shipment]
 [BestRateEvents] [tinyint] NOT NULL,
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
-[ShipSenseEntry] [varbinary] (max) NOT NULL
+[ShipSenseEntry] [varbinary] (max) NOT NULL,
+[OnlineShipmentID] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'

@@ -193,6 +193,7 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
+            shipment.OnlineShipmentID = 0;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);

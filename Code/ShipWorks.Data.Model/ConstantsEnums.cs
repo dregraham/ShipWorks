@@ -2984,6 +2984,8 @@ namespace ShipWorks.Data.Model
 		ReferenceInvoice,
 		///<summary>ReferencePO. </summary>
 		ReferencePO,
+		///<summary>ReferenceShipmentIntegrity. </summary>
+		ReferenceShipmentIntegrity,
 		///<summary>PayorTransportType. </summary>
 		PayorTransportType,
 		///<summary>PayorTransportAccount. </summary>
@@ -3032,8 +3034,6 @@ namespace ShipWorks.Data.Model
 		RmaReason,
 		///<summary>ReturnSaturdayPickup. </summary>
 		ReturnSaturdayPickup,
-		///<summary>ReferenceShipmentIntegrity. </summary>
-		ReferenceShipmentIntegrity,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7250,6 +7250,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseChangeSets,
 		///<summary>ShipSenseEntry. </summary>
 		ShipSenseEntry,
+		///<summary>OnlineShipmentID. </summary>
+		OnlineShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}

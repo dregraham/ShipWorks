@@ -989,6 +989,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceCustomer", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceCustomer, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceInvoice", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceInvoice, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReferencePO", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferencePO, 300, 0, 0);
+			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceShipmentIntegrity", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, 300, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "PayorTransportType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.PayorTransportType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExProfileEntity", "PayorTransportAccount", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.PayorTransportAccount, 12, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "PayorDutiesType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfileFieldIndex.PayorDutiesType, 0, 0, 10);
@@ -1013,7 +1014,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExProfileEntity", "RmaNumber", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.RmaNumber, 30, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "RmaReason", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.RmaReason, 60, 0, 0);
 			base.AddElementFieldInfo("FedExProfileEntity", "ReturnSaturdayPickup", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnSaturdayPickup, 0, 0, 0);
-			base.AddElementFieldInfo("FedExProfileEntity", "ReferenceShipmentIntegrity", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, 300, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -2101,6 +2101,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseChangeSets", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseChangeSets, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseEntry", typeof(System.Byte[]), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseEntry, 2147483647, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "OnlineShipmentID", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.OnlineShipmentID, 0, 0, 10);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
