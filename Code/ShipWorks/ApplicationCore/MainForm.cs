@@ -2665,7 +2665,13 @@ namespace ShipWorks
 
                         ShippingManager.EnsureShipmentLoaded(shipment);
 
-                        TangoWebClient.LogShipment(storeEntity, shipment, true);
+                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment, true);
+
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            adapter.SaveAndRefetch(shipment);
+                            adapter.Commit();
+                        }
                     }
                 },
 
