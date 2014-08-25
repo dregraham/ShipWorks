@@ -150,8 +150,6 @@ namespace ShipWorks.Stores
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
                 StoreTypeCode.nopCommerce,
-                StoreTypeCode.SellerExpress,
-                StoreTypeCode.PowersportsSupport,
                 StoreTypeCode.CloudConversion
             };
 
