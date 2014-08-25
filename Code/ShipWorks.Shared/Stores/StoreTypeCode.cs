@@ -286,12 +286,12 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("opencart")]
         OpenCart = 54,
 
-        [Description("sellerexpress")]
+        [Description("SellerExpress")]
         [StoreTypeIdentity("SELLEREXPRESS", "SEE")]
         [StoreTypeIcon("sellerexpress")]
         SellerExpress = 55,
 		
-        [Description("Powersports Support")]
+        [Description("Powersport Support")]
         [StoreTypeIdentity("POWERSPORTSSUPPORT", "PSS")]
         [StoreTypeIcon("powersportssupport")]
         PowersportsSupport = 56,
