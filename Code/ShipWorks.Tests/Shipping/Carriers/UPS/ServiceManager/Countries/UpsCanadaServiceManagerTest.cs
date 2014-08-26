@@ -99,13 +99,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 
         // US tests
         [TestMethod]
-        public void GetServices_ContainsSixItems_WhenShipCountryIsUnitedStates_Test()
+        public void GetServices_ContainsSevenItems_WhenShipCountryIsUnitedStates_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity { ShipCountryCode = "US" };
 
             List<UpsServiceMapping> mappings = testObject.GetServices(shipment);
 
-            Assert.AreEqual(6, mappings.Count);
+            Assert.AreEqual(7, mappings.Count);
         }
 
         [TestMethod]

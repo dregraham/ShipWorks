@@ -127,8 +127,17 @@
   <data name="bigcommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\bigcommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="brightpearl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\brightpearl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cart66" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\cart66.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="channeladvisor" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\channeladvisor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="channelsale" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\channelsale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="clickcartpro" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\clickcartpro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,6 +154,9 @@
   <data name="etsy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\etsy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="fortune3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fortune3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="genericfile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\genericfile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -153,6 +165,15 @@
   </data>
   <data name="infopia" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\infopia.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jigoshop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\jigoshop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="limelightcrm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\limelightcrm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="livesite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\livesite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="magento" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\magento.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -168,6 +189,15 @@
   </data>
   <data name="newegg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\newegg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="opencart" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\opencart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nopcommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\nopcommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="orderdesk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\orderdesk.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="orderdynamics" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\orderdynamics.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,8 +229,20 @@
   <data name="shopify" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\shopify.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="shopp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\shopp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shopperpress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\shopperpress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="shopsite" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\shopsite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="solidcommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\solidcommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="suredone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Stores\Icons\suredone.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="three3dcart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\3dcart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -214,6 +256,12 @@
   <data name="webshopmanager" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\webshopmanager.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="woocommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\woocommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wpecommerce" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\wpecommerce.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="xcart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\xcart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -222,5 +270,17 @@
   </data>
   <data name="zencart" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Stores\Icons\zencart.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zenventory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\zenventory.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sellerexpress" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\sellerexpress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="powersportssupport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\stores\icons\powersportssupport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cloudconversion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cloudconversion.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

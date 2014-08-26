@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -194,6 +196,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 {
                     // OrderMotion's CSVs are poorly formatted
                     reader.MissingFieldAction = MissingFieldAction.ReplaceByEmpty;
+                    reader.DuplicateFieldAction = DuplicateFieldAction.Ignore;
 
                     // cycle through the records
                     while (reader.ReadNextRecord())
@@ -276,11 +279,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 }
 
                 // save the order
-                SaveDownloadedOrder(order);
+                SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "OrderMotion.LoadOrder");
+                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                // Fild wasn't found, skip it
+                // Field wasn't found, skip it
+                log.Warn(ex);
             }
         }
 

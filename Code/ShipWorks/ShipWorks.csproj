@@ -109,6 +109,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
@@ -391,6 +395,7 @@
     </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
+    <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
@@ -538,6 +543,7 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceRegistrar.cs" />
@@ -597,10 +603,15 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
+    <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
+    <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
+    <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Filters\Content\Conditions\BillShipAddressConditionUtility.cs" />
+    <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
+    <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\OrderAddressValidationStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\USTerritoryCondition.cs" />
@@ -686,6 +697,11 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\International\FedExRateBrokerManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
@@ -1249,7 +1265,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExRegisterCspUserResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExSubscriptionResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExVersionCaptureResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\CreatePendingShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\FedExShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\IFedExNativeShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCertificationManipulator.cs" />
@@ -1303,7 +1318,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\FedExTrackingResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\Manipulators\FedExTrackingResponseManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Response\Manipulators\IFedExTrackingResponseManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\CreatePendingShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\FedExVoidRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Void\Request\Manipulators\FedExVoidClientDetailManipulator.cs" />
@@ -2098,12 +2112,6 @@
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.Designer.cs">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.Designer.cs">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2133,6 +2141,26 @@
       <DependentUpon>MapPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Content\Panels\MapPanelType.cs" />
+    <Compile Include="Stores\Management\OnlineUpdateActionCreateException.cs" />
+    <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
+    <Compile Include="Stores\Platforms\CloudConversion\CloudConversionStoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorMarketplaceStoreNameCondition.cs" />
+    <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChannelSaleAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.Designer.cs">
+      <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2148,6 +2176,29 @@
     <Compile Include="Stores\Management\StoreAddressControl.Designer.cs">
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
+    <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
+    <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.Designer.cs">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\SellerExpressStoreType.cs" />
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.Designer.cs">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\PowersportsSupport\PowersportsSupportStoreType.cs" />
+    <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
+    <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
+    <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -2271,6 +2322,21 @@
     <Compile Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.Designer.cs">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlServerTimeZoneType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreType.cs" />
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Brightpearl\BrightpearlUtility.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2387,6 +2453,7 @@
     <Compile Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.Designer.cs">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\OrderDesk\OrderDeskStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggOrderType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Net\PageCalculator.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggAccountSettingsControl.Designer.cs">
@@ -2476,6 +2543,7 @@
     <Compile Include="Stores\Platforms\Shopify\WizardPages\ShopifyAssociateAccountPage.Designer.cs">
       <DependentUpon>ShopifyAssociateAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\SolidCommerce\SolidCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\IApiQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\MSAccessQueryProvider.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\AdvancedApi\SqlServerQueryProvider.cs" />
@@ -2556,6 +2624,7 @@
     <Compile Include="Stores\Platforms\Volusion\VolusionTimeZoneControl.Designer.cs">
       <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\WPeCommerce\WPeCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\WizardPages\YahooOnlineUpdatePage.cs">
       <SubType>UserControl</SubType>
@@ -2579,6 +2648,19 @@
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.Designer.cs">
+      <DependentUpon>ZenventoryAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>ZenventoryStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Zenventory\ZenventoryStoreType.cs" />
     <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\BestRateEventsOutline.cs" />
     <Compile Include="Common\IO\Hardware\Printers\PrinterTypeControl.Designer.cs">
       <DependentUpon>PrinterTypeControl.cs</DependentUpon>
@@ -2842,6 +2924,18 @@
     <Compile Include="Templates\Saving\SavingNoTemplateOutputException.cs" />
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.Designer.cs">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StringListControl.Designer.cs">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TimeZoneSelection.cs">
       <SubType>UserControl</SubType>
@@ -4667,18 +4761,11 @@
       <DependentUpon>ChannelAdvisorStoreSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorStoreType.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadCriteria.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\CreLoaded\CreLoadedStoreType.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayFeedbackConditionStatusType.cs" />
@@ -5879,6 +5966,11 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -7289,9 +7381,6 @@
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemAttributeControl.resx">
-      <DependentUpon>ShipSenseItemAttributeControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseItemPropertyControl.resx">
       <DependentUpon>ShipSenseItemPropertyControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7373,6 +7462,12 @@
     <EmbeddedResource Include="Stores\Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlAddStoreWizardPage.resx">
+      <DependentUpon>BrightpearlAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Brightpearl\BrightpearlStoreAccountSettingsControl.resx">
+      <DependentUpon>BrightpearlStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\BuyDotCom\BuyDotComAccountSettingsControl.resx">
       <DependentUpon>BuyDotComAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7381,6 +7476,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Grid\GridChannelAdvisorFlagDisplayEditor.resx">
       <DependentUpon>GridChannelAdvisorFlagDisplayEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.resx">
+      <DependentUpon>ChannelSaleAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.resx">
+      <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Etsy\CoreExtensions\Actions\EtsyUploadTaskEditor.resx">
       <DependentUpon>EtsyUploadTaskEditor.cs</DependentUpon>
@@ -7405,6 +7506,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\WizardPages\SearsAccountPage.resx">
       <DependentUpon>SearsAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.resx">
+      <DependentUpon>SellerExpressAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\SellerExpress\WizardPages\SellerExpressWizardPage.resx">
+      <DependentUpon>SellerExpressWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Shopify\ShopifyAccountSettingsControl.resx">
       <DependentUpon>ShopifyAccountSettingsControl.cs</DependentUpon>
@@ -7471,6 +7578,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\IO\Hardware\Printers\ThermalPrinterLanguageWizard.resx">
       <DependentUpon>ThermalPrinterLanguageWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Zenventory\ZenventoryAddStoreWizardPage.resx">
+      <DependentUpon>ZenventoryAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Zenventory\ZenventoryStoreAccountSettingsControl.resx">
+      <DependentUpon>ZenventoryStoreAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\DecimalTextBox.resx">
       <DependentUpon>DecimalTextBox.cs</DependentUpon>
@@ -7564,6 +7677,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
+      <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StringListControl.resx">
+      <DependentUpon>StringListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TimeZoneSelection.resx">
       <DependentUpon>TimeZoneSelection.cs</DependentUpon>
@@ -7958,16 +8077,21 @@
     </EmbeddedResource>
     <None Include="Shipping\Carriers\Equaship\Wsdl\equashipapi.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CountryService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\LocationsService_v1.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PickupService_v9.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ReturnTagService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v1.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\UploadDocumentService_v7.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ValidationAvailabilityAndCommitmentService_v2.wsdl" />
     <None Include="Shipping\Carriers\OnTrac\Net\Schemas\OnTracPickupRequest.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -8051,6 +8175,11 @@
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\OpenShipServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -9451,9 +9580,6 @@
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorAccountPage.resx">
       <DependentUpon>ChannelAdvisorAccountPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\WizardPages\ChannelAdvisorDownloadCriteriaPage.resx">
-      <DependentUpon>ChannelAdvisorDownloadCriteriaPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Ebay\EbayAccountSettingsControl.resx">
       <DependentUpon>EbayAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10445,9 +10571,16 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.8\3.8.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.6.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10487,6 +10620,7 @@
     <None Include="Resources\aprilfools-32x32.png" />
     <None Include="Resources\aprilfools-48x48.png" />
     <None Include="Resources\aprilfools-16x16.png" />
+    <None Include="Resources\brightpearl.png" />
     <Content Include="Resources\check2.png" />
     <None Include="Resources\colors32.png" />
     <None Include="Resources\component.png" />
@@ -10569,7 +10703,12 @@
     <None Include="Resources\check3.png" />
     <None Include="Resources\dashed_outline.png" />
     <None Include="Resources\EndiciaLogo.png" />
+    <None Include="Resources\clock_warning.png" />
+    <None Include="Resources\funnel_warning.png" />
     <None Include="Resources\GoogleMapsFav.png" />
+    <None Include="Resources\livesite.png" />
+    <None Include="Resources\fortune3.png" />
+    <None Include="Resources\cloudconversion.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10724,6 +10863,22 @@
     <None Include="Resources\smiley.png" />
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
+    <None Include="Resources\solidcommerce.png" />
+    <Content Include="Resources\Stores\Icons\cart66.png" />
+    <Content Include="Resources\Stores\Icons\channelsale.png" />
+    <Content Include="Resources\Stores\Icons\jigoshop.png" />
+    <Content Include="Resources\Stores\Icons\nopcommerce.png" />
+    <Content Include="Resources\Stores\Icons\limelightcrm.png" />
+    <Content Include="Resources\Stores\Icons\opencart.png" />
+    <Content Include="Resources\Stores\Icons\sellerexpress.png" />
+    <Content Include="Resources\Stores\Icons\powersportssupport.png" />
+    <Content Include="Resources\Stores\Icons\shopp.png" />
+    <Content Include="Resources\Stores\Icons\orderdesk.png" />
+    <Content Include="Resources\Stores\Icons\shopperpress.png" />
+    <Content Include="Resources\Stores\Icons\suredone.png" />
+    <Content Include="Resources\Stores\Icons\woocommerce.png" />
+    <Content Include="Resources\Stores\Icons\wpecommerce.png" />
+    <None Include="Resources\zenventory.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -11878,10 +12033,21 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v2.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11889,10 +12055,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v14.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v16.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11900,10 +12066,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v3.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v6.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11911,10 +12077,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v8.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v9.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11922,10 +12088,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11944,10 +12110,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v13.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v15.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -11966,10 +12132,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_OnLineTools_WebServices_RegisterMgrAcctService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\</RelPath>
-      <UpdateFromURL>D:\Development\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -12087,10 +12253,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Development\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\AddressValidationService_v2.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Trunk\Development\Code\ShipWorks\Shipping\Carriers\FedEx\Wsdl\AddressValidationService_v2.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -12305,7 +12471,7 @@ if exist %25exe%25 (
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

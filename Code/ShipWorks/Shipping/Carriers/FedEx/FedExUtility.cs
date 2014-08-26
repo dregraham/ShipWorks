@@ -23,6 +23,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public static class FedExUtility
     {
         /// <summary>
+        /// Gets the One Rate service types.
+        /// </summary>
+        public static List<FedExServiceType> OneRateServiceTypes
+        {
+            get
+            {
+                return new List<FedExServiceType>
+                {
+                    FedExServiceType.OneRate2Day,
+                    FedExServiceType.OneRate2DayAM,
+                    FedExServiceType.OneRateExpressSaver,
+                    FedExServiceType.OneRateFirstOvernight,
+                    FedExServiceType.OneRatePriorityOvernight,
+                    FedExServiceType.OneRateStandardOvernight
+                };
+            }
+        }
+
+        /// <summary>
         /// Gets the valid service types.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -85,6 +104,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.FirstFreight);
                 serviceTypes.Add(FedExServiceType.FedEx2DayFreight);
                 serviceTypes.Add(FedExServiceType.FedEx3DayFreight);
+
+                // One Rate is only available for US domestic shipments (according to online ShipManager)
+                serviceTypes.Add(FedExServiceType.OneRateStandardOvernight); 
+                serviceTypes.Add(FedExServiceType.OneRateFirstOvernight);
+                serviceTypes.Add(FedExServiceType.OneRatePriorityOvernight);
+                serviceTypes.Add(FedExServiceType.OneRateExpressSaver);
+                serviceTypes.Add(FedExServiceType.OneRate2Day);
+                serviceTypes.Add(FedExServiceType.OneRate2DayAM);
+
             }
 
             return serviceTypes;
@@ -133,14 +161,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
                 case FedExServiceType.FedEx2DayAM:
-                    {
-                        types.Add(FedExPackagingType.Envelope);
-                        types.Add(FedExPackagingType.Pak);
-                        types.Add(FedExPackagingType.Box);
-                        types.Add(FedExPackagingType.Tube);
+                {
+                    types.Add(FedExPackagingType.Envelope);
+                    types.Add(FedExPackagingType.Pak);
+                    types.Add(FedExPackagingType.Box);
+                    types.Add(FedExPackagingType.Tube);
 
-                        break;
-                    }
+                    break;
+                }                    
             }
 
             switch (service)
@@ -154,7 +182,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
 
-            types.Add(FedExPackagingType.Custom);
+            if (OneRateServiceTypes.Any(s => s == service))
+            {
+                types.Add(FedExPackagingType.Envelope);
+                types.Add(FedExPackagingType.Pak);
+                types.Add(FedExPackagingType.Tube);
+            }
+
+            if (OneRateServiceTypes.All(s => s != service))
+            {
+                // Custom packaging is not available for the OneRate service type
+                types.Add(FedExPackagingType.Custom);
+            }
+            
+            // These are available for all service types
+            types.Add(FedExPackagingType.SmallBox);
+            types.Add(FedExPackagingType.MediumBox);
+            types.Add(FedExPackagingType.LargeBox);
+            types.Add(FedExPackagingType.ExtraLargeBox);
 
             return types;
         }
@@ -193,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.TrackingNumber = "";
 
             package.DangerousGoodsEnabled = false;
-            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.LithiumBatteries;            
+            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;            
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
             package.DangerousGoodsCargoAircraftOnly = false;
             package.DangerousGoodsEmergencyContactPhone = string.Empty;
@@ -391,7 +436,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             File.AppendAllText(debugResponseFilename, rawSoap.ResponseXml);
         }
 
-
         /// <summary>
         /// Builds a filename for saving a certification file. If the isForDebugging is true, the unique ID will be 
         /// used to build the file name for easier troubleshooting purposes
@@ -431,6 +475,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return isEnabled;
+        }
+
+        /// <summary>
+        /// Builds a valid tracking number from the passed in number and any relevant shipment data (like the USPS Application Id)
+        /// </summary>
+        public static string BuildTrackingNumber(string trackingNumber, FedExShipmentEntity fedexShipment)
+        {
+            return fedexShipment != null && (FedExServiceType)fedexShipment.Service == FedExServiceType.SmartPost ?
+                fedexShipment.SmartPostUspsApplicationId + trackingNumber :
+                trackingNumber;
         }
     }
 }

@@ -54,23 +54,41 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
 
                 object current = comboStatus.SelectedValue;
 
-                GenericStoreStatusCodeProvider statusProvider =
-                    ((GenericModuleStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
-                comboStatus.DataSource =
-                    statusProvider.CodeValues.Select(
-                        c => new KeyValuePair<string, object>(statusProvider.GetCodeName(c), c)).ToList();
+                GenericStoreStatusCodeProvider statusProvider = ((GenericModuleStoreType) StoreTypeManager.GetType(store)).CreateStatusCodeProvider();
+                List<KeyValuePair<string, object>> statuses = statusProvider.CodeValues.Select(c => new KeyValuePair<string, object>(statusProvider.GetCodeName(c), c)).ToList();
+
+                // Set before we add the please select an order status entry.
+                bool hasStatuses = statuses.Any();
+
+                KeyValuePair<string, object> pleaseSelectStatus = new KeyValuePair<string, object>("Please select an order status.", -1);
+                statuses.Insert(0, pleaseSelectStatus);
+
+                int selectedIndex = 0;
 
                 // Try to revert back to what was selected before
                 if (current != null)
                 {
                     comboStatus.SelectedValue = current;
+                    selectedIndex = comboStatus.SelectedIndex;
                 }
-
-                if (comboStatus.Items.Count > 0)
+                else if (hasStatuses)
                 {
-                    if (comboStatus.SelectedIndex < 0)
+                    KeyValuePair<string, object> shippedKeyValuePair = statuses.FirstOrDefault(kv => String.Equals(kv.Key, "Shipped", StringComparison.OrdinalIgnoreCase));
+
+                    // If we can't find a "shipped" status, add an list item asking the user to select a status
+                    if (shippedKeyValuePair.Equals(default(KeyValuePair<string, object>)))
                     {
-                        comboStatus.SelectedIndex = 0;
+                        selectedIndex = 0;
+                    }
+                    else
+                    {
+                        // We found a shipped status, so use it.
+                        selectedIndex = statuses.IndexOf(shippedKeyValuePair);
+                    }
+
+                    if (selectedIndex < 0)
+                    {
+                        selectedIndex = 0;
                     }
 
                     statusUpdate.Enabled = true;
@@ -88,6 +106,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
                 else
                 {
                     Height = panelOrderStatus.Bottom;
+                }
+                // If there were any statuses to chose from, set the combo data source and selected index.
+                if (hasStatuses)
+                {
+                    comboStatus.DataSource = statuses;
+                    comboStatus.SelectedIndex = selectedIndex;
                 }
             }
             else
@@ -112,6 +136,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         /// </summary>
         public override List<ActionTask> CreateActionTasks(StoreEntity store)
         {
+            // Validate settings, and throw if they are not valid.
+            ValidateUi();
+
             List<ActionTask> tasks = new List<ActionTask>();
 
             // Shipment update task
@@ -139,6 +166,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
             }
 
             return tasks;
+        }
+
+        /// <summary>
+        /// Check to make sure settings are valid.  If any are not, an OnlineUpdateActionCreateException is thrown.
+        /// </summary>
+        private void ValidateUi()
+        {
+            if (statusUpdate.Checked && comboStatus.SelectedIndex <= 0)
+            {
+                throw new OnlineUpdateActionCreateException("Please select an order status for shipped orders.\n\nNormally this is a 'Shipped' or 'Completed' status.");
+            }
         }
     }
 }

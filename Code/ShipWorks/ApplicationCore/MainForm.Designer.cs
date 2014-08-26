@@ -1,4 +1,3 @@
-using ShipWorks.Data.Administration.UpdateFrom2x.Configuration;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Content.Panels;
 
@@ -168,7 +167,7 @@ namespace ShipWorks
             this.contextOrderQuickPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuTemplatesPlaceholder = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuTemplatesPlaceholderItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCustomerComposeEmail = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerSave = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep4 = new System.Windows.Forms.ToolStripSeparator();
@@ -177,11 +176,11 @@ namespace ShipWorks
             this.contextOrderSep5 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderSave = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSaveOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCustomerComposeEmail = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerSaveOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerEmailNow = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCustomerSave = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuCustomerGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextCustomerEditCustomer = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCustomerCustomActionsSep = new System.Windows.Forms.ToolStripSeparator();
@@ -279,6 +278,7 @@ namespace ShipWorks
             this.separator1 = new Divelements.SandRibbon.Separator();
             this.buttonHelpRemote = new Divelements.SandRibbon.Button();
             this.ribbonChunkSupplies = new Divelements.SandRibbon.RibbonChunk();
+            this.buttonUship = new Divelements.SandRibbon.Button();
             this.buttonBuySupplies = new Divelements.SandRibbon.Button();
             this.ribbonChunkAbout = new Divelements.SandRibbon.RibbonChunk();
             this.buttonHelpAbout = new Divelements.SandRibbon.Button();
@@ -859,7 +859,7 @@ namespace ShipWorks
             this.dockableWindowOrders.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowOrders.Controls.Add(this.panelOrders);
             this.dockableWindowOrders.Guid = new System.Guid("60992767-2cdf-45cc-9868-e404a8cc6dae");
-            this.dockableWindowOrders.Location = new System.Drawing.Point(0, 25);
+            this.dockableWindowOrders.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowOrders.Name = "dockableWindowOrders";
             this.dockableWindowOrders.Size = new System.Drawing.Size(378, 170);
             this.dockableWindowOrders.TabImage = global::ShipWorks.Properties.Resources.order16;
@@ -884,7 +884,7 @@ namespace ShipWorks
             this.dockableWindowItems.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowItems.Controls.Add(this.panelItems);
             this.dockableWindowItems.Guid = new System.Guid("39104285-819c-467e-8318-7b6350ef852a");
-            this.dockableWindowItems.Location = new System.Drawing.Point(747, 219);
+            this.dockableWindowItems.Location = new System.Drawing.Point(0, 25);
             this.dockableWindowItems.Name = "dockableWindowItems";
             this.dockableWindowItems.ShowOptions = false;
             this.dockableWindowItems.Size = new System.Drawing.Size(378, 170);
@@ -908,7 +908,7 @@ namespace ShipWorks
             this.dockableWindowCharges.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowCharges.Controls.Add(this.panelCharges);
             this.dockableWindowCharges.Guid = new System.Guid("7d4b4e89-211e-4d19-b98a-7bcc4b30a8e7");
-            this.dockableWindowCharges.Location = new System.Drawing.Point(747, 219);
+            this.dockableWindowCharges.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowCharges.Name = "dockableWindowCharges";
             this.dockableWindowCharges.ShowOptions = false;
             this.dockableWindowCharges.Size = new System.Drawing.Size(378, 170);
@@ -933,7 +933,7 @@ namespace ShipWorks
             this.dockableWindowPaymentDetails.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowPaymentDetails.Controls.Add(this.panelPaymentDetail);
             this.dockableWindowPaymentDetails.Guid = new System.Guid("d543ebe5-dc50-407e-bc66-c30b8a850b54");
-            this.dockableWindowPaymentDetails.Location = new System.Drawing.Point(747, 219);
+            this.dockableWindowPaymentDetails.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowPaymentDetails.Name = "dockableWindowPaymentDetails";
             this.dockableWindowPaymentDetails.ShowOptions = false;
             this.dockableWindowPaymentDetails.Size = new System.Drawing.Size(378, 170);
@@ -1029,10 +1029,10 @@ namespace ShipWorks
             this.dockableWindowEmail.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowEmail.Controls.Add(this.panelEmail);
             this.dockableWindowEmail.Guid = new System.Guid("b33f5fc1-c720-4046-81d6-728355f64c81");
-            this.dockableWindowEmail.Location = new System.Drawing.Point(747, 219);
+            this.dockableWindowEmail.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowEmail.Name = "dockableWindowEmail";
             this.dockableWindowEmail.ShowOptions = false;
-            this.dockableWindowEmail.Size = new System.Drawing.Size(747, 170);
+            this.dockableWindowEmail.Size = new System.Drawing.Size(365, 170);
             this.dockableWindowEmail.TabImage = global::ShipWorks.Properties.Resources.mail2;
             this.dockableWindowEmail.TabIndex = 0;
             this.dockableWindowEmail.Text = "Emails";
@@ -1045,7 +1045,7 @@ namespace ShipWorks
             this.panelEmail.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelEmail.Location = new System.Drawing.Point(1, 1);
             this.panelEmail.Name = "panelEmail";
-            this.panelEmail.Size = new System.Drawing.Size(745, 168);
+            this.panelEmail.Size = new System.Drawing.Size(363, 168);
             this.panelEmail.TabIndex = 0;
             // 
             // dockableWindowPrinted
@@ -1053,10 +1053,10 @@ namespace ShipWorks
             this.dockableWindowPrinted.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
             this.dockableWindowPrinted.Controls.Add(this.panelPrinted);
             this.dockableWindowPrinted.Guid = new System.Guid("5d33c695-a829-47fa-9eaa-3c2bd9ac5ab5");
-            this.dockableWindowPrinted.Location = new System.Drawing.Point(747, 219);
+            this.dockableWindowPrinted.Location = new System.Drawing.Point(0, 0);
             this.dockableWindowPrinted.Name = "dockableWindowPrinted";
             this.dockableWindowPrinted.ShowOptions = false;
-            this.dockableWindowPrinted.Size = new System.Drawing.Size(747, 170);
+            this.dockableWindowPrinted.Size = new System.Drawing.Size(365, 170);
             this.dockableWindowPrinted.TabImage = global::ShipWorks.Properties.Resources.printer1;
             this.dockableWindowPrinted.TabIndex = 0;
             this.dockableWindowPrinted.Text = "Printed";
@@ -1069,7 +1069,7 @@ namespace ShipWorks
             this.panelPrinted.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelPrinted.Location = new System.Drawing.Point(1, 1);
             this.panelPrinted.Name = "panelPrinted";
-            this.panelPrinted.Size = new System.Drawing.Size(745, 168);
+            this.panelPrinted.Size = new System.Drawing.Size(363, 168);
             this.panelPrinted.TabIndex = 0;
             // 
             // sandDockManager
@@ -1589,7 +1589,7 @@ namespace ShipWorks
             this.contextMenuTemplatesPlaceholder.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextMenuTemplatesPlaceholderItem});
             this.contextMenuTemplatesPlaceholder.Name = "contextMenuTemplatesPlaceholder";
-            this.contextMenuTemplatesPlaceholder.OwnerItem = this.contextCustomerSave;
+            this.contextMenuTemplatesPlaceholder.OwnerItem = this.contextCustomerEmailNow;
             this.contextMenuTemplatesPlaceholder.Size = new System.Drawing.Size(137, 26);
             // 
             // contextMenuTemplatesPlaceholderItem
@@ -1598,18 +1598,17 @@ namespace ShipWorks
             this.contextMenuTemplatesPlaceholderItem.Size = new System.Drawing.Size(136, 22);
             this.contextMenuTemplatesPlaceholderItem.Text = "Placeholder";
             // 
-            // contextCustomerComposeEmail
+            // contextCustomerSave
             // 
-            this.contextCustomerComposeEmail.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerComposeEmail, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
-            this.contextCustomerComposeEmail.Image = global::ShipWorks.Properties.Resources.mail_write1;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerComposeEmail, new System.Guid("403d8e5c-5669-4fa0-bc7f-041bc60bdb28"));
-            this.contextCustomerComposeEmail.Name = "contextCustomerComposeEmail";
-            this.gridMenuLayoutProvider.SetPermission(this.contextCustomerComposeEmail, ShipWorks.Users.Security.PermissionType.CustomersSendEmail);
-            this.contextCustomerComposeEmail.Size = new System.Drawing.Size(159, 22);
-            this.contextCustomerComposeEmail.Text = "Compose Email";
-            this.contextCustomerComposeEmail.Visible = false;
-            this.contextCustomerComposeEmail.DropDownOpening += new System.EventHandler(this.OnComposeEmailMenuOpening);
+            this.contextCustomerSave.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSave, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
+            this.contextCustomerSave.Image = global::ShipWorks.Properties.Resources.disk_blue1;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSave, new System.Guid("2ea96f33-c914-40ff-9828-deb1556e1b4e"));
+            this.contextCustomerSave.Name = "contextCustomerSave";
+            this.contextCustomerSave.Size = new System.Drawing.Size(159, 22);
+            this.contextCustomerSave.Text = "Save";
+            this.contextCustomerSave.Visible = false;
+            this.contextCustomerSave.DropDownOpening += new System.EventHandler(this.OnSaveMenuOpening);
             // 
             // contextOrderPrint
             // 
@@ -1695,6 +1694,19 @@ namespace ShipWorks
             this.contextOrderSaveOpen.Visible = false;
             this.contextOrderSaveOpen.DropDownOpening += new System.EventHandler(this.OnSaveAndOpenMenuOpening);
             // 
+            // contextCustomerComposeEmail
+            // 
+            this.contextCustomerComposeEmail.DropDown = this.contextMenuTemplatesPlaceholder;
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerComposeEmail, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
+            this.contextCustomerComposeEmail.Image = global::ShipWorks.Properties.Resources.mail_write1;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerComposeEmail, new System.Guid("403d8e5c-5669-4fa0-bc7f-041bc60bdb28"));
+            this.contextCustomerComposeEmail.Name = "contextCustomerComposeEmail";
+            this.gridMenuLayoutProvider.SetPermission(this.contextCustomerComposeEmail, ShipWorks.Users.Security.PermissionType.CustomersSendEmail);
+            this.contextCustomerComposeEmail.Size = new System.Drawing.Size(159, 22);
+            this.contextCustomerComposeEmail.Text = "Compose Email";
+            this.contextCustomerComposeEmail.Visible = false;
+            this.contextCustomerComposeEmail.DropDownOpening += new System.EventHandler(this.OnComposeEmailMenuOpening);
+            // 
             // contextCustomerPrint
             // 
             this.contextCustomerPrint.DropDown = this.contextMenuTemplatesPlaceholder;
@@ -1743,18 +1755,6 @@ namespace ShipWorks
             this.contextCustomerEmailNow.Text = "Email Now";
             this.contextCustomerEmailNow.Visible = false;
             this.contextCustomerEmailNow.DropDownOpening += new System.EventHandler(this.OnEmailNowMenuOpening);
-            // 
-            // contextCustomerSave
-            // 
-            this.contextCustomerSave.DropDown = this.contextMenuTemplatesPlaceholder;
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextCustomerSave, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreCustomers);
-            this.contextCustomerSave.Image = global::ShipWorks.Properties.Resources.disk_blue1;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextCustomerSave, new System.Guid("2ea96f33-c914-40ff-9828-deb1556e1b4e"));
-            this.contextCustomerSave.Name = "contextCustomerSave";
-            this.contextCustomerSave.Size = new System.Drawing.Size(159, 22);
-            this.contextCustomerSave.Text = "Save";
-            this.contextCustomerSave.Visible = false;
-            this.contextCustomerSave.DropDownOpening += new System.EventHandler(this.OnSaveMenuOpening);
             // 
             // contextMenuCustomerGrid
             // 
@@ -2629,8 +2629,17 @@ namespace ShipWorks
             // 
             this.ribbonChunkSupplies.FurtherOptions = false;
             this.ribbonChunkSupplies.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonUship,
             this.buttonBuySupplies});
-            this.ribbonChunkSupplies.Text = "Supplies";
+            this.ribbonChunkSupplies.Text = "Services";
+            // 
+            // buttonUship
+            // 
+            this.buttonUship.Guid = new System.Guid("d81ade92-db8c-4f88-9f00-ea3bd217f280");
+            this.buttonUship.Image = ((System.Drawing.Image)(resources.GetObject("buttonUship.Image")));
+            this.buttonUship.Text = "uShip LTL Rates";
+            this.buttonUship.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonUship.Activate += new System.EventHandler(this.OnUShip);
             // 
             // buttonBuySupplies
             // 
@@ -3027,6 +3036,7 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
         private System.Windows.Forms.ToolStripMenuItem logShipmentToTangoRetryToolStripMenuItem;
+        private Divelements.SandRibbon.Button buttonUship;
     }
 }
 

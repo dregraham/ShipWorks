@@ -371,12 +371,12 @@ namespace ShipWorks.Shipping
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
 
             // this is now a new shipment to be inserted
-            MarkAsNew(clonedShipment);
+            EntityUtility.MarkAsNew(clonedShipment);
 
             // all carrier data is New as well
             foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
             {
-                MarkAsNew(customsItem);
+                EntityUtility.MarkAsNew(customsItem);
             }
 
             clonedShipment.Processed = false;
@@ -387,57 +387,10 @@ namespace ShipWorks.Shipping
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
 
-            // Clear out any old UPS tracking information
-            if (clonedShipment.Ups != null && clonedShipment.Ups.Packages != null)
-            {
-                clonedShipment.Ups.UspsTrackingNumber = String.Empty;
-                clonedShipment.Ups.Cn22Number = String.Empty;
-                foreach (UpsPackageEntity package in clonedShipment.Ups.Packages)
-                {
-                    package.TrackingNumber = String.Empty;
-                    package.UspsTrackingNumber = String.Empty;
-                    MarkAsNew(package);
-                }
-            }
-
-            // Clear out post-processed data on a per shipment-type basis.  could probably be factored out into base classes per shipment type if 
-            // we expand this past endicia
-            if (clonedShipment.Postal != null && clonedShipment.Postal.Endicia != null)
-            {
-                clonedShipment.Postal.Endicia.TransactionID = null;
-                clonedShipment.Postal.Endicia.RefundFormID = null;
-                clonedShipment.Postal.Endicia.ScanFormBatchID = null;
-            }
-
-            if (clonedShipment.Postal != null && clonedShipment.Postal.Stamps != null)
-            {
-                clonedShipment.Postal.Stamps.ScanFormBatchID = null;
-            }
+            // Clear out post-processed data on a per shipment-type basis.
+            ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
 
             return clonedShipment;
-        }
-
-        /// <summary>
-        /// Mark all fields as changed for LLBL's sake
-        /// </summary>
-        private static void MarkAsNew(IEntity2 entity)
-        {
-            entity.IsNew = true;
-
-            foreach (IEntityField2 field in entity.Fields)
-            {
-                field.IsChanged = true;
-            }
-
-            entity.GetDependingRelatedEntities().ForEach(e => MarkAsNew(e));
-
-            entity.GetMemberEntityCollections().ForEach(c =>
-            {
-                foreach (IEntity2 e2 in c)
-                {
-                    MarkAsNew(e2);
-                }
-            });
         }
 
         /// <summary>
@@ -619,6 +572,7 @@ namespace ShipWorks.Shipping
                 if (shipmentList == null || !shipmentList.Contains(shipment.ShipmentID))
                 {
                     shipmentList = DataProvider.GetRelatedKeys(shipment.OrderID, EntityType.ShipmentEntity);
+                    shipmentList.Sort();
                     siblingData[shipment.OrderID] = shipmentList;
                 }
 
@@ -1009,6 +963,7 @@ namespace ShipWorks.Shipping
 
                     bool success = false;
                     ShippingException lastException = null;
+                    ShipmentEntity processedShipment = null;
 
                     foreach (ShipmentEntity shipmentToTry in shipmentsToTryToProcess)
                     {
@@ -1023,6 +978,8 @@ namespace ShipWorks.Shipping
                             }
 
                             success = true;
+                            processedShipment = shipmentToTry;
+
                             break;
                         }
                         catch (ShippingException ex)
@@ -1037,6 +994,10 @@ namespace ShipWorks.Shipping
 
                         throw new ShippingException(lastException.Message,lastException);
                     }
+                    
+                    // Log to the knowledge base after everything else has been successful, so an error logging
+                    // to the knowledge base does not prevent the shipment from being actually processed.
+                    LogToShipSenseKnowledgebase(ShipmentTypeManager.GetType(processedShipment), processedShipment);
                 }
             }
             catch (SqlAppResourceLockException ex)
@@ -1195,10 +1156,6 @@ namespace ShipWorks.Shipping
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
                 }
-
-                // Log to the knowledge base after everything else has been successful, so an error logging
-                // to the knowledge base does not prevent the shipment from being actually processed.
-                LogToShipSenseKnowledgebase(shipmentType, shipment);
             }
             catch (ShipWorksLicenseException ex)
             {
@@ -1244,7 +1201,7 @@ namespace ShipWorks.Shipping
             {
                 // We may want to eat this exception entirely, so the user isn't impacted 
                 log.ErrorFormat("An error occurred writing shipment ID {0} to the knowledge base: {1}", shipment.ShipmentID, ex.Message);
-                throw new ShippingException("The shipment was processed successfully, but the data was not logged to the knowledge base.", ex);
+                throw new ShippingException("The shipment was processed successfully, but the data was not logged to ShipSense.", ex);
             }
         }
 

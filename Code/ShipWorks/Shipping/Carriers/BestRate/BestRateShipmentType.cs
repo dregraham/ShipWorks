@@ -162,6 +162,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.BestRate == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             return new List<IPackageAdapter>()
             {
                 new BestRatePackageAdapter(shipment)

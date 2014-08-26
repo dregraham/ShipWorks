@@ -241,6 +241,8 @@ namespace ShipWorks.Stores.Management
                 optionPageSettings.Controls.Add(storeSettingsControl);
 
                 panelStoreStatus.Top = storeSettingsControl.Bottom + 8;
+
+                storeSettingsControl.SizeChanged += (sender, args) => panelStoreStatus.Top = storeSettingsControl.Bottom + 8;
             }
             else
             {

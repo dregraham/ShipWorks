@@ -1,10 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <project>
-  <actions/>
+  <actions />
   <description></description>
   <logRotator class="hudson.tasks.LogRotator">
     <daysToKeep>21</daysToKeep>
-    <numToKeep>50</numToKeep>
+    <numToKeep>5</numToKeep>
     <artifactDaysToKeep>-1</artifactDaysToKeep>
     <artifactNumToKeep>-1</artifactNumToKeep>
   </logRotator>
@@ -15,17 +15,17 @@
       <stageName>Stage 2: Integration test</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
-  <scm class="hudson.scm.NullSCM"/>
+  <scm class="hudson.scm.NullSCM" />
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
-  <triggers/>
+  <triggers />
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>E:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake db:switch[ShipWorks_SeedData] db:deploy</command>
+      <command>rake &quot;db:switch[INTJENKINS\\\\Jenkins, ShipWorks_SeedData]&quot; db:deploy</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -41,13 +41,13 @@
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
-      <parsingRulesPath>e:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>j.yedlicka@shipworks.com</recipients>
+      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
   </publishers>
-  <buildWrappers/>
+  <buildWrappers />
 </project>

@@ -110,7 +110,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
                                     emailOutbound.DontSendBefore = null;
 
                                     // Status
-                                    emailOutbound.SendStatus = (oldResult == 0) ? (int) EmailOutboundStatus.Sent : (int) EmailOutboundStatus.Failed;
+                                    emailOutbound.SendStatus = (oldResult == 0) ? (int) EmailOutboundStatus.Sent : (int) EmailOutboundStatus.Retry;
                                     emailOutbound.SendAttemptCount = 1;
                                     emailOutbound.SendAttemptLastError = (oldResult == 0) ? "" : (oldResult == 1) ? "Canceled" : errorMessage;
 

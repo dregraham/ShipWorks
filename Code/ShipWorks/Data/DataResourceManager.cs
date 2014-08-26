@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
 using System.Data;
@@ -28,6 +29,7 @@ using System.Data.SqlClient;
 using Interapptive.Shared.IO.Zip;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
+using Interapptive.Shared.Pdf;
 
 namespace ShipWorks.Data
 {
@@ -108,11 +110,34 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Regsister the data as a resource in the database.  If already present, the existing reference is returned.
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
         public static DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label)
         {
             return InstantiateResource(data, consumerID, label, false);
+        }
+
+        /// <summary>
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
+        /// </summary>
+        public static IEnumerable<DataResourceReference> CreateFromPdf(PdfDocument pdf, long consumerID, string label)
+        {
+            List<DataResourceReference> resourceReferences = new List<DataResourceReference>();
+
+            // We need to convert the PDF into images and register each image as a resource in the database
+            List<Stream> images = pdf.ToImages().ToList();
+            for (int i = 0; i < images.Count; i++)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    images[i].CopyTo(memoryStream);
+
+                    // Adjust the resource label in the event that there are multiple pages in the PDF
+                    resourceReferences.Add(InstantiateResource(memoryStream.ToArray(), consumerID, string.Format("{0}{1}", label, images.Count > 1 ? "-" + i.ToString() : string.Empty), false));
+                }
+            }
+
+            return resourceReferences;
         }
 
         /// <summary>
@@ -402,51 +427,54 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteAbandonedResourceData()
         {
-            log.InfoFormat("Delete abandoned resources....");
-
-            try
+            using (new LoggedStopwatch(log, "Delete abandoned resources."))
             {
-                // we always want this call to be the deadlock victim
-                using (new SqlDeadlockPriorityScope(-5))
+                // Set the timeout to unlimited.  The proc will take care of it's run time.
+                const int timeoutSeconds = 0;
+                string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
+
+                try
                 {
-                    using (SqlConnection connection = SqlSession.Current.OpenConnection())
+                    // we always want this call to be the deadlock victim
+                    using (new SqlDeadlockPriorityScope(-5))
                     {
-                        string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
-
-                        try
+                        using (SqlConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
                         {
-                            
-                            using (SqlCommand command = SqlCommandProvider.Create(connection, scriptName))
+                            try
                             {
-                                command.CommandType = CommandType.StoredProcedure;
-                                // Disable the command timeout since the scripts should take care of timing themselves out
-                                command.CommandTimeout = (int)TimeSpan.FromMinutes(15).TotalSeconds;
-                                command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
-                                command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
+                                using (SqlCommand command = connection.CreateCommand())
+                                {
+                                    command.CommandType = CommandType.StoredProcedure;
+                                    command.CommandText = scriptName;
+                                    // Disable the command timeout since the scripts should take care of timing themselves out
+                                    command.CommandTimeout = timeoutSeconds;
+                                    command.Parameters.AddWithValue("@olderThan", DateTime.UtcNow);
+                                    command.Parameters.AddWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
 
-                                command.ExecuteNonQuery();
+                                    command.ExecuteNonQuery();
+                                }
                             }
-                        }
-                        catch (SqlException ex)
-                        {
-                            string exceptionMessage = ex.Message.ToLower();
-                            if (exceptionMessage.Contains("sqllockexception") || exceptionMessage.Contains("could not acquire applock"))
+                            catch (SqlException ex)
                             {
-                                log.Warn(ex.Message);                                
-                            }
-                            else
-                            {
-                                log.Error(string.Format("Error likely returned from stored proc {0}", scriptName), ex);
-                                throw;
+                                string exceptionMessage = ex.Message.ToLower();
+                                if (exceptionMessage.Contains("sqllockexception") || exceptionMessage.Contains("could not acquire applock"))
+                                {
+                                    log.Warn(ex.Message);                                
+                                }
+                                else
+                                {
+                                    log.Error(string.Format("Error likely returned from stored proc {0}", scriptName), ex);
+                                    throw;
+                                }
                             }
                         }
                     }
                 }
-            }
-            catch (SqlDeadlockException ex)
-            {
-                // don't let it crash, we'll just try to cleanup the next go-around
-                log.Error("Deadlock detected trying to deleted abandoned resource data.", ex);
+                catch (SqlDeadlockException ex)
+                {
+                    // don't let it crash, we'll just try to cleanup the next go-around
+                    log.Error("Deadlock detected trying to deleted abandoned resource data.", ex);
+                }
             }
         }
 

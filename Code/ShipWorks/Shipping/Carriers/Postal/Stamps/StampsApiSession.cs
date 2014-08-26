@@ -279,6 +279,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
+            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
+            {
+                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+            }
+
             try
             {
                 List<RateResult> rates = new List<RateResult>();
@@ -661,6 +666,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
             Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Stamps.RequireFullAddressValidation);
 
+            // If this is a return shipment, swap the to/from addresses
+            if (shipment.ReturnShipment)
+            {
+                Address tmpAddress = toAddress;
+                toAddress = fromAddress;
+                fromAddress = tmpAddress;
+            }
+
+            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(toAddress.Country) && PostalUtility.IsDomesticCountry(fromAddress.Country)))
+            {
+                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+            }
+
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
             PostageBalance postageBalance;
@@ -809,15 +827,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
             {
                 // For APO/FPO, the customs docs come in the next two images
-                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && shipment.ShipPostalCode.StartsWith("09"))
                 {
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
                     {
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(49, 48, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(49, 1078, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(49, 48, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(49, 1078, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1030, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1597, 1005));
+                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1030, 1597, 1005));
                     }
                     else
                     {
@@ -1082,19 +1100,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             RateV11 rate = new RateV11();
 
-            if (!string.IsNullOrEmpty(account.MailingPostalCode))
+            string fromZipCode = string.Empty;
+            string toZipCode = string.Empty;
+            string toCountry = string.Empty;
+
+            fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
+            toZipCode = shipment.ShipPostalCode;
+            toCountry = AdjustCountryCode(shipment.ShipCountryCode);
+
+            // Swap the to/from for return shipments.
+            if (shipment.ReturnShipment)
             {
-                // We have a mailing postal code defined, so we'll use this to get the rate
-                rate.FromZIPCode = account.MailingPostalCode;
+                rate.FromZIPCode = toZipCode;
+                rate.ToZIPCode = fromZipCode;
+                rate.ToCountry = AdjustCountryCode(shipment.OriginCountryCode);
             }
             else
             {
-                // There's no mailing postal code defined, so use the origin postal code
-                rate.FromZIPCode = shipment.OriginPostalCode;
+                rate.FromZIPCode = fromZipCode;
+                rate.ToZIPCode = toZipCode;
+                rate.ToCountry = toCountry;
             }
-
-            rate.ToZIPCode = shipment.ShipPostalCode;
-            rate.ToCountry = AdjustCountryCode(shipment.ShipCountryCode);
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
@@ -1146,6 +1172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             RateV11 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
+            rate.PrintLayout = "Normal";
 
             List<AddOnV4> addOns = new List<AddOnV4>();
 
@@ -1196,6 +1223,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
+            }
+
+            if (shipment.ReturnShipment)
+            {
+                // Swapping out Normal with Return indicates a return label
+                rate.PrintLayout = rate.PrintLayout.Replace("Normal", "Return");
             }
 
             return rate;

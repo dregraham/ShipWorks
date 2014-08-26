@@ -61,6 +61,9 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
+      <HintPath>..\..\Components\Apitron.PDF.Rasterizer.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\log4net.dll</HintPath>
@@ -136,6 +139,7 @@
     <Compile Include="IO\Hardware\Usb\NativeUsb.cs" />
     <Compile Include="IO\Text\Csv\CachedCsvReader.cs" />
     <Compile Include="IO\Text\Csv\CsvReader.cs" />
+    <Compile Include="IO\Text\Csv\DuplicateFieldAction.cs" />
     <Compile Include="IO\Text\Csv\Events\ParseErrorEventArgs.cs" />
     <Compile Include="IO\Text\Csv\Exceptions\MalformedCsvException.cs" />
     <Compile Include="IO\Text\Csv\Exceptions\MissingFieldCsvException.cs" />
@@ -310,6 +314,8 @@
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectDeletedException.cs" />
+    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Properties\Flags.Designer.cs">
       <DependentUpon>Flags.resx</DependentUpon>
       <AutoGen>True</AutoGen>

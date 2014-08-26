@@ -31,6 +31,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Initializes the control with settings from the given store type. This is to allow
+        /// the control to pull any store specific settings from the store type (i.e. the URL
+        /// for the help link).
+        /// </summary>
+        /// <param name="storeType">Type of the store.</param>
+        public void Initialize(GenericModuleStoreType storeType)
+        {
+            helpLink.Url = storeType.AccountSettingsHelpUrl;
+        }
+
+        /// <summary>
         /// Load store settings from the entity to the GUI
         /// </summary>
         public override void LoadStore(ShipWorks.Data.Model.EntityClasses.StoreEntity store)
@@ -45,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
             moduleUrl.Text = genericStore.ModuleUrl;
         }
-
+        
         /// <summary>
         /// Saves the user selected settings back to the store entity;
         /// </summary>

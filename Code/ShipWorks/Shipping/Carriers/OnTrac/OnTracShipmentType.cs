@@ -93,6 +93,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.OnTrac == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             return new List<IPackageAdapter>()
             {
                 new OnTracPackageAdapter(shipment)
@@ -491,7 +496,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             else
             {
                 // shipment not processed
-                if (originID == (int)ShipmentOriginSource.Account)
+                if (originID == (int)ShipmentOriginSource.Account && shipment.OnTrac != null)
                 {
                     OnTracAccountEntity account = OnTracAccountManager.GetAccount(shipment.OnTrac.OnTracAccountID)
                         ?? OnTracAccountManager.Accounts.FirstOrDefault();

@@ -40,7 +40,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Load the shipments into the controls
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
-        {
+        {   
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipments == null)
+            {
+                throw new ArgumentNullException("shipments");
+            }
+
             base.LoadShipments(shipments, enableEditing);
 
             contentType.SelectedIndexChanged -= this.OnChangeContentType;
@@ -49,6 +56,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
+                    if (shipment.Postal == null)
+                    {
+                        ShippingManager.EnsureShipmentLoaded(shipment);
+                    }
+
+                    if (shipment.Postal == null)
+                    {
+                        throw new NullReferenceException("shipment.Postal cannot be null.");
+                    }
+
                     contentType.ApplyMultiValue((PostalCustomsContentType) shipment.Postal.CustomsContentType);
                     otherDetail.ApplyMultiText(shipment.Postal.CustomsContentDescription);
                 }

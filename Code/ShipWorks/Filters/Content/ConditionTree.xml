@@ -214,6 +214,7 @@
       <Condition identifier="BigCommerceOrderItem.EventName" />
       <Condition identifier="BuyDotComOrderItem.ListingID" />
       <Condition identifier="ChannelAdvisorOrderItem.SiteName" />
+      <Condition identifier="ChannelAdvisorOrderItem.MarketplaceStoreName" />
       <Condition identifier="ChannelAdvisorOrderItem.BuyerID" />
       <Condition identifier="ChannelAdvisorOrderItem.SalesSourceID" />
       <Condition identifier="ChannelAdvisorOrderItem.DistributionCenter" />

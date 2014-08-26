@@ -2692,6 +2692,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MarketplaceName);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.MarketplaceStoreName field instance</summary>
+		public static EntityField2 MarketplaceStoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.MarketplaceBuyerID field instance</summary>
 		public static EntityField2 MarketplaceBuyerID
 		{
@@ -2892,15 +2897,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AccountKey);}
 		}
-		/// <summary>Creates a new ChannelAdvisorStoreEntity.DownloadCriteria field instance</summary>
-		public static EntityField2 DownloadCriteria
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadCriteria);}
-		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.ProfileID field instance</summary>
 		public static EntityField2 ProfileID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ProfileID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.AttributesToDownload field instance</summary>
+		public static EntityField2 AttributesToDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AttributesToDownload);}
 		}
 	}
 
@@ -3731,6 +3736,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomerUpdateShipping
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateShipping);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerUpdateModifiedBilling field instance</summary>
+		public static EntityField2 CustomerUpdateModifiedBilling
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateModifiedBilling);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.CustomerUpdateModifiedShipping field instance</summary>
+		public static EntityField2 CustomerUpdateModifiedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.CustomerUpdateModifiedShipping);}
 		}
 		/// <summary>Creates a new ConfigurationEntity.AuditNewOrders field instance</summary>
 		public static EntityField2 AuditNewOrders
@@ -6767,6 +6782,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferencePO);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReferenceShipmentIntegrity);}
+		}
 		/// <summary>Creates a new FedExProfileEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
 		{
@@ -7081,6 +7101,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferencePO
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferencePO);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReferenceShipmentIntegrity field instance</summary>
+		public static EntityField2 ReferenceShipmentIntegrity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReferenceShipmentIntegrity);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.PayorTransportType field instance</summary>
 		public static EntityField2 PayorTransportType
@@ -7427,6 +7452,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoice);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceFileElectronically field instance</summary>
+		public static EntityField2 CommercialInvoiceFileElectronically
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.CommercialInvoiceFileElectronically);}
+		}
 		/// <summary>Creates a new FedExShipmentEntity.CommercialInvoiceTermsOfSale field instance</summary>
 		public static EntityField2 CommercialInvoiceTermsOfSale
 		{
@@ -7556,6 +7586,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SmartPostHubID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostHubID);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.SmartPostUspsApplicationId field instance</summary>
+		public static EntityField2 SmartPostUspsApplicationId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.SmartPostUspsApplicationId);}
 		}
 		/// <summary>Creates a new FedExShipmentEntity.DropoffType field instance</summary>
 		public static EntityField2 DropoffType

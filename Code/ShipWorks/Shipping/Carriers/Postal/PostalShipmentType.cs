@@ -46,6 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.Postal == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             return new List<IPackageAdapter>()
             {
                 new PostalPackageAdapter(shipment)
@@ -168,30 +173,76 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // it may have effected the shipping services available (i.e. the eBay GSP program)
             ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipment==null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            if (shipment.Postal == null)
+            {
+                throw new NullReferenceException("shipment.Postal cannot be null.");
+            }
+            
+            if (overriddenShipment == null)
+            {
+                throw new NullReferenceException("overriddenShipment cannot be null.");
+            }
+
+            if (overriddenShipment.Postal == null)
+            {
+                throw new NullReferenceException("overriddenShipment.Postal cannot be null.");
+            }
+
             PostalServiceType serviceType = (PostalServiceType) overriddenShipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) overriddenShipment.Postal.PackagingType;
             string countryCode = overriddenShipment.ShipCountryCode;
 
             // If its domestic ensure a domestic service - use the overridden shipment for comparing the ShipToCountry
-            if (PostalUtility.IsDomesticCountry(countryCode) &&
-                !PostalUtility.GetDomesticServices(ShipmentTypeCode).Contains(serviceType))
+            if (PostalUtility.IsDomesticCountry(countryCode))
             {
-                serviceType = PostalServiceType.PriorityMail;
-                shipment.Postal.Service = (int) serviceType;
+                List<PostalServiceType> domesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
+
+                if (domesticServices == null)
+                {
+                    throw new NullReferenceException("domesticServices was null.");
+                }
+
+                if (!domesticServices.Contains(serviceType))
+                {
+                    serviceType = PostalServiceType.PriorityMail;
+                    shipment.Postal.Service = (int)serviceType;
+                }
+            }
+            else
+            {
+                // If its international ensure an internatinoal service - use the overridden shipment for comparing the ShipToCountry
+
+                List<PostalServiceType> internationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
+
+                if (internationalServices == null)
+                {
+                    throw new NullReferenceException("internationalServices was null.");
+                }
+
+                if (!internationalServices.Contains(serviceType))
+                {
+                    serviceType = PostalServiceType.InternationalPriority;
+                    shipment.Postal.Service = (int)serviceType;
+                }
             }
 
-            // If its international ensure an internatinoal service - use the overridden shipment for comparing the ShipToCountry
-            if (!PostalUtility.IsDomesticCountry(countryCode) &&
-                !PostalUtility.GetInternationalServices(ShipmentTypeCode).Contains(serviceType))
+            List<PostalConfirmationType> availableConfirmationTypes = GetAvailableConfirmationTypes(countryCode, serviceType, packagingType);
+            if (availableConfirmationTypes == null)
             {
-                serviceType = PostalServiceType.InternationalPriority;
-                shipment.Postal.Service = (int) serviceType;
+                    throw new NullReferenceException("availableConfirmationTypes was null.");
             }
 
             // Make sure a valid confirmation is selected
-            if (!GetAvailableConfirmationTypes(countryCode, serviceType, packagingType).Contains((PostalConfirmationType) shipment.Postal.Confirmation))
+            if (!availableConfirmationTypes.Contains((PostalConfirmationType) shipment.Postal.Confirmation))
             {
-                shipment.Postal.Confirmation = (int) GetAvailableConfirmationTypes(countryCode, serviceType, packagingType).First();
+                shipment.Postal.Confirmation = (int)availableConfirmationTypes.First();
             }
 
             // Update the dimensions info

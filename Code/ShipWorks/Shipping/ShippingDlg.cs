@@ -1162,6 +1162,13 @@ namespace ShipWorks.Shipping
                     {
                         // Refresh the shipment control, so any status changes are reflected
                         shipmentControl.RefreshAndResort();
+                        
+                        if (CustomsControl != null)
+                        {
+                            // Refresh the items in the customs control after synching with ShipSense. This
+                            // retains any customs items that were selected prior to the sync.
+                            CustomsControl.RefreshItems();
+                        }
                     }
                 }
             }

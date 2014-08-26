@@ -85,9 +85,18 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Load the given shipments customs information into the control
+        /// Load the given shipments customs information into the control and resets the selection
+        /// to the first item in the list (if there are any).
         /// </summary>
         public virtual void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
+        {
+            LoadShipments(shipments, enableEditing, true);
+        }
+
+        /// <summary>
+        /// Load the given shipments customs information into the control
+        /// </summary>
+        private void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool resetSelection)
         {
             SuspendShipSenseFieldChangeEvent();
 
@@ -213,7 +222,10 @@ namespace ShipWorks.Shipping.Editing
 
             if (sandGrid.Rows.Count > 0)
             {
-                sandGrid.Rows[0].Selected = true;
+                if (resetSelection)
+                {
+                    sandGrid.Rows[0].Selected = true;
+                }
             }
             else
             {
@@ -221,6 +233,33 @@ namespace ShipWorks.Shipping.Editing
             }
 
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Refreshes the grid contents using the shipments already loaded in the control. Any items
+        /// that were previously selected are retained.
+        /// </summary>
+        public void RefreshItems()
+        {
+            // Helps to retain selections when a shipment is synched with ShipSense; this retains
+            // any rows that were selected prior to the sync.
+
+            // Make note of any rows that are selected in the grid, so we can re-select them
+            // after loading the customs items
+            List<int> selectedIndexesInGrid = selectedRows.Select(r => r.IndexInGrid).ToList();
+            LoadShipments(loadedShipments, loadedShipments.All(s => !s.Processed), false);
+
+            // Select the rows that were originally selected. Even though the rows should not have
+            // changed, we got an IndexOutOfRangeException after this was released. So we'll ensure
+            // that the selected index still exists before trying to select it.
+            selectedIndexesInGrid.ForEach(i => 
+            {
+                if (sandGrid.Rows.Count > i)
+                {
+                    selectedRows.Add(sandGrid.Rows[i]);
+                    sandGrid.Rows[i].Selected = true;   
+                }
+            });
         }
 
         /// <summary>

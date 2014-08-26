@@ -7,16 +7,19 @@ using Divelements.SandGrid.Rendering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.UI.Controls.SandGrid;
+using log4net;
 
 namespace ShipWorks.Filters.Controls
 {
     /// <summary>
     /// Customized grid row for use in the FilterTree
     /// </summary>
-    class FilterTreeGridRow : SandGridTreeRow
+    public class FilterTreeGridRow : SandGridTreeRow
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
+
         FilterNodeEntity filterNode;
-        FilterCount filterCount;
+        FilterCount filterCount;        
 
         /// <summary>
         /// Constructor
@@ -64,6 +67,12 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Gets or sets whether the filter for the row has been flagged as a slow running
+        /// filter.
+        /// </summary>
+        private bool IsFlaggedAsSlowRunning { get; set; }
+
+        /// <summary>
         /// Indicates if this row is a valid drop target from the sourceRow, for the given state
         /// </summary>
         public override bool IsValidDrop(SandGridDragDropRow sourceRow, DropTargetState state)
@@ -87,6 +96,73 @@ namespace ShipWorks.Filters.Controls
             {
                 filterCount = count;
                 RedrawNeeded();
+            }
+                        
+            UpdateLayoutForSpeed();
+        }
+
+        /// <summary>
+        /// Inspects the cost of the filter to determine if the row should be flagged as slow
+        /// running filter by adjusting the image and filter name if it took more than 10,000
+        /// milliseconds to calculate the filter; otherwise the standard filter image and filter 
+        /// name is used.
+        /// </summary>
+        private void UpdateLayoutForSpeed()
+        {
+            // We want to flag the filter if it takes more than 10 seconds to complete
+            const int WarningThresholdInMilliseconds = 10000;
+            bool statusChangeWrittenToLog = false;
+
+            foreach (GridCell cell in Cells)
+            {
+                // A null reference error was being thrown.  Discoverred by Crash Reports.
+                // Let's figure out what is null....
+                if (FilterNode == null)
+                {
+                    throw new NullReferenceException("FilterNode cannot be null.");
+                }
+
+                if (FilterCount == null)
+                {
+                    throw new NullReferenceException("FilterCount cannot be null.");
+                }
+
+                if (FilterNode.Filter == null)
+                {
+                    throw new NullReferenceException(("FilterNode.Filter cannot be null."));
+                }
+
+                // Make a note whether the filter was already flagged as a slow running filter
+                bool previousFlag = IsFlaggedAsSlowRunning;
+
+                if (FilterCount.CostInMilliseconds > WarningThresholdInMilliseconds)
+                {
+                    IsFlaggedAsSlowRunning = true;
+                    cell.Image = Properties.Resources.funnel_warning;
+                    cell.Text = FilterNode.Filter.Name + " (slow)";
+
+                    if (!previousFlag && !statusChangeWrittenToLog)
+                    {
+                        // Write an entry to the log when a filter goes from normal to slow
+                        log.InfoFormat("The {0} filter took {1} ms to complete and has been flagged as a slow running filter.", FilterNode.Filter.Name, FilterCount.CostInMilliseconds);
+                        statusChangeWrittenToLog = true;
+                    }
+                }
+                else
+                {
+                    // The filter does not exceed the warning threshold, so set the 
+                    // text and image to normal
+                    IsFlaggedAsSlowRunning = false;
+                    cell.Image = FilterHelper.GetFilterImage(FilterNode, false);
+                    cell.Text = FilterNode.Filter.Name;
+
+                    if (previousFlag && !statusChangeWrittenToLog)
+                    {
+                        // Write an entry to the log when a filter goes from slow to normal
+                        log.InfoFormat("The {0} filter took {1} ms to complete and the slow running filter flag has been removed.", FilterNode.Filter.Name, FilterCount.CostInMilliseconds);
+                        statusChangeWrittenToLog = true;
+                    }
+                }
             }
         }
     }

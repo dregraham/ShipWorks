@@ -4,11 +4,13 @@ using System.Text;
 using System.Web.UI.WebControls.WebParts;
 using Microsoft.Web.Services3.Addressing;
 using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
 using log4net;
@@ -49,6 +51,7 @@ namespace ShipWorks.Stores.Communication
         int quantitySaved = 0;
         int quantityNew = 0;
         private AddressAdapter originalShippingAddress;
+        private AddressAdapter originalBillingAddress;
 
         /// <summary>
         /// Constructor
@@ -299,6 +302,9 @@ namespace ShipWorks.Stores.Communication
 
                 originalShippingAddress = new AddressAdapter();
                 AddressAdapter.Copy(order, "Ship", originalShippingAddress);
+
+                originalBillingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", originalBillingAddress);
 
                 return order;
             }
@@ -610,12 +616,31 @@ namespace ShipWorks.Stores.Communication
                     if (!order.IsNew)
                     {
                         AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
-                        if (originalShippingAddress != newShippingAddress)
+                        bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
+                        if (shippingAddressChanged)
                         {
                             SetAddressValidationStatus(order);
                             adapter.SaveAndRefetch(order);
 
                             ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
+                        }
+
+                        // Update the customer's addresses if necessary
+                        AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
+                        bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+
+                        // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
+                        if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
+                            || (shippingAddressChanged && config.CustomerUpdateModifiedShipping != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy))
+                        {
+                            CustomerEntity existingCustomer = DataProvider.GetEntity(order.CustomerID) as CustomerEntity;
+                            if (existingCustomer != null)
+                            {
+                                UpdateCustomerAddressIfNecessary(billingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedBilling, order, existingCustomer, originalBillingAddress, "Bill");
+                                UpdateCustomerAddressIfNecessary(shippingAddressChanged, (ModifiedOrderCustomerUpdateBehavior)config.CustomerUpdateModifiedShipping, order, existingCustomer, originalShippingAddress, "Ship");
+
+                                adapter.SaveEntity(existingCustomer);
+                            }
                         }
                     }
                     else
@@ -624,7 +649,7 @@ namespace ShipWorks.Stores.Communication
                         adapter.SaveAndRefetch(order);
                     }
                     
-                    log.InfoFormat("{0} is {1}new", orderIdentifier, alreadyDownloaded ? "not " : "");
+                    log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
                     AddToDownloadHistory(order, orderIdentifier, alreadyDownloaded, adapter);
@@ -666,6 +691,59 @@ namespace ShipWorks.Stores.Communication
                 order.ShipAddressValidationSuggestionCount = 0;
                 order.ShipAddressValidationError = string.Empty;
             }
+        }
+        /// <summary>
+        /// Update's the customer's address from an order, if it's necessary
+        /// </summary>
+        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, AddressAdapter originalAddress, string prefix)
+        {
+            if (!shouldUpdate || IsAddressEmpty(order, prefix))
+            {
+                return;
+            }
+
+            bool shouldCopy;
+            switch (behavior)
+            {
+                case ModifiedOrderCustomerUpdateBehavior.NeverCopy:
+                    shouldCopy = false;
+                    break;
+                case ModifiedOrderCustomerUpdateBehavior.CopyIfBlankOrMatching:
+                    if (IsAddressEmpty(existingCustomer,prefix))
+                    {
+                        shouldCopy = true;
+                    } 
+                    else if (originalAddress==null || originalAddress.Equals(new PersonAdapter(existingCustomer, prefix)))
+                    {
+                        shouldCopy = true;
+                    }
+                    else
+                    {
+                        shouldCopy = false;
+                    }
+                    break;
+                case ModifiedOrderCustomerUpdateBehavior.AlwaysCopy:
+                    shouldCopy = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("behavior");
+            }
+            
+            if (shouldCopy)
+            {
+                PersonAdapter.Copy(order, existingCustomer, prefix);
+            }
+        }
+
+        /// <summary>
+        /// Is the entity's address considered empty?
+        /// </summary>
+        private static bool IsAddressEmpty(EntityBase2 entity, string prefix)
+        {
+            PersonAdapter personAdapter = new PersonAdapter(entity, prefix);
+
+            return string.IsNullOrEmpty(personAdapter.City) &&
+                   string.IsNullOrEmpty(personAdapter.PostalCode);
         }
 
         /// <summary>

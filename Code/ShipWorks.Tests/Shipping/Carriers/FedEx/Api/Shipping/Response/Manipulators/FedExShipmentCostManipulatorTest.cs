@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         public void Manipulate_FirstRateCostAddedToShipment_ActualRateTypeDoesNotMatchIncludedShipRateDetail()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
-            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
+            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
 
             testObject.Manipulate(fedExShipResponse);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         [TestMethod]
         public void Manipulate_ShippingCostLoggedAsTotalNetFedExCharge_OriginIsCanada()
         {
-            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
+            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
 
             fedExShipResponse.Shipment.OriginCountryCode = "CA";
 

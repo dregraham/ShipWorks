@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 
 namespace ShipWorks.Email
 {
@@ -12,17 +13,17 @@ namespace ShipWorks.Email
     {
         public EmailThrottleException()
         {
-
+            ErrorNumber = EmailExceptionErrorNumber.MaxEmailsPerHourReached;
         }
 
         public EmailThrottleException(string message)
-            : base(message)
+            : base(message, EmailExceptionErrorNumber.MaxEmailsPerHourReached)
         {
 
         }
 
         public EmailThrottleException(string message, Exception inner)
-            : base(message, inner)
+            : base(message, inner, EmailExceptionErrorNumber.MaxEmailsPerHourReached)
         {
 
         }

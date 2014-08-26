@@ -53,6 +53,8 @@ namespace ShipWorks.Shipping.Insurance
             bool allOnTrac = true;
             bool allEndicia = true;
             bool alliParcel = true;
+
+            bool isMultiPackage = false;
             
             InsuranceProvider? insuranceProvider = null;
 
@@ -100,6 +102,8 @@ namespace ShipWorks.Shipping.Insurance
 
                     useInsurance.ApplyMultiCheck(choice.Insured);
                     insuredValue.ApplyMultiAmount(choice.InsuranceValue);
+
+                    isMultiPackage = isMultiPackage || ShipmentTypeManager.GetType(choice.Shipment).GetPackageAdapters(choice.Shipment).Count() > 1;
                 }
             }
 
@@ -119,7 +123,7 @@ namespace ShipWorks.Shipping.Insurance
 
                 if (insuranceProvider == InsuranceProvider.Carrier)
                 {
-                    if ((allUps || allFedEx || allOnTrac || alliParcel))
+                    if (allUps || allFedEx || allOnTrac || alliParcel)
                     {
                         //if insurance provider is not null, loadedInsurance will always have at least one value.
 						string carrierName = ShippingManager.GetCarrierName((ShipmentTypeCode) loadedInsurance.First().Shipment.ShipmentType);
@@ -136,7 +140,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             // Update the insurance cost calculation if there's only one selected
-            if (loadedInsurance.Count == 1)
+            if (loadedInsurance.Count == 1 && !isMultiPackage)
             {
                 UpdateCostDisplay(loadedInsurance[0].Shipment, loadedInsurance[0].InsuranceValue);
             }

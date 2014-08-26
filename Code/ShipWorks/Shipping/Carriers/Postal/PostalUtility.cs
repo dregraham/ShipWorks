@@ -196,6 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         services.Add(PostalServiceType.ConsolidatorInternational);
                         services.Add(PostalServiceType.ConsolidatorIpa);
                         services.Add(PostalServiceType.ConsolidatorIsal);
+                        services.Add(PostalServiceType.CommercialePacket);
                     }
                 }
 

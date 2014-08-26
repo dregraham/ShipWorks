@@ -340,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers
         /// Makes a request to Tango to obtain the account credentials that should be
         /// used for requesting counter rates in a provider's production environment.
         /// </summary>
-        private void LoadTangoProductionCredentials()
+        private static void LoadTangoProductionCredentials()
         {
             if (!productionCredentials.Any())
             {
@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.Carriers
         /// Makes a request to Tango to obtain the certificate verification data that should be
         /// used for requesting counter rates in a provider's production environment.
         /// </summary>
-        private void LoadTangoCertificateVerificationData()
+        private static void LoadTangoCertificateVerificationData()
         {
             if (!productionCertVerificationData.Any())
             {

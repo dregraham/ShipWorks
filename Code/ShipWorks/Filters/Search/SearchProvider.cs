@@ -505,6 +505,9 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         private void CreateSearchResultsNode()
         {
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Create an initial empty count
@@ -531,8 +534,14 @@ namespace ShipWorks.Filters.Search
                 //
                 // One of the biggies in doing this though is that we make sure not to do anything that would edit the properties
                 // of the placeholder.
-                // 
-                searchNode.FilterSequence = SearchManager.GetPlaceholder(filterTarget).FilterSequence;
+
+                FilterNodeEntity placeholder = SearchManager.GetPlaceholder(filterTarget);
+                if (placeholder == null)
+                {
+                    throw new NullReferenceException("placeholder cannot be null.");
+                }
+
+                searchNode.FilterSequence = placeholder.FilterSequence;
 
                 // Save the whole chain
                 adapter.SaveAndRefetch(searchNode, true);
@@ -547,7 +556,12 @@ namespace ShipWorks.Filters.Search
                 adapter.SaveEntity(search);
 
                 // Save the ID
-                searchID = (long) search.Fields[SearchFields.SearchID.FieldIndex].CurrentValue;
+                IEntityField2 field = search.Fields[SearchFields.SearchID.FieldIndex];
+                if (field == null)
+                {
+                    throw new NullReferenceException("field cannot be null.");
+                }
+                searchID = (long) field.CurrentValue;
 
                 adapter.Commit();
             }
@@ -620,8 +634,15 @@ namespace ShipWorks.Filters.Search
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Delete our search filter node
-                adapter.DeleteEntity(new FilterNodeEntity(searchNode.FilterNodeID) { IgnoreConcurrency = true });
-
+                try
+                {
+                    adapter.DeleteEntity(new FilterNodeEntity(searchNode.FilterNodeID) { IgnoreConcurrency = true });
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    log.Warn(string.Format("FilterNode {0} looks like it was already deleted", searchNode.FilterNodeID), ex);
+                }
+                
                 // Delete our search database entry
                 adapter.DeleteEntitiesDirectly(typeof(SearchEntity), new RelationPredicateBucket(SearchFields.FilterNodeID == searchNode.FilterNodeID));
 

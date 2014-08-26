@@ -43,6 +43,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
         {
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipments == null)
+            {
+                throw new ArgumentNullException("shipments");
+            }
+
             base.LoadShipments(shipments, enableEditing);
 
             documentsOnly.CheckedChanged -= new EventHandler(OnChangeDocumentsOnly);
@@ -54,6 +61,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
+                    if (shipment.Ups == null)
+                    {
+                        throw new NullReferenceException("shipment.Ups cannot be null.");
+                    }
+
                     documentsOnly.ApplyMultiCheck(shipment.Ups.CustomsDocumentsOnly);
                     extraDocuments.ApplyMultiCheck(shipment.Ups.PaperlessAdditionalDocumentation);
                     descriptionOfGoods.ApplyMultiText(shipment.Ups.CustomsDescription);

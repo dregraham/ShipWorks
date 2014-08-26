@@ -194,6 +194,111 @@ namespace ShipWorks.Stores
         [Description("Sears")]
         [StoreTypeIdentity("SEARS", "SRS")]
         [StoreTypeIcon("sears")]
-        Sears = 36
+        Sears = 36,
+
+        [Description("SolidCommerce")]
+        [StoreTypeIdentity("SOLIDCOMMERCE", "SDC")]
+        [StoreTypeIcon("solidcommerce")]
+        SolidCommerce = 37,
+
+		[Description("Brightpearl")]
+        [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
+        [StoreTypeIcon("brightpearl")]
+        Brightpearl = 38,
+		
+		[Description("OrderDesk")]
+        [StoreTypeIdentity("ORDERDESK", "ORD")]
+        [StoreTypeIcon("orderdesk")]
+        OrderDesk = 39,
+
+        [Description("Cart66 Lite")]
+        [StoreTypeIdentity("CART66LITE", "C6L")]
+        [StoreTypeIcon("cart66")]
+        Cart66Lite = 40,
+
+        [Description("Cart66 Pro")]
+        [StoreTypeIdentity("CART66PRO", "C6P")]
+        [StoreTypeIcon("cart66")]
+        Cart66Pro = 41,
+
+        [Description("Shopp")]
+        [StoreTypeIdentity("SHOPP", "SPP")]
+        [StoreTypeIcon("shopp")]
+        Shopp = 42,
+
+        [Description("Shopperpress")]
+        [StoreTypeIdentity("SHOPPERPRESS", "SHP")]
+        [StoreTypeIcon("shopperpress")]
+        Shopperpress = 43,
+
+        [Description("WP eCommerce")]
+        [StoreTypeIdentity("WPECOMMERCE", "WPE")]
+        [StoreTypeIcon("wpecommerce")]
+        WPeCommerce = 44,
+
+        [Description("Jigoshop")]
+        [StoreTypeIdentity("JIGOSHOP", "JIG")]
+        [StoreTypeIcon("jigoshop")]
+        Jigoshop = 45,
+
+        [Description("WooCommerce")]
+        [StoreTypeIdentity("WOOCOMMERCE", "WOO")]
+        [StoreTypeIcon("woocommerce")]
+        WooCommerce = 46,
+
+        [Description("ChannelSale")]
+        [StoreTypeIdentity("CHANNELSALE", "CHS")]
+        [StoreTypeIcon("channelsale")]
+        ChannelSale = 47,
+
+		[Description("Fortune3")]
+        [StoreTypeIdentity("FORTUNE3", "FT3")]
+        [StoreTypeIcon("fortune3")]
+        Fortune3 = 48,
+		
+        [Description("LiveSite")]
+        [StoreTypeIdentity("LIVESITE", "LST")]
+        [StoreTypeIcon("livesite")]
+        LiveSite = 49,
+		
+		[Description("SureDone")]
+        [StoreTypeIdentity("SUREDONE", "SDN")]
+        [StoreTypeIcon("suredone")]
+        SureDone = 50,
+
+        [Description("Zenventory")]
+        [StoreTypeIdentity("ZENVENTORY", "ZVN")]
+        [StoreTypeIcon("zenventory")]
+        Zenventory = 51,
+
+        [Description("nopCommerce")]
+        [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
+        [StoreTypeIcon("nopcommerce")]
+        nopCommerce = 52,
+		
+        [Description("Lime Light CRM")]
+        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
+        [StoreTypeIcon("limelightcrm")]
+        LimeLightCRM = 53,
+
+        [Description("OpenCart")]
+        [StoreTypeIdentity("OPENCART", "OCT")]
+        [StoreTypeIcon("opencart")]
+        OpenCart = 54,
+
+        [Description("SellerExpress")]
+        [StoreTypeIdentity("SELLEREXPRESS", "SEE")]
+        [StoreTypeIcon("sellerexpress")]
+        SellerExpress = 55,
+		
+        [Description("Powersport Support")]
+        [StoreTypeIdentity("POWERSPORTSSUPPORT", "PSS")]
+        [StoreTypeIcon("powersportssupport")]
+        PowersportsSupport = 56,
+
+        [Description("Cloud Conversion")]
+        [StoreTypeIdentity("CLOUDCONVERSION", "CLC")]
+        [StoreTypeIcon("cloudconversion")]
+        CloudConversion = 57
     }
 }

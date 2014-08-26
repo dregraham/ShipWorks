@@ -10,7 +10,7 @@ namespace ShipWorks.Stores
     /// Manager of all the StoreTypes available in ShipWorks
     /// </summary>
     public static class StoreTypeManager
-    {        
+    {
         /// <summary>
         /// Returns all store types in ShipWorks
         /// </summary>
@@ -28,6 +28,13 @@ namespace ShipWorks.Stores
                         continue;
                     }
 
+                    if (IsStoreTypeDisabled(typeCode))
+                    {
+                        // Temporary: don't show in ShipWorks for the new stores until marketing materials 
+                        // and other ancillary materials are ready to go
+                        continue;
+                    }
+                    
                     StoreType storeType = GetType(typeCode);
                     storeTypes.Add(storeType);
                 }
@@ -106,10 +113,46 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.NeweggMarketplace: return new Platforms.Newegg.NeweggStoreType(store);             
                 case StoreTypeCode.BuyDotCom: return new Platforms.BuyDotCom.BuyDotComStoreType(store);
                 case StoreTypeCode.Sears: return new Platforms.Sears.SearsStoreType(store);
+                case StoreTypeCode.SolidCommerce: return new Platforms.SolidCommerce.SolidCommerceStoreType(store);
+                case StoreTypeCode.Brightpearl: return new Platforms.Brightpearl.BrightpearlStoreType(store);
+                case StoreTypeCode.OrderDesk: return new Platforms.OrderDesk.OrderDeskStoreType(store);
+                case StoreTypeCode.WooCommerce: return new Platforms.WooCommerce.WooCommerceStoreType(store);
+                case StoreTypeCode.Cart66Lite: return new Platforms.Cart66.Cart66LiteStoreType(store);
+                case StoreTypeCode.Cart66Pro: return new Platforms.Cart66.Cart66ProStoreType(store);
+                case StoreTypeCode.Shopp: return new Platforms.Shopp.ShoppStoreType(store);
+                case StoreTypeCode.Shopperpress: return new Platforms.Shopperpress.ShopperpressStoreType(store);
+                case StoreTypeCode.WPeCommerce: return new Platforms.WPeCommerce.WPeCommerceStoreType(store);
+                case StoreTypeCode.Jigoshop: return new Platforms.Jigoshop.JigoshopStoreType(store);
+                case StoreTypeCode.ChannelSale: return new Platforms.ChannelSale.ChannelSaleStoreType(store);
+                case StoreTypeCode.LiveSite: return new Platforms.LiveSite.LiveSiteStoreType(store);
+				case StoreTypeCode.SureDone: return new Platforms.SureDone.SureDoneStoreType(store);
+                case StoreTypeCode.Zenventory: return new Platforms.Zenventory.ZenventoryStoreType(store);
+                case StoreTypeCode.Fortune3: return new Platforms.Fortune3.Fortune3StoreType(store);
+                case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
+				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
+                case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
+                case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
+                case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
+                case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
         }
 
+        /// <summary>
+        /// Determines whether the store type is disabled. This is only temporary, so we can continue
+        /// to release ShipWorks until supporting materials for the new store types are ready.
+        /// </summary>
+        private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
+        {
+            // Don't show in ShipWorks until marketing materials and other ancillary 
+            // materials are ready to go
+            List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
+            {
+                StoreTypeCode.nopCommerce
+            };
+
+            return disabledTypes.Contains(typeCode);
+        }
     }
 }

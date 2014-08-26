@@ -1081,7 +1081,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         // As of 01/28/2013 Endicia is not returning Parcel Select in the GetAllRates call - they are returning Standard Post instead.  If we can't find Parcel Select, try
                         // to get those rates manually.  In the future if Endicia updates\fixes it we may be able to remove this.
-                        if (!rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
+                        if (account.EndiciaReseller == (int)EndiciaReseller.None &&
+                            !rates.Any(r => r.Selectable && ((PostalRateSelection) r.OriginalTag).ServiceType == PostalServiceType.ParcelSelect))
                         {
                             try
                             {
@@ -1676,6 +1677,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             switch (mailClass)
             {
                 case "Express": return PostalServiceType.ExpressMail;
+                case "PriorityExpress": return PostalServiceType.ExpressMail;
                 case "First": return PostalServiceType.FirstClass;
                 case "LibraryMail": return PostalServiceType.LibraryMail;
                 case "MediaMail": return PostalServiceType.MediaMail;

@@ -69,7 +69,7 @@ namespace ShipWorks.Email
             // Has to be someone to send to
             if (to.Trim().Length == 0)
             {
-                throw new EmailException("A 'To' email address was not specified.");
+                throw new EmailException("A 'To' email address was not specified.", EmailExceptionErrorNumber.MissingToField);
             }
 
             // Validate the email addresses
@@ -84,14 +84,14 @@ namespace ShipWorks.Email
 
                     if (!EmailUtility.IsValidEmailAddress(address.Address))
                     {
-                        throw new EmailException(string.Format("The email address '{0}' is not valid.", recipient));
+                        throw new EmailException(string.Format("The email address '{0}' is not valid.", recipient), EmailExceptionErrorNumber.InvalidEmailAddress);
                     }
                 }
                 catch (MimeException ex)
                 {
                     log.Error(string.Format("Unable to part '{0}' into MailAddress", recipient), ex);
 
-                    throw new EmailException(string.Format("The email address '{0}' is not valid.", recipient), ex);
+                    throw new EmailException(string.Format("The email address '{0}' is not valid.", recipient), ex, EmailExceptionErrorNumber.InvalidEmailAddress);
                 }
             }
         }

@@ -876,6 +876,8 @@ namespace ShipWorks.Shipping.Editing
             {
                 AddShipments(createdShipments);
                 SelectShipments(createdShipments);
+
+                Resort();
             }
 
             // show any error messages

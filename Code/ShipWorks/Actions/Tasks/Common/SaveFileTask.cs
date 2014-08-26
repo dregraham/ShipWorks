@@ -34,11 +34,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         protected override void ProcessTemplateResults(TemplateEntity template, IList<TemplateResult> templateResults, ActionStepContext context)
         {
-            // Create the print job using the default settings from the template
-            SaveWriter writer = SaveWriter.Create(template, templateResults);
-
             try
             {
+                // Create the print job using the default settings from the template
+                SaveWriter writer = SaveWriter.Create(template, templateResults);
+
                 writer.PromptForFile += (object sender, SavePromptForFileEventArgs e) =>
                     {
                         throw new SaveException(string.Format("Template '{0}' is configured to prompt for filenames when saving, which isn't allowed for action tasks.", template.FullName));

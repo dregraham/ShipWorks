@@ -369,8 +369,8 @@ namespace ShipWorks.Templates.Saving
             // Strip all illegals from the name, and everything but the \ from the folder.  We do this because
             // after token processing you could have an item name like "Big Ball!@#$?" be the filename - and we don't
             // want it to just fail.
-            name = StripIllegalChars(name, SaveFileNamePart.Name);
-            folder = StripIllegalChars(folder, SaveFileNamePart.Folder);
+            name = PathUtility.CleanFileName(name);
+            folder = PathUtility.CleanPath(folder);
 
             // Add the extension if there is not one
             if (name.Length != 0 && !Path.HasExtension(name))
@@ -464,21 +464,6 @@ namespace ShipWorks.Templates.Saving
             while (savedFiles.Contains(nameToTry));
 
             return nameToTry;
-        }
-
-        /// <summary>
-        /// Strip characters that are illegal for the given part from the file name
-        /// </summary>
-        private string StripIllegalChars(string name, SaveFileNamePart part)
-        {
-            StringBuilder sb = new StringBuilder(name);
-
-            foreach (char c in (part == SaveFileNamePart.Name) ? Path.GetInvalidFileNameChars() : Path.GetInvalidPathChars())
-            {
-                sb.Replace(c, '_');
-            }
-
-            return sb.ToString();
         }
 
         /// <summary>

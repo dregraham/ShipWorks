@@ -45,8 +45,16 @@ namespace ShipWorks.ApplicationCore.Logging
         Newegg,
         BuyDotCom,
         Sears,
+        SolidCommerce,
         WebRequestTask,
-
+        Brightpearl,
+        OrderDeskCart,
+        LiveSite,
+        Zenventory,
+		Fortune3,
+        OpenCart,
+        CloudConversion,
+		
         [ApiPrivateLogSource]
         DialAZip,
 
@@ -84,6 +92,20 @@ namespace ShipWorks.ApplicationCore.Logging
         OnTrac,
 
         [ApiPrivateLogSource]
-        iParcel
+        iParcel,
+
+        WooCommerce,
+        Cart66Lite,
+        Cart66Pro,
+        Shopp,
+        Shopperpress,
+        WPeCommerce,
+        Jigoshop,
+        ChannelSale,
+        SureDone,
+        nopCommerce,
+        LimeLightCRM,
+        SellerExpress,
+        PowersportsSupport,
     }
 }

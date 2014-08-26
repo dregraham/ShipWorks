@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Utility
 {
@@ -45,7 +44,19 @@ namespace ShipWorks.Data.Utility
         {
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                long current = (long) SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)");
+                long current = 0;
+                object value = null;
+
+                SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(3, -5, "TimestapTracker.CheckForChange");
+                sqlAdapterRetry.ExecuteWithRetry(() => value = SqlCommandProvider.ExecuteScalar(con, "SELECT CAST(@@DBTS AS BIGINT)"));
+
+                // During a reconnect or after an upgrade, the timestamp is sometimes returned as null
+                // If that happens, we'll assume no changes for the moment and let the next run through
+                // of the heartbeat pick it up.
+                if (value is long)
+                {
+                    current = (long) value;
+                }
 
                 if (current > timestamp)
                 {

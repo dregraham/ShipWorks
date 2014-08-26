@@ -88,7 +88,16 @@ namespace ShipWorks.Stores.Management
             }
 
             // Set the text back
-            state.Text = stateProv;
+            if (string.IsNullOrEmpty(stateProv))
+            {
+                // If the text was empty, clear the selection or else the first item in the list will be selected by default.
+                // This was causing issues when stores sent an empty state, yet Alabama was selected by default
+                state.SelectedIndex = -1;
+            }
+            else
+            {
+                state.Text = stateProv;   
+            }
         }
     }
 }

@@ -185,6 +185,8 @@ namespace ShipWorks.Email.Outlook
                 email.BccList = bcc.Text;
                 email.Subject = subject.Text;
 
+                email.SendStatus = (int)EmailOutboundStatus.Ready;
+
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     EmailOutbox.UpdateMessage(email, htmlEditor.Html, null, adapter);

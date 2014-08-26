@@ -135,11 +135,13 @@ namespace ShipWorks.Stores.Content.Panels
             {
                 ratesControl.ChangeShipment(null);
 
-                // Don't auto create for a customer, only for an order
-                if (EntityUtility.GetEntityType(EntityID.Value) == EntityType.OrderEntity && ShippingSettings.Fetch().AutoCreateShipments)
-                {                    
-                    long orderID = EntityID.Value;
+                long orderID = EntityID.Value;
 
+                // Don't auto create for a customer, only for an order
+                if (EntityUtility.GetEntityType(orderID) == EntityType.OrderEntity && 
+                    ShippingSettings.Fetch().AutoCreateShipments &&
+                    UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, orderID))
+                {
                     // Don't do it if we are already in the middle of doing it
                     if (!autoCreatingShipments.Contains(orderID))
                     {
@@ -153,6 +155,14 @@ namespace ShipWorks.Stores.Content.Panels
                             .ContinueWith(
                                 ant =>
                                 {
+                                    // If there was a problem creating the shipment, just give up.  This is to handle a situation
+                                    // where ShipWorks would lock in an endless loop on an exception
+                                    if (ant.IsFaulted)
+                                    {
+                                        log.Warn("Could not create shipment", ant.Exception);
+                                        return;
+                                    }
+
                                     autoCreatingShipments.Remove(orderID);
 
                                     if (orderID == EntityID)

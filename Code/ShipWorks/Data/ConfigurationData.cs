@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -82,6 +83,9 @@ namespace ShipWorks.Data
 
             config.CustomerUpdateBilling = true;
             config.CustomerUpdateShipping = true;
+
+            config.CustomerUpdateModifiedBilling = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
+            config.CustomerUpdateModifiedShipping = (int)ModifiedOrderCustomerUpdateBehavior.NeverCopy;
 
             config.AuditNewOrders = false;
             config.AuditDeletedOrders = false;

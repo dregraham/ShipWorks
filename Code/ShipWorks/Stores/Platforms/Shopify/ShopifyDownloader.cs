@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Business;
@@ -9,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
@@ -304,7 +306,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 }
 
                 // Save the downloaded order
-                SaveDownloadedOrder(order);
+                SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ShopifyDownloader.LoadOrder");
+                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
             }
             catch (JsonException jsonEx)
             {

@@ -19,7 +19,7 @@
     |
      */
     define('REQUIRE_SECURE', true);
-    $moduleVersion = "3.2.1.0";
+    $moduleVersion = "3.9.3.0";
     $schemaVersion = "1.0.0";
 
     // include the Mage engine
@@ -399,16 +399,21 @@
         writeStartTag("Order");
 
     $incrementId = $order->getIncrementId();
-    $orderPostfix = '';
-	 $parts = preg_split('[\-]', $incrementId, 2);
-    
-	 if (count($parts) == 2)
-    {
-    	$incrementId = $parts[0];
-	$orderPostfix = $parts[1];
-    }
-
-        writeElement("OrderNumber", $incrementId);
+	$orderPrefix = '';
+	$orderPostfix = '';
+	$prefixParts = preg_split('/(?=\d)/', $incrementId, 2);
+ 
+	$orderPrefix = $prefixParts[0];
+ 
+	$postfixParts = preg_split('[\-]', $prefixParts[1], 2);
+ 
+	$incrementId = $postfixParts[0];
+ 
+	$orderPostfix = $postfixParts[1];
+ 
+    	writeElement("OrderNumberPrefix", $orderPrefix);
+    	writeElement("OrderNumber", $incrementId);
+    	writeElement("OrderNumberPostfix", $orderPostfix);
         writeElement("OrderDate", FormatDate($order->getCreatedAt()));
         writeElement("LastModified", FormatDate($order->getUpdatedAt()));
         writeElement("ShippingMethod", $order->getShippingDescription());

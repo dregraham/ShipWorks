@@ -1048,6 +1048,7 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
 [MarketplaceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MarketplaceStoreName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceBuyerID] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceSalesID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Classification] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1061,14 +1062,22 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvis
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] ADD CONSTRAINT [PK_ChannelAdvisorOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceBuyerID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceBuyerID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketPlaceName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceName])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceSalesID] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceSalesID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderItem_MarketplaceStoreName] ON [dbo].[ChannelAdvisorOrderItem] ([MarketplaceStoreName]) INCLUDE ([MarketplaceBuyerID], [MarketplaceSalesID])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorStore]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorStore]
 (
 [StoreID] [bigint] NOT NULL,
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadCriteria] [smallint] NOT NULL,
-[ProfileID] [int] NOT NULL
+[ProfileID] [int] NOT NULL,
+[AttributesToDownload] [xml] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1503,6 +1512,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [ReferenceCustomer] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ReferenceInvoice] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ReferencePO] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ReferenceShipmentIntegrity] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportType] [int] NOT NULL,
 [PayorTransportName] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1572,6 +1582,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CustomsOptionsType] [int] NOT NULL,
 [CustomsOptionsDesription] [nvarchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CommercialInvoice] [bit] NOT NULL,
+[CommercialInvoiceFileElectronically] [bit] NOT NULL,
 [CommercialInvoiceTermsOfSale] [int] NOT NULL,
 [CommercialInvoicePurpose] [int] NOT NULL,
 [CommercialInvoiceComments] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1598,6 +1609,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [SmartPostConfirmation] [bit] NOT NULL,
 [SmartPostCustomerManifest] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SmartPostHubID] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SmartPostUspsApplicationId] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DropoffType] [int] NOT NULL,
 [OriginResidentialDetermination] [int] NOT NULL,
 [FedExHoldAtLocationEnabled] [bit] NOT NULL,
@@ -1657,6 +1669,7 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReferenceCustomer] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferenceInvoice] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferencePO] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceShipmentIntegrity] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorTransportType] [int] NULL,
 [PayorTransportAccount] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [PayorDutiesType] [int] NULL,
@@ -1835,9 +1848,9 @@ CREATE TABLE [dbo].[GridColumnLayout]
 [DetailViewSettings] [xml] NULL
 )
 GO
-PRINT N'Creating primary key [PK_GridLayout] on [dbo].[GridColumnLayout]'
+PRINT N'Creating primary key PK_GridColumnLayout on [dbo].[GridColumnLayout]'
 GO
-ALTER TABLE [dbo].[GridColumnLayout] ADD CONSTRAINT [PK_GridLayout] PRIMARY KEY CLUSTERED  ([GridColumnLayoutID])
+ALTER TABLE [dbo].[GridColumnLayout] ADD CONSTRAINT [PK_GridColumnLayout] PRIMARY KEY CLUSTERED  ([GridColumnLayoutID])
 GO
 PRINT N'Creating [dbo].[FilterNodeContentDetail]'
 GO
@@ -1926,13 +1939,13 @@ CREATE TABLE [dbo].[GridColumnPosition]
 [Position] [int] NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_GridColumnLayout] on [dbo].[GridColumnPosition]'
+PRINT N'Creating primary key PK_GridColumnPosition on [dbo].[GridColumnPosition]'
 GO
-ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT [PK_GridColumnLayout] PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
+ALTER TABLE [dbo].[GridColumnPosition] ADD CONSTRAINT PK_GridColumnPosition PRIMARY KEY CLUSTERED  ([GridColumnPositionID])
 GO
 PRINT N'Creating index [IX_GridLayoutColumn] on [dbo].[GridColumnPosition]'
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_GridLayoutColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_GridColumnPosition_GridColumnLayoutIdColumn] ON [dbo].[GridColumnPosition] ([GridColumnLayoutID], [ColumnGuid])
 GO
 PRINT N'Creating [dbo].[InfopiaOrderItem]'
 GO
@@ -3693,6 +3706,8 @@ CREATE TABLE [dbo].[Configuration]
 [CustomerCompareAddress] [bit] NOT NULL,
 [CustomerUpdateBilling] [bit] NOT NULL,
 [CustomerUpdateShipping] [bit] NOT NULL,
+[CustomerUpdateModifiedBilling] [int] NOT NULL,
+[CustomerUpdateModifiedShipping] [int] NOT NULL,
 [AuditNewOrders] [bit] NOT NULL,
 [AuditDeletedOrders] [bit] NOT NULL
 )

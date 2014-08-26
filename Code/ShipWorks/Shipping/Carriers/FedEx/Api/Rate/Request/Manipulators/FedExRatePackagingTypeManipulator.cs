@@ -76,6 +76,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     return PackagingType.FEDEX_PAK;
                 case FedExPackagingType.Tube:
                     return PackagingType.FEDEX_TUBE;
+                case FedExPackagingType.SmallBox:
+                    return PackagingType.FEDEX_SMALL_BOX;
+                case FedExPackagingType.MediumBox:
+                    return PackagingType.FEDEX_MEDIUM_BOX;
+                case FedExPackagingType.LargeBox:
+                    return PackagingType.FEDEX_LARGE_BOX;
+                case FedExPackagingType.ExtraLargeBox:
+                    return PackagingType.FEDEX_EXTRA_LARGE_BOX;
             }
 
             throw new InvalidOperationException("Invalid FedEx Packaging Type");

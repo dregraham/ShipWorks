@@ -172,6 +172,20 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Open a connection using the current properties of the SqlSession, but with
+        /// a timeout based on timeoutInSeconds
+        /// </summary>
+        public SqlConnection OpenConnection(int timeoutInSeconds)
+        {
+            string sqlConnectionString = ConnectionStringWithTimeout(timeoutInSeconds);
+            SqlConnection con = new SqlConnection(sqlConnectionString);
+
+            ConnectionMonitor.OpenConnection(con);
+
+            return con;
+        }
+
+        /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
         public void TestConnection()
@@ -528,6 +542,36 @@ namespace ShipWorks.Data.Connection
             {
                 return SqlSession.Current != null;
             }
+        }
+
+        /// <summary>
+        /// Gets a connection string, based on specified ConnectionString, and modifies it to have a new
+        /// number of minutes for the timeout.
+        /// </summary>
+        private static string ConnectionStringWithTimeout(string sqlConnectionString, int timeoutSeconds)
+        {
+            if (!string.IsNullOrWhiteSpace(sqlConnectionString))
+            {
+                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder(SqlAdapter.Default.ConnectionString)
+                {
+                    ConnectTimeout = timeoutSeconds
+                };
+
+                sqlConnectionString = sqlConnectionStringBuilder.ConnectionString;
+            }
+
+            return sqlConnectionString;
+        }
+
+        /// <summary>
+        /// Gets a connection string, based on SqlSession.Current.Configuration.GetConnectionString(), and modifies it to have a new
+        /// number of minutes for the timeout.
+        /// </summary>
+        private static string ConnectionStringWithTimeout(int timeoutSeconds)
+        {
+            string sqlConnectionString = Current.Configuration.GetConnectionString();
+
+            return ConnectionStringWithTimeout(sqlConnectionString, timeoutSeconds);
         }
     }
 }

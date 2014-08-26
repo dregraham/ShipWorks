@@ -181,6 +181,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            if (shipment.Ups == null)
+            {
+                throw new NullReferenceException("shipment.Ups cannot be null.");
+            }
+
+            if (shipment.Order == null)
+            {
+                throw new NullReferenceException("shipment.Order cannot be null.");
+            }
+
+            if (shipment.Ups.Packages == null)
+            {
+                throw new NullReferenceException("shipment.Ups.Packages cannot be null.");
+            }
+
             shipment.Ups.CodEnabled = false;
             shipment.Ups.CodAmount = shipment.Order.OrderTotal;
             shipment.Ups.CodPaymentType = (int)UpsCodPaymentType.Cash;
@@ -239,12 +261,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="shipment">The shipment.</param>
         protected override void SyncNewShipmentWithShipSense(ShipSense.KnowledgebaseEntry knowledgebaseEntry, ShipmentEntity shipment)
         {
+            if (shipment.Ups.Packages.RemovedEntitiesTracker == null)
+            {
+                shipment.Ups.Packages.RemovedEntitiesTracker = new UpsPackageCollection();
+            }
+
             base.SyncNewShipmentWithShipSense(knowledgebaseEntry, shipment);
 
             while (shipment.Ups.Packages.Count < knowledgebaseEntry.Packages.Count())
             {
                 UpsPackageEntity package = UpsUtility.CreateDefaultPackage();
                 shipment.Ups.Packages.Add(package);
+            }
+
+            while (shipment.Ups.Packages.Count > knowledgebaseEntry.Packages.Count())
+            {
+                // Remove the last package until the packages counts match
+                shipment.Ups.Packages.RemoveAt(shipment.Ups.Packages.Count - 1);
             }
         }
 
@@ -520,12 +553,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
             if (shipment.Processed)
             {
                 return true;
             }
 
-            if (originID == (int)ShipmentOriginSource.Account)
+            // The Ups object may not yet be set if we are in the middle of creating a new shipment
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Ups != null)
             {
                 UpsAccountEntity account = UpsAccountManager.GetAccount(shipment.Ups.UpsAccountID);
                 if (account == null)
@@ -1074,6 +1113,24 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Ups != null && shipment.Ups.Packages != null)
+            {
+                shipment.Ups.UspsTrackingNumber = String.Empty;
+                shipment.Ups.Cn22Number = String.Empty;
+                foreach (UpsPackageEntity package in shipment.Ups.Packages)
+                {
+                    package.TrackingNumber = String.Empty;
+                    package.UspsTrackingNumber = String.Empty;
+                    EntityUtility.MarkAsNew(package);
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
@@ -1089,7 +1146,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         shipment.Ups.Fields[UpsShipmentFields.SaturdayDelivery.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex]
+                        shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex]
                     }
                 );
 
@@ -1203,6 +1261,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
+            if (shipment.Ups == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
             if (!shipment.Ups.Packages.Any())
             {
                 throw new UpsException("There must be at least one package to create the UPS package adapter.");
@@ -1216,6 +1279,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return adapters;
+        }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (shipment.OriginCountryCode == "PR" && shipment.ShipCountryCode == "US")
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
         }
     }
 }
