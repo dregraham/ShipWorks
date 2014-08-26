@@ -215,6 +215,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             while (true)
             {
+                // <orderID, customerID>
                 List<Tuple<long, long>> toDelete = new List<Tuple<long, long>>();
 
                 RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.OrderDate <= olderThan);

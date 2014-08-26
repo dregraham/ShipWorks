@@ -132,6 +132,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private static void ProcessBatch(string etsyFieldName, bool currentStatus, List<EtsyOrderEntity> changedOrders, EtsyWebClient webClient, List<EtsyOrderEntity> tempOrders)
         {
+            // A null reference error was being thrown.  Discoverred by Crash Reports.
+            // Let's figure out what is null....
+
+            if (changedOrders == null)
+            {
+                throw new ArgumentNullException("changedOrders");
+            }
+            if (webClient == null)
+            {
+                throw new ArgumentNullException("webClient");
+            }
+            if (tempOrders == null)
+            {
+                throw new ArgumentNullException("tempOrders");
+            }
+
             int batchSize = EtsyEndpoints.GetOrderLimit;
             bool batchComplete = false;
 

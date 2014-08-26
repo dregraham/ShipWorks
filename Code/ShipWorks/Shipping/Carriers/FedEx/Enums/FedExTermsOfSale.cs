@@ -26,6 +26,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         DDU = 4,
 
         [Description("Delivered Duty Paid")]
-        DDP = 5
+        DDP = 5,
+
+        [Description("Delivered at Place")]
+        DAP = 6,
+
+        [Description("Delivered at Terminal")]
+        DAT = 7
     }
 }

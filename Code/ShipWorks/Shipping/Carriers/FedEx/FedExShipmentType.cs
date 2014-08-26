@@ -302,6 +302,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.CustomsNaftaProducerId = string.Empty;
 
             shipment.FedEx.CommercialInvoice = false;
+            shipment.FedEx.CommercialInvoiceFileElectronically = false;
             shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
             shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Sold;
             shipment.FedEx.CommercialInvoiceComments = "";
@@ -369,6 +370,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
 
             shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
+
+            shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
@@ -489,6 +492,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.ReferenceCustomer = "Order {//Order/Number}";
             profile.FedEx.ReferenceInvoice = "";
             profile.FedEx.ReferencePO = "";
+            profile.FedEx.ReferenceShipmentIntegrity = string.Empty;
             profile.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
 
             profile.FedEx.PayorTransportType = (int) FedExPayorType.Sender;
@@ -635,6 +639,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceCustomer, fedex, FedExShipmentFields.ReferenceCustomer);
             ShippingProfileUtility.ApplyProfileValue(source.ReferenceInvoice, fedex, FedExShipmentFields.ReferenceInvoice);
             ShippingProfileUtility.ApplyProfileValue(source.ReferencePO, fedex, FedExShipmentFields.ReferencePO);
+            ShippingProfileUtility.ApplyProfileValue(source.ReferenceShipmentIntegrity, fedex, FedExShipmentFields.ReferenceShipmentIntegrity);
 
             ShippingProfileUtility.ApplyProfileValue(source.PayorTransportType, fedex, FedExShipmentFields.PayorTransportType);
             ShippingProfileUtility.ApplyProfileValue(source.PayorTransportAccount, fedex, FedExShipmentFields.PayorTransportAccount);
@@ -921,7 +926,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (fedex.Packages.Count == 1)
             {
-                return base.GetTrackingNumbers(shipment);
+                return new List<string> { FedExUtility.BuildTrackingNumber(shipment.TrackingNumber, fedex) };
             }
             else
             {
@@ -929,7 +934,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 for (int i = 0; i < fedex.Packages.Count; i++)
                 {
-                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, fedex.Packages[i].TrackingNumber));
+                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, FedExUtility.BuildTrackingNumber(fedex.Packages[i].TrackingNumber, fedex)));
                 }
 
                 return trackingList;
@@ -1070,9 +1075,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ElementOutline outline = container.AddElement("FedEx", ElementOutline.If(() => shipment().Processed));
             outline.AddAttributeLegacy2x();
             outline.AddElement("Voided", () => shipment().Voided);
+            
             outline.AddElement("LabelCODReturn",
                 () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
                 ElementOutline.If(() => shipment().ThermalType == null && codReturn.Value != null));
+            
             outline.AddElement("Package",
                 new FedExLegacyPackageTemplateOutline(container.Context),
                 () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),
@@ -1169,6 +1176,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.FedEx != null)
+            {
+                shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
@@ -1191,6 +1209,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
+                    shipment.FedEx.Fields[FedExShipmentFields.CodEnabled.FieldIndex],
                     shipment.FedEx.Fields[FedExShipmentFields.NonStandardContainer.FieldIndex]
                 }
             );
@@ -1204,6 +1223,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
                 fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
                 fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
+                fields.Add(package.Fields[FedExPackageFields.DryIceWeight.FieldIndex]);
             }
 
             return fields;

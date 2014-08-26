@@ -79,7 +79,7 @@
             // 
             this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
             this.pictureBox.Location = new System.Drawing.Point(445, 3);
-            this.pictureBox.Size = new System.Drawing.Size(136, 49);
+            this.pictureBox.Size = new System.Drawing.Size(113, 40);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             // 
             // topPanel
@@ -93,14 +93,14 @@
             this.wizardPageInitial.Controls.Add(this.accountNumber);
             this.wizardPageInitial.Controls.Add(this.labelFedExAccount);
             this.wizardPageInitial.Controls.Add(this.labelInfo1);
-            this.wizardPageInitial.Description = "Setup ShipWorks to work with your FedEx account.";
+            this.wizardPageInitial.Description = "Set up ShipWorks to work with your FedEx account.";
             this.wizardPageInitial.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageInitial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageInitial.Location = new System.Drawing.Point(0, 0);
             this.wizardPageInitial.Name = "wizardPageInitial";
             this.wizardPageInitial.Size = new System.Drawing.Size(584, 474);
             this.wizardPageInitial.TabIndex = 0;
-            this.wizardPageInitial.Title = "Setup FedEx® Shipping";
+            this.wizardPageInitial.Title = "Set up FedEx® Shipping";
             this.wizardPageInitial.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextInitialPage);
             // 
             // labelInfo1

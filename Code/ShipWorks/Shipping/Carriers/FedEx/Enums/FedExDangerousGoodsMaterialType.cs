@@ -10,8 +10,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExDangerousGoodsMaterialType
     {
-        [Description("Lithium Batteries")]
-        LithiumBatteries = 0,
+        [Description("Batteries")]
+        Batteries = 0,
 
         [Description("Hazardous Materials")]
         HazardousMaterials = 1, 

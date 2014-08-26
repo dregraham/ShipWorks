@@ -620,6 +620,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Clear any data that should not be part of a shipment after it has been copied.
+        /// </summary>
+        public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                shipment.Postal.Stamps.ScanFormBatchID = null;
+            }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
@@ -636,6 +647,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             );
 
             return fields;
+        }
+
+        /// <summary>
+        /// Indicates if the shipment service type supports return shipments
+        /// </summary>
+        public override bool SupportsReturns
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

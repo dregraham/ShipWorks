@@ -53,6 +53,7 @@ namespace ShipWorks.ApplicationCore.Logging
         Zenventory,
 		Fortune3,
         OpenCart,
+        CloudConversion,
 		
         [ApiPrivateLogSource]
         UspsNoPostage,
@@ -101,5 +102,7 @@ namespace ShipWorks.ApplicationCore.Logging
         SureDone,
         nopCommerce,
         LimeLightCRM,
+        SellerExpress,
+        PowersportsSupport,
     }
 }

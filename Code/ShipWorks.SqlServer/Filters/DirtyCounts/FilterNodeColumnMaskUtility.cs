@@ -34,7 +34,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.DownloadDetail] = 9;
             tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 10;
-            tableBitCount[(int)FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 9;
+            tableBitCount[(int)FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 10;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 24;
             tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 18;
             tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrder] = 5;
@@ -43,7 +43,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 18;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 50;
-            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 145;
+            tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 148;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.ShopifyOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.EtsyOrder] = 3;

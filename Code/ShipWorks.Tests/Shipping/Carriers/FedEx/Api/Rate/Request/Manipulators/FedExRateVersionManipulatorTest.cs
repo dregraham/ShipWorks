@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((RateRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(14, version.Major);
+            Assert.AreEqual(16, version.Major);
         }
 
         [TestMethod]

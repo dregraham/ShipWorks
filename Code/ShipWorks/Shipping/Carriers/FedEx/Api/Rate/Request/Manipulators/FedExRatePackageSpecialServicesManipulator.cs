@@ -125,11 +125,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             switch (serviceType)
             {
-                case FedExServiceType.PriorityOvernight: return ServiceType.PRIORITY_OVERNIGHT;
-                case FedExServiceType.StandardOvernight: return ServiceType.STANDARD_OVERNIGHT;
-                case FedExServiceType.FirstOvernight: return ServiceType.FIRST_OVERNIGHT;
-                case FedExServiceType.FedEx2Day: return ServiceType.FEDEX_2_DAY;
-                case FedExServiceType.FedExExpressSaver: return ServiceType.FEDEX_EXPRESS_SAVER;
+                case FedExServiceType.PriorityOvernight:
+                case FedExServiceType.OneRatePriorityOvernight:
+                    return ServiceType.PRIORITY_OVERNIGHT;
+
+                case FedExServiceType.StandardOvernight:
+                case FedExServiceType.OneRateStandardOvernight:
+                    return ServiceType.STANDARD_OVERNIGHT;
+
+                case FedExServiceType.FirstOvernight:
+                case FedExServiceType.OneRateFirstOvernight:
+                    return ServiceType.FIRST_OVERNIGHT;
+
+                case FedExServiceType.FedEx2Day:
+                case FedExServiceType.OneRate2Day:
+                    return ServiceType.FEDEX_2_DAY;
+
+                case FedExServiceType.FedEx2DayAM:
+                case FedExServiceType.OneRate2DayAM:
+                    return ServiceType.FEDEX_2_DAY_AM;
+
+                case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.OneRateExpressSaver:
+                    return ServiceType.FEDEX_EXPRESS_SAVER;
+                
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
                 case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
                 case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
@@ -142,7 +161,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 case FedExServiceType.InternationalEconomyFreight: return ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
                 case FedExServiceType.SmartPost: return ServiceType.SMART_POST;
                 case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
-                case FedExServiceType.FedEx2DayAM: return ServiceType.FEDEX_2_DAY_AM;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);

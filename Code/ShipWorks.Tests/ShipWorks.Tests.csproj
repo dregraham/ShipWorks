@@ -147,6 +147,7 @@
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
+    <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\PathUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -169,6 +170,8 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
     <Compile Include="Interapptive.Shared\Net\CertificateInspectorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulatorTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Close\Request\FedExGroundCloseRequestTest.cs" />
@@ -522,6 +525,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExMultipleMatch.cer" />
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExNoMatch.cer" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MultiPagePdf.pdf" />
+    <EmbeddedResource Include="Resources\SinglePagePdf.pdf" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

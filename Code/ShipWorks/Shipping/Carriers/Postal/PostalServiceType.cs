@@ -119,6 +119,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("Consolidator (ISAL)")]
         [ApiValue("ISAL")]
-        ConsolidatorIsal = 203
+        ConsolidatorIsal = 203,
+
+        [Description("Commercial ePacket")]
+        [ApiValue("CommercialePacket")]
+        CommercialePacket = 204,
     }
 }

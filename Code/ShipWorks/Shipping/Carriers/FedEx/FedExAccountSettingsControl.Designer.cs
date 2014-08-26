@@ -95,7 +95,7 @@
             this.labelSmartPost.Name = "labelSmartPost";
             this.labelSmartPost.Size = new System.Drawing.Size(103, 13);
             this.labelSmartPost.TabIndex = 3;
-            this.labelSmartPost.Text = "FedEx SmartPost";
+            this.labelSmartPost.Text = "FedEx SmartPost®";
             // 
             // labelSignature
             // 

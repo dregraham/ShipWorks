@@ -131,6 +131,9 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.LimeLightCRM: return new Platforms.LimeLightCRM.LimeLightCRMStoreType(store);
 				case StoreTypeCode.OpenCart: return new Platforms.OpenCart.OpenCartStoreType(store);
                 case StoreTypeCode.nopCommerce: return new Platforms.nopCommerce.nopCommerceStoreType(store);
+                case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
+                case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
+                case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -146,8 +149,7 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.ChannelSale,
-                StoreTypeCode.nopCommerce,
+                StoreTypeCode.nopCommerce
             };
 
             return disabledTypes.Contains(typeCode);

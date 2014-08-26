@@ -7,6 +7,8 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
@@ -40,10 +42,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         [TestMethod]
         [ExpectedException(typeof(CarrierException))]
-        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsCancelPendingShipmentRequest_Test()
+        public void FedExGetShipServiceRequestedShipment_ThrowsCarrierException_WhenNativeRequestIsObject_Test()
         {
-            // Setup to pass a CancelPendingShipmentRequest as the native request
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CancelPendingShipmentRequest());
+            // Setup to pass a object as the native request
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
             FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
         }
@@ -70,16 +72,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest));
         }
 
-        [TestMethod]
-        public void FedExGetShipServiceRequestedShipment_ReturnsCreatePendingShipmentRequest_Test()
-        {
-            // Setup to pass a CreatePendingShipmentRequest as the native request
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest());
+        //[TestMethod]
+        //public void FedExGetShipServiceRequestedShipment_ReturnsCreatePendingShipmentRequest_Test()
+        //{
+        //    // Setup to pass a CreatePendingShipmentRequest as the native request
+        //    carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest());
 
-            FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
+        //    FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest));
-        }
+        //    Assert.IsInstanceOfType(carrierRequest.Object.NativeRequest, typeof(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.CreatePendingShipmentRequest));
+        //}
 
         [TestMethod]
         public void FedExGetShipServiceRequestedShipment_ReturnsCreateValidateShipmentRequest_Test()
@@ -100,6 +102,53 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DropoffType.REGULAR_PICKUP, dropOffType);
         }
 
+        [TestMethod]
+        public void GetApiServiceType_ReturnsPriorityOvernight_WhenServiceTypeIsOneRatePriorityOvernight_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRatePriorityOvernight);
+
+            Assert.AreEqual(ServiceType.PRIORITY_OVERNIGHT, serviceType);
+        }
+
+        [TestMethod]
+        public void GetApiServiceType_ReturnsStandardOvernight_WhenServiceTypeIsOneRateStandardOvernight_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateStandardOvernight);
+
+            Assert.AreEqual(ServiceType.STANDARD_OVERNIGHT, serviceType);
+        }
+
+        [TestMethod]
+        public void GetApiServiceType_ReturnsFedEx2Day_WhenServiceTypeIsOneRate2Day_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRate2Day);
+
+            Assert.AreEqual(ServiceType.FEDEX_2_DAY, serviceType);
+        }
+
+        [TestMethod]
+        public void GetApiServiceType_ReturnsFedEx2DayAM_WhenServiceTypeIsOneRate2DayAM_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRate2DayAM);
+
+            Assert.AreEqual(ServiceType.FEDEX_2_DAY_AM, serviceType);
+        }
+
+        [TestMethod]
+        public void GetApiServiceType_ReturnsFirstOvernight_WhenServiceTypeIsOneRateFirstOvernight_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateFirstOvernight);
+
+            Assert.AreEqual(ServiceType.FIRST_OVERNIGHT, serviceType);
+        }
+
+        [TestMethod]
+        public void GetApiServiceType_ReturnExpressSaver_WhenServiceTypeIsOneRateExpressSaver_Test()
+        {
+            ServiceType serviceType = FedExRequestManipulatorUtilities.GetApiServiceType(FedExServiceType.OneRateExpressSaver);
+
+            Assert.AreEqual(ServiceType.FEDEX_EXPRESS_SAVER, serviceType);
+        }
 
         #region Shipping Web Authentication Tests
 

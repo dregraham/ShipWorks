@@ -1214,6 +1214,8 @@ namespace ShipWorks.Data.Model
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
 		MarketplaceName,
+		///<summary>MarketplaceStoreName. </summary>
+		MarketplaceStoreName,
 		///<summary>MarketplaceBuyerID. </summary>
 		MarketplaceBuyerID,
 		///<summary>MarketplaceSalesID. </summary>
@@ -2982,6 +2984,8 @@ namespace ShipWorks.Data.Model
 		ReferenceInvoice,
 		///<summary>ReferencePO. </summary>
 		ReferencePO,
+		///<summary>ReferenceShipmentIntegrity. </summary>
+		ReferenceShipmentIntegrity,
 		///<summary>PayorTransportType. </summary>
 		PayorTransportType,
 		///<summary>PayorTransportAccount. </summary>
@@ -3126,6 +3130,8 @@ namespace ShipWorks.Data.Model
 		ReferenceInvoice,
 		///<summary>ReferencePO. </summary>
 		ReferencePO,
+		///<summary>ReferenceShipmentIntegrity. </summary>
+		ReferenceShipmentIntegrity,
 		///<summary>PayorTransportType. </summary>
 		PayorTransportType,
 		///<summary>PayorTransportName. </summary>
@@ -3264,6 +3270,8 @@ namespace ShipWorks.Data.Model
 		CustomsOptionsDesription,
 		///<summary>CommercialInvoice. </summary>
 		CommercialInvoice,
+		///<summary>CommercialInvoiceFileElectronically. </summary>
+		CommercialInvoiceFileElectronically,
 		///<summary>CommercialInvoiceTermsOfSale. </summary>
 		CommercialInvoiceTermsOfSale,
 		///<summary>CommercialInvoicePurpose. </summary>
@@ -3316,6 +3324,8 @@ namespace ShipWorks.Data.Model
 		SmartPostCustomerManifest,
 		///<summary>SmartPostHubID. </summary>
 		SmartPostHubID,
+		///<summary>SmartPostUspsApplicationId. </summary>
+		SmartPostUspsApplicationId,
 		///<summary>DropoffType. </summary>
 		DropoffType,
 		///<summary>OriginResidentialDetermination. </summary>
