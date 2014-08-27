@@ -508,6 +508,7 @@
     <Compile Include="AddressValidation\ILinqCollections.cs" />
     <Compile Include="AddressValidation\LLBLGenLinqCollections.cs" />
     <Compile Include="AddressValidation\EntityGridAddressSelector.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />

@@ -322,7 +322,7 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The value for the given key.</returns>
-        private string GetCredentialValue(string key)
+        private static string GetCredentialValue(string key)
         {
             if (!productionCredentials.Any())
             {
@@ -393,7 +393,7 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The value for the given key.</returns>
-        private string GetCertificateVerificationDataValue(string key)
+        private static string GetCertificateVerificationDataValue(string key)
         {
             if (!productionCertVerificationData.Any())
             {
