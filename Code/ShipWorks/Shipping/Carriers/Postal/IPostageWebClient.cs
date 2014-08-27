@@ -8,7 +8,7 @@
         ShipmentTypeCode ShipmentTypeCode { get; }
         string AccountIdentifier { get; }
 
-        decimal GetBalance();
-        void Purchase(decimal amount);
+        double GetBalance();
+        void Purchase(double amount);
     }
 }
