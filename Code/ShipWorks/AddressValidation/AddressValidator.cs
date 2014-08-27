@@ -22,7 +22,7 @@ namespace ShipWorks.AddressValidation
         /// Creates a new instance of the AddressValidator with the default web client
         /// </summary>
         public AddressValidator() :
-            this(new AddressValidationWebClient())
+            this(new EndiciaAddressValidationWebClient())
         {
             
         }

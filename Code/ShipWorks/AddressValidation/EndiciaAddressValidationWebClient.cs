@@ -14,7 +14,7 @@ using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.AddressValidation
 {
-    public class AddressValidationWebClient : IAddressValidationWebClient
+    public class EndiciaAddressValidationWebClient : IAddressValidationWebClient
     {
         /// <summary>
         /// Validates the address.
