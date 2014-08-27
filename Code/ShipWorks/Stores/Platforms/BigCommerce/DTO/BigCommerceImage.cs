@@ -13,5 +13,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.DTO
         public bool is_thumbnail { get; set; }
         public int sort_order { get; set; }
         public string date_created { get; set; }
+
+        public string thumbnail_url { get; set; }
+        public string standard_url { get; set; }
+        public string tiny_url { get; set; }
+        public string description { get; set; }
     }
 }
