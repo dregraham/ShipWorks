@@ -541,12 +541,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             if (product.Image != null)
             {
-                item.Image = BigCommerceWebClientEndpoints.GetProductImageUrl(bigCommerceStore.ApiUrl, product.Image);
+                item.Image = product.Image; 
             }
 
             if (product.ThumbnailImage != null)
             {
-                item.Thumbnail = BigCommerceWebClientEndpoints.GetProductImageUrl(bigCommerceStore.ApiUrl, product.ThumbnailImage);
+                item.Thumbnail = product.ThumbnailImage; 
             }
         }
 

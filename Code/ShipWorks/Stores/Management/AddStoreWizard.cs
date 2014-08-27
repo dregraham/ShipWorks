@@ -564,7 +564,7 @@ namespace ShipWorks.Stores.Management
                 {
                     initialDownloadConfiguredStoreID = store.StoreID;
 
-                    /// Show the download range settings
+                    // Show the download range settings
                     panelDownloadSettings.Visible = true;
 
                     // Initially, the simple view will be shown and the editor wont.
