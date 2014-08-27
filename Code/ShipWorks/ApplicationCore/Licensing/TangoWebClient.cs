@@ -317,6 +317,28 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Sends Postal balances for postal services.
+        /// </summary>
+        public static void LogPostageEvent(double balance, double purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("balance", balance.ToString());
+            postRequest.Variables.Add("purchaseAmount", purchaseAmount.ToString());
+            postRequest.Variables.Add("shipmentTypeCode", ((int) shipmentTypeCode).ToString());
+            postRequest.Variables.Add("accountIdentifier", accountIdentifier);
+
+            XmlDocument xmlResponse = ProcessRequest(postRequest);
+
+            // Check for error
+            XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
+            if (errorNode != null)
+            {
+                throw new TangoException(errorNode.InnerText);
+            }
+        }
+
+        /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
