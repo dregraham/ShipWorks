@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                         instance = Guid.Parse("{358e8025-ba77-43c7-8a4e-66af9860bd2c}");
                         break;
                     case "kevin-pc":
-                        instance = Guid.Parse("{0BDCFB64-15FC-4BA3-84BC-83E8A6D0455A}");
+                        instance = Guid.Parse("{6db3aa02-32bb-430e-95d2-0c59b3b7417a}");
                         break;
                     case "MSTest-vm":
                         instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
