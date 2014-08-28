@@ -655,6 +655,7 @@
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
