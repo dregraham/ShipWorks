@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public void LogPostageEvent(double balance, double purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             TangoWebClient.LogPostageEvent(balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
         }

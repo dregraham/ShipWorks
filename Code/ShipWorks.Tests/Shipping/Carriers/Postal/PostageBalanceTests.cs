@@ -13,18 +13,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         private Mock<IPostageWebClient> postageWebClient;
         private Mock<ITangoWebClient> tangoWebClient;
         private const string accountIdentifier = "blahblahblah";
+        private const decimal balance = (decimal)42.42;
 
         [TestInitialize]
         public void Initialize()
         {
             postageWebClient = new Mock<IPostageWebClient>();
-            postageWebClient.Setup(p => p.GetBalance()).Returns(42.42);
-            postageWebClient.Setup(p => p.Purchase(It.IsAny<double>()));
+            postageWebClient.Setup(p => p.GetBalance()).Returns(balance);
+            postageWebClient.Setup(p => p.Purchase(It.IsAny<decimal>()));
             postageWebClient.Setup(p => p.ShipmentTypeCode).Returns(ShipmentTypeCode.Express1Endicia);
             postageWebClient.Setup(p => p.AccountIdentifier).Returns(accountIdentifier);
 
             tangoWebClient = new Mock<ITangoWebClient>();
-            tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>()));
+            tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>()));
 
             testObject = new PostageBalance(postageWebClient.Object, tangoWebClient.Object);
         }
@@ -50,23 +51,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             testObject.Purchase(7);
 
-            tangoWebClient.Verify(t => t.LogPostageEvent(42.42, 7, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
+            tangoWebClient.Verify(t => t.LogPostageEvent(balance, 7, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
         }
 
         [TestMethod]
         public void Value_LogsPostageEventToTango_Test()
         {
-            double balance = testObject.Value;
+            decimal testValue = testObject.Value;
 
-            tangoWebClient.Verify(t => t.LogPostageEvent(42.42, 0, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
+            tangoWebClient.Verify(t => t.LogPostageEvent(balance, 0, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
         }
 
         [TestMethod]
         public void Value_ValueIsCorrect_Test()
         {
-            double balance = testObject.Value;
-
-            Assert.AreEqual(42.42, balance);
+            Assert.AreEqual(balance, testObject.Value);
         }
     }
 }

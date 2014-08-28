@@ -47,7 +47,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        void LogPostageEvent(double balance, double purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier);
+        void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier);
 
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer

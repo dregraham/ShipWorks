@@ -19,9 +19,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Purchases the specified amount.
         /// </summary>
-        public void Purchase(double amount)
+        public void Purchase(decimal amount)
         {
-            double balance = postageWebClient.GetBalance();
+            decimal balance = postageWebClient.GetBalance();
             postageWebClient.Purchase(amount);
             tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
         }
@@ -29,11 +29,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Balance with carrier
         /// </summary>
-        public double Value
+        public decimal Value
         {
             get
             {
-                double balance = postageWebClient.GetBalance();
+                decimal balance = postageWebClient.GetBalance();
                 tangoWebClient.LogPostageEvent(balance, 0, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
                 return balance;
             }
