@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Editions
 {
@@ -10,6 +11,16 @@ namespace ShipWorks.Editions
     /// </summary>
     public class EditionSharedOptions
     {
+        private List<ShipmentTypeCode> disabledShipmentTypes;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditionSharedOptions"/> class.
+        /// </summary>
+        public EditionSharedOptions()
+        {
+            disabledShipmentTypes = new List<ShipmentTypeCode>();
+        }
+
         /// <summary>
         /// Indicates if DHL is enabled and allowed for the edition
         /// </summary>
@@ -35,5 +46,13 @@ namespace ShipWorks.Editions
         /// Indicates whether scan based payment returns support is enabled for the customer's endicia account
         /// </summary>
         public bool EndiciaScanBasedReturnEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates shipment types that have been disabled in ShipWorks.
+        /// </summary>
+        IEnumerable<ShipmentTypeCode> DisabledShipmentTypes
+        {
+            get { return disabledShipmentTypes; }
+        }
     }
 }
