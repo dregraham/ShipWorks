@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.Licensing;
+﻿using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -6,6 +7,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
     {
         private readonly IPostageWebClient postageWebClient;
         private readonly ITangoWebClient tangoWebClient;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(PostageBalance));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PostageBalance"/> class.
@@ -23,7 +26,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             decimal balance = postageWebClient.GetBalance();
             postageWebClient.Purchase(amount);
-            tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
+
+            try
+            {
+                tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
+            }
+            catch (TangoException ex)
+            {
+                log.Error("Error logging PostageEvent to Tango.", ex);
+            }
         }
 
         /// <summary>
@@ -34,7 +45,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
             get
             {
                 decimal balance = postageWebClient.GetBalance();
-                tangoWebClient.LogPostageEvent(balance, 0, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
+                try
+                {
+                    tangoWebClient.LogPostageEvent(balance, 0, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
+                }
+                catch (TangoException ex)
+                {
+                    log.Error("Error logging PostageEvent to Tango.", ex);
+                }
+
                 return balance;
             }
         }

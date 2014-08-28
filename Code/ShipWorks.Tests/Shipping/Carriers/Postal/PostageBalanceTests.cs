@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping;
@@ -55,6 +56,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
+        public void Purchase_PurchasePostageDespiteTangoError_Test()
+        {
+            testObject.Purchase(7);
+
+            tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>())).Throws(new TangoException());
+
+            postageWebClient.Verify(p => p.Purchase(7), Times.Once);
+        }
+
+        [TestMethod]
         public void Value_LogsPostageEventToTango_Test()
         {
             decimal testValue = testObject.Value;
@@ -65,6 +76,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [TestMethod]
         public void Value_ValueIsCorrect_Test()
         {
+            Assert.AreEqual(balance, testObject.Value);
+        }
+
+        [TestMethod]
+        public void Value_ValueIsCorrectDespiteLoggingError_Test()
+        {
+            tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>())).Throws(new TangoException());
+
             Assert.AreEqual(balance, testObject.Value);
         }
     }
