@@ -418,7 +418,7 @@ namespace ShipWorks.ApplicationCore.Crashes
 
             AppendLineIgnoreException(() => sb.AppendFormat("Store Licenses: {0}\r\n", GetAllLicenses()));
 
-            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", GetExecutionModeName()));
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", Program.ExecutionMode.Name));
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUIDisplayed: {0}\r\n", Program.ExecutionMode.IsUIDisplayed));
             AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUISupported: {0}\r\n", Program.ExecutionMode.IsUISupported));
             
@@ -440,29 +440,6 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Gets the un-obfuscated execution mode name
-        /// </summary>
-        private static string GetExecutionModeName()
-        {
-            if (Program.ExecutionMode is UserInterfaceExecutionMode)
-            {
-                return "UserInterfaceExecutionMode";
-            }
-            
-            if (Program.ExecutionMode is ServiceExecutionMode)
-            {
-                return "UserInterfaceExecutionMode";
-            }
-            
-            if (Program.ExecutionMode is CommandLineExecutionMode)
-            {
-                return "CommandLineExecutionMode";
-            }
-
-            return "Unknown";
         }
 
         /// <summary>
