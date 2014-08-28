@@ -213,7 +213,7 @@ namespace ShipWorks.Data.Connection
                     if (!Program.ExecutionMode.IsUIDisplayed)
                     {
                         log.Warn("Application is not UserInteractive, not attempting to reconnect.");
-                        throw;
+                        throw new ConnectionLostException("The background process has lost connection to the database.", ex);
                     }
 
                     // Indicates MSDTC could not be started - which means we tried to open a new connection while an existing

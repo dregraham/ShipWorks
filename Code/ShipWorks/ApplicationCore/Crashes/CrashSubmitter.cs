@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -10,11 +11,15 @@ using Interapptive.Shared.Data;
 using Interapptive.Shared.Net;
 using System.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared;
 using System.Collections.Generic;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.IO.Zip;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Crashes 
 {
@@ -411,7 +416,12 @@ namespace ShipWorks.ApplicationCore.Crashes
             sb.AppendFormat("User Domain Name: {0}\r\n", Environment.UserDomainName);
             sb.AppendFormat("User Interactive: {0}\r\n", Environment.UserInteractive);
 
-            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", Program.ExecutionMode.GetType().Name));
+            AppendLineIgnoreException(() => sb.AppendFormat("Store Licenses: {0}\r\n", GetAllLicenses()));
+
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode: {0}\r\n", GetExecutionModeName()));
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUIDisplayed: {0}\r\n", Program.ExecutionMode.IsUIDisplayed));
+            AppendLineIgnoreException(() => sb.AppendFormat("Execution Mode IsUISupported: {0}\r\n", Program.ExecutionMode.IsUISupported));
+            
             AppendLineIgnoreException(() => sb.AppendFormat("Local IP Address: {0}\r\n", new NetworkUtility().GetIPAddress()));
 
             if (SqlSession.IsConfigured)
@@ -430,6 +440,37 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets the un-obfuscated execution mode name
+        /// </summary>
+        private static string GetExecutionModeName()
+        {
+            if (Program.ExecutionMode is UserInterfaceExecutionMode)
+            {
+                return "UserInterfaceExecutionMode";
+            }
+            
+            if (Program.ExecutionMode is ServiceExecutionMode)
+            {
+                return "UserInterfaceExecutionMode";
+            }
+            
+            if (Program.ExecutionMode is CommandLineExecutionMode)
+            {
+                return "CommandLineExecutionMode";
+            }
+
+            return "Unknown";
+        }
+
+        /// <summary>
+        /// Joins all store licenses as a pipe delimited string
+        /// </summary>
+        private static string GetAllLicenses()
+        {
+            return StoreManager.GetAllStores().Select(s => s.License).Aggregate((i, j) => i + "|" + j);
         }
 
         /// <summary>
