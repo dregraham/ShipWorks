@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         static readonly ILog log = LogManager.GetLogger(typeof(StampsPurchasePostageDlg));
 
         private StampsAccountEntity account;
-        private AccountInfo accountInfo;
+        private decimal balance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
@@ -37,17 +38,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
         /// </summary>
-        public StampsPurchasePostageDlg(StampsAccountEntity account, AccountInfo accountInfo)
+        public StampsPurchasePostageDlg(StampsAccountEntity account, decimal balance)
         {
             InitializeComponent();
-            InitializeAccountInfo(account, accountInfo);
+            InitializeAccountInfo(account, balance);
         }
 
         /// <summary>
         /// Initializes the account info.
         /// </summary>
         /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
-        private void InitializeAccountInfo(StampsAccountEntity account, AccountInfo accountInfo)
+        private void InitializeAccountInfo(StampsAccountEntity account, decimal? balance)
         {
             // Define these here since they could be used in either inside or outside the try statement
             string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
@@ -56,14 +57,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             try
             {
                 this.account = account;
-                this.accountInfo = accountInfo ?? new StampsApiSession().GetAccountInfo(account);
+                this.balance = balance ?? (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value;
 
-                if (this.accountInfo == null)
+                if (!balance.HasValue)
                 {
                     throw new StampsException(exceptionMessage);
                 }
 
-                current.Text = this.accountInfo.PostageBalance.AvailablePostage.ToString("c");
+                current.Text = balance.Value.ToString("c");
             }
             catch (StampsApiException apiException)
             {
@@ -102,8 +103,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                new StampsApiSession().PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
-
+                (new PostageBalance(new StampsPostageWebClient(account, balance), new TangoWebClientWrapper())).Purchase(postage.Amount);
+                
                 string message = string.Format("The purchase request has been submitted to {0}.\n\n" +
                                                "It may take a few minutes before the amount is reflected in your available balance.", carrierName);
 
@@ -139,8 +140,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                accountInfo = new StampsApiSession().GetAccountInfo(account);
-                current.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
+                balance = (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value;
+                
+                current.Text = balance.ToString("c");
             }
             catch (StampsException ex)
             {

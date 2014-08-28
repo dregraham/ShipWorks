@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Divelements.SandGrid;
@@ -98,9 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 try
                 {
-                    AccountInfo accountInfo = new StampsApiSession().GetAccountInfo(account);
-
-                    result = accountInfo.PostageBalance.AvailablePostage.ToString("c");
+                    result = (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value.ToString("c");
                 }
                 catch (StampsException ex)
                 {

@@ -13,14 +13,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public class StampsPostageWebClient : IPostageWebClient
     {
         private readonly StampsAccountEntity account;
+        private decimal? lastKnownBalance;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsPostageWebClient"/> class.
+        /// Initializes a new instance of the <see cref="StampsPostageWebClient" /> class.
         /// </summary>
         /// <param name="account">The account.</param>
-        public StampsPostageWebClient(StampsAccountEntity account)
+        /// <param name="lastKnownBalance">Required if purchasing.</param>
+        public StampsPostageWebClient(StampsAccountEntity account, decimal? lastKnownBalance)
         {
             this.account = account;
+            this.lastKnownBalance = lastKnownBalance;
         }
 
         /// <summary>
@@ -49,7 +52,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             StampsApiSession client = new StampsApiSession();
             AccountInfo accountInfo = client.GetAccountInfo(account);
-            return accountInfo.PostageBalance.AvailablePostage;
+
+            lastKnownBalance = accountInfo.PostageBalance.AvailablePostage;
+            
+            return lastKnownBalance.Value;
         }
 
         /// <summary>
@@ -60,8 +66,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             StampsApiSession client = new StampsApiSession();
 
+            if (!lastKnownBalance.HasValue)
+            {
+                lastKnownBalance = GetBalance();
+            }
+
             // We might want to add GetBalance as a parameter. 
-            client.PurchasePostage(account, amount, GetBalance());
+            client.PurchasePostage(account, amount, lastKnownBalance.Value);
         }
     }
 }

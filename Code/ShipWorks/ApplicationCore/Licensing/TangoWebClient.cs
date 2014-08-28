@@ -328,7 +328,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("shipmentTypeCode", ((int) shipmentTypeCode).ToString());
             postRequest.Variables.Add("accountIdentifier", accountIdentifier);
 
-            XmlDocument xmlResponse = ProcessRequest(postRequest);
+            XmlDocument xmlResponse = ProcessRequest(postRequest, "CarrierBalance");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");

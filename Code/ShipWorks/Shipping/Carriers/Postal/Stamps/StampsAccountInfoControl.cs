@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public partial class StampsAccountInfoControl : UserControl
     {
         StampsAccountEntity account;
-        AccountInfo accountInfo;
+        decimal balance;
 
         bool postagePurchased = false;
 
@@ -65,8 +66,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    accountInfo = new StampsApiSession().GetAccountInfo(account);
-                    postage.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
+                    balance = (new PostageBalance(new StampsPostageWebClient(account, balance), new TangoWebClientWrapper())).Value;
+                    postage.Text = balance.ToString("c");
                     purchase.Left = postage.Right;
 
                     panelInfo.Enabled = true;
@@ -147,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
+                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, balance))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

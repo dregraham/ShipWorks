@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.UI;
@@ -22,7 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaBuyPostageDlg));
 
         EndiciaAccountEntity account;
-        private readonly EndiciaApiClient endiciaApiClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
@@ -39,7 +39,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             InitializeComponent();
             this.account = account;
-            endiciaApiClient = new EndiciaApiClient();
         }
 
         /// <summary>
@@ -53,9 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                EndiciaAccountStatus status = endiciaApiClient.GetAccountStatus(account);
-
-                current.Text = status.PostageBalance.ToString("c");
+                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {
@@ -76,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                endiciaApiClient.BuyPostage(account, postage.Amount);
+                (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Purchase(postage.Amount);
 
                 MessageHelper.ShowInformation(this,
                     String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller)account.EndiciaReseller)));
