@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public string AccountIdentifier
         {
-            get { return account.StampsAccountID.ToString(); }
+            get { return account.Username; }
         }
 
         /// <summary>
