@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -13,21 +9,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public class StampsPostageWebClient : IPostageWebClient
     {
         private readonly StampsAccountEntity account;
-        private decimal? lastKnownBalance;
+        private decimal controlTotal;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPostageWebClient" /> class.
         /// </summary>
-        /// <param name="account">The account.</param>
-        /// <param name="lastKnownBalance">Required if purchasing.</param>
-        public StampsPostageWebClient(StampsAccountEntity account, decimal? lastKnownBalance)
+        /// <param name="account">The account.</param>        
+        public StampsPostageWebClient(StampsAccountEntity account)
         {
             this.account = account;
-            this.lastKnownBalance = lastKnownBalance;
+            controlTotal = decimal.MinValue;
         }
 
         /// <summary>
-        /// Gets the shipment type code.
+        /// Gets the shipment type code of the web client being used.
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
         {
@@ -38,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets the account identifier.
+        /// Gets the value that will identify this account to the underlying provider (e.g. account number, username, etc.).
         /// </summary>
         public string AccountIdentifier
         {
@@ -46,33 +41,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets the balance.
+        /// Gets the balance from the USPS postage provider.
         /// </summary>
+        /// <returns>The available postage balance remaining.</returns>
         public decimal GetBalance()
         {
             StampsApiSession client = new StampsApiSession();
             AccountInfo accountInfo = client.GetAccountInfo(account);
 
-            lastKnownBalance = accountInfo.PostageBalance.AvailablePostage;
-            
-            return lastKnownBalance.Value;
+            // Make a note of the control total for purchasing purposes
+            controlTotal = accountInfo.PostageBalance.ControlTotal;
+            return accountInfo.PostageBalance.AvailablePostage;
         }
 
         /// <summary>
-        /// Purchases the specified amount.
+        /// Purchases additional postage based on the amount specified.
         /// </summary>
         /// <param name="amount">The amount.</param>
         public void Purchase(decimal amount)
         {
-            StampsApiSession client = new StampsApiSession();
-
-            if (!lastKnownBalance.HasValue)
+            if (controlTotal == decimal.MinValue)
             {
-                lastKnownBalance = GetBalance();
+                // Don't yet have a valid value for the control total, so grab the balance
+                // to populate this value
+                GetBalance();
             }
-
-            // We might want to add GetBalance as a parameter. 
-            client.PurchasePostage(account, amount, lastKnownBalance.Value);
+            
+            StampsApiSession client = new StampsApiSession();
+            client.PurchasePostage(account, amount, controlTotal);
         }
     }
 }

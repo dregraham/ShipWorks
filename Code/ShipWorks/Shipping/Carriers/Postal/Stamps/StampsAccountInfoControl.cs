@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public partial class StampsAccountInfoControl : UserControl
     {
         StampsAccountEntity account;
-        decimal balance;
+        private PostageBalance postageBalance;
 
         bool postagePurchased = false;
 
@@ -43,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             this.account = account;
             this.accountName.Text = account.Description;
+            postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
 
             
             if (account.IsExpress1)
@@ -66,10 +67,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    balance = (new PostageBalance(new StampsPostageWebClient(account, balance), new TangoWebClientWrapper())).Value;
-                    postage.Text = balance.ToString("c");
-                    purchase.Left = postage.Right;
+                    postage.Text = postageBalance.Value.ToString("c");
 
+                    purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
                 }
                 catch (StampsException ex)
@@ -148,7 +148,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, balance))
+                AccountInfo accountInfo = new StampsApiSession().GetAccountInfo(account);
+                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

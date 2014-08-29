@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 try
                 {
-                    result = (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value.ToString("c");
+                    result = (new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
                 }
                 catch (StampsException ex)
                 {
