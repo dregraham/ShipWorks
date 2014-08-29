@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Initializes the account info.
         /// </summary>
         /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
-        private void InitializeAccountInfo(StampsAccountEntity account, decimal? balance)
+        private void InitializeAccountInfo(StampsAccountEntity account, decimal? initialBalance)
         {
             // Define these here since they could be used in either inside or outside the try statement
             string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
@@ -57,14 +57,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             try
             {
                 this.account = account;
-                this.balance = balance ?? (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value;
+                balance = initialBalance ?? (new PostageBalance(new StampsPostageWebClient(account, 0), new TangoWebClientWrapper())).Value;
 
-                if (!balance.HasValue)
-                {
-                    throw new StampsException(exceptionMessage);
-                }
-
-                current.Text = balance.Value.ToString("c");
+                current.Text = balance.ToString("c");
             }
             catch (StampsApiException apiException)
             {
