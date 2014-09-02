@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.XmlDiffPatch;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 
@@ -243,6 +245,38 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
+        public void SetupXmlWithoutShipmentTypeFunctionalityNode()
+        {
+            xml = new XmlDocument();
+            xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
+<License>
+	<Key>FBIN4-6CR3T-6EXUL-MI4XF-CART66LITE-BRIAN@INTERAPPTIVE.COM</Key>
+	<Machine>10.1.10.131/cart66lite/wp-</Machine>
+	<Active>true</Active>
+	<Cancelled>false</Cancelled>
+	<DisabledReason/>
+	<Valid>true</Valid>
+	<StoreID>29043</StoreID>
+	<CustomerID>53</CustomerID>
+	<Version>Checked</Version>
+	<EndiciaDhlEnabled status=""1""/>
+	<EndiciaInsuranceEnabled status=""1""/>
+	<UpsSurePostEnabled status=""1""/>
+	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
+	<EndiciaScanBasedReturns status=""1""/>
+    <ThisShouldNotBeFound>
+		<ShipmentType TypeCode=""3"">
+			<Restriction>Disabled</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode=""6"">
+			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+	</ThisShouldNotBeFound>
+</License>");
+
+            path = xml.CreateNavigator();
+        }
+
         [TestMethod]
         public void Parse_AddsKeysForAllShipmentTypeCodes_Test()
         {
@@ -320,6 +354,17 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
+        public void Parse_HasNoRestrictions_WhenShipmentTypeFunctionalityIsMissing_Test()
+        {
+            SetupXmlWithoutShipmentTypeFunctionalityNode();
+
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Parse(path);
+            IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
+
+            Assert.AreEqual(0, restrictions.Count());
+        }
+
+        [TestMethod]
         public void Parse_OnlyAddsDistinctRestrictions_WhenDuplicateShipmentTypeNodesInXml_Test()
         {
             // Each node configured with the same two restrictions
@@ -341,6 +386,84 @@ namespace ShipWorks.Tests.Editions
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
             Assert.AreEqual(2, restrictions.Distinct().Count());
+        }
+
+        [TestMethod]
+        public void ToString_ReturnsOriginalShipmentTypeFunctionalityXml_Test()
+        {
+            SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
+            string expectedRawXml = @"<ShipmentTypeFunctionality>
+		<ShipmentType TypeCode=""3"">
+			<Restriction>Disabled</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode=""6"">
+			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+	</ShipmentTypeFunctionality>";
+
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Parse(path);
+
+            // Load the raw XML into XmlDocuments to use XmlDiff to verify the 
+            // XML values are the same
+            XmlDiff diff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
+            
+            XmlDocument expectedDocument = new XmlDocument();
+            expectedDocument.LoadXml(expectedRawXml);
+
+            XmlDocument actualDocument = new XmlDocument();
+            actualDocument.LoadXml(functionality.ToString());
+
+            Assert.IsTrue(diff.Compare(expectedDocument, actualDocument));
+        }
+
+        [TestMethod]
+        public void ToXElement_ReturnsOriginalShipmentTypeFunctionalityElement_Test()
+        {
+            SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
+            string expectedRawXml = @"<ShipmentTypeFunctionality>
+		<ShipmentType TypeCode=""3"">
+			<Restriction>Disabled</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode=""6"">
+			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+	</ShipmentTypeFunctionality>";
+
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Parse(path);
+
+            // Load the raw XML into XmlDocuments to use XmlDiff to verify the 
+            // XML values are the same
+            XmlDiff diff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
+
+            XmlDocument expectedDocument = new XmlDocument();
+            expectedDocument.LoadXml(expectedRawXml);
+
+            XmlDocument actualDocument = new XmlDocument();
+            actualDocument.LoadXml(functionality.ToXElement().ToString());
+
+            Assert.IsTrue(diff.Compare(expectedDocument, actualDocument));
+        }
+
+        [TestMethod]
+        public void ToXElement_ReturnsShipmentTypeFunctionalityElement_WhenSourceisMissingShipmentTypeFunctionalityNode_Test()
+        {
+            SetupXmlWithoutShipmentTypeFunctionalityNode();
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Parse(path);
+
+            XElement xElement = functionality.ToXElement();
+
+            Assert.AreEqual("ShipmentTypeFunctionality", xElement.Name);
+        }
+
+        [TestMethod]
+        public void ToXElement_ReturnsEmptyElement_WhenSourceIsMissingShipmentTypeFunctionalityNode_Test()
+        {
+            SetupXmlWithoutShipmentTypeFunctionalityNode();
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Parse(path);
+
+            XElement xElement = functionality.ToXElement();
+
+            Assert.IsTrue(xElement.IsEmpty);
         }
     }
 }

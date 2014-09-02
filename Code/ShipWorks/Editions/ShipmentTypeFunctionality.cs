@@ -14,6 +14,7 @@ namespace ShipWorks.Editions
     public class ShipmentTypeFunctionality
     {
         private readonly Dictionary<ShipmentTypeCode, List<ShipmentTypeRestrictionType>> shipmentTypeRestrictions;
+        private XElement originalFunctionalitySource;
 
         /// <summary>
         /// Prevents a default instance of the <see cref="ShipmentTypeFunctionality"/> class from being created.
@@ -22,7 +23,7 @@ namespace ShipWorks.Editions
         {
             shipmentTypeRestrictions = new Dictionary<ShipmentTypeCode, List<ShipmentTypeRestrictionType>>();
         }
-
+        
         /// <summary>
         /// Parses the XML in the specified path looking for data in the ShipmentTypeFunctionality node.
         /// </summary>
@@ -30,22 +31,42 @@ namespace ShipWorks.Editions
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Parse(XPathNavigator path)
         {
+            XElement document = XElement.Parse(path.OuterXml);
+            return Parse(document);
+        }
+
+        /// <summary>
+        /// Parses the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
+        /// are configured if the node is not found.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>An instance of ShipmentTypeFunctionality.</returns>
+        public static ShipmentTypeFunctionality Parse(XElement source)
+        {
             ShipmentTypeFunctionality functionality = new ShipmentTypeFunctionality();
 
-            XElement document = XElement.Parse(path.OuterXml);
-            XElement functionalityElement = document.Element("ShipmentTypeFunctionality");
-
-            if (functionalityElement != null)
+            // Extract appropriate node with functionality set (or create an empty one if needed)
+            XElement sourcedElement = new XElement("ShipmentTypeFunctionality");
+            if (source != null)
             {
-                IEnumerable<XElement> typeElements = functionalityElement.Elements("ShipmentType");
-                foreach (XElement type in typeElements)
-                {
-                    ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) (int) type.Attribute("TypeCode");
-                    IEnumerable<ShipmentTypeRestrictionType> restrictions = type.Elements("Restriction").Select(e => Enum.Parse(typeof(ShipmentTypeRestrictionType), e.Value, true)).Cast<ShipmentTypeRestrictionType>();
-
-                    functionality.AddShipmentTypeRestriction(shipmentTypeCode, restrictions.Distinct().ToList());
-                }
+                // Set the sourced element to an empty ShipmentTypeFunctionality element if it's
+                // missing; this is useful, so we don't have to check for null in other methods 
+                // (e.g. ToXElement, ToString)
+                sourcedElement = source.Element("ShipmentTypeFunctionality") ?? new XElement("ShipmentTypeFunctionality");
             }
+
+            IEnumerable<XElement> typeElements = sourcedElement.Elements("ShipmentType");
+            foreach (XElement type in typeElements)
+            {
+                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) (int) type.Attribute("TypeCode");
+                IEnumerable<ShipmentTypeRestrictionType> restrictions = type.Elements("Restriction").Select(e => Enum.Parse(typeof (ShipmentTypeRestrictionType), e.Value, true)).Cast<ShipmentTypeRestrictionType>();
+
+                functionality.AddShipmentTypeRestriction(shipmentTypeCode, restrictions.Distinct().ToList());
+            }
+
+            // Record the raw data that was used to populate the object; we'll use this later
+            // for serialization purposes. 
+            functionality.originalFunctionalitySource = sourcedElement;
 
             return functionality;
         }
@@ -56,6 +77,24 @@ namespace ShipWorks.Editions
         public IEnumerable<ShipmentTypeRestrictionType> this[ShipmentTypeCode key]
         {
             get { return shipmentTypeRestrictions.ContainsKey(key) ? shipmentTypeRestrictions[key] : new List<ShipmentTypeRestrictionType>(); }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            return originalFunctionalitySource.ToString();
+        }
+
+        /// <summary>
+        /// Returns the functionality in the form of an XElement.
+        /// </summary>
+        /// <returns>A <see cref="System.Xml.Linq.XElement" /> that represents this instance.</returns>
+        public XElement ToXElement()
+        {
+            return originalFunctionalitySource;
         }
 
         /// <summary>
