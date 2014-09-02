@@ -125,6 +125,12 @@ namespace ShipWorks.Editions
         /// Endicia Scan Based Returns can be Restricted
         /// </summary>
         [Description("You must contact Interapptive to use Endicia Scan Based Returns.")]
-        EndiciaScanBasedReturns
+        EndiciaScanBasedReturns,
+
+        /// <summary>
+        /// The ability to add shipping accounts can be restricted.
+        /// </summary>
+        [Description("You must contact Interapptive to be able to add a new account to ShipWorks.")]
+        ShipmentTypeRegistration
     }
 }

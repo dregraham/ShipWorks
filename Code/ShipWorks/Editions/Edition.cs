@@ -55,7 +55,7 @@ namespace ShipWorks.Editions
         /// Gets or sets the shipment type functionality that can be configured.
         /// </summary>
         public ShipmentTypeFunctionality ShipmentTypeFunctionality { get; set; }
-
+        
         /// <summary>
         /// Add a restriction to the edition
         /// </summary>
@@ -130,6 +130,22 @@ namespace ShipWorks.Editions
             if (!sharedOptions.EndiciaScanBasedReturnEnabled)
             {
                 AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
+            }
+
+            // Load the shipment type functionality into the restriction set
+            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
+            {
+                List<ShipmentTypeRestrictionType> restrictionTypes = ShipmentTypeFunctionality[typeCode].ToList();
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.Disabled))
+                {
+                    AddRestriction(EditionFeature.ShipmentType, typeCode, EditionRestrictionLevel.Hidden);
+                }
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.AccountRegistration))
+                {
+                    AddRestriction(EditionFeature.ShipmentTypeRegistration, typeCode, EditionRestrictionLevel.Hidden);
+                }
             }
 
             restrictionsFinalized = true;
