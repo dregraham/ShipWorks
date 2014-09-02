@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Postal
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
             }
-            catch (TangoException ex)
+            catch (Exception ex)
             {
                 log.Error("Error logging PostageEvent to Tango.", ex);
             }
@@ -49,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     tangoWebClient.LogPostageEvent(balance, 0, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
                 }
-                catch (TangoException ex)
+                catch (Exception ex)
                 {
                     log.Error("Error logging PostageEvent to Tango.", ex);
                 }
