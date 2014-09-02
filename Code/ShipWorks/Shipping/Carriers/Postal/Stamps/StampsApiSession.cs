@@ -695,11 +695,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
-                thermalType = UseThermal(settings.StampsDomesticThermal, (InternationalLabelType)settings.StampsInternationalLabelType, shipment) ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
+                thermalType = GetThermalType(settings.StampsDomesticThermal, settings.StampsInternationalThermal, settings.StampsThermalType, shipment);
             }
             else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
-                thermalType = UseThermal(settings.Express1StampsDomesticThermal, (InternationalLabelType)settings.Express1StampsInternationalLabelType, shipment) ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
+                thermalType = GetThermalType(settings.Express1StampsDomesticThermal, settings.Express1StampsInternationalThermal, settings.Express1StampsThermalType, shipment);
             }
             else
             {
@@ -819,19 +819,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             SaveLabelImages(shipment, labelUrls);
         }
 
-        private static bool UseThermal(bool domesticThermal, InternationalLabelType internationalLabelType, ShipmentEntity shipment)
+        /// <summary>
+        /// Gets the type of the thermal.
+        /// </summary>
+        private static ThermalLanguage? GetThermalType(bool domesticThermal, bool internationalThermal, int thermalType, ShipmentEntity shipment)
         {
             bool useThermal = domesticThermal;
 
-            if (internationalLabelType != InternationalLabelType.SameAsDomestic &&
-                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
                 !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 // International and overrides domestic value
-                useThermal = (internationalLabelType == InternationalLabelType.Thermal);
+                useThermal = internationalThermal;
             }
 
-            return useThermal;
+            return useThermal ? (ThermalLanguage?)thermalType : null;
         }
 
         /// <summary>

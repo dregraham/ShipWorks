@@ -7489,10 +7489,10 @@ namespace ShipWorks.Data.Model
 		WorldShipLaunch,
 		///<summary>StampsDomesticThermal. </summary>
 		StampsDomesticThermal,
+		///<summary>StampsInternationalThermal. </summary>
+		StampsInternationalThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
-		///<summary>StampsInternationalLabelType. </summary>
-		StampsInternationalLabelType,
 		///<summary>StampsAutomaticExpress1. </summary>
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
@@ -7533,10 +7533,10 @@ namespace ShipWorks.Data.Model
 		IParcelInsurancePennyOne,
 		///<summary>Express1StampsDomesticThermal. </summary>
 		Express1StampsDomesticThermal,
+		///<summary>Express1StampsInternationalThermal. </summary>
+		Express1StampsInternationalThermal,
 		///<summary>Express1StampsThermalType. </summary>
 		Express1StampsThermalType,
-		///<summary>Express1StampsInternationalLabelType. </summary>
-		Express1StampsInternationalLabelType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>

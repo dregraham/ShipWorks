@@ -15902,15 +15902,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsDomesticThermal);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsInternationalThermal field instance</summary>
+		public static EntityField2 StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsInternationalThermal);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsThermalType field instance</summary>
 		public static EntityField2 StampsThermalType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsThermalType);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsInternationalLabelType field instance</summary>
-		public static EntityField2 StampsInternationalLabelType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsInternationalLabelType);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpress1 field instance</summary>
 		public static EntityField2 StampsAutomaticExpress1
@@ -16012,15 +16012,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsDomesticThermal);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsInternationalThermal field instance</summary>
+		public static EntityField2 Express1StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsInternationalThermal);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalType field instance</summary>
 		public static EntityField2 Express1StampsThermalType
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermalType);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsInternationalLabelType field instance</summary>
-		public static EntityField2 Express1StampsInternationalLabelType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsInternationalLabelType);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsSingleSource field instance</summary>
 		public static EntityField2 Express1StampsSingleSource

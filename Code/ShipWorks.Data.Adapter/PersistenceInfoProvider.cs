@@ -2333,8 +2333,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaInsuranceProvider", "EndiciaInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 31 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipLaunch", "WorldShipLaunch", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 32 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsDomesticThermal", "StampsDomesticThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 33 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsThermalType", "StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 34 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsInternationalLabelType", "StampsInternationalLabelType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 35 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsInternationalThermal", "StampsInternationalThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 34 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsThermalType", "StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 35 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1", "StampsAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 36 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1Account", "StampsAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 37 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermal", "Express1EndiciaThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 38 );
@@ -2355,8 +2355,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsuranceProvider", "iParcelInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 53 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsurancePennyOne", "iParcelInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 54 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsDomesticThermal", "Express1StampsDomesticThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 55 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermalType", "Express1StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 56 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsInternationalLabelType", "Express1StampsInternationalLabelType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 57 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsInternationalThermal", "Express1StampsInternationalThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 56 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermalType", "Express1StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 57 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 59 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 60 );

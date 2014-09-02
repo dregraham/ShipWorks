@@ -39,12 +39,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if(IsExpress1)
             {
-                thermalPrinter.Checked = settings.Express1StampsDomesticThermal;
+                domesticThermal.Checked = settings.Express1StampsDomesticThermal;
+                internationalThermal.Checked = settings.Express1StampsInternationalThermal;
+
                 thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
             }
             else
             {
-                thermalPrinter.Checked = settings.StampsDomesticThermal;
+                domesticThermal.Checked = settings.StampsDomesticThermal;
+                internationalThermal.Checked = settings.StampsInternationalThermal;
+
                 thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
             }
         }
@@ -54,8 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnUpdateThermalUI(object sender, EventArgs e)
         {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
+            labelThermalType.Enabled = domesticThermal.Checked || internationalThermal.Checked;
+            thermalType.Enabled = domesticThermal.Checked || internationalThermal.Checked;
         }
 
         /// <summary>
@@ -65,12 +69,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             if(IsExpress1)
             {
-                settings.Express1StampsDomesticThermal = thermalPrinter.Checked;
-                settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
+                settings.Express1StampsDomesticThermal = domesticThermal.Checked;
+                settings.Express1StampsInternationalThermal = internationalThermal.Checked;
+
+                settings.Express1StampsThermalType = (int)thermalType.SelectedValue; 
             }
             else
             {
-                settings.StampsDomesticThermal = thermalPrinter.Checked;
+                settings.StampsDomesticThermal = domesticThermal.Checked;
+                settings.StampsInternationalThermal = internationalThermal.Checked;
+
                 settings.StampsThermalType = (int)thermalType.SelectedValue;    
             }
         }

@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1StampsDomesticThermal = false;
             settings.Express1StampsThermalType = (int)ThermalLanguage.EPL;
             settings.Express1StampsSingleSource = false;
-            settings.Express1StampsInternationalLabelType = (int)InternationalLabelType.SameAsDomestic;
+            settings.Express1StampsInternationalThermal = false;
 
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
