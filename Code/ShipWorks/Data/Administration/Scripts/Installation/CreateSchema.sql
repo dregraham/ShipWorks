@@ -144,6 +144,11 @@ PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
 GO
 ALTER TABLE [dbo].[EbayOrder] ADD CONSTRAINT [PK_EbayOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
+GO
+
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -480,6 +485,10 @@ GO
 PRINT N'Creating index [IX_Auto_RequestedShipping] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
+GO
+PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Order] ([BillFirstName])
 GO
 PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Order]'
 GO
@@ -2337,6 +2346,10 @@ GO
 PRINT N'Creating primary key [PK_Customer] on [dbo].[Customer]'
 GO
 ALTER TABLE [dbo].[Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED  ([CustomerID])
+GO
+PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Customer]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Customer] ([BillFirstName])
 GO
 PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Customer]'
 GO
