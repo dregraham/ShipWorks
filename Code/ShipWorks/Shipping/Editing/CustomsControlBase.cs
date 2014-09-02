@@ -256,8 +256,14 @@ namespace ShipWorks.Shipping.Editing
             {
                 if (sandGrid.Rows.Count > i)
                 {
+                    // Temporarily detach fro the SelectionChanged event, so controls aren't
+                    // refreshed (and the cursor isn't reset in any text boxes with focus)
+                    sandGrid.SelectionChanged -= OnChangeSelectedRow;
+
                     selectedRows.Add(sandGrid.Rows[i]);
                     sandGrid.Rows[i].Selected = true;   
+
+                    sandGrid.SelectionChanged += OnChangeSelectedRow;
                 }
             });
         }

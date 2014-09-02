@@ -731,13 +731,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                         BigCommerceImage image = productImagesRestResponse.FirstOrDefault(img => img != null && !img.is_thumbnail);
                         if (image != null)
                         {
-                            product.Image = image.image_file;
+                            product.Image = image.standard_url;
                         }
 
                         image = productImagesRestResponse.FirstOrDefault(img => img.is_thumbnail);
                         if (image != null)
                         {
-                            product.ThumbnailImage = image.image_file;
+                            product.ThumbnailImage = image.thumbnail_url;
                         }
                     }
 

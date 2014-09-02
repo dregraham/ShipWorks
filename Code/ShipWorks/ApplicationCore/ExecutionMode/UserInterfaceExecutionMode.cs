@@ -40,6 +40,17 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
         /// <summary>
+        /// Name of this execution mode (User interface, command line, service)
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return "UserInterfaceExecutionMode";
+            }
+        }
+
+        /// <summary>
         /// Indicates whether the UI is running for the current instance ID.
         /// </summary>
         public static bool IsProcessRunning
