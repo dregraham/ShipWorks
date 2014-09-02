@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         StampsAccountEntity account;
         private PostageBalance postageBalance;
+        private decimal? balance;
 
         bool postagePurchased = false;
 
@@ -67,7 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    postage.Text = postageBalance.Value.ToString("c");
+                    balance = postageBalance.Value;
+                    postage.Text = balance.Value.ToString("c");
 
                     purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
@@ -148,8 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                AccountInfo accountInfo = new StampsApiSession().GetAccountInfo(account);
-                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
+                using (StampsPurchasePostageDlg dlg = balance.HasValue ? new StampsPurchasePostageDlg(account, balance.Value) : new StampsPurchasePostageDlg(account))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
