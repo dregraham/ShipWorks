@@ -65,6 +65,8 @@ namespace ShipWorks.Editions
 
             ApplySharedOptions(edition, xMemento);
 
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Parse(root);
+
             return edition;
         }
 
@@ -113,7 +115,7 @@ namespace ShipWorks.Editions
                 edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
             }
         }
-
+        
         /// <summary>
         /// Get a type string to use to serialize the given edition
         /// </summary>
@@ -172,6 +174,8 @@ namespace ShipWorks.Editions
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
                 new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled)));
+
+            elements.Add(edition.ShipmentTypeFunctionality.ToXElement());
 
             return elements;
         }

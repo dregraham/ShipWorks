@@ -52,6 +52,11 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
+        /// Gets or sets the shipment type functionality that can be configured.
+        /// </summary>
+        public ShipmentTypeFunctionality ShipmentTypeFunctionality { get; set; }
+
+        /// <summary>
         /// Add a restriction to the edition
         /// </summary>
         protected void AddRestriction(EditionFeature feature, EditionRestrictionLevel level)
