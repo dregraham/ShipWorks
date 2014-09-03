@@ -179,14 +179,15 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaSingleSource = false;
             
             settings.Express1StampsDomesticThermal = false;
+            settings.Express1StampsInternationalThermal = false;
             settings.Express1StampsThermalType = (int)ThermalLanguage.EPL;
             settings.Express1StampsSingleSource = false;
-            settings.Express1StampsInternationalThermal = false;
-
+            
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
             settings.StampsDomesticThermal = false;
+            settings.StampsInternationalThermal = false;
             settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
