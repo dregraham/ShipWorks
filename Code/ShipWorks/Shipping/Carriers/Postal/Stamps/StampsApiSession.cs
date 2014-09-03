@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // However, Stamps.com doesn't currently support thermal internationals
-            if (!CustomsManager.IsCustomsRequired(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            if (CustomsManager.IsCustomsRequired(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 thermalType = null;
             }
