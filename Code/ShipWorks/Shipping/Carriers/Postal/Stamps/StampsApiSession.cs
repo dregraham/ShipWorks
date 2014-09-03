@@ -709,7 +709,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // For international thermal labels, we need to set the print layout or else most service/package type combinations
             // will fail with a "does not support Zebra printers" error
             if (thermalType.HasValue &&
-                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+                CustomsManager.IsCustomsRequired(shipment) &&
                 !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 rate.PrintLayout = "Normal4X6CN22";
@@ -826,7 +826,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             bool useThermal = domesticThermal;
 
-            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+            if (CustomsManager.IsCustomsRequired(shipment) &&
                 !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 // International and overrides domestic value
@@ -1244,7 +1244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // For APO/FPO, we have to specifically ask for customs docs
-            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
                 rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
             }
