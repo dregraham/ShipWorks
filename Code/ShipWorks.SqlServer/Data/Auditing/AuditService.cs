@@ -176,6 +176,8 @@ namespace ShipWorks.SqlServer.Data.Auditing
         /// </summary>
         private static List<string> DetermineAuditColumns(AuditTableInfo tableInfo)
         {
+            const byte VarBinaryDataType = 165;
+
             TriggerAction triggerAction = SqlContext.TriggerContext.TriggerAction;
 
             // List of columns we are going to audit for this event
@@ -192,6 +194,12 @@ namespace ShipWorks.SqlServer.Data.Auditing
 
                 // Skip rollups
                 if (columnInfo.ColumnName.StartsWith("Rollup"))
+                {
+                    continue;
+                }
+
+                // Skip varbinary columns
+                if (columnInfo.DataType == VarBinaryDataType)
                 {
                     continue;
                 }
