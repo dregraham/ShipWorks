@@ -159,6 +159,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
                 throw new EndiciaException("The Endicia account associated with the shipment has been removed from ShipWorks.");
             }
 
+            if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType) shipment.Postal.Service))
+            {
+                log.InfoFormat("DHL shipments do not support refunds. {0}", shipment.ShipmentID);
+                return;
+            }
+
             // Nothing to refund
             if (shipment.Postal.Endicia.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
             {
