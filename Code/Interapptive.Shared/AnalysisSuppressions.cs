@@ -3543,3 +3543,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdf", Scope = "type", Target = "Interapptive.Shared.Pdf.IPdfDocument")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pdf", Scope = "type", Target = "Interapptive.Shared.Pdf.PdfDocument")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "pdf", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#.ctor(System.IO.Stream)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.Byte[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.IO.Stream)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.Byte[])")]

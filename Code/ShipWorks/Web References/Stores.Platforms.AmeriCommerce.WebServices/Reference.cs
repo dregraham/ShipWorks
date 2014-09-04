@@ -51172,38 +51172,42 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices {
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.americommerce.com")]
     public enum PaymentTypes {
-        
+
         /// <remarks/>
         None,
-        
+
         /// <remarks/>
         CreditCard,
-        
+
         /// <remarks/>
         PayPal,
-        
+
         /// <remarks/>
         GoogleCheckout,
-        
+
         /// <remarks/>
         PayPalExpress,
-        
+
         /// <remarks/>
         eCheck,
-        
+
         /// <remarks/>
         Custom,
-        
+
         /// <remarks/>
         GiftCertificate,
-        
+
         /// <remarks/>
         CheckoutByAmazon,
 
         /// <summary>
         /// Left out of WSDL
         /// </summary>
-        RewardPoints
+        RewardPoints,
+
+        BillMeLater,
+
+        AffirmCheckout,
     }
     
     /// <remarks/>

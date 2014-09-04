@@ -149,10 +149,7 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.nopCommerce,
-                StoreTypeCode.SellerExpress,
-                StoreTypeCode.PowersportsSupport,
-                StoreTypeCode.CloudConversion
+                StoreTypeCode.nopCommerce
             };
 
             return disabledTypes.Contains(typeCode);

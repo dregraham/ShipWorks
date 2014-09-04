@@ -43,9 +43,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(396, 13);
+            this.label1.Size = new System.Drawing.Size(401, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Enter the administrator username and password you use to login to sellerexpress:";
+            this.label1.Text = "Enter the administrator username and password you use to login to SellerExpress:";
             // 
             // label2
             // 
@@ -84,7 +84,7 @@
             this.password.TabIndex = 4;
             this.password.UseSystemPasswordChar = true;
             // 
-            // ChannelSaleAccountSettingsControl
+            // SellerExpressAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

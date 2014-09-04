@@ -24,6 +24,14 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         private static readonly ILog log = LogManager.GetLogger(typeof(ExecutionMode));
 
         /// <summary>
+        /// Name of this execution mode (User interface, command line, service)
+        /// </summary>
+        public abstract string Name
+        {
+            get; 
+        }
+
+        /// <summary>
         /// Indicates if this execution mode supports displaying a UI, whether or not one is currently displayed or not
         /// </summary>
         public abstract bool IsUISupported
