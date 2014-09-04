@@ -6,6 +6,7 @@ using System.Threading;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -161,6 +162,18 @@ namespace ShipWorks.Shipping
             set
             {
                 certificateInspector = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether account registration allowed for this shipment type.
+        /// </summary>
+        public virtual bool IsAccountRegistrationAllowed
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode);
+                return restriction.Level != EditionRestrictionLevel.Hidden;
             }
         }
 
