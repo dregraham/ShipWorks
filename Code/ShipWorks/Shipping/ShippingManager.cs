@@ -380,6 +380,7 @@ namespace ShipWorks.Shipping
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
+            clonedShipment.OnlineShipmentID = 0;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
