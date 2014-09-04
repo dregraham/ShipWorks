@@ -707,7 +707,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // However, Stamps.com doesn't currently support thermal internationals
-            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            if (CustomsManager.IsCustomsRequired(shipment) || PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 thermalType = null;
             }
@@ -1220,7 +1220,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // For APO/FPO, we have to specifically ask for customs docs
-            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
+            if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
                 rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
             }
