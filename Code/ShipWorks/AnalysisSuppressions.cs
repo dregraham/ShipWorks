@@ -13765,3 +13765,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "ShipWorks.Stores.Platforms.BigCommerce.DTO.BigCommerceImage.#standard_url")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Scope = "member", Target = "ShipWorks.Stores.Platforms.BigCommerce.DTO.BigCommerceImage.#tiny_url")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Scope = "member", Target = "ShipWorks.Stores.Platforms.BigCommerce.DTO.BigCommerceImage.#tiny_url")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "w", Scope = "member", Target = "ShipWorks.Stores.Platforms.AmeriCommerce.AmeriCommerceStoreType.#.ctor(ShipWorks.Data.Model.EntityClasses.StoreEntity)")]
