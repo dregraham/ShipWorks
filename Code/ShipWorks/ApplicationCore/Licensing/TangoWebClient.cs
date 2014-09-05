@@ -403,12 +403,17 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public static void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        /// <returns>OnlineShipmentID from Tango.</returns>
+        /// <exception cref="System.ArgumentNullException">store</exception>
+        /// <exception cref="TangoException"></exception>
+        public static int LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             if (store == null)
             {
                 throw new ArgumentNullException("store");
             }
+
+            int onlineShipmentID = 0;
 
             // Get the license from the store so we know how to log
             ShipWorksLicense license = new ShipWorksLicense(store.License);
@@ -542,7 +547,16 @@ namespace ShipWorks.ApplicationCore.Licensing
                 {
                     throw new TangoException(errorNode.InnerText);
                 }
+
+                XmlNode shipmentIDNode = xmlResponse.SelectSingleNode("//OnlineShipmentID");
+                if (shipmentIDNode != null && 
+                    !int.TryParse(shipmentIDNode.InnerText, out onlineShipmentID))
+                {
+                    onlineShipmentID = 0;
+                }
             }
+
+            return onlineShipmentID;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -38,11 +39,12 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Loads the shipment.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
         public void LoadShipment(ShipmentEntity shipment)
         {
             this.shipment = shipment;
 
+            submitClaimLink.Visible = shipment.OnlineShipmentID > 0;
+            
             // Make sure that controls are reset even if the data is empty
             claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);
             damageValue.Amount = shipment.InsurancePolicy.DamageValue.GetValueOrDefault(InsuranceUtility.GetInsuredValue(shipment));
@@ -139,6 +141,25 @@ namespace ShipWorks.Shipping.Insurance
             {
                 log.Error("While attempting to log the insurance claim with Tango, an error occured.", ex);
             }
+        }
+
+        /// <summary>
+        /// Called when [submit claim link clicked].
+        /// </summary>
+        private void OnSubmitClaimLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
+
+            InsureShipAffiliate insureShipAffiliate = TangoWebClient.GetInsureShipAffiliate(store);
+
+            string onlineStoreID = insureShipAffiliate.InsureShipStoreID;
+
+            string url = string.Format(
+                "https://www.interapptive.com/account/insuranceclaim.php?id={0}&shipment={1}",
+                onlineStoreID,
+                shipment.OnlineShipmentID);
+
+            WebHelper.OpenUrl(url, this);
         }
     }
 }

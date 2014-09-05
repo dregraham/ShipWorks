@@ -517,6 +517,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferencePO", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("ReferenceShipmentIntegrity", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("PayorTransportType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -587,9 +590,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnSaturdayPickup", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("ReferenceShipmentIntegrity", fieldHashtable);
 		}
 		#endregion
 
@@ -806,6 +806,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferencePO, true); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReferencePO, value); }
+		}
+
+		/// <summary> The ReferenceShipmentIntegrity property of the Entity FedExProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."ReferenceShipmentIntegrity"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceShipmentIntegrity
+		{
+			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, true); }
+			set	{ SetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, value); }
 		}
 
 		/// <summary> The PayorTransportType property of the Entity FedExProfile<br/><br/>
@@ -1070,17 +1081,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ReturnSaturdayPickup, value); }
-		}
-
-		/// <summary> The ReferenceShipmentIntegrity property of the Entity FedExProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "FedExProfile"."ReferenceShipmentIntegrity"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String ReferenceShipmentIntegrity
-		{
-			get { return (System.String)GetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, true); }
-			set	{ SetValue((int)FedExProfileFieldIndex.ReferenceShipmentIntegrity, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExProfilePackageEntity' which are related to this entity via a relation of type '1:n'.

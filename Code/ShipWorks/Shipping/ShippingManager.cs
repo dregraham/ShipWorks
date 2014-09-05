@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web.Configuration;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -193,6 +194,7 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
+            shipment.OnlineShipmentID = 0;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -378,6 +380,7 @@ namespace ShipWorks.Shipping
             clonedShipment.ThermalType = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
+            clonedShipment.OnlineShipmentID = 0;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
@@ -1184,9 +1187,15 @@ namespace ShipWorks.Shipping
                 // Now log the result to tango.  For WorldShip we can't do this until the shipment comes back in to ShipWorks
                 if (!shipmentType.ProcessingCompletesExternally)
                 {
-                    TangoWebClient.LogShipment(storeEntity, shipment);
+                    shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment);
 
                     log.InfoFormat("Shipment {0}  - Accounted", shipment.ShipmentID);
+                    
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        adapter.SaveAndRefetch(shipment);
+                        adapter.Commit();
+                    }
                 }
             }
             catch (InsureShipException ex)
