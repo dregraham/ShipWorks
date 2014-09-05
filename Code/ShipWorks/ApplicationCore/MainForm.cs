@@ -3204,9 +3204,7 @@ namespace ShipWorks
             }
 
             ShipmentsLoader loader = new ShipmentsLoader(this);
-
-            // False = not tracking
-            loader.Tag = false;
+            loader.Tag = InitialShippingTabDisplay.Shipping;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
             loader.LoadAsync(gridControl.Selection.OrderedKeys);
@@ -3224,9 +3222,25 @@ namespace ShipWorks
             }
 
             ShipmentsLoader loader = new ShipmentsLoader(this);
+            loader.Tag = InitialShippingTabDisplay.Tracking;
 
-            // True = show tracking
-            loader.Tag = true;
+            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+        }
+
+        /// <summary>
+        /// Submit an insurance claim for the selected orders
+        /// </summary>
+        private void OnSubmitClaim(object sender, EventArgs e)
+        {
+            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            {
+                MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+                return;
+            }
+
+            ShipmentsLoader loader = new ShipmentsLoader(this);
+            loader.Tag = InitialShippingTabDisplay.Insurance;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
             loader.LoadAsync(gridControl.Selection.OrderedKeys);
@@ -3247,8 +3261,11 @@ namespace ShipWorks
                 return;
             }
 
-            // Show the shipping window.  The Tag property hold the value of whether we are shipping or tracking.
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, (bool) ((ShipmentsLoader) sender).Tag))
+            // The Tag property hold the value of whether to show shipping, tracking, or insurance
+            InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
+
+            // Show the shipping window.  
+            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay))
             {
                 dlg.ShowDialog(this);
 
