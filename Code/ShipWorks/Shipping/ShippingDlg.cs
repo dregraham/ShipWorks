@@ -2137,7 +2137,7 @@ namespace ShipWorks.Shipping
                 if (outOfFundsException != null)
                 {
                     DialogResult answer = MessageHelper.ShowQuestion(this,
-                        string.Format("You do not have sufficient funds in {0} account #{1} to continue shipping.\n\n" +
+                        string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
                         "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
 
                     if (answer == DialogResult.OK)
