@@ -47,7 +47,7 @@
             this.thermalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.thermalType.Enabled = false;
             this.thermalType.FormattingEnabled = true;
-            this.thermalType.Location = new System.Drawing.Point(92, 98);
+            this.thermalType.Location = new System.Drawing.Point(99, 98);
             this.thermalType.Name = "thermalType";
             this.thermalType.Size = new System.Drawing.Size(115, 21);
             this.thermalType.TabIndex = 3;
@@ -56,7 +56,7 @@
             // 
             this.labelThermalType.AutoSize = true;
             this.labelThermalType.Enabled = false;
-            this.labelThermalType.Location = new System.Drawing.Point(16, 101);
+            this.labelThermalType.Location = new System.Drawing.Point(23, 101);
             this.labelThermalType.Name = "labelThermalType";
             this.labelThermalType.Size = new System.Drawing.Size(74, 13);
             this.labelThermalType.TabIndex = 2;
@@ -75,7 +75,7 @@
             // domesticThermal
             // 
             this.domesticThermal.AutoSize = true;
-            this.domesticThermal.Location = new System.Drawing.Point(19, 38);
+            this.domesticThermal.Location = new System.Drawing.Point(26, 38);
             this.domesticThermal.Name = "domesticThermal";
             this.domesticThermal.Size = new System.Drawing.Size(278, 17);
             this.domesticThermal.TabIndex = 1;
@@ -86,7 +86,7 @@
             // infotipLabelType
             // 
             this.infotipLabelType.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infotipLabelType.Location = new System.Drawing.Point(292, 40);
+            this.infotipLabelType.Location = new System.Drawing.Point(299, 40);
             this.infotipLabelType.Name = "infotipLabelType";
             this.infotipLabelType.Size = new System.Drawing.Size(12, 12);
             this.infotipLabelType.TabIndex = 46;
@@ -95,7 +95,7 @@
             // infoTip1
             // 
             this.infoTip1.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infoTip1.Location = new System.Drawing.Point(312, 60);
+            this.infoTip1.Location = new System.Drawing.Point(319, 60);
             this.infoTip1.Name = "infoTip1";
             this.infoTip1.Size = new System.Drawing.Size(12, 12);
             this.infoTip1.TabIndex = 48;
@@ -104,7 +104,7 @@
             // internationalThermal
             // 
             this.internationalThermal.AutoSize = true;
-            this.internationalThermal.Location = new System.Drawing.Point(19, 58);
+            this.internationalThermal.Location = new System.Drawing.Point(26, 58);
             this.internationalThermal.Name = "internationalThermal";
             this.internationalThermal.Size = new System.Drawing.Size(297, 17);
             this.internationalThermal.TabIndex = 47;
@@ -115,7 +115,7 @@
             // labelThermalOption
             // 
             this.labelThermalOption.AutoSize = true;
-            this.labelThermalOption.Location = new System.Drawing.Point(16, 22);
+            this.labelThermalOption.Location = new System.Drawing.Point(23, 22);
             this.labelThermalOption.Name = "labelThermalOption";
             this.labelThermalOption.Size = new System.Drawing.Size(156, 13);
             this.labelThermalOption.TabIndex = 49;
@@ -124,7 +124,7 @@
             // labelThermalTypeHeader
             // 
             this.labelThermalTypeHeader.AutoSize = true;
-            this.labelThermalTypeHeader.Location = new System.Drawing.Point(16, 82);
+            this.labelThermalTypeHeader.Location = new System.Drawing.Point(23, 82);
             this.labelThermalTypeHeader.Name = "labelThermalTypeHeader";
             this.labelThermalTypeHeader.Size = new System.Drawing.Size(182, 13);
             this.labelThermalTypeHeader.TabIndex = 50;
