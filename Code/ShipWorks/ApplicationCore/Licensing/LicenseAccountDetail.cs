@@ -124,7 +124,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
-            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Parse(xpath);
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(xpath);
 
             return edition;
         }

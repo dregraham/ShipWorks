@@ -25,23 +25,23 @@ namespace ShipWorks.Editions
         }
         
         /// <summary>
-        /// Parses the XML in the specified path looking for data in the ShipmentTypeFunctionality node.
+        /// Deserializes the XML in the specified path looking for data in the ShipmentTypeFunctionality node.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
-        public static ShipmentTypeFunctionality Parse(XPathNavigator path)
+        public static ShipmentTypeFunctionality Deserialize(XPathNavigator path)
         {
             XElement document = XElement.Parse(path.OuterXml);
-            return Parse(document);
+            return Deserialize(document);
         }
 
         /// <summary>
-        /// Parses the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
+        /// Deserializes the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
         /// are configured if the node is not found.
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
-        public static ShipmentTypeFunctionality Parse(XElement source)
+        public static ShipmentTypeFunctionality Deserialize(XElement source)
         {
             ShipmentTypeFunctionality functionality = new ShipmentTypeFunctionality();
 
@@ -118,6 +118,5 @@ namespace ShipWorks.Editions
             }
             
         }
-
     }
 }
