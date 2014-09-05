@@ -549,9 +549,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 }
 
                 XmlNode shipmentIDNode = xmlResponse.SelectSingleNode("//OnlineShipmentID");
-                if (shipmentIDNode != null)
+                if (shipmentIDNode != null && 
+                    !int.TryParse(shipmentIDNode.InnerText, out onlineShipmentID))
                 {
-                    int.TryParse(shipmentIDNode.InnerText, out onlineShipmentID);
+                    onlineShipmentID = 0;
                 }
             }
 
