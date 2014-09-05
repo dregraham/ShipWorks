@@ -7623,6 +7623,7 @@
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
