@@ -126,6 +126,15 @@ namespace ShipWorks.Shipping.Insurance
                 return false;
             }
 
+            ShipmentTypeDataService.LoadInsuranceData(shipment);
+
+            if (shipment.InsurancePolicy == null)
+            {
+                messageLabel.Text = "A claim must be submitted through the Shipworks website. Go to ShipWorks.com and click \"My Account\"";
+                messageLabel.Visible = true;
+                return false;
+            }
+
             InsureShipSettings insureShipSettings = new InsureShipSettings();
             DateTime allowedSubmitClaimDate = shipment.ShipDate + insureShipSettings.ClaimSubmissionWaitingPeriod;
 
