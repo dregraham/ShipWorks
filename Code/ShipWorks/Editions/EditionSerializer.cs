@@ -175,7 +175,10 @@ namespace ShipWorks.Editions
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
                 new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled)));
 
-            elements.Add(edition.ShipmentTypeFunctionality.ToXElement());
+            if (edition.ShipmentTypeFunctionality != null)
+            {
+                elements.Add(edition.ShipmentTypeFunctionality.ToXElement());
+            }
 
             return elements;
         }
