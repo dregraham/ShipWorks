@@ -525,6 +525,13 @@
     </Compile>
     <Compile Include="ApplicationCore\Nudges\NudgeActions\INudgeAction.cs" />
     <Compile Include="ApplicationCore\Nudges\Nudge.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\Nudges\NudgeDlg.Designer.cs">
+      <DependentUpon>NudgeDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApplicationCore\Nudges\NudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOption.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
@@ -6025,6 +6032,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.resx">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApplicationCore\Nudges\NudgeDlg.resx">
+      <DependentUpon>NudgeDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Options\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>
