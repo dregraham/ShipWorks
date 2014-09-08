@@ -31,7 +31,13 @@ namespace ShipWorks.Editions
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
         public static ShipmentTypeFunctionality Deserialize(XPathNavigator path)
         {
-            XElement document = XElement.Parse(path.OuterXml);
+            XElement document = null;
+
+            if (path != null)
+            {
+                document = XElement.Parse(path.OuterXml);
+            }
+
             return Deserialize(document);
         }
 
