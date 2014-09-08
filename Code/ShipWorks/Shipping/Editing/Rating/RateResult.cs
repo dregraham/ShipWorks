@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateResult Copy()
         {
             //Description,days,amount, tag
-            RateResult coppiedRate = new RateResult(Description, days, amount, tag)
+            RateResult copiedRate = new RateResult(Description, days, amount, duties, taxes, shipping, tag)
             {
                 AmountFootnote = amountFootnote,
                 CarrierDescription = carrierDescription,
@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 ProviderLogo = ProviderLogo
             };
 
-            return coppiedRate;
+            return copiedRate;
         }
     }
 }
