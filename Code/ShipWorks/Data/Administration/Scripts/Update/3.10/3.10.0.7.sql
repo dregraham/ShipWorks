@@ -2,94 +2,151 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Dropping constraints from [dbo].[ShippingSettings]'
+PRINT N'Dropping index [IX_ActionQueue_ContextLock] from [dbo].[ActionQueue]'
 GO
-ALTER TABLE [dbo].[ShippingSettings] DROP CONSTRAINT [PK_ShippingSettings]
+DROP INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue]
 GO
-PRINT N'Rebuilding [dbo].[ShippingSettings]'
+PRINT N'Dropping index [IX_ActionQueue_Search] from [dbo].[ActionQueue]'
 GO
-CREATE TABLE [dbo].[tmp_rg_xx_ShippingSettings]
-(
-[ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DefaultType] [int] NOT NULL,
-[BlankPhoneOption] [int] NOT NULL,
-[BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsurancePolicy] [nvarchar] (40) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsuranceLastAgreed] [datetime] NULL,
-[FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[FedExMaskAccount] [bit] NOT NULL,
-[FedExThermal] [bit] NOT NULL,
-[FedExThermalType] [int] NOT NULL,
-[FedExThermalDocTab] [bit] NOT NULL,
-[FedExThermalDocTabType] [int] NOT NULL,
-[FedExInsuranceProvider] [int] NOT NULL,
-[FedExInsurancePennyOne] [bit] NOT NULL,
-[UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UpsThermal] [bit] NOT NULL,
-[UpsThermalType] [int] NOT NULL,
-[UpsInsuranceProvider] [int] NOT NULL,
-[UpsInsurancePennyOne] [bit] NOT NULL,
-[EndiciaThermal] [bit] NOT NULL,
-[EndiciaThermalType] [int] NOT NULL,
-[EndiciaCustomsCertify] [bit] NOT NULL,
-[EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[EndiciaThermalDocTab] [bit] NOT NULL,
-[EndiciaThermalDocTabType] [int] NOT NULL,
-[EndiciaAutomaticExpress1] [bit] NOT NULL,
-[EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
-[EndiciaInsuranceProvider] [int] NOT NULL,
-[WorldShipLaunch] [bit] NOT NULL,
-[StampsDomesticThermal] [bit] NOT NULL,
-[StampsInternationalThermal] [bit] NOT NULL,
-[StampsThermalType] [int] NOT NULL,
-[StampsAutomaticExpress1] [bit] NOT NULL,
-[StampsAutomaticExpress1Account] [bigint] NOT NULL,
-[Express1EndiciaThermal] [bit] NOT NULL,
-[Express1EndiciaThermalType] [int] NOT NULL,
-[Express1EndiciaCustomsCertify] [bit] NOT NULL,
-[Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Express1EndiciaThermalDocTab] [bit] NOT NULL,
-[Express1EndiciaThermalDocTabType] [int] NOT NULL,
-[Express1EndiciaSingleSource] [bit] NOT NULL,
-[EquaShipThermal] [bit] NOT NULL,
-[EquaShipThermalType] [int] NOT NULL,
-[OnTracThermal] [bit] NOT NULL,
-[OnTracThermalType] [int] NOT NULL,
-[OnTracInsuranceProvider] [int] NOT NULL,
-[OnTracInsurancePennyOne] [bit] NOT NULL,
-[iParcelThermal] [bit] NOT NULL,
-[iParcelThermalType] [int] NOT NULL,
-[iParcelInsuranceProvider] [int] NOT NULL,
-[iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsDomesticThermal] [bit] NOT NULL,
-[Express1StampsInternationalThermal] [bit] NOT NULL,
-[Express1StampsThermalType] [int] NOT NULL,
-[Express1StampsSingleSource] [bit] NOT NULL,
-[UpsMailInnovationsEnabled] [bit] NOT NULL,
-[WorldShipMailInnovationsEnabled] [bit] NOT NULL,
-[BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipSenseEnabled] [bit] NOT NULL,
-[ShipSenseUniquenessXml] [xml] NOT NULL,
-[ShipSenseProcessedShipmentID] [bigint] NOT NULL,
-[ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL
-)
+DROP INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue]
 GO
-INSERT INTO [dbo].[tmp_rg_xx_ShippingSettings]([ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermal], [FedExThermalType], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsThermal], [UpsThermalType], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaThermal], [EndiciaThermalType], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], [EndiciaInsuranceProvider], [WorldShipLaunch], [StampsDomesticThermal], [StampsThermalType], [StampsAutomaticExpress1], [StampsAutomaticExpress1Account], [Express1EndiciaThermal], [Express1EndiciaThermalType], [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [EquaShipThermal], [EquaShipThermalType], [OnTracThermal], [OnTracThermalType], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelThermal], [iParcelThermalType], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsDomesticThermal], [Express1StampsThermalType], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], [AutoCreateShipments],
-	[StampsInternationalThermal], [Express1StampsInternationalThermal])
-	SELECT [ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermal], [FedExThermalType], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsThermal], [UpsThermalType], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaThermal], [EndiciaThermalType], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], [EndiciaInsuranceProvider], [WorldShipLaunch], [StampsThermal], [StampsThermalType], [StampsAutomaticExpress1], [StampsAutomaticExpress1Account], [Express1EndiciaThermal], [Express1EndiciaThermalType], [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [EquaShipThermal], [EquaShipThermalType], [OnTracThermal], [OnTracThermalType], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelThermal], [iParcelThermalType], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsThermal], [Express1StampsThermalType], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], [AutoCreateShipments],
-	0, 0
-	 FROM [dbo].[ShippingSettings]
+PRINT N'Dropping index [IX_Audit_TransactionID] from [dbo].[Audit]'
 GO
-DROP TABLE [dbo].[ShippingSettings]
+DROP INDEX [IX_Audit_TransactionID] ON [dbo].[Audit]
 GO
-EXEC sp_rename N'[dbo].[tmp_rg_xx_ShippingSettings]', N'ShippingSettings'
+PRINT N'Dropping index [IX_AuditChange] from [dbo].[AuditChange]'
 GO
-PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
+DROP INDEX [IX_AuditChange] ON [dbo].[AuditChange]
 GO
-ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
+PRINT N'Dropping index [IX_AuditChangeDetail] from [dbo].[AuditChangeDetail]'
+GO
+DROP INDEX [IX_AuditChangeDetail] ON [dbo].[AuditChangeDetail]
+GO
+PRINT N'Dropping index [IX_EmailOutbound] from [dbo].[EmailOutbound]'
+GO
+DROP INDEX [IX_EmailOutbound] ON [dbo].[EmailOutbound]
+GO
+PRINT N'Dropping index [IX_EmailOutbound_Email] from [dbo].[EmailOutboundRelation]'
+GO
+DROP INDEX [IX_EmailOutbound_Email] ON [dbo].[EmailOutboundRelation]
+GO
+PRINT N'Dropping index [IX_EmailOutbound_Object] from [dbo].[EmailOutboundRelation]'
+GO
+DROP INDEX [IX_EmailOutbound_Object] ON [dbo].[EmailOutboundRelation]
+GO
+PRINT N'Dropping index [IX_FilterNodeCountDirty] from [dbo].[FilterNodeContentDirty]'
+GO
+DROP INDEX [IX_FilterNodeCountDirty] ON [dbo].[FilterNodeContentDirty]
+GO
+PRINT N'Dropping index [IX_ObjectLabel] from [dbo].[ObjectLabel]'
+GO
+DROP INDEX [IX_ObjectLabel] ON [dbo].[ObjectLabel]
+GO
+PRINT N'Dropping index [IX_ObjectReference] from [dbo].[ObjectReference]'
+GO
+DROP INDEX [IX_ObjectReference] ON [dbo].[ObjectReference]
+GO
+PRINT N'Creating index [IX_ActionQueue_ActionQueueType] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ActionQueueType] ON [dbo].[ActionQueue] ([ActionQueueType] DESC) INCLUDE ([ComputerLimitedList], [Status])
+GO
+PRINT N'Creating index [IX_ActionQueue_ContextLock] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_ContextLock] ON [dbo].[ActionQueue] ([ContextLock]) INCLUDE ([Status])
+GO
+PRINT N'Creating index [IX_ActionQueue_Search] on [dbo].[ActionQueue]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ActionQueue_Search] ON [dbo].[ActionQueue] ([Status], [ActionQueueType], [ActionQueueID])
+GO
+PRINT N'Creating index [IX_Audit_Date] on [dbo].[Audit]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Audit_Date] ON [dbo].[Audit] ([Date])
+GO
+PRINT N'Creating index [IX_Audit_ObjectIDDate] on [dbo].[Audit]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Audit_ObjectIDDate] ON [dbo].[Audit] ([ObjectID]) INCLUDE ([Date])
+GO
+PRINT N'Creating index [IX_Audit_TransactionID] on [dbo].[Audit]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Audit_TransactionID] ON [dbo].[Audit] ([TransactionID]) INCLUDE ([Action])
+GO
+PRINT N'Creating index [IX_AuditChange_AuditID] on [dbo].[AuditChange]'
+GO
+CREATE NONCLUSTERED INDEX [IX_AuditChange_AuditID] ON [dbo].[AuditChange] ([AuditID])
+GO
+PRINT N'Creating index [IX_AuditChangeDetail_AuditChangeID] on [dbo].[AuditChangeDetail]'
+GO
+CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_AuditChangeID] ON [dbo].[AuditChangeDetail] ([AuditChangeID])
+GO
+PRINT N'Creating index [IX_AuditChangeDetail_AuditID] on [dbo].[AuditChangeDetail]'
+GO
+CREATE NONCLUSTERED INDEX [IX_AuditChangeDetail_AuditID] ON [dbo].[AuditChangeDetail] ([AuditID])
+GO
+PRINT N'Creating index [IX_DownloadDetail_DownloadID] on [dbo].[DownloadDetail]'
+GO
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_DownloadID] ON [dbo].[DownloadDetail] ([DownloadID])
+GO
+PRINT N'Creating index [IX_EbayOrderItem_OrderID] on [dbo].[EbayOrderItem]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_OrderID] ON [dbo].[EbayOrderItem] ([OrderID])
+GO
+PRINT N'Creating index [IX_EmailOutbound] on [dbo].[EmailOutbound]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EmailOutbound] ON [dbo].[EmailOutbound] ([SendStatus], [AccountID], [DontSendBefore], [SentDate], [ComposedDate]) INCLUDE ([Visibility])
+GO
+PRINT N'Creating index [IX_EmailOutbound_EmailOutboundIDRelationTypeObjectID] on [dbo].[EmailOutboundRelation]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EmailOutbound_EmailOutboundIDRelationTypeObjectID] ON [dbo].[EmailOutboundRelation] ([EmailOutboundID], [RelationType]) INCLUDE ([ObjectID])
+GO
+PRINT N'Creating index [IX_EmailOutbound_ObjectIDRelationTypeEmailOutboundID] on [dbo].[EmailOutboundRelation]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EmailOutbound_ObjectIDRelationTypeEmailOutboundID] ON [dbo].[EmailOutboundRelation] ([ObjectID], [RelationType]) INCLUDE ([EmailOutboundID])
+GO
+PRINT N'Creating index [IX_EmailOutbound_RelationTypeObject] on [dbo].[EmailOutboundRelation]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EmailOutbound_RelationTypeObject] ON [dbo].[EmailOutboundRelation] ([RelationType], [ObjectID]) INCLUDE ([EmailOutboundID])
+GO
+PRINT N'Creating index [IX_FedExPackage_ShipmentID] on [dbo].[FedExPackage]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FedExPackage_ShipmentID] ON [dbo].[FedExPackage] ([ShipmentID])
+GO
+PRINT N'Creating index [IX_FilterNodeContentDirty_ColumnsUpdated] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated])
+GO
+PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
+GO
+PRINT N'Creating index [IX_FilterNodeContentDirty_RowVersion] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_RowVersion] ON [dbo].[FilterNodeContentDirty] ([RowVersion])
+GO
+PRINT N'Creating index [IX_iParcelPackage_ShipmentID] on [dbo].[iParcelPackage]'
+GO
+CREATE NONCLUSTERED INDEX [IX_iParcelPackage_ShipmentID] ON [dbo].[iParcelPackage] ([ShipmentID])
+GO
+PRINT N'Creating index [IX_ObjectLabel_ObjectTypeIsDeleted] on [dbo].[ObjectLabel]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ObjectLabel_ObjectTypeIsDeleted] ON [dbo].[ObjectLabel] ([ObjectType], [IsDeleted])
+GO
+PRINT N'Creating index [IX_ObjectReference_ConsumerIDReferenceKey] on [dbo].[ObjectReference]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ObjectReference_ConsumerIDReferenceKey] ON [dbo].[ObjectReference] ([ConsumerID], [ReferenceKey])
+GO
+PRINT N'Creating index [IX_ObjectReference_ObjectID] on [dbo].[ObjectReference]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ObjectReference_ObjectID] ON [dbo].[ObjectReference] ([ObjectID])
+GO
+PRINT N'Creating index [IX_ShipmentCustomsItem_ShipmentID] on [dbo].[ShipmentCustomsItem]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ShipmentCustomsItem_ShipmentID] ON [dbo].[ShipmentCustomsItem] ([ShipmentID])
+GO
+PRINT N'Creating index [IX_UpsPackage_ShipmentID] on [dbo].[UpsPackage]'
+GO
+CREATE NONCLUSTERED INDEX [IX_UpsPackage_ShipmentID] ON [dbo].[UpsPackage] ([ShipmentID])
+GO
+PRINT N'Creating index [IX_WorldShipPackage_ShipmentID] on [dbo].[WorldShipPackage]'
+GO
+CREATE NONCLUSTERED INDEX [IX_WorldShipPackage_ShipmentID] ON [dbo].[WorldShipPackage] ([ShipmentID])
 GO
