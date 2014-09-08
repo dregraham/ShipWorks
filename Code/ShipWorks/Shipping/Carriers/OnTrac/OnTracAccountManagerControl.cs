@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             edit.Enabled = enabled;
             delete.Enabled = enabled;
 
-            bool allowAccountRegistration = ShipmentTypeManager.GetType(ShipmentTypeCode.iParcel).IsAccountRegistrationAllowed;
+            bool allowAccountRegistration = ShipmentTypeManager.GetType(ShipmentTypeCode.OnTrac).IsAccountRegistrationAllowed;
 
             if (!allowAccountRegistration)
             {
