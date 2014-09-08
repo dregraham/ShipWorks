@@ -345,7 +345,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 17 );
+			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 18 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonApi", "AmazonApi", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, (int)SqlDbType.Char, 2, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -354,15 +354,16 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantName", "MerchantName", false, (int)SqlDbType.VarChar, 64, 0, 0, false, "", null, typeof(System.String), 5 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantToken", "MerchantToken", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AccessKeyID", "AccessKeyID", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "Cookie", "Cookie", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieExpires", "CookieExpires", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 9 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieWaitUntil", "CookieWaitUntil", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 10 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "Certificate", "Certificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 11 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "WeightDownloads", "WeightDownloads", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 16 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "AuthToken", "AuthToken", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "Cookie", "Cookie", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieExpires", "CookieExpires", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 10 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieWaitUntil", "CookieWaitUntil", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 11 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "Certificate", "Certificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 12 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "WeightDownloads", "WeightDownloads", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
 		private void InitAmeriCommerceStoreEntityMappings()

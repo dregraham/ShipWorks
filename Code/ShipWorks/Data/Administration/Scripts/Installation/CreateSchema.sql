@@ -357,6 +357,7 @@ CREATE TABLE [dbo].[AmazonStore]
 [MerchantName] [varchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MerchantToken] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AccessKeyID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Cookie] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CookieExpires] [datetime] NOT NULL,
 [CookieWaitUntil] [datetime] NOT NULL,

@@ -227,6 +227,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MerchantName = "";
             storeEntity.MerchantToken = "";
             storeEntity.AccessKeyID = "";
+            storeEntity.AuthToken = "";
             storeEntity.Cookie = "";
             storeEntity.CookieExpires = SqlDateTime.MinValue.Value;
             storeEntity.CookieWaitUntil = storeEntity.CookieExpires;
@@ -236,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
-
+            
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {
