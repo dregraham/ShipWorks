@@ -8,7 +8,7 @@ using System.Text;
 namespace ShipWorks.ApplicationCore.Nudges
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum NudgeTypes
+    public enum NudgeType
     {
         [Description("Upgrade ShipWorks")]
         ShipWorksUpgrade = 0

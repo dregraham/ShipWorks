@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Nudges
     public class Nudge
     {
         private readonly int nudgeID;
-        private readonly NudgeTypes nudgeType;
+        private readonly NudgeType nudgeType;
         private readonly Uri contentUri;
         private readonly SortedList<int, NudgeOption> nudgeOptions;
         private readonly Size contentDimensions;
@@ -21,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Constructor
         /// </summary>
-        public Nudge(int nudgeID, NudgeTypes nudgeType, Uri contentUri, IEnumerable<NudgeOption> nudgeOptions, Size contentDimensions)
+        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, IEnumerable<NudgeOption> nudgeOptions, Size contentDimensions)
         {
             this.nudgeID = nudgeID;
             this.nudgeType = nudgeType;
@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Type of Nudge
         /// </summary>
-        public NudgeTypes NudgeType
+        public NudgeType NudgeType
         {
             get { return nudgeType; }
         }

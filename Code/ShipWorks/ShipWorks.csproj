@@ -525,7 +525,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeActions\INudgeAction.cs" />
     <Compile Include="ApplicationCore\Nudges\Nudge.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeOption.cs" />
-    <Compile Include="ApplicationCore\Nudges\NudgeTypes.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Options\ModifiedOrderCustomerUpdateBehavior.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceController.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Background\BackgroundServiceHost.cs" />
