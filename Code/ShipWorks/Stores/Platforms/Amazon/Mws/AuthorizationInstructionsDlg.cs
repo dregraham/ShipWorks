@@ -84,6 +84,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
+        /// The entered MWS Auth Token
+        /// </summary>
+        public string AuthToken
+        {
+            get { return authToken.Text; }
+        }
+
+        /// <summary>
         /// Closing the window
         /// </summary>
         private void OnOK(object sender, EventArgs e)
@@ -91,6 +99,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             if (string.IsNullOrWhiteSpace(merchantID.Text))
             {
                 MessageHelper.ShowMessage(this, "Please enter your Amazon Merchant ID.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(authToken.Text))
+            {
+                MessageHelper.ShowMessage(this, "Please enter your AWS Auth Token.");
                 return;
             }
 

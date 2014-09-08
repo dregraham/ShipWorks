@@ -56,6 +56,8 @@
             this.mwsLink = new ShipWorks.UI.Controls.LinkControl();
             this.cancel = new System.Windows.Forms.Button();
             this.ok = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.authToken = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -271,14 +273,15 @@
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(38, 282);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(350, 13);
+            this.label23.Size = new System.Drawing.Size(456, 13);
             this.label23.TabIndex = 26;
-            this.label23.Text = "9.  Copy the Merchant ID from the confirmation page and enter it here:";
+            this.label23.Text = "9.  Copy the Merchant ID and MWS Auth Token from the confirmation page and enter " +
+    "it here:";
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(112, 311);
+            this.label24.Location = new System.Drawing.Point(111, 311);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(70, 13);
             this.label24.TabIndex = 27;
@@ -324,12 +327,30 @@
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.OnOK);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(88, 338);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 13);
+            this.label3.TabIndex = 36;
+            this.label3.Text = "MWS Auth Token:";
+            // 
+            // authToken
+            // 
+            this.authToken.Location = new System.Drawing.Point(187, 335);
+            this.authToken.Name = "authToken";
+            this.authToken.Size = new System.Drawing.Size(136, 21);
+            this.authToken.TabIndex = 37;
+            // 
             // AuthorizationInstructionsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
             this.ClientSize = new System.Drawing.Size(504, 391);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.authToken);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.label19);
@@ -401,5 +422,7 @@
         private UI.Controls.LinkControl mwsLink;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Button ok;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox authToken;
     }
 }
