@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -15,16 +16,18 @@ namespace ShipWorks.ApplicationCore.Nudges
         private readonly NudgeTypes nudgeType;
         private readonly Uri contentUri;
         private readonly SortedList<int, NudgeOption> nudgeOptions;
+        private readonly Size contentDimensions;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Nudge(int nudgeID, NudgeTypes nudgeType, Uri contentUri, IEnumerable<NudgeOption> nudgeOptions)
+        public Nudge(int nudgeID, NudgeTypes nudgeType, Uri contentUri, IEnumerable<NudgeOption> nudgeOptions, Size contentDimensions)
         {
             this.nudgeID = nudgeID;
             this.nudgeType = nudgeType;
             this.contentUri = contentUri;
-
+            this.contentDimensions = contentDimensions;
+            
             this.nudgeOptions = new SortedList<int, NudgeOption>();
             nudgeOptions.ToList().ForEach(no => this.nudgeOptions.Add(no.Index, no));
         }
@@ -51,6 +54,14 @@ namespace ShipWorks.ApplicationCore.Nudges
         public Uri ContentUri
         {
             get { return contentUri; }
+        }
+
+        /// <summary>
+        /// Gets the dimensions that the content should appear within.
+        /// </summary>
+        public Size ContentDimensions
+        {
+            get { return contentDimensions; }
         }
 
         /// <summary>
