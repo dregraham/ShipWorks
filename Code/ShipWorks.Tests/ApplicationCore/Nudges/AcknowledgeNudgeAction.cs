@@ -11,9 +11,8 @@ namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
     /// </summary>
     public class AcknowledgeNudgeAction : INudgeAction
     {
-        // This is what we will log to Tango
-        private readonly string result;
-        private readonly int nudgeID;
+        private string result;
+        private int nudgeID;
 
         /// <summary>
         /// Constructor

@@ -88,7 +88,7 @@ namespace ShipWorks.ApplicationCore.Nudges
                 };
 
                 button.Click += delegate {
-                        nudgeOption.Action.Execute();
+                    nudgeOption.Action.Execute(button.FindForm());
                     };
 
                 using (Graphics g = button.CreateGraphics())

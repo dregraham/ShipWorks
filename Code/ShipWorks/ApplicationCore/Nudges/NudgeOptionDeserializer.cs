@@ -46,7 +46,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Create a NudgeOption from an XElement.
         /// </summary>
-        public static NudgeOption Deserialize(XElement nudgeOptionElement)
+        public static NudgeOption Deserialize(int nudgeID, XElement nudgeOptionElement)
         {
             int index;
             string text;
@@ -68,16 +68,22 @@ namespace ShipWorks.ApplicationCore.Nudges
 
             if (nudgeActionType == null)
             {
-                log.Error(string.Format("Unable to get type '{0}'", nudgeActionName));
-                throw new NudgeException(string.Format("Unable to get type '{0}'", nudgeActionName));
+                nudgeActionType = Assembly.GetCallingAssembly().GetType(string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", nudgeActionName));
+
+                if (nudgeActionType == null)
+                {
+                    log.Error(string.Format("Unable to get type '{0}'", nudgeActionName));
+                    throw new NudgeException(string.Format("Unable to get type '{0}'", nudgeActionName));
+                }
             }
 
             try
             {
-                nudgeAction = (INudgeAction)Activator.CreateInstance(nudgeActionType);
+                nudgeAction = (INudgeAction)Activator.CreateInstance(nudgeActionType, nudgeID, result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error(string.Format("Unable to get type '{0}'", nudgeActionName), ex);
                 throw new NudgeException(string.Format("Unable to create an instance of type '{0}'", nudgeActionName));
             }
 

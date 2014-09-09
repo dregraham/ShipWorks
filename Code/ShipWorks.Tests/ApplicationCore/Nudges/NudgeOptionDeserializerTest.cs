@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Quartz.Util;
@@ -19,11 +20,21 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
 
-            string result = nudgeOption.Action.Execute();
+            bool closeCalled = false;
+            using (Form f = new Form())
+            {
+                f.Closed += new EventHandler(delegate(Object o, EventArgs a)
+                {
+                    closeCalled = true;
+                });
 
-            Assert.AreEqual(GetValue(nudgeOptionElement, "Result"), result);
+                f.Show();
+                nudgeOption.Action.Execute(f);
+            }
+
+            Assert.IsTrue(closeCalled);
         }
 
         [TestMethod]
@@ -33,7 +44,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").Remove();
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -43,7 +54,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").First().SetValue("hi");
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -53,7 +64,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Text").Remove();
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -63,7 +74,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").Remove();
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -73,7 +84,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").First().SetValue("bad type name");
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -83,7 +94,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Result").Remove();
 
-            NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
         }
 
         [TestMethod]
@@ -91,7 +102,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Index, int.Parse(GetValue(nudgeOptionElement, "Index")));
         }
@@ -101,7 +112,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
 
             string fullActionPath = string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", GetValue(nudgeOptionElement, "Action"));
             Assert.AreEqual(nudgeOption.Action.ToString(), fullActionPath);
@@ -112,7 +123,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Text, GetValue(nudgeOptionElement, "Text"));
         }
@@ -122,7 +133,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Result, GetValue(nudgeOptionElement, "Result"));
         }

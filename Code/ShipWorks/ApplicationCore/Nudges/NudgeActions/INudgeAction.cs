@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
     /// </summary>
     public interface INudgeAction
     {
-        string Execute();
+        void Execute(Form owner);
     }
 }

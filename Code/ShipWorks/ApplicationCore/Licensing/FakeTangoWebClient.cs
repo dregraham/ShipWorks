@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.ApplicationCore.Nudges.NudgeActions;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -25,8 +26,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             // for, however.
             List<Nudge> nudges = new List<Nudge>
             {
-                new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new List<NudgeOption> { new NudgeOption(0, "First Button", null, "CloseClicked"), new NudgeOption(1, "Second Button", null, "CloseClicked") }, new Size(625, 575)),
-                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new List<NudgeOption> { new NudgeOption(0, "Close", null, "CloseClicked") }, new Size(300, 500))
+                new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new List<NudgeOption> { new NudgeOption(0, "First Button", new AcknowledgeNudgeAction(1, "CloseClicked"), "CloseClicked1"), new NudgeOption(1, "Second Button", new AcknowledgeNudgeAction(1, "CloseClicked2"), "CloseClicked") }, new Size(625, 575)),
+                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new List<NudgeOption> { new NudgeOption(0, "Close", new AcknowledgeNudgeAction(2, "CloseClicked3"), "CloseClicked") }, new Size(300, 500))
             };
 
             return nudges;

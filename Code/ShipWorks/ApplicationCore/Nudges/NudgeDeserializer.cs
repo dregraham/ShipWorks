@@ -93,7 +93,7 @@ namespace ShipWorks.ApplicationCore.Nudges
 
             contentDimensions = ContentSize(nudgeElement);
 
-            nudgeOptions = Options(nudgeElement);
+            nudgeOptions = Options(nudgeID, nudgeElement);
 
             return new Nudge(nudgeID, nudgeType, contentUri, nudgeOptions, contentDimensions);
         }
@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Populates a list of nudge options
         /// </summary>
-        private static List<NudgeOption> Options(XElement nudgeElement)
+        private static List<NudgeOption> Options(int nudgeID, XElement nudgeElement)
         {
             List<NudgeOption> nudgeOptions = new List<NudgeOption>();
             IEnumerable<XElement> elements = nudgeElement.Descendants("Option");
@@ -113,7 +113,7 @@ namespace ShipWorks.ApplicationCore.Nudges
                 throw new NudgeException("Invalid nudge options in nudge xml.");
             }
 
-            xElements.ForEach(nudgeOption => nudgeOptions.Add(NudgeOptionDeserializer.Deserialize(nudgeOption)));
+            xElements.ForEach(nudgeOption => nudgeOptions.Add(NudgeOptionDeserializer.Deserialize(nudgeID, nudgeOption)));
 
             return nudgeOptions;
         }
