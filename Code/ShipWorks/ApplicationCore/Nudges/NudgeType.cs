@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
@@ -11,6 +12,7 @@ namespace ShipWorks.ApplicationCore.Nudges
     public enum NudgeType
     {
         [Description("Upgrade ShipWorks")]
+        [ApiValue("ShipWorksUpgrade")]
         ShipWorksUpgrade = 0
     }
 }

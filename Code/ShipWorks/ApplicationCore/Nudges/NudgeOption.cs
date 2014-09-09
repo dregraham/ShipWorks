@@ -14,15 +14,17 @@ namespace ShipWorks.ApplicationCore.Nudges
         private readonly int index;
         private readonly string text;
         private readonly INudgeAction action;
+        private readonly string result;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public NudgeOption(int index, string text, INudgeAction action)
+        public NudgeOption(int index, string text, INudgeAction action, string result)
         {
             this.index = index;
             this.text = text;
             this.action = action;
+            this.result = result;
         }
 
         /// <summary>
@@ -55,6 +57,17 @@ namespace ShipWorks.ApplicationCore.Nudges
             get
             {
                 return action;
+            }
+        }
+
+        /// <summary>
+        /// Result to be returned to Tango
+        /// </summary>
+        public string Result
+        {
+            get
+            {
+                return result;
             }
         }
     }
