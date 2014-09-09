@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -12,8 +13,10 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public static class NudgeManager
     {
+        private readonly static ILog log = LogManager.GetLogger(typeof (NudgeManager));
+        private readonly static object lockObject = new object();
+
         private static List<Nudge> nudges = new List<Nudge>();
-        private static object lockObject = new object();
 
         /// <summary>
         /// Initializes this instance by clearing out any previous nudges and refreshing the
@@ -22,12 +25,15 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <param name="stores">The stores.</param>
         public static void Initialize(IEnumerable<StoreEntity> stores)
         {
+            log.Info("Initializing nudges");
             lock (lockObject)
             {
                 nudges.Clear();
-
+             
                 ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
                 nudges = tangoWebClient.GetNudges(stores).ToList();
+
+                log.InfoFormat("Found {0} nudges", nudges.Count);
             }
         }
 
@@ -57,6 +63,7 @@ namespace ShipWorks.ApplicationCore.Nudges
             {
                 // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager
                 // as far as SRP goes...
+                log.InfoFormat("Showing nudge {0}", nudge.NudgeID);
                 using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
                 {
                     nudgeDialog.ShowDialog(owner);
