@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quartz.Util;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.ApplicationCore.Nudges.NudgeActions;
-using ShipWorks.Filters.Content.Conditions.Orders;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-
     [TestClass]
     public class NudgeDeserializerTest
     {
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeID()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeID_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeID").Remove();
@@ -28,7 +21,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenNudgeIDNotANumber()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenNudgeIDNotANumber_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeID").First().SetValue("hi");
@@ -38,7 +31,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeType()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeType_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("NudgeType").Remove();
@@ -48,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentUri()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentUri_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentUri").Remove();
@@ -58,7 +51,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentUriIsInvalid()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentUriIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentUri").First().SetValue("asdf");
@@ -68,7 +61,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensions()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensions_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("ContentDimensions").Remove();
@@ -78,7 +71,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsWidth()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsWidth_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Width").Remove();
@@ -88,7 +81,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsHeight()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsHeight_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Height").Remove();
@@ -98,7 +91,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsWidthIsInvalid()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsWidthIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Width").First().SetValue("hi");
@@ -108,7 +101,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsHeightIsInvalid()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsHeightIsInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Height").First().SetValue("hi");
@@ -118,7 +111,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingOptions()
+        public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingOptions_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeXml);
             nudgeOptionElement.Descendants("Options").Remove();
@@ -127,7 +120,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectNudgeID()
+        public void NudgeDeserializer_NudgeHasCorrectNudgeID_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
@@ -137,7 +130,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectNudgeType()
+        public void NudgeDeserializer_NudgeHasCorrectNudgeType_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
@@ -147,7 +140,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectContentUri()
+        public void NudgeDeserializer_NudgeHasCorrectContentUri_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
@@ -157,7 +150,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectContentDimensions()
+        public void NudgeDeserializer_NudgeHasCorrectContentDimensions_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
@@ -168,18 +161,18 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectOptions()
+        public void NudgeDeserializer_NudgeHasCorrectOptions_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(nudgeElement.Descendants("Option").Count(), nudge.NudgeOptions.Count);
+            Assert.AreEqual(nudgeElement.Descendants("Option").Count(), nudge.NudgeOptions.Count());
 
             foreach (XElement optionElement in nudgeElement.Descendants("Option"))
             {
                 int index = int.Parse(GetValue(optionElement, "Index"));
-                NudgeOption nudgeOption = nudge.NudgeOptions.First(no => no.Value.Index == index).Value;
+                NudgeOption nudgeOption = nudge.NudgeOptions.First(option => option.Index == index);
 
                 Assert.AreEqual(nudgeOption.Result, GetValue(optionElement, "Result"));
                 Assert.AreEqual(nudgeOption.Action.ToString(), string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", GetValue(optionElement, "Action")));

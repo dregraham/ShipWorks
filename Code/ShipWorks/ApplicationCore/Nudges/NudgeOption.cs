@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore.Nudges.NudgeActions;
+﻿using ShipWorks.ApplicationCore.Nudges.NudgeActions;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
@@ -11,64 +7,41 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public class NudgeOption
     {
-        private readonly int index;
-        private readonly string text;
-        private readonly INudgeAction action;
-        private readonly string result;
-
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="NudgeOption"/> class.
         /// </summary>
-        public NudgeOption(int index, string text, INudgeAction action, string result)
+        public NudgeOption(int index, string text, Nudge owner, INudgeAction action, string result)
         {
-            this.index = index;
-            this.text = text;
-            this.action = action;
-            this.result = result;
+            Index = index;
+            Text = text;
+            Action = action;
+            Result = result;
+            Owner = owner;
         }
 
         /// <summary>
         /// Display order of this nudge option
         /// </summary>
-        public int Index
-        {
-            get
-            {
-                return index;
-            }
-        }
+        public int Index { get; private set; }
 
         /// <summary>
         /// Display text for this nudge option
         /// </summary>
-        public string Text
-        {
-            get
-            {
-                return text;
-            }
-        }
+        public string Text { get; private set; }
+
+        /// <summary>
+        /// Gets the owner.
+        /// </summary>
+        public Nudge Owner { get; private set; }
 
         /// <summary>
         /// The task to perform for this NudgeOption
         /// </summary>
-        public INudgeAction Action
-        {
-            get
-            {
-                return action;
-            }
-        }
+        public INudgeAction Action { get; private set; }
 
         /// <summary>
         /// Result to be returned to Tango
         /// </summary>
-        public string Result
-        {
-            get
-            {
-                return result;
-            }
-        }
+        public string Result { get; private set; }
     }
 }

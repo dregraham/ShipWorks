@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
 {
@@ -11,25 +10,13 @@ namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
     /// </summary>
     public class AcknowledgeNudgeAction : INudgeAction
     {
-        // This is what we will log to Tango
-        private readonly string result;
-        private readonly int nudgeID;
-
         /// <summary>
-        /// Constructor
+        /// Executes an action that takes place as the result of a nudge option being selected.
         /// </summary>
-        public AcknowledgeNudgeAction(int nudgeID, string result)
+        /// <param name="nudgeOption">The nudge option that triggered the action.</param>
+        public void Execute(NudgeOption nudgeOption)
         {
-            this.result = result;
-            this.nudgeID = nudgeID;
-        }
-
-        /// <summary>
-        /// The task to perform
-        /// </summary>
-        public void Execute(Form owner)
-        {
-            owner.Close();
+            
         }
     }
 }

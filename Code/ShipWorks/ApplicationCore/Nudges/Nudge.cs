@@ -12,97 +12,107 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public class Nudge
     {
-        private readonly int nudgeID;
-        private readonly NudgeType nudgeType;
-        private readonly Uri contentUri;
-        private readonly SortedList<int, NudgeOption> nudgeOptions;
-        private readonly Size contentDimensions;
+        private readonly List<NudgeOption> nudgeOptions;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Nudge"/> class without any nudge options. (They can
+        /// be added later via the NudgeOptions property.
         /// </summary>
-        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, IEnumerable<NudgeOption> nudgeOptions, Size contentDimensions)
+        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions)
+            : this(nudgeID, nudgeType, contentUri, contentDimensions, new List<NudgeOption>())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Nudge"/> class.
+        /// </summary>
+        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions, IEnumerable<NudgeOption> nudgeOptions)
         {
-            this.nudgeID = nudgeID;
-            this.nudgeType = nudgeType;
-            this.contentUri = contentUri;
-            this.contentDimensions = contentDimensions;
-            
-            this.nudgeOptions = new SortedList<int, NudgeOption>();
-            nudgeOptions.ToList().ForEach(no => this.nudgeOptions.Add(no.Index, no));
+            NudgeID = nudgeID;
+            NudgeType = nudgeType;
+
+            ContentUri = contentUri;
+            ContentDimensions = contentDimensions;
+
+            // Ensure the list is sorted by the index, so buttons get created in the correct order
+            this.nudgeOptions = nudgeOptions.OrderBy(option => option.Index).ToList();
         }
 
         /// <summary>
         /// Identifier of this Nudge
         /// </summary>
-        public int NudgeID
-        {
-            get { return nudgeID; }
-        }
+        public int NudgeID { get; private set; }
 
         /// <summary>
         /// Type of Nudge
         /// </summary>
-        public NudgeType NudgeType
-        {
-            get { return nudgeType; }
-        }
+        public NudgeType NudgeType { get; private set; }
 
         /// <summary>
         /// Uri to the content to be displayed.
         /// </summary>
-        public Uri ContentUri
-        {
-            get { return contentUri; }
-        }
+        public Uri ContentUri { get; private set; }
 
         /// <summary>
         /// Gets the dimensions that the content should appear within.
         /// </summary>
-        public Size ContentDimensions
-        {
-            get { return contentDimensions; }
-        }
+        public Size ContentDimensions { get; private set; }
 
         /// <summary>
         /// List of NudgeOptions
         /// </summary>
-        public SortedList<int, NudgeOption> NudgeOptions
+        public IEnumerable<NudgeOption> NudgeOptions
         {
-            get { return nudgeOptions; }
+            get
+            {
+                return nudgeOptions;
+            }
         }
 
         /// <summary>
-        /// Creates buttons needed for this Nudge
+        /// Adds the given nudge option to the collection of options for this nudge.
         /// </summary>
-        /// <returns>Sorted list of buttons</returns>
-        public SortedList<int, Button> CreateButtons()
+        public void AddNudgeOption(NudgeOption nudgeOption)
         {
-            SortedList<int, Button> buttons = new SortedList<int, Button>();
+            nudgeOptions.Add(nudgeOption);
+        }
 
-            foreach (NudgeOption nudgeOption in nudgeOptions.Values)
+        /// <summary>
+        /// Creates buttons from the nudge options. The order of the buttons will be based 
+        /// on the index of each nudge option.
+        /// </summary>
+        public List<Button> CreateButtons()
+        {
+            List<Button> buttons = new List<Button>();
+
+            // Use for loop instead of foreach to avoid the warning of "Access to foreach variable in closure. May 
+            // have different behaviour when compiled with different versions of compiler." when setting the click
+            // event handler.
+            for (int i = 0; i < nudgeOptions.Count; i++)
             {
+                NudgeOption option = nudgeOptions[i];
+
                 Button button = new Button
                 {
-                    Text = nudgeOption.Text
+                    Text = option.Text
                 };
 
-                button.Click += delegate {
-                    nudgeOption.Action.Execute(button.FindForm());
-                    };
+                button.Click += delegate
+                {
+                    option.Action.Execute(option);
+                };
 
                 using (Graphics g = button.CreateGraphics())
                 {
                     // Make sure the width of the button is sufficient for the text being displayed
-                    button.Width = (int) (g.MeasureString(button.Text, button.Font).Width + 10);
+                    button.Width = (int)(g.MeasureString(button.Text, button.Font).Width + 10);
                 }
 
-                buttons.Add(nudgeOption.Index, button);
+                buttons.Add(button);
             }
 
             // Make all the buttons the same width as the widest button
-            int maxWidth = buttons.Values.Max(b => b.Width);
-            foreach (Button button in buttons.Values)
+            int maxWidth = buttons.Max(b => b.Width);
+            foreach (Button button in buttons)
             {
                 button.Width = maxWidth;
             }

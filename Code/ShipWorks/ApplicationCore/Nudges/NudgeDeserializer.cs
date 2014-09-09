@@ -56,64 +56,89 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         public static Nudge Deserialize(XElement nudgeElement)
         {
-            int nudgeID;
-            NudgeType nudgeType;
-            Uri contentUri;
-            List<NudgeOption> nudgeOptions = new List<NudgeOption>();
-            Size contentDimensions;
+            // Grab the nudge ID and the type of nudge from the XML
+            int nudgeID = GetNudgeID(nudgeElement);
+            NudgeType nudgeType = GetNudgeType(nudgeElement);
 
-            string value = GetValue(nudgeElement, "NudgeID");
-            if (!int.TryParse(value, out nudgeID))
+            // Grab the content data
+            Uri contentUri = GetContentUri(nudgeElement);
+            Size contentDimensions = ContentSize(nudgeElement);
+
+            // We now have everything that's needed for our nudge
+            Nudge nudge = new Nudge(nudgeID, nudgeType, contentUri, contentDimensions);
+
+            // Build up the list of nudge options defined in the XML and add them to the nudge
+            IEnumerable<XElement> optionElements = nudgeElement.Descendants("Option");
+            if (!optionElements.Any())
             {
-                log.Error(string.Format("Invalid NudgeID in nudge xml: {0}", nudgeElement));
-                throw new NudgeException("Invalid NudgeID in nudge xml.");
+                log.Error(string.Format("Missing nudge options in nudge xml: {0}", nudgeElement));
+                throw new NudgeException("Invalid nudge options in nudge xml.");
             }
 
+            List<NudgeOption> nudgeOptions = Options(nudge, nudgeElement.Descendants("Option"));
+            nudgeOptions.ForEach(nudge.AddNudgeOption);
+
+            return nudge;
+        }
+        
+        /// <summary>
+        /// Gets the nudge ID value from the XElement provided.
+        /// </summary>
+        private static int GetNudgeID(XElement nudgeElement)
+        {
+            int nudgeID;
+            string value = GetValue(nudgeElement, "NudgeID");
+
+            if (!int.TryParse(value, out nudgeID))
+            {
+                log.Error(string.Format("Invalid Nudge ID in nudge xml: {0}", nudgeElement));
+                throw new NudgeException("Invalid Nudge ID in nudge xml.");
+            }
+
+            return nudgeID;
+        }
+
+        /// <summary>
+        /// Gets the type of the nudge from the XElement provided.
+        /// </summary>
+        private static NudgeType GetNudgeType(XElement nudgeElement)
+        {   
             try
             {
-                value = GetValue(nudgeElement, "NudgeType");
-                nudgeType = EnumHelper.GetEnumByApiValue<NudgeType>(value);
+                string value = GetValue(nudgeElement, "NudgeType");
+                return EnumHelper.GetEnumByApiValue<NudgeType>(value);
             }
             catch (InvalidOperationException ex)
             {
                 log.Error(string.Format("Invalid nudge type in nudge xml: {0}", nudgeElement));
                 throw new NudgeException("Invalid nudge type in nudge xml.", ex);
             }
+        }
 
+        /// <summary>
+        /// Gets the content URI from the XElement provided.
+        /// </summary>
+        private static Uri GetContentUri(XElement nudgeElement)
+        {
             try
             {
-                value = GetValue(nudgeElement, "ContentUri");
-                contentUri = new Uri(value);
+                string value = GetValue(nudgeElement, "ContentUri");
+                return new Uri(value);
             }
             catch (UriFormatException ex)
             {
                 log.Error(string.Format("Invalid nudge content uri in nudge xml: {0}", nudgeElement));
                 throw new NudgeException("Invalid nudge content uri in nudge xml.", ex);
             }
-
-            contentDimensions = ContentSize(nudgeElement);
-
-            nudgeOptions = Options(nudgeID, nudgeElement);
-
-            return new Nudge(nudgeID, nudgeType, contentUri, nudgeOptions, contentDimensions);
         }
 
         /// <summary>
         /// Populates a list of nudge options
         /// </summary>
-        private static List<NudgeOption> Options(int nudgeID, XElement nudgeElement)
+        private static List<NudgeOption> Options(Nudge nudge, IEnumerable<XElement> optionElements)
         {
             List<NudgeOption> nudgeOptions = new List<NudgeOption>();
-            IEnumerable<XElement> elements = nudgeElement.Descendants("Option");
-            List<XElement> xElements = elements as List<XElement> ?? elements.ToList();
-
-            if (!xElements.Any())
-            {
-                log.Error(string.Format("Missing nudge options in nudge xml: {0}", nudgeElement));
-                throw new NudgeException("Invalid nudge options in nudge xml.");
-            }
-
-            xElements.ForEach(nudgeOption => nudgeOptions.Add(NudgeOptionDeserializer.Deserialize(nudgeID, nudgeOption)));
+            optionElements.ToList().ForEach(nudgeOption => nudgeOptions.Add(NudgeOptionDeserializer.Deserialize(nudge, nudgeOption)));
 
             return nudgeOptions;
         }

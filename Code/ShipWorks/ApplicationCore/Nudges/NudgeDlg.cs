@@ -50,12 +50,12 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         private void AddButtons()
         {
+            IEnumerable<Button> nudgeButtons = nudge.CreateButtons();
+
             // The option panel has a flow direction of right to left to have them
             // be aligned along the right side of the dialog, so add the 
             // buttons starting in reverse order
-            IEnumerable<Button> nudgeButtons = nudge.CreateButtons().Values.Reverse();
-
-            foreach (Button button in nudgeButtons)
+            foreach (Button button in nudgeButtons.Reverse())
             {
                 optionPanel.Controls.Add(button);
             }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
 {
@@ -11,6 +10,10 @@ namespace ShipWorks.ApplicationCore.Nudges.NudgeActions
     /// </summary>
     public interface INudgeAction
     {
-        void Execute(Form owner);
+        /// <summary>
+        /// Executes an action that takes place as the result of a nudge option being selected.
+        /// </summary>
+        /// <param name="nudgeOption">The nudge option that triggered the action.</param>
+        void Execute(NudgeOption nudgeOption);
     }
 }

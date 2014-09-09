@@ -46,48 +46,57 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Create a NudgeOption from an XElement.
         /// </summary>
-        public static NudgeOption Deserialize(int nudgeID, XElement nudgeOptionElement)
+        public static NudgeOption Deserialize(Nudge owner, XElement nudgeOptionElement)
+        {
+            int index = GetIndex(nudgeOptionElement);
+
+            string text = GetValue(nudgeOptionElement, "Text");
+            string result = GetValue(nudgeOptionElement, "Result");
+
+            INudgeAction nudgeAction = CreateNudgeAction(nudgeOptionElement);
+
+            return new NudgeOption(index, text, owner, nudgeAction, result);
+        }
+
+        /// <summary>
+        /// Gets the index of the nudge option from the XElement provided.
+        /// </summary>
+        private static int GetIndex(XElement nudgeOptionElement)
         {
             int index;
-            string text;
-            INudgeAction nudgeAction;
-            string result;
-
             string value = GetValue(nudgeOptionElement, "Index");
             if (!int.TryParse(value, out index))
             {
                 log.Error(string.Format("Invalid Index in nudge option xml: {0}", nudgeOptionElement));
                 throw new NudgeException("Invalid Index in nudge option xml.");
             }
+            return index;
+        }
 
-            text = GetValue(nudgeOptionElement, "Text");
-            result = GetValue(nudgeOptionElement, "Result");
-
+        /// <summary>
+        /// Creates the nudge action from the XElement provided.
+        /// </summary>
+        private static INudgeAction CreateNudgeAction(XElement nudgeOptionElement)
+        {
+            INudgeAction nudgeAction;
             string nudgeActionName = GetValue(nudgeOptionElement, "Action");
             Type nudgeActionType = Assembly.GetExecutingAssembly().GetType(string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", nudgeActionName));
 
             if (nudgeActionType == null)
             {
-                nudgeActionType = Assembly.GetCallingAssembly().GetType(string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", nudgeActionName));
-
-                if (nudgeActionType == null)
-                {
-                    log.Error(string.Format("Unable to get type '{0}'", nudgeActionName));
-                    throw new NudgeException(string.Format("Unable to get type '{0}'", nudgeActionName));
-                }
+                log.Error(string.Format("Unable to get type '{0}'", nudgeActionName));
+                throw new NudgeException(string.Format("Unable to get type '{0}'", nudgeActionName));
             }
 
             try
             {
-                nudgeAction = (INudgeAction)Activator.CreateInstance(nudgeActionType, nudgeID, result);
+                nudgeAction = (INudgeAction)Activator.CreateInstance(nudgeActionType);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                log.Error(string.Format("Unable to get type '{0}'", nudgeActionName), ex);
                 throw new NudgeException(string.Format("Unable to create an instance of type '{0}'", nudgeActionName));
             }
-
-            return new NudgeOption(index, text, nudgeAction, result);
+            return nudgeAction;
         }
 
         /// <summary>

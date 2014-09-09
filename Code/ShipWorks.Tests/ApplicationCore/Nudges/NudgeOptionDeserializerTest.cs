@@ -1,139 +1,129 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quartz.Util;
 using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.ApplicationCore.Nudges.NudgeActions;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-
     [TestClass]
     public class NudgeOptionDeserializerTest
     {
+        private readonly Nudge nudge;
+
+        public NudgeOptionDeserializerTest()
+        {
+            nudge = new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(500, 400));
+        }
+
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionAction_ReturnsCorrectResult()
+        public void NudgeOptionDeserializer_ReturnsCorrectResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            bool closeCalled = false;
-            using (Form f = new Form())
-            {
-                f.Closed += new EventHandler(delegate(Object o, EventArgs a)
-                {
-                    closeCalled = true;
-                });
-
-                f.Show();
-                nudgeOption.Action.Execute(f);
-            }
-
-            Assert.IsTrue(closeCalled);
+            Assert.AreEqual(GetValue(nudgeOptionElement, "Result"), nudgeOption.Result);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingIndex()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingIndex_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").Remove();
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenIndexNotANumber()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenIndexNotANumber_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").First().SetValue("hi");
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingText()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingText_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Text").Remove();
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingAction()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingAction_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").Remove();
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenActionInvalid()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenActionInvalid_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").First().SetValue("bad type name");
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingResult()
+        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Result").Remove();
 
-            NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectIndex()
+        public void NudgeOptionDeserializer_NudgeOptionHasCorrectIndex_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Index, int.Parse(GetValue(nudgeOptionElement, "Index")));
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectAction()
+        public void NudgeOptionDeserializer_NudgeOptionHasCorrectAction_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
             string fullActionPath = string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", GetValue(nudgeOptionElement, "Action"));
             Assert.AreEqual(nudgeOption.Action.ToString(), fullActionPath);
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectText()
+        public void NudgeOptionDeserializer_NudgeOptionHasCorrectText_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Text, GetValue(nudgeOptionElement, "Text"));
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectResult()
+        public void NudgeOptionDeserializer_NudgeOptionHasCorrectResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
-            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(1, nudgeOptionElement);
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
             Assert.AreEqual(nudgeOption.Result, GetValue(nudgeOptionElement, "Result"));
         }
