@@ -91,7 +91,20 @@ namespace ShipWorks.ApplicationCore.Nudges
                         nudgeOption.Action.Execute();
                     };
 
+                using (Graphics g = button.CreateGraphics())
+                {
+                    // Make sure the width of the button is sufficient for the text being displayed
+                    button.Width = (int) (g.MeasureString(button.Text, button.Font).Width + 10);
+                }
+
                 buttons.Add(nudgeOption.Index, button);
+            }
+
+            // Make all the buttons the same width as the widest button
+            int maxWidth = buttons.Values.Max(b => b.Width);
+            foreach (Button button in buttons.Values)
+            {
+                button.Width = maxWidth;
             }
 
             return buttons;

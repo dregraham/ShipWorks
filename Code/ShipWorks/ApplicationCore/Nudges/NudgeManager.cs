@@ -53,11 +53,14 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <param name="nudge">The nudge.</param>
         public static void ShowNudge(IWin32Window owner, Nudge nudge)
         {
-            // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager
-            // as far as SRP goes...
-            using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
+            if (nudge != null)
             {
-                nudgeDialog.ShowDialog(owner);
+                // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager
+                // as far as SRP goes...
+                using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
+                {
+                    nudgeDialog.ShowDialog(owner);
+                }
             }
         }
     }
