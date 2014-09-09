@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             merchantID.Text = amazonStore.MerchantID;
+            authToken.Text = amazonStore.AuthToken;
             marketplaceID.Text = amazonStore.MarketplaceID;
 
             base.LoadStore(store);
@@ -64,6 +65,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return false;
             }
 
+            if (authToken.Text.Trim().Length == 0)
+            {
+                MessageHelper.ShowError(this, "Your MWS Auth Token is required.");
+                return false;
+            }
+
             if (marketplaceID.Text.Trim().Length == 0)
             {
                 MessageHelper.ShowError(this, "Your Marketplace ID is required.");
@@ -72,11 +79,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             // save the values
             saveStore.MerchantID = merchantID.Text.Trim();
+            saveStore.AuthToken = authToken.Text.Trim();
             saveStore.MarketplaceID = marketplaceID.Text.Trim();
-            saveStore.DomainName = GetStoreDomainName(saveStore.MarketplaceID);
 
             try
             {
+                saveStore.DomainName = GetStoreDomainName(saveStore.MarketplaceID);
+                
                 using (AmazonMwsClient client = new AmazonMwsClient(saveStore))
                 {
                     client.TestCredentials();
@@ -130,6 +139,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     merchantID.Text = dlg.MerchantID;
+                    authToken.Text = dlg.AuthToken;
                 }
             }
         }
@@ -145,22 +155,36 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 return;
             }
 
-            List<AmazonMwsMarketplace> marketplaces = GetMarketplaces();
-
-            if (marketplaces != null)
+            if (string.IsNullOrWhiteSpace(authToken.Text))
             {
-                if (marketplaces.Count == 0)
-                {
-                    MessageHelper.ShowMessage(this, "No marketplaces were found for the given Merchant ID");
-                    return;
-                }
+                MessageHelper.ShowMessage(this, "You must enter your MWS Auth Token before ShipWorks can find your marketplaces.");
+                return;
+            }
 
-                using (AmazonMwsMarketplaceSelectionDlg dlg = new AmazonMwsMarketplaceSelectionDlg(marketplaces, marketplaceID.Text))
+            List<AmazonMwsMarketplace> marketplaces;
+            
+            try
+            {
+                marketplaces = GetMarketplaces();
+            }
+            catch (AmazonException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+
+                return;
+            }
+
+            if (marketplaces.Count == 0)
+            {
+                MessageHelper.ShowMessage(this, "No marketplaces were found for the given Merchant ID");
+                return;
+            }
+
+            using (AmazonMwsMarketplaceSelectionDlg dlg = new AmazonMwsMarketplaceSelectionDlg(marketplaces, marketplaceID.Text))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        marketplaceID.Text = dlg.SelectedMarketplace.MarketplaceID;
-                    }
+                    marketplaceID.Text = dlg.SelectedMarketplace.MarketplaceID;
                 }
             }
         }
@@ -171,30 +195,31 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private List<AmazonMwsMarketplace> GetMarketplaces()
         {
             List<AmazonMwsMarketplace> marketplaces;
-            if (marketplaceCache.TryGetValue(merchantID.Text, out marketplaces))
+            if (marketplaceCache.TryGetValue(GetCacheKey(), out marketplaces))
             {
                 return marketplaces;
             }
 
             Cursor.Current = Cursors.WaitCursor;
 
-            try
+            using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
             {
-                using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
-                {
-                    marketplaces = client.GetMarketplaces(merchantID.Text);
-                }
-            }
-            catch (AmazonException ex)
-            {
-                MessageHelper.ShowError(this, ex.Message);
-
-                return null;
+                marketplaces = client.GetMarketplaces(merchantID.Text, authToken.Text);
             }
 
-            marketplaceCache[merchantID.Text] = marketplaces;
+            marketplaceCache[GetCacheKey()] = marketplaces;
 
             return marketplaces;
+        }
+
+        /// <summary>
+        /// Gets the cache key 
+        /// </summary>
+        private string GetCacheKey()
+        {
+            return string.Format("{0}-{1}",
+                merchantID.Text.Trim(),
+                authToken.Text.Trim());
         }
     }
 }

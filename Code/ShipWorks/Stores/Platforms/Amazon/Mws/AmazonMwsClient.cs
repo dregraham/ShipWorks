@@ -169,23 +169,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 request.Variables.Add("AmazonOrderId", dummyNumber);
-                request.Variables.Add("MarketplaceIdList.Id.1", store.MarketplaceID);
 
                 IHttpResponseReader reader = ExecuteRequest(request, AmazonMwsApiCall.ListOrderItems);
                 reader.ReadResult();
             }
             catch (AmazonException ex)
             {
-                bool throwError = true;
-
                 // if we received the expected InvalidParameterValue, we authenticated just fine
                 if (String.Compare(ex.Code, "InvalidParameterValue", StringComparison.OrdinalIgnoreCase) == 0 &&
-                    ex.Message.Contains(dummyNumber))
-                {
-                    throwError = false;
-                }
-
-                if (throwError)
+                                  !ex.Message.Contains(dummyNumber))
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
@@ -195,10 +187,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Get the list of marketplaces associated with the given merchantID
         /// </summary>
-        public List<AmazonMwsMarketplace> GetMarketplaces(string merchantID)
+        public List<AmazonMwsMarketplace> GetMarketplaces(string merchantID, string authToken)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             request.Variables.Add("SellerId", merchantID);
+            request.Variables.Add("MWSAuthToken", authToken);
 
             var apiCall = AmazonMwsApiCall.ListMarketplaceParticipations;
 
@@ -689,24 +682,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 if (amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
                 {
                     request.Variables.Add("SellerId", store.MerchantID);
-                    request.Variables.Add("Marketplace", store.MarketplaceID);
+                    request.Variables.Add("Marketplace", store.MarketplaceID);  
+                    AddMwsAuthToken(request);
                 }
 
                 request.Variables.Add("SignatureMethod", "HmacSHA256");
                 request.Variables.Add("SignatureVersion", "2");
                 request.Variables.Add("Timestamp", FormatDate(timestamp));
                 request.Variables.Add("Version", GetApiVersion(amazonMwsApiCall));
-
-                // sort the variables by name
-                request.Variables.Sort(v => v.Name);
-
-                // AWS Access Key ID needs to be the first parameter or Amazon rejects the signature
-                request.Variables.Insert(0, new HttpVariable("AWSAccessKeyId", Decrypt(InterapptiveAccessKeyID)));
+                request.Variables.Add("AWSAccessKeyId", Decrypt(InterapptiveAccessKeyID));
 
                 // now construct the signature parameter
                 string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
-                string parameterString = String.Format("{0}\n{1}\n{2}\n", verbString, request.Uri.Host, endpointPath);
-                parameterString += QueryStringUtility.GetQueryString(request.Variables, QueryStringEncodingCasing.Upper);
+                string queryString = QueryStringUtility.GetQueryString(
+                    request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
+                    QueryStringEncodingCasing.Upper);
+
+                string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
 
                 // sign the string and add it to the request
                 string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(InterapptiveSecretKey), SigningAlgorithm.SHA256);
@@ -749,6 +741,20 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
             }
+        }
+
+        /// <summary>
+        /// Adds the MWS authentication token - throws if no value.
+        /// </summary>
+        /// <exception cref="AmazonException">No MWS Auth Token. Go to store settings to enter Token Value.</exception>
+        private void AddMwsAuthToken(HttpVariableRequestSubmitter request)
+        {
+            if (string.IsNullOrWhiteSpace(store.AuthToken))
+            {
+                throw new AmazonException(typeof(AmazonMwsClient), "No MWS Auth Token. Go to store settings to enter Token Value.");
+            }
+
+            request.Variables.Add("MWSAuthToken", store.AuthToken);
         }
 
         /// <summary>
@@ -1009,7 +1015,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 case AmazonMwsApiCall.ListOrderItemsByNextToken:
                 case AmazonMwsApiCall.ListOrders:
                 case AmazonMwsApiCall.ListOrdersByNextToken:
-                    return "2011-01-01";
+                    return "2013-09-01";
                 case AmazonMwsApiCall.SubmitFeed:
                     return "2009-01-01";
                 case AmazonMwsApiCall.ListMarketplaceParticipations:
