@@ -259,7 +259,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                     // amazon-specific fields
                     item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amz:OrderItemId", (long)0);
-                    item.ConditionNote = "";
+                    item.ConditionNote = XPathUtility.Evaluate(xpath, "amz:ConditionNote", "");
                     item.ASIN = XPathUtility.Evaluate(xpath, "amz:ASIN", "");
 
                     // Amazon doesn't have a new solution for weights or images
