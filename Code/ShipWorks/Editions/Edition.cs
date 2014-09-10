@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
@@ -156,9 +157,31 @@ namespace ShipWorks.Editions
                 }
             }
 
+            // Update the shipping settings default shipment type just in case the default carrier is now disabled.
+            UpdateDefaultShippingType();
+
             restrictionsFinalized = true;
 
             return restrictions;
+        }
+
+        /// <summary>
+        /// Updates the shipping setting default shipment type.  This is to keep restricted shipment types in sync with
+        /// the selected default type.  i.e. if UPS is restricted and it was the default type, the next created shipment
+        /// would be created as UPS.  So instead, we'll update the default type to be None.
+        /// </summary>
+        private void UpdateDefaultShippingType()
+        {
+            ShippingSettingsEntity shippingSettingsEntity = ShippingSettings.Fetch();
+            ShipmentTypeCode currentDefaultShipmentTypeCode = (ShipmentTypeCode)shippingSettingsEntity.DefaultType;
+
+            IEnumerable<ShipmentTypeCode> disabledShipmentTypeCodes = restrictions.Where(er => er.Feature == EditionFeature.ShipmentType).Select(er => (ShipmentTypeCode)er.Data);
+
+            if (disabledShipmentTypeCodes.Contains(currentDefaultShipmentTypeCode))
+            {
+                shippingSettingsEntity.DefaultType = (int) ShipmentTypeCode.None;
+                ShippingSettings.Save(shippingSettingsEntity);
+            }
         }
 
         /// <summary>
