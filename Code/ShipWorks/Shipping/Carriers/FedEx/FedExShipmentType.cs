@@ -98,6 +98,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return FedExAccountManager.Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the shipment type [supports multiple packages].
         /// </summary>
         /// <value>

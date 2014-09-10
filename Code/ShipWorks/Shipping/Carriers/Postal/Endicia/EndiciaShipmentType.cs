@@ -81,6 +81,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return EndiciaAccountManager.EndiciaAccounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Create an EndiciaShipmentType object
         /// </summary>
         public EndiciaShipmentType()

@@ -178,6 +178,17 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public virtual bool HasAccounts
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
         /// null if the shipment type does not require setup
         /// </summary>

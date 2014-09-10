@@ -145,6 +145,14 @@ namespace ShipWorks.Editions
                 if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.AccountRegistration))
                 {
                     AddRestriction(EditionFeature.ShipmentTypeRegistration, typeCode, EditionRestrictionLevel.Hidden);
+
+                    // If account registration is not allowed and there are no accounts in the db for this shipment type, 
+                    // it is effectively a disabled shipment type, so go ahead and add that restriction as well.
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(typeCode);
+                    if (!shipmentType.HasAccounts)
+                    {
+                        AddRestriction(EditionFeature.ShipmentType, typeCode, EditionRestrictionLevel.Hidden);
+                    }
                 }
             }
 

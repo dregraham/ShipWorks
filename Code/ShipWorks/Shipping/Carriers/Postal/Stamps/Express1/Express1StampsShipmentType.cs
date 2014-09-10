@@ -43,6 +43,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return StampsAccountManager.Express1Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
         [Obfuscation(Exclude = true)]

@@ -48,6 +48,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return StampsAccountManager.StampsAccounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the log entry factory.
         /// </summary>
         public LogEntryFactory LogEntryFactory { get; set; }

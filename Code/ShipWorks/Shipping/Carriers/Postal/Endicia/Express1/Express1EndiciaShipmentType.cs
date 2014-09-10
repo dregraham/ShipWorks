@@ -80,6 +80,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return EndiciaAccountManager.Express1Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
