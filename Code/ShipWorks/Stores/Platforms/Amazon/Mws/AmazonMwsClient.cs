@@ -45,8 +45,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get 
             {
-                return IsNorthAmericanStore ? 
-                    "https://mws.amazonservices.com" : 
+                return 
+                    Store.AmazonApiRegion == "CA" ? "https://mws.amazonservices.ca" :
+                    IsNorthAmericanStore ? "https://mws.amazonservices.com" : 
                     "https://mws.amazonservices.co.uk";
             }
         }
@@ -683,6 +684,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 {
                     request.Variables.Add("SellerId", store.MerchantID);
                     request.Variables.Add("Marketplace", store.MarketplaceID);  
+                }
+
+                if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken)
+                {
                     AddMwsAuthToken(request);
                 }
 
@@ -751,11 +756,45 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             if (string.IsNullOrWhiteSpace(store.AuthToken))
             {
-                throw new AmazonException(typeof(AmazonMwsClient), "No MWS Auth Token. Go to store settings to enter Token Value.");
+                GetAuthToken();
             }
 
             request.Variables.Add("MWSAuthToken", store.AuthToken);
         }
+
+        /// <summary>
+        /// Gets the MWS authentication token. - Will only work before 3/13/2015
+        /// </summary>
+        /// <returns></returns>
+        private void GetAuthToken()
+        {
+            // create request
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+
+            try
+            {
+                IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetAuthToken);
+
+                XPathNamespaceNavigator responseNavigator = GetXPathNavigator(response, AmazonMwsApiCall.GetAuthToken);
+                XPathNavigator selectSingleNode = responseNavigator.SelectSingleNode("//amz:MWSAuthToken");
+                if (selectSingleNode == null)
+                {
+                    throw new AmazonException(typeof(AmazonMwsClient), "Token not returned");
+                }
+
+                store.AuthToken = selectSingleNode.Value;
+
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveAndRefetch(store);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new AmazonException(typeof(AmazonMwsClient), ex);
+            }
+        }
+
 
         /// <summary>
         /// Submit an Amazon request, throttled so we don't over-call
@@ -944,7 +983,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             string apiName = "";
             string version = "";
-            
+
             switch (amazonMwsApiCall)
             {
                 case AmazonMwsApiCall.GetServiceStatus:
@@ -958,6 +997,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 case AmazonMwsApiCall.SubmitFeed:
                     break;
                 case AmazonMwsApiCall.ListMarketplaceParticipations:
+                case AmazonMwsApiCall.GetAuthToken:
                     apiName = "Sellers";
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
@@ -998,6 +1038,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     return "ListMarketplaceParticipations";
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     return "GetMatchingProductForId";
+                case AmazonMwsApiCall.GetAuthToken:
+                    return "GetAuthToken";
                 default:
                     throw new InvalidOperationException(string.Format("Unhandled AmazonMwsApiCall '{0}'", amazonMwsApiCall));
             }
@@ -1019,6 +1061,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 case AmazonMwsApiCall.SubmitFeed:
                     return "2009-01-01";
                 case AmazonMwsApiCall.ListMarketplaceParticipations:
+                case AmazonMwsApiCall.GetAuthToken:
                     return "2011-07-01";
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     return "2011-10-01";

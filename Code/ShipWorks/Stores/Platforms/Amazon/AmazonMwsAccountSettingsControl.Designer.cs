@@ -88,7 +88,7 @@
             this.buttonFindMerchantID.Name = "buttonFindMerchantID";
             this.buttonFindMerchantID.Size = new System.Drawing.Size(146, 51);
             this.buttonFindMerchantID.TabIndex = 8;
-            this.buttonFindMerchantID.Text = "Find My Merchant ID && AWS Auth Token...";
+            this.buttonFindMerchantID.Text = "Find My Merchant ID && MWS Auth Token...";
             this.buttonFindMerchantID.UseVisualStyleBackColor = true;
             this.buttonFindMerchantID.Click += new System.EventHandler(this.OnGetMerchantID);
             // 
@@ -107,7 +107,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 13);
             this.label1.TabIndex = 9;
-            this.label1.Text = "2. Enter your AWS Auth Token";
+            this.label1.Text = "2. Enter your MWS Auth Token";
             // 
             // AmazonMwsAccountSettingsControl
             // 

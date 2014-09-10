@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             if (string.IsNullOrWhiteSpace(authToken.Text))
             {
-                MessageHelper.ShowMessage(this, "Please enter your AWS Auth Token.");
+                MessageHelper.ShowMessage(this, "Please enter your MWS Auth Token.");
                 return;
             }
 
