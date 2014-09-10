@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using log4net;
 
 namespace ShipWorks.ApplicationCore.Nudges.Buttons
 {
@@ -53,12 +54,21 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// </summary>
         private void OnClick(object sender, EventArgs eventArgs)
         {
-            // Log the that the option was selected and allow derived 
-            // classes to handle the event.
-            option.Log();
+            try
+            {
+                // Log the that the option was selected and allow derived 
+                // classes to handle the event.
+                option.Log();
+            }
+            catch (Exception exception)
+            {
+                // Just make a note of the exception in the log file. This is more for our own 
+                // informational and/or reporting purposes, so it's not critical if it wasn't
+                // logged successfully.
+                LogManager.GetLogger(GetType()).WarnFormat("Could not log the nudge option for nudge {0}. {1}", option.Owner.NudgeID, exception.Message);
+            }
+
             HandleClick();
         }
-
-
     }
 }
