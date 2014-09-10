@@ -65,17 +65,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             nudgeOptionElement.Descendants("Action").Remove();
 
             NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenActionInvalid_Test()
-        {
-            XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
-            nudgeOptionElement.Descendants("Action").First().SetValue("bad type name");
-
-            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
-        }
+        }        
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
@@ -104,8 +94,8 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            string fullActionPath = string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", GetValue(nudgeOptionElement, "Action"));
-            Assert.AreEqual(nudgeOption.Action.ToString(), fullActionPath);
+            string action = GetValue(nudgeOptionElement, "Action");
+            Assert.AreEqual(nudgeOption.Action, action);
         }
 
         [TestMethod]

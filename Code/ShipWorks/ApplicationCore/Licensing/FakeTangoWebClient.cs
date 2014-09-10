@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using log4net;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -44,7 +45,8 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public override void LogNudgeOption(NudgeOption option)
         {
-            // Do nothing to simulate a successful nudge being logged to Tango
+            // Just log the option that was selected to disk to simulate a call to Tango
+            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The {0} option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
         }
     }
 }

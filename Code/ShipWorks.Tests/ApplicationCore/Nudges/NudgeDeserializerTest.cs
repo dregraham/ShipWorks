@@ -175,7 +175,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                 NudgeOption nudgeOption = nudge.NudgeOptions.First(option => option.Index == index);
 
                 Assert.AreEqual(nudgeOption.Result, GetValue(optionElement, "Result"));
-                Assert.AreEqual(nudgeOption.Action.ToString(), string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", GetValue(optionElement, "Action")));
+                Assert.AreEqual(nudgeOption.Action, GetValue(optionElement, "Action"));
                 Assert.AreEqual(nudgeOption.Text, GetValue(optionElement, "Text"));
             }
         }

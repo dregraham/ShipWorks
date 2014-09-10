@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
@@ -50,13 +51,18 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         private void AddButtons()
         {
-            IEnumerable<Button> nudgeButtons = nudge.CreateButtons();
+            IEnumerable<NudgeOptionButton> nudgeButtons = nudge.CreateButtons();
+
+            // Note the width of the widest button
+            int maxWidth = nudgeButtons.ToList().Max(b => b.Width);
 
             // The option panel has a flow direction of right to left to have them
             // be aligned along the right side of the dialog, so add the 
             // buttons starting in reverse order
-            foreach (Button button in nudgeButtons.Reverse())
+            foreach (NudgeOptionButton button in nudgeButtons.Reverse())
             {
+                // Make all the buttons the same width as the widest button
+                button.Width = maxWidth;
                 optionPanel.Controls.Add(button);
             }
         }

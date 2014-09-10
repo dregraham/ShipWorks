@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
@@ -13,19 +14,11 @@ namespace ShipWorks.ApplicationCore.Nudges
     public class Nudge
     {
         private readonly List<NudgeOption> nudgeOptions;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Nudge"/> class without any nudge options. (They can
-        /// be added later via the NudgeOptions property.
-        /// </summary>
-        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions)
-            : this(nudgeID, nudgeType, contentUri, contentDimensions, new List<NudgeOption>())
-        { }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Nudge"/> class.
         /// </summary>
-        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions, IEnumerable<NudgeOption> nudgeOptions)
+        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions)
         {
             NudgeID = nudgeID;
             NudgeType = nudgeType;
@@ -34,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Nudges
             ContentDimensions = contentDimensions;
 
             // Ensure the list is sorted by the index, so buttons get created in the correct order
-            this.nudgeOptions = nudgeOptions.OrderBy(option => option.Index).ToList();
+            nudgeOptions = new List<NudgeOption>();
         }
 
         /// <summary>
@@ -58,13 +51,13 @@ namespace ShipWorks.ApplicationCore.Nudges
         public Size ContentDimensions { get; private set; }
 
         /// <summary>
-        /// List of NudgeOptions
+        /// List of NudgeOptions ordered by the NudgeOption.Index value.
         /// </summary>
         public IEnumerable<NudgeOption> NudgeOptions
         {
             get
             {
-                return nudgeOptions;
+                return nudgeOptions.OrderBy(option => option.Index);
             }
         }
 
@@ -80,39 +73,13 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// Creates buttons from the nudge options. The order of the buttons will be based 
         /// on the index of each nudge option.
         /// </summary>
-        public List<Button> CreateButtons()
+        public List<NudgeOptionButton> CreateButtons()
         {
-            List<Button> buttons = new List<Button>();
-
-            // Use for loop instead of foreach to avoid the warning of "Access to foreach variable in closure. May 
-            // have different behaviour when compiled with different versions of compiler." when setting the click
-            // event handler.
-            for (int i = 0; i < nudgeOptions.Count; i++)
-            {
-                NudgeOption option = nudgeOptions[i];
-
-                Button button = new Button
-                {
-                    Text = option.Text
-                };
-
-                button.Click += delegate
-                {
-                    option.Action.Execute(option);
-                };
-
-                using (Graphics g = button.CreateGraphics())
-                {
-                    // Make sure the width of the button is sufficient for the text being displayed
-                    button.Width = (int)(g.MeasureString(button.Text, button.Font).Width + 10);
-                }
-
-                buttons.Add(button);
-            }
+            List<NudgeOptionButton> buttons = NudgeOptions.Select(option => option.CreateButton()).ToList();
 
             // Make all the buttons the same width as the widest button
             int maxWidth = buttons.Max(b => b.Width);
-            foreach (Button button in buttons)
+            foreach (NudgeOptionButton button in buttons)
             {
                 button.Width = maxWidth;
             }

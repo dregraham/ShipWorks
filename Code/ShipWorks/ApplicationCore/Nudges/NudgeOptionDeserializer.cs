@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Xml.Linq;
 using log4net;
-using Quartz.Util;
-using ShipWorks.ApplicationCore.Nudges.NudgeActions;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
@@ -49,13 +44,11 @@ namespace ShipWorks.ApplicationCore.Nudges
         public static NudgeOption Deserialize(Nudge owner, XElement nudgeOptionElement)
         {
             int index = GetIndex(nudgeOptionElement);
-
             string text = GetValue(nudgeOptionElement, "Text");
             string result = GetValue(nudgeOptionElement, "Result");
+            string action = GetValue(nudgeOptionElement, "Action");
 
-            INudgeAction nudgeAction = CreateNudgeAction(nudgeOptionElement);
-
-            return new NudgeOption(index, text, owner, nudgeAction, result);
+            return new NudgeOption(index, text, owner, action, result);
         }
 
         /// <summary>
@@ -72,33 +65,7 @@ namespace ShipWorks.ApplicationCore.Nudges
             }
             return index;
         }
-
-        /// <summary>
-        /// Creates the nudge action from the XElement provided.
-        /// </summary>
-        private static INudgeAction CreateNudgeAction(XElement nudgeOptionElement)
-        {
-            INudgeAction nudgeAction;
-            string nudgeActionName = GetValue(nudgeOptionElement, "Action");
-            Type nudgeActionType = Assembly.GetExecutingAssembly().GetType(string.Format("ShipWorks.ApplicationCore.Nudges.NudgeActions.{0}", nudgeActionName));
-
-            if (nudgeActionType == null)
-            {
-                log.Error(string.Format("Unable to get type '{0}'", nudgeActionName));
-                throw new NudgeException(string.Format("Unable to get type '{0}'", nudgeActionName));
-            }
-
-            try
-            {
-                nudgeAction = (INudgeAction)Activator.CreateInstance(nudgeActionType);
-            }
-            catch (Exception)
-            {
-                throw new NudgeException(string.Format("Unable to create an instance of type '{0}'", nudgeActionName));
-            }
-            return nudgeAction;
-        }
-
+        
         /// <summary>
         /// Gets the string value of an element
         /// </summary>
@@ -106,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         {
             IEnumerable<XElement> elements = nudgeOptionElement.Descendants(elementName);
             List<XElement> xElements = elements as List<XElement> ?? elements.ToList();
-            if (!xElements.Any() || xElements.First().Value.IsNullOrWhiteSpace())
+            if (!xElements.Any() || string.IsNullOrWhiteSpace(xElements.First().Value))
             {
                 log.Error(string.Format("Invalid or missing '{0}' in nudge option xml: {1}", elementName, nudgeOptionElement));
                 throw new NudgeException(string.Format("Invalid '{0}' in nudge option xml.", elementName));
