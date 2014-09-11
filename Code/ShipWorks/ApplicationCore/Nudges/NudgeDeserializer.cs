@@ -32,13 +32,13 @@ namespace ShipWorks.ApplicationCore.Nudges
         ///             <Option>
         ///                 <Index>0</Index>
         ///                 <Text>OK</Text>
-        ///                 <Action>Acknowledge</Action>
+        ///                 <Action>0</Action>
         ///                 <Result>OKClicked</Result>
         ///             </Option>
         ///             <Option>
         ///                 <Index>1</Index>
-        ///                 <Text>Close</Text>
-        ///                 <Action>Acknowledge</Action>
+        ///                 <Text>Close ShipWorks</Text>
+        ///                 <Action>1</Action>
         ///                 <Result>CloseClicked</Result>
         ///             </Option>
         ///         </Options>

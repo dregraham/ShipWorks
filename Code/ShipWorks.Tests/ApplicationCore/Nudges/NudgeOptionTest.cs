@@ -7,20 +7,38 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
     [TestClass]
     public class NudgeOptionTest
     {
-        private readonly NudgeOption testObject;
+        private NudgeOption testObject;
 
         public NudgeOptionTest()
         {
-            testObject = new NudgeOption(1, "Test Option", null, "Test Action", "Test Result");
+            testObject = new NudgeOption(1, "Test Option", null, NudgeOptionActionType.None, "Test Result");
         }
 
         [TestMethod]
-        public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_Test()
+        public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsNone_Test()
         {
-            // This will change once additional button types get added
             NudgeOptionButton button = testObject.CreateButton();
 
             Assert.IsInstanceOfType(button, typeof(AcknowledgeNudgeOptionButton));
+        }
+
+        [TestMethod]
+        public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsShutDown_Test()
+        {
+            testObject = new NudgeOption(1, "Test Option", null, NudgeOptionActionType.Shutdown, "Test Result");
+
+            NudgeOptionButton button = testObject.CreateButton();
+
+            Assert.IsInstanceOfType(button, typeof(ShutdownNudgeOptionButton));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NudgeException))]
+        public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
+        {
+            testObject = new NudgeOption(1, "Test Option", null, (NudgeOptionActionType)900, "Test Result");
+            
+            testObject.CreateButton();
         }
 
         [TestMethod]

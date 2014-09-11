@@ -94,7 +94,9 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            string action = GetValue(nudgeOptionElement, "Action");
+            string value = GetValue(nudgeOptionElement, "Action");
+            NudgeOptionActionType action = (NudgeOptionActionType) int.Parse(value);
+
             Assert.AreEqual(nudgeOption.Action, action);
         }
 
@@ -130,7 +132,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             <Option>
                 <Index>2</Index>
                 <Text>OK</Text>
-                <Action>AcknowledgeNudgeAction</Action>
+                <Action>0</Action>
                 <Result>OKClicked</Result>
             </Option>"
             ;
@@ -155,7 +157,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                          <Option>
                              <Index>1</Index>
                              <Text>Close</Text>
-                             <Action>AcknowledgeNudgeAction</Action>
+                             <Action>0</Action>
                              <Result>OKClicked</Result>
                          </Option>
                      </Options>

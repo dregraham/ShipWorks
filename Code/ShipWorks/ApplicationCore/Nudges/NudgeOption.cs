@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Initializes a new instance of the <see cref="NudgeOption"/> class.
         /// </summary>
-        public NudgeOption(int index, string text, Nudge owner, string action, string result)
+        public NudgeOption(int index, string text, Nudge owner, NudgeOptionActionType action, string result)
         {
             Index = index;
             Text = text;
@@ -37,9 +37,9 @@ namespace ShipWorks.ApplicationCore.Nudges
         public Nudge Owner { get; private set; }
 
         /// <summary>
-        /// The task to perform for this NudgeOption
+        /// The action to perform when this nudge option is selected.
         /// </summary>
-        public string Action { get; private set; }
+        public NudgeOptionActionType Action { get; private set; }
 
         /// <summary>
         /// Result to be returned to Tango
@@ -55,28 +55,37 @@ namespace ShipWorks.ApplicationCore.Nudges
             webClient.LogNudgeOption(this);
         }
 
+        /// <summary>
+        /// Factory method for creating a button based on the action of the nudge option
+        /// </summary>
+        /// <returns>An instance of NudgeOptionButton.</returns>
+        /// <exception cref="NudgeException">Thrown when the action type is not recognized.</exception>
         public NudgeOptionButton CreateButton()
         {
-            // Only one type of nudge option button at this time
-            NudgeOptionButton button = null;// new AcknowledgeNudgeOptionButton(this);
+            NudgeOptionButton button;
 
+            switch (Action)
+            {
+                case NudgeOptionActionType.None:
+                {
+                    button = new AcknowledgeNudgeOptionButton(this);
+                    break;
+                }
 
-            if (string.Compare(Action, "acknowledge", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                button = new AcknowledgeNudgeOptionButton(this);
-            }
-            else if (string.Compare(Action, "shutdown", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                button = new ShutdownNudgeOptionButton(this);
+                case NudgeOptionActionType.Shutdown:
+                {
+                    button = new ShutdownNudgeOptionButton(this);
+                    break;
+                }
+
+                default:
+                {
+                    throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
+                }
             }
 
-            if (button == null)
-            {
-                throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
-            }
 
             button.Text = Text;
-            
             return button;
         }
     }

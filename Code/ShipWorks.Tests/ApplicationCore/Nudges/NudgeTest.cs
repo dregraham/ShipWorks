@@ -17,10 +17,10 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             testObject = new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 500));
 
-            testObject.AddNudgeOption(new NudgeOption(2, "Two", testObject, "acknowledge", "I don't know"));
-            testObject.AddNudgeOption(new NudgeOption(0, "Zero", testObject, "acknowledge", "OK"));
-            testObject.AddNudgeOption(new NudgeOption(3, "A really long string for a button", testObject, "acknowledge", "Make a sandwich"));
-            testObject.AddNudgeOption(new NudgeOption(1, "One", testObject, "acknowledge", "Cancel"));
+            testObject.AddNudgeOption(new NudgeOption(2, "Two", testObject, NudgeOptionActionType.None, "I don't know"));
+            testObject.AddNudgeOption(new NudgeOption(0, "Zero", testObject, NudgeOptionActionType.None, "OK"));
+            testObject.AddNudgeOption(new NudgeOption(3, "A really long string for a button", testObject, NudgeOptionActionType.None, "Make a sandwich"));
+            testObject.AddNudgeOption(new NudgeOption(1, "One", testObject, NudgeOptionActionType.None, "Cancel"));
         }
 
         [TestMethod]

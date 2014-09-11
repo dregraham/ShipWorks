@@ -20,13 +20,13 @@ namespace ShipWorks.ApplicationCore.Nudges
     ///             <Option>
     ///                 <Index>0</Index>
     ///                 <Text>OK</Text>
-    ///                 <Action>Acknowledge</Action>
+    ///                 <Action>0</Action>
     ///                 <Result>OKClicked</Result>
     ///             </Option>
     ///             <Option>
     ///                 <Index>1</Index>
-    ///                 <Text>Close</Text>
-    ///                 <Action>Acknowledge</Action>
+    ///                 <Text>Close ShipWorks</Text>
+    ///                 <Action>1</Action>
     ///                 <Result>CloseClicked</Result>
     ///             </Option>
     ///         </Options>
@@ -46,9 +46,9 @@ namespace ShipWorks.ApplicationCore.Nudges
             int index = GetIndex(nudgeOptionElement);
             string text = GetValue(nudgeOptionElement, "Text");
             string result = GetValue(nudgeOptionElement, "Result");
-            string action = GetValue(nudgeOptionElement, "Action");
+            NudgeOptionActionType actionType = GetActionType(nudgeOptionElement);
 
-            return new NudgeOption(index, text, owner, action, result);
+            return new NudgeOption(index, text, owner, actionType, result);
         }
 
         /// <summary>
@@ -65,7 +65,24 @@ namespace ShipWorks.ApplicationCore.Nudges
             }
             return index;
         }
-        
+
+        /// <summary>
+        /// Gets the type of the action for the XElement provided.
+        /// </summary>
+        private static NudgeOptionActionType GetActionType(XElement nudgeOptionElement)
+        {
+            string value = GetValue(nudgeOptionElement, "Action");
+            int numericValue;
+
+            if (!int.TryParse(value, out numericValue))
+            {
+                log.ErrorFormat("An invalid nudge action was provided: {0}", value);
+                throw new NudgeException(string.Format("An error while parsing the action of a nudge option: {0}", nudgeOptionElement));
+            }
+
+            return (NudgeOptionActionType) numericValue;
+        }
+
         /// <summary>
         /// Gets the string value of an element
         /// </summary>

@@ -159,27 +159,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(nudge.ContentDimensions.Width, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Width")));
             Assert.AreEqual(nudge.ContentDimensions.Height, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Height")));
         }
-
-        [TestMethod]
-        public void NudgeDeserializer_NudgeHasCorrectOptions_Test()
-        {
-            XElement nudgeElement = XElement.Parse(GoodNudgeXml);
-
-            Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
-
-            Assert.AreEqual(nudgeElement.Descendants("Option").Count(), nudge.NudgeOptions.Count());
-
-            foreach (XElement optionElement in nudgeElement.Descendants("Option"))
-            {
-                int index = int.Parse(GetValue(optionElement, "Index"));
-                NudgeOption nudgeOption = nudge.NudgeOptions.First(option => option.Index == index);
-
-                Assert.AreEqual(nudgeOption.Result, GetValue(optionElement, "Result"));
-                Assert.AreEqual(nudgeOption.Action, GetValue(optionElement, "Action"));
-                Assert.AreEqual(nudgeOption.Text, GetValue(optionElement, "Text"));
-            }
-        }
-
+        
         /// <summary>
         /// Gets the string value of an element
         /// </summary>
@@ -202,13 +182,13 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                          <Option>
                              <Index>0</Index>
                              <Text>OK</Text>
-                             <Action>AcknowledgeNudgeAction</Action>
+                             <Action>0</Action>
                              <Result>OKClicked</Result>
                          </Option>
                          <Option>
                              <Index>1</Index>
                              <Text>Close</Text>
-                             <Action>AcknowledgeNudgeAction</Action>
+                             <Action>1</Action>
                              <Result>OKClicked</Result>
                          </Option>
                      </Options>
