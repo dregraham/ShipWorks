@@ -1,4 +1,5 @@
-﻿using ShipWorks.ApplicationCore.Licensing;
+﻿using System;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.ApplicationCore.Nudges
@@ -57,17 +58,22 @@ namespace ShipWorks.ApplicationCore.Nudges
         public NudgeOptionButton CreateButton()
         {
             // Only one type of nudge option button at this time
-            NudgeOptionButton button = new AcknowledgeNudgeOptionButton(this);
-            
-            //if (string.Compare(Action, "acknowledge", StringComparison.OrdinalIgnoreCase) == 0)
-            //{
-            //    button = new AcknowledgeNudgeOptionButton(this);
-            //}
-            
-            //if (button == null)
-            //{
-            //    throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
-            //}
+            NudgeOptionButton button = null;// new AcknowledgeNudgeOptionButton(this);
+
+
+            if (string.Compare(Action, "acknowledge", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                button = new AcknowledgeNudgeOptionButton(this);
+            }
+            else if (string.Compare(Action, "shutdown", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                button = new ShutdownNudgeOptionButton(this);
+            }
+
+            if (button == null)
+            {
+                throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
+            }
 
             button.Text = Text;
             
