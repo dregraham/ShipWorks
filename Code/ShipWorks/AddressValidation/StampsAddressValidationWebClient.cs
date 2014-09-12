@@ -63,21 +63,6 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, bool? isPoBox, ResidentialDeliveryIndicatorType residentialStatus)
         {
-            ValidationDetailStatusType convertedResidentialStatus;
-
-            switch (residentialStatus)
-            {
-                case ResidentialDeliveryIndicatorType.No:
-                    convertedResidentialStatus = ValidationDetailStatusType.True;
-                    break;
-                case ResidentialDeliveryIndicatorType.Yes:
-                    convertedResidentialStatus = ValidationDetailStatusType.False;
-                    break;
-                default:
-                    convertedResidentialStatus = ValidationDetailStatusType.Unknown;
-                    break;
-            }
-
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
                 Street1 = address.Address1,
@@ -93,13 +78,29 @@ namespace ShipWorks.AddressValidation
                         ValidationDetailStatusType.True : 
                         ValidationDetailStatusType.False : 
                     ValidationDetailStatusType.Unknown,
-                ResidentialStatus = convertedResidentialStatus
+                ResidentialStatus = ConvertResidentialStatus(residentialStatus)
             };
 
             addressValidationResult.ParseStreet1();
             addressValidationResult.ApplyAddressCasing();
 
             return addressValidationResult;
+        }
+
+        /// <summary>
+        /// Convert Stamps.com residential status into ShipWorks residential status
+        /// </summary>
+        private static ValidationDetailStatusType ConvertResidentialStatus(ResidentialDeliveryIndicatorType residentialStatus)
+        {
+            switch (residentialStatus)
+            {
+                case ResidentialDeliveryIndicatorType.No:
+                    return ValidationDetailStatusType.True;
+                case ResidentialDeliveryIndicatorType.Yes:
+                    return ValidationDetailStatusType.False;
+                default:
+                    return ValidationDetailStatusType.Unknown;
+            }
         }
 
         /// <summary>
