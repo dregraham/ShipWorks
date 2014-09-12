@@ -91,8 +91,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public override bool HasAccounts
         {
 	        get 
-	        { 
-		         return UpsAccountManager.Accounts.Any();
+	        {
+                return AccountRepository.Accounts.Any();
 	        }
         }
 

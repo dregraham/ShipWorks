@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return StampsAccountManager.StampsAccounts.Any();
+                return AccountRepository.Accounts.Any();
             }
         }
 

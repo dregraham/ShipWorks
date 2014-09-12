@@ -102,10 +102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override bool HasAccounts
         {
-            get
-            {
-                return FedExAccountManager.Accounts.Any();
-            }
+            get { return SettingsRepository.GetAccounts().Any(); }
         }
 
         /// <summary>

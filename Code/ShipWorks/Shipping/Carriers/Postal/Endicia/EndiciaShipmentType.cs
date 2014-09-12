@@ -85,10 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool HasAccounts
         {
-            get
-            {
-                return EndiciaAccountManager.EndiciaAccounts.Any();
-            }
+            get { return Accounts.Any(); }
         }
 
         /// <summary>
@@ -169,10 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public virtual List<EndiciaAccountEntity> Accounts
         {
-            get
-            {
-                return EndiciaAccountManager.EndiciaAccounts;
-            }
+            get { return AccountRepository.Accounts.ToList(); }
         }
 
         /// <summary>
