@@ -15957,10 +15957,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipLaunch);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsThermal field instance</summary>
-		public static EntityField2 StampsThermal
+		/// <summary>Creates a new ShippingSettingsEntity.StampsDomesticThermal field instance</summary>
+		public static EntityField2 StampsDomesticThermal
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsThermal);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsDomesticThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsInternationalThermal field instance</summary>
+		public static EntityField2 StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsInternationalThermal);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsThermalType field instance</summary>
 		public static EntityField2 StampsThermalType
@@ -16062,10 +16067,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermal field instance</summary>
-		public static EntityField2 Express1StampsThermal
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsDomesticThermal field instance</summary>
+		public static EntityField2 Express1StampsDomesticThermal
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermal);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsDomesticThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsInternationalThermal field instance</summary>
+		public static EntityField2 Express1StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsInternationalThermal);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalType field instance</summary>
 		public static EntityField2 Express1StampsThermalType
