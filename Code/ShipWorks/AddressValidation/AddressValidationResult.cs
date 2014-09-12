@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.Business;
+﻿using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.AddressValidation
 {
@@ -114,6 +116,72 @@ namespace ShipWorks.AddressValidation
             adapter.CountryCode = CountryCode;
             adapter.ResidentialStatus = (int) ResidentialStatus;
             adapter.POBox = (int) POBox;
+        }
+
+        /// <summary>
+        /// Parse the first street field into street1 and street2, if possible
+        /// </summary>
+        public void ParseStreet1()
+        {
+            if (string.IsNullOrEmpty(Street1))
+            {
+                return;
+            }
+
+            List<string> unitDesignators = new List<String>()
+            {
+                " APT ",
+                " BSMT ",
+                " BLDG ",
+                " DEPT ",
+                " FL ",
+                " FRNT ",
+                " HNGR ",
+                " KEY ",
+                " LBBY ",
+                " LOT ",
+                " LOWR ",
+                " OFC ",
+                " PH ",
+                " PIER ",
+                " REAR ",
+                " RM ",
+                " SIDE ",
+                " SLIP ",
+                " SPC ",
+                " STOP ",
+                " STE ",
+                " TRLR ",
+                " UNIT ",
+                " UPPR ",
+                " # "
+            };
+
+            string lineToParse = Street1;
+
+            foreach (var designator in unitDesignators)
+            {
+                int designatorLocation = lineToParse.IndexOf(designator, StringComparison.OrdinalIgnoreCase);
+
+                if (designatorLocation >= 0)
+                {
+                    Street1 = lineToParse.Substring(0, designatorLocation).Trim();
+                    Street2 = lineToParse.Substring(designatorLocation).Trim();
+
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Applies Address Casing
+        /// </summary>
+        public void ApplyAddressCasing()
+        {
+            Street1 = AddressCasing.Apply(Street1);
+            Street2 = AddressCasing.Apply(Street2);
+            Street3 = AddressCasing.Apply(Street3);
+            City = AddressCasing.Apply(City);
         }
     }
 }     

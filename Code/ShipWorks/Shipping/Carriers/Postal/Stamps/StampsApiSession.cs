@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Collections;
+using RestSharp.Validation;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -22,6 +23,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.Infopia.WebServices;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
@@ -438,37 +440,64 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 return address;
             }
 
-            address = CreateAddress(person);
+            StampsAddressValidationResults results = ValidateAddress(account, person);
 
-            bool addressMatch;
-            bool cityStateZipOK;
-            ResidentialDeliveryIndicatorType residentialIndicator;
-            bool? isPoBox;
-            bool isPoBoxSpecified;
-            Address[] candidates;
-            StatusCodes statusCodes;
-
-            using (SwsimV29 webService = CreateWebService("CleanseAddress", account.IsExpress1))
+            if (!results.IsSuccessfulMatch)
             {
-                string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
-                usernameAuthenticatorMap[account.Username] = auth;
-
-                if (!addressMatch)
+                if (!results.IsCityStateZipOk)
                 {
-                    if (!cityStateZipOK)
-                    {
-                        throw new StampsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
-                    }
-                    else if (requireFullMatch)
-                    {
-                        throw new StampsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
-                    }
+                    throw new StampsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
+                }
+
+                if (requireFullMatch)
+                {
+                    throw new StampsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
                 }
             }
 
-            cleansedAddressMap[person] = address;
+            cleansedAddressMap[person] = results.MatchedAddress;
 
-            return address;
+            return results.MatchedAddress;
+        }
+
+        /// <summary>
+        /// Validates the address of the given person using the specified stamps account
+        /// </summary>
+        public StampsAddressValidationResults ValidateAddress(StampsAccountEntity account, PersonAdapter person)
+        {
+            return AuthenticationWrapper(() => ValidateAddressInternal(person, account), account);
+        }
+
+        /// <summary>
+        /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
+        /// </summary>
+        private StampsAddressValidationResults ValidateAddressInternal(PersonAdapter person, StampsAccountEntity account)
+        {
+            Address address = CreateAddress(person);
+
+            using (SwsimV29 webService = CreateWebService("CleanseAddress", account.IsExpress1))
+            {
+                bool addressMatch;
+                bool cityStateZipOk;
+                ResidentialDeliveryIndicatorType residentialIndicator;
+                bool? isPoBox;
+                bool isPoBoxSpecified;
+                Address[] candidates;
+                StatusCodes statusCodes;
+                
+                string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                usernameAuthenticatorMap[account.Username] = auth;
+
+                return new StampsAddressValidationResults
+                {
+                    IsSuccessfulMatch = addressMatch,
+                    IsCityStateZipOk = cityStateZipOk,
+                    ResidentialIndicator = residentialIndicator,
+                    IsPoBox = isPoBox,
+                    MatchedAddress = address,
+                    Candidates = candidates.ToList()
+                };
+            }
         }
 
         /// <summary>

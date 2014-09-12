@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.AddressValidation
 {
@@ -10,6 +7,15 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class AddressValidationWebClientValidateAddressResult
     {
+        /// <summary>
+        /// Constructro
+        /// </summary>
+        public AddressValidationWebClientValidateAddressResult()
+        {
+            AddressValidationResults = new List<AddressValidationResult>();
+            AddressValidationError = string.Empty;
+        }
+
         /// <summary>
         /// Gets or sets the address validation results.
         /// </summary>

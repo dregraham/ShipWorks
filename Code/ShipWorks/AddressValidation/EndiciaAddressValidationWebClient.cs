@@ -38,11 +38,7 @@ namespace ShipWorks.AddressValidation
         /// </exception>
         public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip)
         {
-            AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult()
-            {
-                AddressValidationResults = new List<AddressValidationResult>(),
-                AddressValidationError = string.Empty
-            };
+            AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 
             XPathNavigator zip1Result = QueryDialAZip("ZIP1", street1, street2, city, state, zip);
 
@@ -101,7 +97,7 @@ namespace ShipWorks.AddressValidation
                             IsValid = true
                         };
 
-                        ParseStreet1(addressValidationResult);
+                        addressValidationResult.ParseStreet1();
 
                         validationResult.AddressValidationResults = new List<AddressValidationResult>() { addressValidationResult };
                     }
@@ -111,7 +107,7 @@ namespace ShipWorks.AddressValidation
                     throw new AddressValidationException("Address Validation failed to return a known Return Code");
             }
 
-            ApplyAddressCasing(validationResult.AddressValidationResults);
+            validationResult.AddressValidationResults.ForEach(x => x.ApplyAddressCasing());
 
             return validationResult;
         }
@@ -156,58 +152,6 @@ namespace ShipWorks.AddressValidation
             return ValidationDetailStatusType.Unknown;
         }
 
-        private static void ParseStreet1(AddressValidationResult addressValidationResult)
-        {
-            if (string.IsNullOrEmpty(addressValidationResult.Street1))
-            {
-                return;
-            }
-
-            List<string> unitDesignators = new List<String>()
-            {
-                " APT ",
-                " BSMT ",
-                " BLDG ",
-                " DEPT ",
-                " FL ",
-                " FRNT ",
-                " HNGR ",
-                " KEY ",
-                " LBBY ",
-                " LOT ",
-                " LOWR ",
-                " OFC ",
-                " PH ",
-                " PIER ",
-                " REAR ",
-                " RM ",
-                " SIDE ",
-                " SLIP ",
-                " SPC ",
-                " STOP ",
-                " STE ",
-                " TRLR ",
-                " UNIT ",
-                " UPPR ",
-                " # "
-            };
-
-            string lineToParse = addressValidationResult.Street1;
-
-            foreach (var designator in unitDesignators)
-            {
-                int designatorLocation = lineToParse.IndexOf(designator, StringComparison.InvariantCultureIgnoreCase);
-             
-                if (designatorLocation >=0)
-                {
-                    addressValidationResult.Street1 = lineToParse.Substring(0, designatorLocation).Trim();
-                    addressValidationResult.Street2 = lineToParse.Substring(designatorLocation).Trim();
-
-                    break;
-                }
-            }
-        }
-
         /// <summary>
         /// Zips the specified zip1 result.
         /// </summary>
@@ -228,25 +172,6 @@ namespace ShipWorks.AddressValidation
         private static bool DoesAddressExist(XPathNavigator zip1Result)
         {
             return XPathUtility.Evaluate(zip1Result, "//Dial-A-ZIP_Response/AddrExists", false);
-        }
-
-        /// <summary>
-        /// Applies Address Casing
-        /// </summary>
-        private static void ApplyAddressCasing(IEnumerable<AddressValidationResult> validationResults)
-        {
-            if (validationResults == null)
-            {
-                return;
-            }
-
-            foreach (AddressValidationResult validationResult in validationResults)
-            {
-                validationResult.Street1 = AddressCasing.Apply(validationResult.Street1);
-                validationResult.Street2 = AddressCasing.Apply(validationResult.Street2);
-                validationResult.Street3 = AddressCasing.Apply(validationResult.Street3);
-                validationResult.City = AddressCasing.Apply(validationResult.City);
-            }
         }
 
         /// <summary>
