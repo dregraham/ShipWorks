@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // this functionality was added), so we need to try to look it up
                     using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
                     {
-                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces(amazonStore.MerchantID, amazonStore.AuthToken);
+                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces();
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name

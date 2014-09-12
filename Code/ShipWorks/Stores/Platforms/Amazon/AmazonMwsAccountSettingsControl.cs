@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data;
+using Interapptive.Shared.Net;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -19,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     {
         AmazonStoreEntity amazonStore;
 
-        Dictionary<string, List<AmazonMwsMarketplace>> marketplaceCache = new Dictionary<string, List<AmazonMwsMarketplace>>();
+        readonly Dictionary<string, List<AmazonMwsMarketplace>> marketplaceCache = new Dictionary<string, List<AmazonMwsMarketplace>>();
 
         /// <summary>
         /// Constructor
@@ -30,12 +28,70 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Load settings from the store entity
+        /// Developer account number for access to Amazon API
         /// </summary>
+        private string AccountNumber
+        {
+            get
+            {
+                switch (amazonStore.AmazonApiRegion)
+                {
+                    case "US":
+                        return "1025-5115-6476";
+                    case "CA":
+                        return "1025-5115-6476";
+                    default:
+                        return "2814-9468-9452";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Url for accessing the Amazon developer portal
+        /// </summary>
+        private string DeveloperUrl
+        {
+            get
+            {
+                switch (amazonStore.AmazonApiRegion)
+                {
+                    case "US":
+                        return "http://developer.amazonservices.com";
+                    case "CA":
+                        return "http://developer.amazonservices.ca";
+                    default:
+                        return "http://developer.amazonservices.co.uk";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Load the data from the given store into the control
+        /// </summary>
+        /// <param name="store"></param>
         public override void LoadStore(StoreEntity store)
         {
+            LoadStore(store, false);
+        }
+
+        /// <summary>
+        /// Load settings from the store entity
+        /// </summary>
+        public void LoadStore(StoreEntity store, bool onWizard)
+        {
+            if (onWizard)
+            {
+                title.Visible = false;
+                form.Location = new Point(25, 0);
+            }
+            else
+            {
+                title.Visible = true;
+                form.Location = new Point(25, 30);
+            }
+
             // validate we get an AmazonStoreEntity
-            this.amazonStore = store as AmazonStoreEntity;
+            amazonStore = store as AmazonStoreEntity;
             if (amazonStore == null)
             {
                 throw new ArgumentException("AmazonStoreEntity expected.", "store"); 
@@ -44,6 +100,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             merchantID.Text = amazonStore.MerchantID;
             authToken.Text = amazonStore.AuthToken;
             marketplaceID.Text = amazonStore.MarketplaceID;
+
+            mwsLink.Text = string.Format("{0}.", DeveloperUrl);
+            accountNumber.Text = AccountNumber;
 
             base.LoadStore(store);
         }
@@ -130,21 +189,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Open the instruction dialog
-        /// </summary>
-        private void OnGetMerchantID(object sender, EventArgs e)
-        {
-            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg(amazonStore.AmazonApiRegion))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    merchantID.Text = dlg.MerchantID;
-                    authToken.Text = dlg.AuthToken;
-                }
-            }
-        }
-
-        /// <summary>
         /// Clicking the find marketplaces link
         /// </summary>
         private void OnClickFindMarketplaces(object sender, EventArgs e)
@@ -194,6 +238,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private List<AmazonMwsMarketplace> GetMarketplaces()
         {
+            amazonStore.MerchantID = merchantID.Text;
+            amazonStore.AuthToken = authToken.Text;
+
             List<AmazonMwsMarketplace> marketplaces;
             if (marketplaceCache.TryGetValue(GetCacheKey(), out marketplaces))
             {
@@ -201,10 +248,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             Cursor.Current = Cursors.WaitCursor;
-
+            
             using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
             {
-                marketplaces = client.GetMarketplaces(merchantID.Text, authToken.Text);
+                marketplaces = client.GetMarketplaces();
             }
 
             marketplaceCache[GetCacheKey()] = marketplaces;
@@ -220,6 +267,24 @@ namespace ShipWorks.Stores.Platforms.Amazon
             return string.Format("{0}-{1}",
                 merchantID.Text.Trim(),
                 authToken.Text.Trim());
+        }
+
+        /// <summary>
+        /// Open the MWS registration page
+        /// </summary>
+        private void OnMWSLinkClick(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl(DeveloperUrl, this);
+        }
+
+        /// <summary>
+        /// Called when [copy account number click].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnCopyAccountNumberClick(object sender, EventArgs e)
+        {
+            Clipboard.SetText(AccountNumber);
         }
     }
 }

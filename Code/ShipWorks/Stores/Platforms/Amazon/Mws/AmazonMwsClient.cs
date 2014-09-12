@@ -188,13 +188,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Get the list of marketplaces associated with the given merchantID
         /// </summary>
-        public List<AmazonMwsMarketplace> GetMarketplaces(string merchantID, string authToken)
+        public List<AmazonMwsMarketplace> GetMarketplaces()
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-            request.Variables.Add("SellerId", merchantID);
-            request.Variables.Add("MWSAuthToken", authToken);
+            request.Variables.Add("SellerId", store.MerchantID);
+            request.Variables.Add("MWSAuthToken", store.AuthToken);
 
-            var apiCall = AmazonMwsApiCall.ListMarketplaceParticipations;
+            AmazonMwsApiCall apiCall = AmazonMwsApiCall.ListMarketplaceParticipations;
 
             IHttpResponseReader response = ExecuteRequest(request, apiCall);
 
@@ -686,7 +686,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     request.Variables.Add("Marketplace", store.MarketplaceID);  
                 }
 
-                if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken)
+                if (amazonMwsApiCall != AmazonMwsApiCall.GetAuthToken && amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
                 {
                     AddMwsAuthToken(request);
                 }
