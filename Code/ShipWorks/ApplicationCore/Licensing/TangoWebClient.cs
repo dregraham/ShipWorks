@@ -99,6 +99,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// Logs the nudge option back to Tango to indicate that the option was selected 
+        /// by the user.
+        /// </summary>
+        public static void LogNudgeOption(NudgeOption option)
+        {
+            
+        }
+
+        /// <summary>
         /// Get the status of the specified license
         /// </summary>
         public static Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
@@ -778,8 +787,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Set the uri
-            //postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
-            postRequest.Uri = new Uri("https://www.interapptive.com/tango_private/shipworks.php");
+            postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
+            //postRequest.Uri = new Uri("https://www.interapptive.com/tango_private/shipworks.php");
         
 
             // Logging
