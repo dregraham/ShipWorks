@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
 #pragma warning disable 168,219
             // This is just to prove RewardsPoints and PaymentOrder exists. If it doesn't the WSDL has been updated and RewardPoints and PaymentOrder aren't
             // hacked into the reference.cs file any more.
+            var w = PaymentTypes.BillMeLater;
             var x = PaymentTypes.RewardPoints;
             var y = OrderType.PaymentOrder;
             var z = OrderItemType.OrderPayment;

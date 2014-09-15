@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ActiproSoftware.Drawing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
@@ -25,11 +26,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public static class PostalUtility
     {
         /// <summary>
+        /// This is a list of ranges used for military addresses
+        /// http://pe.usps.gov/text/LabelingLists/L002.htm
+        /// </summary>
+        private static readonly List<string> militaryPostalCodePrefixes = Enumerable
+            .Range(90, 9)
+            .Concat(new[] {340})
+            .Concat(Enumerable.Range(962, 5))
+            .Select(x => x.ToString("000")).ToList();
+
+        /// <summary>
         /// Indicates if the given state code is a military destination.  Only the USPS can ship to military, which is why this is in the PostalUtility
         /// </summary>
         public static bool IsMilitaryState(string stateCode)
         {
             return stateCode == "AA" || stateCode == "AE" || stateCode == "AP";
+        }
+
+        /// <summary>
+        /// Indiciates if the given postal code is a military destination.
+        /// </summary>
+        public static bool IsMilitaryPostalCode(string postalCode)
+        {
+            return militaryPostalCodePrefixes.Any(postalCode.StartsWith);
         }
 
         /// <summary>

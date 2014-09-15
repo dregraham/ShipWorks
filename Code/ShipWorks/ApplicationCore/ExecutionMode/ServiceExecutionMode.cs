@@ -91,6 +91,17 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         }
 
         /// <summary>
+        /// Name of this execution mode (User interface, command line, service)
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return "ServiceExecutionMode"; 
+            }
+        }
+
+        /// <summary>
         /// Indicates if this execution mode supports displaying a UI, whether or not one is currently displayed or not
         /// </summary>
         public override bool IsUISupported

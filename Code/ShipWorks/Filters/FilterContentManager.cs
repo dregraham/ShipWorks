@@ -349,34 +349,38 @@ namespace ShipWorks.Filters
             bool initial = (bool) ((object[]) state)[0];
             ApplicationBusyToken token = (ApplicationBusyToken) ((object[]) state)[1];
 
-            // Create a new connection
-            using (SqlAdapter adapter = new SqlAdapter())
+            // Get a connection that will not timeout
+            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
-                // adapter.LogInfoMessages = true;
-
-                // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
-                // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
-                // give this plenty of time.
-                adapter.CommandTimeOut = 300;
-
-                if (adapter.InSystemTransaction)
+                // Create a new connection
+                using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                 {
-                    // If there is no way around this, then wrap it in a TransactionScope with Suppress.
-                    throw new InvalidOperationException("This cannot be within a transaction.");
-                }
+                    // adapter.LogInfoMessages = true;
 
-                log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
+                    // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
+                    // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
+                    // give this plenty of time.
+                    adapter.CommandTimeOut = 0;
 
-                if (initial)
-                {
-                    ActionProcedures.CalculateInitialFilterCounts(adapter);
-                }
-                else
-                {
-                    ActionProcedures.CalculateUpdateFilterCounts(adapter);
-                }
+                    if (adapter.InSystemTransaction)
+                    {
+                        // If there is no way around this, then wrap it in a TransactionScope with Suppress.
+                        throw new InvalidOperationException("This cannot be within a transaction.");
+                    }
 
-                log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
+                    log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
+
+                    if (initial)
+                    {
+                        ActionProcedures.CalculateInitialFilterCounts(adapter);
+                    }
+                    else
+                    {
+                        ActionProcedures.CalculateUpdateFilterCounts(adapter);
+                    }
+
+                    log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
+                }
             }
 
             calculatingEvent.Set();
@@ -390,25 +394,32 @@ namespace ShipWorks.Filters
         public static void DeleteAbandonedFilterCounts()
         {
             log.InfoFormat("Deleting abandoned filter counts....");
-
-            // Create a new connection
-            using (SqlAdapter adapter = new SqlAdapter())
+            
+            // Get a connection that will not timeout
+            using (SqlConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
             {
-                try
+                // Create a new connection
+                using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                 {
-                    ActionProcedures.DeleteAbandonedFilterCounts(adapter);
-                }
-                catch (SqlException ex)
-                {
-                    // The constraint exception happens rarely, but we don't want it to crash ShipWorks since we can just 
-                    // try to delete the filter counts again later.
-                    if (UtilityFunctions.IsConstraintException(ex) || UtilityFunctions.IsDeadlockException(ex))
+                    // This needs to run as long as it has work to do
+                    adapter.CommandTimeOut = 0;
+
+                    try
                     {
-                        log.Warn("Could not delete abandoned filter counts", ex);
+                        ActionProcedures.DeleteAbandonedFilterCounts(adapter);
                     }
-                    else
+                    catch (SqlException ex)
                     {
-                        throw;
+                        // The constraint exception happens rarely, but we don't want it to crash ShipWorks since we can just 
+                        // try to delete the filter counts again later.
+                        if (UtilityFunctions.IsConstraintException(ex) || UtilityFunctions.IsDeadlockException(ex))
+                        {
+                            log.Warn("Could not delete abandoned filter counts", ex);
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
                 }
             }

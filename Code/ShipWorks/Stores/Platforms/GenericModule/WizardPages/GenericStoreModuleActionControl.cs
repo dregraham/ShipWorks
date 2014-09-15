@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         public override List<ActionTask> CreateActionTasks(StoreEntity store)
         {
             // Validate settings, and throw if they are not valid.
-            ValidateUi();
+            ValidateUi(DoesStoreSupportOnlineStatusUpdates((GenericModuleStoreEntity)store));
 
             List<ActionTask> tasks = new List<ActionTask>();
 
@@ -171,12 +171,21 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         /// <summary>
         /// Check to make sure settings are valid.  If any are not, an OnlineUpdateActionCreateException is thrown.
         /// </summary>
-        private void ValidateUi()
+        private void ValidateUi(bool supportsOnlineStatusUpdates)
         {
-            if (statusUpdate.Checked && comboStatus.SelectedIndex <= 0)
+            if (supportsOnlineStatusUpdates && statusUpdate.Checked && comboStatus.SelectedIndex <= 0)
             {
                 throw new OnlineUpdateActionCreateException("Please select an order status for shipped orders.\n\nNormally this is a 'Shipped' or 'Completed' status.");
             }
+        }
+
+        /// <summary>
+        /// Does the specified store support online status updates
+        /// </summary>
+        private static bool DoesStoreSupportOnlineStatusUpdates(GenericModuleStoreEntity store)
+        {
+            return store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusOnly ||
+                   store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusWithComment;
         }
     }
 }

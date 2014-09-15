@@ -656,7 +656,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return false;
+                return true;
             }
         }
     }
