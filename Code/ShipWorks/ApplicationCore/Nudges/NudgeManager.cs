@@ -30,10 +30,18 @@ namespace ShipWorks.ApplicationCore.Nudges
             {
                 nudges.Clear();
              
-                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                nudges = tangoWebClient.GetNudges(stores).ToList();
+                try
+                {
+                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                    nudges = tangoWebClient.GetNudges(stores).ToList();
 
-                log.InfoFormat("Found {0} nudges", nudges.Count);
+                    log.InfoFormat("Found {0} nudges", nudges.Count);
+                }
+                catch (TangoException exception)
+                {
+                    // Don't crash if SSL could not be verified
+                    log.Error("Could not intialize nudges.", exception);
+                }
             }
         }
 
@@ -61,8 +69,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         {
             if (nudge != null)
             {
-                // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager
-                // as far as SRP goes...
+                // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager as far as SRP goes...
                 log.InfoFormat("Showing nudge {0}", nudge.NudgeID);
                 using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
                 {

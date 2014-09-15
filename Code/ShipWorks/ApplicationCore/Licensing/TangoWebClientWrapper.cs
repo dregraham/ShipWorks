@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -155,7 +155,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
         {
-            throw new NotImplementedException();
+            List<Nudge> nudges = new List<Nudge>();
+            
+            foreach (StoreEntity store in stores)
+            {
+                nudges.AddRange(TangoWebClient.GetNudges(store));
+            }
+
+            return nudges.GroupBy(n => n.NudgeID).Select(group => group.First());
         }
 
         /// <summary>

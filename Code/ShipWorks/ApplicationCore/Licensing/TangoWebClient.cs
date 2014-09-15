@@ -28,6 +28,7 @@ using System.Reflection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -70,6 +71,31 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "getstatus");
 
             return ProcessAccountRequest(postRequest, store, license);
+        }
+
+        /// <summary>
+        /// Gets the nudges for the specified store.
+        /// </summary>
+        public static List<Nudge> GetNudges(StoreEntity store)
+        {
+            List<Nudge> nudges = new List<Nudge>();
+
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            postRequest.Variables.Add("action", "getnudges");
+            postRequest.Variables.Add("license", license.Key);
+
+            XmlDocument nudgesDoc = ProcessRequest(postRequest, "GetNudges");
+            XElement xNudges = XElement.Parse(nudgesDoc.OuterXml);
+
+            foreach (XElement xNudge in xNudges.Elements("Nudge"))
+            {
+                Nudge nudge = NudgeDeserializer.Deserialize(xNudge);
+                nudges.Add(nudge);
+            }
+
+            return nudges;
         }
 
         /// <summary>
@@ -752,7 +778,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
             // Set the uri
-            postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
+            //postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
+            postRequest.Uri = new Uri("https://www.interapptive.com/tango_private/shipworks.php");
+        
 
             // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
