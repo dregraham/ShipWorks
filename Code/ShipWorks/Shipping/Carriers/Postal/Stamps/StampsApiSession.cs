@@ -426,7 +426,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
-            return AuthenticationWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
+            return AuthenticationWrapper(() => CleanseAddressInternal(person, account, requireFullMatch), account);
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 return address;
             }
 
-            StampsAddressValidationResults results = ValidateAddress(account, person);
+            StampsAddressValidationResults results = ValidateAddress(person, account);
 
             if (!results.IsSuccessfulMatch)
             {
@@ -461,21 +461,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Validates the address of the given person using the specified stamps account
+        /// Validates the address of the given person
         /// </summary>
-        public StampsAddressValidationResults ValidateAddress(StampsAccountEntity account, PersonAdapter person)
+        public StampsAddressValidationResults ValidateAddress(PersonAdapter person)
         {
-            return AuthenticationWrapper(() => ValidateAddressInternal(person, account), account);
+            return ValidateAddress(person, null);
         }
 
         /// <summary>
-        /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
+        /// Validates the address of the given person using the specified stamps account
         /// </summary>
-        private StampsAddressValidationResults ValidateAddressInternal(PersonAdapter person, StampsAccountEntity account)
+        private StampsAddressValidationResults ValidateAddress(PersonAdapter person, StampsAccountEntity account)
         {
             Address address = CreateAddress(person);
 
-            using (SwsimV29 webService = CreateWebService("CleanseAddress", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("CleanseAddress", account != null && account.IsExpress1))
             {
                 bool addressMatch;
                 bool cityStateZipOk;
@@ -484,10 +484,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 bool isPoBoxSpecified;
                 Address[] candidates;
                 StatusCodes statusCodes;
-                
-                string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
-                usernameAuthenticatorMap[account.Username] = auth;
 
+                if (account == null)
+                {
+                    webService.CleanseAddress(new Credentials
+                    {
+                        IntegrationID = integrationID,
+                        Username = string.Empty,
+                        Password = string.Empty
+                    }, ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                }
+                else
+                {
+                    // If we've got a valid account, we'll use it to keep the authenticator current
+                    string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                    usernameAuthenticatorMap[account.Username] = auth;
+                }
+                
                 return new StampsAddressValidationResults
                 {
                     IsSuccessfulMatch = addressMatch,

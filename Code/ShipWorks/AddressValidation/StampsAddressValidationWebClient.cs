@@ -32,7 +32,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                StampsAddressValidationResults stampsResult = session.ValidateAddress(new StampsAccountRepository().DefaultProfileAccount, adapter);
+                StampsAddressValidationResults stampsResult = session.ValidateAddress(adapter);
 
                 if (stampsResult.IsSuccessfulMatch)
                 {
