@@ -54,6 +54,8 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// </summary>
         private void OnClick(object sender, EventArgs eventArgs)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             try
             {
                 // Log the that the option was selected and allow derived 
