@@ -388,25 +388,25 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{70DDFF53-64AB-406F-A48A-F91A7FEBC402}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "S: Residential Status", ValidationDetailStatusType.True,
+                        "S: Residential Status", ValidationDetailStatusType.Yes,
                         OrderFields.ShipResidentialStatus) 
                         { DefaultWidth = 100 }, 
 
                     new GridColumnDefinition("{B548B1DC-CFF1-4679-B4C4-10B86FA17DE5}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "S: PO Box", ValidationDetailStatusType.True,
+                        "S: PO Box", ValidationDetailStatusType.Yes,
                         OrderFields.ShipPOBox) 
                         { DefaultWidth = 72 }, 
 
                     new GridColumnDefinition("{13598E92-9602-4D48-9E9E-1F7BB2E49FA3}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "S: US Territory", ValidationDetailStatusType.True,
+                        "S: US Territory", ValidationDetailStatusType.Yes,
                         OrderFields.ShipUSTerritory) 
                         { DefaultWidth = 145 }, 
 
                     new GridColumnDefinition("{FB979A60-0C09-4AE9-8383-338745D9C075}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "S: Military Address",  ValidationDetailStatusType.True,
+                        "S: Military Address",  ValidationDetailStatusType.Yes,
                         OrderFields.ShipMilitaryAddress) 
                         { DefaultWidth = 115 }, 
 
@@ -487,25 +487,25 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{8FC356A6-3682-4B93-9046-DE3D3947AC69}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "B: Residential Status", ValidationDetailStatusType.True,
+                        "B: Residential Status", ValidationDetailStatusType.Yes,
                         OrderFields.BillResidentialStatus) 
                         { DefaultWidth = 100 }, 
 
                     new GridColumnDefinition("{AD6DCADA-4B68-4BB9-BF06-277BFD28EFE3}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "B: PO Box", ValidationDetailStatusType.True,
+                        "B: PO Box", ValidationDetailStatusType.Yes,
                         OrderFields.BillPOBox) 
                         { DefaultWidth = 72 }, 
 
                     new GridColumnDefinition("{A791FFD5-D49B-41C6-A66B-94B6222AB8B8}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "B: US Territory", ValidationDetailStatusType.True,
+                        "B: US Territory", ValidationDetailStatusType.Yes,
                         OrderFields.BillUSTerritory) 
                         { DefaultWidth = 145 }, 
 
                     new GridColumnDefinition("{7DDB96D8-1675-4C34-8F37-EA29D6F3E853}",
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                        "B: Military Address",  ValidationDetailStatusType.True,
+                        "B: Military Address",  ValidationDetailStatusType.Yes,
                         OrderFields.BillMilitaryAddress) 
                         { DefaultWidth = 115 },
 
