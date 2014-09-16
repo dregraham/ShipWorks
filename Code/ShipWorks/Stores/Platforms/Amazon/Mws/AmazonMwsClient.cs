@@ -791,7 +791,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             catch (Exception ex)
             {
-                throw new AmazonException(typeof(AmazonMwsClient), ex);
+                throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
             }
         }
 
