@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
     /// <summary>
-    /// Exception thrown when their are insufficient funds for processing in a label server account
+    /// Exception thrown when there are insufficient funds for processing in a label server account
     /// </summary>
-    public class EndiciaInsufficientFundsException : EndiciaApiException
+    public class EndiciaInsufficientFundsException : EndiciaApiException, IInsufficientFunds
     {
-        EndiciaAccountEntity account;
+        readonly EndiciaAccountEntity account;
 
         /// <summary>
         /// Constructor
@@ -23,11 +24,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// The Endicia account that is out of funds
+        /// Name of the provider associated with the exception
         /// </summary>
-        public EndiciaAccountEntity Account
+        public string Provider
         {
-            get { return account; }
+            get
+            {
+                return account.EndiciaReseller == (int) EndiciaReseller.None ? "Endicia" : "Express1";
+            }
+        }
+
+        /// <summary>
+        /// Identifier of the account
+        /// </summary>
+        public string AccountIdentifier
+        {
+            get
+            {
+                return account.AccountNumber;
+            }
+        }
+
+        /// <summary>
+        /// Create a dialog that will allow a customer to purchase more postage
+        /// </summary>
+        public Form CreatePostageDialog()
+        {
+            return new EndiciaBuyPostageDlg(account);
         }
     }
 }
