@@ -962,7 +962,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 

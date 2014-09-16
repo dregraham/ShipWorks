@@ -823,7 +823,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
