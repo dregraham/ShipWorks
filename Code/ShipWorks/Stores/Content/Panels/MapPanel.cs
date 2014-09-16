@@ -142,12 +142,12 @@ namespace ShipWorks.Stores.Content.Panels
                         else if (googleResponse.IsThrottled)
                         {
                             googleImage.Visible = false;
-                            errorLabel.Text = @"Google has received too many requests from this location. Please try again later.";
+                            errorLabel.Text = @"Too many requests. Please try again later.";
                         }
                         else
                         {
                             googleImage.Visible = false;
-                            errorLabel.Text = @"Cannot get image from Google.";
+                            errorLabel.Text = @"Cannot contact map server.";
                         }
                     }));
                 }

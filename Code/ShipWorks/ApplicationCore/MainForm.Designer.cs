@@ -1009,9 +1009,9 @@ namespace ShipWorks
             this.dockableWindowStreetView.Name = "dockableWindowStreetView";
             this.dockableWindowStreetView.ShowOptions = false;
             this.dockableWindowStreetView.Size = new System.Drawing.Size(378, 170);
-            this.dockableWindowStreetView.TabImage = global::ShipWorks.Properties.Resources.googleMapsFav16;
+            this.dockableWindowStreetView.TabImage = global::ShipWorks.Properties.Resources.streetLight;
             this.dockableWindowStreetView.TabIndex = 0;
-            this.dockableWindowStreetView.Text = "Street View";
+            this.dockableWindowStreetView.Text = "View of Street";
             // 
             // panelStreetView
             // 
