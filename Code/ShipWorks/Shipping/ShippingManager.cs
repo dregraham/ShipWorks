@@ -732,34 +732,41 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
         {
-            // Ensure data is valid and up-to-date
-            shipmentType.UpdateDynamicShipmentData(shipment);
+            // Start off with an empty rate group in the event that the shipment type has been restricted
+            RateGroup rateResults = new RateGroup(new List<RateResult>());
 
-            // We're going to confirm the shipping address with the store as some stores may change 
-            // the shipping address depending on the shipping program being used (such as eBay's 
-            // Global Shipping Program), so we want to get rates for the location the package will be shipped                
-
-            // We want to retain the buyer's address on the original shipment object, so we're going to use 
-            // a cloned shipment to confirm the shipping address with the store. This way the original 
-            // shipment is not altered and persisted to the database if the store alters the address
-            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
-            OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
-
-            // Determine residential status
-            if (shipmentType.IsResidentialStatusRequired(clonedShipment))
+            // Don't try to get rates for a restricted shipment type
+            if (!shipmentType.IsShipmentTypeRestricted)
             {
-                clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
+                // Ensure data is valid and up-to-date
+                shipmentType.UpdateDynamicShipmentData(shipment);
+
+                // We're going to confirm the shipping address with the store as some stores may change 
+                // the shipping address depending on the shipping program being used (such as eBay's 
+                // Global Shipping Program), so we want to get rates for the location the package will be shipped                
+
+                // We want to retain the buyer's address on the original shipment object, so we're going to use 
+                // a cloned shipment to confirm the shipping address with the store. This way the original 
+                // shipment is not altered and persisted to the database if the store alters the address
+                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+                OrderHeader orderHeader = DataProvider.GetOrderHeader(clonedShipment.OrderID);
+
+                // Determine residential status
+                if (shipmentType.IsResidentialStatusRequired(clonedShipment))
+                {
+                    clonedShipment.ResidentialResult = ResidentialDeterminationService.DetermineResidentialAddress(clonedShipment);
+                }
+
+                // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
+                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+                storeType.OverrideShipmentDetails(clonedShipment);
+
+                // Use the cloned shipment with the potentially adjusted shipping address to get the rates
+                rateResults = shipmentType.GetRates(clonedShipment);
+
+                // Copy back any best rate events that were set on the clone
+                shipment.BestRateEvents |= clonedShipment.BestRateEvents;
             }
-
-            // Confirm the address of the cloned shipment with the store giving it a chance to inspect/alter the shipping address
-            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
-            storeType.OverrideShipmentDetails(clonedShipment);
-
-            // Use the cloned shipment with the potentially adjusted shipping address to get the rates
-            RateGroup rateResults = shipmentType.GetRates(clonedShipment);
-
-            // Copy back any best rate events that were set on the clone
-            shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
             return rateResults;
         }
