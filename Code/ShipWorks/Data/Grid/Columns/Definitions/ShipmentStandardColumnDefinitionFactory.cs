@@ -152,31 +152,31 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{BD8A5B41-F9D8-4C56-B0B0-2F0BBA8CAC4B}",
                     new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
-                    "S: Validation Status", string.Empty,
+                    "S: Validation Status", AddressValidationStatusType.Valid,
                     ShipmentFields.ShipAddressValidationStatus) 
                     { DefaultWidth = 100 },
 
                 new GridColumnDefinition("{0791736A-46BC-40D9-A0C2-31432C1D64C4}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: Residential status", string.Empty,
+                    "S: Residential status", ValidationDetailStatusType.True,
                     ShipmentFields.ShipResidentialStatus) 
                     { DefaultWidth = 100 }, 
 
                 new GridColumnDefinition("{B857D3D6-32AC-43E2-B133-EA06CBBCFD5B}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: PO Box", string.Empty,
+                    "S: PO Box", ValidationDetailStatusType.True,
                     ShipmentFields.ShipPOBox) 
                     { DefaultWidth = 72 }, 
 
                 new GridColumnDefinition("{679D1C53-0826-4827-8CF0-9E153F51398B}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: International Territory", string.Empty,
+                    "S: International Territory", ValidationDetailStatusType.True,
                     ShipmentFields.ShipUSTerritory) 
                     { DefaultWidth = 145 }, 
 
                 new GridColumnDefinition("{68565201-49E4-45BB-80C2-E2D8343253F9}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: Military Address", string.Empty,
+                    "S: Military Address", ValidationDetailStatusType.True,
                     ShipmentFields.ShipMilitaryAddress) 
                     { DefaultWidth = 115 }
             };
