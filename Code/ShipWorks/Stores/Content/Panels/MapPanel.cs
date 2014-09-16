@@ -327,11 +327,9 @@ namespace ShipWorks.Stores.Content.Panels
             googleImage.Size = new Size(Size.Width, Size.Height);
             googleImage.Location = new Point(0, 0);
 
-
             requestQueue.Enqueue(selectedEntity != null ? EntityUtility.GetEntityId(selectedEntity) : 0);
 
             LoadSelection();
-            //GetImage();
         }
 
         /// <summary>
