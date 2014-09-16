@@ -43,12 +43,13 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         public static NudgeOption Deserialize(Nudge owner, XElement nudgeOptionElement)
         {
+            int optionId = GetNudgeOptionID(nudgeOptionElement);
             int index = GetIndex(nudgeOptionElement);
             string text = GetValue(nudgeOptionElement, "Text");
             string result = GetValue(nudgeOptionElement, "Result");
             NudgeOptionActionType actionType = GetActionType(nudgeOptionElement);
 
-            return new NudgeOption(index, text, owner, actionType, result);
+            return new NudgeOption(optionId, index, text, owner, actionType, result);
         }
 
         /// <summary>
@@ -64,6 +65,21 @@ namespace ShipWorks.ApplicationCore.Nudges
                 throw new NudgeException("Invalid Index in nudge option xml.");
             }
             return index;
+        }
+
+        /// <summary>
+        /// Gets the index of the nudge option from the XElement provided.
+        /// </summary>
+        private static int GetNudgeOptionID(XElement nudgeOptionElement)
+        {
+            int optionId;
+            string value = GetValue(nudgeOptionElement, "NudgeOptionID");
+            if (!int.TryParse(value, out optionId))
+            {
+                log.Error(string.Format("Invalid ID in nudge option xml: {0}", nudgeOptionElement));
+                throw new NudgeException("Invalid ID in nudge option xml.");
+            }
+            return optionId;
         }
 
         /// <summary>

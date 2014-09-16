@@ -170,7 +170,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public virtual void LogNudgeOption(NudgeOption option)
         {
-            throw new NotImplementedException();
+            TangoWebClient.LogNudgeOption(option);
         }
     }
 }

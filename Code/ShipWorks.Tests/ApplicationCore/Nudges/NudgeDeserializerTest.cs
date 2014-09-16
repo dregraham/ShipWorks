@@ -180,12 +180,14 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                      </ContentDimensions>
                      <Options>
                          <Option>
+                             <NudgeOptionID>1</NudgeOptionID>
                              <Index>0</Index>
                              <Text>OK</Text>
                              <Action>0</Action>
                              <Result>OKClicked</Result>
                          </Option>
                          <Option>
+                             <NudgeOptionID>2</NudgeOptionID>
                              <Index>1</Index>
                              <Text>Close</Text>
                              <Action>1</Action>

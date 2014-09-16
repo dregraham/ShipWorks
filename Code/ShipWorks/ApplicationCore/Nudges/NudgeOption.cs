@@ -12,14 +12,20 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Initializes a new instance of the <see cref="NudgeOption"/> class.
         /// </summary>
-        public NudgeOption(int index, string text, Nudge owner, NudgeOptionActionType action, string result)
+        public NudgeOption(int nudgeOptionID, int index, string text, Nudge owner, NudgeOptionActionType action, string result)
         {
+            NudgeOptionID = nudgeOptionID;
             Index = index;
             Text = text;
             Action = action;
             Result = result;
             Owner = owner;
         }
+
+        /// <summary>
+        /// Gets the nudge option ID.
+        /// </summary>
+        public int NudgeOptionID { get; private set; }
 
         /// <summary>
         /// Display order of this nudge option

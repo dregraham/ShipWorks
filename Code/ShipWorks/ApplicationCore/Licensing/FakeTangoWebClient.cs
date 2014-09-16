@@ -31,11 +31,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             };
 
             // Add a couple of options to the first nudge
-            nudges[0].AddNudgeOption(new NudgeOption(0, "OK", nudges[0], NudgeOptionActionType.None, "CloseClicked"));
-            nudges[0].AddNudgeOption(new NudgeOption(1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown, "ShutdownClicked"));
+            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None, "CloseClicked"));
+            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown, "ShutdownClicked"));
 
             // Add one option to the second nudge in the list
-            nudges[1].AddNudgeOption(new NudgeOption(0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
+            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
 
             return nudges;
         }

@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_ReturnsCorrectResult_Test()
+        public void Deserialize_ReturnsCorrectResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingIndex_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingIndex_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").Remove();
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenIndexNotANumber_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenIndexNotANumber_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Index").First().SetValue("hi");
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingText_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingText_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Text").Remove();
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingAction_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingAction_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Action").Remove();
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         [TestMethod]
         [ExpectedException(typeof(NudgeException))]
-        public void NudgeOptionDeserializer_ThrowsNudgeOptionException_WhenMissingResult_Test()
+        public void Deserialize_ThrowsNudgeOptionException_WhenMissingResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
             nudgeOptionElement.Descendants("Result").Remove();
@@ -78,17 +78,17 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectIndex_Test()
+        public void Deserialize_NudgeOptionHasCorrectIndex_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            Assert.AreEqual(nudgeOption.Index, int.Parse(GetValue(nudgeOptionElement, "Index")));
+            Assert.AreEqual(int.Parse(GetValue(nudgeOptionElement, "Index")), nudgeOption.Index);
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectAction_Test()
+        public void Deserialize_NudgeOptionHasCorrectAction_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
@@ -97,28 +97,49 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             string value = GetValue(nudgeOptionElement, "Action");
             NudgeOptionActionType action = (NudgeOptionActionType) int.Parse(value);
 
-            Assert.AreEqual(nudgeOption.Action, action);
+            Assert.AreEqual(action, nudgeOption.Action);
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectText_Test()
+        public void Deserialize_NudgeOptionHasCorrectText_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            Assert.AreEqual(nudgeOption.Text, GetValue(nudgeOptionElement, "Text"));
+            Assert.AreEqual(GetValue(nudgeOptionElement, "Text"), nudgeOption.Text);
         }
 
         [TestMethod]
-        public void NudgeOptionDeserializer_NudgeOptionHasCorrectResult_Test()
+        public void Deserialize_NudgeOptionHasCorrectResult_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            Assert.AreEqual(nudgeOption.Result, GetValue(nudgeOptionElement, "Result"));
+            Assert.AreEqual(GetValue(nudgeOptionElement, "Result"), nudgeOption.Result);
         }
+
+        [TestMethod]
+        public void Deserialize_SetsNudgeOptionID_Test()
+        {
+            XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
+
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
+
+            Assert.AreEqual(int.Parse(GetValue(nudgeOptionElement, "NudgeOptionID")), nudgeOption.NudgeOptionID);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NudgeException))]
+        public void Deserialize_ThrowsNudgeException_WhenNudgeIDIsMissing_Test()
+        {
+            XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
+            nudgeOptionElement.Descendants("NudgeOptionID").Remove();
+
+            NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
+        }
+
 
         /// <summary>
         /// Gets the string value of an element
@@ -130,40 +151,13 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         private const string GoodNudgeOptionXml = @"
             <Option>
+                <NudgeOptionID>1</NudgeOptionID>
                 <Index>2</Index>
                 <Text>OK</Text>
                 <Action>0</Action>
                 <Result>OKClicked</Result>
             </Option>"
-            ;
-
-        private const string GoodNudgeXml = @"
-            <Nudges>
-                 <Nudge>
-                     <NudgeID>12345</NudgeID>
-                     <NudgeType>ShipWorksUpgrade</NudgeType>
-                     <ContentUri>https://www.shipworks.com/blah</ContentUri>
-                     <ContentDimensions>
-                         <Width>1024</Width>
-                         <Height>768</Height>
-                     </ContentDimensions>
-                     <Options>
-                         <Option>
-                             <Index>0</Index>
-                             <Text>OK</Text>
-                             <Action>AcknowledgeNudgeAction</Action>
-                             <Result>OKClicked</Result>
-                         </Option>
-                         <Option>
-                             <Index>1</Index>
-                             <Text>Close</Text>
-                             <Action>0</Action>
-                             <Result>OKClicked</Result>
-                         </Option>
-                     </Options>
-                 </Nudge>
-             </Nudges>";
-
+            ;        
     }
 
 }
