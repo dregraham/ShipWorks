@@ -178,6 +178,18 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has been restricted.
+        /// </summary>
+        public virtual bool IsShipmentTypeRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Hidden;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
         public virtual bool HasAccounts

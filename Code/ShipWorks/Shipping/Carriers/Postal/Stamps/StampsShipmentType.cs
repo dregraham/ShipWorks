@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
-               settings.StampsAutomaticExpress1 &&
+               settings.StampsAutomaticExpress1 && !ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted && 
                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
                 var express1Account = StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account);
