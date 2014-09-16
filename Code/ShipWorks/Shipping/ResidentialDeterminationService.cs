@@ -58,9 +58,9 @@ namespace ShipWorks.Shipping
                 case ResidentialDeterminationType.FromAddressValidation:
                     switch (shipment.ShipResidentialStatus)
                     {
-                        case (int) ValidationDetailStatusType.True:
+                        case (int) ValidationDetailStatusType.Yes:
                             return true;
-                        case (int) ValidationDetailStatusType.False:
+                        case (int) ValidationDetailStatusType.No:
                             return false;
                         default:
                             // Just fall back on testing whether the company is set to determine if the address is commercial

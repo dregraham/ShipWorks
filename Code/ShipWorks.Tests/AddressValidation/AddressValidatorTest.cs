@@ -249,15 +249,15 @@ namespace ShipWorks.Tests.AddressValidation
             result1.StateProvCode = "AA";
             result1.CountryCode = "US";
             result1.PostalCode = "12345";
-            result1.ResidentialStatus = ValidationDetailStatusType.False;
-            result1.POBox = ValidationDetailStatusType.True;
+            result1.ResidentialStatus = ValidationDetailStatusType.No;
+            result1.POBox = ValidationDetailStatusType.Yes;
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
+            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
         [TestMethod]
@@ -308,15 +308,15 @@ namespace ShipWorks.Tests.AddressValidation
             result1.StateProvCode = "AA";
             result1.CountryCode = "US";
             result1.PostalCode = "12345";
-            result1.ResidentialStatus = ValidationDetailStatusType.False;
-            result1.POBox = ValidationDetailStatusType.True;
+            result1.ResidentialStatus = ValidationDetailStatusType.No;
+            result1.POBox = ValidationDetailStatusType.Yes;
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
-            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
-            Assert.AreEqual(ValidationDetailStatusType.True, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
-            Assert.AreEqual(ValidationDetailStatusType.False, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
+            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipResidentialStatus);
+            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipPOBox);
+            Assert.AreEqual(ValidationDetailStatusType.Yes, (ValidationDetailStatusType)sampleOrder.ShipMilitaryAddress);
+            Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
         [TestMethod]

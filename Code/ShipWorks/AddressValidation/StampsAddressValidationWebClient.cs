@@ -75,8 +75,8 @@ namespace ShipWorks.AddressValidation
                 IsValid = isValid,
                 POBox = isPoBox.HasValue ? 
                     isPoBox.Value ? 
-                        ValidationDetailStatusType.True : 
-                        ValidationDetailStatusType.False : 
+                        ValidationDetailStatusType.Yes : 
+                        ValidationDetailStatusType.No : 
                     ValidationDetailStatusType.Unknown,
                 ResidentialStatus = ConvertResidentialStatus(residentialStatus)
             };
@@ -95,9 +95,9 @@ namespace ShipWorks.AddressValidation
             switch (residentialStatus)
             {
                 case ResidentialDeliveryIndicatorType.No:
-                    return ValidationDetailStatusType.True;
+                    return ValidationDetailStatusType.Yes;
                 case ResidentialDeliveryIndicatorType.Yes:
-                    return ValidationDetailStatusType.False;
+                    return ValidationDetailStatusType.No;
                 default:
                     return ValidationDetailStatusType.Unknown;
             }

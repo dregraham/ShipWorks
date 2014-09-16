@@ -121,7 +121,7 @@ namespace ShipWorks.AddressValidation
 
             if (poBox == "P")
             {
-                return ValidationDetailStatusType.True;
+                return ValidationDetailStatusType.Yes;
             }
 
             if (string.IsNullOrEmpty(poBox))
@@ -129,7 +129,7 @@ namespace ShipWorks.AddressValidation
                 return ValidationDetailStatusType.Unknown;
             }
 
-            return ValidationDetailStatusType.False;
+            return ValidationDetailStatusType.No;
         }
 
         /// <summary>
@@ -141,12 +141,12 @@ namespace ShipWorks.AddressValidation
 
             if (residentialStatus == "R")
             {
-                return ValidationDetailStatusType.True;
+                return ValidationDetailStatusType.Yes;
             }
 
             if (residentialStatus == "B")
             {
-                return ValidationDetailStatusType.False;
+                return ValidationDetailStatusType.No;
             }
 
             return ValidationDetailStatusType.Unknown;

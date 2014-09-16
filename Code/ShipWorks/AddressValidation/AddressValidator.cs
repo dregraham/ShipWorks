@@ -219,8 +219,8 @@ namespace ShipWorks.AddressValidation
         private static int MilitaryAddressStatus(string stateProvCode)
         {
             return (stateProvCode == "AE" || stateProvCode == "AP" || stateProvCode == "AA") ?
-                (int) ValidationDetailStatusType.True :
-                (int) ValidationDetailStatusType.False;
+                (int) ValidationDetailStatusType.Yes :
+                (int) ValidationDetailStatusType.No;
         }
 
         /// <summary>
@@ -229,8 +229,8 @@ namespace ShipWorks.AddressValidation
         private static int InternationalTerritoryStatus(string stateProvCode, string countryCode)
         {
             return PostalUtility.IsUSInternationalTerritory(countryCode) || PostalUtility.IsUSInternationalTerritory(stateProvCode) ?
-                (int) ValidationDetailStatusType.True :
-                (int) ValidationDetailStatusType.False;
+                (int) ValidationDetailStatusType.Yes :
+                (int) ValidationDetailStatusType.No;
         }
     }
 }
