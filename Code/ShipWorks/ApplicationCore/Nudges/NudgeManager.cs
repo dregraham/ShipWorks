@@ -67,7 +67,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <param name="nudge">The nudge.</param>
         public static void ShowNudge(IWin32Window owner, Nudge nudge)
         {
-            if (nudge != null)
+            if (nudge != null && nudge.NudgeOptions.Any())
             {
                 // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager as far as SRP goes...
                 log.InfoFormat("Showing nudge {0}", nudge.NudgeID);
