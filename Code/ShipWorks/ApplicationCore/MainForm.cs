@@ -115,6 +115,7 @@ using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks
 {
@@ -653,6 +654,10 @@ namespace ShipWorks
 
             // Start the heartbeat
             heartBeat.Start();
+
+            // Update the nudges from Tango and show any upgrade related nudges
+            NudgeManager.Initialize(StoreManager.GetAllStores());
+            NudgeManager.ShowNudge(this, NudgeManager.Nudges.FirstOrDefault(n => n.NudgeType == NudgeType.ShipWorksUpgrade));
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);

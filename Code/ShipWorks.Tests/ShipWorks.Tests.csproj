@@ -134,6 +134,11 @@
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\GuidTests.cs" />
