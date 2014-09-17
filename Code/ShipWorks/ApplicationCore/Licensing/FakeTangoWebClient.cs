@@ -27,15 +27,20 @@ namespace ShipWorks.ApplicationCore.Licensing
             List<Nudge> nudges = new List<Nudge>
             {
                 new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
-                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500))
+                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500)),
+                new Nudge(3, NudgeType.RegisterStampsAccount, new Uri("http://www.bing.com"), new Size(400, 600))
             };
 
             // Add a couple of options to the first nudge
-            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None, "CloseClicked"));
-            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown, "ShutdownClicked"));
+            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None));
+            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown));
 
             // Add one option to the second nudge in the list
-            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
+            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
+
+            // Add one option to the third nudge in the list
+            nudges[2].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
+            nudges[2].AddNudgeOption(new NudgeOption(3, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount));
 
             return nudges;
         }
@@ -46,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public override void LogNudgeOption(NudgeOption option)
         {
             // Just log the option that was selected to disk to simulate a call to Tango
-            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The {0} option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
+            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
         }
     }
 }
