@@ -32,15 +32,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             };
 
             // Add a couple of options to the first nudge
-            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None, "CloseClicked"));
-            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown, "ShutdownClicked"));
+            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None));
+            nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown));
 
             // Add one option to the second nudge in the list
-            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
+            nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
 
             // Add one option to the third nudge in the list
-            nudges[2].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
-            nudges[2].AddNudgeOption(new NudgeOption(3, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount, "RegisterStampsAccount"));
+            nudges[2].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
+            nudges[2].AddNudgeOption(new NudgeOption(3, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount));
 
             return nudges;
         }
