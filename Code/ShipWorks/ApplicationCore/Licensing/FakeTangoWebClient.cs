@@ -51,7 +51,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         public override void LogNudgeOption(NudgeOption option)
         {
             // Just log the option that was selected to disk to simulate a call to Tango
-            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The {0} option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
+            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
         }
     }
 }

@@ -14,7 +14,9 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// <param name="option">The option.</param>
         public AcknowledgeNudgeOptionButton(NudgeOption option)
             : base(option)
-        { }
+        {
+            option.Result = string.Format("{0} Clicked", option.Text);
+        }
         
         /// <summary>
         /// Closes the form that this button resides within.
