@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.ApplicationCore.Nudges
 {
+    /// <summary>
+    /// An enumeration to indicate what the content of a nudge is for.
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum NudgeType
     {
+        /// <summary>
+        /// Indicates the nudge is prompting the user to upgrade to the latest version of ShipWorks
+        /// </summary>
         [Description("Upgrade ShipWorks")]
         [ApiValue("ShipWorksUpgrade")]
         ShipWorksUpgrade = 0,
 
-        [Description("Register Stamps Account")]
+        /// <summary>
+        /// Prompt the user to create a Stamps.com account
+        /// </summary>
+        [Description("Create a Stamps.com account")]
         [ApiValue("RegisterStampsAccount")]
         RegisterStampsAccount = 1
     }

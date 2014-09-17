@@ -33,6 +33,16 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
+        public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsRegisterStampsAccount_Test()
+        {
+            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.RegisterStampsAccount, "Test Result");
+
+            NudgeOptionButton button = testObject.CreateButton();
+
+            Assert.IsInstanceOfType(button, typeof(RegisterStampsAccountNudgeOptionButton));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(NudgeException))]
         public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
         {

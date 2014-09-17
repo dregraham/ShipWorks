@@ -13,6 +13,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
     public abstract class NudgeOptionButton : Button
     {
         private readonly NudgeOption option;
+        private Form hostForm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NudgeOptionButton"/> class.
@@ -26,6 +27,21 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
             Click += OnClick;
         }
 
+        /// <summary>
+        /// Gets the NudgeOption that this button is for.
+        /// </summary>
+        protected NudgeOption Option
+        {
+            get { return option; }
+        }
+
+        /// <summary>
+        /// Gets the form that this button is hosted within.
+        /// </summary>
+        protected Form HostForm
+        {
+            get { return hostForm ?? (hostForm = FindForm()); }
+        }
         /// <summary>
         /// An abstract method allowing derived classes to perform any logic that is needed when the button is clicked. 
         /// </summary>

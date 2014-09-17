@@ -15,18 +15,16 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         public AcknowledgeNudgeOptionButton(NudgeOption option)
             : base(option)
         { }
-
+        
         /// <summary>
         /// Closes the form that this button resides within.
         /// </summary>
         public override void HandleClick()
         {
-            Form form = FindForm();
-
-            if (form != null)
+            if (HostForm != null)
             {
-                form.Close();
+                HostForm.Close();
             }
-        }
+        }        
     }
 }
