@@ -70,12 +70,13 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// </summary>
         private void OnClick(object sender, EventArgs eventArgs)
         {
+            // Allow derived classes to handle the event prior to logging to 
+            // allow a chance for the option's result to be set if needed
             Cursor.Current = Cursors.WaitCursor;
+            HandleClick();
 
             try
             {
-                // Log the that the option was selected and allow derived 
-                // classes to handle the event.
                 option.Log();
             }
             catch (Exception exception)
@@ -85,8 +86,6 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
                 // logged successfully.
                 LogManager.GetLogger(GetType()).WarnFormat("Could not log the nudge option for nudge {0}. {1}", option.Owner.NudgeID, exception.Message);
             }
-
-            HandleClick();
         }
     }
 }
