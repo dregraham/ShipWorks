@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -190,9 +191,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
+
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
-               settings.StampsAutomaticExpress1 && !ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted && 
+               settings.StampsAutomaticExpress1 && !isExpress1Restricted && 
                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
                 var express1Account = StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account);
@@ -285,7 +288,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             else
                             {
                                 // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
                                 {
                                     rate.AmountFootnote = Resources.star_green;
                                 }
@@ -298,22 +301,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
 
                     RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
-                    if (settings.StampsAutomaticExpress1)
+
+                    if (!isExpress1Restricted)
                     {
-                        if (hasExpress1Savings)
+                        // Express1 is not restricted, so show the Express1 related footers
+                        if (settings.StampsAutomaticExpress1)
                         {
-                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
+                            if (hasExpress1Savings)
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
+                            }
+                            else
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
+                            }
                         }
                         else
                         {
-                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
-                        }
-                    }
-                    else
-                    {
-                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
-                        {
-                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new Express1StampsSettingsFacade(settings)));
+                            if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new Express1StampsSettingsFacade(settings)));
+                            }
                         }
                     }
 

@@ -459,10 +459,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
 
             // See if this shipment should really go through Express1
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia 
-                && !ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
+                && !isExpress1Restricted
                 && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
                 && (settings = ShippingSettings.Fetch()).EndiciaAutomaticExpress1)
             {
@@ -566,7 +567,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             else
                             {
                                 // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if (Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
                                 {
                                     rate.AmountFootnote = Resources.star_green;
                                 }
@@ -580,23 +581,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Endicia; return e; }).ToList());
 
-                    if (settings.EndiciaAutomaticExpress1)
+                    if (!isExpress1Restricted)
                     {
-                        if (hasExpress1Savings)
+                        if (settings.EndiciaAutomaticExpress1)
                         {
-                            finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, endiciaRates, express1Rates));
+                            if (hasExpress1Savings)
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, endiciaRates, express1Rates));
+                            }
+                            else
+                            {
+                                finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
+                            }
                         }
                         else
                         {
-                            finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
-                        }
-                    }
-                    else
-                    {
-                        if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType)shipment.Postal.PackagingType))
-                        {
-                            IExpress1SettingsFacade express1Settings = new Express1EndiciaSettingsFacade(ShippingSettings.Fetch());
-                            finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
+                            if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
+                            {
+                                IExpress1SettingsFacade express1Settings = new Express1EndiciaSettingsFacade(ShippingSettings.Fetch());
+                                finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, express1Settings));
+                            }
                         }
                     }
 

@@ -133,6 +133,8 @@ namespace ShipWorks.Editions
                 AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
             }
 
+            AddRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.Express1Stamps, EditionRestrictionLevel.Hidden);
+
             // Load the shipment type functionality into the restriction set
             foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
             {
