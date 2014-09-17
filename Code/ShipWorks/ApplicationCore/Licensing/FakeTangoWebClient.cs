@@ -27,7 +27,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             List<Nudge> nudges = new List<Nudge>
             {
                 new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
-                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500))
+                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500)),
+                new Nudge(3, NudgeType.RegisterStampsAccount, new Uri("http://www.bing.com"), new Size(400, 600))
             };
 
             // Add a couple of options to the first nudge
@@ -36,6 +37,10 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Add one option to the second nudge in the list
             nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
+
+            // Add one option to the third nudge in the list
+            nudges[2].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None, "CloseClicked"));
+            nudges[2].AddNudgeOption(new NudgeOption(3, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount, "RegisterStampsAccount"));
 
             return nudges;
         }

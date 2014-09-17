@@ -13,6 +13,10 @@ namespace ShipWorks.ApplicationCore.Nudges
     {
         [Description("Upgrade ShipWorks")]
         [ApiValue("ShipWorksUpgrade")]
-        ShipWorksUpgrade = 0
+        ShipWorksUpgrade = 0,
+
+        [Description("Register Stamps Account")]
+        [ApiValue("RegisterStampsAccount")]
+        RegisterStampsAccount = 1
     }
 }

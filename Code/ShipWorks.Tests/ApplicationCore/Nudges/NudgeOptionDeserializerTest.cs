@@ -101,6 +101,20 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         [TestMethod]
+        public void Deserialize_NudgeOptionHasCorrectAction_ForRegisterStampsAccount_Test()
+        {
+            XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
+            nudgeOptionElement.Descendants("Action").First().SetValue(((int)NudgeOptionActionType.RegisterStampsAccount).ToString());
+
+            NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
+
+            string value = GetValue(nudgeOptionElement, "Action");
+            NudgeOptionActionType action = (NudgeOptionActionType)int.Parse(value);
+
+            Assert.AreEqual(action, nudgeOption.Action);
+        }
+
+        [TestMethod]
         public void Deserialize_NudgeOptionHasCorrectText_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
