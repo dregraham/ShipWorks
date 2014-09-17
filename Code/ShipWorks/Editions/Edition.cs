@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
@@ -51,6 +52,11 @@ namespace ShipWorks.Editions
             get { return sharedOptions; }
         }
 
+        /// <summary>
+        /// Gets or sets the shipment type functionality that can be configured.
+        /// </summary>
+        public ShipmentTypeFunctionality ShipmentTypeFunctionality { get; set; }
+        
         /// <summary>
         /// Add a restriction to the edition
         /// </summary>
@@ -126,10 +132,56 @@ namespace ShipWorks.Editions
             {
                 AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
             }
+            
+            // Load the shipment type functionality into the restriction set
+            foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
+            {
+                List<ShipmentTypeRestrictionType> restrictionTypes = ShipmentTypeFunctionality[typeCode].ToList();
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.Disabled))
+                {
+                    AddRestriction(EditionFeature.ShipmentType, typeCode, EditionRestrictionLevel.Hidden);
+                }
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.AccountRegistration))
+                {
+                    AddRestriction(EditionFeature.ShipmentTypeRegistration, typeCode, EditionRestrictionLevel.Hidden);
+
+                    // If account registration is not allowed and there are no accounts in the db for this shipment type, 
+                    // it is effectively a disabled shipment type, so go ahead and add that restriction as well.
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(typeCode);
+                    if (!shipmentType.HasAccounts)
+                    {
+                        AddRestriction(EditionFeature.ShipmentType, typeCode, EditionRestrictionLevel.Hidden);
+                    }
+                }
+            }
+
+            // Update the shipping settings default shipment type just in case the default carrier is now disabled.
+            UpdateDefaultShippingType();
 
             restrictionsFinalized = true;
 
             return restrictions;
+        }
+
+        /// <summary>
+        /// Updates the shipping setting default shipment type.  This is to keep restricted shipment types in sync with
+        /// the selected default type.  i.e. if UPS is restricted and it was the default type, the next created shipment
+        /// would be created as UPS.  So instead, we'll update the default type to be None.
+        /// </summary>
+        private void UpdateDefaultShippingType()
+        {
+            ShippingSettingsEntity shippingSettingsEntity = ShippingSettings.Fetch();
+            ShipmentTypeCode currentDefaultShipmentTypeCode = (ShipmentTypeCode)shippingSettingsEntity.DefaultType;
+
+            IEnumerable<ShipmentTypeCode> disabledShipmentTypeCodes = restrictions.Where(er => er.Feature == EditionFeature.ShipmentType).Select(er => (ShipmentTypeCode)er.Data);
+
+            if (disabledShipmentTypeCodes.Contains(currentDefaultShipmentTypeCode))
+            {
+                shippingSettingsEntity.DefaultType = (int) ShipmentTypeCode.None;
+                ShippingSettings.Save(shippingSettingsEntity);
+            }
         }
 
         /// <summary>

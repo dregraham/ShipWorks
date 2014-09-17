@@ -71,6 +71,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return iParcelAccountManager.Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Create and Initialize a new shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)

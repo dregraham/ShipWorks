@@ -485,16 +485,23 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
                 return errorRates;
             }
+            
+            RateGroup rates = new RateGroup(new List<RateResult>());
 
-            RateGroup rates = new PostalWebShipmentType().GetRates(shipment);
-            rates.Rates.ForEach(x =>
+            if (!IsShipmentTypeRestricted)
             {
-                if (x.ProviderLogo != null)
+                // Only get counter rates if the shipment type has not been restricted
+                rates = new PostalWebShipmentType().GetRates(shipment);
+                rates.Rates.ForEach(x =>
                 {
-                    // Only change existing logos; don't set logos for rates that don't have them
-                    x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType);
-                }
-            });
+                    if (x.ProviderLogo != null)
+                    {
+                        // Only change existing logos; don't set logos for rates that don't have them
+                        x.ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType);
+                    }
+                });
+            }
+
             return rates;
         }
     }

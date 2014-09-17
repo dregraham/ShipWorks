@@ -69,17 +69,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets the configured Express1 Accounts
-        /// </summary>
-        public override List<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.Express1Accounts;
-            }
-        }
-
-        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()

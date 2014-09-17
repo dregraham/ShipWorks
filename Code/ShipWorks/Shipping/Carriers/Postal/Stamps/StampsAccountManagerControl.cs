@@ -151,6 +151,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             edit.Enabled = enabled;
             remove.Enabled = enabled;
+
+            bool allowAccountRegistration = ShipmentTypeManager.GetType(IsExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps).IsAccountRegistrationAllowed;
+            
+            if (!allowAccountRegistration)
+            {
+                add.Hide();
+
+                // Adjust the location of the remove button based on the visiblity of the add button and
+                // make sure it's on top of the add button. 
+                remove.Top = add.Top;
+                remove.BringToFront();
+            }
+            else
+            {
+                add.Show();
+                remove.Top = add.Bottom + 6;
+            }
         }
 
         /// <summary>

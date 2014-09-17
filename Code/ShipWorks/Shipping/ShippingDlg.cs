@@ -2299,23 +2299,32 @@ namespace ShipWorks.Shipping
             {
                 this.Invoke((MethodInvoker)delegate
                 {
-                    using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
+                    // If this shipment type is not allowed to have new registrations, cancel out.
+                    if (!shipmentType.IsAccountRegistrationAllowed)
                     {
-                        result = setupWizard.ShowDialog(this);
-
-                        if (result == DialogResult.OK)
+                        MessageHelper.ShowWarning(this, string.Format("Account registration is disabled for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)));
+                        result = DialogResult.Cancel;
+                    }
+                    else
+                    {
+                        using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
                         {
-                            ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+                            result = setupWizard.ShowDialog(this);
 
-                            ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
-                            ServiceControl.SaveToShipments();
-                            ServiceControl.LoadAccounts();
-                        }
-                        else
-                        {
-                            // User canceled out of the setup wizard for this batch, so don't show
-                            // any setup wizard for the rest of this batch
-                            cancelProcessing = true;
+                            if (result == DialogResult.OK)
+                            {
+                                ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                                ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
+                                ServiceControl.SaveToShipments();
+                                ServiceControl.LoadAccounts();
+                            }
+                            else
+                            {
+                                // User canceled out of the setup wizard for this batch, so don't show
+                                // any setup wizard for the rest of this batch
+                                cancelProcessing = true;
+                            }
                         }
                     }
                 });

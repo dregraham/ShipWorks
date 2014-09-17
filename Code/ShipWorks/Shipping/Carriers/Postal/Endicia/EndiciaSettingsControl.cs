@@ -82,10 +82,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                express1PostageDiscountSettingsControl.LoadSettings(this.settings);
-                express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted)
+                {
+                    // Express1 is restricted - hide the express1 settings
+                    express1PostageDiscountSettingsControl.Hide();
+                    express1Options.Hide();
 
-                panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
+                    panelBottom.Top = optionsControl.Bottom + 5;
+                }
+                else
+                {
+                    express1PostageDiscountSettingsControl.LoadSettings(this.settings);
+                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+
+                    panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
+                }
             }
         }
 

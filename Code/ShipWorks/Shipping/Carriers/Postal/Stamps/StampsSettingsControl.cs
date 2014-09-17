@@ -65,10 +65,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                express1SettingsControl.LoadSettings(express1Settings);
-                express1SettingsControl.Top = optionsControl.Bottom + 5;
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted)
+                {
+                    // Express1 is restricted - hide the express1 settings
+                    express1SettingsControl.Hide();
+                    express1Options.Hide();
 
-                panelBottom.Top = express1SettingsControl.Bottom + 5;
+                    panelBottom.Top = optionsControl.Bottom + 5;
+                }
+                else
+                {
+                    express1SettingsControl.LoadSettings(express1Settings);
+                    express1SettingsControl.Top = optionsControl.Bottom + 5;
+
+                    panelBottom.Top = express1SettingsControl.Bottom + 5;
+                }
             }
         }
 
