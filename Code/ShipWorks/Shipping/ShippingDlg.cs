@@ -9,6 +9,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -31,6 +32,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Templates.Printing;
@@ -2092,6 +2094,9 @@ namespace ShipWorks.Shipping
                 return;
             }
             
+            // Check for shipment type process shipment nudges
+            ShowShipmentTypeProcessingNudges(shipments);
+
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
                 "Processing Shipments",
                 "ShipWorks is processing the shipments.",
@@ -2279,6 +2284,35 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             }, shipments, rateControl.SelectedRate); // Each shipment to execute the code for
+        }
+
+        /// <summary>
+        /// Checks for any Process Shipment nudges that might pertain to processing the referenced list of shipments.
+        /// </summary>
+        private void ShowShipmentTypeProcessingNudges(IEnumerable<ShipmentEntity> shipments)
+        {
+            // Get a distinct list of shipment types from the list of shipments to process
+            List<ShipmentTypeCode> shipmentTypeCodes = shipments.Select(s => (ShipmentTypeCode) s.ShipmentType).Distinct().ToList();
+
+            // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
+            if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
+            {
+                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessEndicia);
+                if(nudges.Any())
+                {
+                    NudgeManager.ShowNudge(this, nudges.First());
+                }
+            }
+
+            // If there is an Express1Endicia shipment in the list, check for ProcessExpress1Endicia nudges
+            if (shipmentTypeCodes.Contains(ShipmentTypeCode.Express1Endicia))
+            {
+                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessExpress1Endicia);
+                if (nudges.Any())
+                {
+                    NudgeManager.ShowNudge(this, nudges.First());
+                }
+            }
         }
 
         /// <summary>
