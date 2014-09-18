@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.UI;
@@ -48,6 +49,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private void OnShown(object sender, EventArgs e)
         {
             Refresh();
+
+            // Show any purchase nudges if there are any
+            ShowPurchasePostageNudges();
 
             Cursor.Current = Cursors.WaitCursor;
 
@@ -92,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }        
 
         /// <summary>
-        /// This will show the dialog using the information for the given Stamps account entity provided.
+        /// This will show the dialog using the information for the given Endicia account entity provided.
         /// </summary>
         /// <exception cref="EndiciaException">ShipWorks could not find information for this account.</exception>
         public DialogResult ShowDialog(IWin32Window owner, long accountID)
@@ -109,6 +113,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // InitializeAccountInfo(endiciaAccountEntity);
             this.account = endiciaAccountEntity;
             return ShowDialog(owner);
+        }
+
+        /// <summary>
+        /// Checks for any purchase postage nudges
+        /// </summary>
+        private void ShowPurchasePostageNudges()
+        {
+            // Determine if this is for express1
+            bool isExpress1 = (EndiciaReseller) account.EndiciaReseller == EndiciaReseller.Express1;
+
+            NudgeType nudgeType = isExpress1 ? NudgeType.PurchaseExpress1Endicia : NudgeType.PurchaseEndicia;
+
+            // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
+            IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == nudgeType);
+            if (nudges.Any())
+            {
+                NudgeManager.ShowNudge(this, nudges.First());
+            }
         }
     }
 }
