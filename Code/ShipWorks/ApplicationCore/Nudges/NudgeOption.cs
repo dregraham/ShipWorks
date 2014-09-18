@@ -12,13 +12,13 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Initializes a new instance of the <see cref="NudgeOption"/> class.
         /// </summary>
-        public NudgeOption(int nudgeOptionID, int index, string text, Nudge owner, NudgeOptionActionType action, string result)
+        public NudgeOption(int nudgeOptionID, int index, string text, Nudge owner, NudgeOptionActionType action)
         {
             NudgeOptionID = nudgeOptionID;
             Index = index;
             Text = text;
             Action = action;
-            Result = result;
+            Result = string.Empty;
             Owner = owner;
         }
 
@@ -50,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Result to be returned to Tango
         /// </summary>
-        public string Result { get; private set; }
+        public string Result { get; set; }
 
         /// <summary>
         /// Logs that this option was selected.
@@ -89,7 +89,6 @@ namespace ShipWorks.ApplicationCore.Nudges
                     throw new NudgeException(string.Format("Unable to create a button for the {0} nudge option. The {1} action was not resolved.", Text, Action));
                 }
             }
-
 
             button.Text = Text;
             return button;

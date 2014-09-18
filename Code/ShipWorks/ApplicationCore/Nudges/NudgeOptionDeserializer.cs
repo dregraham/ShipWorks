@@ -46,10 +46,9 @@ namespace ShipWorks.ApplicationCore.Nudges
             int optionId = GetNudgeOptionID(nudgeOptionElement);
             int index = GetIndex(nudgeOptionElement);
             string text = GetValue(nudgeOptionElement, "Text");
-            string result = GetValue(nudgeOptionElement, "Result");
             NudgeOptionActionType actionType = GetActionType(nudgeOptionElement);
 
-            return new NudgeOption(optionId, index, text, owner, actionType, result);
+            return new NudgeOption(optionId, index, text, owner, actionType);
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         public NudgeOptionTest()
         {
-            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.None, "Test Result");
+            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.None);
         }
 
         [TestMethod]
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         [TestMethod]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsShutDown_Test()
         {
-            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.Shutdown, "Test Result");
+            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.Shutdown);
 
             NudgeOptionButton button = testObject.CreateButton();
 
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         [ExpectedException(typeof(NudgeException))]
         public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
         {
-            testObject = new NudgeOption(1, 1, "Test Option", null, (NudgeOptionActionType)900, "Test Result");
+            testObject = new NudgeOption(1, 1, "Test Option", null, (NudgeOptionActionType)900);
             
             testObject.CreateButton();
         }
