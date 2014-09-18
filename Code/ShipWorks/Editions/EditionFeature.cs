@@ -131,6 +131,12 @@ namespace ShipWorks.Editions
         /// The ability to add shipping accounts can be restricted.
         /// </summary>
         [Description("You must contact Interapptive to be able to add a new account to ShipWorks.")]
-        ShipmentTypeRegistration
+        ShipmentTypeRegistration,
+
+        /// <summary>
+        /// The ability to process shipments for specific carriers can be restricted.
+        /// </summary>
+        [Description("Processing shipments using the selected carrier is no longer supported.")]
+        ProcessShipment
     }
 }
