@@ -158,7 +158,7 @@ namespace ShipWorks.Editions
 
                 if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.Processing))
                 {
-                    AddRestriction(EditionFeature.ProcessShipment, typeCode, EditionRestrictionLevel.Hidden);
+                    AddRestriction(EditionFeature.ProcessShipment, typeCode, EditionRestrictionLevel.Forbidden);
                 }
             }
 
