@@ -277,8 +277,40 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
+        public void SetupXmlWithFedExProcessingRestriction()
+        {
+            xml = new XmlDocument();
+            xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
+<License>
+	<Key>FBIN4-6CR3T-6EXUL-MI4XF-CART66LITE-BRIAN@INTERAPPTIVE.COM</Key>
+	<Machine>10.1.10.131/cart66lite/wp-</Machine>
+	<Active>true</Active>
+	<Cancelled>false</Cancelled>
+	<DisabledReason/>
+	<Valid>true</Valid>
+	<StoreID>29043</StoreID>
+	<CustomerID>53</CustomerID>
+	<Version>Checked</Version>
+	<EndiciaDhlEnabled status=""1""/>
+	<EndiciaInsuranceEnabled status=""1""/>
+	<UpsSurePostEnabled status=""1""/>
+	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
+	<EndiciaScanBasedReturns status=""1""/>
+    <ShipmentTypeFunctionality>
+		<ShipmentType TypeCode=""3"">
+			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode=""6"">
+			<Restriction>Processing</Restriction>
+		</ShipmentType>
+	</ShipmentTypeFunctionality>
+</License>");
+
+            path = xml.CreateNavigator();
+        }
+
         [TestMethod]
-        public void Parse_AddsKeysForAllShipmentTypeCodes_Test()
+        public void Deserialize_AddsKeysForAllShipmentTypeCodes_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
 
@@ -287,7 +319,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_AddsDisabledRestriction_WhenListedInTheRestrictionSet_Test()
+        public void Deserialize_AddsDisabledRestriction_WhenListedInTheRestrictionSet_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
 
@@ -297,7 +329,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_AddsAccountRegistrationRestriction_WhenListedInTheRestrictionSet_Test()
+        public void Deserialize_AddsAccountRegistrationRestriction_WhenListedInTheRestrictionSet_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
 
@@ -307,7 +339,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_AddsMultipleRestrictionForShipmentType_WhenMultipleRestrictionsListedInTheRestrictionSet_Test()
+        public void Deserialize_AddsMultipleRestrictionForShipmentType_WhenMultipleRestrictionsListedInTheRestrictionSet_Test()
         {
             SetupXmlWithMultipleFedExRestrictions();
 
@@ -318,7 +350,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_HasNoRestrictions_WhenNoShipmentTypesAreInXml_Test()
+        public void Deserialize_HasNoRestrictions_WhenNoShipmentTypesAreInXml_Test()
         {
             SetupXmlWithNoShipmentTypes();
             
@@ -332,7 +364,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_OnlyAddsDistinctRestrictions_WhenDuplicateRestrictionsListedInTheRestrictionSet_Test()
+        public void Deserialize_OnlyAddsDistinctRestrictions_WhenDuplicateRestrictionsListedInTheRestrictionSet_Test()
         {
             SetupXmlWithDuplicateFedExRestrictions();
 
@@ -343,7 +375,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_HasNoRestrictions_WhenRestrictionSetIsEmpty_Test()
+        public void Deserialize_HasNoRestrictions_WhenRestrictionSetIsEmpty_Test()
         {
             SetupXmlWithNoFedExRestrictions();
 
@@ -354,7 +386,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_HasNoRestrictions_WhenShipmentTypeFunctionalityIsMissing_Test()
+        public void Deserialize_HasNoRestrictions_WhenShipmentTypeFunctionalityIsMissing_Test()
         {
             SetupXmlWithoutShipmentTypeFunctionalityNode();
 
@@ -365,7 +397,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_OnlyAddsDistinctRestrictions_WhenDuplicateShipmentTypeNodesInXml_Test()
+        public void Deserialize_OnlyAddsDistinctRestrictions_WhenDuplicateShipmentTypeNodesInXml_Test()
         {
             // Each node configured with the same two restrictions
             SetupXmlWithDuplicateShipmentTypeNodes();
@@ -377,7 +409,7 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
-        public void Parse_OnlyAddsDistinctRestrictions_WhenShipmentTypeListedMultipleTimes_WithDifferentRestrictionsInEachNode_Test()
+        public void Deserialize_OnlyAddsDistinctRestrictions_WhenShipmentTypeListedMultipleTimes_WithDifferentRestrictionsInEachNode_Test()
         {
             // Each node configured with the same two restrictions
             SetupXmlWithDuplicateShipmentTypeNodes();
@@ -386,6 +418,17 @@ namespace ShipWorks.Tests.Editions
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
             Assert.AreEqual(2, restrictions.Distinct().Count());
+        }
+
+        [TestMethod]
+        public void Deserialize_AddsProcessingRestriction_Test()
+        {
+            SetupXmlWithFedExProcessingRestriction();
+
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
+            IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
+
+            Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Processing));
         }
 
         [TestMethod]
