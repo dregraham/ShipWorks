@@ -22,6 +22,20 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         [Description("Create a Stamps.com account")]
         [ApiValue("RegisterStampsAccount")]
-        RegisterStampsAccount = 1
+        RegisterStampsAccount = 1,
+
+        /// <summary>
+        /// Prompt the user to create a Stamps.com account
+        /// </summary>
+        [Description("Processing with Endicia maybe be restricted.")]
+        [ApiValue("ProcessEndicia")]
+        ProcessEndicia = 2,
+
+        /// <summary>
+        /// Prompt the user to create a Stamps.com account
+        /// </summary>
+        [Description("Processing with Express1 for Endicia maybe be restricted.")]
+        [ApiValue("ProcessExpress1Endicia")]
+        ProcessExpress1Endicia = 3
     }
 }

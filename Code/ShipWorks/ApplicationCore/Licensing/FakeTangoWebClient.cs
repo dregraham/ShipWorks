@@ -28,7 +28,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
                 new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500)),
-                new Nudge(3, NudgeType.RegisterStampsAccount, new Uri("http://www.bing.com"), new Size(400, 600))
+                new Nudge(3, NudgeType.RegisterStampsAccount, new Uri("http://www.bing.com"), new Size(400, 600)),
+                new Nudge(4, NudgeType.ProcessEndicia, new Uri("http://www.endicia.com"), new Size(400, 600)),
+                new Nudge(5, NudgeType.ProcessExpress1Endicia, new Uri("http://www.stackoverflow.com"), new Size(400, 600))
             };
 
             // Add a couple of options to the first nudge
@@ -39,8 +41,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             nudges[1].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
 
             // Add one option to the third nudge in the list
-            nudges[2].AddNudgeOption(new NudgeOption(3, 0, "Close", nudges[1], NudgeOptionActionType.None));
-            nudges[2].AddNudgeOption(new NudgeOption(3, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount));
+            nudges[2].AddNudgeOption(new NudgeOption(4, 0, "Close", nudges[1], NudgeOptionActionType.None));
+            nudges[2].AddNudgeOption(new NudgeOption(5, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount));
+
+            // Add one option to the third nudge in the list
+            nudges[3].AddNudgeOption(new NudgeOption(4, 0, "OK", nudges[3], NudgeOptionActionType.None));
+            nudges[4].AddNudgeOption(new NudgeOption(5, 1, "OK", nudges[4], NudgeOptionActionType.None));
 
             return nudges;
         }
