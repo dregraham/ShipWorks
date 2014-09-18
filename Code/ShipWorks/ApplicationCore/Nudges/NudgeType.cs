@@ -27,29 +27,29 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Notify the user that processing with Endicia may be restricted
         /// </summary>
-        [Description("Processing with Endicia maybe be restricted.")]
+        [Description("Processing with Endicia may be restricted.")]
         [ApiValue("ProcessEndicia")]
         ProcessEndicia = 2,
 
         /// <summary>
         /// Notify the user that processing with Express1 for Endicia may be restricted
         /// </summary>
-        [Description("Processing with Express1 for Endicia maybe be restricted.")]
+        [Description("Processing with Express1 for Endicia may be restricted.")]
         [ApiValue("ProcessExpress1Endicia")]
         ProcessExpress1Endicia = 3,
 
         /// <summary>
         /// Notify the user that purchasing postage for Endicia may be restricted
         /// </summary>
-        [Description("Purchasing postage for Endicia maybe be restricted.")]
-        [ApiValue("ProcessEndicia")]
+        [Description("Purchasing postage for Endicia may be restricted.")]
+        [ApiValue("PurchaseEndicia")]
         PurchaseEndicia = 4,
 
         /// <summary>
         /// Notify the user that purchasing postage for Express1 for Endicia may be restricted
         /// </summary>
-        [Description("Purchasing postage for Express1 for Endicia maybe be restricted.")]
-        [ApiValue("ProcessExpress1Endicia")]
+        [Description("Purchasing postage for Express1 for Endicia may be restricted.")]
+        [ApiValue("PurchaseExpress1Endicia")]
         PurchaseExpress1Endicia = 5
     }
 }
