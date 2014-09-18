@@ -25,17 +25,31 @@ namespace ShipWorks.ApplicationCore.Nudges
         RegisterStampsAccount = 1,
 
         /// <summary>
-        /// Prompt the user to create a Stamps.com account
+        /// Notify the user that processing with Endicia may be restricted
         /// </summary>
         [Description("Processing with Endicia maybe be restricted.")]
         [ApiValue("ProcessEndicia")]
         ProcessEndicia = 2,
 
         /// <summary>
-        /// Prompt the user to create a Stamps.com account
+        /// Notify the user that processing with Express1 for Endicia may be restricted
         /// </summary>
         [Description("Processing with Express1 for Endicia maybe be restricted.")]
         [ApiValue("ProcessExpress1Endicia")]
-        ProcessExpress1Endicia = 3
+        ProcessExpress1Endicia = 3,
+
+        /// <summary>
+        /// Notify the user that purchasing postage for Endicia may be restricted
+        /// </summary>
+        [Description("Purchasing postage for Endicia maybe be restricted.")]
+        [ApiValue("ProcessEndicia")]
+        PurchaseEndicia = 4,
+
+        /// <summary>
+        /// Notify the user that purchasing postage for Express1 for Endicia may be restricted
+        /// </summary>
+        [Description("Purchasing postage for Express1 for Endicia maybe be restricted.")]
+        [ApiValue("ProcessExpress1Endicia")]
+        PurchaseExpress1Endicia = 5
     }
 }
