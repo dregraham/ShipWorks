@@ -1,23 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Web;
-using ShipWorks.Users;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.UI;
 using System.IO;
-using ShipWorks.ApplicationCore.Logging;
+using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using System.Threading;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Crashes
 {
@@ -107,9 +97,17 @@ namespace ShipWorks.ApplicationCore.Crashes
                     formsToClose.Add(form);
                 }
 
-                foreach (Form form in formsToClose )
+                foreach (Form form in formsToClose)
                 {
-                    form.Visible = false;
+                    if (form.InvokeRequired)
+                    {
+                        Form currentForm = form; // Access to foreach variables in closure may have different ehavior when compiled with different version of the compiler. Copy to Local Variable.
+                        form.Invoke(new Action(() => currentForm.Visible = false));
+                    }
+                    else
+                    {
+                        form.Visible = false;    
+                    }
                 }
             }
 
