@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         [TestMethod]
         public void SubmitClaimDelayTimespan_IsSevenDays_Test()
         {
-            Assert.AreEqual(TimeSpan.FromDays(7).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
+            Assert.AreEqual(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
         }
 		
         [TestMethod]
