@@ -34,6 +34,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
 			toReturn.Add(this.EquaShipShipmentEntityUsingShipmentID);
 			toReturn.Add(this.FedExShipmentEntityUsingShipmentID);
+			toReturn.Add(this.InsurancePolicyEntityUsingShipmentID);
 			toReturn.Add(this.IParcelShipmentEntityUsingShipmentID);
 			toReturn.Add(this.OnTracShipmentEntityUsingShipmentID);
 			toReturn.Add(this.OtherShipmentEntityUsingShipmentID);
@@ -117,6 +118,25 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("FedExShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and InsurancePolicyEntity over the 1:1 relation they have, using the relation between the fields:
+		/// Shipment.ShipmentID - InsurancePolicy.ShipmentID
+		/// </summary>
+		public virtual IEntityRelation InsurancePolicyEntityUsingShipmentID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "InsurancePolicy", true);
+
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, InsurancePolicyFields.ShipmentID);
+
+
+
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("InsurancePolicyEntity", false);
 				return relation;
 			}
 		}

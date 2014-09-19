@@ -106,6 +106,25 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
+        /// Determines how much the shipment was insured for.
+        /// </summary>
+        public static decimal GetInsuredValue(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+            return
+                Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                    .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                    .Where(
+                        choice =>
+                            choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                            choice.InsuranceValue > 0)
+                    .Select(insuredPackages => insuredPackages.InsuranceValue)
+                    .DefaultIfEmpty(0)
+                    .Sum();
+        }
+
+        /// <summary>
         /// Check for any insurance issues in the given list
         /// </summary>
         public static void ValidateShipment(ShipmentEntity shipment)

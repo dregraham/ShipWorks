@@ -935,7 +935,8 @@ CREATE TABLE [dbo].[Shipment]
 [BestRateEvents] [tinyint] NOT NULL,
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
-[ShipSenseEntry] [varbinary] (max) NOT NULL
+[ShipSenseEntry] [varbinary] (max) NOT NULL,
+[OnlineShipmentID] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1991,6 +1992,26 @@ GO
 PRINT N'Creating primary key [PK_InfopiaStore] on [dbo].[InfopiaStore]'
 GO
 ALTER TABLE [dbo].[InfopiaStore] ADD CONSTRAINT [PK_InfopiaStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Creating [dbo].[InsurancePolicy]'
+GO
+CREATE TABLE [dbo].[InsurancePolicy]
+(
+[ShipmentID] [bigint] NOT NULL,
+[InsureShipStoreName] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CreatedWithApi] [bit] NOT NULL,
+[ItemName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ClaimType] [int] NULL,
+[DamageValue] [money] NULL,
+[SubmissionDate] [datetime] NULL,
+[ClaimID] [bigint] NULL,
+[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [PK_InsurancePolicy] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 PRINT N'Creating [dbo].[iParcelShipment]'
 GO
@@ -4895,6 +4916,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaOrderItem]'
 GO
 ALTER TABLE [dbo].[InfopiaOrderItem] ADD CONSTRAINT [FK_InfopiaOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [FK_InsurancePolicy_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaStore]'
 GO
