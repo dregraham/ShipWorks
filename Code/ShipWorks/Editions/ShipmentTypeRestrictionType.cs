@@ -15,6 +15,11 @@
         /// <summary>
         /// A shipment cannot be processed.
         /// </summary>
-        Processing = 2
+        Processing = 2,
+
+        /// <summary>
+        /// Purchasing postage is not allowed.
+        /// </summary>
+        Purchasing = 3
     }
 }
