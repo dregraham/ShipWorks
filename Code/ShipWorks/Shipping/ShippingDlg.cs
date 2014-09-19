@@ -351,6 +351,11 @@ namespace ShipWorks.Shipping
 
             // Save all changes from the UI to the previous entity selection
             SaveUIDisplayedShipments();
+
+            // Synchronize to make sure the status is up to date in the case where dimensions
+            // have been manually altered across shipment types
+            shipSenseNeedsUpdated = true;
+            SynchronizeWithShipSense();
             
             // Reload the displayed shipments so that they show the new shipment type UI
             LoadSelectedShipments(true);
