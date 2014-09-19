@@ -137,6 +137,12 @@ namespace ShipWorks.Editions
         /// The ability to process shipments for specific carriers can be restricted.
         /// </summary>
         [Description("Processing shipments using the selected carrier is no longer supported.")]
-        ProcessShipment
+        ProcessShipment,
+
+        /// <summary>
+        /// The ability to purchase postage for specific carriers can be restricted.
+        /// </summary>
+        [Description("Purchasing postage using the selected carrier is no longer supported.")]
+        PurchasePostage
     }
 }
