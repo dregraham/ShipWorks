@@ -21,6 +21,7 @@ using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
@@ -2126,7 +2127,7 @@ namespace ShipWorks.Shipping
 
             // Special cases - I didn't think we needed to abstract these.  If it gets out of hand we should refactor.
             bool worldshipExported = false;
-            EndiciaInsufficientFundsException endiciaOutOfFundsEx = null;
+            IInsufficientFunds outOfFundsException = null;
 
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
@@ -2157,17 +2158,15 @@ namespace ShipWorks.Shipping
                 shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
 
                 // If any accounts were out of funds we show that instead of the errors
-                if (endiciaOutOfFundsEx != null)
+                if (outOfFundsException != null)
                 {
-                    string provider = (endiciaOutOfFundsEx.Account.EndiciaReseller == (int) EndiciaReseller.None) ? "Endicia" : "Express1";
-
                     DialogResult answer = MessageHelper.ShowQuestion(this,
-                        string.Format("You do not have sufficient funds in {0} account #{1} to continue shipping.\n\n" +
-                        "Would you like to purchase more now?", provider, endiciaOutOfFundsEx.Account.AccountNumber));
+                        string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
+                        "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
 
                     if (answer == DialogResult.OK)
                     {
-                        using (EndiciaBuyPostageDlg dlg = new EndiciaBuyPostageDlg(endiciaOutOfFundsEx.Account))
+                        using (Form dlg = outOfFundsException.CreatePostageDialog())
                         {
                             dlg.ShowDialog(this);
                         }
@@ -2277,10 +2276,10 @@ namespace ShipWorks.Shipping
                     errorMessage = ex.Message;
                     processingErrors[shipmentID] = ex;
 
-                    // Special case for Endicia out of funds
+                    // Special case for out of funds
                     if (ex.InnerException != null)
                     {
-                        endiciaOutOfFundsEx = endiciaOutOfFundsEx ?? (ex.InnerException.InnerException as EndiciaInsufficientFundsException);
+                        outOfFundsException = outOfFundsException ?? (ex.InnerException.InnerException as IInsufficientFunds);
                     }
                 }
 

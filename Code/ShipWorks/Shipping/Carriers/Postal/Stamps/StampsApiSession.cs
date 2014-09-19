@@ -649,7 +649,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     throw new StampsException(message, ex);
                 }
 
-                // This isn't an authentication exception, so just throw the original exception
+                if (ex.Code == 5636353 || ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS"))
+                {
+                    throw new StampsInsufficientFundsException(account, ex.Message);
+                }
+
+                // This isn't an exception we can handle, so just throw the original exception
                 throw;
             }
         }

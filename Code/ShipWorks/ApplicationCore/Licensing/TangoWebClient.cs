@@ -31,6 +31,7 @@ using System.Reflection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -105,6 +106,46 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
 
             return insureShipAffiliate;
+        }
+
+        /// <summary>
+        /// Gets the nudges for the specified store.
+        /// </summary>
+        public static List<Nudge> GetNudges(StoreEntity store)
+        {
+            List<Nudge> nudges = new List<Nudge>();
+
+            ShipWorksLicense license = new ShipWorksLicense(store.License);
+
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+            postRequest.Variables.Add("action", "getnudges");
+            postRequest.Variables.Add("license", license.Key);
+
+            XmlDocument nudgesDoc = ProcessXmlRequest(postRequest, "GetNudges");
+            XElement xNudges = XElement.Parse(nudgesDoc.OuterXml);
+
+            foreach (XElement xNudge in xNudges.Elements("Nudge"))
+            {
+                Nudge nudge = NudgeDeserializer.Deserialize(xNudge);
+                nudges.Add(nudge);
+            }
+
+            return nudges;
+        }
+
+        /// <summary>
+        /// Logs the nudge option back to Tango to indicate that the option was selected 
+        /// by the user.
+        /// </summary>
+        public static void LogNudgeOption(NudgeOption option)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "lognudgeresponse");            
+            postRequest.Variables.Add("nudgeOptionID", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("result", option.Result);
+
+            ProcessRequest(postRequest, "LogNudgeOption");
         }
 
         /// <summary>
