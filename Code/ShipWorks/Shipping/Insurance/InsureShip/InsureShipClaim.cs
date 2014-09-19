@@ -4,6 +4,7 @@ using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip.Net;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {
@@ -160,8 +161,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
             if (shipment.Processed)
             {
-                TimeSpan timeSinceShipDate = DateTime.UtcNow.Subtract(shipment.ShipDate);
-                if (timeSinceShipDate > settings.ClaimSubmissionWaitingPeriod)
+                DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + settings.ClaimSubmissionWaitingPeriod;
+                if (DateTime.Now > allowedSubmitClaimDate)
                 {
                     // The appropriate amount of time has passed since the shipment was shipped
                     log.InfoFormat("Shipment {0} is eligible for submitting a claim to InsureShip.", shipment.ShipmentID);

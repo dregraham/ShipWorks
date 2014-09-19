@@ -76,6 +76,12 @@ namespace ShipWorks.Shipping.Insurance
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(email.Text))
+            {
+                MessageHelper.ShowError(this, "An email address must be provided when submitting a claim.");
+                return;
+            }
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;

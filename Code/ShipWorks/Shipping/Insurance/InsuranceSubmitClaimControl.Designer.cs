@@ -91,7 +91,7 @@
             this.submitClaim.Location = new System.Drawing.Point(198, 274);
             this.submitClaim.Name = "submitClaim";
             this.submitClaim.Size = new System.Drawing.Size(75, 23);
-            this.submitClaim.TabIndex = 4;
+            this.submitClaim.TabIndex = 5;
             this.submitClaim.Text = "Submit Claim";
             this.submitClaim.UseVisualStyleBackColor = true;
             this.submitClaim.Click += new System.EventHandler(this.OnSubmitClaimClick);
@@ -118,7 +118,7 @@
             this.description.Multiline = true;
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(180, 113);
-            this.description.TabIndex = 3;
+            this.description.TabIndex = 4;
             // 
             // label1
             // 
@@ -138,7 +138,7 @@
             this.email.Location = new System.Drawing.Point(93, 128);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(180, 21);
-            this.email.TabIndex = 13;
+            this.email.TabIndex = 3;
             // 
             // emailLabel
             // 
@@ -156,7 +156,7 @@
             this.submitClaimLink.Location = new System.Drawing.Point(-3, 31);
             this.submitClaimLink.Name = "submitClaimLink";
             this.submitClaimLink.Size = new System.Drawing.Size(224, 13);
-            this.submitClaimLink.TabIndex = 1;
+            this.submitClaimLink.TabIndex = 6;
             this.submitClaimLink.TabStop = true;
             this.submitClaimLink.Text = "Having trouble? Click here to submit via Web.";
             this.submitClaimLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnSubmitClaimLinkClicked);

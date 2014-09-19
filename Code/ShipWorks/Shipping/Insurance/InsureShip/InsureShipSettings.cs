@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets the amount of time after a shipment has been processed before a claim can be submitted.
         /// 
-        /// Technically, it is 7 days, but there was confusion of what if it was 
+        /// Technically, it is 7 days, but we don't know when the shipment was shipped during the day.
         /// </summary>
         public TimeSpan ClaimSubmissionWaitingPeriod
         {

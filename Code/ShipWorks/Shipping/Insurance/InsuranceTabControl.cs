@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             InsureShipSettings insureShipSettings = new InsureShipSettings();
-            DateTime allowedSubmitClaimDate = shipment.ShipDate + insureShipSettings.ClaimSubmissionWaitingPeriod;
+            DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + insureShipSettings.ClaimSubmissionWaitingPeriod;
 
             if (DateTime.Now < allowedSubmitClaimDate)
             {
