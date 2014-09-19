@@ -31,13 +31,10 @@
             this.messageLabel = new System.Windows.Forms.Label();
             this.submitClaimPanel = new System.Windows.Forms.Panel();
             this.viewClaimPanel = new System.Windows.Forms.Panel();
-            this.notShippedPanel = new System.Windows.Forms.Panel();
-            this.notShippedBrowser = new System.Windows.Forms.WebBrowser();
             this.insuranceViewClaimControl = new ShipWorks.Shipping.Insurance.InsuranceViewClaimControl();
             this.insuranceSubmitClaimControl = new ShipWorks.Shipping.Insurance.InsuranceSubmitClaimControl();
             this.submitClaimPanel.SuspendLayout();
             this.viewClaimPanel.SuspendLayout();
-            this.notShippedPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // messageLabel
@@ -67,25 +64,6 @@
             this.viewClaimPanel.Size = new System.Drawing.Size(447, 261);
             this.viewClaimPanel.TabIndex = 4;
             // 
-            // notShippedPanel
-            // 
-            this.notShippedPanel.Controls.Add(this.notShippedBrowser);
-            this.notShippedPanel.Location = new System.Drawing.Point(8, 591);
-            this.notShippedPanel.Name = "notShippedPanel";
-            this.notShippedPanel.Size = new System.Drawing.Size(450, 292);
-            this.notShippedPanel.TabIndex = 5;
-            this.notShippedPanel.Visible = false;
-            // 
-            // notShippedBrowser
-            // 
-            this.notShippedBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notShippedBrowser.Location = new System.Drawing.Point(0, 0);
-            this.notShippedBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.notShippedBrowser.Name = "notShippedBrowser";
-            this.notShippedBrowser.ScrollBarsEnabled = false;
-            this.notShippedBrowser.Size = new System.Drawing.Size(450, 292);
-            this.notShippedBrowser.TabIndex = 0;
-            // 
             // insuranceViewClaimControl
             // 
             this.insuranceViewClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -109,7 +87,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.notShippedPanel);
             this.Controls.Add(this.viewClaimPanel);
             this.Controls.Add(this.submitClaimPanel);
             this.Controls.Add(this.messageLabel);
@@ -118,7 +95,6 @@
             this.Size = new System.Drawing.Size(471, 886);
             this.submitClaimPanel.ResumeLayout(false);
             this.viewClaimPanel.ResumeLayout(false);
-            this.notShippedPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,7 +107,5 @@
         private InsuranceSubmitClaimControl insuranceSubmitClaimControl;
         private System.Windows.Forms.Panel viewClaimPanel;
         private InsuranceViewClaimControl insuranceViewClaimControl;
-        private System.Windows.Forms.Panel notShippedPanel;
-        private System.Windows.Forms.WebBrowser notShippedBrowser;
     }
 }

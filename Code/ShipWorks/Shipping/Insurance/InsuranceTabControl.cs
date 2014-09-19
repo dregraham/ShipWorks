@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Insurance
             messageLabel.Location = new Point(8, 7);
             viewClaimPanel.Location = new Point(0, 4);
             submitClaimPanel.Location = new Point(0, 4);
-            notShippedPanel.Dock = DockStyle.Fill;
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace ShipWorks.Shipping.Insurance
             viewClaimPanel.Visible = false;
             submitClaimPanel.Visible = false;
             messageLabel.Visible = false;
-            notShippedPanel.Visible = false;
 
             if (!IsValid(shipments))
             {
@@ -91,7 +89,8 @@ namespace ShipWorks.Shipping.Insurance
 
             if (!shipment.Processed)
             {
-                ShowNotShipped();
+                messageLabel.Text = "The selected shipment has not been processed.";
+                messageLabel.Visible = true;
 
                 return false;
             }
@@ -158,27 +157,6 @@ namespace ShipWorks.Shipping.Insurance
                         shipment.Ups != null && shipment.Ups.Packages.Count > 1) ||
                    (shipment.ShipmentType == (int)ShipmentTypeCode.FedEx && shipment.FedEx != null && shipment.FedEx.Packages.Count > 1) ||
                    (shipment.ShipmentType == (int)ShipmentTypeCode.iParcel && shipment.IParcel != null && shipment.IParcel.Packages.Count > 1);
-        }
-
-        /// <summary>
-        /// Show the not shipped content.
-        /// </summary>
-        private void ShowNotShipped()
-        {
-            try
-            {
-                string content = TangoWebClient.GetContent("insurancepromotion1");
-                notShippedBrowser.DocumentText = content;
-
-                notShippedPanel.Visible = true;
-            }
-            catch (Exception)
-            {
-                // Let's not crash because of this...
-                notShippedPanel.Visible = false;
-                messageLabel.Text = "The selected shipment has not been processed.";
-                messageLabel.Visible = true;
-            }
         }
 
         /// <summary>

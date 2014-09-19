@@ -848,28 +848,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Gets content from tango.
-        /// </summary>
-        /// <returns></returns>
-        public static string GetContent(string contentID)
-        {
-            if (contentCache.ContainsKey(contentID))
-            {
-                return contentCache[contentID];
-            }
-
-            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
-            postRequest.Variables.Add("action", "getscreen");
-            postRequest.Variables.Add("screen", contentID);
-
-            string response = ProcessRequest(postRequest, "GetContent");
-
-            contentCache.Add(contentID, response);
-
-            return response;
-        }
-
-        /// <summary>
         /// Process a request against a signed up customers interapptive account
         /// </summary>
         private static LicenseAccountDetail ProcessAccountRequest(HttpVariableRequestSubmitter postRequest, StoreEntity store, ShipWorksLicense license)
