@@ -64,14 +64,23 @@ namespace ShipWorks.Stores
         {
             get
             {
-                ComputerDownloadAllowed allowed = GetComputerAllowed(UserSession.Computer.ComputerID);
-
-                switch (allowed)
+                if (UserSession.Computer != null)
                 {
-                    case ComputerDownloadAllowed.Yes: return true;
-                    case ComputerDownloadAllowed.No: return false;
-                    default:
-                        return defaultToYes;
+                    ComputerDownloadAllowed allowed = GetComputerAllowed(UserSession.Computer.ComputerID);
+
+                    switch (allowed)
+                    {
+                        case ComputerDownloadAllowed.Yes:
+                            return true;
+                        case ComputerDownloadAllowed.No:
+                            return false;
+                        default:
+                            return defaultToYes;
+                    }
+                }
+                else
+                {
+                    return false;
                 }
             }
         }
