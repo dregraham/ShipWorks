@@ -101,7 +101,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             set; 
         }
 
-        
         /// <summary>
         /// The text to display for the action link
         /// </summary>
@@ -212,6 +211,8 @@ namespace ShipWorks.Shipping.Editing.Rating
                 }
 
                 UpdateFootnotes(rateGroup);
+
+                SetRateDetailsVisibility(rateGroup != null ? rateGroup.Rates : new List<RateResult>());
             }
 
             ShowSpinner = false;
@@ -277,6 +278,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridCell(rate.ProviderLogo),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
+                        new GridCell(rate.Selectable && rate.Shipping.HasValue ? rate.Shipping.Value.ToString("c") : ""),
+                        new GridCell(rate.Selectable && rate.Taxes.HasValue ? rate.Taxes.Value.ToString("c") : ""),
+                        new GridCell(rate.Selectable && rate.Duties.HasValue ? rate.Duties.Value.ToString("c") : ""),
                         new GridCell(rate.Selectable ? rate.Amount.ToString("c") : "", rate.AmountFootnote)
                     }) { Tag = rate };
 
@@ -287,7 +291,9 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                     sandGrid.Rows.Add(row);
                 }
-                
+
+                SetRateDetailsVisibility(ratesToShow);
+
                 AddShowMoreRatesRow();
 
                 UpdateFootnotes(rateGroup);
@@ -309,7 +315,17 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             UpdateHeight();
         }
-        
+
+        /// <summary>
+        /// Shows or hides the extra rate columns
+        /// </summary>
+        private void SetRateDetailsVisibility(List<RateResult> ratesToShow)
+        {
+            gridColumnDuty.Visible = ratesToShow.Any(x => x.Duties.HasValue);
+            gridColumnTax.Visible = ratesToShow.Any(x => x.Taxes.HasValue);
+            gridColumnShipping.Visible = ratesToShow.Any(x => x.Shipping.HasValue);
+        }
+
         /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
@@ -343,6 +359,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                 {
                     new GridCell(""),
                     new GridCell(showMoreRatesRateResult.Description),
+                    new GridCell(""),
+                    new GridCell(""),
+                    new GridCell(""),
                     new GridCell(""),
                     new GridCell(""),
                     new GridHyperlinkCell("More...")

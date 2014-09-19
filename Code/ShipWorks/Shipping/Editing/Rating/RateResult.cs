@@ -14,6 +14,9 @@ namespace ShipWorks.Shipping.Editing.Rating
         bool selectable;
         string days;
         decimal amount;
+        decimal? taxes;
+        decimal? duties;
+        decimal? shipping;
 
         Image amountFootnote;
         object tag;
@@ -52,6 +55,17 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             this.selectable = true;
             this.IsCounterRate = false;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RateResult(string description, string days, decimal amount, decimal? duties, decimal? taxes, decimal? shipping, object tag) : 
+            this(description, days, amount, tag)
+        {
+            this.duties = duties;
+            this.taxes = taxes;
+            this.shipping = shipping;
         }
 
         /// <summary>
@@ -97,6 +111,30 @@ namespace ShipWorks.Shipping.Editing.Rating
         public decimal Amount
         {
             get { return amount; }
+        }
+
+        /// <summary>
+        /// The amount of taxes included in the rate
+        /// </summary>
+        public decimal? Taxes
+        {
+            get { return taxes; }
+        }
+
+        /// <summary>
+        /// The amount of duties included in the rate
+        /// </summary>
+        public decimal? Duties
+        {
+            get { return duties; }
+        }
+
+        /// <summary>
+        /// The portion of the amount that goes for shipping
+        /// </summary>
+        public decimal? Shipping
+        {
+            get { return shipping; }
         }
 
         /// <summary>
@@ -183,7 +221,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public RateResult Copy()
         {
             //Description,days,amount, tag
-            RateResult coppiedRate = new RateResult(Description, days, amount, tag)
+            RateResult copiedRate = new RateResult(Description, days, amount, duties, taxes, shipping, tag)
             {
                 AmountFootnote = amountFootnote,
                 CarrierDescription = carrierDescription,
@@ -196,7 +234,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 ProviderLogo = ProviderLogo
             };
 
-            return coppiedRate;
+            return copiedRate;
         }
     }
 }

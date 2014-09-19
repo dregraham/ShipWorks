@@ -37,6 +37,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnService = new Divelements.SandGrid.GridColumn();
             this.gridColumnDays = new Divelements.SandGrid.GridColumn();
+            this.gridColumnShipping = new Divelements.SandGrid.GridColumn();
+            this.gridColumnTax = new Divelements.SandGrid.GridColumn();
+            this.gridColumnDuty = new Divelements.SandGrid.GridColumn();
             this.gridColumnRate = new Divelements.SandGrid.GridColumn();
             this.gridColumnSelect = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
             this.panelFootnote = new System.Windows.Forms.Panel();
@@ -53,6 +56,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnProvider,
             this.gridColumnService,
             this.gridColumnDays,
+            this.gridColumnShipping,
+            this.gridColumnTax,
+            this.gridColumnDuty,
             this.gridColumnRate,
             this.gridColumnSelect});
             this.sandGrid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -72,6 +78,21 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new Divelements.SandGrid.GridCell("First Class"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        300,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        100,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        45,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
                                         445,
                                         0,
                                         0,
@@ -81,6 +102,21 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("     Delivery Confirmation (+$.045)"),
                         new Divelements.SandGrid.GridCell(),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        250,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        110,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        130,
+                                        0,
+                                        0,
+                                        131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
                                         490,
                                         0,
@@ -92,6 +128,21 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new Divelements.SandGrid.GridCell("     Signature Confirmation (+$0.85)"),
                         new Divelements.SandGrid.GridCell(),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        410,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        60,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        60,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
                                         530,
                                         0,
                                         0,
@@ -101,6 +152,21 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("Priority"),
                         new Divelements.SandGrid.GridCell(),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        635,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        200,
+                                        0,
+                                        0,
+                                        131072})))),
+                        ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
+                                        150,
+                                        0,
+                                        0,
+                                        131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridDecimalCell(new decimal(new int[] {
                                         985,
                                         0,
@@ -142,6 +208,39 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnDays.Clickable = false;
             this.gridColumnDays.HeaderText = "Days";
             this.gridColumnDays.Width = 75;
+            // 
+            // gridColumnShipping
+            // 
+            this.gridColumnShipping.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnShipping.AutoSizeIncludeHeader = true;
+            this.gridColumnShipping.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
+            this.gridColumnShipping.Clickable = false;
+            this.gridColumnShipping.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.gridColumnShipping.HeaderText = "Shipping";
+            this.gridColumnShipping.MinimumWidth = 20;
+            this.gridColumnShipping.Width = 50;
+            // 
+            // gridColumnTax
+            // 
+            this.gridColumnTax.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnTax.AutoSizeIncludeHeader = true;
+            this.gridColumnTax.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
+            this.gridColumnTax.Clickable = false;
+            this.gridColumnTax.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.gridColumnTax.HeaderText = "Tax";
+            this.gridColumnTax.MinimumWidth = 20;
+            this.gridColumnTax.Width = 40;
+            // 
+            // gridColumnDuty
+            // 
+            this.gridColumnDuty.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnDuty.AutoSizeIncludeHeader = true;
+            this.gridColumnDuty.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
+            this.gridColumnDuty.Clickable = false;
+            this.gridColumnDuty.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.gridColumnDuty.HeaderText = "Duty";
+            this.gridColumnDuty.MinimumWidth = 20;
+            this.gridColumnDuty.Width = 40;
             // 
             // gridColumnRate
             // 
@@ -224,5 +323,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         private Divelements.SandGrid.Specialized.GridImageColumn gridColumnProvider;
         private Label loadingRatesLabel;
         private PictureBox loadingImage;
+        private GridColumn gridColumnShipping;
+        private GridColumn gridColumnTax;
+        private GridColumn gridColumnDuty;
     }
 }
