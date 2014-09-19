@@ -41,6 +41,7 @@
             this.accountNumber = new System.Windows.Forms.TextBox();
             this.label19 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
+            this.mwsLink = new ShipWorks.UI.Controls.LinkControl();
             this.label26 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.title = new System.Windows.Forms.Label();
-            this.mwsLink = new ShipWorks.UI.Controls.LinkControl();
             this.form.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -120,7 +120,7 @@
             // 
             // copyAccountNumber
             // 
-            this.copyAccountNumber.Location = new System.Drawing.Point(183, 128);
+            this.copyAccountNumber.Location = new System.Drawing.Point(182, 127);
             this.copyAccountNumber.Name = "copyAccountNumber";
             this.copyAccountNumber.Size = new System.Drawing.Size(128, 23);
             this.copyAccountNumber.TabIndex = 72;
@@ -144,7 +144,7 @@
             // 
             // buttonChooseMarketplace
             // 
-            this.buttonChooseMarketplace.Location = new System.Drawing.Point(277, 278);
+            this.buttonChooseMarketplace.Location = new System.Drawing.Point(279, 279);
             this.buttonChooseMarketplace.Name = "buttonChooseMarketplace";
             this.buttonChooseMarketplace.Size = new System.Drawing.Size(146, 23);
             this.buttonChooseMarketplace.TabIndex = 7;
@@ -205,6 +205,19 @@
             this.label27.Size = new System.Drawing.Size(70, 13);
             this.label27.TabIndex = 61;
             this.label27.Text = "Merchant ID:";
+            // 
+            // mwsLink
+            // 
+            this.mwsLink.AutoSize = true;
+            this.mwsLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.mwsLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.mwsLink.ForeColor = System.Drawing.Color.Blue;
+            this.mwsLink.Location = new System.Drawing.Point(45, 0);
+            this.mwsLink.Name = "mwsLink";
+            this.mwsLink.Size = new System.Drawing.Size(194, 13);
+            this.mwsLink.TabIndex = 63;
+            this.mwsLink.Text = "http://developer.amazonservices.com.";
+            this.mwsLink.Click += new System.EventHandler(this.OnMWSLinkClick);
             // 
             // label26
             // 
@@ -376,19 +389,6 @@
             this.title.Size = new System.Drawing.Size(235, 13);
             this.title.TabIndex = 38;
             this.title.Text = "Authorize ShipWorks for Amazon Access";
-            // 
-            // mwsLink
-            // 
-            this.mwsLink.AutoSize = true;
-            this.mwsLink.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.mwsLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.mwsLink.ForeColor = System.Drawing.Color.Blue;
-            this.mwsLink.Location = new System.Drawing.Point(45, 0);
-            this.mwsLink.Name = "mwsLink";
-            this.mwsLink.Size = new System.Drawing.Size(194, 13);
-            this.mwsLink.TabIndex = 63;
-            this.mwsLink.Text = "http://developer.amazonservices.com.";
-            this.mwsLink.Click += new System.EventHandler(this.OnMWSLinkClick);
             // 
             // AmazonMwsAccountSettingsControl
             // 
