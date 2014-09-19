@@ -41,7 +41,6 @@ namespace ShipWorks.ApplicationCore.Licensing
     public static class TangoWebClient
     {
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
-        private static Dictionary<string, string> contentCache = new Dictionary<string, string>();
 
         /// <summary>
         /// Activate the given license key to the specified store identifier
