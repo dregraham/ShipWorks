@@ -795,8 +795,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Set the uri
             postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
-            //postRequest.Uri = new Uri("https://www.interapptive.com/tango_private/shipworks.php");
-        
 
             // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
