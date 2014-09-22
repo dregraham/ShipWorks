@@ -227,31 +227,33 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private void OnEnableMWSClicked(object sender, EventArgs e)
         {
-            string message = "Are you sure you want to convert to Amazon MWS?  This cannot be undone.";
+            //string message = "Are you sure you want to convert to Amazon MWS?  This cannot be undone.";
 
-            // show a confirmation and/or warnings if they aren't absolutely required to upgrade since some functionality will be lost
-            if (MessageHelper.ShowQuestion(this, message) != DialogResult.OK)
-            {
-                return;
-            }
+            //// show a confirmation and/or warnings if they aren't absolutely required to upgrade since some functionality will be lost
+            //if (MessageHelper.ShowQuestion(this, message) != DialogResult.OK)
+            //{
+            //    return;
+            //}
 
-            using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg("US"))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    AmazonStoreEntity tempStore = new AmazonStoreEntity();
-                    tempStore.MerchantID = dlg.MerchantID;
+            //using (AuthorizationInstructionsDlg dlg = new AuthorizationInstructionsDlg("US"))
+            //{
+            //    if (dlg.ShowDialog(this) == DialogResult.OK)
+            //    {
+            //        AmazonStoreEntity tempStore = new AmazonStoreEntity();
+            //        tempStore.MerchantID = dlg.MerchantID;
 
-                    mwsAccountSettingsControl = new AmazonMwsAccountSettingsControl();
-                    mwsAccountSettingsControl.LoadStore(tempStore);
+            //        mwsAccountSettingsControl = new AmazonMwsAccountSettingsControl();
+            //        mwsAccountSettingsControl.LoadStore(tempStore);
 
-                    // clear all child controls
-                    Controls.Clear();
+            //        // clear all child controls
+            //        Controls.Clear();
 
-                    // add in the new MWS Account Settings Control
-                    Controls.Add(mwsAccountSettingsControl);
-                }
-            }
+            //        // add in the new MWS Account Settings Control
+            //        Controls.Add(mwsAccountSettingsControl);
+            //    }
+            //}
+
+            throw new AmazonException("Legacy Code");
         }
     }
 }

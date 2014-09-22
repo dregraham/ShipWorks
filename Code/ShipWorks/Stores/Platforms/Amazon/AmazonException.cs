@@ -81,6 +81,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AmazonException"/> class.
+        /// </summary>
+        public AmazonException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
         /// Serialize
         /// </summary>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)

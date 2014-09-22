@@ -346,6 +346,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantName, 64, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantToken, 32, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "AccessKeyID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AccessKeyID, 32, 0, 0);
+			base.AddElementFieldInfo("AmazonStoreEntity", "AuthToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AuthToken, 100, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "Cookie", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.Cookie, 2147483647, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "CookieExpires", typeof(System.DateTime), false, false, false, false,  (int)AmazonStoreFieldIndex.CookieExpires, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "CookieWaitUntil", typeof(System.DateTime), false, false, false, false,  (int)AmazonStoreFieldIndex.CookieWaitUntil, 0, 0, 0);

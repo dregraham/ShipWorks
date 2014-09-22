@@ -2245,12 +2245,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderItemASINComparer.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonProductDetailRepository.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.Designer.cs">
-      <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\RequestSignature.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\SigningAlgorithm.cs" />
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.cs">
@@ -7433,9 +7427,6 @@
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsStoreSettingsControl.resx">
       <DependentUpon>AmazonMwsStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.resx">
-      <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.resx">
       <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -7715,6 +7706,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.8.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />

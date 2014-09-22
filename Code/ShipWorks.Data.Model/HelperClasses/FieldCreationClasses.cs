@@ -1007,6 +1007,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AccessKeyID);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.AuthToken field instance</summary>
+		public static EntityField2 AuthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AuthToken);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.Cookie field instance</summary>
 		public static EntityField2 Cookie
 		{

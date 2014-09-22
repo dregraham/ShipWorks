@@ -496,6 +496,8 @@ namespace ShipWorks.Data.Model
 		MerchantToken,
 		///<summary>AccessKeyID. </summary>
 		AccessKeyID,
+		///<summary>AuthToken. </summary>
+		AuthToken,
 		///<summary>Cookie. </summary>
 		Cookie,
 		///<summary>CookieExpires. </summary>
