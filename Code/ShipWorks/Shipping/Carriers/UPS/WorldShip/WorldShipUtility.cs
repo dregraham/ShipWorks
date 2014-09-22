@@ -47,6 +47,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         /// <summary>
         /// Static constructor
+        /// 
+        /// Codes listed here: http://www.ups.com/worldshiphelp/WS12/ENU/AppHelp/Codes/UPS_Service_Codes.htm
         /// </summary>
         static WorldShipUtility()
         {
@@ -81,6 +83,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             upsServiceCodes[UpsServiceType.UpsMailInnovationsExpedited] = "MID";
             upsServiceCodes[UpsServiceType.UpsMailInnovationsIntEconomy] = "MIE";
             upsServiceCodes[UpsServiceType.UpsMailInnovationsIntPriority] = "MIP";
+
+            upsServiceCodes[UpsServiceType.UpsCaWorldWideExpress] = "ES";
+            upsServiceCodes[UpsServiceType.UpsCaWorldWideExpressPlus] = "EP";
+            upsServiceCodes[UpsServiceType.UpsCaWorldWideExpressSaver] = "1DP";
         }
 
         /// <summary>
