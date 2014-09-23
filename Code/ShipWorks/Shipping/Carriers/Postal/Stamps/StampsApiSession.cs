@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Collections;
 using RestSharp.Validation;
+using ShipWorks.AddressValidation;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
@@ -485,22 +486,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Address[] candidates;
                 StatusCodes statusCodes;
 
-                if (account == null)
+                try
                 {
-                    webService.CleanseAddress(new Credentials
+                    if (account == null)
                     {
-                        IntegrationID = integrationID,
-                        Username = string.Empty,
-                        Password = string.Empty
-                    }, ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                        webService.CleanseAddress(new Credentials
+                        {
+                            IntegrationID = integrationID,
+                            Username = string.Empty,
+                            Password = string.Empty
+                        }, ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                    }
+                    else
+                    {
+                        // If we've got a valid account, we'll use it to keep the authenticator current
+                        string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                        usernameAuthenticatorMap[account.Username] = auth;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    // If we've got a valid account, we'll use it to keep the authenticator current
-                    string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOk, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
-                    usernameAuthenticatorMap[account.Username] = auth;
+                    throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
                 }
-                
+
                 return new StampsAddressValidationResults
                 {
                     IsSuccessfulMatch = addressMatch,
