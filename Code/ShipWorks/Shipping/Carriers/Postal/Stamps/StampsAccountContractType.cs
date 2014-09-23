@@ -1,20 +1,17 @@
 ﻿
-namespace ShipWorks.Shipping.Carriers.Postal
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
-    public enum PostalAccountContractType
+    public enum StampsAccountContractType
     {
         /// <summary>
         /// The contract type is unknown at the moment but can/should be obtained from the postal
-        /// provder's API (most likely because ShipWorks has not requested this information 
-        /// from the postal provider yet).
+        /// provder's API.
         /// </summary>
         Unknown = 0,
 
         /// <summary>
-        /// The contract type is not applicable (most likely due to the postal provider's
-        /// API not offering a way to obtain this information). This should also be used
-        /// for accounts from postal providers where ShipWorks is not concerned with the type
-        /// of postal account.
+        /// The contract type is not applicable. This should also be used for accounts from postal 
+        /// providers where ShipWorks is not concerned with the type of postal account.
         /// </summary>
         NotApplicable = 1,
         
