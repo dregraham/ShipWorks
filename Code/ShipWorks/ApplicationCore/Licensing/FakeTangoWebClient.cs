@@ -63,5 +63,14 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Just log the option that was selected to disk to simulate a call to Tango
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
         }
+
+        /// <summary>
+        /// Sends Stamps.com account info to Tango.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void LogStampsAccount(StampsAccountEntity account)
+        {
+            // Do nothing
+        }
     }
 }

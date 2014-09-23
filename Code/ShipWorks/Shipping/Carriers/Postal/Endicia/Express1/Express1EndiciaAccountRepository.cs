@@ -45,5 +45,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
                 return GetProfileAccount(ShipmentTypeCode.Express1Endicia, accountID);
             }
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void Save(EndiciaAccountEntity account)
+        {
+            EndiciaAccountManager.SaveAccount(account);
+        }
     }
 }

@@ -116,5 +116,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         {
             return lazyAccounts.Value;
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(FedExAccountEntity account)
+        {
+            // Nothing to save. This is a counter rate account.
+        }
     }
 }

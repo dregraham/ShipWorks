@@ -25,6 +25,8 @@ using System.Drawing.Imaging;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Editions;
+using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -677,6 +679,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             );
 
             return fields;
+        }
+
+        /// <summary>
+        /// Uses the Stamps.com API to update the contract type of the account if it is unkown.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public virtual void UpdateContractType(StampsAccountEntity account)
+        {
+            // Only update the contract type if it's unknown
+            if (account.ContractType == (int) StampsAccountContractType.Unknown)
+            {
+                try
+                {
+                    // TODO: Grab contract type from the Stamps API once it is available
+
+                    // Save the contract to the DB and push it to Tango
+                    AccountRepository.Save(account);
+
+                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                    tangoWebClient.LogStampsAccount(account);
+                }
+                catch (Exception exception)
+                {
+                    // Log the error
+                    LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
+                }
+
+                throw new NotImplementedException("StampsShipmentType.UpdateContractType needs to call the Stamps API.");
+            }
         }
     }
 }

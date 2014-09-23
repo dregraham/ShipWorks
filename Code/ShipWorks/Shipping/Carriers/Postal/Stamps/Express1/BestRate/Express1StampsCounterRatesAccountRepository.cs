@@ -84,5 +84,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
             return counterRateAccounts;
         }
+
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(StampsAccountEntity account)
+        {
+            // Nothing to save. This is a counter rate account.
+        }
     }
 }

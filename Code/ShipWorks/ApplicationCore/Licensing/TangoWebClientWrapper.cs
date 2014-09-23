@@ -172,5 +172,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             TangoWebClient.LogNudgeOption(option);
         }
+
+        /// <summary>
+        /// Sends Stamps.com account info to Tango.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public virtual void LogStampsAccount(StampsAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

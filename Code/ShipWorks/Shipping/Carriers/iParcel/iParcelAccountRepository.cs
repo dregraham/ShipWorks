@@ -42,5 +42,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 return GetProfileAccount(ShipmentTypeCode.iParcel, accountID);
             }
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void Save(IParcelAccountEntity account)
+        {
+            iParcelAccountManager.SaveAccount(account);
+        }
     }
 }

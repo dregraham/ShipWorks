@@ -105,5 +105,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Logs the nudge option back to Tango. Intended to record which option was selected by the user.
         /// </summary>
         void LogNudgeOption(NudgeOption option);
+
+        /// <summary>
+        /// Sends Stamps.com account info to Tango.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        void LogStampsAccount(StampsAccountEntity account);
     }
 }
