@@ -190,5 +190,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             
             return new Express1StampsCounterRatesBroker();
         }
+
+        /// <summary>
+        /// Will just assign the contract type of the account to Unknown and save the account to the repository.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void UpdateContractType(StampsAccountEntity account)
+        {
+            // Just assign the contract type to unkown; we don't need to worry about Express1 accounts
+            account.ContractType = (int) StampsAccountContractType.Unknown;
+            AccountRepository.Save(account);
+        }
     }
 }
