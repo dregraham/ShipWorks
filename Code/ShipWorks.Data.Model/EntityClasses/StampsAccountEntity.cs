@@ -491,6 +491,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IsExpress1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ContractType", fieldHashtable);
 		}
 		#endregion
 
@@ -774,6 +777,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)StampsAccountFieldIndex.IsExpress1, true); }
 			set	{ SetValue((int)StampsAccountFieldIndex.IsExpress1, value); }
+		}
+
+		/// <summary> The ContractType property of the Entity StampsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsAccount"."ContractType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ContractType
+		{
+			get { return (System.Int32)GetValue((int)StampsAccountFieldIndex.ContractType, true); }
+			set	{ SetValue((int)StampsAccountFieldIndex.ContractType, value); }
 		}
 
 

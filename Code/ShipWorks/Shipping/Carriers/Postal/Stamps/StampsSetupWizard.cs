@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
-            stampsAccount = new StampsAccountEntity { CountryCode = "US" };
+            stampsAccount = new StampsAccountEntity { CountryCode = "US", ContractType = (int)StampsAccountContractType.Unknown };
             stampsAccount.InitializeNullsToDefault();
 
             personControl.LoadEntity(new PersonAdapter(stampsAccount, string.Empty));
@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 if (stampsAccount == null)
                 {
-                    stampsAccount = new StampsAccountEntity();
+                    stampsAccount = new StampsAccountEntity { ContractType = (int)StampsAccountContractType.Unknown };
                 }
 
                 SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));

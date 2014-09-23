@@ -8008,6 +8008,8 @@ namespace ShipWorks.Data.Model
 		MailingPostalCode,
 		///<summary>IsExpress1. </summary>
 		IsExpress1,
+		///<summary>ContractType. </summary>
+		ContractType,
 		/// <summary></summary>
 		AmountOfFields
 	}

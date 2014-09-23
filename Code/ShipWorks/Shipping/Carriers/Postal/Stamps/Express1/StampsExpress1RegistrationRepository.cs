@@ -36,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             stampsAccount.InitializeNullsToDefault();
             stampsAccount.IsExpress1 = true;
 
+            stampsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
+
             // Translate the registration data into a Stamps account entity
             stampsAccount.Username = registration.UserName;
             stampsAccount.Password = registration.EncryptedPassword;

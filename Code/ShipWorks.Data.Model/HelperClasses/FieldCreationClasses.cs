@@ -17042,6 +17042,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
 		}
+		/// <summary>Creates a new StampsAccountEntity.ContractType field instance</summary>
+		public static EntityField2 ContractType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.ContractType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity StampsProfileEntity</summary>
