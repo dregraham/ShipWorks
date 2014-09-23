@@ -693,6 +693,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // TODO: Grab contract type from the Stamps API once it is available
+                    // account.ContractType = StampsApiSession...
 
                     // Save the contract to the DB and push it to Tango
                     AccountRepository.Save(account);
