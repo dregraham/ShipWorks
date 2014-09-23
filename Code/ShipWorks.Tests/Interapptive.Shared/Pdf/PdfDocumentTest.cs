@@ -87,9 +87,9 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         public void ToImages_ReturnsPngImages_Test()
         {
             List<ImageFormat> formats;
+            
             Assembly assembly = Assembly.GetExecutingAssembly();
             const string ResourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";
-            
 
             using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
             {
@@ -104,10 +104,15 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
 
                         return format;
                     }).ToList();
-                }
-            }
 
-            Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+                    foreach (Stream imageStream in images)
+                    {
+                        images.First().Dispose();
+                    }
+                }
+
+                Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+            }
         }
     }
 }

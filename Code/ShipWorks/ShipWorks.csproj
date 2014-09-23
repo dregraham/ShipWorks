@@ -743,6 +743,55 @@
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
+    <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.Designer.cs">
+      <DependentUpon>InsuranceSubmitClaimControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceTabControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceTabControl.Designer.cs">
+      <DependentUpon>InsuranceTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.Designer.cs">
+      <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimType.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaim.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipShipmentIdentifier.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipRequestFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponseFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\IInsureShipSettings.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestBase.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipRequestFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseException.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseCode.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\IInsureShipResponse.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipException.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\InsureShipResponseFactory.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettings.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicy.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
@@ -2048,6 +2097,7 @@
     </Compile>
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
+    <Compile Include="Shipping\InitialShippingTabDisplay.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
@@ -2200,12 +2250,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderItemASINComparer.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonProductDetailRepository.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.Designer.cs">
-      <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\Mws\RequestSignature.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\SigningAlgorithm.cs" />
     <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.cs">
@@ -7322,6 +7366,15 @@
     <EmbeddedResource Include="Shipping\Insurance\InsuranceSelectionControl.resx">
       <DependentUpon>InsuranceSelectionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsuranceSubmitClaimControl.resx">
+      <DependentUpon>InsuranceSubmitClaimControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsuranceTabControl.resx">
+      <DependentUpon>InsuranceTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
+      <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -7378,9 +7431,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AmazonMwsStoreSettingsControl.resx">
       <DependentUpon>AmazonMwsStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\Mws\AuthorizationInstructionsDlg.resx">
-      <DependentUpon>AuthorizationInstructionsDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonMwsCountryPage.resx">
       <DependentUpon>AmazonMwsCountryPage.cs</DependentUpon>
@@ -7661,6 +7711,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.8.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
@@ -10540,6 +10592,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.6.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -12419,13 +12472,14 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>setlocal
-set exe="$(SolutionDir)Artifacts\Application\$(TargetFileName)"
-if exist %25exe%25 (
-    REM Stopping the ShipWorks Service (Scheduler)
-    %25exe%25 /s=scheduler /stop
-)
-</PreBuildEvent>
+    <PreBuildEvent>
+      setlocal
+      set exe="$(SolutionDir)Artifacts\Application\$(TargetFileName)"
+      if exist %25exe%25 (
+      REM Stopping the ShipWorks Service (Scheduler)
+      %25exe%25 /s=scheduler /stop
+      )
+    </PreBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

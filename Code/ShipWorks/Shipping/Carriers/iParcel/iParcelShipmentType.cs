@@ -796,11 +796,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     foreach (iParcelServiceType serviceType in supportedServiceTypes)
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
-                        decimal totalServiceCost = costInfoTable.AsEnumerable()
-                                                                .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
-                                                                .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        List<DataRow> serviceRows = costInfoTable.AsEnumerable()
+                                               .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
+                                               .ToList();
 
-                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
+                        decimal shippingCost = serviceRows.Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        decimal taxCost = serviceRows.Sum(row => decimal.Parse(row["PackageTax"].ToString()));
+                        decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
+                        decimal totalCost = shippingCost + taxCost + dutyCost;
+
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalCost, dutyCost, taxCost, shippingCost, new iParcelRateSelection(serviceType))
                         {
                             ServiceLevel = ServiceLevelType.Anytime,
                             ShipmentType = ShipmentTypeCode.iParcel,
