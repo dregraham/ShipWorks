@@ -361,6 +361,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="counterRatesProcessing"></param>
+        /// <param name="selectedRate"></param>
+        /// <returns>
+        /// The updates shipment (or shipments) that is ready to be processed. A null value may
+        /// be returned to indicate that processing should be halted completely.
+        /// </returns>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            // Take this opportunity to try to update contract type of the account
+            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UpdateContractType(account);
+            
+            return base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+        }
+
+        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
