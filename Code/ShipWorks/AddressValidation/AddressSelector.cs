@@ -60,12 +60,12 @@ namespace ShipWorks.AddressValidation
 
             switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
             {
-                case AddressValidationStatusType.Adjusted:
-                case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.Fixed:
+                case AddressValidationStatusType.HasSuggestions:
+                case AddressValidationStatusType.SuggestionIgnored:
                 case AddressValidationStatusType.SuggestedSelected:
                     return addressAdapter.AddressValidationSuggestionCount > 0;
-                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
                     return !string.IsNullOrEmpty(addressAdapter.AddressValidationError);
@@ -91,12 +91,12 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.NotChecked:
                 case AddressValidationStatusType.Pending:
                     return string.Empty;
-                case AddressValidationStatusType.Adjusted:
-                case AddressValidationStatusType.NeedsAttention:
-                case AddressValidationStatusType.Overridden:
+                case AddressValidationStatusType.Fixed:
+                case AddressValidationStatusType.HasSuggestions:
+                case AddressValidationStatusType.SuggestionIgnored:
                 case AddressValidationStatusType.SuggestedSelected:
                     return string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
-                case AddressValidationStatusType.NotValid:
+                case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
                     return string.IsNullOrEmpty(addressAdapter.AddressValidationError) ? string.Empty : "Details...";
@@ -131,7 +131,7 @@ namespace ShipWorks.AddressValidation
         {
             // If we won't validate, an error occured, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.WillNotValidate ||
-                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.NotValid ||
+                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.BadAddress ||
                 entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.Error)
             {
                 MessageHelper.ShowInformation(Program.MainForm, entityAdapter.AddressValidationError);
@@ -196,7 +196,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter.Copy(validatedAddressEntity, string.Empty, entityAdapter);
 
             entityAdapter.AddressValidationStatus = validatedAddressEntity.IsOriginal ?
-                (int)AddressValidationStatusType.Overridden :
+                (int)AddressValidationStatusType.SuggestionIgnored :
                 (int)AddressValidationStatusType.SuggestedSelected;
 
             OnAddressSelected(entityAdapter, originalAddress);

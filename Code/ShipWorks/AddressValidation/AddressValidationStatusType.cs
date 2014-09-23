@@ -11,32 +11,32 @@ namespace ShipWorks.AddressValidation
     public enum AddressValidationStatusType
     {
         [Description("Not Checked")]
-        [ImageResource("cancel16")]
+        [ImageResource("help16")]
         NotChecked = 0,
 
-        [Description("Pending")]
-        [ImageResource("nav_redo_yellow")]
+        [Description("Checking...")]
+        [ImageResource("hourglass16")]
         Pending = 1,
 
-        [Description("Not Valid")]
+        [Description("Bad Address")]
         [ImageResource("error16")]
-        NotValid = 2,
+        BadAddress = 2,
 
-        [Description("Valid")]
+        [Description("Good Address")]
         [ImageResource("check16")]
         Valid = 3,
 
-        [Description("Adjusted")]
+        [Description("Fixed")]
         [ImageResource("check16")]
-        Adjusted = 4,
+        Fixed = 4,
 
-        [Description("Overridden")]
+        [Description("Suggestion Ignored")]
         [ImageResource("check16")]
-        Overridden = 5,
+        SuggestionIgnored = 5,
 
-        [Description("Needs Attention")]
-        [ImageResource("error16")]
-        NeedsAttention = 6,
+        [Description("Has Suggestions")]
+        [ImageResource("information2_16")]
+        HasSuggestions = 6,
 
         [Description("Suggestion Selected")]
         [ImageResource("check16")]
@@ -46,8 +46,8 @@ namespace ShipWorks.AddressValidation
         [ImageResource("error16")]
         Error = 8,
 
-        [Description("Won't Validate")]
-        [ImageResource("warning16")]
+        [Description("International (Can't Validate)")]
+        [ImageResource("globe16")]
         WillNotValidate = 9
     }
 }

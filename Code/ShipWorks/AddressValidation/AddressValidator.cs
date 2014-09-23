@@ -131,7 +131,7 @@ namespace ShipWorks.AddressValidation
         {
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NotValid;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid && suggestedAddresses[0].IsEqualTo(adapter))
             {
@@ -139,7 +139,7 @@ namespace ShipWorks.AddressValidation
             }
             else
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NeedsAttention;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions;
             }
         }
 
@@ -150,17 +150,17 @@ namespace ShipWorks.AddressValidation
         {
             if (!suggestedAddresses.Any())
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NotValid;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
             }
             else if (suggestedAddresses.Count == 1 && suggestedAddresses[0].IsValid)
             {
                 adapter.AddressValidationStatus = suggestedAddresses[0].IsEqualTo(adapter) ?
                     (int)AddressValidationStatusType.Valid :
-                    (int)AddressValidationStatusType.Adjusted;
+                    (int)AddressValidationStatusType.Fixed;
             }
             else
             {
-                adapter.AddressValidationStatus = (int)AddressValidationStatusType.NeedsAttention;
+                adapter.AddressValidationStatus = (int)AddressValidationStatusType.HasSuggestions;
             }
         }
 
@@ -175,7 +175,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.Adjusted)
+            if (adapter.AddressValidationStatus == (int) AddressValidationStatusType.Fixed)
             {
                 adjustedAddress.CopyTo(adapter);
             }

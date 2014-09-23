@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.AddressValidation
                 .Returns(new AddressValidationWebClientValidateAddressResult() { AddressValidationResults = new List<AddressValidationResult>() });
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -234,7 +234,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", false, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NeedsAttention, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.Adjusted, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.Fixed, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -353,7 +353,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NeedsAttention, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -381,7 +381,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (x, y) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NeedsAttention, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]
@@ -450,7 +450,7 @@ namespace ShipWorks.Tests.AddressValidation
 
             testObject.Validate(sampleOrder, "Ship", true, (a, b) => { });
 
-            Assert.AreEqual(AddressValidationStatusType.NotValid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
+            Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
         [TestMethod]

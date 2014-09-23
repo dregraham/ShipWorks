@@ -178,7 +178,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void OnNeedsAttentionLabelClicked(object sender, EventArgs e)
         {
-            SelectStatuses(AddressValidationStatusType.NeedsAttention, AddressValidationStatusType.NotValid, AddressValidationStatusType.Error, AddressValidationStatusType.WillNotValidate);
+            SelectStatuses(AddressValidationStatusType.HasSuggestions, AddressValidationStatusType.BadAddress, AddressValidationStatusType.Error, AddressValidationStatusType.WillNotValidate);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void OnReadyToGoLabelClicked(object sender, EventArgs e)
         {
-            SelectStatuses(AddressValidationStatusType.Valid, AddressValidationStatusType.Overridden, AddressValidationStatusType.Adjusted);
+            SelectStatuses(AddressValidationStatusType.Valid, AddressValidationStatusType.SuggestionIgnored, AddressValidationStatusType.Fixed);
         }
 
         /// <summary>
