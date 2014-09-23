@@ -69,6 +69,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Creates the Express1/Stamps service control.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -181,14 +189,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
             
             return new Express1StampsCounterRatesBroker();
-        }
-
-        /// <summary>
-        /// Supports getting counter rates.
-        /// </summary>
-        public override bool SupportsCounterRates
-        {
-            get { return true; }
         }
     }
 }
