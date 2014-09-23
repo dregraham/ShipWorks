@@ -155,6 +155,16 @@ namespace ShipWorks.Editions
                         AddRestriction(EditionFeature.ShipmentType, typeCode, EditionRestrictionLevel.Hidden);
                     }
                 }
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.Processing))
+                {
+                    AddRestriction(EditionFeature.ProcessShipment, typeCode, EditionRestrictionLevel.Forbidden);
+                }
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.Purchasing))
+                {
+                    AddRestriction(EditionFeature.PurchasePostage, typeCode, EditionRestrictionLevel.Forbidden);
+                }
             }
 
             // Update the shipping settings default shipment type just in case the default carrier is now disabled.
