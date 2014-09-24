@@ -7,6 +7,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -473,6 +474,8 @@ namespace ShipWorks.Shipping
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
+
+            profile.RequestedLabelFormat = (int)ThermalLanguage.None;
         }
 
         /// <summary>
