@@ -327,9 +327,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("action", "logpostagebalance");
             postRequest.Variables.Add("custid", tangoCustomerID);
             postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("purchaseAmount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("accountIdentifier", accountIdentifier);
+            postRequest.Variables.Add("accountidentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessRequest(postRequest, "CarrierBalance");
 
