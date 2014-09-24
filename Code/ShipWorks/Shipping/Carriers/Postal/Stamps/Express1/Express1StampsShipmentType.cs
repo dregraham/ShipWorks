@@ -197,9 +197,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="account">The account.</param>
         public override void UpdateContractType(StampsAccountEntity account)
         {
-            // Just assign the contract type to unkown; we don't need to worry about Express1 accounts
-            account.ContractType = (int) StampsAccountContractType.Unknown;
-            AccountRepository.Save(account);
+            // If the ContractType is unknown, we must not have tried to check this account yet.
+            // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
+            if (account.ContractType == (int) StampsAccountContractType.Unknown)
+            {
+                account.ContractType = (int) StampsAccountContractType.NotApplicable;
+                AccountRepository.Save(account);
+            }
         }
     }
 }

@@ -383,6 +383,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Save the stamps account and use it to initialize the stamps info control
             StampsAccountManager.SaveAccount(stampsAccount);
+
+            // Update the account contract type
+            StampsShipmentType stampsShipmentType = (StampsShipmentType)ShipmentTypeManager.GetType(stampsAccount.IsExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps);
+            stampsShipmentType.UpdateContractType(stampsAccount);
         }
 
         /// <summary>
