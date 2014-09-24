@@ -216,6 +216,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnLoad(object sender, EventArgs e)
         {
             ResetWizardPagesCollection();
+            ShowAccountNumberPanel();
         }
 
         /// <summary>
@@ -246,7 +247,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // Validate the entered account number
-            if (string.IsNullOrWhiteSpace(accountNumber))
+            if (string.IsNullOrWhiteSpace(accountNumber) && existingAccount.Checked)
             {
                 // Note: this will need to be refactored when we unhide the ability to create 
                 // a new UPS account from ShipWorks
@@ -894,6 +895,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnSteppingIntoRates(object sender, WizardSteppingIntoEventArgs e)
         {
             upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
+        }
+
+        /// <summary>
+        /// Called when [account option check changed].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void OnAccountOptionCheckChanged(object sender, EventArgs e)
+        {
+            ShowAccountNumberPanel();
+        }
+
+        private void ShowAccountNumberPanel()
+        {
+            accountNumberPanel.Visible = existingAccount.Checked;
         }
     }
 }
