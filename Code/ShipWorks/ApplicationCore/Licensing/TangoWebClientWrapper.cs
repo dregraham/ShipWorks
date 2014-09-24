@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
@@ -17,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Activate the given license key to the specified store identifier
         /// </summary>
-        public LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store)
+        public virtual LicenseAccountDetail ActivateLicense(string licenseKey, StoreEntity store)
         {
             return TangoWebClient.ActivateLicense(licenseKey, store);
         }
@@ -25,7 +26,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
+        public virtual LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             return TangoWebClient.GetLicenseStatus(licenseKey, store);
         }
@@ -33,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
+        public virtual Dictionary<string, string> GetCounterRatesCredentials(StoreEntity store)
         {
             return TangoWebClient.GetCounterRatesCredentials(store);
         }
@@ -41,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
-        public Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store)
+        public virtual Dictionary<string, string> GetCarrierCertificateVerificationData(StoreEntity store)
         {
             return TangoWebClient.GetCarrierCertificateVerificationData(store);
         }
@@ -49,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
         /// </summary>
-        public TrialDetail GetTrial(StoreEntity store)
+        public virtual TrialDetail GetTrial(StoreEntity store)
         {
             return TangoWebClient.GetTrial(store);
         }
@@ -57,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Extend the trial for the given store
         /// </summary>
-        public TrialDetail ExtendTrial(StoreEntity store)
+        public virtual TrialDetail ExtendTrial(StoreEntity store)
         {
             return TangoWebClient.ExtendTrial(store);
         }
@@ -65,7 +66,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Send the user their username using the specified email address
         /// </summary>
-        public void SendAccountUsername(string email, string username)
+        public virtual void SendAccountUsername(string email, string username)
         {
             TangoWebClient.SendAccountUsername(email, username);
         }
@@ -73,7 +74,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
             // depending on the number of stores. May want to look into caching this information, but that could result
@@ -94,7 +95,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
+        public virtual void LogShipment(StoreEntity store, ShipmentEntity shipment, bool isRetry = false)
         {
             TangoWebClient.LogShipment(store, shipment, isRetry);
         }
@@ -102,7 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Void the given processed shipment to Tango
         /// </summary>
-        public void VoidShipment(StoreEntity store, ShipmentEntity shipment)
+        public virtual void VoidShipment(StoreEntity store, ShipmentEntity shipment)
         {
             TangoWebClient.VoidShipment(store, shipment);
         }
@@ -110,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Records License agreement and generates an Interapptive-tracked policy number.
         /// </summary>
-        public string GenerateInsurancePolicyNumber(StoreEntity store)
+        public virtual string GenerateInsurancePolicyNumber(StoreEntity store)
         {
             return TangoWebClient.GenerateInsurancePolicyNumber(store);
         }
@@ -126,7 +127,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Create a new freemium store in tango
         /// </summary>
-        public void CreateFreemiumStore(StoreEntity store, PersonAdapter accountAddress, EndiciaPaymentInfo paymentInfo, string dazzleAccount, bool validateOnly)
+        public virtual void CreateFreemiumStore(StoreEntity store, PersonAdapter accountAddress, EndiciaPaymentInfo paymentInfo, string dazzleAccount, bool validateOnly)
         {
             TangoWebClient.CreateFreemiumStore(store, accountAddress, paymentInfo, dazzleAccount, validateOnly);
         }
@@ -134,7 +135,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Associate the given freemium account# with the given store
         /// </summary>
-        public void SetFreemiumAccountNumber(StoreEntity store, string freemiumAccount)
+        public virtual void SetFreemiumAccountNumber(StoreEntity store, string freemiumAccount)
         {
             TangoWebClient.SetFreemiumAccountNumber(store, freemiumAccount);
         }
@@ -142,7 +143,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Update the platform, developer, and version info for the given generic store
         /// </summary>
-        public void UpdateGenericModuleInfo(GenericModuleStoreEntity store, string platform, string developer, string version)
+        public virtual void UpdateGenericModuleInfo(GenericModuleStoreEntity store, string platform, string developer, string version)
         {
             TangoWebClient.UpdateGenericModuleInfo(store, platform, developer, version);
         }
@@ -150,7 +151,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Upgrade the given store to the 'Paid' version of freemium with the given endicia service plan.
         /// </summary>
-        public void UpgradeFreemiumStore(StoreEntity store, int endiciaServicePlan)
+        public virtual void UpgradeFreemiumStore(StoreEntity store, int endiciaServicePlan)
         {
             TangoWebClient.UpgradeFreemiumStore(store, endiciaServicePlan);
         }
@@ -158,7 +159,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Upgrade the given trial to not be in an 'Edition' mode
         /// </summary>
-        public void UpgradeEditionTrial(StoreEntity store)
+        public virtual void UpgradeEditionTrial(StoreEntity store)
         {
             TangoWebClient.UpgradeEditionTrial(store);
         }
@@ -166,9 +167,32 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
-        public void ValidateSecureConnection(Uri uri)
+        public virtual void ValidateSecureConnection(Uri uri)
         {
             TangoWebClient.ValidateSecureConnection(uri);
+        }
+
+        /// <summary>
+        /// Gets the nudges.
+        /// </summary>
+        public virtual IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores)
+        {
+            List<Nudge> nudges = new List<Nudge>();
+            
+            foreach (StoreEntity store in stores)
+            {
+                nudges.AddRange(TangoWebClient.GetNudges(store));
+            }
+
+            return nudges.GroupBy(n => n.NudgeID).Select(group => group.First());
+        }
+
+        /// <summary>
+        /// Logs the nudge option back to Tango. Intended to record which option was selected by the user.
+        /// </summary>
+        public virtual void LogNudgeOption(NudgeOption option)
+        {
+            TangoWebClient.LogNudgeOption(option);
         }
     }
 }

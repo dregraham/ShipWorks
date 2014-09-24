@@ -497,7 +497,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 {
                     try
                     {
-                        TangoWebClient.LogShipment(store, shipmentForTango);
+                        shipmentForTango.OnlineShipmentID = TangoWebClient.LogShipment(store, shipmentForTango); ;
+
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            adapter.SaveAndRefetch(shipmentForTango);
+                            adapter.Commit();
+                        }
                     }
                     catch (ShipWorksLicenseException ex)
                     {

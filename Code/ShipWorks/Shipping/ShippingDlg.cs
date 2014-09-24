@@ -21,6 +21,7 @@ using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Setup;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
@@ -60,8 +61,8 @@ namespace ShipWorks.Shipping
         // But after changing shipping settings we need to make sure a new one gets initialized to pick up any new settings.
         private bool forceRecreateServiceControl = false;
 
-        // Indicates if the tracking control will be initially displayed
-        private bool initialDisplayTracking = false;
+        // Indicates which tab in the dialog will be initially displayed
+        private InitialShippingTabDisplay initialDisplay = InitialShippingTabDisplay.Shipping;
 
         // The list of shipments that are the ones currently shown in the UI, not necessarily the current selection depending on async loading stuff
         private List<ShipmentEntity> uiDisplayedShipments = new List<ShipmentEntity>();
@@ -95,7 +96,7 @@ namespace ShipWorks.Shipping
         /// Constructor
         /// </summary>
         public ShippingDlg(List<ShipmentEntity> shipments)
-            : this(shipments, false)
+            : this(shipments, InitialShippingTabDisplay.Shipping)
         {}
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping
         /// to be used when a rate has been selected outside of the shipping dialog.
         /// </summary>
         public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs)
-            : this(new List<ShipmentEntity> { shipment }, false)
+            : this(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Shipping)
         {
             this.preSelectedRateEventArgs = preSelectedRateEventArgs;
         }
@@ -111,7 +112,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments, bool trackingPage)
+        public ShippingDlg(List<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay)
         {
             InitializeComponent();
 
@@ -139,7 +140,7 @@ namespace ShipWorks.Shipping
             // Security
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
-            initialDisplayTracking = trackingPage;
+            this.initialDisplay = initialDisplay;
 
             rateControl.Initialize(new FootnoteParameters(()=> LoadSelectedShipments(false) , GetStoreForCurrentShipment));
 
@@ -178,9 +179,13 @@ namespace ShipWorks.Shipping
 
             LoadShipmentTypeCombo();
 
-            if (initialDisplayTracking)
+            if (initialDisplay == InitialShippingTabDisplay.Tracking)
             {
                 tabControl.SelectedTab = tabPageTracking;
+            }
+            else if (initialDisplay == InitialShippingTabDisplay.Insurance)
+            {
+                tabControl.SelectedTab = tabPageInsurance;
             }
 
             ShipmentGridRow firstRow = shipmentControl.AllRows.FirstOrDefault();
@@ -351,6 +356,11 @@ namespace ShipWorks.Shipping
 
             // Save all changes from the UI to the previous entity selection
             SaveUIDisplayedShipments();
+
+            // Synchronize to make sure the status is up to date in the case where dimensions
+            // have been manually altered across shipment types
+            shipSenseNeedsUpdated = true;
+            SynchronizeWithShipSense();
             
             // Reload the displayed shipments so that they show the new shipment type UI
             LoadSelectedShipments(true);
@@ -702,6 +712,9 @@ namespace ShipWorks.Shipping
             // Load the tracking control
             LoadTrackingDisplay();
 
+            // Load the insurance control
+            LoadInsuranceDisplay();
+
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
@@ -1011,14 +1024,23 @@ namespace ShipWorks.Shipping
                     trackingControl.Top = trackingNumbers.Bottom + 5;
                     trackingControl.Height = panelTrackingData.Height - 5 - trackingControl.Top;
 
-                    if (initialDisplayTracking)
+                    if (initialDisplay == InitialShippingTabDisplay.Tracking)
                     {
                         OnTrack(track, EventArgs.Empty);
                     }
                 }
             }
 
-            initialDisplayTracking = false;
+            initialDisplay = InitialShippingTabDisplay.Shipping;
+        }
+
+        /// <summary>
+        /// Load the insurance data from the selected shipments into the control
+        /// </summary>
+        private void LoadInsuranceDisplay()
+        {
+            insuranceTabControl.LoadClaim(uiDisplayedShipments);
+            initialDisplay = InitialShippingTabDisplay.Shipping;
         }
 
         /// <summary>
@@ -1342,6 +1364,12 @@ namespace ShipWorks.Shipping
                     }                    
                 }
             }
+
+            // Save the insurance data if we're switching away from the insurance tab
+            if (tabControl.SelectedTab == tabPageInsurance)
+            {
+                insuranceTabControl.SaveToShipments();
+            }
         }
 
         /// <summary>
@@ -1373,6 +1401,8 @@ namespace ShipWorks.Shipping
             {
                 ServiceControl.SaveToShipments();
             }
+
+            insuranceTabControl.SaveToShipments();
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -2102,7 +2132,7 @@ namespace ShipWorks.Shipping
 
             // Special cases - I didn't think we needed to abstract these.  If it gets out of hand we should refactor.
             bool worldshipExported = false;
-            EndiciaInsufficientFundsException endiciaOutOfFundsEx = null;
+            IInsufficientFunds outOfFundsException = null;
 
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
@@ -2133,17 +2163,15 @@ namespace ShipWorks.Shipping
                 shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
 
                 // If any accounts were out of funds we show that instead of the errors
-                if (endiciaOutOfFundsEx != null)
+                if (outOfFundsException != null)
                 {
-                    string provider = (endiciaOutOfFundsEx.Account.EndiciaReseller == (int) EndiciaReseller.None) ? "Endicia" : "Express1";
-
                     DialogResult answer = MessageHelper.ShowQuestion(this,
-                        string.Format("You do not have sufficient funds in {0} account #{1} to continue shipping.\n\n" +
-                        "Would you like to purchase more now?", provider, endiciaOutOfFundsEx.Account.AccountNumber));
+                        string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
+                        "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
 
                     if (answer == DialogResult.OK)
                     {
-                        using (EndiciaBuyPostageDlg dlg = new EndiciaBuyPostageDlg(endiciaOutOfFundsEx.Account))
+                        using (Form dlg = outOfFundsException.CreatePostageDialog())
                         {
                             dlg.ShowDialog(this);
                         }
@@ -2253,10 +2281,10 @@ namespace ShipWorks.Shipping
                     errorMessage = ex.Message;
                     processingErrors[shipmentID] = ex;
 
-                    // Special case for Endicia out of funds
+                    // Special case for out of funds
                     if (ex.InnerException != null)
                     {
-                        endiciaOutOfFundsEx = endiciaOutOfFundsEx ?? (ex.InnerException.InnerException as EndiciaInsufficientFundsException);
+                        outOfFundsException = outOfFundsException ?? (ex.InnerException.InnerException as IInsufficientFunds);
                     }
                 }
 

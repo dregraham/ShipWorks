@@ -1206,9 +1206,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             while (true)
             {
                 GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
-
+                
                 // Quit if eBay says there aren't any more
-                if (response.FeedbackDetailItemTotal == 0)
+                if (response.FeedbackDetailItemTotal == 0 || page > response.PaginationResult.TotalNumberOfPages)
                 {
                     return newestFeedback;
                 }

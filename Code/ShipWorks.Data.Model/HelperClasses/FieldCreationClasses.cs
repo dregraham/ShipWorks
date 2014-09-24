@@ -1007,6 +1007,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AccessKeyID);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.AuthToken field instance</summary>
+		public static EntityField2 AuthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AuthToken);}
+		}
 		/// <summary>Creates a new AmazonStoreEntity.Cookie field instance</summary>
 		public static EntityField2 Cookie
 		{
@@ -8489,6 +8494,61 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity InsurancePolicyEntity</summary>
+	public partial class InsurancePolicyFields
+	{
+		/// <summary>Creates a new InsurancePolicyEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.InsureShipStoreName field instance</summary>
+		public static EntityField2 InsureShipStoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.InsureShipStoreName);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.CreatedWithApi field instance</summary>
+		public static EntityField2 CreatedWithApi
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.CreatedWithApi);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ItemName field instance</summary>
+		public static EntityField2 ItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ItemName);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.Description);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ClaimType field instance</summary>
+		public static EntityField2 ClaimType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ClaimType);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.DamageValue field instance</summary>
+		public static EntityField2 DamageValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.DamageValue);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.SubmissionDate field instance</summary>
+		public static EntityField2 SubmissionDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.SubmissionDate);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.ClaimID field instance</summary>
+		public static EntityField2 ClaimID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.ClaimID);}
+		}
+		/// <summary>Creates a new InsurancePolicyEntity.EmailAddress field instance</summary>
+		public static EntityField2 EmailAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.EmailAddress);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity IParcelAccountEntity</summary>
 	public partial class IParcelAccountFields
 	{
@@ -15407,6 +15467,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ShipSenseEntry);}
 		}
+		/// <summary>Creates a new ShipmentEntity.OnlineShipmentID field instance</summary>
+		public static EntityField2 OnlineShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.OnlineShipmentID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>
@@ -15897,10 +15962,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipLaunch);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsThermal field instance</summary>
-		public static EntityField2 StampsThermal
+		/// <summary>Creates a new ShippingSettingsEntity.StampsDomesticThermal field instance</summary>
+		public static EntityField2 StampsDomesticThermal
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsThermal);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsDomesticThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsInternationalThermal field instance</summary>
+		public static EntityField2 StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsInternationalThermal);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.StampsThermalType field instance</summary>
 		public static EntityField2 StampsThermalType
@@ -16002,10 +16072,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermal field instance</summary>
-		public static EntityField2 Express1StampsThermal
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsDomesticThermal field instance</summary>
+		public static EntityField2 Express1StampsDomesticThermal
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsThermal);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsDomesticThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsInternationalThermal field instance</summary>
+		public static EntityField2 Express1StampsInternationalThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsInternationalThermal);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsThermalType field instance</summary>
 		public static EntityField2 Express1StampsThermalType

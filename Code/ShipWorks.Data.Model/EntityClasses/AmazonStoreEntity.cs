@@ -497,6 +497,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AccessKeyID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("AuthToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Cookie", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -670,6 +673,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AccessKeyID, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.AccessKeyID, value); }
+		}
+
+		/// <summary> The AuthToken property of the Entity AmazonStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."AuthToken"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String AuthToken
+		{
+			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.AuthToken, true); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.AuthToken, value); }
 		}
 
 		/// <summary> The Cookie property of the Entity AmazonStore<br/><br/>

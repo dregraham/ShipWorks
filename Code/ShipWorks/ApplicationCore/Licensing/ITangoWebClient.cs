@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
@@ -99,5 +100,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Ensure the connection to the given URI is a valid interapptive secure connection
         /// </summary>
         void ValidateSecureConnection(Uri uri);
+
+        /// <summary>
+        /// Gets a collection of nudges from Tango.
+        /// </summary>
+        IEnumerable<Nudge> GetNudges(IEnumerable<StoreEntity> stores);
+
+        /// <summary>
+        /// Logs the nudge option back to Tango. Intended to record which option was selected by the user.
+        /// </summary>
+        void LogNudgeOption(NudgeOption option);
     }
 }

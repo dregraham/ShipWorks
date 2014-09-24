@@ -496,6 +496,8 @@ namespace ShipWorks.Data.Model
 		MerchantToken,
 		///<summary>AccessKeyID. </summary>
 		AccessKeyID,
+		///<summary>AuthToken. </summary>
+		AuthToken,
 		///<summary>Cookie. </summary>
 		Cookie,
 		///<summary>CookieExpires. </summary>
@@ -4007,6 +4009,37 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InsurancePolicy.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum InsurancePolicyFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>InsureShipStoreName. </summary>
+		InsureShipStoreName,
+		///<summary>CreatedWithApi. </summary>
+		CreatedWithApi,
+		///<summary>ItemName. </summary>
+		ItemName,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>ClaimType. </summary>
+		ClaimType,
+		///<summary>DamageValue. </summary>
+		DamageValue,
+		///<summary>SubmissionDate. </summary>
+		SubmissionDate,
+		///<summary>ClaimID. </summary>
+		ClaimID,
+		///<summary>EmailAddress. </summary>
+		EmailAddress,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelAccount.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -7219,6 +7252,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseChangeSets,
 		///<summary>ShipSenseEntry. </summary>
 		ShipSenseEntry,
+		///<summary>OnlineShipmentID. </summary>
+		OnlineShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7487,8 +7522,10 @@ namespace ShipWorks.Data.Model
 		EndiciaInsuranceProvider,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>StampsThermal. </summary>
-		StampsThermal,
+		///<summary>StampsDomesticThermal. </summary>
+		StampsDomesticThermal,
+		///<summary>StampsInternationalThermal. </summary>
+		StampsInternationalThermal,
 		///<summary>StampsThermalType. </summary>
 		StampsThermalType,
 		///<summary>StampsAutomaticExpress1. </summary>
@@ -7529,8 +7566,10 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>Express1StampsThermal. </summary>
-		Express1StampsThermal,
+		///<summary>Express1StampsDomesticThermal. </summary>
+		Express1StampsDomesticThermal,
+		///<summary>Express1StampsInternationalThermal. </summary>
+		Express1StampsInternationalThermal,
 		///<summary>Express1StampsThermalType. </summary>
 		Express1StampsThermalType,
 		///<summary>Express1StampsSingleSource. </summary>
@@ -9732,6 +9771,8 @@ namespace ShipWorks.Data.Model
 		InfopiaOrderItemEntity,
 		///<summary>InfopiaStore</summary>
 		InfopiaStoreEntity,
+		///<summary>InsurancePolicy</summary>
+		InsurancePolicyEntity,
 		///<summary>IParcelAccount</summary>
 		IParcelAccountEntity,
 		///<summary>IParcelPackage</summary>

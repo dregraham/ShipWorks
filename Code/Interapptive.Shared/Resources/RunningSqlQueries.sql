@@ -17,6 +17,9 @@ select
 	r.writes, 
 	r.logical_reads, 
 	r.transaction_isolation_level, 
-	r.row_count
-FROM sys.dm_exec_requests AS r
+	r.row_count,
+	s.host_name
+FROM 
+	sys.dm_exec_sessions AS s INNER JOIN
+    sys.dm_exec_requests AS r ON s.session_id = r.session_id
 		CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) AS t

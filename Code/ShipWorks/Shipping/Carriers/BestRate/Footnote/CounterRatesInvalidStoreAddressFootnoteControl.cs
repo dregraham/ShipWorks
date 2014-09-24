@@ -5,6 +5,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
 {
@@ -22,6 +24,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         {
             this.parameters = parameters;
             InitializeComponent();
+
+            storeAddressLink.Visible = UserSession.Security.HasPermission(PermissionType.ManageStores);
         }
 
         /// <summary>

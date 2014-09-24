@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (162 + 0));
+			base.InitClass( (163 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -124,6 +124,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitGridColumnPositionEntityInfos();
 			InitInfopiaOrderItemEntityInfos();
 			InitInfopiaStoreEntityInfos();
+			InitInsurancePolicyEntityInfos();
 			InitIParcelAccountEntityInfos();
 			InitIParcelPackageEntityInfos();
 			InitIParcelProfileEntityInfos();
@@ -345,6 +346,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantName", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantName, 64, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "MerchantToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.MerchantToken, 32, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "AccessKeyID", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AccessKeyID, 32, 0, 0);
+			base.AddElementFieldInfo("AmazonStoreEntity", "AuthToken", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.AuthToken, 100, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "Cookie", typeof(System.String), false, false, false, false,  (int)AmazonStoreFieldIndex.Cookie, 2147483647, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "CookieExpires", typeof(System.DateTime), false, false, false, false,  (int)AmazonStoreFieldIndex.CookieExpires, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonStoreEntity", "CookieWaitUntil", typeof(System.DateTime), false, false, false, false,  (int)AmazonStoreFieldIndex.CookieWaitUntil, 0, 0, 0);
@@ -1367,6 +1369,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("InfopiaStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)InfopiaStoreFieldIndex.StoreID, 0, 0, 19);
 			base.AddElementFieldInfo("InfopiaStoreEntity", "ApiToken", typeof(System.String), false, false, false, false,  (int)InfopiaStoreFieldIndex.ApiToken, 128, 0, 0);
 		}
+		/// <summary>Inits InsurancePolicyEntity's FieldInfo objects</summary>
+		private void InitInsurancePolicyEntityInfos()
+		{
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)InsurancePolicyFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipStoreName", typeof(System.String), false, false, false, false,  (int)InsurancePolicyFieldIndex.InsureShipStoreName, 75, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "CreatedWithApi", typeof(System.Boolean), false, false, false, false,  (int)InsurancePolicyFieldIndex.CreatedWithApi, 0, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ItemName", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.ItemName, 255, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "Description", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.Description, 255, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ClaimType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimType, 0, 0, 10);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "DamageValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)InsurancePolicyFieldIndex.DamageValue, 0, 4, 19);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "SubmissionDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.SubmissionDate, 0, 0, 0);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "ClaimID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)InsurancePolicyFieldIndex.ClaimID, 0, 0, 19);
+			base.AddElementFieldInfo("InsurancePolicyEntity", "EmailAddress", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.EmailAddress, 100, 0, 0);
+		}
 		/// <summary>Inits IParcelAccountEntity's FieldInfo objects</summary>
 		private void InitIParcelAccountEntityInfos()
 		{
@@ -2086,6 +2102,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseStatus, 0, 0, 10);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseChangeSets", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseChangeSets, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseEntry", typeof(System.Byte[]), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseEntry, 2147483647, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "OnlineShipmentID", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.OnlineShipmentID, 0, 0, 10);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -2208,7 +2225,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1Account, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipLaunch", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipLaunch, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsDomesticThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsDomesticThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsInternationalThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsInternationalThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, 0, 0, 19);
@@ -2229,7 +2247,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsuranceProvider, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsDomesticThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsDomesticThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsInternationalThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsInternationalThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);

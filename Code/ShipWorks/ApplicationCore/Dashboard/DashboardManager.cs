@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using log4net;
@@ -571,18 +573,23 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         private static void CheckForEmailChanges()
         {
-            // Unsent messages - but only ones that should have been sent by now
-            int unsent = EmailOutboundCollection.GetCount(SqlAdapter.Default, 
-                EmailOutboundFields.SendStatus != (int) EmailOutboundStatus.Sent &
-                (EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow) & 
-                EmailOutboundFields.ComposedDate < DateTime.UtcNow.AddMinutes(-1));
-
+            int unsent = 0;
             int errors = 0;
 
-            if (unsent > 0)
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -6, "DashboardManager.CheckForEmailChanges");
+            sqlAdapterRetry.ExecuteWithRetry(() =>
             {
-                errors = EmailOutboundCollection.GetCount(SqlAdapter.Default, EmailOutboundFields.SendStatus == (int) EmailOutboundStatus.Failed);
-            }
+                // Unsent messages - but only ones that should have been sent by now
+                unsent = EmailOutboundCollection.GetCount(SqlAdapter.Default,
+                    EmailOutboundFields.SendStatus != (int)EmailOutboundStatus.Sent &
+                    (EmailOutboundFields.DontSendBefore == DBNull.Value | EmailOutboundFields.DontSendBefore <= DateTime.UtcNow) &
+                    EmailOutboundFields.ComposedDate < DateTime.UtcNow.AddMinutes(-1));
+
+                if (unsent > 0)
+                {
+                    errors = EmailOutboundCollection.GetCount(SqlAdapter.Default, EmailOutboundFields.SendStatus == (int)EmailOutboundStatus.Failed);
+                }
+            });
 
             // See if we already have an email dashboard item
             DashboardEmailItem emailItem = dashboardItems.OfType<DashboardEmailItem>().SingleOrDefault();

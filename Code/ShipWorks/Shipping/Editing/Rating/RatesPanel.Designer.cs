@@ -45,14 +45,13 @@
             // 
             // rateControl
             // 
-            this.rateControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rateControl.ActionLinkVisible = false;
             this.rateControl.AutoHeight = true;
+            this.rateControl.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rateControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rateControl.Location = new System.Drawing.Point(0, 19);
             this.rateControl.Name = "rateControl";
             this.rateControl.ShowAllRates = true;
-            this.rateControl.ActionLinkVisible = false;
             this.rateControl.Size = new System.Drawing.Size(476, 165);
             this.rateControl.TabIndex = 0;
             this.rateControl.SizeChanged += new System.EventHandler(this.OnRateControlSizeChanged);

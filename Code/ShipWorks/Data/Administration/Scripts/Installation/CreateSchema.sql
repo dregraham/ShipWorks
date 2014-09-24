@@ -152,6 +152,11 @@ PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
 GO
 ALTER TABLE [dbo].[EbayOrder] ADD CONSTRAINT [PK_EbayOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
+GO
+
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -352,6 +357,7 @@ CREATE TABLE [dbo].[AmazonStore]
 [MerchantName] [varchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MerchantToken] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AccessKeyID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[AuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Cookie] [text] COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CookieExpires] [datetime] NOT NULL,
 [CookieWaitUntil] [datetime] NOT NULL,
@@ -492,6 +498,10 @@ GO
 PRINT N'Creating index [IX_Auto_RequestedShipping] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
+GO
+PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Order] ([BillFirstName])
 GO
 PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Order]'
 GO
@@ -926,7 +936,8 @@ CREATE TABLE [dbo].[Shipment]
 [BestRateEvents] [tinyint] NOT NULL,
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
-[ShipSenseEntry] [varbinary] (max) NOT NULL
+[ShipSenseEntry] [varbinary] (max) NOT NULL,
+[OnlineShipmentID] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1983,6 +1994,26 @@ PRINT N'Creating primary key [PK_InfopiaStore] on [dbo].[InfopiaStore]'
 GO
 ALTER TABLE [dbo].[InfopiaStore] ADD CONSTRAINT [PK_InfopiaStore] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
+PRINT N'Creating [dbo].[InsurancePolicy]'
+GO
+CREATE TABLE [dbo].[InsurancePolicy]
+(
+[ShipmentID] [bigint] NOT NULL,
+[InsureShipStoreName] [nvarchar] (75) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CreatedWithApi] [bit] NOT NULL,
+[ItemName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ClaimType] [int] NULL,
+[DamageValue] [money] NULL,
+[SubmissionDate] [datetime] NULL,
+[ClaimID] [bigint] NULL,
+[EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+)
+GO
+PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [PK_InsurancePolicy] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
 PRINT N'Creating [dbo].[iParcelShipment]'
 GO
 CREATE TABLE [dbo].[iParcelShipment]
@@ -2377,6 +2408,10 @@ GO
 PRINT N'Creating primary key [PK_Customer] on [dbo].[Customer]'
 GO
 ALTER TABLE [dbo].[Customer] ADD CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED  ([CustomerID])
+GO
+PRINT N'Creating index [IX_Auto_BillFirstName] on [dbo].[Customer]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_BillFirstName] ON [dbo].[Customer] ([BillFirstName])
 GO
 PRINT N'Creating index [IX_Auto_BillLastName] on [dbo].[Customer]'
 GO
@@ -4423,7 +4458,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
-[StampsThermal] [bit] NOT NULL,
+[StampsDomesticThermal] [bit] NOT NULL,
+[StampsInternationalThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
 [StampsAutomaticExpress1] [bit] NOT NULL,
 [StampsAutomaticExpress1Account] [bigint] NOT NULL,
@@ -4444,7 +4480,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsThermal] [bit] NOT NULL,
+[Express1StampsDomesticThermal] [bit] NOT NULL,
+[Express1StampsInternationalThermal] [bit] NOT NULL,
 [Express1StampsThermalType] [int] NOT NULL,
 [Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
@@ -4880,6 +4917,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaOrderItem]'
 GO
 ALTER TABLE [dbo].[InfopiaOrderItem] ADD CONSTRAINT [FK_InfopiaOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [FK_InsurancePolicy_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaStore]'
 GO

@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
         /// </summary>
         private void OnSteppingInto(object sender, UI.Wizard.WizardSteppingIntoEventArgs e)
         {
-            storeSettingsControl.LoadStore(GetStore<AmazonStoreEntity>());
+            storeSettingsControl.LoadStore(GetStore<AmazonStoreEntity>(), true);
         }
     }
 }

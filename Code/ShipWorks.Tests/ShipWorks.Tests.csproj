@@ -91,6 +91,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
@@ -134,6 +135,11 @@
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
     <Compile Include="Core\GuidTests.cs" />
@@ -329,6 +335,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostageBalanceTests.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizerTest.cs" />
@@ -367,6 +374,15 @@
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResultTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
