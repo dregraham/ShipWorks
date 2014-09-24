@@ -24,6 +24,7 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -96,6 +97,8 @@ namespace ShipWorks.ApplicationCore.Options
             EnumHelper.BindComboBox <EndiciaTestServer>(endiciaTestServers);
             endiciaTestServers.SelectedValue = EndiciaApiClient.UseTestServerUrl;
             endiciaTestServers.Enabled = endiciaTestServer.Checked;
+
+            useInsureShipTestServer.Checked = new InsureShipSettings().UseTestServer;
         }
 
         /// <summary>
@@ -131,6 +134,8 @@ namespace ShipWorks.ApplicationCore.Options
             InterapptiveOnly.AllowMultipleInstances = multipleInstances.Checked;
 
             EndiciaApiClient.UseTestServerUrl = (EndiciaTestServer)endiciaTestServers.SelectedValue;
+
+            new InsureShipSettings().UseTestServer = useInsureShipTestServer.Checked;
         }
 
         /// <summary>

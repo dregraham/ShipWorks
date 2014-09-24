@@ -2812,6 +2812,47 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
+	/// <summary>Factory to create new, empty InsurancePolicyEntity objects.</summary>
+	[Serializable]
+	public partial class InsurancePolicyEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public InsurancePolicyEntityFactory() : base("InsurancePolicyEntity", ShipWorks.Data.Model.EntityType.InsurancePolicyEntity) { }
+
+		/// <summary>Creates a new, empty InsurancePolicyEntity object.</summary>
+		/// <returns>A new, empty InsurancePolicyEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new InsurancePolicyEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewInsurancePolicy
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new InsurancePolicyEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new InsurancePolicyEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewInsurancePolicyUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<InsurancePolicyEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
 	/// <summary>Factory to create new, empty IParcelAccountEntity objects.</summary>
 	[Serializable]
 	public partial class IParcelAccountEntityFactory : EntityFactoryBase2 {
@@ -6939,6 +6980,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.InfopiaStoreEntity:
 					factoryToUse = new InfopiaStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.InsurancePolicyEntity:
+					factoryToUse = new InsurancePolicyEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.IParcelAccountEntity:
 					factoryToUse = new IParcelAccountEntityFactory();

@@ -233,6 +233,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.InfopiaStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "InfopiaStoreEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.InsurancePolicyEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "InsurancePolicyEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.IParcelAccountEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "IParcelAccountEntity");
 					break;

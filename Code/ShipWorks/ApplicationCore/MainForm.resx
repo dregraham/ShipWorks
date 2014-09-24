@@ -124,7 +124,7 @@
     <value>False</value>
   </metadata>
   <metadata name="ribbonSecurityProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>610, 56</value>
+    <value>809, 56</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="applicationMenu.ExitButtonImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -405,8 +405,11 @@
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>182</value>
   </metadata>
+  <metadata name="sandDockManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>159, 17</value>
+  </metadata>
   <metadata name="contextMenuFilterTree.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>193, 56</value>
+    <value>392, 56</value>
   </metadata>
   <data name="dashboardBarSample.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9285,7 +9288,7 @@
         XTesb3QPLh88M+QwdP6m681Lt7xuXbu94vbgcOjwnZHokdE77DtTd1PuvriXeW/h/sYH6AdFD6UeVjxS
         fNTws+7PbaOWo6fHXMf6Hwc/vj/OGn/2S8Yv7ycKnpCfVEyqTDZPmU2dmnafvvF05dOJZ+nPFmYKf5X+
         tfa5zvMffnP8rX82YnbiBf/Fp99LXsq/PPRq2aueuYC5R69TXy/MF72Rf3P4LeNt37vwd5MLWe+x7ys/
-        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALEQAACxEBf2RfkQAAA79JREFUWEfFVltIVGEQ
+        6H7o/ujz8cGn1E+f/gUDmPP8usTo0wAAAAlwSFlzAAALDQAACw0B7QfALAAAA79JREFUWEfFVltIVGEQ
         9qULBKlQpD5UZoSZRKSGUZoItgSBCxXo2+qj+7La9iBqrK4J4Q0iySAyQxPDEIUIBLULlElluq6XIhYj
         Ispac9Wsl2m+8fzLasdNxU4DH/ufOfPPfHP5/7MhRPRfoas0ErpKI6GrNBK6SiOhqzQSq5ZfbzbunhmJ
         rp1yHfF6Xck0Px5aq736t8KBLdPug72Tgyb6NpRCXlcsfXx5TNYgpZmtr8Dx3FiEZIvATIARSc+7Mqmq
@@ -9773,7 +9776,7 @@
     <value>934, 17</value>
   </metadata>
   <metadata name="contextMenuCustomerGrid.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1284, 17</value>
+    <value>17, 56</value>
   </metadata>
   <data name="contextCustomerLookupOrders.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9793,7 +9796,7 @@
 </value>
   </data>
   <metadata name="contextMenuTemplatesPlaceholder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>367, 56</value>
+    <value>566, 56</value>
   </metadata>
   <data name="contextOrderLookupCustomer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9814,7 +9817,7 @@
 </value>
   </data>
   <metadata name="windowLayoutProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 56</value>
+    <value>216, 56</value>
   </metadata>
   <data name="pictureBox6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -9831,6 +9834,6 @@
 </value>
   </data>
   <metadata name="editionGuiHelper.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>786, 56</value>
+    <value>985, 56</value>
   </metadata>
 </root>

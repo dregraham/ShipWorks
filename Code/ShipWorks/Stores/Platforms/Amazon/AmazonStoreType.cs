@@ -228,6 +228,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MerchantName = "";
             storeEntity.MerchantToken = "";
             storeEntity.AccessKeyID = "";
+            storeEntity.AuthToken = "";
             storeEntity.Cookie = "";
             storeEntity.CookieExpires = SqlDateTime.MinValue.Value;
             storeEntity.CookieWaitUntil = storeEntity.CookieExpires;
@@ -237,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
-
+            
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
             {
@@ -404,7 +405,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     // this functionality was added), so we need to try to look it up
                     using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
                     {
-                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces(amazonStore.MerchantID);
+                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces();
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name

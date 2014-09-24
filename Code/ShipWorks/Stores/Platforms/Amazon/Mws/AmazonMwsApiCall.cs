@@ -22,6 +22,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         ListMarketplaceParticipations = 6,
 
         // Product API
-        GetMatchingProductForId = 7
+        GetMatchingProductForId = 7,
+
+        GetAuthToken = 8
     }
 }

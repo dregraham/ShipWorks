@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -56,7 +57,9 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialExpress1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
         private const string TestCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         private const string TestCredentialExpress1StampsCertificateVerificationData = "<Service><Subject><Value>test</Value><Value></Value></Subject></Service>";
-       
+
+        private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
+
         // Key names of credential values in the dictionary 
         private const string FedExAccountNumberKeyName = "FedExAccountNumber";
         private const string FedExMeterNumberKeyName = "FedExMeterNumber";
@@ -80,6 +83,7 @@ namespace ShipWorks.Shipping.Carriers
         private const string EndiciaAccountNumberKeyName = "EndiciaAccountNumber";
         private const string EndiciaApiUserPasswordKeyName = "EndiciaApiUserPassword";
         public const string EndiciaCertificateVerificationDataKeyName = "EndiciaCertificateVerificationData";
+        public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
 
         
         
@@ -314,6 +318,18 @@ namespace ShipWorks.Shipping.Carriers
             get
             {
                 return GetCertificateVerificationDataValue(EndiciaCertificateVerificationDataKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from InsureShip
+        /// </summary>
+        public string InsureShipCertificateVerificationData
+        {
+            get
+            {
+                return new InsureShipSettings().UseTestServer ?
+                    TestCredentialInsureCertificateVerficationData : GetCertificateVerificationDataValue(InsureShipCertificateVerificationDataKeyName);
             }
         }
 

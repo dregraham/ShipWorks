@@ -62,8 +62,8 @@ namespace ShipWorks.Shipping
         // But after changing shipping settings we need to make sure a new one gets initialized to pick up any new settings.
         private bool forceRecreateServiceControl = false;
 
-        // Indicates if the tracking control will be initially displayed
-        private bool initialDisplayTracking = false;
+        // Indicates which tab in the dialog will be initially displayed
+        private InitialShippingTabDisplay initialDisplay = InitialShippingTabDisplay.Shipping;
 
         // The list of shipments that are the ones currently shown in the UI, not necessarily the current selection depending on async loading stuff
         private List<ShipmentEntity> uiDisplayedShipments = new List<ShipmentEntity>();
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping
         /// Constructor
         /// </summary>
         public ShippingDlg(List<ShipmentEntity> shipments)
-            : this(shipments, false)
+            : this(shipments, InitialShippingTabDisplay.Shipping)
         {}
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping
         /// to be used when a rate has been selected outside of the shipping dialog.
         /// </summary>
         public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs)
-            : this(new List<ShipmentEntity> { shipment }, false)
+            : this(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Shipping)
         {
             this.preSelectedRateEventArgs = preSelectedRateEventArgs;
         }
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments, bool trackingPage)
+        public ShippingDlg(List<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay)
         {
             InitializeComponent();
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping
             // Security
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
-            initialDisplayTracking = trackingPage;
+            this.initialDisplay = initialDisplay;
 
             rateControl.Initialize(new FootnoteParameters(()=> LoadSelectedShipments(false) , GetStoreForCurrentShipment));
 
@@ -183,9 +183,13 @@ namespace ShipWorks.Shipping
 
             LoadShipmentTypeCombo();
 
-            if (initialDisplayTracking)
+            if (initialDisplay == InitialShippingTabDisplay.Tracking)
             {
                 tabControl.SelectedTab = tabPageTracking;
+            }
+            else if (initialDisplay == InitialShippingTabDisplay.Insurance)
+            {
+                tabControl.SelectedTab = tabPageInsurance;
             }
 
             ShipmentGridRow firstRow = shipmentControl.AllRows.FirstOrDefault();
@@ -356,6 +360,11 @@ namespace ShipWorks.Shipping
 
             // Save all changes from the UI to the previous entity selection
             SaveUIDisplayedShipments();
+
+            // Synchronize to make sure the status is up to date in the case where dimensions
+            // have been manually altered across shipment types
+            shipSenseNeedsUpdated = true;
+            SynchronizeWithShipSense();
             
             // Reload the displayed shipments so that they show the new shipment type UI
             LoadSelectedShipments(true);
@@ -707,6 +716,9 @@ namespace ShipWorks.Shipping
             // Load the tracking control
             LoadTrackingDisplay();
 
+            // Load the insurance control
+            LoadInsuranceDisplay();
+
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
@@ -1016,14 +1028,23 @@ namespace ShipWorks.Shipping
                     trackingControl.Top = trackingNumbers.Bottom + 5;
                     trackingControl.Height = panelTrackingData.Height - 5 - trackingControl.Top;
 
-                    if (initialDisplayTracking)
+                    if (initialDisplay == InitialShippingTabDisplay.Tracking)
                     {
                         OnTrack(track, EventArgs.Empty);
                     }
                 }
             }
 
-            initialDisplayTracking = false;
+            initialDisplay = InitialShippingTabDisplay.Shipping;
+        }
+
+        /// <summary>
+        /// Load the insurance data from the selected shipments into the control
+        /// </summary>
+        private void LoadInsuranceDisplay()
+        {
+            insuranceTabControl.LoadClaim(uiDisplayedShipments);
+            initialDisplay = InitialShippingTabDisplay.Shipping;
         }
 
         /// <summary>
@@ -1350,6 +1371,12 @@ namespace ShipWorks.Shipping
                     }                    
                 }
             }
+
+            // Save the insurance data if we're switching away from the insurance tab
+            if (tabControl.SelectedTab == tabPageInsurance)
+            {
+                insuranceTabControl.SaveToShipments();
+            }
         }
 
         /// <summary>
@@ -1381,6 +1408,8 @@ namespace ShipWorks.Shipping
             {
                 ServiceControl.SaveToShipments();
             }
+
+            insuranceTabControl.SaveToShipments();
 
             foreach (ShipmentEntity shipment in shipments)
             {
