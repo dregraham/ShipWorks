@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -24,6 +25,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public iParcelOptionsControl()
         {
             InitializeComponent();
+
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
+            labelFormat.Items.Remove(ThermalLanguage.ZPL);
         }
 
         /// <summary>
@@ -31,8 +35,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void LoadSettings()
         {
-            //ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            //thermalPrinter.Checked = settings.IParcelThermal;
+            labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<iParcelShipmentType>();
         }
 
         /// <summary>
@@ -41,10 +44,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="settings">The settings.</param>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            //settings.IParcelThermal = thermalPrinter.Checked;
-
-            //// i-parcel only supports EPL
-            //settings.IParcelThermalType = (int) ThermalLanguage.EPL;
+            ShippingProfileManager.SaveLabelFormatToDefaultProfile<iParcelShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
         }
     }
 }

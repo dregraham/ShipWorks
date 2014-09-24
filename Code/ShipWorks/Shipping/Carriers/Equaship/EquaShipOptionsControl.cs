@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public EquaShipOptionsControl()
         {
             InitializeComponent();
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
 
         /// <summary>
@@ -33,8 +34,6 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
-
             ShippingProfileEntity profile = new EquaShipShipmentType().GetPrimaryProfile();
 
             if (profile.RequestedLabelFormat.HasValue)

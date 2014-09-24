@@ -46,7 +46,6 @@
             // labelFormat
             // 
             this.labelFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.labelFormat.Enabled = false;
             this.labelFormat.FormattingEnabled = true;
             this.labelFormat.Location = new System.Drawing.Point(134, 21);
             this.labelFormat.Name = "labelFormat";
@@ -56,7 +55,6 @@
             // labelThermalType
             // 
             this.labelThermalType.AutoSize = true;
-            this.labelThermalType.Enabled = false;
             this.labelThermalType.Location = new System.Drawing.Point(18, 24);
             this.labelThermalType.Name = "labelThermalType";
             this.labelThermalType.Size = new System.Drawing.Size(110, 13);

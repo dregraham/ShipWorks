@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
             labelFormat.SelectedValueChanged += OnUpdateThermalUI;
+
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
+            EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
         }
 
         /// <summary>
@@ -35,9 +38,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
-            EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
-
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             maskAccountNumber.Checked = settings.FedExMaskAccount;

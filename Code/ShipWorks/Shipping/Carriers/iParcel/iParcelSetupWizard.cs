@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Emit;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -48,6 +49,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
+
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.iParcel))
+            {
+                Pages.Remove(wizardPageOptions);
+            }
 
             // Wire up the stepping into event of the finish page to the event handler
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);

@@ -47,6 +47,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(shippingWizardPageFinish);
 
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.OnTrac))
+            {
+                Pages.Remove(wizardPageOptions);
+            }
+
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
         }
 

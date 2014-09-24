@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Common.IO.Hardware.Printers;
 
@@ -24,6 +25,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltOptionsControl()
         {
             InitializeComponent();
+
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
 
         /// <summary>
@@ -31,21 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
-
-            //ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            //thermalPrinter.Checked = settings.UpsThermal;
-            //thermalType.SelectedValue = (ThermalLanguage) settings.UpsThermalType;
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
+            labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<UpsOltShipmentType>();
         }
 
         /// <summary>
@@ -53,8 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            //settings.UpsThermal = thermalPrinter.Checked;
-            //settings.UpsThermalType = (int) thermalType.SelectedValue;
+            ShippingProfileManager.SaveLabelFormatToDefaultProfile<UpsOltShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
         }
     }
 }

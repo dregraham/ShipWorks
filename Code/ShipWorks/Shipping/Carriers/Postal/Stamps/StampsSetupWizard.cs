@@ -64,6 +64,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Stamps))
+            {
+                Pages.Remove(wizardPageOptions);
+            }
+
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
