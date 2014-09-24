@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
 using log4net;
@@ -99,9 +100,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             Cursor.Current = Cursors.WaitCursor;
             string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
+            StampsShipmentType stampsShipmentType = account.IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType();
 
             try
             {
+                // Take this opportunity to update the contract type of the account
+                stampsShipmentType.UpdateContractType(account);
                 new StampsApiSession().PurchasePostage(account, postage.Amount, accountInfo.PostageBalance.ControlTotal);
 
                 string message = string.Format("The purchase request has been submitted to {0}.\n\n" +
