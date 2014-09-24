@@ -27,8 +27,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             //thermalPrinter.Checked = settings.OnTracThermal;
             //thermalType.SelectedValue = (ThermalLanguage) settings.OnTracThermalType;
         }

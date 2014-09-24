@@ -400,8 +400,6 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             WebServices.ShipmentType request = new WebServices.ShipmentType();
             EquaShipShipmentEntity eqShip = shipment.EquaShip;
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             // address information
             request.ShipFromAddress = new AddressType();
             request.ShipToAddress = new AddressType();

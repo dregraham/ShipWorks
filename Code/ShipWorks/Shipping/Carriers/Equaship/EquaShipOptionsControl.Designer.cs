@@ -29,51 +29,39 @@
         private void InitializeComponent()
         {
             this.infotipLabelType = new ShipWorks.UI.Controls.InfoTip();
-            this.thermalType = new System.Windows.Forms.ComboBox();
+            this.labelFormat = new System.Windows.Forms.ComboBox();
             this.labelThermalType = new System.Windows.Forms.Label();
-            this.thermalPrinter = new System.Windows.Forms.CheckBox();
             this.labelLabels = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // infotipLabelType
             // 
             this.infotipLabelType.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infotipLabelType.Location = new System.Drawing.Point(271, 25);
+            this.infotipLabelType.Location = new System.Drawing.Point(255, 25);
             this.infotipLabelType.Name = "infotipLabelType";
             this.infotipLabelType.Size = new System.Drawing.Size(12, 12);
             this.infotipLabelType.TabIndex = 36;
             this.infotipLabelType.Title = "Printer Type";
             // 
-            // thermalType
+            // labelFormat
             // 
-            this.thermalType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.thermalType.Enabled = false;
-            this.thermalType.FormattingEnabled = true;
-            this.thermalType.Location = new System.Drawing.Point(114, 42);
-            this.thermalType.Name = "thermalType";
-            this.thermalType.Size = new System.Drawing.Size(115, 21);
-            this.thermalType.TabIndex = 35;
+            this.labelFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.labelFormat.Enabled = false;
+            this.labelFormat.FormattingEnabled = true;
+            this.labelFormat.Location = new System.Drawing.Point(134, 21);
+            this.labelFormat.Name = "labelFormat";
+            this.labelFormat.Size = new System.Drawing.Size(115, 21);
+            this.labelFormat.TabIndex = 35;
             // 
             // labelThermalType
             // 
             this.labelThermalType.AutoSize = true;
             this.labelThermalType.Enabled = false;
-            this.labelThermalType.Location = new System.Drawing.Point(38, 45);
+            this.labelThermalType.Location = new System.Drawing.Point(18, 24);
             this.labelThermalType.Name = "labelThermalType";
-            this.labelThermalType.Size = new System.Drawing.Size(71, 13);
+            this.labelThermalType.Size = new System.Drawing.Size(110, 13);
             this.labelThermalType.TabIndex = 34;
-            this.labelThermalType.Text = "Thermal type:";
-            // 
-            // thermalPrinter
-            // 
-            this.thermalPrinter.AutoSize = true;
-            this.thermalPrinter.Location = new System.Drawing.Point(21, 23);
-            this.thermalPrinter.Name = "thermalPrinter";
-            this.thermalPrinter.Size = new System.Drawing.Size(245, 17);
-            this.thermalPrinter.TabIndex = 33;
-            this.thermalPrinter.Text = "The labels will be printed with a thermal printer.";
-            this.thermalPrinter.UseVisualStyleBackColor = true;
-            this.thermalPrinter.CheckedChanged += new System.EventHandler(this.OnUpdateThermalUI);
+            this.labelThermalType.Text = "Requested label type:";
             // 
             // labelLabels
             // 
@@ -85,17 +73,16 @@
             this.labelLabels.TabIndex = 37;
             this.labelLabels.Text = "Labels";
             // 
-            // EquashipOptionsControl
+            // EquaShipOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelLabels);
             this.Controls.Add(this.infotipLabelType);
-            this.Controls.Add(this.thermalType);
+            this.Controls.Add(this.labelFormat);
             this.Controls.Add(this.labelThermalType);
-            this.Controls.Add(this.thermalPrinter);
-            this.Name = "EquashipOptionsControl";
-            this.Size = new System.Drawing.Size(323, 83);
+            this.Name = "EquaShipOptionsControl";
+            this.Size = new System.Drawing.Size(323, 58);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -104,9 +91,8 @@
         #endregion
 
         private UI.Controls.InfoTip infotipLabelType;
-        private System.Windows.Forms.ComboBox thermalType;
+        private System.Windows.Forms.ComboBox labelFormat;
         private System.Windows.Forms.Label labelThermalType;
-        private System.Windows.Forms.CheckBox thermalPrinter;
         private System.Windows.Forms.Label labelLabels;
     }
 }

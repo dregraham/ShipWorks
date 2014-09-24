@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.HelperClasses;
@@ -139,6 +140,31 @@ namespace ShipWorks.Shipping.Profiles
             }
 
             CheckForChangesNeeded();
+        }
+
+        /// <summary>
+        /// Get the label format from the default profile of the specified shipment type
+        /// </summary>
+        public static ThermalLanguage GetLabelFormatFromDefaultProfile<T>() where T : ShipmentType, new() 
+        {
+            ShippingProfileEntity profile = new T().GetPrimaryProfile();
+
+            if (profile.RequestedLabelFormat.HasValue)
+            {
+                return (ThermalLanguage)profile.RequestedLabelFormat.Value;
+            }
+
+            return ThermalLanguage.None;
+        }
+
+        /// <summary>
+        /// Save the specified language as the label format for the default profile
+        /// </summary>
+        public static void SaveLabelFormatToDefaultProfile<T>(ThermalLanguage language) where T : ShipmentType, new()
+        {
+            ShippingProfileEntity profile = new T().GetPrimaryProfile();
+            profile.RequestedLabelFormat = (int)language;
+            SaveProfile(profile);
         }
     }
 }

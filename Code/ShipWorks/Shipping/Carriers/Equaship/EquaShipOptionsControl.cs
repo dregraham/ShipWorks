@@ -5,8 +5,10 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Web.Profile;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -31,21 +33,14 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            ShippingProfileEntity profile = new EquaShipShipmentType().GetPrimaryProfile();
 
-            //thermalPrinter.Checked = settings.EquaShipThermal;
-            //thermalType.SelectedValue = (ThermalLanguage)settings.EquaShipThermalType;
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
+            if (profile.RequestedLabelFormat.HasValue)
+            {
+                labelFormat.SelectedValue = (ThermalLanguage)profile.RequestedLabelFormat.Value;   
+            }
         }
 
         /// <summary>
@@ -53,13 +48,13 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            ShippingProfileEntity profile = new EquaShipShipmentType().GetPrimaryProfile();
+            profile.RequestedLabelFormat = (int)labelFormat.SelectedValue;
 
-            //settings.EquaShipThermal = thermalPrinter.Checked;
-            //settings.EquaShipThermalType = (int)thermalType.SelectedValue;
+            using (SqlAdapter adapter = SqlAdapter.Default)
+            {
+                adapter.SaveAndRefetch(profile);
+            }
         }
     }
 }
