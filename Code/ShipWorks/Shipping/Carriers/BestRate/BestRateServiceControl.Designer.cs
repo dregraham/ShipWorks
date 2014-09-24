@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Settings.Origin;
+﻿using System.Security.AccessControl;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -69,6 +70,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 321);
             this.sectionReturns.Size = new System.Drawing.Size(441, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(441, 24);
             // 
             // sectionShipment
             // 

@@ -83,6 +83,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 439);
             this.sectionReturns.Size = new System.Drawing.Size(496, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(496, 24);
             // 
             // sectionShipment
             // 

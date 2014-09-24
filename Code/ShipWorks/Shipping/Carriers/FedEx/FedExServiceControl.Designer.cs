@@ -250,6 +250,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 667);
             this.sectionReturns.Size = new System.Drawing.Size(504, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionShipment
             // 

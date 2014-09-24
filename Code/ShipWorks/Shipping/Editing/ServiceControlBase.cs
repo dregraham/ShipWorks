@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -159,6 +160,8 @@ namespace ShipWorks.Shipping.Editing
                 throw new ArgumentNullException("shipments");
             }
 
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
+
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
@@ -210,6 +213,8 @@ namespace ShipWorks.Shipping.Editing
                 // Go through and load the data from each shipment
                 foreach (ShipmentEntity shipment in shipments)
                 {
+                    labelFormat.ApplyMultiValue((ThermalLanguage)shipment.RequestedLabelFormat);
+
                     // Residential status info
                     if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
                     {
@@ -398,6 +403,8 @@ namespace ShipWorks.Shipping.Editing
             // Save the data to each selected shipment
             foreach (ShipmentEntity shipment in loadedShipments)
             {
+                labelFormat.ReadMultiValue(v => shipment.RequestedLabelFormat = (int)v);
+
                 // Residential
                 if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
                 {
