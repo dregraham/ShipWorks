@@ -532,10 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StampsDomesticThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("StampsInternationalThermal", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsThermal", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("StampsThermalType", fieldHashtable);
@@ -598,10 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Express1StampsDomesticThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsInternationalThermal", fieldHashtable);
+			_fieldsCustomProperties.Add("Express1StampsThermal", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1StampsThermalType", fieldHashtable);
@@ -1060,26 +1054,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, value); }
 		}
 
-		/// <summary> The StampsDomesticThermal property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The StampsThermal property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsDomesticThermal"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsThermal"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean StampsDomesticThermal
+		public virtual System.Boolean StampsThermal
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsDomesticThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsDomesticThermal, value); }
-		}
-
-		/// <summary> The StampsInternationalThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsInternationalThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean StampsInternationalThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsInternationalThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsInternationalThermal, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsThermal, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsThermal, value); }
 		}
 
 		/// <summary> The StampsThermalType property of the Entity ShippingSettings<br/><br/>
@@ -1302,26 +1285,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
 		}
 
-		/// <summary> The Express1StampsDomesticThermal property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The Express1StampsThermal property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsDomesticThermal"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsThermal"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsDomesticThermal
+		public virtual System.Boolean Express1StampsThermal
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsDomesticThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsDomesticThermal, value); }
-		}
-
-		/// <summary> The Express1StampsInternationalThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsInternationalThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsInternationalThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsInternationalThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsInternationalThermal, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermal, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermal, value); }
 		}
 
 		/// <summary> The Express1StampsThermalType property of the Entity ShippingSettings<br/><br/>
