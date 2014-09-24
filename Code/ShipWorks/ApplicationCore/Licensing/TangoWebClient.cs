@@ -320,12 +320,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public static void LogPostageEvent(string tangoCustomerID, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public static void LogPostageEvent(LicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
             postRequest.Variables.Add("action", "logpostagebalance");
-            postRequest.Variables.Add("custid", tangoCustomerID);
+            postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));

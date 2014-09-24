@@ -75,19 +75,18 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
-            // Grab all of the distinct Tango customer IDs of the active stores. This could take a couple of seconds 
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
             // depending on the number of stores. May want to look into caching this information, but that could result
             // in stale license data. Since customer's aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
+            List<StoreEntity> stores = StoreManager.GetEnabledStores();
+            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store));
 
-            // ToList() is called, so the LINQ is evaluated immediately
-            List<string> tangoCustomerIDs = StoreManager.GetEnabledStores()
-                                                               .Select(store => TangoWebClient.GetLicenseStatus(store.License, store))
-                                                               .Select(l => l.TangoCustomerID).ToList();
-
-            foreach (string customerID in tangoCustomerIDs.Distinct())
+            // We only need to send up one license for each distinct customer ID
+            IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
+            foreach (LicenseAccountDetail license in licensesForLogging)
             {
-                TangoWebClient.LogPostageEvent(customerID, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
+                TangoWebClient.LogPostageEvent(license, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
             }
         }
 
