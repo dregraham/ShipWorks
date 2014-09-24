@@ -11,7 +11,7 @@ namespace ShipWorks.AddressValidation
     public enum AddressValidationStatusType
     {
         [Description("Not Checked")]
-        [ImageResource("help16")]
+        [ImageResource("help2_16")]
         NotChecked = 0,
 
         [Description("Checking...")]
@@ -35,7 +35,7 @@ namespace ShipWorks.AddressValidation
         SuggestionIgnored = 5,
 
         [Description("Has Suggestions")]
-        [ImageResource("information2_16")]
+        [ImageResource("information16")]
         HasSuggestions = 6,
 
         [Description("Suggestion Selected")]
@@ -47,7 +47,7 @@ namespace ShipWorks.AddressValidation
         Error = 8,
 
         [Description("International (Can't Validate)")]
-        [ImageResource("globe16")]
+        [ImageResource("earth16")]
         WillNotValidate = 9
     }
 }
