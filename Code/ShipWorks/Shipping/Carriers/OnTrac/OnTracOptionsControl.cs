@@ -29,8 +29,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            thermalPrinter.Checked = settings.OnTracThermal;
-            thermalType.SelectedValue = (ThermalLanguage) settings.OnTracThermalType;
+            //thermalPrinter.Checked = settings.OnTracThermal;
+            //thermalType.SelectedValue = (ThermalLanguage) settings.OnTracThermalType;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            settings.OnTracThermal = thermalPrinter.Checked;
-            settings.OnTracThermalType = (int) thermalType.SelectedValue;
+            //settings.OnTracThermal = thermalPrinter.Checked;
+            //settings.OnTracThermalType = (int) thermalType.SelectedValue;
         }
 
         /// <summary>

@@ -35,8 +35,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            thermalPrinter.Checked = settings.EquaShipThermal;
-            thermalType.SelectedValue = (ThermalLanguage)settings.EquaShipThermalType;
+            //thermalPrinter.Checked = settings.EquaShipThermal;
+            //thermalType.SelectedValue = (ThermalLanguage)settings.EquaShipThermalType;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
                 throw new ArgumentNullException("settings");
             }
 
-            settings.EquaShipThermal = thermalPrinter.Checked;
-            settings.EquaShipThermalType = (int)thermalType.SelectedValue;
+            //settings.EquaShipThermal = thermalPrinter.Checked;
+            //settings.EquaShipThermalType = (int)thermalType.SelectedValue;
         }
     }
 }

@@ -700,11 +700,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
-                thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
             else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
-                thermalType = settings.Express1StampsThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
             else
             {
@@ -814,7 +814,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             shipment.Postal.Stamps.StampsTransactionID = stampsGuid;
 
             // Set the thermal type for the shipment
-            shipment.ThermalType = (int?)thermalType;
+            shipment.ActualLabelFormat = (int?)thermalType;
 
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
@@ -859,7 +859,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // International services require some trickdickery
             else
             {
-                if (shipment.ThermalType != null)
+                if (shipment.ActualLabelFormat != null)
                 {
                     // If the labels are thermal, just save them all, marking the first as the primary
                     for (int i = 0; i < labelUrls.Length; i++)
@@ -905,7 +905,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         SaveLabelImage(shipment, labelUrls[2], "LabelPart5", new Rectangle(0, 0, 1600, 1010));
 
                         // create a blank png so that the sender's copy and continuation page are separate from the Dispatch Note
-                        if (shipment.ThermalType == null)
+                        if (shipment.ActualLabelFormat == null)
                         {
                             using (Image blankImage = CreateBlankImage(new Rectangle(0, 0, 1600, 1010)))
                             {
@@ -963,7 +963,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Debug.Assert(adapter.InSystemTransaction);
 
                 // Standard images
-                if (shipment.ThermalType == null)
+                if (shipment.ActualLabelFormat == null)
                 {
                     using (Image imageOriginal = DownloadLabelImage(url))
                     {

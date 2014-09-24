@@ -132,8 +132,8 @@ public partial class StoredProcedures
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
 		                [ObjectReference].ObjectID AS ResourceID, 
 		                CASE 
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
 			                ELSE 'GIF'
 		                END as ImageFormat		
 	                FROM [UpsPackage]
@@ -151,8 +151,8 @@ public partial class StoredProcedures
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
 		                [ObjectReference].ObjectID AS ResourceID, 		
 		                CASE 
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
 			                ELSE 'PNG'
 		                END as ImageFormat
 	                FROM [FedexPackage]
@@ -170,8 +170,8 @@ public partial class StoredProcedures
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
 		                [ObjectReference].ObjectID AS ResourceID, 
 		                CASE 
-			                WHEN ISNULL(Shipment.ThermalType, -1) = 0 THEN 'EPL'
-			                WHEN ISNULL(Shipment.ThermalType, -1) = 1 THEN 'ZPL'
+			                WHEN ISNULL(Shipment.ActualLabelFormat, -1) = 0 THEN 'EPL'
+			                WHEN ISNULL(Shipment.ActualLabelFormat, -1) = 1 THEN 'ZPL'
 			                ELSE 'GIF'
 		                END as ImageFormat
 	                FROM OnTracShipment
@@ -190,8 +190,8 @@ public partial class StoredProcedures
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
 		                [ObjectReference].ObjectID AS ResourceID, 		
 		                CASE 
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
 			                ELSE 'PNG'
 		                END as ImageFormat
 	                FROM [PostalShipment]
@@ -209,8 +209,8 @@ public partial class StoredProcedures
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
 		                [ObjectReference].ObjectID AS ResourceID, 		
 		                CASE 
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 0 THEN 'EPL'
-			                WHEN ISNULL([Shipment].ThermalType, -1) = 1 THEN 'ZPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 0 THEN 'EPL'
+			                WHEN ISNULL([Shipment].ActualLabelFormat, -1) = 1 THEN 'ZPL'
 			                ELSE 'JPG'
 		                END as ImageFormat
 	                FROM iParcelShipment i

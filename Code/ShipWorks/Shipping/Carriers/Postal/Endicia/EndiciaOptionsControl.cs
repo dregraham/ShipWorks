@@ -67,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        thermalPrinter.Checked = settings.Express1EndiciaThermal;
-                        thermalType.SelectedValue = (ThermalLanguage)settings.Express1EndiciaThermalType;
+                        //thermalPrinter.Checked = settings.Express1EndiciaThermal;
+                        //thermalType.SelectedValue = (ThermalLanguage)settings.Express1EndiciaThermalType;
 
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
@@ -82,8 +82,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
-                        thermalPrinter.Checked = settings.EndiciaThermal;
-                        thermalType.SelectedValue = (ThermalLanguage)settings.EndiciaThermalType;
+                        //thermalPrinter.Checked = settings.EndiciaThermal;
+                        //thermalType.SelectedValue = (ThermalLanguage)settings.EndiciaThermalType;
 
                         customsCertify.Checked = settings.EndiciaCustomsCertify;
                         customsSigner.Text = settings.EndiciaCustomsSigner;
@@ -118,8 +118,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        settings.Express1EndiciaThermal = thermalPrinter.Checked;
-                        settings.Express1EndiciaThermalType = (int)thermalType.SelectedValue;
+                        //settings.Express1EndiciaThermal = thermalPrinter.Checked;
+                        //settings.Express1EndiciaThermalType = (int)thermalType.SelectedValue;
 
                         settings.Express1EndiciaCustomsCertify = customsCertify.Checked;
                         settings.Express1EndiciaCustomsSigner = customsSigner.Text;
@@ -132,8 +132,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
-                        settings.EndiciaThermal = thermalPrinter.Checked;
-                        settings.EndiciaThermalType = (int)thermalType.SelectedValue;
+                        //settings.EndiciaThermal = thermalPrinter.Checked;
+                        //settings.EndiciaThermalType = (int)thermalType.SelectedValue;
 
                         settings.EndiciaCustomsCertify = customsCertify.Checked;
                         settings.EndiciaCustomsSigner = customsSigner.Text;

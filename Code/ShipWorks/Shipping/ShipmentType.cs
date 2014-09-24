@@ -277,7 +277,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            shipment.ThermalType = null;
+            shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
             // First apply the base profile

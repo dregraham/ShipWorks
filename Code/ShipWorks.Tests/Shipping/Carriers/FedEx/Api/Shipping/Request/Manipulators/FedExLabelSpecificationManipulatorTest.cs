@@ -197,18 +197,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLanguage.EPL, shipmentEntity.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.EPL, shipmentEntity.ActualLabelFormat);
         }
 
         [TestMethod]
         public void Manipulate_ConfiguresShipmentEntityThermalLabel_WithZPL_WhenFexExThermalSettingIsTrueAndConfiguredWithZPL_Test()
         {
             // Setup
-            shippingSettings.FedExThermalType = (int)ThermalLanguage.ZPL;
+            shipmentEntity.ActualLabelFormat = (int)ThermalLanguage.ZPL;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLanguage.ZPL, shipmentEntity.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
         }
 
         [TestMethod]
@@ -216,7 +216,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsInvalidOperationException_WhenUnknownThermalType_Test()
         {
             // Setup: set the thermal type to an invalid value
-            shippingSettings.FedExThermalType = 3;
+            shipmentEntity.ActualLabelFormat = 3;
 
             // Should throw the exception
             testObject.Manipulate(carrierRequest.Object);
@@ -260,12 +260,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SetsShipmentEntityThermalType_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shippingSettings.FedExThermal = false;
+            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.IsNull(shipmentEntity.FedEx.Shipment.ThermalType);
+            Assert.IsNull(shipmentEntity.FedEx.Shipment.ActualLabelFormat);
         }
 
         [TestMethod]

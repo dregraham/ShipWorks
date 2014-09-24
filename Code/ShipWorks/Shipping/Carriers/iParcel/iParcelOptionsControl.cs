@@ -31,8 +31,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void LoadSettings()
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            thermalPrinter.Checked = settings.IParcelThermal;
+            //ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            //thermalPrinter.Checked = settings.IParcelThermal;
         }
 
         /// <summary>
@@ -41,10 +41,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="settings">The settings.</param>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            settings.IParcelThermal = thermalPrinter.Checked;
+            //settings.IParcelThermal = thermalPrinter.Checked;
 
-            // i-parcel only supports EPL
-            settings.IParcelThermalType = (int) ThermalLanguage.EPL;
+            //// i-parcel only supports EPL
+            //settings.IParcelThermalType = (int) ThermalLanguage.EPL;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         /// </summary>
         private string GetFormatSql(SqlGenerationContext context, LabelFormatType format)
         {
-            string thermalColumn = context.GetColumnReference(ShipmentFields.ThermalType);
+            string thermalColumn = context.GetColumnReference(ShipmentFields.ActualLabelFormat);
 
             switch (format)
             {

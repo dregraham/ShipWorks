@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
             byte[] imageData;
-            if (shipment.ThermalType.HasValue)
+            if (shipment.ActualLabelFormat.HasValue)
             {
                 imageData = Encoding.ASCII.GetBytes(shipmentResponse.Label);
             }

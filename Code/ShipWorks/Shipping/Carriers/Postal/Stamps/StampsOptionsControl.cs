@@ -37,16 +37,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if(IsExpress1)
-            {
-                thermalPrinter.Checked = settings.Express1StampsThermal;
-                thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
-            }
-            else
-            {
-                thermalPrinter.Checked = settings.StampsThermal;
-                thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
-            }
+            //if(IsExpress1)
+            //{
+            //    thermalPrinter.Checked = settings.Express1StampsThermal;
+            //    thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
+            //}
+            //else
+            //{
+            //    thermalPrinter.Checked = settings.StampsThermal;
+            //    thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
+            //}
         }
 
         /// <summary>
@@ -63,16 +63,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if(IsExpress1)
-            {
-                settings.Express1StampsThermal = thermalPrinter.Checked;
-                settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
-            }
-            else
-            {
-                settings.StampsThermal = thermalPrinter.Checked;
-                settings.StampsThermalType = (int)thermalType.SelectedValue;    
-            }
+            //if(IsExpress1)
+            //{
+            //    settings.Express1StampsThermal = thermalPrinter.Checked;
+            //    settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
+            //}
+            //else
+            //{
+            //    settings.StampsThermal = thermalPrinter.Checked;
+            //    settings.StampsThermalType = (int)thermalType.SelectedValue;    
+            //}
         }
     }
 }

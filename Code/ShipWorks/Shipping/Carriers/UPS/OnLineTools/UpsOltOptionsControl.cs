@@ -33,10 +33,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         {
             EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            //ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            thermalPrinter.Checked = settings.UpsThermal;
-            thermalType.SelectedValue = (ThermalLanguage) settings.UpsThermalType;
+            //thermalPrinter.Checked = settings.UpsThermal;
+            //thermalType.SelectedValue = (ThermalLanguage) settings.UpsThermalType;
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            settings.UpsThermal = thermalPrinter.Checked;
-            settings.UpsThermalType = (int) thermalType.SelectedValue;
+            //settings.UpsThermal = thermalPrinter.Checked;
+            //settings.UpsThermalType = (int) thermalType.SelectedValue;
         }
     }
 }

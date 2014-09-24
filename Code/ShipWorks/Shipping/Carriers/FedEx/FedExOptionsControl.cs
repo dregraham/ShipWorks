@@ -39,8 +39,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             maskAccountNumber.Checked = settings.FedExMaskAccount;
 
-            thermalPrinter.Checked = settings.FedExThermal;
-            thermalType.SelectedValue = (ThermalLanguage) settings.FedExThermalType;
+            //thermalPrinter.Checked = settings.FedExThermal;
+            //thermalType.SelectedValue = (ThermalLanguage) settings.FedExThermalType;
 
             thermalDocTab.Checked = settings.FedExThermalDocTab;
             thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.FedExThermalDocTabType;
@@ -66,8 +66,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             settings.FedExMaskAccount = maskAccountNumber.Checked;
 
-            settings.FedExThermal = thermalPrinter.Checked;
-            settings.FedExThermalType = (int) thermalType.SelectedValue;
+            //settings.FedExThermal = thermalPrinter.Checked;
+            //settings.FedExThermalType = (int) thermalType.SelectedValue;
 
             settings.FedExThermalDocTab = thermalDocTab.Checked;
             settings.FedExThermalDocTabType = (int) thermalDocTabType.SelectedValue;

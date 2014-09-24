@@ -23,6 +23,7 @@ using ShipWorks.Data.Connection;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -71,12 +72,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("LabelSpecification");
 
             // Thermal
-            if (settings.UpsThermal)
+            if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
             {
-                shipment.ThermalType = settings.UpsThermalType;
+                shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
 
                 xmlWriter.WriteStartElement("LabelPrintMethod");
-                xmlWriter.WriteElementString("Code", settings.UpsThermalType == (int) ThermalLanguage.EPL ? "EPL" : "ZPL");
+                xmlWriter.WriteElementString("Code", shipment.RequestedLabelFormat == (int) ThermalLanguage.EPL ? "EPL" : "ZPL");
                 xmlWriter.WriteEndElement();
                 xmlWriter.WriteStartElement("LabelStockSize");
                 xmlWriter.WriteElementString("Height", "4");
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             // GIF
             else
             {
-                shipment.ThermalType = null;
+                shipment.ActualLabelFormat = null;
 
                 xmlWriter.WriteStartElement("LabelPrintMethod");
                 xmlWriter.WriteElementString("Code", "GIF");
@@ -763,9 +764,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("PrintsPerPage", "1");
 
             // Valid values are pdf,png,gif,zpl,star,epl2 and spl
-            if (shippingSettings.UpsThermal)
+            if (ups.Shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
             {
-                xmlWriter.WriteElementString("LabelPrintType", shippingSettings.UpsThermalType == (int) ThermalLanguage.EPL ? "EPL2" : "ZPL");
+                xmlWriter.WriteElementString("LabelPrintType", ups.Shipment.RequestedLabelFormat == (int) ThermalLanguage.EPL ? "EPL2" : "ZPL");
             }
             else
             {
@@ -1062,7 +1063,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 else
                 {
                     // Create all the images
-                    CreateLabelImages(packageNode, currentPackage, (ThermalLanguage?) shipment.ThermalType);
+                    CreateLabelImages(packageNode, currentPackage, (ThermalLanguage?) shipment.ActualLabelFormat);
                 }
 
                 // Next package

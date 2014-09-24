@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64)))
             {
                 // If not cropping, or if it is thermal, just save it as-is
-                if (!crop || shipment.ThermalType != null)
+                if (!crop || shipment.ActualLabelFormat != null)
                 {
                     DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name);
                 }
@@ -433,23 +433,23 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             request.Weight = shipment.TotalWeight;
 
             // locate and set the desired thermal type
-            ThermalLanguage? thermalType = settings.EquaShipThermal ? (ThermalLanguage) settings.EquaShipThermalType : (ThermalLanguage?) null;
+            ThermalLanguage thermalType = (ThermalLanguage)shipment.RequestedLabelFormat;
 
             // adjust thermal type based on service used?
 
             // update the shipment
-            shipment.ThermalType = (int?)thermalType;
+            shipment.ActualLabelFormat = (int)thermalType;
 
             // label 
-            if (shipment.ThermalType.HasValue)
-            {
-                // 1 for epl, 3 for zebra
-                request.LabelType = shipment.ThermalType.Value == (int)ThermalLanguage.EPL ? 1 : 3;
-            }
-            else
+            if (thermalType == ThermalLanguage.None)
             {
                 // request PNG
                 request.LabelType = 6;
+            }
+            else
+            {
+                // 1 for epl, 3 for zebra
+                request.LabelType = thermalType == ThermalLanguage.EPL ? 1 : 3;
             }
 
             // undocumented, required?
