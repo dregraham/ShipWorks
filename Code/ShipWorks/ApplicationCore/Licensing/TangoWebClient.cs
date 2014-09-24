@@ -28,6 +28,7 @@ using System.Reflection;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using System.Globalization;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -319,13 +320,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Postal balances for postal services.
         /// </summary>
-        public static void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        public static void LogPostageEvent(string tangoCustomerID, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            postRequest.Variables.Add("balance", balance.ToString());
-            postRequest.Variables.Add("purchaseAmount", purchaseAmount.ToString());
-            postRequest.Variables.Add("shipmentTypeCode", ((int) shipmentTypeCode).ToString());
+            postRequest.Variables.Add("action", "logpostagebalance");
+            postRequest.Variables.Add("custid", tangoCustomerID);
+            postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("purchaseAmount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("accountIdentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessRequest(postRequest, "CarrierBalance");

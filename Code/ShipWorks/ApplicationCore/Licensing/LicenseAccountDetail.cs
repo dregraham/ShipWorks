@@ -41,6 +41,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 		// If its deactivated (disabled), this is the reason why (for metered only)
 		string disabledReason = "";
 
+        private string tangoCustomerID;
+
         // State of the license
         LicenseActivationState licenseState = LicenseActivationState.Invalid;
 
@@ -73,6 +75,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 throw new ShipWorksLicenseException(error);
             }
 
+            tangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", string.Empty);
+
             // Key
             license = new ShipWorksLicense(XPathUtility.Evaluate(xpath, "//Key", ""));
 
@@ -89,7 +93,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 			disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
 
             // Valid
-            valid = XPathUtility.Evaluate(xpath, "//Valid", false);
+            valid = XPathUtility.Evaluate(xpath, "//Valid", false);            
 
             // State
             DetermineState(StoreTypeManager.GetType(store).LicenseIdentifier);
@@ -359,5 +363,13 @@ namespace ShipWorks.ApplicationCore.Licensing
 				return disabledReason;
 			}
 		}
+
+        /// <summary>
+        /// Gets the tango customer identifier associated with the license.
+        /// </summary>
+        public string TangoCustomerID
+        {
+            get { return tangoCustomerID; }
+        }
     }
 }

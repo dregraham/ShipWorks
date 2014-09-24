@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -73,7 +75,20 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
         {
-            TangoWebClient.LogPostageEvent(balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
+            // Grab all of the distinct Tango customer IDs of the active stores. This could take a couple of seconds 
+            // depending on the number of stores. May want to look into caching this information, but that could result
+            // in stale license data. Since customer's aren't buying postage all the time, the additonal overhead to ensure
+            // accuracy may not be that big of a deal.
+
+            // ToList() is called, so the LINQ is evaluated immediately
+            List<string> tangoCustomerIDs = StoreManager.GetEnabledStores()
+                                                               .Select(store => TangoWebClient.GetLicenseStatus(store.License, store))
+                                                               .Select(l => l.TangoCustomerID).ToList();
+
+            foreach (string customerID in tangoCustomerIDs.Distinct())
+            {
+                TangoWebClient.LogPostageEvent(customerID, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
+            }
         }
 
         /// <summary>
