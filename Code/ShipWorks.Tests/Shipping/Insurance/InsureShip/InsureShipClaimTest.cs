@@ -190,7 +190,8 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             // Make sure the test submission date is set to the time period between before the 
             // Submit method was invoked and when it finished
-            Assert.IsTrue(testBegin >= shipment.InsurancePolicy.SubmissionDate && shipment.InsurancePolicy.SubmissionDate <= testEnd);
+            Assert.IsTrue(testBegin >= shipment.InsurancePolicy.SubmissionDate);
+            Assert.IsTrue(shipment.InsurancePolicy.SubmissionDate <= testEnd);
         }
 
         [TestMethod]

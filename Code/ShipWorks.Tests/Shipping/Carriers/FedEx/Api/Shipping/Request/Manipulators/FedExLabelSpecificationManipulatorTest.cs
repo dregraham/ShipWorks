@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -28,7 +29,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Initialize()
         {
             shippingSettings = new ShippingSettingsEntity();
-            shippingSettings.FedExThermal = true;
             shippingSettings.FedExThermalDocTab = true;
             shippingSettings.FedExMaskAccount = true;
 
@@ -38,7 +38,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Initialize the shipment entity that we'll be testing with
             shipmentEntity = new ShipmentEntity()
             {
-                ThermalType = (int)ThermalLanguage.EPL,
+                RequestedLabelFormat = (int) ThermalLanguage.EPL,
+                ActualLabelFormat = (int)ThermalLanguage.EPL,
                 FedEx = new FedExShipmentEntity()
                 {
                     Shipment = new ShipmentEntity()
@@ -204,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ConfiguresShipmentEntityThermalLabel_WithZPL_WhenFexExThermalSettingIsTrueAndConfiguredWithZPL_Test()
         {
             // Setup
-            shipmentEntity.ActualLabelFormat = (int)ThermalLanguage.ZPL;
+            shipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.ZPL;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -216,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ThrowsInvalidOperationException_WhenUnknownThermalType_Test()
         {
             // Setup: set the thermal type to an invalid value
-            shipmentEntity.ActualLabelFormat = 3;
+            shipmentEntity.RequestedLabelFormat = 3;
 
             // Should throw the exception
             testObject.Manipulate(carrierRequest.Object);
@@ -272,7 +273,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SetsImageTypeToPng_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shippingSettings.FedExThermal = false;
+            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -284,7 +285,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_SetsPaper4x6StockLabel_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shippingSettings.FedExThermal = false;
+            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
