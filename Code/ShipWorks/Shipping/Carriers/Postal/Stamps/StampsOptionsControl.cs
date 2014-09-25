@@ -1,10 +1,5 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using System;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -19,8 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public StampsOptionsControl()
         {
             InitializeComponent();
-
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
 
         /// <summary>
@@ -37,9 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadSettings()
         {
-            labelFormat.SelectedValue = IsExpress1 ? 
-                ShippingProfileManager.GetLabelFormatFromDefaultProfile<Express1StampsShipmentType>() : 
-                ShippingProfileManager.GetLabelFormatFromDefaultProfile<StampsShipmentType>();
+            requestedLabelFormat.LoadSettings(IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType());
         }
 
         /// <summary>
@@ -47,14 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if (IsExpress1)
-            {
-                ShippingProfileManager.SaveLabelFormatToDefaultProfile<Express1StampsShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
-            }
-            else
-            {
-                ShippingProfileManager.SaveLabelFormatToDefaultProfile<StampsShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
-            }
+            requestedLabelFormat.SaveSettings();
         }
     }
 }

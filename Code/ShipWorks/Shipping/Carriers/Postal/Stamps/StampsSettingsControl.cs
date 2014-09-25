@@ -61,14 +61,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (isExpress1)
             {
                 express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom + 5;
+                panelBottom.Top = express1Options.Bottom;
             }
             else
             {
                 express1SettingsControl.LoadSettings(express1Settings);
-                express1SettingsControl.Top = optionsControl.Bottom + 5;
+                express1SettingsControl.Top = optionsControl.Bottom;
 
-                panelBottom.Top = express1SettingsControl.Bottom + 5;
+                panelBottom.Top = express1SettingsControl.Bottom + 4;
             }
         }
 
