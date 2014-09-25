@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using ShipWorks.UI;
@@ -108,9 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 try
                 {
-                    EndiciaAccountStatus accountInfo = (new EndiciaApiClient()).GetAccountStatus(account);
-
-                    result = accountInfo.PostageBalance.ToString("c");
+                    result = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
                 }
                 catch (EndiciaException ex)
                 {

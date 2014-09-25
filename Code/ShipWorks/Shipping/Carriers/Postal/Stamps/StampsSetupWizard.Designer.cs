@@ -80,7 +80,9 @@
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(374, 505);
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -92,7 +94,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOptions);
+            this.mainPanel.Controls.Add(this.wizardPageStampsAccount);
             this.mainPanel.Size = new System.Drawing.Size(542, 433);
             // 
             // etchBottom
@@ -213,7 +215,7 @@
             this.wizardPageExistingAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageExistingAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageExistingAccountCredentials.Name = "wizardPageExistingAccountCredentials";
-            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(542, 433);
+            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(542, 404);
             this.wizardPageExistingAccountCredentials.TabIndex = 0;
             this.wizardPageExistingAccountCredentials.Title = "Stamps.com Credentials";
             this.wizardPageExistingAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextExistingCredentials);
@@ -298,10 +300,9 @@
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.IsExpress1 = false;
             this.optionsControl.Location = new System.Drawing.Point(16, 5);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(435, 125);
+            this.optionsControl.Size = new System.Drawing.Size(435, 112);
             this.optionsControl.TabIndex = 0;
             // 
             // wizardPageAccountAddress
