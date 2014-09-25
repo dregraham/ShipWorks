@@ -61,7 +61,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnProfileLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile());
+            profileEditor.ShowDialog(this);
         }
 
         /// <summary>
