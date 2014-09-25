@@ -27,9 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExOptionsControl()
         {
             InitializeComponent();
-            labelFormat.SelectedValueChanged += OnUpdateThermalUI;
 
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
             EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
         }
 
@@ -42,23 +40,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             maskAccountNumber.Checked = settings.FedExMaskAccount;
 
-            labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<FedExShipmentType>();
+            requestedLabelFormat.LoadSettings(new FedExShipmentType());
 
             thermalDocTab.Checked = settings.FedExThermalDocTab;
             thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.FedExThermalDocTabType;
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            bool isThermal = ((ThermalLanguage?) labelFormat.SelectedValue).GetValueOrDefault(ThermalLanguage.None) != ThermalLanguage.None;
-
-            thermalDocTab.Enabled = isThermal;
-
-            labelThermalDocTabType.Enabled = isThermal && thermalDocTab.Checked;
-            thermalDocTabType.Enabled = isThermal && thermalDocTab.Checked;
         }
 
         /// <summary>
@@ -68,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             settings.FedExMaskAccount = maskAccountNumber.Checked;
 
-            ShippingProfileManager.SaveLabelFormatToDefaultProfile<FedExShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
+            requestedLabelFormat.SaveSettings();
 
             settings.FedExThermalDocTab = thermalDocTab.Checked;
             settings.FedExThermalDocTabType = (int) thermalDocTabType.SelectedValue;
