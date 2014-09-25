@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(20, 21);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(16, 21);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
             this.requestedLabelFormat.TabIndex = 58;
