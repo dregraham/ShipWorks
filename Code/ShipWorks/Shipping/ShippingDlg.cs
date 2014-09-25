@@ -2332,16 +2332,6 @@ namespace ShipWorks.Shipping
                     NudgeManager.ShowNudge(this, nudges.First());
                 }
             }
-
-            // If there is an Express1Endicia shipment in the list, check for ProcessExpress1Endicia nudges
-            if (shipmentTypeCodes.Contains(ShipmentTypeCode.Express1Endicia))
-            {
-                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessExpress1Endicia);
-                if (nudges.Any())
-                {
-                    NudgeManager.ShowNudge(this, nudges.First());
-                }
-            }
         }
 
         /// <summary>
