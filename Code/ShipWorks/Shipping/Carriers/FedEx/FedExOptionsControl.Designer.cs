@@ -40,7 +40,7 @@
             // 
             this.thermalDocTabType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.thermalDocTabType.FormattingEnabled = true;
-            this.thermalDocTabType.Location = new System.Drawing.Point(250, 92);
+            this.thermalDocTabType.Location = new System.Drawing.Point(250, 90);
             this.thermalDocTabType.Name = "thermalDocTabType";
             this.thermalDocTabType.Size = new System.Drawing.Size(149, 21);
             this.thermalDocTabType.TabIndex = 7;
@@ -48,7 +48,7 @@
             // labelThermalDocTabType
             // 
             this.labelThermalDocTabType.AutoSize = true;
-            this.labelThermalDocTabType.Location = new System.Drawing.Point(58, 95);
+            this.labelThermalDocTabType.Location = new System.Drawing.Point(58, 93);
             this.labelThermalDocTabType.Name = "labelThermalDocTabType";
             this.labelThermalDocTabType.Size = new System.Drawing.Size(192, 13);
             this.labelThermalDocTabType.TabIndex = 6;
@@ -57,7 +57,7 @@
             // thermalDocTab
             // 
             this.thermalDocTab.AutoSize = true;
-            this.thermalDocTab.Location = new System.Drawing.Point(40, 72);
+            this.thermalDocTab.Location = new System.Drawing.Point(40, 70);
             this.thermalDocTab.Name = "thermalDocTab";
             this.thermalDocTab.Size = new System.Drawing.Size(166, 17);
             this.thermalDocTab.TabIndex = 5;
@@ -77,7 +77,7 @@
             // maskAccountNumber
             // 
             this.maskAccountNumber.AutoSize = true;
-            this.maskAccountNumber.Location = new System.Drawing.Point(21, 24);
+            this.maskAccountNumber.Location = new System.Drawing.Point(21, 22);
             this.maskAccountNumber.Name = "maskAccountNumber";
             this.maskAccountNumber.Size = new System.Drawing.Size(207, 17);
             this.maskAccountNumber.TabIndex = 1;
@@ -89,7 +89,7 @@
             this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 45);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 43);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
             this.requestedLabelFormat.TabIndex = 59;
@@ -106,7 +106,7 @@
             this.Controls.Add(this.maskAccountNumber);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExOptionsControl";
-            this.Size = new System.Drawing.Size(409, 117);
+            this.Size = new System.Drawing.Size(409, 116);
             this.ResumeLayout(false);
             this.PerformLayout();
 

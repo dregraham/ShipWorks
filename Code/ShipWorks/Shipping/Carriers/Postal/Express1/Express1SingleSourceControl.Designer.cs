@@ -41,7 +41,7 @@
             singleSourceLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
             singleSourceLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             singleSourceLearnMore.ForeColor = System.Drawing.Color.Blue;
-            singleSourceLearnMore.Location = new System.Drawing.Point(345, 24);
+            singleSourceLearnMore.Location = new System.Drawing.Point(345, 23);
             singleSourceLearnMore.Name = "singleSourceLearnMore";
             singleSourceLearnMore.Size = new System.Drawing.Size(65, 13);
             singleSourceLearnMore.TabIndex = 9;
@@ -61,7 +61,7 @@
             // singleSourceCheckBox
             // 
             this.singleSourceCheckBox.AutoSize = true;
-            this.singleSourceCheckBox.Location = new System.Drawing.Point(23, 23);
+            this.singleSourceCheckBox.Location = new System.Drawing.Point(23, 22);
             this.singleSourceCheckBox.Name = "singleSourceCheckBox";
             this.singleSourceCheckBox.Size = new System.Drawing.Size(325, 17);
             this.singleSourceCheckBox.TabIndex = 8;

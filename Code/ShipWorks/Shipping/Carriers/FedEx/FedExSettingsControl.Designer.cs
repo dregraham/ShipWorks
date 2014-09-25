@@ -40,7 +40,7 @@
             // shippersControl
             // 
             this.shippersControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.shippersControl.Location = new System.Drawing.Point(27, 151);
+            this.shippersControl.Location = new System.Drawing.Point(27, 149);
             this.shippersControl.Name = "shippersControl";
             this.shippersControl.Size = new System.Drawing.Size(407, 168);
             this.shippersControl.TabIndex = 2;
@@ -57,7 +57,7 @@
             // 
             this.labelShippers.AutoSize = true;
             this.labelShippers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShippers.Location = new System.Drawing.Point(8, 130);
+            this.labelShippers.Location = new System.Drawing.Point(8, 128);
             this.labelShippers.Name = "labelShippers";
             this.labelShippers.Size = new System.Drawing.Size(95, 13);
             this.labelShippers.TabIndex = 1;
@@ -67,7 +67,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 333);
+            this.label1.Location = new System.Drawing.Point(8, 331);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 3;
@@ -78,7 +78,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(FedEx Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "FedEx Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 352);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 350);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 4;
@@ -87,7 +87,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 385);
+            this.pennyOne.Location = new System.Drawing.Point(27, 383);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 5;
@@ -100,7 +100,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(319, 386);
+            this.pennyOneLink.Location = new System.Drawing.Point(319, 384);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 6;
@@ -120,7 +120,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(445, 414);
+            this.Size = new System.Drawing.Size(445, 411);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             InitializeComponent();
             Reseller = reseller;
 
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
             EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
         }
 
@@ -69,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<Express1EndiciaShipmentType>();
+                        requestedLabelFormat.LoadSettings(new Express1EndiciaShipmentType());
 
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
@@ -83,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
-                        labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<EndiciaShipmentType>();
+                        requestedLabelFormat.LoadSettings(new EndiciaShipmentType());
 
                         customsCertify.Checked = settings.EndiciaCustomsCertify;
                         customsSigner.Text = settings.EndiciaCustomsSigner;
@@ -97,29 +96,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            bool isThermal = ((ThermalLanguage?)labelFormat.SelectedValue).GetValueOrDefault(ThermalLanguage.None) != ThermalLanguage.None;
-
-            thermalDocTab.Enabled = isThermal;
-
-            labelThermalDocTabType.Enabled = isThermal && thermalDocTab.Checked;
-            thermalDocTabType.Enabled = isThermal && thermalDocTab.Checked;
-        }
-
-        /// <summary>
         /// Save the settings to the database
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
+            requestedLabelFormat.SaveSettings();
+
             switch (Reseller)
             {
                 case EndiciaReseller.Express1:
                     {
-                        ShippingProfileManager.SaveLabelFormatToDefaultProfile<Express1EndiciaShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
-
                         settings.Express1EndiciaCustomsCertify = customsCertify.Checked;
                         settings.Express1EndiciaCustomsSigner = customsSigner.Text;
 
@@ -131,8 +117,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
-                        ShippingProfileManager.SaveLabelFormatToDefaultProfile<EndiciaShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
-
                         settings.EndiciaCustomsCertify = customsCertify.Checked;
                         settings.EndiciaCustomsSigner = customsSigner.Text;
 

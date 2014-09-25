@@ -34,5 +34,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 
             settings.Express1EndiciaSingleSource = singleSourceCheckBox.Checked;
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // singleSourceCheckBox
+            // 
+            this.singleSourceCheckBox.Location = new System.Drawing.Point(23, 22);
+            // 
+            // Express1EndiciaSingleSourceControl
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.Name = "Express1EndiciaSingleSourceControl";
+            this.Controls.SetChildIndex(this.singleSourceCheckBox, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
     }
 }
