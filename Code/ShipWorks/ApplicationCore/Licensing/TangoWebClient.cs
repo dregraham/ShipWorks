@@ -140,8 +140,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            postRequest.Variables.Add("action", "lognudgeresponse");            
-            postRequest.Variables.Add("nudgeOptionID", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("action", "lognudgeresponse");
+            postRequest.Variables.Add("nudgeid", option.Owner.NudgeID.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("nudgeoptionid", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("result", option.Result);
 
             ProcessRequest(postRequest, "LogNudgeOption");
