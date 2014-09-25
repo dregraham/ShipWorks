@@ -8,7 +8,6 @@ using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using System.Threading;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Common.IO.Hardware.Printers;
 
@@ -177,17 +176,15 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaThermalDocTab = false;
             settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
-            
-            settings.Express1StampsDomesticThermal = false;
-            settings.Express1StampsInternationalThermal = false;
+
+            settings.Express1StampsThermal = false;
             settings.Express1StampsThermalType = (int)ThermalLanguage.EPL;
             settings.Express1StampsSingleSource = false;
-            
+
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
-            settings.StampsDomesticThermal = false;
-            settings.StampsInternationalThermal = false;
+            settings.StampsThermal = false;
             settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;

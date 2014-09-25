@@ -41,12 +41,22 @@
             singleSourceLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
             singleSourceLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             singleSourceLearnMore.ForeColor = System.Drawing.Color.Blue;
-            singleSourceLearnMore.Location = new System.Drawing.Point(345, 24);
+            singleSourceLearnMore.Location = new System.Drawing.Point(342, 24);
             singleSourceLearnMore.Name = "singleSourceLearnMore";
             singleSourceLearnMore.Size = new System.Drawing.Size(65, 13);
             singleSourceLearnMore.TabIndex = 9;
             singleSourceLearnMore.Text = "(Learn how)";
             singleSourceLearnMore.Click += new System.EventHandler(this.OnSingleSourceLearnMore);
+            // 
+            // singleSourceCheckBox
+            // 
+            this.singleSourceCheckBox.AutoSize = true;
+            this.singleSourceCheckBox.Location = new System.Drawing.Point(20, 23);
+            this.singleSourceCheckBox.Name = "singleSourceCheckBox";
+            this.singleSourceCheckBox.Size = new System.Drawing.Size(325, 17);
+            this.singleSourceCheckBox.TabIndex = 8;
+            this.singleSourceCheckBox.Text = "My Express1 account supports shipping with all USPS services.";
+            this.singleSourceCheckBox.UseVisualStyleBackColor = true;
             // 
             // singleSourceLabel
             // 
@@ -57,16 +67,6 @@
             singleSourceLabel.Size = new System.Drawing.Size(110, 13);
             singleSourceLabel.TabIndex = 7;
             singleSourceLabel.Text = "Available Services";
-            // 
-            // singleSourceCheckBox
-            // 
-            this.singleSourceCheckBox.AutoSize = true;
-            this.singleSourceCheckBox.Location = new System.Drawing.Point(23, 23);
-            this.singleSourceCheckBox.Name = "singleSourceCheckBox";
-            this.singleSourceCheckBox.Size = new System.Drawing.Size(325, 17);
-            this.singleSourceCheckBox.TabIndex = 8;
-            this.singleSourceCheckBox.Text = "My Express1 account supports shipping with all USPS services.";
-            this.singleSourceCheckBox.UseVisualStyleBackColor = true;
             // 
             // Express1SingleSourceControl
             // 

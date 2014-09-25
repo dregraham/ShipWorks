@@ -685,6 +685,7 @@
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -699,6 +700,9 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1PromotionRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\IInsufficientFunds.cs" />
+    <Compile Include="Shipping\Carriers\Postal\IPostageWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepository.cs" />
@@ -7710,7 +7714,6 @@
     </None>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.4\3.4.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.8.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
@@ -10590,9 +10593,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
