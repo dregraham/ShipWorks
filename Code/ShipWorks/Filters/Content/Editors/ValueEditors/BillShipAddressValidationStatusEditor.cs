@@ -30,7 +30,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             equalityOperator.SelectedValue = condition.Operator;
 
             // Load the combo
-            addressValidationStatus.SelectStatuses(condition.StatusTypes.ToArray());
+            addressValidationStatus.SelectStatuses(condition.StatusTypes);
             addressValidationStatus.StatusChanged = () =>
             {
                 condition.StatusTypes = addressValidationStatus.GetSelectedStatuses();

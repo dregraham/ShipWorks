@@ -59,7 +59,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
                 {
                     Text = status.Key,
                     Location = new Point(3, verticlePosition),
-                    Width = 150
+                    AutoSize = true
                 }, status.Value);
 
                 checkboxAndStatusType.Item1.CheckedChanged += OnStatusCheckChanged;
@@ -68,6 +68,10 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
 
                 // Add checkbox to panel
                 statusPanel.Controls.Add(checkboxAndStatusType.Item1);
+                if (statusPanel.Width < checkboxAndStatusType.Item1.Width)
+                {
+                    statusPanel.Width = checkboxAndStatusType.Item1.Width;
+                }
             }
         }
 
@@ -170,7 +174,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void OnNotValidatedClicked(object sender, EventArgs e)
         {
-            SelectStatuses(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending, AddressValidationStatusType.WillNotValidate);
+            SelectStatuses(AddressSelector.NotValidated);
         }
 
         /// <summary>
@@ -178,7 +182,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void OnNeedsAttentionLabelClicked(object sender, EventArgs e)
         {
-            SelectStatuses(AddressValidationStatusType.HasSuggestions, AddressValidationStatusType.BadAddress, AddressValidationStatusType.Error, AddressValidationStatusType.WillNotValidate);
+            SelectStatuses(AddressSelector.AddressToLookAt);
         }
 
         /// <summary>
@@ -186,14 +190,14 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void OnReadyToGoLabelClicked(object sender, EventArgs e)
         {
-            SelectStatuses(AddressValidationStatusType.Valid, AddressValidationStatusType.SuggestionIgnored, AddressValidationStatusType.Fixed);
+            SelectStatuses(AddressSelector.ReadyToShip);
         }
 
         /// <summary>
         /// Selects the statuses specified and deselects the other statuses.
         /// </summary>
         /// <param name="addressValidationStatusTypes">The address validation status types to select.</param>
-        public void SelectStatuses(params AddressValidationStatusType[] addressValidationStatusTypes)
+        public void SelectStatuses(List<AddressValidationStatusType> addressValidationStatusTypes)
         {
             ignoreChanged = true;
 

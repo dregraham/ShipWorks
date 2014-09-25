@@ -243,8 +243,8 @@ namespace ShipWorks.Data.Administration
                                     cmd.ExecuteNonQuery();
                                 });
                             }
-
-                            if (installed < new Version(3, 9, 0, 5))
+                            // If we were upgrading from this version, add AddressValidation filters.
+                            if (installed < new Version(3, 11, 0, 0))
                             {
                                 AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);

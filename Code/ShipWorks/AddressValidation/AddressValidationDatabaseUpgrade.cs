@@ -20,20 +20,17 @@ namespace ShipWorks.AddressValidation
 
             FilterNodeEntity orderNode = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
 
-            FilterNodeEntity examplesNode = orderNode.ChildNodes.FirstOrDefault(filter => filter.Filter.Name == "Examples");
-            if (examplesNode == null)
-            {
-                examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), orderNode, orderNode.ChildNodes.Count)[0];
-            }
+            FilterNodeEntity examplesNode = orderNode.ChildNodes.FirstOrDefault(filter => filter.Filter.Name == "Examples") ?? 
+                FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), orderNode, orderNode.ChildNodes.Count)[0];
 
             FilterNodeEntity addressValidationNode =
                 FilterLayoutContext.Current.AddFilter(
                     FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode,
                     examplesNode.ChildNodes.Count, sqlAdapter)[0];
 
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Valid, AddressValidationStatusType.SuggestionIgnored, AddressValidationStatusType.Fixed)), addressValidationNode, 0, sqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Address to Look at", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.HasSuggestions, AddressValidationStatusType.BadAddress, AddressValidationStatusType.WillNotValidate)), addressValidationNode, 0, sqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressValidationStatusType.Error, AddressValidationStatusType.NotChecked, AddressValidationStatusType.Pending, AddressValidationStatusType.WillNotValidate)), addressValidationNode, 0, sqlAdapter);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0, sqlAdapter);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Needs Attention", FilterHelper.CreateAddressValidationDefinition(AddressSelector.AddressToLookAt)), addressValidationNode, 0, sqlAdapter);            
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0, sqlAdapter);
         }
     }
 }

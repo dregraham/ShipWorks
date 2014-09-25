@@ -40,7 +40,7 @@ namespace ShipWorks.AddressValidation
 
         [Description("Suggestion Selected")]
         [ImageResource("check16")]
-        SuggestedSelected = 7,
+        SuggestionSelected = 7,
 
         [Description("Error")]
         [ImageResource("error16")]

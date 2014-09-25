@@ -623,7 +623,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Creates fitler for address validation statuses.
         /// </summary>
-        public static FilterDefinition CreateAddressValidationDefinition(params AddressValidationStatusType[] statusesToInclude)
+        public static FilterDefinition CreateAddressValidationDefinition(IEnumerable<AddressValidationStatusType> statusesToInclude)
         {
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
 

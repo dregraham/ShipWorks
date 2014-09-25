@@ -11,6 +11,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.AddressValidation
 {
@@ -31,9 +32,63 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public event EventHandler AddressSelecting;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddressSelector"/> class.
+        /// </summary>
         public AddressSelector(string addressPrefix)
         {
             this.addressPrefix = addressPrefix;
+        }
+
+        /// <summary>
+        /// Gets the ready to ship status types
+        /// </summary>
+        public static List<AddressValidationStatusType> ReadyToShip
+        {
+            get
+            {
+                return new List<AddressValidationStatusType>()
+                {
+                    AddressValidationStatusType.Valid,
+                    AddressValidationStatusType.SuggestionIgnored,
+                    AddressValidationStatusType.Fixed,
+                    AddressValidationStatusType.SuggestionSelected
+                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the address to look at statuses
+        /// </summary>
+        public static List<AddressValidationStatusType> AddressToLookAt
+        {
+            get
+            {
+                return new List<AddressValidationStatusType>()
+                {
+                    AddressValidationStatusType.Error, 
+                    AddressValidationStatusType.HasSuggestions, 
+                    AddressValidationStatusType.BadAddress, 
+                    AddressValidationStatusType.WillNotValidate
+                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the not validated statuses
+        /// </summary>
+        public static List<AddressValidationStatusType> NotValidated
+        {
+            get
+            {
+                return new List<AddressValidationStatusType>()
+                {
+                    AddressValidationStatusType.Error, 
+                    AddressValidationStatusType.NotChecked, 
+                    AddressValidationStatusType.Pending, 
+                    AddressValidationStatusType.WillNotValidate
+                };
+            }
         }
 
         /// <summary>
@@ -63,7 +118,7 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.Fixed:
                 case AddressValidationStatusType.HasSuggestions:
                 case AddressValidationStatusType.SuggestionIgnored:
-                case AddressValidationStatusType.SuggestedSelected:
+                case AddressValidationStatusType.SuggestionSelected:
                     return addressAdapter.AddressValidationSuggestionCount > 0;
                 case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
@@ -94,7 +149,7 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.Fixed:
                 case AddressValidationStatusType.HasSuggestions:
                 case AddressValidationStatusType.SuggestionIgnored:
-                case AddressValidationStatusType.SuggestedSelected:
+                case AddressValidationStatusType.SuggestionSelected:
                     return string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
                 case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
@@ -197,7 +252,7 @@ namespace ShipWorks.AddressValidation
 
             entityAdapter.AddressValidationStatus = validatedAddressEntity.IsOriginal ?
                 (int)AddressValidationStatusType.SuggestionIgnored :
-                (int)AddressValidationStatusType.SuggestedSelected;
+                (int)AddressValidationStatusType.SuggestionSelected;
 
             OnAddressSelected(entityAdapter, originalAddress);
         }
