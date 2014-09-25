@@ -14,11 +14,30 @@ namespace ShipWorks.Shipping.Editing
     {
         private ShipmentType shipmentType;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RequestedLabelFormatOptionControl()
         {
             InitializeComponent();
 
             SetSettingsMovedMessageLocation();
+        }
+
+        /// <summary>
+        /// Remove the specified formats from the list of options
+        /// </summary>
+        public void RemoveFormats(params ThermalLanguage[] formats)
+        {
+            if (formats == null)
+            {
+                return;
+            }
+
+            foreach (ThermalLanguage format in formats)
+            {
+                labelFormat.Items.Remove(formats);
+            }
         }
 
         /// <summary>
