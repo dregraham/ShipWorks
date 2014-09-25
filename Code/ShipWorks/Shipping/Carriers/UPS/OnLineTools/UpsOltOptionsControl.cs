@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
+﻿using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -25,8 +14,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltOptionsControl()
         {
             InitializeComponent();
-
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
 
         /// <summary>
@@ -34,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<UpsOltShipmentType>();
+            requestedLabelFormat.LoadSettings(new UpsOltShipmentType());
         }
 
         /// <summary>
@@ -42,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            ShippingProfileManager.SaveLabelFormatToDefaultProfile<UpsOltShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
+            requestedLabelFormat.SaveSettings();
         }
     }
 }

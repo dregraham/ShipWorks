@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
+﻿using ShipWorks.Shipping.Editing;
+
+namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
     partial class UpsOltOptionsControl
     {
@@ -29,9 +31,8 @@
         private void InitializeComponent()
         {
             this.labelLabels = new System.Windows.Forms.Label();
-            this.infotipLabelType = new ShipWorks.UI.Controls.InfoTip();
-            this.labelFormat = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
+            this.reqestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
             this.SuspendLayout();
             // 
             // labelLabels
@@ -44,44 +45,33 @@
             this.labelLabels.TabIndex = 39;
             this.labelLabels.Text = "Labels";
             // 
-            // infotipLabelType
+            // requestedLabelFormat
             // 
-            this.infotipLabelType.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infotipLabelType.Location = new System.Drawing.Point(267, 25);
-            this.infotipLabelType.Name = "infotipLabelType";
-            this.infotipLabelType.Size = new System.Drawing.Size(12, 12);
-            this.infotipLabelType.TabIndex = 44;
-            this.infotipLabelType.Title = "Printer Type";
+            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(20, 21);
+            this.requestedLabelFormat.Name = "requestedLabelFormat";
+            this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
+            this.requestedLabelFormat.TabIndex = 58;
             // 
-            // labelFormat
+            // reqestedLabelFormat
             // 
-            this.labelFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.labelFormat.FormattingEnabled = true;
-            this.labelFormat.Location = new System.Drawing.Point(146, 21);
-            this.labelFormat.Name = "labelFormat";
-            this.labelFormat.Size = new System.Drawing.Size(115, 21);
-            this.labelFormat.TabIndex = 57;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(123, 13);
-            this.label1.TabIndex = 56;
-            this.label1.Text = "Requested label format:";
+            this.reqestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.reqestedLabelFormat.Location = new System.Drawing.Point(0, 0);
+            this.reqestedLabelFormat.Name = "reqestedLabelFormat";
+            this.reqestedLabelFormat.Size = new System.Drawing.Size(115, 21);
+            this.reqestedLabelFormat.TabIndex = 57;
             // 
             // UpsOltOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelFormat);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.infotipLabelType);
             this.Controls.Add(this.labelLabels);
+            this.Controls.Add(this.requestedLabelFormat);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsOltOptionsControl";
-            this.Size = new System.Drawing.Size(287, 56);
+            this.Size = new System.Drawing.Size(363, 50);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -90,8 +80,7 @@
         #endregion
 
         private System.Windows.Forms.Label labelLabels;
-        private UI.Controls.InfoTip infotipLabelType;
-        private System.Windows.Forms.ComboBox labelFormat;
-        private System.Windows.Forms.Label label1;
+        private RequestedLabelFormatOptionControl reqestedLabelFormat;
+        private RequestedLabelFormatOptionControl requestedLabelFormat;
     }
 }
