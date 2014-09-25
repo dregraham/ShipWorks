@@ -1,8 +1,5 @@
 ﻿using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -17,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public OnTracOptionsControl()
         {
             InitializeComponent();
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
         
         /// <summary>
@@ -25,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void LoadSettings()
         {
-            labelFormat.SelectedValue = ShippingProfileManager.GetLabelFormatFromDefaultProfile<OnTracShipmentType>();
+            requestedLabelFormat.LoadSettings(new OnTracShipmentType());
         }
 
         /// <summary>
@@ -33,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            ShippingProfileManager.SaveLabelFormatToDefaultProfile<OnTracShipmentType>((ThermalLanguage)labelFormat.SelectedValue);
+            requestedLabelFormat.SaveSettings();
         }
     }
 }

@@ -7259,9 +7259,6 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaServiceControl.resx">
       <DependentUpon>Express1EndiciaServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaSingleSourceControl.resx">
-      <DependentUpon>Express1EndiciaSingleSourceControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\AutomaticExpress1ControlBase.resx">
       <DependentUpon>AutomaticExpress1ControlBase.cs</DependentUpon>
     </EmbeddedResource>

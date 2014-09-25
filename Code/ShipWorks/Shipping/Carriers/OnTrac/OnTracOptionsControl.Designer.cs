@@ -29,40 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.infotipLabelType = new ShipWorks.UI.Controls.InfoTip();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.labelFormat = new System.Windows.Forms.ComboBox();
-            this.labelThermalType = new System.Windows.Forms.Label();
             this.labelLabels = new System.Windows.Forms.Label();
+            this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
-            // 
-            // infotipLabelType
-            // 
-            this.infotipLabelType.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infotipLabelType.Location = new System.Drawing.Point(271, 26);
-            this.infotipLabelType.Name = "infotipLabelType";
-            this.infotipLabelType.Size = new System.Drawing.Size(12, 12);
-            this.infotipLabelType.TabIndex = 52;
-            this.infotipLabelType.Title = "Printer Type";
-            // 
-            // labelFormat
-            // 
-            this.labelFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.labelFormat.FormattingEnabled = true;
-            this.labelFormat.Location = new System.Drawing.Point(150, 22);
-            this.labelFormat.Name = "labelFormat";
-            this.labelFormat.Size = new System.Drawing.Size(115, 21);
-            this.labelFormat.TabIndex = 51;
-            // 
-            // labelThermalType
-            // 
-            this.labelThermalType.AutoSize = true;
-            this.labelThermalType.Location = new System.Drawing.Point(21, 25);
-            this.labelThermalType.Name = "labelThermalType";
-            this.labelThermalType.Size = new System.Drawing.Size(123, 13);
-            this.labelThermalType.TabIndex = 50;
-            this.labelThermalType.Text = "Requested label format:";
             // 
             // labelLabels
             // 
@@ -74,17 +45,25 @@
             this.labelLabels.TabIndex = 48;
             this.labelLabels.Text = "Labels";
             // 
+            // requestedLabelFormat
+            // 
+            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 23);
+            this.requestedLabelFormat.Name = "requestedLabelFormat";
+            this.requestedLabelFormat.Size = new System.Drawing.Size(341, 25);
+            this.requestedLabelFormat.TabIndex = 60;
+            // 
             // OnTracOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.infotipLabelType);
-            this.Controls.Add(this.labelFormat);
-            this.Controls.Add(this.labelThermalType);
+            this.Controls.Add(this.requestedLabelFormat);
             this.Controls.Add(this.labelLabels);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OnTracOptionsControl";
-            this.Size = new System.Drawing.Size(331, 56);
+            this.Size = new System.Drawing.Size(363, 49);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -93,10 +72,8 @@
 
         #endregion
 
-        private UI.Controls.InfoTip infotipLabelType;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private System.Windows.Forms.ComboBox labelFormat;
-        private System.Windows.Forms.Label labelThermalType;
         private System.Windows.Forms.Label labelLabels;
+        private Editing.RequestedLabelFormatOptionControl requestedLabelFormat;
     }
 }

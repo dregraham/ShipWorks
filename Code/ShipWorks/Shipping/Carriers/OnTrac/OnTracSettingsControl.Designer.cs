@@ -41,7 +41,7 @@
             // 
             this.managerLabel.AutoSize = true;
             this.managerLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managerLabel.Location = new System.Drawing.Point(3, 77);
+            this.managerLabel.Location = new System.Drawing.Point(9, 60);
             this.managerLabel.Name = "managerLabel";
             this.managerLabel.Size = new System.Drawing.Size(102, 13);
             this.managerLabel.TabIndex = 2;
@@ -50,7 +50,7 @@
             // accountManager
             // 
             this.accountManager.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountManager.Location = new System.Drawing.Point(26, 98);
+            this.accountManager.Location = new System.Drawing.Point(27, 81);
             this.accountManager.Name = "accountManager";
             this.accountManager.Size = new System.Drawing.Size(407, 168);
             this.accountManager.TabIndex = 1;
@@ -60,7 +60,7 @@
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(6, 3);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(349, 75);
+            this.optionsControl.Size = new System.Drawing.Size(428, 54);
             this.optionsControl.TabIndex = 0;
             // 
             // pennyOneLink
@@ -69,7 +69,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(322, 334);
+            this.pennyOneLink.Location = new System.Drawing.Point(321, 314);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 10;
@@ -79,7 +79,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(28, 334);
+            this.pennyOne.Location = new System.Drawing.Point(27, 315);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 9;
@@ -90,7 +90,7 @@
             // 
             this.labelShipmentProtection.AutoSize = true;
             this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipmentProtection.Location = new System.Drawing.Point(3, 283);
+            this.labelShipmentProtection.Location = new System.Drawing.Point(8, 263);
             this.labelShipmentProtection.Name = "labelShipmentProtection";
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
             this.labelShipmentProtection.TabIndex = 12;
@@ -101,7 +101,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(OnTrac Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "OnTrac Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 301);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 282);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 13;
@@ -118,7 +118,7 @@
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.optionsControl);
             this.Name = "OnTracSettingsControl";
-            this.Size = new System.Drawing.Size(456, 355);
+            this.Size = new System.Drawing.Size(456, 339);
             this.ResumeLayout(false);
             this.PerformLayout();
 

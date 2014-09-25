@@ -35,8 +35,8 @@
             // labelOriginInfo
             // 
             this.labelOriginInfo.AutoSize = true;
-            this.labelOriginInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelOriginInfo.Location = new System.Drawing.Point(9, 4);
+            this.labelOriginInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelOriginInfo.Location = new System.Drawing.Point(8, 5);
             this.labelOriginInfo.Name = "labelOriginInfo";
             this.labelOriginInfo.Size = new System.Drawing.Size(102, 13);
             this.labelOriginInfo.TabIndex = 0;
@@ -44,8 +44,8 @@
             // 
             // originManagerControl
             // 
-            this.originManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.originManagerControl.Location = new System.Drawing.Point(12, 23);
+            this.originManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originManagerControl.Location = new System.Drawing.Point(27, 26);
             this.originManagerControl.Name = "originManagerControl";
             this.originManagerControl.Size = new System.Drawing.Size(452, 150);
             this.originManagerControl.TabIndex = 1;
