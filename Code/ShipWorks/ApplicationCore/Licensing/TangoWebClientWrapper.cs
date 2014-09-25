@@ -78,10 +78,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
             // depending on the number of stores. May want to look into caching this information, but that could result
-            // in stale license data. Since customer's aren't buying postage all the time, the additonal overhead to ensure
+            // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
             // accuracy may not be that big of a deal.
-            List<StoreEntity> stores = StoreManager.GetEnabledStores();
-            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store));
+            List<StoreEntity> stores = StoreManager.GetAllStores();
+            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
 
             // We only need to send up one license for each distinct customer ID
             IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
