@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
 		// If its deactivated (disabled), this is the reason why (for metered only)
 		string disabledReason = "";
-
+        
         // State of the license
         LicenseActivationState licenseState = LicenseActivationState.Invalid;
 
@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new ShipWorksLicenseException(error);
             }
-
+            
             // Key
             license = new ShipWorksLicense(XPathUtility.Evaluate(xpath, "//Key", ""));
 
@@ -89,7 +89,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 			disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
 
             // Valid
-            valid = XPathUtility.Evaluate(xpath, "//Valid", false);
+            valid = XPathUtility.Evaluate(xpath, "//Valid", false);            
 
             // State
             DetermineState(StoreTypeManager.GetType(store).LicenseIdentifier);

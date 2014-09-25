@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using System.Linq;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -68,7 +70,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             TangoWebClient.SendAccountUsername(email, username);
         }
-        
+
+        /// <summary>
+        /// Sends Postal balances for postal services.
+        /// </summary>
+        public virtual void LogPostageEvent(decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        {
+            // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
+            // depending on the number of stores. May want to look into caching this information, but that could result
+            // in stale license data. Since customers aren't buying postage all the time, the additonal overhead to ensure
+            // accuracy may not be that big of a deal.
+            List<StoreEntity> stores = StoreManager.GetAllStores();
+            IEnumerable<LicenseAccountDetail> licenses = stores.Select(store => TangoWebClient.GetLicenseStatus(store.License, store)).Where(l => l.Active);
+
+            // We only need to send up one license for each distinct customer ID
+            IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
+            foreach (LicenseAccountDetail license in licensesForLogging)
+            {
+                TangoWebClient.LogPostageEvent(license, balance, purchaseAmount, shipmentTypeCode, accountIdentifier);
+            }
+        }
+
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
