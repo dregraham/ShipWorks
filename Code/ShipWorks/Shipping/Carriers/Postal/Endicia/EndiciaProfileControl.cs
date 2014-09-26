@@ -74,6 +74,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
             AddValueMapping(profile.Postal, PostalProfileFields.EntryFacility, stateEntryFacility, entryFacility, labelEntryFacility);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
         }
 
         /// <summary>

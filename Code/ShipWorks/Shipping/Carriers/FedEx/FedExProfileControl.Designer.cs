@@ -179,7 +179,7 @@
             this.labelInsureWith = new System.Windows.Forms.Label();
             this.kryptonBorderEdge7 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.labelsGroupBox = new System.Windows.Forms.GroupBox();
+            this.groupLabels = new System.Windows.Forms.GroupBox();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
             this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge11 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -198,7 +198,7 @@
             this.tabPagePackages.SuspendLayout();
             this.groupBoxPackages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            this.labelsGroupBox.SuspendLayout();
+            this.groupLabels.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxFrom
@@ -580,7 +580,7 @@
             // tabPageSettings
             // 
             this.tabPageSettings.AutoScroll = true;
-            this.tabPageSettings.Controls.Add(this.labelsGroupBox);
+            this.tabPageSettings.Controls.Add(this.groupLabels);
             this.tabPageSettings.Controls.Add(this.groupReturns);
             this.tabPageSettings.Controls.Add(this.groupInsurance);
             this.tabPageSettings.Controls.Add(this.groupSmartPost);
@@ -1858,17 +1858,17 @@
             this.kryptonBorderEdge7.Size = new System.Drawing.Size(1, 31);
             this.kryptonBorderEdge7.Text = "kryptonBorderEdge7";
             // 
-            // labelsGroupBox
+            // groupLabels
             // 
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormat);
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormatState);
-            this.labelsGroupBox.Controls.Add(this.kryptonBorderEdge11);
-            this.labelsGroupBox.Location = new System.Drawing.Point(6, 296);
-            this.labelsGroupBox.Name = "labelsGroupBox";
-            this.labelsGroupBox.Size = new System.Drawing.Size(377, 58);
-            this.labelsGroupBox.TabIndex = 13;
-            this.labelsGroupBox.TabStop = false;
-            this.labelsGroupBox.Text = "Labels";
+            this.groupLabels.Controls.Add(this.requestedLabelFormat);
+            this.groupLabels.Controls.Add(this.requestedLabelFormatState);
+            this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
+            this.groupLabels.Location = new System.Drawing.Point(6, 296);
+            this.groupLabels.Name = "groupLabels";
+            this.groupLabels.Size = new System.Drawing.Size(377, 58);
+            this.groupLabels.TabIndex = 13;
+            this.groupLabels.TabStop = false;
+            this.groupLabels.Text = "Labels";
             // 
             // requestedLabelFormat
             // 
@@ -1931,8 +1931,8 @@
             this.groupBoxPackages.ResumeLayout(false);
             this.groupBoxPackages.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            this.labelsGroupBox.ResumeLayout(false);
-            this.labelsGroupBox.PerformLayout();
+            this.groupLabels.ResumeLayout(false);
+            this.groupLabels.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2084,7 +2084,7 @@
         private System.Windows.Forms.CheckBox referenceShipmentIntegrityState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
-        private System.Windows.Forms.GroupBox labelsGroupBox;
+        private System.Windows.Forms.GroupBox groupLabels;
         private Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
         private System.Windows.Forms.CheckBox requestedLabelFormatState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;

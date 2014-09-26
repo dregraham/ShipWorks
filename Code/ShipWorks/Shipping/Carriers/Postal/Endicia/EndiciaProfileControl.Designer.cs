@@ -69,6 +69,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.stateSortType = new System.Windows.Forms.CheckBox();
             this.scanBasedPayment = new System.Windows.Forms.CheckBox();
             this.scanBasedPaymentState = new System.Windows.Forms.CheckBox();
+            this.groupLabels = new System.Windows.Forms.GroupBox();
+            this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
+            this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
+            this.kryptonBorderEdge11 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.groupBoxCustoms.SuspendLayout();
@@ -76,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupReturns.SuspendLayout();
             this.groupInsurance.SuspendLayout();
             this.groupExpressMail.SuspendLayout();
-            this.labelsGroupBox.SuspendLayout();
+            this.groupLabels.SuspendLayout();
             this.groupBoxRubberStamps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.groupParcelSelect.SuspendLayout();
@@ -142,6 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.tabPage.Controls.Add(this.groupBoxRubberStamps);
             this.tabPage.Controls.Add(this.groupParcelSelect);
+            this.tabPage.Controls.Add(this.groupLabels);
             this.tabPage.Size = new System.Drawing.Size(431, 957);
             this.tabPage.Controls.SetChildIndex(this.groupParcelSelect, 0);
             this.tabPage.Controls.SetChildIndex(this.groupReturns, 0);
@@ -149,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.tabPage.Controls.SetChildIndex(this.groupBoxRubberStamps, 0);
             this.tabPage.Controls.SetChildIndex(this.groupBoxCustoms, 0);
             this.tabPage.Controls.SetChildIndex(this.groupInsurance, 0);
-            this.tabPage.Controls.SetChildIndex(this.labelsGroupBox, 0);
+            this.tabPage.Controls.SetChildIndex(this.groupLabels, 0);
             this.tabPage.Controls.SetChildIndex(this.groupShipment, 0);
             this.tabPage.Controls.SetChildIndex(this.groupBoxFrom, 0);
             // 
@@ -170,13 +175,48 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.groupExpressMail.Location = new System.Drawing.Point(8, 761);
             // 
-            // labelsGroupBox
+            // groupLabels
             // 
-            this.labelsGroupBox.Location = new System.Drawing.Point(8, 364);
-            this.labelsGroupBox.Size = new System.Drawing.Size(411, 58);
-            this.labelsGroupBox.Controls.SetChildIndex(this.kryptonBorderEdge11, 0);
-            this.labelsGroupBox.Controls.SetChildIndex(this.requestedLabelFormatState, 0);
-            this.labelsGroupBox.Controls.SetChildIndex(this.requestedLabelFormat, 0);
+            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupLabels.Controls.Add(this.requestedLabelFormat);
+            this.groupLabels.Controls.Add(this.requestedLabelFormatState);
+            this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
+            this.groupLabels.Name = "groupLabels";
+            this.groupLabels.Location = new System.Drawing.Point(8, 364);
+            this.groupLabels.Size = new System.Drawing.Size(411, 58);
+            this.groupLabels.TabIndex = 13;
+            this.groupLabels.TabStop = false;
+            this.groupLabels.Text = "Labels";
+            // 
+            // requestedLabelFormat
+            // 
+            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(35, 22);
+            this.requestedLabelFormat.Name = "requestedLabelFormat";
+            this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
+            this.requestedLabelFormat.State = false;
+            this.requestedLabelFormat.TabIndex = 101;
+            // 
+            // requestedLabelFormatState
+            // 
+            this.requestedLabelFormatState.AutoSize = true;
+            this.requestedLabelFormatState.Location = new System.Drawing.Point(9, 25);
+            this.requestedLabelFormatState.Name = "requestedLabelFormatState";
+            this.requestedLabelFormatState.Size = new System.Drawing.Size(15, 14);
+            this.requestedLabelFormatState.TabIndex = 0;
+            this.requestedLabelFormatState.UseVisualStyleBackColor = true;
+            // 
+            // kryptonBorderEdge11
+            // 
+            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.kryptonBorderEdge11.AutoSize = false;
+            this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
+            this.kryptonBorderEdge11.Location = new System.Drawing.Point(29, 17);
+            this.kryptonBorderEdge11.Name = "kryptonBorderEdge11";
+            this.kryptonBorderEdge11.Size = new System.Drawing.Size(1, 24);
+            this.kryptonBorderEdge11.Text = "kryptonBorderEdge11";
             // 
             // labelAccount
             // 
@@ -556,8 +596,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.groupInsurance.PerformLayout();
             this.groupExpressMail.ResumeLayout(false);
             this.groupExpressMail.PerformLayout();
-            this.labelsGroupBox.ResumeLayout(false);
-            this.labelsGroupBox.PerformLayout();
+            this.groupLabels.ResumeLayout(false);
+            this.groupLabels.PerformLayout();
             this.groupBoxRubberStamps.ResumeLayout(false);
             this.groupBoxRubberStamps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
@@ -605,5 +645,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private System.Windows.Forms.CheckBox scanBasedPaymentState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge31;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge6;
+
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;
+        protected System.Windows.Forms.GroupBox groupLabels;
+        protected ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
+        protected System.Windows.Forms.CheckBox requestedLabelFormatState;
     }
 }

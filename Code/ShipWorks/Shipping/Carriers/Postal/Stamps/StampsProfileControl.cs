@@ -43,6 +43,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             AddValueMapping(stampsProfile, StampsProfileFields.HidePostage, stateStealth, hidePostage, labelStealth);
             AddValueMapping(stampsProfile, StampsProfileFields.RequireFullAddressValidation, validationState, requireFullAddressValidation, labelValidation);
             AddValueMapping(stampsProfile, StampsProfileFields.Memo, stateMemo, memo, labelMemo);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
         }
         
         /// <summary>

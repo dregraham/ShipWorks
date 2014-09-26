@@ -75,10 +75,6 @@
             this.confirmationState = new System.Windows.Forms.CheckBox();
             this.serviceState = new System.Windows.Forms.CheckBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.labelsGroupBox = new System.Windows.Forms.GroupBox();
-            this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
-            this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
-            this.kryptonBorderEdge11 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.tabControl.SuspendLayout();
             this.tabPage.SuspendLayout();
             this.groupExpressMail.SuspendLayout();
@@ -88,7 +84,6 @@
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            this.labelsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -104,7 +99,6 @@
             // tabPage
             // 
             this.tabPage.AutoScroll = true;
-            this.tabPage.Controls.Add(this.labelsGroupBox);
             this.tabPage.Controls.Add(this.groupExpressMail);
             this.tabPage.Controls.Add(this.groupReturns);
             this.tabPage.Controls.Add(this.groupInsurance);
@@ -126,7 +120,7 @@
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirement);
             this.groupExpressMail.Controls.Add(this.expressSignatureRequirementState);
             this.groupExpressMail.Controls.Add(this.kryptonBorderEdge5);
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 505);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 441);
             this.groupExpressMail.Name = "groupExpressMail";
             this.groupExpressMail.Size = new System.Drawing.Size(417, 53);
             this.groupExpressMail.TabIndex = 9;
@@ -170,7 +164,7 @@
             this.groupReturns.Controls.Add(this.returnShipment);
             this.groupReturns.Controls.Add(this.returnState);
             this.groupReturns.Controls.Add(this.kryptonBorderEdge3);
-            this.groupReturns.Location = new System.Drawing.Point(8, 565);
+            this.groupReturns.Location = new System.Drawing.Point(8, 501);
             this.groupReturns.Name = "groupReturns";
             this.groupReturns.Size = new System.Drawing.Size(417, 53);
             this.groupReturns.TabIndex = 8;
@@ -214,7 +208,7 @@
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge4);
-            this.groupInsurance.Location = new System.Drawing.Point(8, 356);
+            this.groupInsurance.Location = new System.Drawing.Point(8, 292);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(417, 82);
             this.groupInsurance.TabIndex = 7;
@@ -258,7 +252,7 @@
             this.groupBoxCustoms.Controls.Add(this.labelContent);
             this.groupBoxCustoms.Controls.Add(this.kryptonBorderEdge2);
             this.groupBoxCustoms.Controls.Add(this.customsContentState);
-            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 444);
+            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 380);
             this.groupBoxCustoms.Name = "groupBoxCustoms";
             this.groupBoxCustoms.Size = new System.Drawing.Size(417, 54);
             this.groupBoxCustoms.TabIndex = 2;
@@ -611,49 +605,6 @@
             this.serviceState.Tag = "";
             this.serviceState.UseVisualStyleBackColor = true;
             // 
-            // labelsGroupBox
-            // 
-            this.labelsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormat);
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormatState);
-            this.labelsGroupBox.Controls.Add(this.kryptonBorderEdge11);
-            this.labelsGroupBox.Location = new System.Drawing.Point(8, 292);
-            this.labelsGroupBox.Name = "labelsGroupBox";
-            this.labelsGroupBox.Size = new System.Drawing.Size(417, 58);
-            this.labelsGroupBox.TabIndex = 13;
-            this.labelsGroupBox.TabStop = false;
-            this.labelsGroupBox.Text = "Labels";
-            // 
-            // requestedLabelFormat
-            // 
-            this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(35, 22);
-            this.requestedLabelFormat.Name = "requestedLabelFormat";
-            this.requestedLabelFormat.Size = new System.Drawing.Size(267, 21);
-            this.requestedLabelFormat.State = false;
-            this.requestedLabelFormat.TabIndex = 101;
-            // 
-            // requestedLabelFormatState
-            // 
-            this.requestedLabelFormatState.AutoSize = true;
-            this.requestedLabelFormatState.Location = new System.Drawing.Point(9, 25);
-            this.requestedLabelFormatState.Name = "requestedLabelFormatState";
-            this.requestedLabelFormatState.Size = new System.Drawing.Size(15, 14);
-            this.requestedLabelFormatState.TabIndex = 0;
-            this.requestedLabelFormatState.UseVisualStyleBackColor = true;
-            // 
-            // kryptonBorderEdge11
-            // 
-            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.kryptonBorderEdge11.AutoSize = false;
-            this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge11.Location = new System.Drawing.Point(29, 20);
-            this.kryptonBorderEdge11.Name = "kryptonBorderEdge10";
-            this.kryptonBorderEdge11.Size = new System.Drawing.Size(1, 28);
-            this.kryptonBorderEdge11.Text = "kryptonBorderEdge1";
-            // 
             // PostalProfileControlBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -676,8 +627,6 @@
             this.groupShipment.ResumeLayout(false);
             this.groupShipment.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            this.labelsGroupBox.ResumeLayout(false);
-            this.labelsGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -713,26 +662,22 @@
         protected System.Windows.Forms.CheckBox senderState;
         protected System.Windows.Forms.Label labelSender;
         protected ShipWorks.UI.Controls.MultiValueComboBox originCombo;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
         protected System.Windows.Forms.GroupBox groupBoxCustoms;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         protected System.Windows.Forms.TabPage tabPage;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         protected System.Windows.Forms.CheckBox returnShipment;
         private System.Windows.Forms.CheckBox returnState;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
         private System.Windows.Forms.CheckBox insuranceState;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge4;
         protected System.Windows.Forms.GroupBox groupReturns;
         protected System.Windows.Forms.GroupBox groupInsurance;
         protected System.Windows.Forms.GroupBox groupExpressMail;
         private System.Windows.Forms.CheckBox expressSignatureRequirement;
         private System.Windows.Forms.CheckBox expressSignatureRequirementState;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge5;
         protected Insurance.InsuranceProfileControl insuranceControl;
-        protected System.Windows.Forms.GroupBox labelsGroupBox;
-        protected ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
-        protected System.Windows.Forms.CheckBox requestedLabelFormatState;
-        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge1;
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge3;
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge4;
+        protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge5;
     }
 }

@@ -34,7 +34,7 @@
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.labelsGroupBox = new System.Windows.Forms.GroupBox();
+            this.groupLabels = new System.Windows.Forms.GroupBox();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
             this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge11 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -184,7 +184,7 @@
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
-            this.labelsGroupBox.SuspendLayout();
+            this.groupLabels.SuspendLayout();
             this.surePostGroup.SuspendLayout();
             this.groupInsurance.SuspendLayout();
             this.returnGroup.SuspendLayout();
@@ -214,7 +214,7 @@
             // tabPageSettings
             // 
             this.tabPageSettings.AutoScroll = true;
-            this.tabPageSettings.Controls.Add(this.labelsGroupBox);
+            this.tabPageSettings.Controls.Add(this.groupLabels);
             this.tabPageSettings.Controls.Add(this.surePostGroup);
             this.tabPageSettings.Controls.Add(this.groupInsurance);
             this.tabPageSettings.Controls.Add(this.returnGroup);
@@ -232,19 +232,19 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
-            // labelsGroupBox
+            // groupLabels
             // 
-            this.labelsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormat);
-            this.labelsGroupBox.Controls.Add(this.requestedLabelFormatState);
-            this.labelsGroupBox.Controls.Add(this.kryptonBorderEdge11);
-            this.labelsGroupBox.Location = new System.Drawing.Point(6, 221);
-            this.labelsGroupBox.Name = "labelsGroupBox";
-            this.labelsGroupBox.Size = new System.Drawing.Size(405, 58);
-            this.labelsGroupBox.TabIndex = 12;
-            this.labelsGroupBox.TabStop = false;
-            this.labelsGroupBox.Text = "Labels";
+            this.groupLabels.Controls.Add(this.requestedLabelFormat);
+            this.groupLabels.Controls.Add(this.requestedLabelFormatState);
+            this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
+            this.groupLabels.Location = new System.Drawing.Point(6, 221);
+            this.groupLabels.Name = "groupLabels";
+            this.groupLabels.Size = new System.Drawing.Size(405, 58);
+            this.groupLabels.TabIndex = 12;
+            this.groupLabels.TabStop = false;
+            this.groupLabels.Text = "Labels";
             // 
             // requestedLabelFormat
             // 
@@ -1873,8 +1873,8 @@
             this.Size = new System.Drawing.Size(425, 1059);
             this.tabControl.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
-            this.labelsGroupBox.ResumeLayout(false);
-            this.labelsGroupBox.PerformLayout();
+            this.groupLabels.ResumeLayout(false);
+            this.groupLabels.PerformLayout();
             this.surePostGroup.ResumeLayout(false);
             this.surePostGroup.PerformLayout();
             this.groupInsurance.ResumeLayout(false);
@@ -2049,7 +2049,7 @@
         private System.Windows.Forms.Label labelPackageId;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge2;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
-        private System.Windows.Forms.GroupBox labelsGroupBox;
+        private System.Windows.Forms.GroupBox groupLabels;
         private Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
         private System.Windows.Forms.CheckBox requestedLabelFormatState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;

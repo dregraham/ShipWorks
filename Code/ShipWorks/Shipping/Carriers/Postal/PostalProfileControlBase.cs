@@ -67,9 +67,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             AddValueMapping(postal, PostalProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
-            // Labels
-            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
-
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
