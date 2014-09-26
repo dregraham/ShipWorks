@@ -36,7 +36,7 @@ namespace ShipWorks.AddressValidation
         /// or
         /// Unknown error validating address.
         /// </exception>
-        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip)
+        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip, string countryCode)
         {
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 

@@ -476,6 +476,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             Address address = CreateAddress(person);
 
+            address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
+
             using (SwsimV29 webService = CreateWebService("CleanseAddress", account != null && account.IsExpress1))
             {
                 bool addressMatch;

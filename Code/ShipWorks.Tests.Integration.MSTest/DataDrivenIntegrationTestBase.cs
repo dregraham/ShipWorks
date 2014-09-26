@@ -161,8 +161,6 @@ namespace ShipWorks.Tests.Integration.MSTest
             PropertyInfo[] properties = (testObject.GetType().GetProperties().Where(c => c.DeclaringType.FullName.ToUpperInvariant().Contains("SHIPWORKS")
                                                                                          && c.Name.ToUpperInvariant() != "MagicKeysDown".ToUpperInvariant()
                                                                                          && c.Name.ToUpperInvariant() != "DebugKeysDown".ToUpperInvariant())).ToArray();
-            string missingProperties = string.Empty;
-
             foreach (PropertyInfo item in properties)
             {
                 try
@@ -195,10 +193,6 @@ namespace ShipWorks.Tests.Integration.MSTest
                             }
 
                         }
-                    }
-                    else
-                    {
-                        missingProperties += item.Name + System.Environment.NewLine;
                     }
                 }
                 catch (Exception ex)

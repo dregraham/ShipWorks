@@ -12,7 +12,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate the address
         /// </summary>
-        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip)
+        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip, string countryCode)
         {
             PersonAdapter adapter = new PersonAdapter
             {
@@ -23,7 +23,7 @@ namespace ShipWorks.AddressValidation
                 City = city,
                 StateProvCode = state,
                 PostalCode = zip,
-                CountryCode = "US"
+                CountryCode = countryCode
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();

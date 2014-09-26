@@ -11,6 +11,6 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates the address.
         /// </summary>
-        AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, String zip);
+        AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, String zip, string countryCode);
     }
 }
