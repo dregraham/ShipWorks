@@ -15,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
@@ -679,6 +680,7 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
+            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
