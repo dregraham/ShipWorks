@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Returns the appropriate web service url based on UseTestServer
         /// </summary>
-        private string ServiceUrl
+        private static string ServiceUrl
         {
             get
             {
