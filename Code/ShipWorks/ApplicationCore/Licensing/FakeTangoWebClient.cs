@@ -47,8 +47,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             nudges[3].AddNudgeOption(new NudgeOption(4, 0, "OK", nudges[3], NudgeOptionActionType.None));
             nudges[4].AddNudgeOption(new NudgeOption(5, 1, "OK", nudges[4], NudgeOptionActionType.None));
 
-            nudges[5].AddNudgeOption(new NudgeOption(4, 0, "OK", nudges[3], NudgeOptionActionType.None));
-
             return nudges;
         }
 
