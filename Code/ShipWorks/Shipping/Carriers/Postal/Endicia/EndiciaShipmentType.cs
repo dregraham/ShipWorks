@@ -460,6 +460,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
             bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
+            bool isDiscountComparisonRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
@@ -507,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // For endicia, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !isDiscountComparisonRestricted)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
 
