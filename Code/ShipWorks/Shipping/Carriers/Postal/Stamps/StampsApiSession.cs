@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
         static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV29.asmx";
+        static string testUrl = "https://swsim.testing.stamps.com/swsim/SwsimV29.asmx";
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Maps stamps.com usernames to their latest authenticator tokens
@@ -99,6 +100,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Returns the appropriate web service url based on UseTestServer
+        /// </summary>
+        private string ServiceUrl
+        {
+            get
+            {
+                return  UseTestServer ? testUrl : productionUrl;
+            }
+        }
+
+        /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
         private SwsimV29 CreateWebService(string logName, bool isExpress1, LogActionType logActionType)
@@ -115,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
                     {
-                        Url = productionUrl
+                        Url = ServiceUrl
                     };
             }
 
