@@ -28,8 +28,7 @@ namespace ShipWorks.AddressValidation
                     FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode,
                     examplesNode.ChildNodes.Count, sqlAdapter)[0];
 
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0, sqlAdapter);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Needs Attention", FilterHelper.CreateAddressValidationDefinition(AddressSelector.AddressToLookAt)), addressValidationNode, 0, sqlAdapter);            
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0, sqlAdapter);         
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0, sqlAdapter);
         }
     }

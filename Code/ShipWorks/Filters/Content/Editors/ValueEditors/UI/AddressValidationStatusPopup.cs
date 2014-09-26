@@ -38,7 +38,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             statusPanel.Height = panelHeight;
             DropDownMinimumHeight = panelHeight - 12;
             DropDownHeight = panelHeight - 12;
-            Height = panelHeight + 42;
+            Height = panelHeight + 20;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             {
                 var status = EnumHelper.GetEnumList<AddressValidationStatusType>()[statusIndex];
 
-                // * 3 makes room for the label buttons.
-                int verticlePosition = 23*(statusIndex + 3);
+                // * 2 makes room for the label buttons.
+                int verticlePosition = 23*(statusIndex + 2);
 
                 // Build statusList with new checkboxes and related enums.
                 var checkboxAndStatusType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
@@ -101,60 +101,47 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusPanel = new System.Windows.Forms.Panel();
-            this.readyToGoLabel = new System.Windows.Forms.Label();
-            this.needsAttentionLabel = new System.Windows.Forms.Label();
-            this.notValidated = new System.Windows.Forms.Label();
+            this.statusPanel = new Panel();
+            this.readyToGoLabel = new Label();
+            this.needsAttentionLabel = new Label();
+            this.notValidated = new Label();
             this.statusPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusPanel
             // 
-            this.statusPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.statusPanel.BackColor = SystemColors.ControlLightLight;
             this.statusPanel.Controls.Add(this.readyToGoLabel);
             this.statusPanel.Controls.Add(this.needsAttentionLabel);
             this.statusPanel.Controls.Add(this.notValidated);
-            this.statusPanel.Location = new System.Drawing.Point(0, 0);
+            this.statusPanel.Location = new Point(0, 0);
             this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(130, 306);
+            this.statusPanel.Size = new Size(130, 306);
             this.statusPanel.TabIndex = 7;
             this.statusPanel.Visible = false;
             // 
             // readyToGoLabel
             // 
             this.readyToGoLabel.AutoSize = true;
-            this.readyToGoLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.readyToGoLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.readyToGoLabel.ForeColor = System.Drawing.Color.Blue;
-            this.readyToGoLabel.Location = new System.Drawing.Point(3, 3);
+            this.readyToGoLabel.Cursor = Cursors.Hand;
+            this.readyToGoLabel.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte)(0)));
+            this.readyToGoLabel.ForeColor = Color.Blue;
+            this.readyToGoLabel.Location = new Point(3, 3);
             this.readyToGoLabel.Name = "readyToGoLabel";
-            this.readyToGoLabel.Size = new System.Drawing.Size(101, 13);
+            this.readyToGoLabel.Size = new Size(101, 13);
             this.readyToGoLabel.TabIndex = 1;
             this.readyToGoLabel.Text = "Select Ready To Go";
             this.readyToGoLabel.Click += OnReadyToGoLabelClicked;
             // 
-            // needsAttentionLabel
-            // 
-            this.needsAttentionLabel.AutoSize = true;
-            this.needsAttentionLabel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.needsAttentionLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.needsAttentionLabel.ForeColor = System.Drawing.Color.Blue;
-            this.needsAttentionLabel.Location = new System.Drawing.Point(3, 26);
-            this.needsAttentionLabel.Name = "needsAttentionLabel";
-            this.needsAttentionLabel.Size = new System.Drawing.Size(117, 13);
-            this.needsAttentionLabel.TabIndex = 1;
-            this.needsAttentionLabel.Text = "Select Needs Attention";
-            this.needsAttentionLabel.Click += OnNeedsAttentionLabelClicked;
-            // 
             // notValidated
             // 
             this.notValidated.AutoSize = true;
-            this.notValidated.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.notValidated.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.notValidated.ForeColor = System.Drawing.Color.Blue;
-            this.notValidated.Location = new System.Drawing.Point(3, 49);
+            this.notValidated.Cursor = Cursors.Hand;
+            this.notValidated.Font = new Font("Tahoma", 8.25F, FontStyle.Underline, GraphicsUnit.Point, ((byte)(0)));
+            this.notValidated.ForeColor = Color.Blue;
+            this.notValidated.Location = new Point(3, 26);
             this.notValidated.Name = "notValidated";
-            this.notValidated.Size = new System.Drawing.Size(103, 13);
+            this.notValidated.Size = new Size(103, 13);
             this.notValidated.TabIndex = 1;
             this.notValidated.Text = "Select Not Validated";
             this.notValidated.Click += OnNotValidatedClicked;
@@ -162,7 +149,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
             // AddressValidationStatusPopup
             // 
             this.Controls.Add(this.statusPanel);
-            this.Size = new System.Drawing.Size(316, 21);
+            this.Size = new Size(316, 21);
             this.statusPanel.ResumeLayout(false);
             this.statusPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -175,14 +162,6 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         private void OnNotValidatedClicked(object sender, EventArgs e)
         {
             SelectStatuses(AddressSelector.NotValidated);
-        }
-
-        /// <summary>
-        /// Called when [needs attention label clicked].
-        /// </summary>
-        private void OnNeedsAttentionLabelClicked(object sender, EventArgs e)
-        {
-            SelectStatuses(AddressSelector.AddressToLookAt);
         }
 
         /// <summary>

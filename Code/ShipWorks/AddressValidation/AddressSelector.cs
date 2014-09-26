@@ -52,23 +52,7 @@ namespace ShipWorks.AddressValidation
                     AddressValidationStatusType.Valid,
                     AddressValidationStatusType.SuggestionIgnored,
                     AddressValidationStatusType.Fixed,
-                    AddressValidationStatusType.SuggestionSelected
-                };
-            }
-        }
-
-        /// <summary>
-        /// Gets the address to look at statuses
-        /// </summary>
-        public static List<AddressValidationStatusType> AddressToLookAt
-        {
-            get
-            {
-                return new List<AddressValidationStatusType>()
-                {
-                    AddressValidationStatusType.Error, 
-                    AddressValidationStatusType.HasSuggestions, 
-                    AddressValidationStatusType.BadAddress, 
+                    AddressValidationStatusType.SuggestionSelected,
                     AddressValidationStatusType.WillNotValidate
                 };
             }
@@ -83,10 +67,11 @@ namespace ShipWorks.AddressValidation
             {
                 return new List<AddressValidationStatusType>()
                 {
-                    AddressValidationStatusType.Error, 
-                    AddressValidationStatusType.NotChecked, 
-                    AddressValidationStatusType.Pending, 
-                    AddressValidationStatusType.WillNotValidate
+                    AddressValidationStatusType.Error,
+                    AddressValidationStatusType.HasSuggestions,
+                    AddressValidationStatusType.BadAddress,
+                    AddressValidationStatusType.Pending,
+                    AddressValidationStatusType.NotChecked
                 };
             }
         }
