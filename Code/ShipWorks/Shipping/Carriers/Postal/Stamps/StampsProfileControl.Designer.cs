@@ -47,6 +47,7 @@
             this.tabPage.SuspendLayout();
             this.groupReturns.SuspendLayout();
             this.groupInsurance.SuspendLayout();
+            this.labelsGroupBox.SuspendLayout();
             this.groupExpressMail.SuspendLayout();
             this.groupTo.SuspendLayout();
             this.SuspendLayout();
@@ -101,7 +102,7 @@
             // 
             // groupBoxCustoms
             // 
-            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 521);
+            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 579);
             // 
             // kryptonBorderEdge
             // 
@@ -113,6 +114,7 @@
             this.tabPage.Size = new System.Drawing.Size(431, 757);
             this.tabPage.Controls.SetChildIndex(this.groupExpressMail, 0);
             this.tabPage.Controls.SetChildIndex(this.groupInsurance, 0);
+            this.tabPage.Controls.SetChildIndex(this.labelsGroupBox, 0);
             this.tabPage.Controls.SetChildIndex(this.groupReturns, 0);
             this.tabPage.Controls.SetChildIndex(this.groupShipment, 0);
             this.tabPage.Controls.SetChildIndex(this.groupBoxFrom, 0);
@@ -121,15 +123,19 @@
             // 
             // groupReturns
             // 
-            this.groupReturns.Location = new System.Drawing.Point(8, 642);
+            this.groupReturns.Location = new System.Drawing.Point(8, 700);
+            // 
+            // labelsGroupBox
+            // 
+            this.labelsGroupBox.Location = new System.Drawing.Point(8, 428);
             // 
             // groupInsurance
             // 
-            this.groupInsurance.Location = new System.Drawing.Point(8, 433);
+            this.groupInsurance.Location = new System.Drawing.Point(8, 491);
             // 
             // groupExpressMail
             // 
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 582);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 640);
             // 
             // labelAccount
             // 
@@ -288,6 +294,8 @@
             this.groupReturns.PerformLayout();
             this.groupInsurance.ResumeLayout(false);
             this.groupInsurance.PerformLayout();
+            this.labelsGroupBox.ResumeLayout(false);
+            this.labelsGroupBox.PerformLayout();
             this.groupExpressMail.ResumeLayout(false);
             this.groupExpressMail.PerformLayout();
             this.groupTo.ResumeLayout(false);
