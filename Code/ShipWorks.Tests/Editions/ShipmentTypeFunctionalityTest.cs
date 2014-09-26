@@ -50,6 +50,9 @@ namespace ShipWorks.Tests.Editions
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
 		</ShipmentType>
+		<ShipmentType TypeCode='2'>
+			<Restriction>RateDiscountMessaging</Restriction>
+		</ShipmentType>
 	</ShipmentTypeFunctionality>
 </License>");
 
@@ -371,6 +374,16 @@ namespace ShipWorks.Tests.Editions
         }
 
         [TestMethod]
+        public void Deserialize_AddsRateDiscountMessagingRestriction_WhenListedInTheRestrictionSet_Test()
+        {
+            ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
+
+            IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.Endicia];
+
+            Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.RateDiscountMessaging));
+        }
+
+        [TestMethod]
         public void Deserialize_AddsMultipleRestrictionForShipmentType_WhenMultipleRestrictionsListedInTheRestrictionSet_Test()
         {
             SetupXmlWithMultipleFedExRestrictions();
@@ -485,6 +498,9 @@ namespace ShipWorks.Tests.Editions
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
 		</ShipmentType>
+		<ShipmentType TypeCode='2'>
+			<Restriction>RateDiscountMessaging</Restriction>
+		</ShipmentType>
 	</ShipmentTypeFunctionality>";
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
@@ -512,6 +528,9 @@ namespace ShipWorks.Tests.Editions
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode='2'>
+			<Restriction>RateDiscountMessaging</Restriction>
 		</ShipmentType>
 	</ShipmentTypeFunctionality>";
 
