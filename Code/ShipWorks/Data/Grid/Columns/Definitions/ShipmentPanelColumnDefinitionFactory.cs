@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -123,6 +124,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         ApplicableTest = (o) => o == null || UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, (long) o)
                     },
 
+                new GridColumnDefinition("{72E01539-A415-4D49-B08C-B96FA551CCE9}", false,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Requested Label Format", ThermalLanguage.None,
+                    ShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
+
+                new GridColumnDefinition("{ADB80862-F35B-4F79-8405-607E329155F1}", false,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Actual Label Format", ThermalLanguage.None,
+                    ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }
     }
