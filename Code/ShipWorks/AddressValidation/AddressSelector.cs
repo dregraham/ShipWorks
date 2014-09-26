@@ -95,7 +95,7 @@ namespace ShipWorks.AddressValidation
             AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
             {
-                return false;
+                return true;
             }
 
             switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
@@ -109,6 +109,8 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
                     return !string.IsNullOrEmpty(addressAdapter.AddressValidationError);
+                case AddressValidationStatusType.NotChecked:
+                    return true;
                 default:
                     return false;
             }
