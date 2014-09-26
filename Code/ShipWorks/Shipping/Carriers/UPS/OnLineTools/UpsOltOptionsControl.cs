@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadSettings(new UpsOltShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(new UpsOltShipmentType());
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public void SaveSettings()
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

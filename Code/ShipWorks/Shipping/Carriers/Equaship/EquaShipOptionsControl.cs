@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadSettings(new EquaShipShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(new EquaShipShipmentType());
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void SaveSettings()
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

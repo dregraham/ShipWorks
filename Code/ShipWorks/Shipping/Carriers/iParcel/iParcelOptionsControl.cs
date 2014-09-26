@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadSettings(new iParcelShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(new iParcelShipmentType());
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public void SaveSettings()
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

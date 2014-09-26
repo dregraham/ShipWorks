@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             maskAccountNumber.Checked = settings.FedExMaskAccount;
 
-            requestedLabelFormat.LoadSettings(new FedExShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(new FedExShipmentType());
 
             thermalDocTab.Checked = settings.FedExThermalDocTab;
             thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.FedExThermalDocTabType;
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             settings.FedExMaskAccount = maskAccountNumber.Checked;
 
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
 
             settings.FedExThermalDocTab = thermalDocTab.Checked;
             settings.FedExThermalDocTabType = (int) thermalDocTabType.SelectedValue;

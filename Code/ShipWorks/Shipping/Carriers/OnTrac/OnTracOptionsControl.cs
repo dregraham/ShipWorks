@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void LoadSettings()
         {
-            requestedLabelFormat.LoadSettings(new OnTracShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(new OnTracShipmentType());
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void SaveSettings()
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

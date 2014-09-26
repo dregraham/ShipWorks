@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 case EndiciaReseller.Express1:
                     {
-                        requestedLabelFormat.LoadSettings(new Express1EndiciaShipmentType());
+                        requestedLabelFormat.LoadDefaultProfile(new Express1EndiciaShipmentType());
 
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case EndiciaReseller.None:
                 default:
                     {
-                        requestedLabelFormat.LoadSettings(new EndiciaShipmentType());
+                        requestedLabelFormat.LoadDefaultProfile(new EndiciaShipmentType());
 
                         customsCertify.Checked = settings.EndiciaCustomsCertify;
                         customsSigner.Text = settings.EndiciaCustomsSigner;
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
 
             switch (Reseller)
             {

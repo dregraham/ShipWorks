@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadSettings()
         {
-            requestedLabelFormat.LoadSettings(IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType());
+            requestedLabelFormat.LoadDefaultProfile(IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType());
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            requestedLabelFormat.SaveSettings();
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

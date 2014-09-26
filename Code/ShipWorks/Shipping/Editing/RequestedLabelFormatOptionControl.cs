@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -12,7 +14,7 @@ namespace ShipWorks.Shipping.Editing
     /// <summary>
     /// Control that displays the requested label format
     /// </summary>
-    public partial class RequestedLabelFormatOptionControl : UserControl
+    public partial class RequestedLabelFormatOptionControl : UserControl, IShippingProfileControl
     {
         private ShipmentType shipmentType;
         private ThermalLanguage[] excludedFormats;
@@ -25,7 +27,12 @@ namespace ShipWorks.Shipping.Editing
             InitializeComponent();
 
             SetSettingsMovedMessageLocation();
+
+            BindComboBox();
+            SetDisplayMode(DisplayMode.LanguageSelection);
         }
+
+        public bool State { get; set; }
 
         /// <summary>
         /// Remove the specified formats from the list of options
@@ -46,7 +53,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Load settings into the control
         /// </summary>
-        public void LoadSettings(ShipmentType workingShipmentType)
+        public void LoadDefaultProfile(ShipmentType workingShipmentType)
         {
             shipmentType = workingShipmentType;
 
@@ -56,17 +63,28 @@ namespace ShipWorks.Shipping.Editing
             }
             else
             {
-                BindComboBox();
-                labelFormat.SelectedValue = GetLabelFormatFromDefaultProfile();
-
-                SetDisplayMode(DisplayMode.LanguageSelection);
+                LoadFromEntity(shipmentType.GetPrimaryProfile());
             }
+        }
+
+        /// <summary>
+        /// Load settings into the control
+        /// </summary>
+        public void LoadFromEntity(EntityBase2 entity)
+        {
+            ShippingProfileEntity profile = entity as ShippingProfileEntity;
+            Debug.Assert(profile != null, "Entity must be a profile");
+
+            BindComboBox();
+            labelFormat.SelectedValue = GetLabelFormatFromDefaultProfile(profile);
+            
+            SetDisplayMode(DisplayMode.LanguageSelection);
         }
 
         /// <summary>
         /// Save the settings to the primary profile
         /// </summary>
-        public void SaveSettings()
+        public void SaveDefaultProfile()
         {
             if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
@@ -74,8 +92,19 @@ namespace ShipWorks.Shipping.Editing
             }
 
             ShippingProfileEntity profile = shipmentType.GetPrimaryProfile();
-            profile.RequestedLabelFormat = (int)labelFormat.SelectedValue;
+            SaveToEntity(profile);
             ShippingProfileManager.SaveProfile(profile);
+        }
+
+        /// <summary>
+        /// Save settings into the specified profile
+        /// </summary>
+        public void SaveToEntity(EntityBase2 entity)
+        {
+            ShippingProfileEntity profile = entity as ShippingProfileEntity;
+            Debug.Assert(profile != null, "Entity must be a profile");
+
+            profile.RequestedLabelFormat = (int)labelFormat.SelectedValue;
         }
 
         /// <summary>
@@ -128,10 +157,8 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Get the label format from the default profile of the specified shipment type
         /// </summary>
-        private ThermalLanguage GetLabelFormatFromDefaultProfile()
+        private ThermalLanguage GetLabelFormatFromDefaultProfile(ShippingProfileEntity profile)
         {
-            ShippingProfileEntity profile = shipmentType.GetPrimaryProfile();
-
             if (profile.RequestedLabelFormat.HasValue)
             {
                 return (ThermalLanguage)profile.RequestedLabelFormat.Value;

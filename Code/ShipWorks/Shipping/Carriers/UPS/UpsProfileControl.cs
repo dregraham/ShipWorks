@@ -130,6 +130,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.EmailNotifyFrom, emailNotifyFromState, emailFrom, labelEmailFrom);
             AddValueMapping(ups, UpsProfileFields.EmailNotifySubject, emailNotifySubjectState, emailSubject, labelEmailSubject);
 
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
+            
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
@@ -238,6 +241,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
         }
+
         /// <summary>
         /// Cancel any changes that have not yet been committed
         /// </summary>
