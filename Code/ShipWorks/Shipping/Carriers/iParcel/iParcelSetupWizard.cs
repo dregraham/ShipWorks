@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            iParcelOptionsControl.SaveSettings(settings);
+            iParcelOptionsControl.SaveSettings();
             ShippingSettings.Save(settings);
 
             iParcelAccountManager.SaveAccount(iParcelAccount);

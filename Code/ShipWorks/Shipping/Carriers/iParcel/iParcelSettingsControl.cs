@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
             base.SaveSettings(settings);
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
 
             settings.IParcelInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.IParcelInsurancePennyOne = pennyOne.Checked;

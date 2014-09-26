@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Save the settings to the database
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings()
         {
             requestedLabelFormat.SaveSettings();
         }

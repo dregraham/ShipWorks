@@ -693,8 +693,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             rate.ToState = toAddress.State;
             rate.ToZIPCode = toAddress.ZIPCode;
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             ThermalLanguage? thermalType;
 
             // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment

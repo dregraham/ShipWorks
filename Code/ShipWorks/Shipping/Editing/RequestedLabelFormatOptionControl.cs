@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -13,6 +15,7 @@ namespace ShipWorks.Shipping.Editing
     public partial class RequestedLabelFormatOptionControl : UserControl
     {
         private ShipmentType shipmentType;
+        private ThermalLanguage[] excludedFormats;
 
         /// <summary>
         /// Constructor
@@ -27,16 +30,16 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Remove the specified formats from the list of options
         /// </summary>
-        public void RemoveFormats(params ThermalLanguage[] formats)
+        public void ExcludeFormats(params ThermalLanguage[] formats)
         {
-            if (formats == null)
-            {
-                return;
-            }
+            excludedFormats = formats;
 
-            foreach (ThermalLanguage format in formats)
+            object currentValue = labelFormat.SelectedValue;
+            BindComboBox();
+
+            if (currentValue != null && labelFormat.Items.Contains(currentValue))
             {
-                labelFormat.Items.Remove(formats);
+                labelFormat.SelectedValue = currentValue;   
             }
         }
 
@@ -53,7 +56,7 @@ namespace ShipWorks.Shipping.Editing
             }
             else
             {
-                EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
+                BindComboBox();
                 labelFormat.SelectedValue = GetLabelFormatFromDefaultProfile();
 
                 SetDisplayMode(DisplayMode.LanguageSelection);
@@ -80,8 +83,18 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnProfileLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile());
-            profileEditor.ShowDialog(this);
+            using (ShippingProfileEditorDlg profileEditor = new ShippingProfileEditorDlg(shipmentType.GetPrimaryProfile()))
+            {
+                profileEditor.ShowDialog(this);   
+            }
+        }
+
+        /// <summary>
+        /// Bind the combo box to the available label formats
+        /// </summary>
+        private void BindComboBox()
+        {
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, x => excludedFormats == null || !excludedFormats.Contains(x));
         }
 
         /// <summary>

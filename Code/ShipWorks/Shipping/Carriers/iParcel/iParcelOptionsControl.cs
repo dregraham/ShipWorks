@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             InitializeComponent();
 
-            requestedLabelFormat.RemoveFormats(ThermalLanguage.ZPL);
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.ZPL);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Saves the settings.
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings()
         {
             requestedLabelFormat.SaveSettings();
         }

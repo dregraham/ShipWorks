@@ -64,8 +64,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsShipmentEntity ups = shipment.Ups;
             UpsRateType accountRateType = (UpsRateType) account.RateType;
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
             bool isSurePost = UpsUtility.IsUpsSurePostService((UpsServiceType) ups.Service);
 
             // Labels
@@ -751,10 +749,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Start CN22Form
             xmlWriter.WriteStartElement("CN22Form");
-
-            //Fetch the latest shipping settings from the repository
-            UpsSettingsRepository upsSettingsRepository = new UpsSettingsRepository();
-            ShippingSettingsEntity shippingSettings = upsSettingsRepository.GetShippingSettings();
                 
             // 6 = 4x6 
             // 1 = 8.5x11

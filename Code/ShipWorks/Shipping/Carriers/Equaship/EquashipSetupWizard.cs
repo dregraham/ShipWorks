@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         private void OnStepNextSettings(object sender, EventArgs e)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
             ShippingSettings.Save(settings);
         }
 

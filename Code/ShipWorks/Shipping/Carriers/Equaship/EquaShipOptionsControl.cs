@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// <summary>
         /// Save the settings to the database
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings()
         {
             requestedLabelFormat.SaveSettings();
         }

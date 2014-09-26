@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
             ShippingSettings.Save(settings);
 
             OnTracAccountManager.SaveAccount(account);
