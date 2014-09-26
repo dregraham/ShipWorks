@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
@@ -39,6 +40,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Use the i-parcel specific factory for populating the suggested tokens
             skuAndQuantity.TokenSuggestionFactory = new iParcelTokenSuggestionFactory();
+
+            // i-parcel does not support ZPL
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.ZPL);
         }
 
         /// <summary>
@@ -66,6 +70,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             //Service
             AddValueMapping(iParcelProfile, IParcelProfileFields.Service, serviceState, service, labelService);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat, labelThermalNote);
 
             //Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

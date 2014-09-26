@@ -68,6 +68,9 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             AddValueMapping(equaship, EquaShipProfileFields.Description, stateDescription, customerDescription, labelDescription);
             AddValueMapping(equaship, EquaShipProfileFields.ShippingNotes, stateShippingNotes, customerShippingNotes, labelShippingNotes);
 
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
+
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }

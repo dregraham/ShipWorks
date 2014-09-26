@@ -65,6 +65,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             AddValueMapping(onTracProfile, OnTracProfileFields.Reference2, reference2State, referenceNumber2, labelReference2);
             AddValueMapping(onTracProfile, OnTracProfileFields.Instructions, instructionsState, instructions, labelInstructions);
 
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
+
             //Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
         }
