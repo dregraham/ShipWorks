@@ -73,11 +73,7 @@ namespace ShipWorks.AddressValidation
                 PostalCode = GetPostalCode(address),
                 CountryCode = address.Country,
                 IsValid = isValid,
-                POBox = isPoBox.HasValue ? 
-                    isPoBox.Value ? 
-                        ValidationDetailStatusType.Yes : 
-                        ValidationDetailStatusType.No : 
-                    ValidationDetailStatusType.Unknown,
+                POBox = ConvertPoBox(isPoBox),
                 ResidentialStatus = ConvertResidentialStatus(residentialStatus)
             };
 
@@ -88,6 +84,19 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Converts the po box indicator into a ShipWorks ValidationDetailStatus
+        /// </summary>
+        private static ValidationDetailStatusType ConvertPoBox(bool? isPoBox)
+        {
+            if (!isPoBox.HasValue)
+            {
+                return ValidationDetailStatusType.Unknown; 
+            }
+
+            return isPoBox.Value ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No;
+        }
+
+        /// <summary>
         /// Convert Stamps.com residential status into ShipWorks residential status
         /// </summary>
         private static ValidationDetailStatusType ConvertResidentialStatus(ResidentialDeliveryIndicatorType residentialStatus)
@@ -95,9 +104,9 @@ namespace ShipWorks.AddressValidation
             switch (residentialStatus)
             {
                 case ResidentialDeliveryIndicatorType.No:
-                    return ValidationDetailStatusType.Yes;
-                case ResidentialDeliveryIndicatorType.Yes:
                     return ValidationDetailStatusType.No;
+                case ResidentialDeliveryIndicatorType.Yes:
+                    return ValidationDetailStatusType.Yes;
                 default:
                     return ValidationDetailStatusType.Unknown;
             }

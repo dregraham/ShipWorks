@@ -242,8 +242,7 @@ namespace ShipWorks.AddressValidation
             ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses,
             string prefix)
         {
-            Debug.Assert(entity.PrimaryKeyFields.Count == 1, "SaveValidatedEntity cannot be called on entities with multiple field keys");
-            long entityId = (long)entity.PrimaryKeyFields.Single().CurrentValue;
+            long entityId = EntityUtility.GetEntityId(entity);
 
             DeleteExistingAddresses(dataAccess, entityId, prefix);
             SaveEntityAddress(dataAccess, entityId, enteredAddress);

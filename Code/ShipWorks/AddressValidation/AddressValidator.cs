@@ -61,6 +61,13 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
+            // It is possible that existing international orders can be "Not Checked." This code updates the order.
+            if (!ValidatedAddressManager.EnsureAddressCanBeValidated(addressAdapter))
+            {
+                saveAction(null, new List<ValidatedAddressEntity>());
+                return;
+            }
+
             try
             {
                 AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode);
