@@ -939,8 +939,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
+            // Get the url
+            string tangoUrl = string.Format("https://www.interapptive.com/{0}/shipworks.php", UseTestServer ? "tango_private" : "account");
+
             // Set the uri
-            postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
+            postRequest.Uri = new Uri(tangoUrl);
 
             // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
@@ -1024,6 +1027,16 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
+        }
+
+
+        /// <summary>
+        /// Indicates if the test server should be used instead of the live server
+        /// </summary>
+        public static bool UseTestServer
+        {
+            get { return InterapptiveOnly.Registry.GetValue("TangoTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("TangoTestServer", value); }
         }
     }
 }
