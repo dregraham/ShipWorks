@@ -488,6 +488,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Address[] candidates;
                 StatusCodes statusCodes;
 
+                webService.OnlyLogOnMagicKeys = true;
+
                 try
                 {
                     if (account == null)
@@ -508,6 +510,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 catch (Exception ex)
                 {
+                    log.Error(ex);
+
                     throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
                 }
 
