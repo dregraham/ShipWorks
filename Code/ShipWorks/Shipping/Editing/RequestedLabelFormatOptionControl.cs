@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -14,10 +9,9 @@ namespace ShipWorks.Shipping.Editing
     /// <summary>
     /// Control that displays the requested label format
     /// </summary>
-    public partial class RequestedLabelFormatOptionControl : UserControl, IShippingProfileControl
+    public partial class RequestedLabelFormatOptionControl : UserControl
     {
         private ShipmentType shipmentType;
-        private ThermalLanguage[] excludedFormats;
 
         /// <summary>
         /// Constructor
@@ -28,7 +22,6 @@ namespace ShipWorks.Shipping.Editing
 
             SetSettingsMovedMessageLocation();
 
-            BindComboBox();
             SetDisplayMode(DisplayMode.LanguageSelection);
         }
 
@@ -39,15 +32,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         public void ExcludeFormats(params ThermalLanguage[] formats)
         {
-            excludedFormats = formats;
-
-            object currentValue = labelFormat.SelectedValue;
-            BindComboBox();
-
-            if (currentValue != null && labelFormat.Items.Contains(currentValue))
-            {
-                labelFormat.SelectedValue = currentValue;   
-            }
+            requestedLabelFormat.ExcludeFormats(formats);
         }
 
         /// <summary>
@@ -63,22 +48,8 @@ namespace ShipWorks.Shipping.Editing
             }
             else
             {
-                LoadFromEntity(shipmentType.GetPrimaryProfile());
+                requestedLabelFormat.LoadFromEntity(shipmentType.GetPrimaryProfile());
             }
-        }
-
-        /// <summary>
-        /// Load settings into the control
-        /// </summary>
-        public void LoadFromEntity(EntityBase2 entity)
-        {
-            ShippingProfileEntity profile = entity as ShippingProfileEntity;
-            Debug.Assert(profile != null, "Entity must be a profile");
-
-            BindComboBox();
-            labelFormat.SelectedValue = GetLabelFormatFromDefaultProfile(profile);
-            
-            SetDisplayMode(DisplayMode.LanguageSelection);
         }
 
         /// <summary>
@@ -92,19 +63,8 @@ namespace ShipWorks.Shipping.Editing
             }
 
             ShippingProfileEntity profile = shipmentType.GetPrimaryProfile();
-            SaveToEntity(profile);
+            requestedLabelFormat.SaveToEntity(profile);
             ShippingProfileManager.SaveProfile(profile);
-        }
-
-        /// <summary>
-        /// Save settings into the specified profile
-        /// </summary>
-        public void SaveToEntity(EntityBase2 entity)
-        {
-            ShippingProfileEntity profile = entity as ShippingProfileEntity;
-            Debug.Assert(profile != null, "Entity must be a profile");
-
-            profile.RequestedLabelFormat = (int)labelFormat.SelectedValue;
         }
 
         /// <summary>
@@ -119,23 +79,16 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Bind the combo box to the available label formats
-        /// </summary>
-        private void BindComboBox()
-        {
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, x => excludedFormats == null || !excludedFormats.Contains(x));
-        }
-
-        /// <summary>
         /// Update the settings moved message so that it is located over the label format message
         /// </summary>
         /// <remarks>This isn't being done with the designer so that both messages can be edited without having
         /// to move things around in the designer</remarks>
         private void SetSettingsMovedMessageLocation()
         {
-            Point delta = labelFormatMessage.Location - (Size)settingsMovedMessage.Location;
+            Point delta = requestedLabelFormat.Location - (Size)settingsMovedMessage.Location;
+            delta.Offset(0, 3);
 
-            settingsMovedMessage.Location = labelFormatMessage.Location;
+            settingsMovedMessage.Location = settingsMovedMessage.Location + (Size)delta;
             primaryProfileLink.Location = primaryProfileLink.Location + (Size)delta;
         }
 
@@ -146,25 +99,10 @@ namespace ShipWorks.Shipping.Editing
         {
             bool showLanguageSelection = displayMode == DisplayMode.LanguageSelection;
 
-            labelFormat.Visible = showLanguageSelection;
-            labelFormatMessage.Visible = showLanguageSelection;
-            infotipLabelType.Visible = showLanguageSelection;
+            requestedLabelFormat.Visible = showLanguageSelection;
 
             primaryProfileLink.Visible = !showLanguageSelection;
             settingsMovedMessage.Visible = !showLanguageSelection;
-        }
-
-        /// <summary>
-        /// Get the label format from the default profile of the specified shipment type
-        /// </summary>
-        private ThermalLanguage GetLabelFormatFromDefaultProfile(ShippingProfileEntity profile)
-        {
-            if (profile.RequestedLabelFormat.HasValue)
-            {
-                return (ThermalLanguage)profile.RequestedLabelFormat.Value;
-            }
-
-            return ThermalLanguage.None;
         }
 
         /// <summary>
