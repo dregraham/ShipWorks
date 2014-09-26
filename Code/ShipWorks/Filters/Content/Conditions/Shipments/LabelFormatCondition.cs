@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
@@ -9,7 +10,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Filters.Content.Conditions.Shipments
 {
-    [ConditionElement("Label Format", "Shipment.LabelFormat")]
+    [ConditionElement("Actual Label Format", "Shipment.LabelFormat")]
     public class LabelFormatCondition : EnumCondition<LabelFormatType>
     {
         /// <summary>
@@ -75,7 +76,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         /// </summary>
         private string GetFormatSql(SqlGenerationContext context, LabelFormatType format)
         {
-            string thermalColumn = context.GetColumnReference(ShipmentFields.ActualLabelFormat);
+            string thermalColumn = context.GetColumnReference(FilterField);
 
             switch (format)
             {
@@ -93,6 +94,17 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             }
 
             return "";
+        }
+
+        /// <summary>
+        /// Field that will be used for filtering
+        /// </summary>
+        protected virtual EntityField2 FilterField
+        {
+            get
+            {
+                return ShipmentFields.ActualLabelFormat;
+            }
         }
     }
 }
