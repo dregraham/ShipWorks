@@ -46,12 +46,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 purchaseRestricted = true;
             }
 
-            // If purchasing is restricted for Express1 for Endicia, set the variable
-            if (IsExpress1() && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Express1Endicia).Level == EditionRestrictionLevel.Forbidden)
-            {
-                purchaseRestricted = true;
-            }
-
             InitializeComponent();
         }
 
@@ -147,17 +141,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void ShowPurchasePostageNudges()
         {
-            NudgeType nudgeType = IsExpress1() ? NudgeType.PurchaseExpress1Endicia : NudgeType.PurchaseEndicia;
-
-            // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
-            IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == nudgeType);
+            // If there is an Endicia shipment in the list, check for PurchasesEndicia nudges
+            IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.PurchaseEndicia);
             if (nudges.Any())
             {
                 NudgeManager.ShowNudge(this, nudges.First());
             }
             else if (purchaseRestricted)
             {
-                MessageHelper.ShowError(this, string.Format("ShipWorks can no longer purchase postage for {0}.", IsExpress1() ? "Express1 for Endicia" : "Endicia"));
+                MessageHelper.ShowError(this, string.Format("ShipWorks can no longer purchase postage for Endicia."));
             }
         }
     }
