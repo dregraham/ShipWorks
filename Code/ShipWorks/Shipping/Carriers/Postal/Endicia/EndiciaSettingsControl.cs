@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (endiciaReseller == EndiciaReseller.Express1)
             {
                 express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom;
+                panelBottom.Top = express1Options.Bottom + 4;
             }
             else
             {

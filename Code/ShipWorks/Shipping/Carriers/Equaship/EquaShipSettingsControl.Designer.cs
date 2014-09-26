@@ -28,47 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.accountsControl = new ShipWorks.Shipping.Carriers.EquaShip.EquaShipAccountManagerControl();
-            this.labelAccounts = new System.Windows.Forms.Label();
             this.optionsControl = new ShipWorks.Shipping.Carriers.EquaShip.EquaShipOptionsControl();
+            this.labelAccounts = new System.Windows.Forms.Label();
+            this.accountsControl = new ShipWorks.Shipping.Carriers.EquaShip.EquaShipAccountManagerControl();
             this.SuspendLayout();
             // 
-            // accountsControl
+            // optionsControl
             // 
-            this.accountsControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.accountsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountsControl.Location = new System.Drawing.Point(31, 112);
-            this.accountsControl.Name = "accountsControl";
-            this.accountsControl.Size = new System.Drawing.Size(400, 168);
-            this.accountsControl.TabIndex = 0;
+            this.optionsControl.Location = new System.Drawing.Point(5, 3);
+            this.optionsControl.Name = "optionsControl";
+            this.optionsControl.Size = new System.Drawing.Size(422, 53);
+            this.optionsControl.TabIndex = 2;
             // 
             // labelAccounts
             // 
             this.labelAccounts.AutoSize = true;
             this.labelAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAccounts.Location = new System.Drawing.Point(18, 90);
+            this.labelAccounts.Location = new System.Drawing.Point(8, 60);
             this.labelAccounts.Name = "labelAccounts";
-            this.labelAccounts.Size = new System.Drawing.Size(112, 13);
+            this.labelAccounts.Size = new System.Drawing.Size(113, 13);
             this.labelAccounts.TabIndex = 1;
             this.labelAccounts.Text = "EquaShip Accounts";
             // 
-            // optionsControl
+            // accountsControl
             // 
-            this.optionsControl.Location = new System.Drawing.Point(12, 3);
-            this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(323, 72);
-            this.optionsControl.TabIndex = 2;
+            this.accountsControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.accountsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accountsControl.Location = new System.Drawing.Point(27, 82);
+            this.accountsControl.Name = "accountsControl";
+            this.accountsControl.Size = new System.Drawing.Size(400, 168);
+            this.accountsControl.TabIndex = 0;
             // 
-            // EquashipSettingsControl
+            // EquaShipSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountsControl);
-            this.Name = "EquashipSettingsControl";
-            this.Size = new System.Drawing.Size(445, 297);
+            this.Name = "EquaShipSettingsControl";
+            this.Size = new System.Drawing.Size(445, 266);
             this.ResumeLayout(false);
             this.PerformLayout();
 

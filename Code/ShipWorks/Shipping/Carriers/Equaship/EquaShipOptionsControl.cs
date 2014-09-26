@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Web.Profile;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
+﻿using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.EquaShip
 {
@@ -26,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public EquaShipOptionsControl()
         {
             InitializeComponent();
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
         }
 
         /// <summary>
@@ -34,12 +21,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void LoadSettings()
         {
-            ShippingProfileEntity profile = new EquaShipShipmentType().GetPrimaryProfile();
-
-            if (profile.RequestedLabelFormat.HasValue)
-            {
-                labelFormat.SelectedValue = (ThermalLanguage)profile.RequestedLabelFormat.Value;   
-            }
+            requestedLabelFormat.LoadSettings(new EquaShipShipmentType());
         }
 
         /// <summary>
@@ -47,13 +29,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
-            ShippingProfileEntity profile = new EquaShipShipmentType().GetPrimaryProfile();
-            profile.RequestedLabelFormat = (int)labelFormat.SelectedValue;
-
-            using (SqlAdapter adapter = SqlAdapter.Default)
-            {
-                adapter.SaveAndRefetch(profile);
-            }
+            requestedLabelFormat.SaveSettings();
         }
     }
 }
