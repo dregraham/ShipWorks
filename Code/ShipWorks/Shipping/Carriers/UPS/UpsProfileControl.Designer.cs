@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.labelsGroupBox = new System.Windows.Forms.GroupBox();
@@ -234,6 +234,8 @@
             // 
             // labelsGroupBox
             // 
+            this.labelsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.labelsGroupBox.Controls.Add(this.requestedLabelFormat);
             this.labelsGroupBox.Controls.Add(this.requestedLabelFormatState);
             this.labelsGroupBox.Controls.Add(this.kryptonBorderEdge11);
@@ -504,7 +506,7 @@
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(200, 21);
             this.returnContents.TabIndex = 86;
-            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // returnService
             // 
@@ -1420,7 +1422,7 @@
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber2.TabIndex = 76;
-            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // labelReference2
             // 
@@ -1514,7 +1516,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber.TabIndex = 3;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
             // 
             // labelReference
             // 
