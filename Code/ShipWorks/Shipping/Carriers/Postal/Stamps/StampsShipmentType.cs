@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // For Stamps, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
 
@@ -288,7 +288,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             else
                             {
                                 // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection)rate.OriginalTag).ServiceType, (PostalPackagingType)shipment.Postal.PackagingType))
+                                if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.OriginalTag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
                                 {
                                     rate.AmountFootnote = Resources.star_green;
                                 }
@@ -676,6 +676,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has rate discount messaging restricted.
+        /// </summary>
+        public bool IsRateDiscountMessagingRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Forbidden;
             }
         }
     }
