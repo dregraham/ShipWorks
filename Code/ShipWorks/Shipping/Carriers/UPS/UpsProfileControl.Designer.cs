@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.groupLabels = new System.Windows.Forms.GroupBox();
@@ -277,6 +277,8 @@
             // 
             // surePostGroup
             // 
+            this.surePostGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.surePostGroup.Controls.Add(this.packageId);
             this.surePostGroup.Controls.Add(this.packageIdState);
             this.surePostGroup.Controls.Add(this.labelPackageId);
@@ -421,6 +423,8 @@
             // 
             // groupInsurance
             // 
+            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
@@ -461,6 +465,8 @@
             // 
             // returnGroup
             // 
+            this.returnGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.returnGroup.Controls.Add(this.returnShipment);
             this.returnGroup.Controls.Add(this.returnState);
             this.returnGroup.Controls.Add(this.returnContents);
@@ -506,7 +512,7 @@
             this.returnContents.Name = "returnContents";
             this.returnContents.Size = new System.Drawing.Size(200, 21);
             this.returnContents.TabIndex = 86;
-            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            this.returnContents.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // returnService
             // 
@@ -601,6 +607,8 @@
             // 
             // groupEmail
             // 
+            this.groupEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupEmail.Controls.Add(this.emailNotifyFromState);
             this.groupEmail.Controls.Add(this.emailNotifySubjectState);
             this.groupEmail.Controls.Add(this.emailSubject);
@@ -994,6 +1002,8 @@
             // 
             // groupBilling
             // 
+            this.groupBilling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBilling.Controls.Add(this.payorDutiesPostalCode);
             this.groupBilling.Controls.Add(this.labelPayorDutiesPostalCode);
             this.groupBilling.Controls.Add(this.labelPayorDutiesCountry);
@@ -1231,6 +1241,8 @@
             // 
             // groupOptions
             // 
+            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupOptions.Controls.Add(this.usePaperlessInvoice);
             this.groupOptions.Controls.Add(this.usePaperlessInvoiceLabel);
             this.groupOptions.Controls.Add(this.usePaperlessInvoiceState);
@@ -1422,7 +1434,7 @@
             this.referenceNumber2.Name = "referenceNumber2";
             this.referenceNumber2.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber2.TabIndex = 76;
-            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
+            this.referenceNumber2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelReference2
             // 
@@ -1516,7 +1528,7 @@
             this.referenceNumber.Name = "referenceNumber";
             this.referenceNumber.Size = new System.Drawing.Size(222, 21);
             this.referenceNumber.TabIndex = 3;
-            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
+            this.referenceNumber.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelReference
             // 
@@ -1530,6 +1542,8 @@
             // 
             // groupTo
             // 
+            this.groupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupTo.Controls.Add(this.kryptonBorderEdge6);
             this.groupTo.Controls.Add(this.labelResidential);
             this.groupTo.Controls.Add(this.residentialDetermination);
@@ -1584,6 +1598,8 @@
             // 
             // groupShipment
             // 
+            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupShipment.Controls.Add(this.saturdayDelivery);
             this.groupShipment.Controls.Add(this.labelSaturday);
             this.groupShipment.Controls.Add(this.saturdayState);
@@ -1675,6 +1691,8 @@
             // 
             // groupBoxFrom
             // 
+            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.upsAccount);
             this.groupBoxFrom.Controls.Add(this.accountState);
