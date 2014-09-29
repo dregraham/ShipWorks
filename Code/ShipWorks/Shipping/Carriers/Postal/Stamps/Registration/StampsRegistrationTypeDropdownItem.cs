@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-
+﻿
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
     /// <summary>
-    /// Class for populating the Stamps.com account type combo box.
+    /// Class for populating the Stamps.com registration type combo box.
     /// </summary>
-    public class StampsAccountTypeDropdownItem
+    public class StampsRegistrationTypeDropdownItem
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsAccountTypeDropdownItem"/> class.
+        /// Initializes a new instance of the <see cref="StampsAccountUsageDropdownItem"/> class.
         /// </summary>
-        /// <param name="accountType">Type of the account.</param>
-        /// <param name="displayName">The display name.</param>
-        public StampsAccountTypeDropdownItem(AccountType accountType, string displayName)
+        public StampsRegistrationTypeDropdownItem(PostalAccountRegistrationType registrationType, string displayName)
         {
-            AccountType = accountType;
+            RegistrationType = registrationType;
             DisplayName = displayName;
         }
 
         /// <summary>
-        /// Gets the type of the account.
+        /// Gets the type of the registration.
         /// </summary>
-        public AccountType AccountType { get; private set; }
+        public PostalAccountRegistrationType RegistrationType { get; private set; }
 
         /// <summary>
         /// Gets the display name.
