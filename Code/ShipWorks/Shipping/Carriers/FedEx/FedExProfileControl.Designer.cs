@@ -643,6 +643,8 @@
             // 
             // groupReturns
             // 
+            this.groupReturns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupReturns.Controls.Add(this.saturdayReturn);
             this.groupReturns.Controls.Add(this.saturdayReturnState);
             this.groupReturns.Controls.Add(this.returnType);
@@ -857,6 +859,8 @@
             // 
             // groupSmartPost
             // 
+            this.groupSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupSmartPost.Controls.Add(this.smartHubIDState);
             this.groupSmartPost.Controls.Add(this.smartHubID);
             this.groupSmartPost.Controls.Add(this.labelSmartHubID);
@@ -1109,6 +1113,8 @@
             // 
             // groupEmail
             // 
+            this.groupEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupEmail.Controls.Add(this.emailNotifyBrokerState);
             this.groupEmail.Controls.Add(this.emailNotifyBrokerShip);
             this.groupEmail.Controls.Add(this.emailNotifyBrokerDelivery);
@@ -1494,6 +1500,8 @@
             // 
             // groupOptions
             // 
+            this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupOptions.Controls.Add(this.referenceShipmentIntegrity);
             this.groupOptions.Controls.Add(this.labelShipmentIntegrity);
             this.groupOptions.Controls.Add(this.referenceShipmentIntegrityState);
@@ -1626,6 +1634,8 @@
             // 
             // groupBilling
             // 
+            this.groupBilling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBilling.Controls.Add(this.dutiesAccount);
             this.groupBilling.Controls.Add(this.labelDutiesAccount);
             this.groupBilling.Controls.Add(this.payorDuties);
