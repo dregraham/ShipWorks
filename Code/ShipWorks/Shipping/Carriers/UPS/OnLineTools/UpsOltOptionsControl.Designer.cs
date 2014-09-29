@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         {
             this.labelLabels = new System.Windows.Forms.Label();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
-            this.reqestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
             this.SuspendLayout();
             // 
             // labelLabels
@@ -50,18 +49,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(16, 21);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(16, 22);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
             this.requestedLabelFormat.TabIndex = 58;
-            // 
-            // reqestedLabelFormat
-            // 
-            this.reqestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.reqestedLabelFormat.Location = new System.Drawing.Point(0, 0);
-            this.reqestedLabelFormat.Name = "reqestedLabelFormat";
-            this.reqestedLabelFormat.Size = new System.Drawing.Size(115, 21);
-            this.reqestedLabelFormat.TabIndex = 57;
             // 
             // UpsOltOptionsControl
             // 
@@ -80,7 +71,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         #endregion
 
         private System.Windows.Forms.Label labelLabels;
-        private RequestedLabelFormatOptionControl reqestedLabelFormat;
         private RequestedLabelFormatOptionControl requestedLabelFormat;
     }
 }

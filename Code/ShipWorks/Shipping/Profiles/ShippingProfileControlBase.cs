@@ -74,6 +74,7 @@ namespace ShipWorks.Shipping.Profiles
         {
             foreach (GroupBox groupBox in container.Controls.OfType<GroupBox>())
             {
+                groupBox.Location = new Point(9, groupBox.Location.Y);
                 groupBox.Size = new Size(container.Size.Width - 18, groupBox.Size.Height);
             }
         }

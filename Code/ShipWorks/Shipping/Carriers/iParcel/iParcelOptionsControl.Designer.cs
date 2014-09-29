@@ -50,7 +50,7 @@
             // 
             this.labelThermalNote.AutoSize = true;
             this.labelThermalNote.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelThermalNote.Location = new System.Drawing.Point(19, 49);
+            this.labelThermalNote.Location = new System.Drawing.Point(18, 49);
             this.labelThermalNote.Name = "labelThermalNote";
             this.labelThermalNote.Size = new System.Drawing.Size(233, 13);
             this.labelThermalNote.TabIndex = 58;
@@ -62,7 +62,7 @@
             this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 23);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(18, 23);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(369, 25);
             this.requestedLabelFormat.TabIndex = 60;

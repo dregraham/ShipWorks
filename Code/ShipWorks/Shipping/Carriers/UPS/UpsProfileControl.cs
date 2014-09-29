@@ -28,6 +28,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             InitializeComponent();
 
+            ResizeGroupBoxes(tabPageSettings);
+            ResizeGroupBoxes(tabPagePackages);
+
             packagesCount.Items.Clear();
 
             for (int i = 1; i <= 5; i++)

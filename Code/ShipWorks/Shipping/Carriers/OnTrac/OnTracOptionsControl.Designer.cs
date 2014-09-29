@@ -50,7 +50,7 @@
             this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormat.Location = new System.Drawing.Point(19, 23);
+            this.requestedLabelFormat.Location = new System.Drawing.Point(18, 23);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
             this.requestedLabelFormat.Size = new System.Drawing.Size(341, 25);
             this.requestedLabelFormat.TabIndex = 60;

@@ -32,6 +32,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
 
+            ResizeGroupBoxes(tabPageSettings);
+            ResizeGroupBoxes(tabPagePackages);
+
             packagesCount.Items.Clear();
 
             for (int i = 1; i <= 5; i++)

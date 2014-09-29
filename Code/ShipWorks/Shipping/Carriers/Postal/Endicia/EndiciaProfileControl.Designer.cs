@@ -377,6 +377,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.kryptonBorderEdge31.Name = "kryptonBorderEdge31";
             this.kryptonBorderEdge31.Size = new System.Drawing.Size(1, 150);
             this.kryptonBorderEdge31.Text = "kryptonBorderEdge1";
+            //
+            // kryptonBorderEdge3
+            //
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 47);
             // 
             // labelReferenceIdInfo
             // 

@@ -23,8 +23,9 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public EquaShipProfileControl()
         {
             InitializeComponent();
-        }
 
+            ResizeGroupBoxes(tabPage);
+        }
 
         /// <summary>
         /// Load the given profile into the control

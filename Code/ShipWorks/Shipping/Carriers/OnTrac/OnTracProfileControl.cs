@@ -21,6 +21,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public OnTracProfileControl()
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabPageSettings);
         }
 
         /// <summary>
