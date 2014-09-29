@@ -197,7 +197,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // We have the necessary information, so update our stamps.com registration
                 stampsRegistration.UsageType = ((StampsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
-                stampsRegistration.RegistrationType = (PostalAccountRegistrationType) stampsAccountRegistrationType.SelectedItem;
+
+                StampsRegistrationTypeDropdownItem selectedStampsRegistrationTypeDropdownItem = (StampsRegistrationTypeDropdownItem) stampsAccountRegistrationType.SelectedItem;
+                stampsRegistration.RegistrationType = selectedStampsRegistrationTypeDropdownItem.RegistrationType;
 
                 stampsRegistration.PhysicalAddress.FirstName = stampsAccount.FirstName;
                 stampsRegistration.PhysicalAddress.LastName = stampsAccount.LastName;
