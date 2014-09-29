@@ -704,6 +704,7 @@
     <Compile Include="Shipping\Carriers\Postal\IPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\IRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsExpeditedRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
