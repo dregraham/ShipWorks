@@ -8002,8 +8002,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
-		///<summary>IsExpress1. </summary>
-		IsExpress1,
+		///<summary>StampsReseller. </summary>
+		StampsReseller,
 		/// <summary></summary>
 		AmountOfFields
 	}
