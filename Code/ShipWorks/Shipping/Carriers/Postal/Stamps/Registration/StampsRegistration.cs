@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using System.Net;
-using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
     public class StampsRegistration
     {
-        private IStampsRegistrationValidator validator;
-        private IStampsRegistrationGateway registrationGateway;
-
+        private readonly IStampsRegistrationValidator validator;
+        private readonly IStampsRegistrationGateway registrationGateway;
+        private readonly IRegistrationPromotion promotion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsRegistration"/> class.
@@ -21,10 +19,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
         public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway)
+            : this(validator, gateway, new StampsExpeditedRegistrationPromotion())
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StampsRegistration" /> class.
+        /// </summary>
+        /// <param name="validator">The validator.</param>
+        /// <param name="gateway">The gateway.</param>
+        /// <param name="promotion">The promotion.</param>
+        /// <exception cref="StampsRegistrationException">Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.</exception>
+        public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway, IRegistrationPromotion promotion)
         {
             this.validator = validator;
             registrationGateway = gateway;
-            
+            this.promotion = promotion;
+
             UserName = string.Empty;
             Password = string.Empty;
             Email = string.Empty;
@@ -53,9 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             {
                 throw new StampsRegistrationException("Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.", ex);
             }
-
-            PromoCode = string.Empty;
-
+            
             CreditCard = new CreditCard();
             AchAccount = new AchAccount();
         }
@@ -127,10 +135,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         public MachineInfo MachineInfo { get; set; }
 
         /// <summary>
-        /// Gets or sets the promo code.
+        /// Gets or sets the type of the registration.
+        /// </summary>
+        /// <value>The type of the registration.</value>
+        public PostalAccountRegistrationType RegistrationType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the promo code based on the valud of the RegistrationType property.
         /// </summary>
         /// <value>The promo code.</value>
-        public string PromoCode { get; set; }
+        public string PromoCode
+        {
+            get { return promotion.GetPromoCode(RegistrationType); }
+        }
 
         /// <summary>
         /// Gets or sets the credit card.
