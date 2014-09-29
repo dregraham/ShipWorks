@@ -236,10 +236,10 @@ namespace ShipWorks.Data.Controls
             // 
             // addressValidationStatusText
             // 
-            this.addressValidationStatusText.AutoSize = true;
+            this.addressValidationStatusText.AutoEllipsis = true;
             this.addressValidationStatusText.Location = new System.Drawing.Point(37, 3);
             this.addressValidationStatusText.Name = "addressValidationStatusText";
-            this.addressValidationStatusText.Size = new System.Drawing.Size(29, 13);
+            this.addressValidationStatusText.Size = new System.Drawing.Size(63, 13);
             this.addressValidationStatusText.TabIndex = 27;
             this.addressValidationStatusText.Text = "Valid";
             // 
@@ -430,6 +430,7 @@ namespace ShipWorks.Data.Controls
             this.Name = "PersonControl";
             this.Size = new System.Drawing.Size(355, 402);
             this.Load += new System.EventHandler(this.OnLoad);
+            this.SizeChanged += new System.EventHandler(this.OnSizeChanged);
             this.addressValidationPanel.ResumeLayout(false);
             this.addressValidationPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.addressValidationStatusIcon)).EndInit();

@@ -1104,7 +1104,8 @@ namespace ShipWorks.Data.Controls
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
 
             addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
-            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)dummyAddress.AddressValidationStatus);
+           
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
 
@@ -1115,6 +1116,9 @@ namespace ShipWorks.Data.Controls
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
                 validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
                 validateAddress.Right - addressValidationSuggestionLink.Width;
+
+            addressValidationStatusText.Width = addressValidationSuggestionLink.Left -
+                                                addressValidationStatusText.Left;
         }
 
         /// <summary>
@@ -1216,6 +1220,15 @@ namespace ShipWorks.Data.Controls
             AddressAdapter clonedAddress = dummyPerson.ConvertTo<AddressAdapter>();
             AddressAdapter.CopyValidationData(lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>(), clonedAddress);
             return clonedAddress;
+        }
+
+        /// <summary>
+        /// Called when [size changed].
+        /// </summary>
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            addressValidationStatusText.Width = addressValidationSuggestionLink.Left -
+                        addressValidationStatusText.Left;
         }
     }
 }
