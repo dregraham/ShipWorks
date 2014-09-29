@@ -458,21 +458,23 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private void LoadOption(OrderItemEntity item, JToken lineItem)
         {
             string name = lineItem.GetValue<string>("variant_title", string.Empty);
-            if (!string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) && (lineItem.SelectToken("properties") == null || !lineItem.SelectToken("properties").Any()))
             {
-                //Instantiate the order item attribute
-                OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
-
-                //Set the option propeties
-                option.Name = "Variant";
-                option.Description = lineItem.GetValue<string>("variant_title", string.Empty);
-
-                // Shopify only sends the total line price
-                option.UnitPrice = 0;
-
-                // Add any properties for this option
-                LoadOptionProperties(item, lineItem);
+                return;
             }
+
+            //Instantiate the order item attribute
+            OrderItemAttributeEntity option = InstantiateOrderItemAttribute(item);
+
+            //Set the option propeties
+            option.Name = "Variant";
+            option.Description = name;
+
+            // Shopify only sends the total line price
+            option.UnitPrice = 0;
+
+            // Add any properties for this option
+            LoadOptionProperties(item, lineItem);
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public Form CreatePostageDialog()
         {
-            return new StampsPurchasePostageDlg(account, null);
+            return new StampsPurchasePostageDlg(account);
         }
     }
 }
