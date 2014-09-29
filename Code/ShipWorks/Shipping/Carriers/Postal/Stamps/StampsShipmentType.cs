@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(false);
+            return new StampsSettingsControl(StampsResellerType.None);
         }
 
         /// <summary>

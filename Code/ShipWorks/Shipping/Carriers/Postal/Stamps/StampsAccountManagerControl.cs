@@ -26,9 +26,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsAccountManagerControl : PostalAccountManagerControlBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(StampsAccountManagerControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof (StampsAccountManagerControl));
 
-        long initialAccountID = -1;
+        private long initialAccountID = -1;
 
         /// <summary>
         /// Constructor
@@ -50,7 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
         /// </summary>
-        public bool IsExpress1 { get; set; }
+        public StampsResellerType StampsResellerType { get; set; }
+
+        private bool IsExpress1
+        {
+            get { return StampsResellerType == StampsResellerType.Express1; }
+        }
 
         /// <summary>
         /// Load all the shippers into the grid
@@ -61,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(IsExpress1))
+            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
             {
                 GridRow row = new GridRow(new string[] { account.Description, "Checking..." });
                 sandGrid.Rows.Add(row);
@@ -103,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 catch (StampsException ex)
                 {
-                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName(account.IsExpress1));
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller));
                     log.Error(logMessage, ex);
                 }
                 catch (ORMEntityIsDeletedException ex)
@@ -217,7 +222,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Note: This does not delete your account from {1}.",
-                account.Description, StampsAccountManager.GetResellerName(IsExpress1)));
+                account.Description, StampsAccountManager.GetResellerName(StampsResellerType)));
 
             if (result == DialogResult.OK)
             {

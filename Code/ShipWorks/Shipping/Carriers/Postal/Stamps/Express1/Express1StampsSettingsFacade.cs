@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                return StampsAccountManager.GetAccounts(true)
+                return StampsAccountManager.GetAccounts(StampsResellerType.Express1)
                            .Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID))
                            .ToList();
             }
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(false);
+                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
 
                 return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
             }

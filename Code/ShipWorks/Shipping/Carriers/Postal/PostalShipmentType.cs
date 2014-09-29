@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // the provider that has an account instead of rates from web tools).
             IBestRateShippingBroker broker = new NullShippingBroker();
 
-            bool stampsAccountsExist = StampsAccountManager.GetAccounts(false).Any();
+            bool stampsAccountsExist = StampsAccountManager.GetAccounts(StampsResellerType.None).Any();
             bool endiciaAccountsExist = EndiciaAccountManager.GetAccounts(EndiciaReseller.None).Any();
 
             if (!stampsAccountsExist && !endiciaAccountsExist)

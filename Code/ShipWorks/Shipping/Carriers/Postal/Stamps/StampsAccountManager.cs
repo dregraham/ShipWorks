@@ -12,6 +12,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get the Stamps.com accounts in the system.  Optionally include those that have not yet totally completed signup where
         /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<StampsAccountEntity> GetAccounts(bool isExpress1, bool includeIncomplete)
+        public static List<StampsAccountEntity> GetAccounts(StampsResellerType stampsResellerType, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -73,16 +74,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.IsExpress1 == isExpress1)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.StampsReseller == (int)stampsResellerType)));
             }
         }
 
         /// <summary>
         /// Get the Stamps.com accounts in the system.
         /// </summary>
-        public static List<StampsAccountEntity> GetAccounts(bool isExpress1)
+        public static List<StampsAccountEntity> GetAccounts(StampsResellerType stampsResellerType)
         {
-            return GetAccounts(isExpress1, false);
+            return GetAccounts(stampsResellerType, false);
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts(false, false);
+                return GetAccounts(StampsResellerType.None, false);
             }
         }
 
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts(true, false);
+                return GetAccounts(StampsResellerType.Express1, false);
             }
         }
 
@@ -156,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string descriptionBase = account.StampsAccountID.ToString();
 
             // Express1 uses terribly long account numbers
-            if (account.IsExpress1)
+            if (account.StampsReseller == (int)StampsResellerType.Express1)
             {
                 // only shorten so long as we know they're still using long account numbers.
                 if (descriptionBase.Length == 36)
@@ -206,9 +207,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the name of the Stamps reseller, either "Stamps" or "Express1"
         /// </summary>
-        public static string GetResellerName(bool isExpress1)
+        public static string GetResellerName(StampsResellerType stampsResellerType)
         {
-            return isExpress1 ? "Express1" : "Stamps.com";
+            return stampsResellerType == StampsResellerType.Express1 ? "Express1" : "Stamps.com";
         }
     }
 }

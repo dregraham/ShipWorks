@@ -389,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsApiSession().AuthenticateUser(userID, password.Text, false);
+                new StampsApiSession().AuthenticateUser(userID, password.Text, StampsResellerType.None);
 
                 if (stampsAccount == null)
                 {
@@ -457,7 +457,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 RateCache.Instance.Clear();
 
                 // If this is the only account, update this shipment type profiles with this account
-                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(false);
+                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
                 if (accounts.Count == 1)
                 {
                     StampsAccountEntity accountEntity = accounts.First();

@@ -20,18 +20,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         readonly bool isExpress1 = false;
         bool loadedAccounts = false;
         private Express1StampsSettingsFacade express1Settings;
+        readonly StampsResellerType stampsResellerType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsSettingsControl(bool isExpress1)
+        public StampsSettingsControl(StampsResellerType stampsResellerType)
         {
             InitializeComponent();
 
-            this.isExpress1 = isExpress1;
+            this.stampsResellerType = stampsResellerType;
+            isExpress1 = stampsResellerType == StampsResellerType.Express1;
 
             optionsControl.IsExpress1 = isExpress1;
-            accountControl.IsExpress1 = isExpress1;
+            accountControl.StampsResellerType = stampsResellerType;
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             optionsControl.LoadSettings();
 
-            string reseller = StampsAccountManager.GetResellerName(isExpress1);
+            string reseller = StampsAccountManager.GetResellerName(stampsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = isExpress1;
