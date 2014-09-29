@@ -11,6 +11,7 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
@@ -77,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            return new StampsSetupWizard();
+            return new StampsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
         }
 
         /// <summary>

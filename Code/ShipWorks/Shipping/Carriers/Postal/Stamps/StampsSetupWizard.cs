@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
@@ -24,20 +23,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private StampsAccountEntity stampsAccount;
-        private StampsRegistration stampsRegistration;
+        private readonly StampsRegistration stampsRegistration;
+        private readonly IEnumerable<PostalAccountRegistrationType> availableRegistrationTypes;
 
         bool registrationComplete = false;
+        private readonly bool allowRegisteringExistingAccount;
+
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StampsSetupWizard"/> class.
         /// </summary>
-        public StampsSetupWizard()
+        /// <param name="promotion">The promotion.</param>
+        /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering existing account].</param>
+        public StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount)
         {
             InitializeComponent();
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
-            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway());
+            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(), promotion);
+            this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
+            availableRegistrationTypes = promotion.AvailableRegistrationTypes;
+
+            if (!availableRegistrationTypes.Any())
+            {
+                throw new StampsRegistrationException("There weren't any registration types provided to the Stamps.com setup wizard.");
+            }
         }
 
         /// <summary>
@@ -51,11 +62,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
             // until Stamps.com has enabled ShipWorks to register new accounts
-            accountTypePanel.Visible = EnableAccountRegistration;
-            if (!EnableAccountRegistration)
+            accountTypePanel.Visible = allowRegisteringExistingAccount;
+            
+            if (!allowRegisteringExistingAccount)
             {
-                radioNewAccount.Checked = false;
-                radioExistingAccount.Checked = true;
+                // Registering an existing account is not allowed, so choose new account (since the options have
+                // been hidden from the user)
+                radioNewAccount.Checked = true;
+                radioExistingAccount.Checked = false;
             }
 
             Pages.Add(new ShippingWizardPageOrigin(shipmentType));
@@ -73,27 +87,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             personControl.LoadEntity(new PersonAdapter(stampsAccount, string.Empty));
 
-            stampsAccountType.Items.Add(new StampsAccountTypeDropdownItem(AccountType.Individual, "Individual"));
-            stampsAccountType.Items.Add(new StampsAccountTypeDropdownItem(AccountType.HomeOffice, "Home Office"));
-            stampsAccountType.Items.Add(new StampsAccountTypeDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
-            stampsAccountType.Items.Add(new StampsAccountTypeDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
-            stampsAccountType.SelectedIndex = 0;
+            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
+            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
+            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
+            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
+            stampsUsageType.SelectedIndex = 0;
+
+            LoadAccountRegistrationTypes();
         }
 
-
-        /// <summary>
-        /// Gets a value indicating whether [enable account registration]. The code/wizard pages for registering a 
-        /// new Stamps.com account have been incorporated into the setup wizard, but Stamps.com has not enabled 
-        /// ShipWorks to create new accounts; invoking the API to register an account results in an error message 
-        /// from Stamps.com indicating that registration is not allowed. This flag is intended to be temporary until 
-        /// Stamps.com allows ShipWorks to register accounts. Once ShipWorks is allowed to register new accounts this 
-        /// flag can be removed.
-        /// </summary>
-        /// <value><c>true</c> if [enable account registration]; otherwise, <c>false</c>.</value>
-        private bool EnableAccountRegistration
+        private void LoadAccountRegistrationTypes()
         {
-            get { return true; }
+            stampsAccountRegistrationType.Items.Clear();
+            foreach (PostalAccountRegistrationType type in availableRegistrationTypes)
+            {
+                stampsAccountRegistrationType.Items.Add(new StampsRegistrationTypeDropdownItem(type, EnumHelper.GetDescription(type)));
+            }
+
+            if (stampsAccountRegistrationType.Items.Count == 1)
+            {
+                int adjustedHeight = stampsUsageType.Top - stampsAccountRegistrationType.Top;
+
+                // Don't show the registration drop down if there's only one item available
+                // and move up the other controls accordingly
+                stampsAccountRegistrationType.Visible = false;
+                stampsUsageType.Top = stampsAccountRegistrationType.Top;
+                
+                labelUsageType.Top = labelAccountType.Top;
+                labelAccountType.Visible = false;
+
+                panelAccountType.Height -= adjustedHeight;
+                personControl.Top -= adjustedHeight;
+                panelTerms.Top -= adjustedHeight;
+            }
+
+            // Default the selection to the first item in the list (in case it's hidden)
+            stampsAccountRegistrationType.SelectedIndex = 0;
         }
+        
 
         /// <summary>
         /// User clicked the link to open the stamps.com website
@@ -165,7 +196,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (HasAcceptedTermsConditions() && checker.Validate(this))
             {
                 // We have the necessary information, so update our stamps.com registration
-                stampsRegistration.AccountType = ((StampsAccountTypeDropdownItem)stampsAccountType.SelectedItem).AccountType;
+                stampsRegistration.UsageType = ((StampsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
+
+                StampsRegistrationTypeDropdownItem selectedStampsRegistrationTypeDropdownItem = (StampsRegistrationTypeDropdownItem) stampsAccountRegistrationType.SelectedItem;
+                stampsRegistration.RegistrationType = selectedStampsRegistrationTypeDropdownItem.RegistrationType;
 
                 stampsRegistration.PhysicalAddress.FirstName = stampsAccount.FirstName;
                 stampsRegistration.PhysicalAddress.LastName = stampsAccount.LastName;
