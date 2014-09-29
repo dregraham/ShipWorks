@@ -1,6 +1,9 @@
 ﻿
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
+    /// <summary>
+    /// Class for populating the Stamps.com registration type combo box.
+    /// </summary>
     public class StampsRegistrationTypeDropdownItem
     {
         /// <summary>

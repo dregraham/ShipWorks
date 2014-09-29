@@ -43,7 +43,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // the stamps.com API
             stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
-            this.availableRegistrationTypes = promotion.AvailableAccountTypes;
+            availableRegistrationTypes = promotion.AvailableRegistrationTypes;
+
+            if (!availableRegistrationTypes.Any())
+            {
+                throw new StampsRegistrationException("There weren't any registration types provided to the Stamps.com setup wizard.");
+            }
         }
 
         /// <summary>

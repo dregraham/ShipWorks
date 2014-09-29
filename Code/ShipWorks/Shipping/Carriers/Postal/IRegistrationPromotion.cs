@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// based on factors such as whether the account is a brand new account, being migrated from another
         /// postal carrier, etc.
         /// </summary>
-        IEnumerable<PostalAccountRegistrationType> AvailableAccountTypes { get; }
+        IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes { get; }
 
         /// <summary>
         /// Gets the promo code to use when registering an account with Stamps.com based on the 

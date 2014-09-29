@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <summary>
         /// This will only return the Expedited type.
         /// </summary>
-        public IEnumerable<PostalAccountRegistrationType> AvailableAccountTypes
+        public IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes
         {
             get { return new List<PostalAccountRegistrationType> { PostalAccountRegistrationType.Expedited }; }
         }
@@ -20,10 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// type of account being registered.
         /// </summary>
         /// <param name="registrationType">The type of account being registered.</param>
-        /// <returns>
-        /// The promotion code to be used during registration.
-        /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode(PostalAccountRegistrationType registrationType)
         {
             // The promotion code for a new expedited account.

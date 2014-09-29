@@ -17,17 +17,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration
         }
 
         [TestMethod]
-        public void AvailableAvailableAccountTypes_ReturnsListWithSingleItem_Test()
+        public void AvailableAvailableRegistrationTypes_ReturnsListWithSingleItem_Test()
         {
-            IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableAccountTypes;
+            IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableRegistrationTypes;
 
             Assert.AreEqual(1, registrationAccountTypes.Count());
         }
 
         [TestMethod]
-        public void AvailableAvailableAccountTypes_ContainsExpeditedRegistrationType_Test()
+        public void AvailableAvailableRegistrationTypes_ContainsExpeditedRegistrationType_Test()
         {
-            IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableAccountTypes;
+            IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableRegistrationTypes;
 
             Assert.AreEqual(PostalAccountRegistrationType.Expedited, registrationAccountTypes.First());
         }
