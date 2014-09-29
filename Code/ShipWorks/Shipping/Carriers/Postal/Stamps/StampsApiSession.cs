@@ -503,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             null,
                             registration.MachineInfo,
                             registration.Email,
-                            registration.AccountType,
+                            registration.UsageType,
                             registration.PromoCode,
                             (object)registration.CreditCard ?? registration.AchAccount,
                             out suggestedUserName,

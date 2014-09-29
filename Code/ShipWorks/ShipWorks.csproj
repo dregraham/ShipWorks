@@ -222,6 +222,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
@@ -706,6 +707,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsExpeditedRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
@@ -1775,7 +1777,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\IStampsRegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\IStampsRegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\RegistrationValidationError.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsAccountTypeDropdownItem.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsAccountUsageDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsPaymentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

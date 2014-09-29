@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             Password = string.Empty;
             Email = string.Empty;
 
-            AccountType = new AccountType();
+            UsageType = new AccountType();
             
             FirstCodewordType = new CodewordType();
             FirstCodewordValue = string.Empty;
@@ -87,10 +87,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         public string Email { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the account.
+        /// Gets or sets the intended usage of the the account. 
         /// </summary>
-        /// <value>The type of the account.</value>
-        public AccountType AccountType { get; set; }
+        /// <value>The intended usage of the account.</value>
+        public AccountType UsageType { get; set; }
 
         /// <summary>
         /// Gets or sets the first type of the codeword.
