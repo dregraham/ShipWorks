@@ -478,6 +478,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             // groupParcelSelect
             // 
+            this.groupParcelSelect.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupParcelSelect.Controls.Add(this.kryptonBorderEdge6);
             this.groupParcelSelect.Controls.Add(this.labelEntryFacility);
             this.groupParcelSelect.Controls.Add(this.entryFacility);

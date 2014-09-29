@@ -25,6 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public StampsProfileControl(ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabPage);
+
             this.shipmentTypeCode = shipmentTypeCode;
         }
 

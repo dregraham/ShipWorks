@@ -64,5 +64,18 @@ namespace ShipWorks.Shipping.Profiles
         {
 
         }
+        
+        /// <summary>
+        /// Resize all the GroupBoxes in the specified container so they are all uniform
+        /// </summary>
+        /// <remarks>We're doing this here instead of in the designer because the inheritance of the profile controls
+        /// makes getting the sizeing right difficult</remarks>
+        protected static void ResizeGroupBoxes(Control container)
+        {
+            foreach (GroupBox groupBox in container.Controls.OfType<GroupBox>())
+            {
+                groupBox.Size = new Size(container.Size.Width - 18, groupBox.Size.Height);
+            }
+        }
     }
 }
