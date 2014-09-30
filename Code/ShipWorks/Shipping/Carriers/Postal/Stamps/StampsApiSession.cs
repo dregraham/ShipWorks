@@ -698,7 +698,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ThermalLanguage? thermalType;
 
-            // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            // Determine what thermal type, if any to use.  
+            // If USPS, use it's setting.  
+            // Otherwise, use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
+            {
+                thermalType = settings.UspsThermal ? (ThermalLanguage)settings.UspsThermalType : (ThermalLanguage?)null;
+            }
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
