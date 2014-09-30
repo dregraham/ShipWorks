@@ -205,11 +205,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets the name of the Stamps reseller, either "Stamps" or "Express1"
+        /// Gets the name of the Stamps reseller
         /// </summary>
         public static string GetResellerName(StampsResellerType stampsResellerType)
         {
-            return stampsResellerType == StampsResellerType.Express1 ? "Express1" : "Stamps.com";
+            switch (stampsResellerType)
+            {
+                case StampsResellerType.None:
+                    return "Stamps.com";
+                case StampsResellerType.Express1:
+                    return "Express1";
+                case StampsResellerType.StampsExpedited:
+                    return "USPS";
+                default:
+                    throw new ArgumentOutOfRangeException("stampsResellerType");
+            }
         }
     }
 }
