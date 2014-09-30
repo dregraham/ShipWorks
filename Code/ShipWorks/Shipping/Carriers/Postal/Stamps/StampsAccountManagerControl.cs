@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            if (StampsAccountManager.DisplaySetupWizard(this, IsExpress1))
+            if (StampsAccountManager.DisplaySetupWizard(this, StampsResellerType))
             {
                 LoadAccounts();
             }
