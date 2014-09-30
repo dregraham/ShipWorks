@@ -345,7 +345,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            return new StampsShipmentProcessingSynchronizer();
+            return new StampsShipmentProcessingSynchronizer(AccountRepository);
         }
 
         /// <summary>

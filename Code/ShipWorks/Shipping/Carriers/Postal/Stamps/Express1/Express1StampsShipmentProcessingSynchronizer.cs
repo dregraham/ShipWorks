@@ -12,14 +12,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1ShipmentProcessingSynchronizer"/> class.
+        /// Initializes a new instance of the <see cref="Express1StampsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         public Express1StampsShipmentProcessingSynchronizer()
             : this(new Express1StampsAccountRepository())
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1ShipmentProcessingSynchronizer"/> class.
+        /// Initializes a new instance of the <see cref="Express1StampsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
         public Express1StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<StampsAccountEntity> accountRepository)
