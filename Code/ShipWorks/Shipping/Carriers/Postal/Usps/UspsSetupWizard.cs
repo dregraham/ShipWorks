@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+﻿using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -14,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="promotion">The promotion.</param>
         /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering existing account].</param>
         public UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount)
-            : base(promotion, allowRegisteringExistingAccount)
+            : base(promotion, allowRegisteringExistingAccount, ShipmentTypeCode.Usps)
         { }
 
         /// <summary>

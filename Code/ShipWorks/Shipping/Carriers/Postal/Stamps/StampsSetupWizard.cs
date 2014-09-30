@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         private readonly StampsRegistration stampsRegistration;
         private readonly IEnumerable<PostalAccountRegistrationType> availableRegistrationTypes;
+        private readonly ShipmentTypeCode shipmentTypeCode;
 
         bool registrationComplete = false;
         private readonly bool allowRegisteringExistingAccount;
@@ -35,8 +36,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="promotion">The promotion.</param>
         /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering existing account].</param>
         public StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount)
+            : this (promotion, allowRegisteringExistingAccount, ShipmentTypeCode.Stamps)
+        { }
+
+        protected StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+
+            this.shipmentTypeCode = shipmentTypeCode;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
@@ -57,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             optionsControl.LoadSettings();
 
@@ -468,8 +475,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
+                StampsShipmentType shipmentType = (StampsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+
                 // If this is the only account, update this shipment type profiles with this account
-                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+                List<StampsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
                 if (accounts.Count == 1)
                 {
                     StampsAccountEntity accountEntity = accounts.First();
@@ -478,7 +487,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous account that has since
                     // been deleted. 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Stamps))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentTypeCode))
                     {
                         if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
                         {
