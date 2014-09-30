@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -36,6 +38,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override SettingsControlBase CreateSettingsControl()
         {
             return new StampsSettingsControl(StampsResellerType.StampsExpedited);
-        } 
+        }
+
+        /// <summary>
+        /// Get postal rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
+            
+            return new RateGroup(stampsRates);
+        }
     }
 }

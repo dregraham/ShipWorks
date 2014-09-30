@@ -187,7 +187,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        protected virtual RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();

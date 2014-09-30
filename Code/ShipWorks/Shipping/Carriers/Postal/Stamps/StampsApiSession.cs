@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             stampsRate.DeliverDays.Replace("Days", ""))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
+                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                         };
                     }
                     else
@@ -315,8 +315,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             stampsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                             {
-
-                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
+                                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                             };
                     }
 
