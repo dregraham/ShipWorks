@@ -3,6 +3,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
@@ -59,6 +60,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
             return new RateGroup(stampsRates);
+        }
+
+        /// <summary>
+        /// Creates the Express1/Stamps service control.
+        /// </summary>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
+        {
+            return new UspsServiceControl(rateControl);
         }
 
         /// <summary>
