@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// A shipment type for the generic USPS shipment type in ShipWorks. This is actually a
+    /// Stamps.com Expedited shipment type (which is why it derives from the StampsShipmentType)
+    /// that gets presented as USPS to the end user.
+    /// </summary>
     public class UspsShipmentType : StampsShipmentType
     {
         /// <summary>
@@ -38,6 +41,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override SettingsControlBase CreateSettingsControl()
         {
             return new StampsSettingsControl(ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Create the Form used to do the setup for the Stamps.com API
+        /// </summary>
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
+        {
+            return new UspsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
         }
 
         /// <summary>
