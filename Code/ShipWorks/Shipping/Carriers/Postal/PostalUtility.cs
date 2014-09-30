@@ -58,6 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             switch (shipmentTypeCode)
             {
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
@@ -141,6 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     };
 
                 if (shipmentType == ShipmentTypeCode.Stamps ||
+                    shipmentType == ShipmentTypeCode.Usps ||
                     shipmentType == ShipmentTypeCode.Express1Stamps ||
                     shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
