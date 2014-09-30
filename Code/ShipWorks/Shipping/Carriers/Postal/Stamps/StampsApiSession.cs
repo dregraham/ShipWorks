@@ -707,6 +707,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 thermalType = settings.Express1StampsThermal ? (ThermalLanguage)settings.Express1StampsThermalType : (ThermalLanguage?)null;
             }
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Usps)
+            {
+                thermalType = settings.UspsThermal ? (ThermalLanguage)settings.UspsThermalType : (ThermalLanguage?)null;
+            }
             else
             {
                 throw new InvalidOperationException("Unknown Stamps.com shipment type.");

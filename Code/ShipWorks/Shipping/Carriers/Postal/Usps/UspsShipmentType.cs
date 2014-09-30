@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShouldRetrieveExpress1Rates = false;
 
             // Use the "live" versions by default
-            AccountRepository = new StampsAccountRepository();
+            AccountRepository = new UspsAccountRepository();
             LogEntryFactory = new LogEntryFactory();
         }
 
@@ -47,8 +47,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
-            
             return new RateGroup(stampsRates);
+        }
+
+        /// <summary>
+        /// Process the shipment. Overridden here, so overhead of Express1 can be removed.
+        /// </summary>
+        public override void ProcessShipment(ShipmentEntity shipment)
+        {
+            ValidateShipment(shipment);
+
+            try
+            {
+                new StampsApiSession().ProcessShipment(shipment);
+            }
+            catch (StampsException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
         }
     }
 }
