@@ -297,6 +297,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
@@ -386,6 +387,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                     PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
                     service = EnumHelper.GetDescription(uspsType);
                     break;
