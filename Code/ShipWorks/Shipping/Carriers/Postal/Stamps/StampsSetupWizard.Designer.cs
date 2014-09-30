@@ -300,7 +300,7 @@
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.ResellerType = StampsResellerType.None;
+            this.optionsControl.ShipmentTypeCode = ShipmentTypeCode.Stamps;
             this.optionsControl.Location = new System.Drawing.Point(16, 5);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(435, 112);

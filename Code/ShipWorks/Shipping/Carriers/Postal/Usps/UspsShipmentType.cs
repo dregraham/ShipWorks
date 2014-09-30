@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(StampsResellerType.StampsExpedited);
+            return new StampsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>

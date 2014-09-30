@@ -495,5 +495,23 @@ namespace ShipWorks.Shipping.Carriers.Postal
                      StampsAccountManager.StampsAccounts.Any() ||
                      StampsAccountManager.Express1Accounts.Any();
         }
+
+        /// <summary>
+        /// Returns the StampsResellerType for a ShipmentTypeCode
+        /// </summary>
+        public static StampsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.Usps:
+                    return StampsResellerType.StampsExpedited;
+                case ShipmentTypeCode.Stamps:
+                    return StampsResellerType.None;
+                case ShipmentTypeCode.Express1Stamps:
+                    return StampsResellerType.Express1;
+                default:
+                    throw new ArgumentException(string.Format("{0} has no associated StampsResellerType.", EnumHelper.GetDescription(shipmentTypeCode)), "shipmentTypeCode");
+            }
+        }
     }
 }
