@@ -705,7 +705,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 thermalType = settings.UspsThermal ? (ThermalLanguage)settings.UspsThermalType : (ThermalLanguage?)null;
             }
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 thermalType = settings.StampsThermal ? (ThermalLanguage)settings.StampsThermalType : (ThermalLanguage?)null;
             }

@@ -132,6 +132,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 stampsAccount = Express1Accounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
             }
 
+            if (stampsAccount == null)
+            {
+                stampsAccount = StampsExpeditedAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+            }
+
             return stampsAccount;
         }
 

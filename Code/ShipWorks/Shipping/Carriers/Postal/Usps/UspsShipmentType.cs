@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                new StampsApiSession().ProcessShipment(shipment);
+                new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).ProcessShipment(shipment);
             }
             catch (StampsException ex)
             {
