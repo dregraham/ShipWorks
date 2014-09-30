@@ -622,7 +622,6 @@
             this.groupEmail.Controls.Add(this.emailNotifySenderState);
             this.groupEmail.Controls.Add(this.emailNotifyMessage);
             this.groupEmail.Controls.Add(this.labelPersonalMessage);
-            this.groupEmail.Controls.Add(this.kryptonBorderEdgeEmail2);
             this.groupEmail.Controls.Add(this.emailNotifyOtherShip);
             this.groupEmail.Controls.Add(this.emailNotifyOtherDelivery);
             this.groupEmail.Controls.Add(this.emailNotifyOtherException);
@@ -630,7 +629,6 @@
             this.groupEmail.Controls.Add(this.emailNotifyRecipientDelivery);
             this.groupEmail.Controls.Add(this.emailNotifyRecipientException);
             this.groupEmail.Controls.Add(this.emailNotifyOtherAddress);
-            this.groupEmail.Controls.Add(this.kryptonBorderEdgeEmail);
             this.groupEmail.Controls.Add(this.labelEmailOther);
             this.groupEmail.Controls.Add(this.labelEmailRecipient);
             this.groupEmail.Controls.Add(this.labelEmailSender);

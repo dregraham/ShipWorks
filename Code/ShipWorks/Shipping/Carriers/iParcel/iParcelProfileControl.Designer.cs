@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge11.AutoSize = false;
             this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge11.Location = new System.Drawing.Point(29, 17);
+            this.kryptonBorderEdge11.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge11.Name = "kryptonBorderEdge11";
             this.kryptonBorderEdge11.Size = new System.Drawing.Size(1, 52);
             this.kryptonBorderEdge11.Text = "kryptonBorderEdge11";
