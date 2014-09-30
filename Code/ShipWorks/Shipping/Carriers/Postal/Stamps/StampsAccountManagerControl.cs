@@ -52,6 +52,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public StampsResellerType StampsResellerType { get; set; }
 
+        /// <summary>
+        /// Determines if an Express1 account is being managed.
+        /// </summary>
         private bool IsExpress1
         {
             get { return StampsResellerType == StampsResellerType.Express1; }
