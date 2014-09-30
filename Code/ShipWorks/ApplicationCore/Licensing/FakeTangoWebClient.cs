@@ -26,12 +26,12 @@ namespace ShipWorks.ApplicationCore.Licensing
             // for, however.
             List<Nudge> nudges = new List<Nudge>
             {
-                new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
-                new Nudge(2, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500))
+                new Nudge(7, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
+                new Nudge(8, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500))
             };
 
             // Add a couple of options to the first nudge
-            nudges[0].AddNudgeOption(new NudgeOption(1, 0, "OK", nudges[0], NudgeOptionActionType.None));
+            nudges[0].AddNudgeOption(new NudgeOption(3, 0, "OK", nudges[0], NudgeOptionActionType.None));
             nudges[0].AddNudgeOption(new NudgeOption(2, 1, "Close ShipWorks", nudges[0], NudgeOptionActionType.Shutdown));
 
             // Add one option to the second nudge in the list

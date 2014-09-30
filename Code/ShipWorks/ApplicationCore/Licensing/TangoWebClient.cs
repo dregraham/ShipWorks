@@ -140,8 +140,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
-            postRequest.Variables.Add("action", "lognudgeresponse");            
-            postRequest.Variables.Add("nudgeOptionID", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("action", "lognudgeresponse");
+            postRequest.Variables.Add("nudgeid", option.Owner.NudgeID.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("nudgeoptionid", option.NudgeOptionID.ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("result", option.Result);
 
             ProcessRequest(postRequest, "LogNudgeOption");
@@ -439,6 +440,30 @@ namespace ShipWorks.ApplicationCore.Licensing
             ProcessXmlRequest(postRequest, "SubmitInsuranceClaim");
         }
 
+		/// <summary>
+        /// Sends Postal balances for postal services.
+        /// </summary>
+        public static void LogPostageEvent(LicenseAccountDetail license, decimal balance, decimal purchaseAmount, ShipmentTypeCode shipmentTypeCode, string accountIdentifier)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "logpostagebalance");
+            postRequest.Variables.Add("license", license.Key);
+            postRequest.Variables.Add("balance", balance.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("purchaseamount", purchaseAmount.ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("accountidentifier", accountIdentifier);
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
+
+            // Check for error
+            XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
+            if (errorNode != null)
+            {
+                throw new TangoException(errorNode.InnerText);
+            }
+        }
+		
         /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.

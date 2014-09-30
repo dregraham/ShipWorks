@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Quartz.Util;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Hashing;
@@ -218,13 +219,23 @@ namespace ShipWorks.Shipping.ShipSense
                             // configuration of a domestic shipment meaning the domestic shipment still matches the KB entry
                             // (e.g. the harmonized code of an international shipment changed which does not impact weight 
                             // or dimensions of a domestic shipment)
-                            KnowledgebaseEntry originalEntry = knowledgebaseEntryDictionary[hashResult.HashValue];
-                            matchedShipment.ShipSenseStatus = originalEntry.Matches(matchedShipment) ? (int)ShipSenseStatus.Applied : (int)ShipSenseStatus.Overwritten;
+                            matchedShipment.ShipSenseStatus = MatchesOriginalEntry(matchedShipment, hashResult) ? 
+                                (int)ShipSenseStatus.Applied : 
+                                (int)ShipSenseStatus.Overwritten;
                         }
                     }
                 }
             }
-        }        
+        }
+
+        /// <summary>
+        /// Checks whether the matched shipment is already in the knowledgebase
+        /// </summary>
+        private bool MatchesOriginalEntry(ShipmentEntity matchedShipment, KnowledgebaseHashResult hash)
+        {
+            return knowledgebaseEntryDictionary.ContainsKey(hash.HashValue) && 
+                knowledgebaseEntryDictionary[hash.HashValue].Matches(matchedShipment);
+        }
 
         /// <summary>
         /// Inspects the ShipSense status of the given shipment to determine whether ShipSense 

@@ -251,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            PostageBalance postageBalance;
+            WebServices.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
@@ -686,7 +686,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
-            PostageBalance postageBalance;
+            WebServices.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Stamps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
