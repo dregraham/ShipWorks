@@ -109,6 +109,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Return the active list of Stamps.com Expedited accounts
+        /// </summary>
+        public static List<StampsAccountEntity> StampsExpeditedAccounts
+        {
+            get
+            {
+                return GetAccounts(StampsResellerType.StampsExpedited, false);
+            }
+        }
+
+        /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
         public static StampsAccountEntity GetAccount(long accountID)
