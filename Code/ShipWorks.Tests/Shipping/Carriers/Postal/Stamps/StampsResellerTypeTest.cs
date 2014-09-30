@@ -23,5 +23,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             // The upgrade script depends on None value being 0
             Assert.AreEqual(0, (int)StampsResellerType.None);
         }
+
+        [TestMethod]
+        public void StampsExpedited_HasTwoAsValue_Test()
+        {
+            Assert.AreEqual(2, (int)StampsResellerType.StampsExpedited);
+        }
     }
 }

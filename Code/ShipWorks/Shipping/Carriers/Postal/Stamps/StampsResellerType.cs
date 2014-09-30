@@ -17,6 +17,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         None = 0,
 
         [Description("Express1")]
-        Express1 = 1
+        Express1 = 1,
+
+        [Description("USPS")]
+        StampsExpedited = 2
     }
 }
