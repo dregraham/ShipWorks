@@ -40,7 +40,7 @@
             // 
             this.labelAccounts.AutoSize = true;
             this.labelAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAccounts.Location = new System.Drawing.Point(9, 204);
+            this.labelAccounts.Location = new System.Drawing.Point(8, 206);
             this.labelAccounts.Name = "labelAccounts";
             this.labelAccounts.Size = new System.Drawing.Size(84, 13);
             this.labelAccounts.TabIndex = 1;
@@ -49,7 +49,7 @@
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.Location = new System.Drawing.Point(12, 221);
+            this.accountControl.Location = new System.Drawing.Point(27, 227);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(404, 168);
             this.accountControl.TabIndex = 2;
@@ -66,7 +66,7 @@
             // 
             // upsMailInnovationsOptions
             // 
-            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(29, 435);
+            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 447);
             this.upsMailInnovationsOptions.Name = "upsMailInnovationsOptions";
             this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 46);
             this.upsMailInnovationsOptions.TabIndex = 14;
@@ -75,7 +75,7 @@
             // 
             this.labelInfo.AutoSize = true;
             this.labelInfo.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelInfo.Location = new System.Drawing.Point(9, 414);
+            this.labelInfo.Location = new System.Drawing.Point(9, 426);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(292, 13);
             this.labelInfo.TabIndex = 13;
@@ -85,7 +85,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(9, 399);
+            this.label2.Location = new System.Drawing.Point(8, 408);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 12;
@@ -103,7 +103,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "WorldShipSettingsControl";
-            this.Size = new System.Drawing.Size(468, 493);
+            this.Size = new System.Drawing.Size(468, 502);
             this.ResumeLayout(false);
             this.PerformLayout();
 
