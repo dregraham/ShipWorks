@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -20,9 +21,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Whether the control is used for Express1.
+        /// The stamps reseller type.
         /// </summary>
-        public bool IsExpress1 
+        public StampsResellerType ResellerType
         { 
             get; 
             set; 
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if(IsExpress1)
+            if (ResellerType == StampsResellerType.Express1)
             {
                 thermalPrinter.Checked = settings.Express1StampsThermal;
                 thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if(IsExpress1)
+            if (ResellerType == StampsResellerType.Express1)
             {
                 settings.Express1StampsThermal = thermalPrinter.Checked;
                 settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   

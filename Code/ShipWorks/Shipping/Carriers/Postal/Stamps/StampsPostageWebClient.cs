@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get 
             {
-                return account.IsExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps;
+                return account.StampsReseller == (int)StampsResellerType.Express1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps;
             }
         }
 

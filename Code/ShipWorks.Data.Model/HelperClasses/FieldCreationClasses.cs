@@ -17027,10 +17027,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
 		}
-		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
-		public static EntityField2 IsExpress1
+		/// <summary>Creates a new StampsAccountEntity.StampsReseller field instance</summary>
+		public static EntityField2 StampsReseller
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StampsReseller);}
 		}
 	}
 

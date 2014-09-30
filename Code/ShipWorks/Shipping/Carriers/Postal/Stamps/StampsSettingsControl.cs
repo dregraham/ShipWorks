@@ -17,21 +17,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsSettingsControl : SettingsControlBase
     {
-        readonly bool isExpress1 = false;
         bool loadedAccounts = false;
         private Express1StampsSettingsFacade express1Settings;
+        readonly StampsResellerType stampsResellerType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsSettingsControl(bool isExpress1)
+        public StampsSettingsControl(StampsResellerType stampsResellerType)
         {
             InitializeComponent();
 
-            this.isExpress1 = isExpress1;
+            this.stampsResellerType = stampsResellerType;
 
-            optionsControl.IsExpress1 = isExpress1;
-            accountControl.IsExpress1 = isExpress1;
+            optionsControl.ResellerType = stampsResellerType;
+            accountControl.StampsResellerType = stampsResellerType;
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             optionsControl.LoadSettings();
 
-            string reseller = StampsAccountManager.GetResellerName(isExpress1);
+            string reseller = StampsAccountManager.GetResellerName(stampsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
-            express1Options.Visible = isExpress1;
-            express1SettingsControl.Visible = !isExpress1;
+            express1Options.Visible = stampsResellerType == StampsResellerType.Express1;
+            express1SettingsControl.Visible = stampsResellerType != StampsResellerType.Express1;
 
             LoadExpress1Settings();
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             express1Settings = new Express1StampsSettingsFacade(settings);
 
-            if (isExpress1)
+            if (stampsResellerType == StampsResellerType.Express1)
             {
                 express1Options.LoadSettings(settings);
                 panelBottom.Top = express1Options.Bottom + 5;
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             optionsControl.SaveSettings(settings);
 
-            if (isExpress1)
+            if (stampsResellerType == StampsResellerType.Express1)
             {
                 express1Options.SaveSettings(settings);
             }
