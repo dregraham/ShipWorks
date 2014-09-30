@@ -1,3 +1,5 @@
+using System.Security.AccessControl;
+
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
     partial class Express1SetupWizard
@@ -111,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountList);
+            this.mainPanel.Controls.Add(this.wizardPageOptions);
             this.mainPanel.Size = new System.Drawing.Size(625, 460);
             // 
             // etchBottom
@@ -139,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountType.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountType.Name = "wizardPageAccountType";
-            this.wizardPageAccountType.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageAccountType.Size = new System.Drawing.Size(625, 460);
             this.wizardPageAccountType.TabIndex = 0;
             this.wizardPageAccountType.Title = "Setup Express1 Shipping";
             // 
@@ -183,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAddress.Name = "wizardPageAddress";
-            this.wizardPageAddress.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageAddress.Size = new System.Drawing.Size(625, 460);
             this.wizardPageAddress.TabIndex = 0;
             this.wizardPageAddress.Title = "Account Registration";
             this.wizardPageAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAddress);
@@ -221,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAgreement.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAgreement.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAgreement.Name = "wizardPageAgreement";
-            this.wizardPageAgreement.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageAgreement.Size = new System.Drawing.Size(625, 460);
             this.wizardPageAgreement.TabIndex = 0;
             this.wizardPageAgreement.Title = "Express1 Agreement";
             this.wizardPageAgreement.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAgreement);
@@ -260,7 +262,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPagePayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPagePayment.Location = new System.Drawing.Point(0, 0);
             this.wizardPagePayment.Name = "wizardPagePayment";
-            this.wizardPagePayment.Size = new System.Drawing.Size(545, 460);
+            this.wizardPagePayment.Size = new System.Drawing.Size(625, 460);
             this.wizardPagePayment.TabIndex = 0;
             this.wizardPagePayment.Title = "Account Registration";
             this.wizardPagePayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPayment);
@@ -570,10 +572,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptions.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptions.Name = "wizardPageOptions";
-            this.wizardPageOptions.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageOptions.Size = new System.Drawing.Size(625, 460);
             this.wizardPageOptions.TabIndex = 0;
             this.wizardPageOptions.Title = "Express1 Settings";
             this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
+            this.wizardPageOptions.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSettings);
             // 
             // optionsControlPanel
             // 
@@ -595,7 +598,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageExisting.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageExisting.Location = new System.Drawing.Point(0, 0);
             this.wizardPageExisting.Name = "wizardPageExisting";
-            this.wizardPageExisting.Size = new System.Drawing.Size(545, 460);
+            this.wizardPageExisting.Size = new System.Drawing.Size(625, 460);
             this.wizardPageExisting.TabIndex = 0;
             this.wizardPageExisting.Title = "Express1 Account";
             this.wizardPageExisting.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepExistingNext);
