@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.IsExpress1 = false;
+            this.optionsControl.ResellerType = StampsResellerType.None;
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(435, 105);
