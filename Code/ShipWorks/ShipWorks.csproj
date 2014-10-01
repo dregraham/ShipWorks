@@ -718,12 +718,6 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.Designer.cs">
-      <DependentUpon>UspsServiceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">

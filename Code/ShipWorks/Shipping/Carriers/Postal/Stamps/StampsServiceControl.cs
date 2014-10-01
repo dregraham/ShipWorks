@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StampsServiceControl(ShipmentTypeCode shipmentTypeCode, StampsResellerType stampsResellerType, RateControl rateControl)
+        public StampsServiceControl(ShipmentTypeCode shipmentTypeCode, StampsResellerType stampsResellerType, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
             this.stampsResellerType = stampsResellerType;

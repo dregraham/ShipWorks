@@ -69,7 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
-            return new UspsServiceControl(rateControl);
+            // Just use the stamps service control, but configured it for USPS (Stamps.com Expedited)
+            return new StampsServiceControl(ShipmentTypeCode, StampsResellerType.StampsExpedited, rateControl);
         }
 
         /// <summary>
