@@ -215,6 +215,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Changes the contract associated with the given account based on the contract type provided.
+        /// </summary>
+        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        {
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+
+            AuthenticationWrapper(() =>
+            {
+                contractWebClient.ChangeToExpeditedPlan(GetAuthenticator(account), promoCode);
+                return true;
+            }, account);
+        }
+
+        /// <summary>
         /// Get the Stamps.com URL of the given urlType
         /// </summary>
         public string GetUrl(StampsAccountEntity account, UrlType urlType)
