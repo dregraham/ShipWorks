@@ -8380,7 +8380,7 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv38.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\cost_code_info_v1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12285,10 +12285,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv38.wsdl">
+    <WebReferenceUrl Include="C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\</RelPath>
-      <UpdateFromURL>C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv38.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

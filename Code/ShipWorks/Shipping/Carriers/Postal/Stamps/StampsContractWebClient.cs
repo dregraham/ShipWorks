@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private string ServiceUrl
         {
-            get { return useTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV38.asmx" : "https://swsim.stamps.com/swsim/swsimv38.asmx"; }
+            get { return useTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV39.asmx" : "https://swsim.stamps.com/swsim/swsimv39.asmx"; }
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             
             try
             {
-                using (SwsimV38 webService = new SwsimV38())
+                using (SwsimV39 webService = new SwsimV39(new LogEntryFactory().GetLogEntry(ApiLogSource.UspsStamps, "ChangePlan", LogActionType.Other)))
                 {
                     webService.Url = ServiceUrl;
                     webService.ChangePlan(authenticator, ExpeditedPlanID, promoCode, out purchaseStatus, out transactionID, out rejectionReason);

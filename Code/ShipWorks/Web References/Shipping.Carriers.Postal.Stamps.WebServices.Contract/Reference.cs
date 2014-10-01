@@ -26,10 +26,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="SwsimV38Soap", Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Web.Services.WebServiceBindingAttribute(Name="SwsimV39Soap", Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(Capabilities))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CustomsV2))]
-    public partial class SwsimV38 : System.Web.Services.Protocols.SoapHttpClientProtocol {
+    public partial class SwsimV39 : System.Web.Services.Protocols.SoapHttpClientProtocol {
+        
+        private System.Threading.SendOrPostCallback SetCodeWordsOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback EnumCodeWordTypesOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback RegisterAccountOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetShipmentListOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetShipmentListByTokenOperationCompleted;
         
         private System.Threading.SendOrPostCallback CreateIndiciumOperationCompleted;
         
@@ -85,8 +95,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         
         private System.Threading.SendOrPostCallback GetCodewordQuestionsOperationCompleted;
         
-        private System.Threading.SendOrPostCallback RegisterAccountOperationCompleted;
-        
         private System.Threading.SendOrPostCallback VoidUnfundedIndiciumOperationCompleted;
         
         private System.Threading.SendOrPostCallback FundUnfundedIndiciumOperationCompleted;
@@ -102,8 +110,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
-        public SwsimV38() {
-            this.Url = "https://swsim.stamps.com/swsim/swsimv38.asmx";
+        public SwsimV39() {
+            this.Url = "https://swsim.testing.stamps.com/swsim/swsimv39.asmx";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
@@ -136,6 +144,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
+        
+        /// <remarks/>
+        public event SetCodeWordsCompletedEventHandler SetCodeWordsCompleted;
+        
+        /// <remarks/>
+        [CLSCompliant(false)]
+        public event EnumCodeWordTypesCompletedEventHandler EnumCodeWordTypesCompleted;
+        
+        /// <remarks/>
+        public event RegisterAccountCompletedEventHandler RegisterAccountCompleted;
+        
+        /// <remarks/>
+        public event GetShipmentListCompletedEventHandler GetShipmentListCompleted;
+        
+        /// <remarks/>
+        public event GetShipmentListByTokenCompletedEventHandler GetShipmentListByTokenCompleted;
         
         /// <remarks/>
         public event CreateIndiciumCompletedEventHandler CreateIndiciumCompleted;
@@ -174,6 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         public event ChangePasswordCompletedEventHandler ChangePasswordCompleted;
         
         /// <remarks/>
+        [CLSCompliant(false)]
         public event PriceOrderCompletedEventHandler PriceOrderCompleted;
         
         /// <remarks/>
@@ -201,6 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         public event EnumNetStampsLayoutsCompletedEventHandler EnumNetStampsLayoutsCompleted;
         
         /// <remarks/>
+        [CLSCompliant(false)]
         public event EnumCostCodesCompletedEventHandler EnumCostCodesCompleted;
         
         /// <remarks/>
@@ -217,9 +243,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         
         /// <remarks/>
         public event GetCodewordQuestionsCompletedEventHandler GetCodewordQuestionsCompleted;
-        
-        /// <remarks/>
-        public event RegisterAccountCompletedEventHandler RegisterAccountCompleted;
         
         /// <remarks/>
         public event VoidUnfundedIndiciumCompletedEventHandler VoidUnfundedIndiciumCompleted;
@@ -240,7 +263,277 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         public event TrackShipmentCompletedEventHandler TrackShipmentCompleted;
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/SetCodeWords", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
+        public string SetCodeWords([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, CodewordType2 Codeword1Type, [System.Xml.Serialization.XmlIgnoreAttribute()] bool Codeword1TypeSpecified, string Codeword1, CodewordType2 Codeword2Type, [System.Xml.Serialization.XmlIgnoreAttribute()] bool Codeword2TypeSpecified, string Codeword2) {
+            object[] results = this.Invoke("SetCodeWords", new object[] {
+                        Item,
+                        Codeword1Type,
+                        Codeword1TypeSpecified,
+                        Codeword1,
+                        Codeword2Type,
+                        Codeword2TypeSpecified,
+                        Codeword2});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void SetCodeWordsAsync(object Item, CodewordType2 Codeword1Type, bool Codeword1TypeSpecified, string Codeword1, CodewordType2 Codeword2Type, bool Codeword2TypeSpecified, string Codeword2) {
+            this.SetCodeWordsAsync(Item, Codeword1Type, Codeword1TypeSpecified, Codeword1, Codeword2Type, Codeword2TypeSpecified, Codeword2, null);
+        }
+        
+        /// <remarks/>
+        public void SetCodeWordsAsync(object Item, CodewordType2 Codeword1Type, bool Codeword1TypeSpecified, string Codeword1, CodewordType2 Codeword2Type, bool Codeword2TypeSpecified, string Codeword2, object userState) {
+            if ((this.SetCodeWordsOperationCompleted == null)) {
+                this.SetCodeWordsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetCodeWordsOperationCompleted);
+            }
+            this.InvokeAsync("SetCodeWords", new object[] {
+                        Item,
+                        Codeword1Type,
+                        Codeword1TypeSpecified,
+                        Codeword1,
+                        Codeword2Type,
+                        Codeword2TypeSpecified,
+                        Codeword2}, this.SetCodeWordsOperationCompleted, userState);
+        }
+        
+        private void OnSetCodeWordsOperationCompleted(object arg) {
+            if ((this.SetCodeWordsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.SetCodeWordsCompleted(this, new SetCodeWordsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/EnumCodeWordTypes", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlArrayAttribute("CodeWords")]
+        [return: System.Xml.Serialization.XmlArrayItemAttribute("CodewordV1")]
+        [CLSCompliant(false)]
+        public Codeword[] EnumCodeWordTypes() {
+            object[] results = this.Invoke("EnumCodeWordTypes", new object[0]);
+            return ((Codeword[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void EnumCodeWordTypesAsync() {
+            this.EnumCodeWordTypesAsync(null);
+        }
+        
+        /// <remarks/>
+        public void EnumCodeWordTypesAsync(object userState) {
+            if ((this.EnumCodeWordTypesOperationCompleted == null)) {
+                this.EnumCodeWordTypesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnEnumCodeWordTypesOperationCompleted);
+            }
+            this.InvokeAsync("EnumCodeWordTypes", new object[0], this.EnumCodeWordTypesOperationCompleted, userState);
+        }
+        
+        private void OnEnumCodeWordTypesOperationCompleted(object arg) {
+            if ((this.EnumCodeWordTypesCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.EnumCodeWordTypesCompleted(this, new EnumCodeWordTypesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/RegisterAccount", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RegistrationStatus")]
+        public RegistrationStatus RegisterAccount(
+                    System.Guid IntegrationID, 
+                    string UserName, 
+                    string Password, 
+                    CodewordType2 Codeword1Type, 
+                    [System.Xml.Serialization.XmlIgnoreAttribute()] bool Codeword1TypeSpecified, 
+                    string Codeword1, 
+                    CodewordType2 Codeword2Type, 
+                    [System.Xml.Serialization.XmlIgnoreAttribute()] bool Codeword2TypeSpecified, 
+                    string Codeword2, 
+                    Address PhysicalAddress, 
+                    Address MailingAddress, 
+                    MachineInfo MachineInfo, 
+                    string Email, 
+                    AccountType AccountType, 
+                    string PromoCode, 
+                    [System.Xml.Serialization.XmlElementAttribute("AchAccount", typeof(AchAccount))] [System.Xml.Serialization.XmlElementAttribute("CreditCard", typeof(CreditCard))] object Item, 
+                    out string SuggestedUserName, 
+                    out int UserId, 
+                    out string PromoUrl) {
+            object[] results = this.Invoke("RegisterAccount", new object[] {
+                        IntegrationID,
+                        UserName,
+                        Password,
+                        Codeword1Type,
+                        Codeword1TypeSpecified,
+                        Codeword1,
+                        Codeword2Type,
+                        Codeword2TypeSpecified,
+                        Codeword2,
+                        PhysicalAddress,
+                        MailingAddress,
+                        MachineInfo,
+                        Email,
+                        AccountType,
+                        PromoCode,
+                        Item});
+            SuggestedUserName = ((string)(results[1]));
+            UserId = ((int)(results[2]));
+            PromoUrl = ((string)(results[3]));
+            return ((RegistrationStatus)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void RegisterAccountAsync(
+                    System.Guid IntegrationID, 
+                    string UserName, 
+                    string Password, 
+                    CodewordType2 Codeword1Type, 
+                    bool Codeword1TypeSpecified, 
+                    string Codeword1, 
+                    CodewordType2 Codeword2Type, 
+                    bool Codeword2TypeSpecified, 
+                    string Codeword2, 
+                    Address PhysicalAddress, 
+                    Address MailingAddress, 
+                    MachineInfo MachineInfo, 
+                    string Email, 
+                    AccountType AccountType, 
+                    string PromoCode, 
+                    object Item) {
+            this.RegisterAccountAsync(IntegrationID, UserName, Password, Codeword1Type, Codeword1TypeSpecified, Codeword1, Codeword2Type, Codeword2TypeSpecified, Codeword2, PhysicalAddress, MailingAddress, MachineInfo, Email, AccountType, PromoCode, Item, null);
+        }
+        
+        /// <remarks/>
+        public void RegisterAccountAsync(
+                    System.Guid IntegrationID, 
+                    string UserName, 
+                    string Password, 
+                    CodewordType2 Codeword1Type, 
+                    bool Codeword1TypeSpecified, 
+                    string Codeword1, 
+                    CodewordType2 Codeword2Type, 
+                    bool Codeword2TypeSpecified, 
+                    string Codeword2, 
+                    Address PhysicalAddress, 
+                    Address MailingAddress, 
+                    MachineInfo MachineInfo, 
+                    string Email, 
+                    AccountType AccountType, 
+                    string PromoCode, 
+                    object Item, 
+                    object userState) {
+            if ((this.RegisterAccountOperationCompleted == null)) {
+                this.RegisterAccountOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRegisterAccountOperationCompleted);
+            }
+            this.InvokeAsync("RegisterAccount", new object[] {
+                        IntegrationID,
+                        UserName,
+                        Password,
+                        Codeword1Type,
+                        Codeword1TypeSpecified,
+                        Codeword1,
+                        Codeword2Type,
+                        Codeword2TypeSpecified,
+                        Codeword2,
+                        PhysicalAddress,
+                        MailingAddress,
+                        MachineInfo,
+                        Email,
+                        AccountType,
+                        PromoCode,
+                        Item}, this.RegisterAccountOperationCompleted, userState);
+        }
+        
+        private void OnRegisterAccountOperationCompleted(object arg) {
+            if ((this.RegisterAccountCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.RegisterAccountCompleted(this, new RegisterAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetShipmentList", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
+        public string GetShipmentList([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] System.Nullable<int> ShipmentsPerPage, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] bool ShipmentsPerPageSpecified, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] System.Nullable<System.DateTime> PrintDateMin, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] System.Nullable<System.DateTime> PrintDateMax, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] bool PrintDateMaxSpecified, ShipmentFieldV1[] Fields, out string ShipmentListToken, out int TotalPages, out ShipmentV1[] Shipments) {
+            object[] results = this.Invoke("GetShipmentList", new object[] {
+                        Item,
+                        ShipmentsPerPage,
+                        ShipmentsPerPageSpecified,
+                        PrintDateMin,
+                        PrintDateMax,
+                        PrintDateMaxSpecified,
+                        Fields});
+            ShipmentListToken = ((string)(results[1]));
+            TotalPages = ((int)(results[2]));
+            Shipments = ((ShipmentV1[])(results[3]));
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetShipmentListAsync(object Item, System.Nullable<int> ShipmentsPerPage, bool ShipmentsPerPageSpecified, System.Nullable<System.DateTime> PrintDateMin, System.Nullable<System.DateTime> PrintDateMax, bool PrintDateMaxSpecified, ShipmentFieldV1[] Fields) {
+            this.GetShipmentListAsync(Item, ShipmentsPerPage, ShipmentsPerPageSpecified, PrintDateMin, PrintDateMax, PrintDateMaxSpecified, Fields, null);
+        }
+        
+        /// <remarks/>
+        public void GetShipmentListAsync(object Item, System.Nullable<int> ShipmentsPerPage, bool ShipmentsPerPageSpecified, System.Nullable<System.DateTime> PrintDateMin, System.Nullable<System.DateTime> PrintDateMax, bool PrintDateMaxSpecified, ShipmentFieldV1[] Fields, object userState) {
+            if ((this.GetShipmentListOperationCompleted == null)) {
+                this.GetShipmentListOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetShipmentListOperationCompleted);
+            }
+            this.InvokeAsync("GetShipmentList", new object[] {
+                        Item,
+                        ShipmentsPerPage,
+                        ShipmentsPerPageSpecified,
+                        PrintDateMin,
+                        PrintDateMax,
+                        PrintDateMaxSpecified,
+                        Fields}, this.GetShipmentListOperationCompleted, userState);
+        }
+        
+        private void OnGetShipmentListOperationCompleted(object arg) {
+            if ((this.GetShipmentListCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetShipmentListCompleted(this, new GetShipmentListCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetShipmentListByToken", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
+        public string GetShipmentListByToken([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, ref string ShipmentListToken, int PageNumber, out int ShipmentsPerPage, out int TotalPages, out ShipmentV1[] Shipments) {
+            object[] results = this.Invoke("GetShipmentListByToken", new object[] {
+                        Item,
+                        ShipmentListToken,
+                        PageNumber});
+            ShipmentListToken = ((string)(results[1]));
+            ShipmentsPerPage = ((int)(results[2]));
+            TotalPages = ((int)(results[3]));
+            Shipments = ((ShipmentV1[])(results[4]));
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetShipmentListByTokenAsync(object Item, string ShipmentListToken, int PageNumber) {
+            this.GetShipmentListByTokenAsync(Item, ShipmentListToken, PageNumber, null);
+        }
+        
+        /// <remarks/>
+        public void GetShipmentListByTokenAsync(object Item, string ShipmentListToken, int PageNumber, object userState) {
+            if ((this.GetShipmentListByTokenOperationCompleted == null)) {
+                this.GetShipmentListByTokenOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetShipmentListByTokenOperationCompleted);
+            }
+            this.InvokeAsync("GetShipmentListByToken", new object[] {
+                        Item,
+                        ShipmentListToken,
+                        PageNumber}, this.GetShipmentListByTokenOperationCompleted, userState);
+        }
+        
+        private void OnGetShipmentListByTokenOperationCompleted(object arg) {
+            if ((this.GetShipmentListByTokenCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetShipmentListByTokenCompleted(this, new GetShipmentListByTokenCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateIndicium(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -459,7 +752,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateUnfundedIndicium(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -597,7 +890,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateScanForm", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateScanForm", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateScanForm([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] System.Nullable<System.DateTime> ShipDate, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] bool ShipDateSpecified, out string ScanFormId, out string Url) {
             object[] results = this.Invoke("CreateScanForm", new object[] {
@@ -641,7 +934,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateEnvelopeIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateEnvelopeIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateEnvelopeIndicium(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -713,7 +1006,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateNetStampsIndicia", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateNetStampsIndicia", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateNetStampsIndicia(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -788,7 +1081,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CreateMailingLabelIndicia", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CreateMailingLabelIndicia", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CreateMailingLabelIndicia(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -857,7 +1150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetRates", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetRates", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetRates([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, RateV14 Rate, [System.Xml.Serialization.XmlArrayItemAttribute("Rate")] out RateV14[] Rates) {
             object[] results = this.Invoke("GetRates", new object[] {
@@ -890,7 +1183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/ChangePlan", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/ChangePlan", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string ChangePlan([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.ComponentModel.DefaultValueAttribute(0)] int PlanId, string PromoCode, out PurchaseStatus PurchaseStatus, out int TransactionID, out string RejectionReason) {
             object[] results = this.Invoke("ChangePlan", new object[] {
@@ -927,7 +1220,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetURL", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetURL", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetURL([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, UrlType URLType, string ApplicationContext, out string URL) {
             object[] results = this.Invoke("GetURL", new object[] {
@@ -962,7 +1255,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/RecoverUsername", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/RecoverUsername", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void RecoverUsername(string EmailAddress) {
             this.Invoke("RecoverUsername", new object[] {
                         EmailAddress});
@@ -990,7 +1283,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetSupportedCountries", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetSupportedCountries", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetSupportedCountries([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, out CountryInfo[] CountryInfo) {
             object[] results = this.Invoke("GetSupportedCountries", new object[] {
@@ -1021,7 +1314,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/ChangePassword", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/ChangePassword", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string ChangePassword([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.ComponentModel.DefaultValueAttribute("")] string OldPassword, string NewPassword) {
             object[] results = this.Invoke("ChangePassword", new object[] {
@@ -1055,7 +1348,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/PriceOrder", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/PriceOrder", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string PriceOrder([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, Sku[] Skus, [System.ComponentModel.DefaultValueAttribute("")] string PromoCode, Address ShippingAddress, out StoreShippingMethodOption[] StoreShippingMethodOptions) {
             object[] results = this.Invoke("PriceOrder", new object[] {
@@ -1092,7 +1385,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/PlaceOrder", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/PlaceOrder", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string PlaceOrder([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, Sku[] Skus, [System.ComponentModel.DefaultValueAttribute("")] string PromoCode, Address ShippingAddress, StoreShippingMethodType StoreShippingMethod, [System.ComponentModel.DefaultValueAttribute("")] out string StoreOrderId, [System.ComponentModel.DefaultValueAttribute(typeof(decimal), "0.0")] out decimal StoreOrderTotal) {
             object[] results = this.Invoke("PlaceOrder", new object[] {
@@ -1132,7 +1425,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CleanseAddress", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CleanseAddress", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CleanseAddress([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, ref Address Address, out bool AddressMatch, out bool CityStateZipOK, out ResidentialDeliveryIndicatorType ResidentialDeliveryIndicator, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] out System.Nullable<bool> IsPOBox, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] out bool IsPOBoxSpecified, out Address[] CandidateAddresses, out StatusCodes StatusCodes) {
             object[] results = this.Invoke("CleanseAddress", new object[] {
@@ -1172,7 +1465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetNetStampsImages", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetNetStampsImages", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetNetStampsImages([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, out NetStampsImage[] NetStampsImages) {
             object[] results = this.Invoke("GetNetStampsImages", new object[] {
@@ -1203,7 +1496,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetChangePlanStatus", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetChangePlanStatus", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetChangePlanStatus([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, int TransactionID, out PurchaseStatus PurchaseStatus, out string RejectionReason) {
             object[] results = this.Invoke("GetChangePlanStatus", new object[] {
@@ -1237,7 +1530,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/PurchasePostage", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/PurchasePostage", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string PurchasePostage([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, decimal PurchaseAmount, decimal ControlTotal, MachineInfo MI, string IntegratorTxID, out PurchaseStatus PurchaseStatus, out int TransactionID, out PostageBalance PostageBalance, out string RejectionReason, out bool MIRequired) {
             object[] results = this.Invoke("PurchasePostage", new object[] {
@@ -1280,7 +1573,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/ResubmitPurchase", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/ResubmitPurchase", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string ResubmitPurchase([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, string ResubmitCookie, out int TransactionID, out decimal ChargedAmount, out decimal PendingAmount, out int WaitIntervalSeconds, out PurchaseStatus PurchaseStatus, out string RejectionReason) {
             object[] results = this.Invoke("ResubmitPurchase", new object[] {
@@ -1318,7 +1611,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CarrierPickup", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CarrierPickup", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CarrierPickup(
                     [System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, 
@@ -1450,7 +1743,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/EnumNetStampsLayouts", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/EnumNetStampsLayouts", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string EnumNetStampsLayouts([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, out NetStampsLayout[] Layouts) {
             object[] results = this.Invoke("EnumNetStampsLayouts", new object[] {
@@ -1481,8 +1774,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/EnumCostCodes", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/EnumCostCodes", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
+        [CLSCompliant(false)]
         public string EnumCostCodes([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.Xml.Serialization.XmlArrayItemAttribute("CostCodes", IsNullable=false)] out cost_code_info_v1[] CostCodes) {
             object[] results = this.Invoke("EnumCostCodes", new object[] {
                         Item});
@@ -1512,8 +1806,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/AuthenticateWithTransferAu" +
-            "thenticator", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/AuthenticateWithTransferAu" +
+            "thenticator", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string AuthenticateWithTransferAuthenticator(System.Guid integrationID, string transferAuthenticator) {
             object[] results = this.Invoke("AuthenticateWithTransferAuthenticator", new object[] {
@@ -1545,7 +1839,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/CancelIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/CancelIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string CancelIndicium([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.Xml.Serialization.XmlElementAttribute("StampsTxID", typeof(System.Guid))] [System.Xml.Serialization.XmlElementAttribute("TrackingNumber", typeof(string))] object Item1) {
             object[] results = this.Invoke("CancelIndicium", new object[] {
@@ -1577,7 +1871,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/StartPasswordReset", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/StartPasswordReset", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void StartPasswordReset(string Username, string Codeword1, string Codeword2, System.Guid IntegrationId, [System.Xml.Serialization.XmlIgnoreAttribute()] bool IntegrationIdSpecified) {
             this.Invoke("StartPasswordReset", new object[] {
                         Username,
@@ -1613,7 +1907,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/FinishPasswordReset", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/FinishPasswordReset", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void FinishPasswordReset(string Username, string TempPassword, string NewPassword, System.Guid IntegrationId, [System.Xml.Serialization.XmlIgnoreAttribute()] bool IntegrationIdSpecified) {
             this.Invoke("FinishPasswordReset", new object[] {
                         Username,
@@ -1649,7 +1943,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetCodewordQuestions", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetCodewordQuestions", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Codeword1Question")]
         public string GetCodewordQuestions(string Username, System.Guid IntegrationId, [System.Xml.Serialization.XmlIgnoreAttribute()] bool IntegrationIdSpecified, out string Codeword2Question) {
             object[] results = this.Invoke("GetCodewordQuestions", new object[] {
@@ -1684,83 +1978,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/RegisterAccount", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        [return: System.Xml.Serialization.XmlElementAttribute("RegistrationStatus")]
-        public RegistrationStatus RegisterAccount(
-                    System.Guid IntegrationID, 
-                    string UserName, 
-                    string Password, 
-                    CodewordType Codeword1Type, 
-                    string Codeword1, 
-                    CodewordType Codeword2Type, 
-                    string Codeword2, 
-                    Address PhysicalAddress, 
-                    Address MailingAddress, 
-                    MachineInfo MachineInfo, 
-                    string Email, 
-                    AccountType AccountType, 
-                    string PromoCode, 
-                    [System.Xml.Serialization.XmlElementAttribute("AchAccount", typeof(AchAccount))] [System.Xml.Serialization.XmlElementAttribute("CreditCard", typeof(CreditCard))] object Item, 
-                    out string SuggestedUserName, 
-                    out int UserId, 
-                    out string PromoUrl) {
-            object[] results = this.Invoke("RegisterAccount", new object[] {
-                        IntegrationID,
-                        UserName,
-                        Password,
-                        Codeword1Type,
-                        Codeword1,
-                        Codeword2Type,
-                        Codeword2,
-                        PhysicalAddress,
-                        MailingAddress,
-                        MachineInfo,
-                        Email,
-                        AccountType,
-                        PromoCode,
-                        Item});
-            SuggestedUserName = ((string)(results[1]));
-            UserId = ((int)(results[2]));
-            PromoUrl = ((string)(results[3]));
-            return ((RegistrationStatus)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void RegisterAccountAsync(System.Guid IntegrationID, string UserName, string Password, CodewordType Codeword1Type, string Codeword1, CodewordType Codeword2Type, string Codeword2, Address PhysicalAddress, Address MailingAddress, MachineInfo MachineInfo, string Email, AccountType AccountType, string PromoCode, object Item) {
-            this.RegisterAccountAsync(IntegrationID, UserName, Password, Codeword1Type, Codeword1, Codeword2Type, Codeword2, PhysicalAddress, MailingAddress, MachineInfo, Email, AccountType, PromoCode, Item, null);
-        }
-        
-        /// <remarks/>
-        public void RegisterAccountAsync(System.Guid IntegrationID, string UserName, string Password, CodewordType Codeword1Type, string Codeword1, CodewordType Codeword2Type, string Codeword2, Address PhysicalAddress, Address MailingAddress, MachineInfo MachineInfo, string Email, AccountType AccountType, string PromoCode, object Item, object userState) {
-            if ((this.RegisterAccountOperationCompleted == null)) {
-                this.RegisterAccountOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRegisterAccountOperationCompleted);
-            }
-            this.InvokeAsync("RegisterAccount", new object[] {
-                        IntegrationID,
-                        UserName,
-                        Password,
-                        Codeword1Type,
-                        Codeword1,
-                        Codeword2Type,
-                        Codeword2,
-                        PhysicalAddress,
-                        MailingAddress,
-                        MachineInfo,
-                        Email,
-                        AccountType,
-                        PromoCode,
-                        Item}, this.RegisterAccountOperationCompleted, userState);
-        }
-        
-        private void OnRegisterAccountOperationCompleted(object arg) {
-            if ((this.RegisterAccountCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.RegisterAccountCompleted(this, new RegisterAccountCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/VoidUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/VoidUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string VoidUnfundedIndicium([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, System.Guid StampsTxID) {
             object[] results = this.Invoke("VoidUnfundedIndicium", new object[] {
@@ -1792,7 +2010,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/FundUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/FundUnfundedIndicium", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string FundUnfundedIndicium([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, System.Guid StampsTxID) {
             object[] results = this.Invoke("FundUnfundedIndicium", new object[] {
@@ -1824,15 +2042,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/AuthenticateUser", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/AuthenticateUser", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
-        public string AuthenticateUser(Credentials Credentials, [System.ComponentModel.DefaultValueAttribute(typeof(System.DateTime), "0001-01-01T00:00:00")] out System.DateTime LastLoginTime, out bool ClearCredential, out string LoginBannerText, out bool PasswordExpired) {
+        public string AuthenticateUser(Credentials Credentials, [System.ComponentModel.DefaultValueAttribute(typeof(System.DateTime), "0001-01-01T00:00:00")] out System.DateTime LastLoginTime, out bool ClearCredential, out string LoginBannerText, out bool PasswordExpired, out bool CodewordsSet) {
             object[] results = this.Invoke("AuthenticateUser", new object[] {
                         Credentials});
             LastLoginTime = ((System.DateTime)(results[1]));
             ClearCredential = ((bool)(results[2]));
             LoginBannerText = ((string)(results[3]));
             PasswordExpired = ((bool)(results[4]));
+            CodewordsSet = ((bool)(results[5]));
             return ((string)(results[0]));
         }
         
@@ -1858,7 +2077,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetAccountInfo", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetAccountInfo", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetAccountInfo([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, out AccountInfo AccountInfo, out Address Address, out string CustomerEmail) {
             object[] results = this.Invoke("GetAccountInfo", new object[] {
@@ -1891,7 +2110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/GetPurchaseStatus", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/GetPurchaseStatus", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string GetPurchaseStatus([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, int TransactionID, out PurchaseStatus PurchaseStatus, out PostageBalance PostageBalance, out string RejectionReason, out bool MIRequired) {
             object[] results = this.Invoke("GetPurchaseStatus", new object[] {
@@ -1927,7 +2146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/08/swsim/swsimv38/TrackShipment", RequestNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", ResponseNamespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/09/swsim/swsimv39/TrackShipment", RequestNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", ResponseNamespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
         public string TrackShipment([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, [System.Xml.Serialization.XmlElementAttribute("StampsTxID", typeof(System.Guid))] [System.Xml.Serialization.XmlElementAttribute("TrackingNumber", typeof(string))] object Item1, out TrackingEvent[] TrackingEvents) {
             object[] results = this.Invoke("TrackShipment", new object[] {
@@ -1983,7 +2202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Credentials {
         
         private System.Guid integrationIDField;
@@ -2028,7 +2247,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class TrackingEvent {
         
         private System.DateTime timestampField;
@@ -2143,7 +2362,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum TrackingEventType {
         
         /// <remarks/>
@@ -2241,11 +2460,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV5))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV6))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Capabilities {
         
         private bool canPrintShippingField;
@@ -2387,11 +2607,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV5))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV6))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV2 : Capabilities {
         
         private bool allowAllMailClassesField;
@@ -2412,11 +2633,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV5))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV6))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV3 : CapabilitiesV2 {
         
         private bool canPrintReturnShippingLabelField;
@@ -2628,11 +2850,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV5))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV6))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV4 : CapabilitiesV3 {
         
         private bool isIBIPEnabledField;
@@ -2651,11 +2874,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV6))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV5 : CapabilitiesV4 {
         
         private bool canCreateCriticalMailField;
@@ -2673,11 +2897,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV7))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV6 : CapabilitiesV5 {
         
         private bool canUseInvoicingField;
@@ -2694,11 +2919,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CapabilitiesV8))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CapabilitiesV7 : CapabilitiesV6 {
         
         private bool canUseCertifiedMailField;
@@ -2731,7 +2957,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class CapabilitiesV8 : CapabilitiesV7 {
+        
+        private bool canPrintCubicField;
+        
+        /// <remarks/>
+        public bool CanPrintCubic {
+            get {
+                return this.canPrintCubicField;
+            }
+            set {
+                this.canPrintCubicField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class AccountInfo {
         
         private int customerIDField;
@@ -2764,7 +3011,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         
         private int maxUsersField;
         
-        private CapabilitiesV7 capabilitiesField;
+        private CapabilitiesV8 capabilitiesField;
         
         private Address meterPhysicalAddressField;
         
@@ -2779,6 +3026,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         private bool pendingPlanIdFieldSpecified;
         
         private string usernameField;
+        
+        private System.Nullable<RatesetType> ratesetTypeField;
+        
+        private bool ratesetTypeFieldSpecified;
+        
+        private System.Nullable<bool> uSPSRepField;
+        
+        private bool uSPSRepFieldSpecified;
         
         public AccountInfo() {
             this.accountIdField = ((long)(0));
@@ -2937,7 +3192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
         }
         
         /// <remarks/>
-        public CapabilitiesV7 Capabilities {
+        public CapabilitiesV8 Capabilities {
             get {
                 return this.capabilitiesField;
             }
@@ -3018,6 +3273,50 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
                 this.usernameField = value;
             }
         }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<RatesetType> RatesetType {
+            get {
+                return this.ratesetTypeField;
+            }
+            set {
+                this.ratesetTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RatesetTypeSpecified {
+            get {
+                return this.ratesetTypeFieldSpecified;
+            }
+            set {
+                this.ratesetTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<bool> USPSRep {
+            get {
+                return this.uSPSRepField;
+            }
+            set {
+                this.uSPSRepField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool USPSRepSpecified {
+            get {
+                return this.uSPSRepFieldSpecified;
+            }
+            set {
+                this.uSPSRepFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -3025,7 +3324,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class PostageBalance {
         
         private decimal availablePostageField;
@@ -3058,7 +3357,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Address {
         
         private string fullNameField;
@@ -3382,7 +3681,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum ResubmissionStatus {
         
         /// <remarks/>
@@ -3398,89 +3697,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public partial class CreditCard {
-        
-        private CreditCardType creditCardTypeField;
-        
-        private string accountNumberField;
-        
-        private string cVNField;
-        
-        private System.DateTime expirationDateField;
-        
-        private Address billingAddressField;
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum RatesetType {
         
         /// <remarks/>
-        public CreditCardType CreditCardType {
-            get {
-                return this.creditCardTypeField;
-            }
-            set {
-                this.creditCardTypeField = value;
-            }
-        }
+        Unknown,
         
         /// <remarks/>
-        public string AccountNumber {
-            get {
-                return this.accountNumberField;
-            }
-            set {
-                this.accountNumberField = value;
-            }
-        }
+        Retail,
         
         /// <remarks/>
-        public string CVN {
-            get {
-                return this.cVNField;
-            }
-            set {
-                this.cVNField = value;
-            }
-        }
+        CBP,
         
         /// <remarks/>
-        public System.DateTime ExpirationDate {
-            get {
-                return this.expirationDateField;
-            }
-            set {
-                this.expirationDateField = value;
-            }
-        }
+        CPP,
         
         /// <remarks/>
-        public Address BillingAddress {
-            get {
-                return this.billingAddressField;
-            }
-            set {
-                this.billingAddressField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum CreditCardType {
+        NSA,
         
         /// <remarks/>
-        Visa,
-        
-        /// <remarks/>
-        MasterCard,
-        
-        /// <remarks/>
-        AmericanExpress,
-        
-        /// <remarks/>
-        Discover,
+        Reseller,
     }
     
     /// <remarks/>
@@ -3488,89 +3724,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public partial class AchAccount {
-        
-        private AchAccountType achAccountTypeField;
-        
-        private string bankNameField;
-        
-        private string accountNumberField;
-        
-        private string routeIDField;
-        
-        private string accountHolderNameField;
-        
-        /// <remarks/>
-        public AchAccountType AchAccountType {
-            get {
-                return this.achAccountTypeField;
-            }
-            set {
-                this.achAccountTypeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string BankName {
-            get {
-                return this.bankNameField;
-            }
-            set {
-                this.bankNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string AccountNumber {
-            get {
-                return this.accountNumberField;
-            }
-            set {
-                this.accountNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string RouteID {
-            get {
-                return this.routeIDField;
-            }
-            set {
-                this.routeIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string AccountHolderName {
-            get {
-                return this.accountHolderNameField;
-            }
-            set {
-                this.accountHolderNameField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum AchAccountType {
-        
-        /// <remarks/>
-        Checking,
-        
-        /// <remarks/>
-        Savings,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    [CLSCompliant(false)]
     public partial class cost_code_info_v1 {
         
         private uint idField;
@@ -3603,7 +3758,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class NetStampsLayout {
         
         private string nameField;
@@ -3816,126 +3971,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public partial class FP {
-        
-        private byte[] fP1Field;
-        
-        private byte[] fP2Field;
-        
-        private byte[] fP3Field;
-        
-        private byte[] fP4Field;
-        
-        private byte[] fP5Field;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] FP1 {
-            get {
-                return this.fP1Field;
-            }
-            set {
-                this.fP1Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] FP2 {
-            get {
-                return this.fP2Field;
-            }
-            set {
-                this.fP2Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] FP3 {
-            get {
-                return this.fP3Field;
-            }
-            set {
-                this.fP3Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] FP4 {
-            get {
-                return this.fP4Field;
-            }
-            set {
-                this.fP4Field = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] FP5 {
-            get {
-                return this.fP5Field;
-            }
-            set {
-                this.fP5Field = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public partial class MachineInfo {
-        
-        private string iPAddressField;
-        
-        private string macAddressField;
-        
-        private FP fpField;
-        
-        /// <remarks/>
-        public string IPAddress {
-            get {
-                return this.iPAddressField;
-            }
-            set {
-                this.iPAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string MacAddress {
-            get {
-                return this.macAddressField;
-            }
-            set {
-                this.macAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public FP FP {
-            get {
-                return this.fpField;
-            }
-            set {
-                this.fpField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Plan {
         
         private int planIdField;
@@ -3980,7 +4016,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class NetStampsImage {
         
         private string imageNameField;
@@ -4095,7 +4131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum NetStampsImageType {
         
         /// <remarks/>
@@ -4110,7 +4146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class DpvFootnote {
         
         private string valueField;
@@ -4131,7 +4167,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Footnote {
         
         private string valueField;
@@ -4152,7 +4188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class StatusCodes {
         
         private int returnCodeField;
@@ -4209,7 +4245,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class StoreShippingMethodOption {
         
         private StoreShippingMethodType storeShippingMethodField;
@@ -4337,7 +4373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum StoreShippingMethodType {
         
         /// <remarks/>
@@ -4358,7 +4394,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class Sku {
         
         private string idField;
@@ -4410,7 +4446,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CountryInfo {
         
         private string nameField;
@@ -4443,7 +4479,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class IndiciumInfoV6 {
         
         private RateV14 rateField;
@@ -4493,7 +4529,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class RateV14 {
         
         private string fromZIPCodeField;
@@ -4997,7 +5033,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum ServiceType {
         
         /// <remarks/>
@@ -5051,7 +5087,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum PackageTypeV6 {
         
         /// <remarks/>
@@ -5122,7 +5158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum AddOnTypeV6 {
         
         /// <remarks/>
@@ -5235,7 +5271,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class AddOnV6 {
         
         private decimal amountField;
@@ -5311,7 +5347,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class IndiciumData {
         
         private byte[] iBIField;
@@ -5346,7 +5382,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class NetStampV10 {
         
         private int rowField;
@@ -5391,7 +5427,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class LabelRecipientInfo {
         
         private string emailAddressField;
@@ -5455,7 +5491,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class ShipmentNotification {
         
         private string emailField;
@@ -5535,7 +5571,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CustomsLine {
         
         private string descriptionField;
@@ -5636,7 +5672,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CustomsV2 {
         
         private ContentTypeV2 contentTypeField;
@@ -5727,7 +5763,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum ContentTypeV2 {
         
         /// <remarks/>
@@ -5764,7 +5800,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public partial class CustomsV3 : CustomsV2 {
         
         private string customsSignerField;
@@ -5783,47 +5819,1211 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum ImageType {
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class RefundStatusV1 {
+        
+        private string postageRefundIdField;
+        
+        private System.Nullable<int> claimNumberField;
+        
+        private System.DateTime requestDateField;
+        
+        private PostageRefundStatusV1 postageRefundStatusField;
+        
+        private System.Nullable<System.DateTime> estimatedPostageRefundCompletionDateField;
+        
+        private bool estimatedPostageRefundCompletionDateFieldSpecified;
+        
+        private decimal postageAmountRequestedField;
+        
+        private decimal postageAmountApprovedField;
+        
+        private string postageRefundResultField;
+        
+        private System.Nullable<PostageRefundStatusV1> insuranceRefundStatusField;
+        
+        private bool insuranceRefundStatusFieldSpecified;
+        
+        private System.Nullable<System.DateTime> estimatedInsuranceRefundCompletionDateField;
+        
+        private bool estimatedInsuranceRefundCompletionDateFieldSpecified;
+        
+        private System.Nullable<decimal> insuranceAmountRequestedField;
+        
+        private bool insuranceAmountRequestedFieldSpecified;
+        
+        private System.Nullable<decimal> insuranceAmountApprovedField;
+        
+        private bool insuranceAmountApprovedFieldSpecified;
         
         /// <remarks/>
-        BZpl,
+        public string PostageRefundId {
+            get {
+                return this.postageRefundIdField;
+            }
+            set {
+                this.postageRefundIdField = value;
+            }
+        }
         
         /// <remarks/>
-        AZpl,
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<int> ClaimNumber {
+            get {
+                return this.claimNumberField;
+            }
+            set {
+                this.claimNumberField = value;
+            }
+        }
         
         /// <remarks/>
-        Zpl,
+        public System.DateTime RequestDate {
+            get {
+                return this.requestDateField;
+            }
+            set {
+                this.requestDateField = value;
+            }
+        }
         
         /// <remarks/>
-        EncryptedPngUrl,
+        public PostageRefundStatusV1 PostageRefundStatus {
+            get {
+                return this.postageRefundStatusField;
+            }
+            set {
+                this.postageRefundStatusField = value;
+            }
+        }
         
         /// <remarks/>
-        PrintOncePdf,
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<System.DateTime> EstimatedPostageRefundCompletionDate {
+            get {
+                return this.estimatedPostageRefundCompletionDateField;
+            }
+            set {
+                this.estimatedPostageRefundCompletionDateField = value;
+            }
+        }
         
         /// <remarks/>
-        Jpg,
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EstimatedPostageRefundCompletionDateSpecified {
+            get {
+                return this.estimatedPostageRefundCompletionDateFieldSpecified;
+            }
+            set {
+                this.estimatedPostageRefundCompletionDateFieldSpecified = value;
+            }
+        }
         
         /// <remarks/>
-        Epl,
+        public decimal PostageAmountRequested {
+            get {
+                return this.postageAmountRequestedField;
+            }
+            set {
+                this.postageAmountRequestedField = value;
+            }
+        }
         
         /// <remarks/>
-        Pdf,
+        public decimal PostageAmountApproved {
+            get {
+                return this.postageAmountApprovedField;
+            }
+            set {
+                this.postageAmountApprovedField = value;
+            }
+        }
         
         /// <remarks/>
-        Gif,
+        public string PostageRefundResult {
+            get {
+                return this.postageRefundResultField;
+            }
+            set {
+                this.postageRefundResultField = value;
+            }
+        }
         
         /// <remarks/>
-        Png,
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<PostageRefundStatusV1> InsuranceRefundStatus {
+            get {
+                return this.insuranceRefundStatusField;
+            }
+            set {
+                this.insuranceRefundStatusField = value;
+            }
+        }
         
         /// <remarks/>
-        Auto,
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool InsuranceRefundStatusSpecified {
+            get {
+                return this.insuranceRefundStatusFieldSpecified;
+            }
+            set {
+                this.insuranceRefundStatusFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<System.DateTime> EstimatedInsuranceRefundCompletionDate {
+            get {
+                return this.estimatedInsuranceRefundCompletionDateField;
+            }
+            set {
+                this.estimatedInsuranceRefundCompletionDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EstimatedInsuranceRefundCompletionDateSpecified {
+            get {
+                return this.estimatedInsuranceRefundCompletionDateFieldSpecified;
+            }
+            set {
+                this.estimatedInsuranceRefundCompletionDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<decimal> InsuranceAmountRequested {
+            get {
+                return this.insuranceAmountRequestedField;
+            }
+            set {
+                this.insuranceAmountRequestedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool InsuranceAmountRequestedSpecified {
+            get {
+                return this.insuranceAmountRequestedFieldSpecified;
+            }
+            set {
+                this.insuranceAmountRequestedFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<decimal> InsuranceAmountApproved {
+            get {
+                return this.insuranceAmountApprovedField;
+            }
+            set {
+                this.insuranceAmountApprovedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool InsuranceAmountApprovedSpecified {
+            get {
+                return this.insuranceAmountApprovedFieldSpecified;
+            }
+            set {
+                this.insuranceAmountApprovedFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum PostageRefundStatusV1 {
+        
+        /// <remarks/>
+        Pending,
+        
+        /// <remarks/>
+        Processing,
+        
+        /// <remarks/>
+        Complete,
+        
+        /// <remarks/>
+        Duplicate,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class ReferencesV1 {
+        
+        private string userNameField;
+        
+        private string costCodeField;
+        
+        private string memoField;
+        
+        /// <remarks/>
+        public string UserName {
+            get {
+                return this.userNameField;
+            }
+            set {
+                this.userNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string CostCode {
+            get {
+                return this.costCodeField;
+            }
+            set {
+                this.costCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Memo {
+            get {
+                return this.memoField;
+            }
+            set {
+                this.memoField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class PackageInfoV1 {
+        
+        private PackageTypeV6 packageTypeField;
+        
+        private int numberOfLabelsField;
+        
+        private double weightLbField;
+        
+        private double weightOzField;
+        
+        public PackageInfoV1() {
+            this.weightLbField = 0D;
+            this.weightOzField = 0D;
+        }
+        
+        /// <remarks/>
+        public PackageTypeV6 PackageType {
+            get {
+                return this.packageTypeField;
+            }
+            set {
+                this.packageTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int NumberOfLabels {
+            get {
+                return this.numberOfLabelsField;
+            }
+            set {
+                this.numberOfLabelsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double WeightLb {
+            get {
+                return this.weightLbField;
+            }
+            set {
+                this.weightLbField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.ComponentModel.DefaultValueAttribute(0D)]
+        public double WeightOz {
+            get {
+                return this.weightOzField;
+            }
+            set {
+                this.weightOzField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class ServicesV1 {
+        
+        private ServiceType serviceTypeField;
+        
+        private decimal amountField;
+        
+        /// <remarks/>
+        public ServiceType ServiceType {
+            get {
+                return this.serviceTypeField;
+            }
+            set {
+                this.serviceTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public decimal Amount {
+            get {
+                return this.amountField;
+            }
+            set {
+                this.amountField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class ShipmentV1 {
+        
+        private string stampsTxIdField;
+        
+        private System.Nullable<ShipmentStatusV1> shipmentStatusField;
+        
+        private bool shipmentStatusFieldSpecified;
+        
+        private System.Nullable<System.DateTime> printDateField;
+        
+        private bool printDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> mailDateField;
+        
+        private bool mailDateFieldSpecified;
+        
+        private System.Nullable<System.DateTime> deliveredDateField;
+        
+        private bool deliveredDateFieldSpecified;
+        
+        private string trackingNumberField;
+        
+        private string scanFormIdField;
+        
+        private ServicesV1 serviceField;
+        
+        private AddOnV6[] addOnsField;
+        
+        private string fromZIPCodeField;
+        
+        private Address returnToField;
+        
+        private Address shipToField;
+        
+        private PackageInfoV1 packageInfoField;
+        
+        private ReferencesV1 referencesField;
+        
+        private System.Nullable<RefundTypeV1> refundTypeField;
+        
+        private bool refundTypeFieldSpecified;
+        
+        private RefundStatusV1 refundStatusField;
+        
+        /// <remarks/>
+        public string StampsTxId {
+            get {
+                return this.stampsTxIdField;
+            }
+            set {
+                this.stampsTxIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<ShipmentStatusV1> ShipmentStatus {
+            get {
+                return this.shipmentStatusField;
+            }
+            set {
+                this.shipmentStatusField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ShipmentStatusSpecified {
+            get {
+                return this.shipmentStatusFieldSpecified;
+            }
+            set {
+                this.shipmentStatusFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<System.DateTime> PrintDate {
+            get {
+                return this.printDateField;
+            }
+            set {
+                this.printDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PrintDateSpecified {
+            get {
+                return this.printDateFieldSpecified;
+            }
+            set {
+                this.printDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<System.DateTime> MailDate {
+            get {
+                return this.mailDateField;
+            }
+            set {
+                this.mailDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool MailDateSpecified {
+            get {
+                return this.mailDateFieldSpecified;
+            }
+            set {
+                this.mailDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<System.DateTime> DeliveredDate {
+            get {
+                return this.deliveredDateField;
+            }
+            set {
+                this.deliveredDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DeliveredDateSpecified {
+            get {
+                return this.deliveredDateFieldSpecified;
+            }
+            set {
+                this.deliveredDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string TrackingNumber {
+            get {
+                return this.trackingNumberField;
+            }
+            set {
+                this.trackingNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ScanFormId {
+            get {
+                return this.scanFormIdField;
+            }
+            set {
+                this.scanFormIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ServicesV1 Service {
+            get {
+                return this.serviceField;
+            }
+            set {
+                this.serviceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public AddOnV6[] AddOns {
+            get {
+                return this.addOnsField;
+            }
+            set {
+                this.addOnsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string FromZIPCode {
+            get {
+                return this.fromZIPCodeField;
+            }
+            set {
+                this.fromZIPCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address ReturnTo {
+            get {
+                return this.returnToField;
+            }
+            set {
+                this.returnToField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address ShipTo {
+            get {
+                return this.shipToField;
+            }
+            set {
+                this.shipToField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public PackageInfoV1 PackageInfo {
+            get {
+                return this.packageInfoField;
+            }
+            set {
+                this.packageInfoField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ReferencesV1 References {
+            get {
+                return this.referencesField;
+            }
+            set {
+                this.referencesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public System.Nullable<RefundTypeV1> RefundType {
+            get {
+                return this.refundTypeField;
+            }
+            set {
+                this.refundTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RefundTypeSpecified {
+            get {
+                return this.refundTypeFieldSpecified;
+            }
+            set {
+                this.refundTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public RefundStatusV1 RefundStatus {
+            get {
+                return this.refundStatusField;
+            }
+            set {
+                this.refundStatusField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum ShipmentStatusV1 {
+        
+        /// <remarks/>
+        Printed,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("In Transit")]
+        InTransit,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("Received at Opening Unit")]
+        ReceivedatOpeningUnit,
+        
+        /// <remarks/>
+        Delivered,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("Pending Refund")]
+        PendingRefund,
+        
+        /// <remarks/>
+        Refunded,
+        
+        /// <remarks/>
+        Voided,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum RefundTypeV1 {
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("E-refund")]
+        Erefund,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("Mail-in")]
+        Mailin,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class CreditCard {
+        
+        private CreditCardType creditCardTypeField;
+        
+        private string accountNumberField;
+        
+        private string cVNField;
+        
+        private System.DateTime expirationDateField;
+        
+        private Address billingAddressField;
+        
+        /// <remarks/>
+        public CreditCardType CreditCardType {
+            get {
+                return this.creditCardTypeField;
+            }
+            set {
+                this.creditCardTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string CVN {
+            get {
+                return this.cVNField;
+            }
+            set {
+                this.cVNField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime ExpirationDate {
+            get {
+                return this.expirationDateField;
+            }
+            set {
+                this.expirationDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address BillingAddress {
+            get {
+                return this.billingAddressField;
+            }
+            set {
+                this.billingAddressField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum CreditCardType {
+        
+        /// <remarks/>
+        Visa,
+        
+        /// <remarks/>
+        MasterCard,
+        
+        /// <remarks/>
+        AmericanExpress,
+        
+        /// <remarks/>
+        Discover,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class AchAccount {
+        
+        private AchAccountType achAccountTypeField;
+        
+        private string bankNameField;
+        
+        private string accountNumberField;
+        
+        private string routeIDField;
+        
+        private string accountHolderNameField;
+        
+        /// <remarks/>
+        public AchAccountType AchAccountType {
+            get {
+                return this.achAccountTypeField;
+            }
+            set {
+                this.achAccountTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string BankName {
+            get {
+                return this.bankNameField;
+            }
+            set {
+                this.bankNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string RouteID {
+            get {
+                return this.routeIDField;
+            }
+            set {
+                this.routeIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AccountHolderName {
+            get {
+                return this.accountHolderNameField;
+            }
+            set {
+                this.accountHolderNameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum AchAccountType {
+        
+        /// <remarks/>
+        Checking,
+        
+        /// <remarks/>
+        Savings,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class FP {
+        
+        private byte[] fP1Field;
+        
+        private byte[] fP2Field;
+        
+        private byte[] fP3Field;
+        
+        private byte[] fP4Field;
+        
+        private byte[] fP5Field;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] FP1 {
+            get {
+                return this.fP1Field;
+            }
+            set {
+                this.fP1Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] FP2 {
+            get {
+                return this.fP2Field;
+            }
+            set {
+                this.fP2Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] FP3 {
+            get {
+                return this.fP3Field;
+            }
+            set {
+                this.fP3Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] FP4 {
+            get {
+                return this.fP4Field;
+            }
+            set {
+                this.fP4Field = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
+        public byte[] FP5 {
+            get {
+                return this.fP5Field;
+            }
+            set {
+                this.fP5Field = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public partial class MachineInfo {
+        
+        private string iPAddressField;
+        
+        private string macAddressField;
+        
+        private FP fpField;
+        
+        /// <remarks/>
+        public string IPAddress {
+            get {
+                return this.iPAddressField;
+            }
+            set {
+                this.iPAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MacAddress {
+            get {
+                return this.macAddressField;
+            }
+            set {
+                this.macAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public FP FP {
+            get {
+                return this.fpField;
+            }
+            set {
+                this.fpField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    [CLSCompliant(false)]
+    public partial class Codeword {
+        
+        private CodewordType2 codewordTypeField;
+        
+        private uint valueField;
+        
+        private string descriptionField;
+        
+        /// <remarks/>
+        public CodewordType2 CodewordType {
+            get {
+                return this.codewordTypeField;
+            }
+            set {
+                this.codewordTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public uint Value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum CodewordType2 {
+        
+        /// <remarks/>
+        Undefined,
+        
+        /// <remarks/>
+        MothersMaidenName,
+        
+        /// <remarks/>
+        PetsName,
+        
+        /// <remarks/>
+        BirthCity,
+        
+        /// <remarks/>
+        HighSchoolMascot,
+        
+        /// <remarks/>
+        FathersBirthplace,
+        
+        /// <remarks/>
+        StreetName,
+        
+        /// <remarks/>
+        FirstSchoolsName,
+        
+        /// <remarks/>
+        FirstCarsMakeModel,
+        
+        /// <remarks/>
+        Last4SocialSecurityNumber,
+        
+        /// <remarks/>
+        Last4DriversLicense,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum AccountType {
+        
+        /// <remarks/>
+        Individual,
+        
+        /// <remarks/>
+        HomeOffice,
+        
+        /// <remarks/>
+        HomeBasedBusiness,
+        
+        /// <remarks/>
+        OfficeBasedBusiness,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum RegistrationStatus {
+        
+        /// <remarks/>
+        Success,
+        
+        /// <remarks/>
+        Fail,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum ShipmentFieldV1 {
+        
+        /// <remarks/>
+        StampsTxId,
+        
+        /// <remarks/>
+        ShipmentStatus,
+        
+        /// <remarks/>
+        PrintDate,
+        
+        /// <remarks/>
+        MailDate,
+        
+        /// <remarks/>
+        DeliveredDate,
+        
+        /// <remarks/>
+        TrackingNumber,
+        
+        /// <remarks/>
+        ScanFormId,
+        
+        /// <remarks/>
+        Service,
+        
+        /// <remarks/>
+        AddOns,
+        
+        /// <remarks/>
+        FromZIPCode,
+        
+        /// <remarks/>
+        ReturnTo,
+        
+        /// <remarks/>
+        ShipTo,
+        
+        /// <remarks/>
+        PackageInfo,
+        
+        /// <remarks/>
+        References,
+        
+        /// <remarks/>
+        RefundType,
+        
+        /// <remarks/>
+        RefundStatus,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
+    public enum ImageType {
+        
+        /// <remarks/>
+        Auto,
+        
+        /// <remarks/>
+        Png,
+        
+        /// <remarks/>
+        Gif,
+        
+        /// <remarks/>
+        Pdf,
+        
+        /// <remarks/>
+        Epl,
+        
+        /// <remarks/>
+        Jpg,
+        
+        /// <remarks/>
+        PrintOncePdf,
+        
+        /// <remarks/>
+        EncryptedPngUrl,
+        
+        /// <remarks/>
+        Zpl,
+        
+        /// <remarks/>
+        AZpl,
+        
+        /// <remarks/>
+        BZpl,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum EltronPrinterDPIType {
         
         /// <remarks/>
@@ -5836,7 +7036,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum NonDeliveryOption {
         
         /// <remarks/>
@@ -5855,42 +7055,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum PaperSizeV1 {
         
         /// <remarks/>
-        LabelSize,
+        Default,
         
         /// <remarks/>
         Letter85x11,
         
         /// <remarks/>
-        Default,
+        LabelSize,
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum CreateIndiciumModeV1 {
         
         /// <remarks/>
-        Preview,
-        
-        /// <remarks/>
-        NoPostage,
+        Normal,
         
         /// <remarks/>
         Sample,
         
         /// <remarks/>
-        Normal,
+        NoPostage,
+        
+        /// <remarks/>
+        Preview,
     }
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum NetstampsStatus {
         
         /// <remarks/>
@@ -5906,7 +7106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum PurchaseStatus {
         
         /// <remarks/>
@@ -5925,7 +7125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum UrlType {
         
         /// <remarks/>
@@ -6118,7 +7318,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum ResidentialDeliveryIndicatorType {
         
         /// <remarks/>
@@ -6137,7 +7337,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/09/swsim/swsimv39")]
     public enum CarrierPickupLocationV1 {
         
         /// <remarks/>
@@ -6169,57 +7369,215 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum CodewordType {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    public delegate void SetCodeWordsCompletedEventHandler(object sender, SetCodeWordsCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class SetCodeWordsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal SetCodeWordsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
         
         /// <remarks/>
-        MothersMaidenName,
-        
-        /// <remarks/>
-        PetsName,
-        
-        /// <remarks/>
-        BirthCity,
-        
-        /// <remarks/>
-        Last4SocialSecurityNumber,
-        
-        /// <remarks/>
-        Last4DriversLicense,
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum AccountType {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [CLSCompliant(false)]
+    public delegate void EnumCodeWordTypesCompletedEventHandler(object sender, EnumCodeWordTypesCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [CLSCompliant(false)]
+    public partial class EnumCodeWordTypesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal EnumCodeWordTypesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
         
         /// <remarks/>
-        Individual,
-        
-        /// <remarks/>
-        HomeOffice,
-        
-        /// <remarks/>
-        HomeBasedBusiness,
-        
-        /// <remarks/>
-        OfficeBasedBusiness,
+        public Codeword[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((Codeword[])(this.results[0]));
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/08/swsim/swsimv38")]
-    public enum RegistrationStatus {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    public delegate void RegisterAccountCompletedEventHandler(object sender, RegisterAccountCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class RegisterAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal RegisterAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
         
         /// <remarks/>
-        Success,
+        public RegistrationStatus Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((RegistrationStatus)(this.results[0]));
+            }
+        }
         
         /// <remarks/>
-        Fail,
+        public string SuggestedUserName {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[1]));
+            }
+        }
+        
+        /// <remarks/>
+        public int UserId {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[2]));
+            }
+        }
+        
+        /// <remarks/>
+        public string PromoUrl {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[3]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    public delegate void GetShipmentListCompletedEventHandler(object sender, GetShipmentListCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetShipmentListCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetShipmentListCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public string ShipmentListToken {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[1]));
+            }
+        }
+        
+        /// <remarks/>
+        public int TotalPages {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[2]));
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentV1[] Shipments {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ShipmentV1[])(this.results[3]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    public delegate void GetShipmentListByTokenCompletedEventHandler(object sender, GetShipmentListByTokenCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetShipmentListByTokenCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetShipmentListByTokenCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public string ShipmentListToken {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[1]));
+            }
+        }
+        
+        /// <remarks/>
+        public int ShipmentsPerPage {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[2]));
+            }
+        }
+        
+        /// <remarks/>
+        public int TotalPages {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[3]));
+            }
+        }
+        
+        /// <remarks/>
+        public ShipmentV1[] Shipments {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ShipmentV1[])(this.results[4]));
+            }
+        }
     }
     
     /// <remarks/>
@@ -6890,12 +8248,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [CLSCompliant(false)]
     public delegate void PriceOrderCompletedEventHandler(object sender, PriceOrderCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [CLSCompliant(false)]
     public partial class PriceOrderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -7364,12 +8724,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
+    [CLSCompliant(false)]
     public delegate void EnumCostCodesCompletedEventHandler(object sender, EnumCostCodesCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [CLSCompliant(false)]
     public partial class EnumCostCodesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -7492,56 +8854,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
-    public delegate void RegisterAccountCompletedEventHandler(object sender, RegisterAccountCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class RegisterAccountCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal RegisterAccountCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public RegistrationStatus Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((RegistrationStatus)(this.results[0]));
-            }
-        }
-        
-        /// <remarks/>
-        public string SuggestedUserName {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[1]));
-            }
-        }
-        
-        /// <remarks/>
-        public int UserId {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((int)(this.results[2]));
-            }
-        }
-        
-        /// <remarks/>
-        public string PromoUrl {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((string)(this.results[3]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.18408")]
     public delegate void VoidUnfundedIndiciumCompletedEventHandler(object sender, VoidUnfundedIndiciumCompletedEventArgs e);
     
     /// <remarks/>
@@ -7646,6 +8958,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((bool)(this.results[4]));
+            }
+        }
+        
+        /// <remarks/>
+        public bool CodewordsSet {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[5]));
             }
         }
     }
