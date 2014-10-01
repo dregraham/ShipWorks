@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
             StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { StampsResellerType = StampsResellerType.Express1 };
-            StampsOptionsControl optionsControl = new StampsOptionsControl { ResellerType = StampsResellerType.Express1 };
+            StampsOptionsControl optionsControl = new StampsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
             StampsPurchasePostageDlg postageDialog = new StampsPurchasePostageDlg();
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(StampsResellerType.Express1);
+            return new StampsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>

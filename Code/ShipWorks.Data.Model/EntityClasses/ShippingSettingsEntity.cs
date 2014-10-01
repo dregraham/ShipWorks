@@ -626,6 +626,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AutoCreateShipments", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UspsThermal", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UspsThermalType", fieldHashtable);
 		}
 		#endregion
 
@@ -1404,6 +1410,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.AutoCreateShipments, value); }
+		}
+
+		/// <summary> The UspsThermal property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsThermal"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean UspsThermal
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UspsThermal, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsThermal, value); }
+		}
+
+		/// <summary> The UspsThermalType property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsThermalType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 UspsThermalType
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UspsThermalType, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsThermalType, value); }
 		}
 
 

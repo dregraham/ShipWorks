@@ -278,6 +278,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return "usps";
 
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:

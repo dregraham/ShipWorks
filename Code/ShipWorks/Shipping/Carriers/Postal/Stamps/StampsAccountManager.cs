@@ -13,6 +13,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -109,6 +110,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Return the active list of Stamps.com Expedited accounts
+        /// </summary>
+        public static List<StampsAccountEntity> StampsExpeditedAccounts
+        {
+            get
+            {
+                return GetAccounts(StampsResellerType.StampsExpedited, false);
+            }
+        }
+
+        /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
         public static StampsAccountEntity GetAccount(long accountID)
@@ -118,6 +130,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (stampsAccount == null)
             {
                 stampsAccount = Express1Accounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+            }
+
+            if (stampsAccount == null)
+            {
+                stampsAccount = StampsExpeditedAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
             }
 
             return stampsAccount;
@@ -194,11 +211,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Displays the appropriate setup wizard based on the Stamps Reseller
         /// </summary>
-        public static bool DisplaySetupWizard(IWin32Window owner, bool isExpress1)
+        public static bool DisplaySetupWizard(IWin32Window owner, StampsResellerType stampsResellerType)
         {
-            using (Form dlg = isExpress1 ? 
-                new Express1StampsShipmentType().CreateSetupWizard() :
-                new StampsShipmentType().CreateSetupWizard())
+            ShipmentType shipmentType;
+            switch (stampsResellerType)
+            {
+                case StampsResellerType.None:
+                    shipmentType = new StampsShipmentType();
+                    break;
+                case StampsResellerType.Express1:
+                    shipmentType = new Express1StampsShipmentType();
+                    break;
+                case StampsResellerType.StampsExpedited:
+                    shipmentType = new UspsShipmentType();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("stampsResellerType");
+            }
+
+            using (Form dlg = shipmentType.CreateSetupWizard())
             {
                 return (dlg.ShowDialog(owner) == DialogResult.OK);
             }

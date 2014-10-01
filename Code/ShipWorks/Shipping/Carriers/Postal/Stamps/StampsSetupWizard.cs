@@ -22,9 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        private StampsAccountEntity stampsAccount;
         private readonly StampsRegistration stampsRegistration;
         private readonly IEnumerable<PostalAccountRegistrationType> availableRegistrationTypes;
+        private readonly ShipmentTypeCode shipmentTypeCode;
 
         bool registrationComplete = false;
         private readonly bool allowRegisteringExistingAccount;
@@ -36,8 +36,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="promotion">The promotion.</param>
         /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering existing account].</param>
         public StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount)
+            : this (promotion, allowRegisteringExistingAccount, ShipmentTypeCode.Stamps)
+        { }
+
+        protected StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+
+            this.shipmentTypeCode = shipmentTypeCode;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
@@ -51,12 +57,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        protected StampsAccountEntity StampsAccount { get; private set; }
+
         /// <summary>
         /// Initialization
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
             optionsControl.LoadSettings();
 
@@ -82,10 +90,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
-            stampsAccount = new StampsAccountEntity { CountryCode = "US" };
-            stampsAccount.InitializeNullsToDefault();
+            StampsAccount = new StampsAccountEntity { CountryCode = "US" };
+            StampsAccount.InitializeNullsToDefault();
 
-            personControl.LoadEntity(new PersonAdapter(stampsAccount, string.Empty));
+            personControl.LoadEntity(new PersonAdapter(StampsAccount, string.Empty));
 
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
@@ -185,13 +193,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             personControl.SaveToEntity();
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
-            checker.Check("Full Name", stampsAccount.FirstName);
-            checker.Check("Street Address", stampsAccount.Street1);
-            checker.Check("City", stampsAccount.City);
-            checker.Check("State", stampsAccount.StateProvCode);
-            checker.Check("Postal Code", stampsAccount.PostalCode);
-            checker.Check("Phone", stampsAccount.Phone);
-            checker.Check("Email", stampsAccount.Email);
+            checker.Check("Full Name", StampsAccount.FirstName);
+            checker.Check("Street Address", StampsAccount.Street1);
+            checker.Check("City", StampsAccount.City);
+            checker.Check("State", StampsAccount.StateProvCode);
+            checker.Check("Postal Code", StampsAccount.PostalCode);
+            checker.Check("Phone", StampsAccount.Phone);
+            checker.Check("Email", StampsAccount.Email);
 
             if (HasAcceptedTermsConditions() && checker.Validate(this))
             {
@@ -201,28 +209,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsRegistrationTypeDropdownItem selectedStampsRegistrationTypeDropdownItem = (StampsRegistrationTypeDropdownItem) stampsAccountRegistrationType.SelectedItem;
                 stampsRegistration.RegistrationType = selectedStampsRegistrationTypeDropdownItem.RegistrationType;
 
-                stampsRegistration.PhysicalAddress.FirstName = stampsAccount.FirstName;
-                stampsRegistration.PhysicalAddress.LastName = stampsAccount.LastName;
-                stampsRegistration.PhysicalAddress.Company = stampsAccount.Company;
+                stampsRegistration.PhysicalAddress.FirstName = StampsAccount.FirstName;
+                stampsRegistration.PhysicalAddress.LastName = StampsAccount.LastName;
+                stampsRegistration.PhysicalAddress.Company = StampsAccount.Company;
 
-                stampsRegistration.PhysicalAddress.PhoneNumber = stampsAccount.Phone;
-                stampsRegistration.Email = stampsAccount.Email;
+                stampsRegistration.PhysicalAddress.PhoneNumber = StampsAccount.Phone;
+                stampsRegistration.Email = StampsAccount.Email;
 
-                stampsRegistration.PhysicalAddress.Address1 = stampsAccount.Street1;
-                stampsRegistration.PhysicalAddress.Address2 = stampsAccount.Street2;
-                stampsRegistration.PhysicalAddress.City = stampsAccount.City;
-                stampsRegistration.PhysicalAddress.State = Geography.GetStateProvCode(stampsAccount.StateProvCode);
-                stampsRegistration.PhysicalAddress.Country = Geography.GetCountryCode(stampsAccount.CountryCode);
+                stampsRegistration.PhysicalAddress.Address1 = StampsAccount.Street1;
+                stampsRegistration.PhysicalAddress.Address2 = StampsAccount.Street2;
+                stampsRegistration.PhysicalAddress.City = StampsAccount.City;
+                stampsRegistration.PhysicalAddress.State = Geography.GetStateProvCode(StampsAccount.StateProvCode);
+                stampsRegistration.PhysicalAddress.Country = Geography.GetCountryCode(StampsAccount.CountryCode);
 
                 if (PostalUtility.IsDomesticCountry(stampsRegistration.PhysicalAddress.Country))
                 {
                     // stamps.com inspects the ZIP code for US addresses
-                    stampsRegistration.PhysicalAddress.ZIPCode = stampsAccount.PostalCode;
+                    stampsRegistration.PhysicalAddress.ZIPCode = StampsAccount.PostalCode;
                 }
                 else
                 {
                     // stamps.com inspects the postal code for international addresses
-                    stampsRegistration.PhysicalAddress.PostalCode = stampsAccount.PostalCode;
+                    stampsRegistration.PhysicalAddress.PostalCode = StampsAccount.PostalCode;
                 }
 
                 // Determine which wizard page to go next
@@ -391,9 +399,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 new StampsApiSession().AuthenticateUser(userID, password.Text, StampsResellerType.None);
 
-                if (stampsAccount == null)
+                if (StampsAccount == null)
                 {
-                    stampsAccount = new StampsAccountEntity();
+                    StampsAccount = new StampsAccountEntity();
                 }
 
                 SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));
@@ -406,17 +414,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Prepares the stamps account for save. This is just a hook to allow derived
+        /// classes a chance to manipulate the account prior to it being persisted.
+        /// </summary>
+        protected virtual void PrepareStampsAccountForSave()
+        {
+            // Do nothing - just a hook for derived classes
+        }
+
+        /// <summary>
         /// Saves the stamps accountand initializes the stamps info control.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="encryptedPassword">The encrypted password.</param>
-        private void SaveStampsAccount(string username, string encryptedPassword)
+        protected virtual void SaveStampsAccount(string username, string encryptedPassword)
         {
-            stampsAccount.Username = username;
-            stampsAccount.Password = encryptedPassword;
+            PrepareStampsAccountForSave();
+
+            StampsAccount.Username = username;
+            StampsAccount.Password = encryptedPassword;
 
             // Save the stamps account and use it to initialize the stamps info control
-            StampsAccountManager.SaveAccount(stampsAccount);
+            StampsAccountManager.SaveAccount(StampsAccount);
         }
 
         /// <summary>
@@ -424,7 +443,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnSteppingIntoAccountInfo(object sender, WizardSteppingIntoEventArgs e)
         {
-            stampsAccountInfo.Initialize(stampsAccount);
+            stampsAccountInfo.Initialize(StampsAccount);
         }
 
         /// <summary>
@@ -446,9 +465,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (DialogResult != DialogResult.OK && stampsAccount != null && !stampsAccount.IsNew)
+            if (DialogResult != DialogResult.OK && StampsAccount != null && !StampsAccount.IsNew)
             {
-                StampsAccountManager.DeleteAccount(stampsAccount);
+                StampsAccountManager.DeleteAccount(StampsAccount);
             }
             else if (DialogResult == DialogResult.OK)
             {
@@ -456,8 +475,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
+                StampsShipmentType shipmentType = (StampsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+
                 // If this is the only account, update this shipment type profiles with this account
-                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+                List<StampsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();
                 if (accounts.Count == 1)
                 {
                     StampsAccountEntity accountEntity = accounts.First();
@@ -466,7 +487,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // in the system. This is to account for the situation where there a multiple
                     // profiles that may be associated with a previous account that has since
                     // been deleted. 
-                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Stamps))
+                    foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)shipmentTypeCode))
                     {
                         if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
                         {

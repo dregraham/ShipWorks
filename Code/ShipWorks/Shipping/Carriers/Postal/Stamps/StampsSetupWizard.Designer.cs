@@ -94,7 +94,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountAddress);
+            this.mainPanel.Controls.Add(this.wizardPageOptions);
             this.mainPanel.Size = new System.Drawing.Size(542, 485);
             // 
             // etchBottom
@@ -300,9 +300,9 @@
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.ResellerType = StampsResellerType.None;
             this.optionsControl.Location = new System.Drawing.Point(16, 5);
             this.optionsControl.Name = "optionsControl";
+            this.optionsControl.ShipmentTypeCode = ShipWorks.Shipping.ShipmentTypeCode.Stamps;
             this.optionsControl.Size = new System.Drawing.Size(435, 112);
             this.optionsControl.TabIndex = 0;
             // 
@@ -472,7 +472,7 @@
             this.wizardPageNewAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountCredentials.Name = "wizardPageNewAccountCredentials";
-            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(542, 433);
+            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(542, 485);
             this.wizardPageNewAccountCredentials.TabIndex = 0;
             this.wizardPageNewAccountCredentials.Title = "Account Registration";
             this.wizardPageNewAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRegistrationCredentials);
