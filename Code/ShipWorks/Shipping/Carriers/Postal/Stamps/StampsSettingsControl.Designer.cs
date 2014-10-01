@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.IsExpress1 = false;
+            this.accountControl.StampsResellerType = StampsResellerType.None;
             this.accountControl.Location = new System.Drawing.Point(12, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.IsExpress1 = false;
+            this.optionsControl.ShipmentTypeCode = ShipmentTypeCode.Stamps;
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(435, 105);

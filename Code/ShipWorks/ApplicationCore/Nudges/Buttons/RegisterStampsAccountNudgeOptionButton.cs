@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.ApplicationCore.Nudges.Buttons
 {
@@ -23,7 +24,8 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         {
             if (HostForm != null)
             {
-                using (StampsSetupWizard setupWizard = new StampsSetupWizard())
+                UspsShipmentType shipmentType = new UspsShipmentType();
+                using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
                 {
                     DialogResult result = setupWizard.ShowDialog(HostForm);
                     HostForm.DialogResult = result;

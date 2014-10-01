@@ -2257,6 +2257,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseProcessedShipmentID", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseProcessedShipmentID, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShipSenseEndShipmentID", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipSenseEndShipmentID, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "AutoCreateShipments", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.AutoCreateShipments, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "UspsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsThermal, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "UspsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsThermalType, 0, 0, 10);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()
@@ -2321,7 +2323,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Email, 100, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Website, 50, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.MailingPostalCode, 20, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "IsExpress1", typeof(System.Boolean), false, false, false, false,  (int)StampsAccountFieldIndex.IsExpress1, 0, 0, 0);
+			base.AddElementFieldInfo("StampsAccountEntity", "StampsReseller", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.StampsReseller, 0, 0, 10);
 			base.AddElementFieldInfo("StampsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.ContractType, 0, 0, 10);
 		}
 		/// <summary>Inits StampsProfileEntity's FieldInfo objects</summary>

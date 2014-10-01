@@ -310,6 +310,7 @@ namespace ShipWorks.Stores.Platforms.Miva
                         case ShipmentTypeCode.Express1Endicia:
                         case ShipmentTypeCode.Express1Stamps:
                         case ShipmentTypeCode.Stamps:
+                        case ShipmentTypeCode.Usps:
                             carrierCode = "USPS";
                             break;
 

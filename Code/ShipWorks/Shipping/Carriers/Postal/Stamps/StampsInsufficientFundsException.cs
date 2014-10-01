@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -26,7 +27,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return account.IsExpress1 ? "Express1" : "Stamps.com";
+                switch ((StampsResellerType)account.StampsReseller)
+                {
+                    case StampsResellerType.None:
+                        return "Stamps.com";
+                    case StampsResellerType.Express1:
+                        return "Express1";
+                    case StampsResellerType.StampsExpedited:
+                        return "USPS";
+                    default:
+                        throw new ArgumentOutOfRangeException("StampsReseller");
+                }
             }
         }
 

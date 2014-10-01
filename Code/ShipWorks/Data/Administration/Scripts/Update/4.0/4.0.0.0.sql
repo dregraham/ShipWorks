@@ -33,15 +33,16 @@ CREATE TABLE [dbo].[tmp_rg_xx_StampsAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsExpress1] [bit] NOT NULL,
+[StampsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL
 )
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_StampsAccount] ON
 GO
 INSERT INTO [dbo].[tmp_rg_xx_StampsAccount]([StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], 
-	[IsExpress1], [ContractType]) 
+	[StampsReseller], [ContractType]) 
 		SELECT [StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], 
+			-- 0 is None, 1 is Express1, so we can set StampsReseller = IsExpress1
 			[IsExpress1], 
 			-- The enum has Unknown as 0, and N/A as 1, which just happens to match up the value of IsExpress1.  If IsExpress1 = 1, ContractType should be N/A, and vice versa.
 			[IsExpress1]

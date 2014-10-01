@@ -101,53 +101,16 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                     s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
             }
 
             enabledShipmentTypes.ForEach(shipmentType => menu.Items.Add(
-                GetCarrierName(shipmentType, postalNotSetup),
-                GetCarrierImage(shipmentType.ShipmentTypeCode, postalNotSetup),
+                EnumHelper.GetDescription(shipmentType.ShipmentTypeCode),
+                EnumHelper.GetImage(shipmentType.ShipmentTypeCode),
                 (sender, args) => SelectProvider(shipment, shipmentType)));
 
             menu.Show(row.Grid.SandGrid, displayPosition);
-        }
-
-        /// <summary>
-        /// Gets the carrier image.
-        /// </summary>
-        private static Image GetCarrierImage(ShipmentTypeCode shipmentTypeCode, bool postageNotSetup)
-        {
-            Image carrierImage;
-
-            if (shipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
-            {
-                carrierImage = EnumHelper.GetImage(ShipmentTypeCode.PostalWebTools);
-            }
-            else
-            {
-                carrierImage = EnumHelper.GetImage(shipmentTypeCode);
-            }
-
-            return carrierImage;
-        }
-
-        /// <summary>
-        /// Gets the name of the carrier.
-        /// </summary>
-        private static string GetCarrierName(ShipmentType shipmentType, bool postageNotSetup)
-        {
-            string carrierName;
-
-            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.Endicia && postageNotSetup)
-            {
-                carrierName = "USPS";
-            }
-            else
-            {
-                carrierName = EnumHelper.GetDescription(shipmentType.ShipmentTypeCode);
-            }
-
-            return carrierName;
         }
 
         /// <summary>

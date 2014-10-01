@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,
-                    IsExpress1 = true
+                    StampsReseller = (int)StampsResellerType.Express1
                 });
             }
             catch (StampsException ex)

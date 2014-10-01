@@ -7586,6 +7586,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEndShipmentID,
 		///<summary>AutoCreateShipments. </summary>
 		AutoCreateShipments,
+		///<summary>UspsThermal. </summary>
+		UspsThermal,
+		///<summary>UspsThermalType. </summary>
+		UspsThermalType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8002,8 +8006,8 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
-		///<summary>IsExpress1. </summary>
-		IsExpress1,
+		///<summary>StampsReseller. </summary>
+		StampsReseller,
 		///<summary>ContractType. </summary>
 		ContractType,
 		/// <summary></summary>

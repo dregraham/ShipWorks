@@ -11,6 +11,7 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
@@ -90,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            return new StampsSetupWizard();
+            return new StampsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(false);
+            return new StampsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -162,10 +163,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // The Stamps or Postal objects may not yet be set if we are in the middle of creating a new shipment
             if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Stamps != null)
             {
-                StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
                 if (account == null)
                 {
-                    account = StampsAccountManager.StampsAccounts.FirstOrDefault();
+                    account = AccountRepository.Accounts.FirstOrDefault();
                 }
 
                 if (account != null)
@@ -199,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        protected virtual RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
@@ -357,7 +358,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            return new StampsShipmentProcessingSynchronizer();
+            return new StampsShipmentProcessingSynchronizer(AccountRepository);
         }
 
         /// <summary>
@@ -572,7 +573,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             StampsProfileEntity stamps = profile.Postal.Stamps;
 
-            stamps.StampsAccountID = StampsAccountManager.StampsAccounts.Count > 0 ? StampsAccountManager.StampsAccounts[0].StampsAccountID : 0;
+            stamps.StampsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().StampsAccountID : 0;
             stamps.RequireFullAddressValidation = true;
             stamps.HidePostage = false;
             stamps.Memo = string.Empty;
@@ -670,7 +671,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new StampsBestRateBroker() : counterBroker;
+            return counterBroker is NullShippingBroker ? new StampsBestRateBroker(this, AccountRepository) : counterBroker;
         }
 
         /// <summary>
@@ -728,8 +729,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Log the error
                     LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
                 }
-
-                throw new NotImplementedException("StampsShipmentType.UpdateContractType needs to call the Stamps API.");
             }
         }
     }

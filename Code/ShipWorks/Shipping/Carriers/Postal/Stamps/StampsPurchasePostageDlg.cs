@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private decimal GetBalance(StampsAccountEntity account)
         {
             // Define these here since they could be used in either inside or outside the try statement
-            string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller); 
             string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
 
             if (postageBalance == null)
@@ -115,8 +115,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            string carrierName = account.IsExpress1 ? "Express1" : "Stamps.com";
-            StampsShipmentType stampsShipmentType = account.IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType();
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller);
+            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.StampsReseller);
 
             try
             {

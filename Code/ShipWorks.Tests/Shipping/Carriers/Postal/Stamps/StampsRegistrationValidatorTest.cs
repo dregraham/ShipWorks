@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Moq;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
@@ -11,17 +10,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     [TestClass]
     public class StampsRegistrationValidatorTest
     {
-        private StampsRegistrationValidator testObject;
+        private readonly StampsRegistrationValidator testObject;
 
+        private Mock<IRegistrationPromotion> promotion;
+        private Mock<IStampsRegistrationGateway> gateway;
 
         public StampsRegistrationValidatorTest()
         {
             testObject = new StampsRegistrationValidator();
         }
-
+        
         private StampsRegistration CreateValidUnitedStatesRegistration()
         {
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object)
+            promotion = new Mock<IRegistrationPromotion>();
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+           
+            gateway = new Mock<IStampsRegistrationGateway>();
+
+            StampsRegistration registration = new StampsRegistration(testObject, gateway.Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
@@ -553,8 +559,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Create a promo code of 51 characters (exceeds the upper bound by 1)
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "123456789012345678901234567890123456789012345678901";
-
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345678901234567890123456789012345678901");
+            
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
@@ -565,7 +571,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "12345678901234567890123456789012345678901";
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("12345678901234567890123456789012345678901");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -576,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeDoesNotMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "123456789012345";
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 

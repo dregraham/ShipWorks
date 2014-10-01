@@ -16122,6 +16122,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.AutoCreateShipments);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.UspsThermal field instance</summary>
+		public static EntityField2 UspsThermal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsThermal);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.UspsThermalType field instance</summary>
+		public static EntityField2 UspsThermalType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsThermalType);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
@@ -17027,10 +17037,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
 		}
-		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
-		public static EntityField2 IsExpress1
+		/// <summary>Creates a new StampsAccountEntity.StampsReseller field instance</summary>
+		public static EntityField2 StampsReseller
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StampsReseller);}
 		}
 		/// <summary>Creates a new StampsAccountEntity.ContractType field instance</summary>
 		public static EntityField2 ContractType

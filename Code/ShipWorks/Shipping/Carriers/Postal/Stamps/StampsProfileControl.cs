@@ -53,8 +53,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            bool isExpress1 = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(isExpress1);
+            StampsResellerType stampsResellerType = PostalUtility.GetStampsResellerType(shipmentTypeCode);
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(stampsResellerType);
             if (accounts.Any())
             {
                 stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();

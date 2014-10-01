@@ -134,7 +134,9 @@ namespace ShipWorks.Shipping.Settings
 
             settings.ActivatedTypes = new int[0];
             settings.ConfiguredTypes = new int[0];
-            settings.ExcludedTypes = new int[0];
+
+            // Only want to show the single USPS provider by default
+            settings.ExcludedTypes = new int[] { (int)ShipmentTypeCode.Endicia, (int)ShipmentTypeCode.Express1Endicia, (int)ShipmentTypeCode.Express1Stamps, (int)ShipmentTypeCode.PostalWebTools, (int)ShipmentTypeCode.Stamps };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -212,6 +214,9 @@ namespace ShipWorks.Shipping.Settings
             settings.ShipSenseEndShipmentID = 0;
 
             settings.AutoCreateShipments = true;
+
+            settings.UspsThermal = false;
+            settings.UspsThermalType = (int)ThermalLanguage.EPL;
 
             adapter.SaveAndRefetch(settings);
         }

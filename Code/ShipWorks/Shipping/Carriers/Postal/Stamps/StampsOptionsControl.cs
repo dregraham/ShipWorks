@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -20,9 +21,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Whether the control is used for Express1.
+        /// The stamps reseller type.
         /// </summary>
-        public bool IsExpress1 
+        public ShipmentTypeCode ShipmentTypeCode
         { 
             get; 
             set; 
@@ -37,15 +38,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if(IsExpress1)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Stamps)
             {
                 thermalPrinter.Checked = settings.Express1StampsThermal;
                 thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
             }
-            else
+            else if (ShipmentTypeCode == ShipmentTypeCode.Stamps)
             {
                 thermalPrinter.Checked = settings.StampsThermal;
                 thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
+            }
+            else if (ShipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                thermalPrinter.Checked = settings.UspsThermal;
+                thermalType.SelectedValue = (ThermalLanguage)settings.UspsThermalType;
             }
         }
 
@@ -63,15 +69,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if(IsExpress1)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Stamps)
             {
                 settings.Express1StampsThermal = thermalPrinter.Checked;
                 settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
             }
-            else
+            else if (ShipmentTypeCode == ShipmentTypeCode.Stamps)
             {
                 settings.StampsThermal = thermalPrinter.Checked;
-                settings.StampsThermalType = (int)thermalType.SelectedValue;    
+                settings.StampsThermalType = (int)thermalType.SelectedValue;
+            }
+            else if (ShipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                settings.UspsThermal = thermalPrinter.Checked;
+                settings.UspsThermalType = (int)thermalType.SelectedValue;
             }
         }
     }
