@@ -360,7 +360,9 @@ namespace ShipWorks.Filters
                     SELECT CAST(MAX(RowVersion) as bigint)
                       FROM FilterLayout";
 
-                long dbTimestamp = (long) SqlCommandProvider.ExecuteScalar(cmd);
+                // We're using this version of ExecuteScalar because it will throw a better exception if the returned value cannot be cast.
+                // A customer was crashing on a NullReferenceException and the original cast to long was one possible location of the crash.
+                long dbTimestamp = SqlCommandProvider.ExecuteScalar<long>(cmd);
 
                 // Get the local timestamp
                 long localTimestamp = layouts.Max(l => SqlUtility.GetTimestampValue(l.RowVersion));
