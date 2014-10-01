@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Stores;
@@ -455,6 +456,29 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
+
+            // Check for error
+            XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
+            if (errorNode != null)
+            {
+                throw new TangoException(errorNode.InnerText);
+            }
+        }
+
+        /// <summary>
+        /// Sends Stamps contract type to Tango.
+        /// </summary>
+        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, StampsAccountContractType stampsAccountContractType)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "logstampsaccount");
+            postRequest.Variables.Add("license", license.Key);
+            postRequest.Variables.Add("accountidentifier", accountIdentifier);
+            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int)stampsAccountContractType).ToString(CultureInfo.InvariantCulture));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");

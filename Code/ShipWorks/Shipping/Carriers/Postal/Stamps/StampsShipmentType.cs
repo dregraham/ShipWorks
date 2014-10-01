@@ -376,11 +376,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </returns>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
+            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
             // Take this opportunity to try to update contract type of the account
             StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
             UpdateContractType(account);
-            
-            return base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+            return shipments;
         }
 
         /// <summary>
@@ -710,8 +712,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(StampsAccountEntity account)
         {
-            // Only update the contract type if it's unknown
-            if (account.ContractType == (int) StampsAccountContractType.Unknown)
+            // Only update the contract type if it's unknown 
+            if (account.ContractType == (int)StampsAccountContractType.Unknown)
             {
                 try
                 {
