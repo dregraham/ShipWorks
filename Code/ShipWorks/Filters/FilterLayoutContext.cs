@@ -94,7 +94,16 @@ namespace ShipWorks.Filters
         /// </summary>
         public static FilterLayoutContext Current
         {
-            get { return instanceScope.Count == 0 ? null : instanceScope[0]; }
+            get
+            {
+                if (instanceScope.Any())
+                {
+                    return instanceScope[0];
+                }
+
+                log.Warn("Could not get current filter layout context");
+                return null;
+            }
         }
 
         /// <summary>
