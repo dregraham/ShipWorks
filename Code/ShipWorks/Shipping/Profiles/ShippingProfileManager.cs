@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Profiles
             bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList(profile).Any(e => e.IsDirty);
 
             // Transaction
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = new SqlAdapter(false))
             {
                 bool extraDirty = shipmentType.SaveProfileData(profile, adapter);
 
@@ -136,7 +136,10 @@ namespace ShipWorks.Shipping.Profiles
                 adapter.Commit();
             }
 
-            CheckForChangesNeeded();
+            lock (synchronizer)
+            {
+                synchronizer.MergeEntity(profile);
+            }
         }
     }
 }
