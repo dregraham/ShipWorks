@@ -86,7 +86,10 @@ namespace Interapptive.Shared.Data
         /// </summary>
         public static T ExecuteScalar<T>(SqlConnection con, string commandText) where T : struct
         {
-            return ExecuteScalar<T>(Create(con, commandText));
+            using (SqlCommand command = Create(con, commandText))
+            {
+                return ExecuteScalar<T>(command);   
+            }
         }
 
         /// <summary>
