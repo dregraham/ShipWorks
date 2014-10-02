@@ -81,10 +81,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             switch (format)
             {
                 case LabelFormatType.Standard:
-                    return string.Format("{0} IS NULL", thermalColumn);
+                    return string.Format("{0} IS NULL OR {0} = {1}", thermalColumn, (int)ThermalLanguage.None);
 
                 case LabelFormatType.Thermal:
-                    return string.Format("{0} IS NOT NULL", thermalColumn);
+                    return string.Format("{0} IS NOT NULL AND {0} <> {1}", thermalColumn, (int)ThermalLanguage.None);
 
                 case LabelFormatType.EPL:
                     return string.Format("{0} = {1}", thermalColumn, (int) ThermalLanguage.EPL);
