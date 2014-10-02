@@ -117,4 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="labelDiscountInfo1.Text" xml:space="preserve">
+    <value>ShipWorks offers discounted postage rates on Priority and Express shipments, both domestic and international, through our partnership with Stamps.com and Intuiship.
+
+There are no monthly fees and the service, tracking, and labels are exactly the same.  The only difference is that you pay less for postage.
+</value>
+  </data>
 </root>

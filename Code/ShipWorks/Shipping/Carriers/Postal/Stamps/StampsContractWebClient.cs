@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract;
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     /// <summary>
-    /// This is hitting v38 of the Stamps.com API to change the plan. At the time this class was created
+    /// This is hitting v39 of the Stamps.com API to change the plan. At the time this class was created
     /// the StampsApiSession was using v29 of the API. In order to not have to retest both Stamps.com and
     /// Express1 to use the functionality to change plan, this class was created that gets called by the 
     /// StampsApiSession.

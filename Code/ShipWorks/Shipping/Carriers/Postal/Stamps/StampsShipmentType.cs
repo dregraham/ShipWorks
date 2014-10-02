@@ -12,6 +12,9 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing;
@@ -323,18 +326,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         {
                             if (hasExpress1Savings)
                             {
-                                finalGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(this, stampsRates, express1Rates));
+                                finalGroup.AddFootnoteFactory(new UspsRateDiscountedFootnoteFactory(this, stampsRates, express1Rates));
                             }
                             else
                             {
-                                finalGroup.AddFootnoteFactory(new Express1NotQualifiedRateFootnoteFactory(this));
+                                finalGroup.AddFootnoteFactory(new UspsRateNotQualifiedFootnoteFactory(this));
                             }
                         }
                         else
                         {
                             if (Express1Utilities.IsValidPackagingType(null, (PostalPackagingType) shipment.Postal.PackagingType))
                             {
-                                finalGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(this, new Express1StampsSettingsFacade(settings)));
+                                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this));
                             }
                         }
                     }
