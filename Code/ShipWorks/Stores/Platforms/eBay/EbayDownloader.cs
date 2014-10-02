@@ -375,7 +375,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             DateTime orderDate = orderType.CreatedTime;
 
-            foreach (var transaction in orderType.TransactionArray)
+            // Exclude invalid (null) transactions by making sure the date is greater than the minimum because SQL Server can't
+            // handle this date and it doesn't make sense anyway.
+            foreach (var transaction in orderType.TransactionArray.Where(x => x.CreatedDate > DateTime.MinValue))
             {
                 orderDate = (transaction.CreatedDate < orderDate) ? transaction.CreatedDate : orderDate;
             }
