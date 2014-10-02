@@ -51,6 +51,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             {
                 Pages.Remove(wizardPageOptions);
             }
+            else
+            {
+                wizardPageOptions.StepNext += (o, args) => optionsControl.SaveSettings();
+            }
 
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
         }
@@ -128,10 +132,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            optionsControl.SaveSettings();
-            ShippingSettings.Save(settings);
-
             OnTracAccountManager.SaveAccount(account);
 
             // Mark the new account as configured
