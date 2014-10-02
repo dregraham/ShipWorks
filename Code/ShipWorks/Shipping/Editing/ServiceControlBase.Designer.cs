@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Editing
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 144);
             this.sectionLabelOptions.Name = "sectionLabelOptions";
             this.sectionLabelOptions.SectionName = "Label Options";
-            this.sectionLabelOptions.SettingsKey = "{D20EB555-AFCD-4050-9C9E-BD982DBC60C9}";
+            this.sectionLabelOptions.SettingsKey = "{d20eb555-afcd-4050-9c9e-bd982dbc60c9}";
             this.sectionLabelOptions.Size = new System.Drawing.Size(385, 24);
             this.sectionLabelOptions.TabIndex = 4;
             // 

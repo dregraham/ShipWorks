@@ -1387,6 +1387,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
