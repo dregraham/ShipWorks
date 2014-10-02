@@ -84,6 +84,14 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Executes a scalar query on the given SQL command.  The value of the first row of the first column of the result set is returned.
         /// </summary>
+        public static T ExecuteScalar<T>(SqlConnection con, string commandText) where T : struct
+        {
+            return ExecuteScalar<T>(Create(con, commandText));
+        }
+
+        /// <summary>
+        /// Executes a scalar query on the given SQL command.  The value of the first row of the first column of the result set is returned.
+        /// </summary>
         public static T ExecuteScalar<T>(DbCommand cmd) where T : struct 
         {
             if (cmd == null)
