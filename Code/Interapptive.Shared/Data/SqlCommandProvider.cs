@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Data.SqlClient;
+using log4net;
 
 namespace Interapptive.Shared.Data
 {
@@ -76,6 +79,39 @@ namespace Interapptive.Shared.Data
         public static object ExecuteScalar(SqlCommand cmd)
         {
             return cmd.ExecuteScalar();
+        }
+
+        /// <summary>
+        /// Executes a scalar query on the given SQL command.  The value of the first row of the first column of the result set is returned.
+        /// </summary>
+        public static T ExecuteScalar<T>(SqlConnection con, string commandText) where T : struct
+        {
+            return ExecuteScalar<T>(Create(con, commandText));
+        }
+
+        /// <summary>
+        /// Executes a scalar query on the given SQL command.  The value of the first row of the first column of the result set is returned.
+        /// </summary>
+        public static T ExecuteScalar<T>(DbCommand cmd) where T : struct 
+        {
+            if (cmd == null)
+            {
+                throw new ArgumentNullException("cmd");
+            }
+
+            object result = cmd.ExecuteScalar();
+
+            if (result == null)
+            {
+                throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "Could not convert null to {0}", typeof(T).Name));
+            }
+
+            if (result is T)
+            {
+                return (T) result;
+            }
+
+            throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "Could not convert {0} to {1}", result.GetType().Name, typeof(T).Name));
         }
 
         /// <summary>
