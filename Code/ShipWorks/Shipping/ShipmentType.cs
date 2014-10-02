@@ -56,6 +56,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private ICertificateInspector certificateInspector;
 
+        private static object syncLock = new object();
+
         protected ShipmentType()
         {
             // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
@@ -440,27 +442,44 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingProfileEntity GetPrimaryProfile()
         {
-            ShippingProfileEntity profile = ShippingProfileManager.Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
+            ShippingProfileEntity profile = GetDefaultProfile();
 
             if (profile == null)
             {
-                profile = new ShippingProfileEntity();
-                profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                profile.ShipmentType = (int)ShipmentTypeCode;
-                profile.ShipmentTypePrimary = true;
+                lock (syncLock)
+                {
+                    profile = GetDefaultProfile();
 
-                // Load the shipmentType specific profile data
-                LoadProfileData(profile, true);
+                    if (profile == null)
+                    {
+                        profile = new ShippingProfileEntity();
+                        profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
+                        profile.ShipmentType = (int)ShipmentTypeCode;
+                        profile.ShipmentTypePrimary = true;
 
-                // Configure it as a primary profile
-                ConfigurePrimaryProfile(profile);
+                        // Load the shipmentType specific profile data
+                        LoadProfileData(profile, true);
 
-                // Save the profile
-                ShippingProfileManager.SaveProfile(profile);
+                        // Configure it as a primary profile
+                        ConfigurePrimaryProfile(profile);
+
+                        // Save the profile
+                        ShippingProfileManager.SaveProfile(profile);
+                    }
+                }
             }
 
             return profile;
+        }
+
+        /// <summary>
+        /// Gets the default profile if it exists
+        /// </summary>
+        /// <returns></returns>
+        private ShippingProfileEntity GetDefaultProfile()
+        {
+            return ShippingProfileManager.Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
