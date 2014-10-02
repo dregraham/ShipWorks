@@ -15982,6 +15982,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1Account);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpedited field instance</summary>
+		public static EntityField2 StampsAutomaticExpedited
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpedited);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpeditedAccount field instance</summary>
+		public static EntityField2 StampsAutomaticExpeditedAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaThermal field instance</summary>
 		public static EntityField2 Express1EndiciaThermal
 		{

@@ -7530,6 +7530,10 @@ namespace ShipWorks.Data.Model
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
 		StampsAutomaticExpress1Account,
+		///<summary>StampsAutomaticExpedited. </summary>
+		StampsAutomaticExpedited,
+		///<summary>StampsAutomaticExpeditedAccount. </summary>
+		StampsAutomaticExpeditedAccount,
 		///<summary>Express1EndiciaThermal. </summary>
 		Express1EndiciaThermal,
 		///<summary>Express1EndiciaThermalType. </summary>

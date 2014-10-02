@@ -544,6 +544,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StampsAutomaticExpress1Account", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("StampsAutomaticExpedited", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StampsAutomaticExpeditedAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Express1EndiciaThermal", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1102,6 +1108,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, value); }
+		}
+
+		/// <summary> The StampsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpedited"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean StampsAutomaticExpedited
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpedited, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpedited, value); }
+		}
+
+		/// <summary> The StampsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpeditedAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 StampsAutomaticExpeditedAccount
+		{
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount, value); }
 		}
 
 		/// <summary> The Express1EndiciaThermal property of the Entity ShippingSettings<br/><br/>

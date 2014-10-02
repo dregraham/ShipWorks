@@ -190,6 +190,8 @@ namespace ShipWorks.Shipping.Settings
             settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
+            settings.StampsAutomaticExpedited = false;
+            settings.StampsAutomaticExpeditedAccount = 0;
 
             settings.EquaShipThermal = false;
             settings.EquaShipThermalType = (int) ThermalLanguage.EPL;

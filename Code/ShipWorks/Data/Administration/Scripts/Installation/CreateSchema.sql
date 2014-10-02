@@ -4462,6 +4462,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [StampsThermalType] [int] NOT NULL,
 [StampsAutomaticExpress1] [bit] NOT NULL,
 [StampsAutomaticExpress1Account] [bigint] NOT NULL,
+[StampsAutomaticExpedited] [bit] NOT NULL,
+[StampsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [Express1EndiciaThermal] [bit] NOT NULL,
 [Express1EndiciaThermalType] [int] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
