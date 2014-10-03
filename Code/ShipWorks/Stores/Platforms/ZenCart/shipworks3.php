@@ -1,7 +1,7 @@
 <?php
         define('IS_ADMIN_FLAG', true);
         define('SHIPWORKS_MODULE_ACTIVE', true);
-        define('REQUIRE_SECURE', true);
+        define('REQUIRE_SECURE', TRUE);
 
         global $db;
         /*
@@ -193,12 +193,17 @@
                                         " from " . TABLE_ADMIN .
                                         " where admin_name = '". zen_db_input($admin) . "'");
 
-                        // Check that password is good
+                        // Check that password is good Zen v1.3
                         if (validatePassword($password, $check_admin->fields['login_pass']))
                         {
                                 $loginOK = true;
                         }
-
+                        
+                        // Check that password is good Zen v1.5
+                        if (zen_validate_password($password, $check_admin->fields['login_pass'])){
+                                $loginOK = true;
+                        }
+                        
                         if (!$loginOK)
                         {
                                 outputError(50, "The username or password is incorrect.");
