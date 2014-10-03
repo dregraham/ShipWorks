@@ -419,12 +419,16 @@ namespace ShipWorks.Shipping.ShipSense.Population
         }
 
         /// <summary>
-        /// Releases the ShipSense loading sql app lock
+        /// Releases the ShipSense loading sql app lock if it is currently locked.
         /// </summary>
         public void ReleaseAppLock(string appLockName)
         {
             OpenConnection();
-            SqlAppLockUtility.ReleaseLock(connection, appLockName);
+            
+            if (SqlAppLockUtility.IsLocked(connection, appLockName))
+            {
+                SqlAppLockUtility.ReleaseLock(connection, appLockName);
+            }
         }
 
         /// <summary>
