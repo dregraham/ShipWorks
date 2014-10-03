@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Don't give the user the option to have FedEx perform the address look up; the thought it that the shipper will know
             // what type of address they are shipping from, and it saves delays associated with a service call
-            EnumHelper.BindComboBox<ResidentialDeterminationType>(fromAddressType, t => t != ResidentialDeterminationType.FedExAddressLookup);
+            EnumHelper.BindComboBox<ResidentialDeterminationType>(fromAddressType, t => t != ResidentialDeterminationType.FedExAddressLookup && t != ResidentialDeterminationType.FromAddressValidation);
 
             packageControl.Initialize();
 
