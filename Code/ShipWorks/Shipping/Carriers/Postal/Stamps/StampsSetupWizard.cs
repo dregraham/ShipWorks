@@ -14,6 +14,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.Business;
+using ShipWorks.Data.Controls;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -57,12 +58,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        /// <summary>
+        /// Gets the stamps account.
+        /// </summary>
         protected StampsAccountEntity StampsAccount { get; private set; }
+
+        /// <summary>
+        /// Gets the person control associated with the Stamps.com account.
+        /// </summary>
+        protected PersonControl PersonControl
+        {
+            get { return personControl; }
+        }
 
         /// <summary>
         /// Initialization
         /// </summary>
-        private void OnLoad(object sender, EventArgs e)
+        protected virtual void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 

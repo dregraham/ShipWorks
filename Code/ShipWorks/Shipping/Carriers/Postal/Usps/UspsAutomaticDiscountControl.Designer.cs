@@ -32,7 +32,7 @@
             this.panelExpress1Account = new System.Windows.Forms.Panel();
             this.labelExpeditedAccount = new System.Windows.Forms.Label();
             this.expeditedAccounts = new System.Windows.Forms.ComboBox();
-            this.express1LearnMore = new ShipWorks.UI.Controls.LinkControl();
+            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
             this.expeditedSignup = new System.Windows.Forms.Button();
             this.labelDiscountedPostage = new System.Windows.Forms.Label();
             this.labelDiscountInfo1 = new System.Windows.Forms.Label();
@@ -44,7 +44,7 @@
             // 
             this.panelExpress1Account.Controls.Add(this.labelExpeditedAccount);
             this.panelExpress1Account.Controls.Add(this.expeditedAccounts);
-            this.panelExpress1Account.Controls.Add(this.express1LearnMore);
+            this.panelExpress1Account.Controls.Add(this.expeditedLearnMore);
             this.panelExpress1Account.Controls.Add(this.expeditedSignup);
             this.panelExpress1Account.Enabled = false;
             this.panelExpress1Account.Location = new System.Drawing.Point(6, 132);
@@ -70,18 +70,20 @@
             this.expeditedAccounts.Size = new System.Drawing.Size(122, 21);
             this.expeditedAccounts.TabIndex = 2;
             this.expeditedAccounts.Visible = false;
+            this.expeditedAccounts.SelectedIndexChanged += new System.EventHandler(this.OnExpeditedAccountsSelectedIndexChanged);
             // 
-            // express1LearnMore
+            // expeditedLearnMore
             // 
-            this.express1LearnMore.AutoSize = true;
-            this.express1LearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.express1LearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.express1LearnMore.ForeColor = System.Drawing.Color.Blue;
-            this.express1LearnMore.Location = new System.Drawing.Point(229, 10);
-            this.express1LearnMore.Name = "express1LearnMore";
-            this.express1LearnMore.Size = new System.Drawing.Size(69, 13);
-            this.express1LearnMore.TabIndex = 7;
-            this.express1LearnMore.Text = "(Learn more)";
+            this.expeditedLearnMore.AutoSize = true;
+            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
+            this.expeditedLearnMore.Location = new System.Drawing.Point(229, 10);
+            this.expeditedLearnMore.Name = "expeditedLearnMore";
+            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
+            this.expeditedLearnMore.TabIndex = 7;
+            this.expeditedLearnMore.Text = "(Learn more)";
+            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
             // 
             // expeditedSignup
             // 
@@ -91,6 +93,7 @@
             this.expeditedSignup.TabIndex = 3;
             this.expeditedSignup.Text = "Signup for Free";
             this.expeditedSignup.UseVisualStyleBackColor = true;
+            this.expeditedSignup.Click += new System.EventHandler(this.OnSignup);
             // 
             // labelDiscountedPostage
             // 
@@ -119,6 +122,7 @@
             this.checkBoxUseExpedited.Text = "Automatically save postage costs on domestic and international Priority and Expre" +
     "ss shipments:";
             this.checkBoxUseExpedited.UseVisualStyleBackColor = true;
+            this.checkBoxUseExpedited.Click += new System.EventHandler(this.OnChangeUseExpedited);
             // 
             // UspsAutomaticDiscountControl
             // 
@@ -142,7 +146,7 @@
         private System.Windows.Forms.Panel panelExpress1Account;
         private System.Windows.Forms.Label labelExpeditedAccount;
         private System.Windows.Forms.ComboBox expeditedAccounts;
-        private UI.Controls.LinkControl express1LearnMore;
+        private UI.Controls.LinkControl expeditedLearnMore;
         private System.Windows.Forms.Button expeditedSignup;
         private System.Windows.Forms.Label labelDiscountedPostage;
         private System.Windows.Forms.Label labelDiscountInfo1;

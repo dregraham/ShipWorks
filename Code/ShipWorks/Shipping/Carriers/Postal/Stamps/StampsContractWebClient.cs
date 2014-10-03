@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -16,6 +20,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         // This value came from Stamps.com (the "standard" account value is 88)
         private const int ExpeditedPlanID = 236;
+        private readonly Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
+
+        private readonly ILog log;
+
+        // Maps stamps.com usernames to their latest authenticator tokens
+        static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
+
+        // Maps stamps.com usernames to the object lock used to make sure only one thread is trying to authenticate at a time
+        static Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
 
         private readonly bool useTestServer;
 
@@ -26,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public StampsContractWebClient(bool useTestServer)
         {
             this.useTestServer = useTestServer;
+            log = LogManager.GetLogger(GetType());
         }
 
         /// <summary>
@@ -40,16 +54,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Makes request to Stamps.com API to change plan associated with the account referenced by the authenticator to be 
         /// an Expedited plan. This requires an authentication call to the Stamps.com API prior to changing the plan.
         /// </summary>
-        public void ChangeToExpeditedPlan(string authenticator, string promoCode)
+        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        {
+            AuthenticationWrapper(() =>
+            {
+                InternalChangeToExpeditedPlan(GetAuthenticator(account), promoCode);
+                return true;
+            }, account);
+        }
+
+        /// <summary>
+        /// Makes request to Stamps.com API to change plan associated with the account referenced by the authenticator to be 
+        /// an Expedited plan. This requires an authentication call to the Stamps.com API prior to changing the plan.
+        /// </summary>
+        public void InternalChangeToExpeditedPlan(string authenticator, string promoCode)
         {
             // Output parameters for web service call
-            PurchaseStatus purchaseStatus;
             int transactionID;
+            PurchaseStatus purchaseStatus;
             string rejectionReason = string.Empty;
             
             try
             {
-                using (SwsimV39 webService = new SwsimV39(new LogEntryFactory().GetLogEntry(ApiLogSource.UspsStamps, "ChangePlan", LogActionType.Other)))
+                using (SwsimV39 webService = CreateWebService("ChangePlan"))
                 {
                     webService.Url = ServiceUrl;
                     webService.ChangePlan(authenticator, ExpeditedPlanID, promoCode, out purchaseStatus, out transactionID, out rejectionReason);
@@ -57,12 +84,168 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             catch (SoapException soapException)
             {
-                string message = string.Format("ShipWorks was unable to change the Stamps.com plan. {0}{1}", rejectionReason ?? string.Empty, soapException.Message);
-                throw new StampsException(message, soapException);
+                log.ErrorFormat("ShipWorks was unable to change the Stamps.com plan. {0}. {1}", rejectionReason ?? string.Empty, soapException.Message);
+                throw new StampsApiException(soapException);
             }
             catch (Exception exception)
             {
                 WebHelper.TranslateWebException(exception, typeof (StampsException));
+            }
+        }
+
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private SwsimV39 CreateWebService(string logName)
+        {
+            SwsimV39 webService = new SwsimV39(new LogEntryFactory().GetLogEntry(ApiLogSource.UspsStamps, logName, LogActionType.Other))
+            {
+                Url = ServiceUrl
+            };
+
+            return webService;
+        }
+
+
+        /// <summary>
+        /// Authenticate the given user with Stamps.com. 
+        /// </summary>
+        public void AuthenticateUser(string username, string password, StampsResellerType stampsResellerType)
+        {
+            try
+            {
+                // Output parameters from stamps.com
+                DateTime lastLoginTime = new DateTime();
+                bool clearCredential = false;
+                bool codeWordsSet = false;
+
+                string bannerText = string.Empty;
+                bool passwordExpired = false;
+
+                using (SwsimV39 webService = CreateWebService("Authenticate"))
+                {
+                    string auth = webService.AuthenticateUser(new Credentials
+                    {
+                        IntegrationID = integrationID,
+                        Username = username,
+                        Password = password
+                    }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired, out codeWordsSet);
+
+                    usernameAuthenticatorMap[username] = auth;
+                }
+            }
+            catch (SoapException ex)
+            {
+                throw new StampsApiException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+            }
+        }
+
+        /// <summary>
+        /// Wraps the given executor in methods that ensure the appropriate authentication for the account
+        /// </summary>
+        private T AuthenticationWrapper<T>(Func<T> executor, StampsAccountEntity account)
+        {
+            object authenticationLock;
+
+            lock (authenticationLockMap)
+            {
+                if (!authenticationLockMap.TryGetValue(account.Username, out authenticationLock))
+                {
+                    authenticationLock = new object();
+                    authenticationLockMap[account.Username] = authenticationLock;
+                }
+            }
+
+            // We have to lockout authentication of this account to make sure only one thread is trying to authenticate at a time,
+            // otherwise there will be race conditions try to get the latest authenticator.
+            lock (authenticationLock)
+            {
+                int triesLeft = 5;
+
+                while (true)
+                {
+                    triesLeft--;
+
+                    try
+                    {
+                        return executor();
+                    }
+                    catch (SoapException ex)
+                    {
+                        log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
+
+                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int)StampsResellerType.Express1))
+                        {
+                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+                        }
+                        else
+                        {
+                            throw new StampsApiException(ex);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the authenticator for the given account
+        /// </summary>
+        private string GetAuthenticator(StampsAccountEntity account)
+        {
+            string auth;
+            if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
+            {
+                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+
+                auth = usernameAuthenticatorMap[account.Username];
+            }
+
+            return auth;
+        }
+
+        /// <summary>
+        /// Indicates if the exception represents an authenticator that has gone stale
+        /// </summary>
+        private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
+        {
+            if (isExpress1)
+            {
+                // Express1 does not return error codes...
+                switch (ex.Message)
+                {
+                    case "Invalid authentication info":
+                    case "Unable to authenticate user.":
+                        return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                long code = StampsApiException.GetErrorCode(ex);
+
+                switch (code)
+                {
+                    case 0x002b0201: // Invalid
+                    case 0x002b0202: // Expired
+                    case 0x004C0105: // Expired
+                    case 0x00500102: // Expired
+                    case 0x8004E112: // Expired
+                    case 0x002b0203: // Invalid
+                    case 0x002b0204: // Out of sync
+                        return true;
+                }
+
+                return false;
             }
         }
     }

@@ -62,9 +62,9 @@
             this.label.AutoSize = true;
             this.label.Location = new System.Drawing.Point(35, 9);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(185, 13);
+            this.label.Size = new System.Drawing.Size(200, 13);
             this.label.TabIndex = 6;
-            this.label.Text = "This is your Express1 discounted rate.";
+            this.label.Text = "This is your Stamps.com discounted rate.";
             // 
             // UspsRateDiscountedFootnote
             // 

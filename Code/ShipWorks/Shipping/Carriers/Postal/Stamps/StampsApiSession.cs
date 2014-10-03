@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
-        static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV29.asmx";
+        static string productionUrl = "https://swsim.testing.stamps.com/swsim/SwsimV29.asmx";
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Maps stamps.com usernames to their latest authenticator tokens
@@ -219,13 +219,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
         {
+            // Just pass this along to the contract web client until the WSDL has been 
+            // upgraded to v39+ 
             StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
-
-            AuthenticationWrapper(() =>
-            {
-                contractWebClient.ChangeToExpeditedPlan(GetAuthenticator(account), promoCode);
-                return true;
-            }, account);
+            contractWebClient.ChangeToExpeditedPlan(account, promoCode);
         }
 
         /// <summary>

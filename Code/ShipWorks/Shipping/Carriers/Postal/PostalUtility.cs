@@ -493,9 +493,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public static bool IsPostalSetup()
         {
             return EndiciaAccountManager.EndiciaAccounts.Any() ||
-                     EndiciaAccountManager.Express1Accounts.Any() ||
-                     StampsAccountManager.StampsAccounts.Any() ||
-                     StampsAccountManager.Express1Accounts.Any();
+                   EndiciaAccountManager.Express1Accounts.Any() ||
+                   StampsAccountManager.StampsAccounts.Any() ||
+                   StampsAccountManager.Express1Accounts.Any() ||
+                   StampsAccountManager.StampsExpeditedAccounts.Any();
         }
 
         /// <summary>

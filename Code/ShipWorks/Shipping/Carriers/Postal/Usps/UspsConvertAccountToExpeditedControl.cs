@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using Interapptive.Shared.UI;
+using log4net;
+using log4net.Core;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
+{
+    public partial class UspsConvertAccountToExpeditedControl : UserControl
+    {
+        private readonly ILog log;
+        private StampsAccountEntity accountToConvert;
+
+        public event EventHandler<UspsAccountConvertedEventArgs> AccountConverted;
+        public event EventHandler AccountConverting;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UspsConvertAccountToExpeditedControl"/> class.
+        /// </summary>
+        public UspsConvertAccountToExpeditedControl()
+        {
+            InitializeComponent();
+            log = LogManager.GetLogger(GetType());
+        }
+
+        /// <summary>
+        /// Initializes the account to convert with the specified stamps account.
+        /// </summary>
+        /// <param name="stampsAccount">The account to be converted.</param>
+        /// <exception cref="StampsException">Only Stamps.com accounts can be converted.</exception>
+        public void Initialize(StampsAccountEntity stampsAccount)
+        {
+            if (stampsAccount.StampsReseller != (int)StampsResellerType.None)
+            {
+                throw new StampsException("Only Stamps.com accounts can be converted.");
+            }
+
+            accountToConvert = stampsAccount;
+        }
+
+        /// <summary>
+        /// Called when the Start Saving button is clicked.
+        /// </summary>
+        private void OnStartSaving(object sender, EventArgs e)
+        {
+            try
+            {
+                if (AccountConverting != null)
+                {
+                    // Allow the hosting control/form a chance to update the cursor
+                    AccountConverting(this, EventArgs.Empty);
+                }
+
+                // Convert the account with the Stamps.com API and update the account entity's 
+                // contract type to reflect the conversion, so the Activate discount dialog is 
+                // not displayed again
+                ConvertAccountToExpedited();
+                accountToConvert.ContractType = (int)StampsAccountContractType.CommercialPlus;
+                StampsAccountManager.SaveAccount(accountToConvert);
+
+                // Notify any listeners
+                if (AccountConverted != null)
+                {
+                    AccountConverted(this, new UspsAccountConvertedEventArgs(accountToConvert));
+                }
+            }
+            catch (StampsException exception)
+            {
+                log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);
+                MessageHelper.ShowError(this, "An error occurred, and ShipWorks was not able to convert your account at this time.");
+            }
+        }
+
+        /// <summary>
+        /// Converts the account to an expedited account.
+        /// </summary>
+        private void ConvertAccountToExpedited()
+        {
+            try
+            {
+                // Need to convert the account to get discounted rates via the 
+                // expedited contract/plan
+
+                //StampsExpeditedRegistrationPromotion promotion = new StampsExpeditedRegistrationPromotion();
+                log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
+                new StampsApiSession().ChangeToExpeditedPlan(accountToConvert, "shipworks"); //promotion.GetPromoCode(PostalAccountRegistrationType.Expedited));                
+            }
+            catch (StampsApiException exception)
+            {
+                if (exception.Code == 0x005f0302)
+                {
+                    // The account is already converted, so there's nothing to do here
+                    log.WarnFormat("The Stamps.com account ({0}) has already been converted.", accountToConvert.Username);                    
+                }
+                else
+                {
+                    log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);
+                    throw;
+                }
+            }
+        }
+    }
+}
