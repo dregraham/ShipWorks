@@ -36,12 +36,14 @@
             // googleImage
             // 
             this.googleImage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.googleImage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.googleImage.Location = new System.Drawing.Point(0, 0);
             this.googleImage.Name = "googleImage";
             this.googleImage.Size = new System.Drawing.Size(326, 174);
             this.googleImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.googleImage.TabIndex = 4;
             this.googleImage.TabStop = false;
+            this.googleImage.Click += new System.EventHandler(this.OnGoogleImageClick);
             // 
             // errorLabel
             // 

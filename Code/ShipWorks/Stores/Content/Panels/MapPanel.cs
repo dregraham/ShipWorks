@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -27,10 +28,10 @@ namespace ShipWorks.Stores.Content.Panels
     /// </summary>
     public partial class MapPanel : UserControl, IDockingPanelContent
     {
-        EntityBase2 selectedEntity;
-        LruCache<string, Image> imageCache = new LruCache<string, Image>(100);
-        readonly ConcurrentQueue<long> requestQueue = new ConcurrentQueue<long>();
-        readonly object lockObj = new object();
+        private EntityBase2 selectedEntity;
+        private LruCache<string, Image> imageCache = new LruCache<string, Image>(100);
+        private readonly ConcurrentQueue<long> requestQueue = new ConcurrentQueue<long>();
+        private readonly object lockObj = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapPanel"/> class.
@@ -43,35 +44,26 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Gets or sets the type of the map.
         /// </summary>
-        public MapPanelType MapType 
-        { 
-            get; 
-            set; 
-        }
+        public MapPanelType MapType { get; set; }
 
         /// <summary>
         /// Load the state of the panel.
         /// </summary>
         public void LoadState()
-        {
-        }
+        {}
 
         /// <summary>
         /// Save the state of the panel.
         /// </summary>
         public void SaveState()
-        {
-        }
+        {}
 
         /// <summary>
         /// Indicates if the panel can handle multiple selected items at one time.
         /// </summary>
         public bool SupportsMultiSelect
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
 
         /// <summary>
@@ -99,7 +91,7 @@ namespace ShipWorks.Stores.Content.Panels
                 {
                     return;
                 }
-                
+
                 try
                 {
                     long requestId = 0;
@@ -163,14 +155,11 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private GoogleResponse GetImage()
         {
-            if (selectedEntity == null)
+            AddressAdapter addressAdapter = SelectedAddress();
+            if (addressAdapter == null)
             {
                 return null;
             }
-
-            AddressAdapter addressAdapter = new AddressAdapter();
-                    
-            AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
 
             Size size = GetPictureSize(Size);
 
@@ -182,7 +171,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             if (imageCache.Contains(hash))
             {
-                response = new GoogleResponse() {ReturnedImage = imageCache[hash]};
+                response = new GoogleResponse() { ReturnedImage = imageCache[hash] };
             }
             else
             {
@@ -190,11 +179,28 @@ namespace ShipWorks.Stores.Content.Panels
 
                 if (!response.IsThrottled)
                 {
-                    imageCache[hash] = response.ReturnedImage;   
+                    imageCache[hash] = response.ReturnedImage;
                 }
             }
 
             return response;
+        }
+
+        /// <summary>
+        /// Selects the address.
+        /// </summary>
+        /// <returns>Selected Address - null if non selected</returns>
+        private AddressAdapter SelectedAddress()
+        {
+            if (selectedEntity == null)
+            {
+                return null;
+            }
+
+            AddressAdapter addressAdapter = new AddressAdapter();
+
+            AddressAdapter.Copy(selectedEntity, "Ship", addressAdapter);
+            return addressAdapter;
         }
 
         private GoogleResponse LoadImageFromGoogle(AddressAdapter addressAdapter, Size size)
@@ -206,7 +212,7 @@ namespace ShipWorks.Stores.Content.Panels
                 using (WebClient imageDownloader = new WebClient())
                 {
 
-                    image = imageDownloader.DownloadData(string.Format(GetUrl(),
+                    image = imageDownloader.DownloadData(string.Format(GetImageUrl(),
                         addressAdapter.Street1,
                         addressAdapter.City,
                         addressAdapter.StateProvCode,
@@ -216,7 +222,7 @@ namespace ShipWorks.Stores.Content.Panels
 
                 using (MemoryStream stream = new MemoryStream(image))
                 {
-                    return new GoogleResponse() {ReturnedImage = Image.FromStream(stream)};
+                    return new GoogleResponse() { ReturnedImage = Image.FromStream(stream) };
                 }
             }
             catch (WebException ex)
@@ -259,7 +265,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Gets the URL.
         /// </summary>
-        private string GetUrl()
+        private string GetImageUrl()
         {
             if (MapType == MapPanelType.Satellite)
             {
@@ -275,8 +281,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// Update the content to reflect changes to the loaded stores
         /// </summary>
         public void UpdateStoreDependentUI()
-        {
-        }
+        {}
 
 
         /// <summary>
@@ -284,10 +289,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         public EntityType EntityType
         {
-            get
-            {
-                return EntityType.OrderEntity;
-            }
+            get { return EntityType.OrderEntity; }
         }
 
         /// <summary>
@@ -295,10 +297,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         public FilterTarget[] SupportedTargets
         {
-            get
-            {
-                return new[] { FilterTarget.Orders, FilterTarget.Customers };
-            }
+            get { return new[] { FilterTarget.Orders, FilterTarget.Customers }; }
         }
 
         /// <summary>
@@ -306,16 +305,14 @@ namespace ShipWorks.Stores.Content.Panels
         /// list with up-to-date displayed entity content.
         /// </summary>
         public void ReloadContent()
-        {
-        }
+        {}
 
         /// <summary>
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
         public void UpdateContent()
-        {
-        }
+        {}
 
         /// <summary>
         /// Called when [size changed].
@@ -349,18 +346,34 @@ namespace ShipWorks.Stores.Content.Panels
             /// <summary>
             /// Gets or sets the returned image.
             /// </summary>
-            public Image ReturnedImage
-            {
-                get; set;
-            }
+            public Image ReturnedImage { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether this instance is throttled.
             /// </summary>
-            public bool IsThrottled
+            public bool IsThrottled { get; set; }
+        }
+
+        /// <summary>
+        /// Called when [google image click].
+        /// </summary>
+        private void OnGoogleImageClick(object sender, EventArgs e)
+        {
+            var addressAdapter = SelectedAddress();
+            if (addressAdapter == null)
             {
-                get; set;
+                return;
             }
+            
+            string url = string.Format("https://www.google.com/maps/place/{0}+{1}+{2}+{3}+{4}",
+                addressAdapter.Street1,
+                addressAdapter.City,
+                addressAdapter.StateProvCode,
+                addressAdapter.PostalCode,
+                addressAdapter.CountryCode);
+
+            Process.Start(url);
         }
     }
 }
+
