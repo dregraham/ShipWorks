@@ -219,10 +219,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
         {
-            // Just pass this along to the contract web client until the WSDL has been 
-            // upgraded to v39+ 
+            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
+            // has been upgraded to v39+ 
             StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
             contractWebClient.ChangeToExpeditedPlan(account, promoCode);
+        }
+
+        /// <summary>
+        /// Checks with Stamps.com API to get the contract type of the account.
+        /// </summary>
+        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        {
+            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
+            // has been upgraded to v39+ 
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+            return contractWebClient.GetContractType(account);
         }
 
         /// <summary>

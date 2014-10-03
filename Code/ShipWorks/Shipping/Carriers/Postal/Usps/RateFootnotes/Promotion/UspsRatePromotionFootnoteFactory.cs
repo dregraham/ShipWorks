@@ -6,13 +6,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
     public class UspsRatePromotionFootnoteFactory : IRateFootnoteFactory
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsRatePromotionFootnoteFactory"/> class.
+        /// Initializes a new instance of the <see cref="UspsRatePromotionFootnoteFactory" /> class.
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
-        public UspsRatePromotionFootnoteFactory(ShipmentType shipmentType, ShipmentEntity shipment)
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="showSingleAccountDialog">if set to <c>true</c> [show single account dialog].</param>
+        public UspsRatePromotionFootnoteFactory(ShipmentType shipmentType, ShipmentEntity shipment, bool showSingleAccountDialog)
         {
             ShipmentType = shipmentType;
             Shipment = shipment;
+            ShowSingleAccountDialog = showSingleAccountDialog;
         }
 
         /// <summary>
@@ -26,13 +29,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         private ShipmentEntity Shipment { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether to [show single account dialog].
+        /// </summary>
+        public bool ShowSingleAccountDialog { get; private set; }
+
+        /// <summary>
         /// Creates a footnote control.
         /// </summary>
         /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>
         /// <returns>A instance of a RateFoonoteControl.</returns>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new UspsRatePromotionFootnote(Shipment);
+            return new UspsRatePromotionFootnote(Shipment, ShowSingleAccountDialog);
         }
     }
 }

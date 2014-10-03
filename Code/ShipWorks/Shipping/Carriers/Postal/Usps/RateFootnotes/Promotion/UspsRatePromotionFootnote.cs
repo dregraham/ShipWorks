@@ -8,12 +8,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
     public partial class UspsRatePromotionFootnote : RateFootnoteControl
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsRatePromotionFootnote"/> class.
+        /// Initializes a new instance of the <see cref="UspsRatePromotionFootnote" /> class.
         /// </summary>
-        public UspsRatePromotionFootnote(ShipmentEntity shipment)
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="showSingleAccountDialog">if set to <c>true</c> the dialog for the single account marketing
+        /// message will be displayed when the Activate link is clicked; otherwise the normal activate discount dialog
+        /// is displayed.</param>
+        public UspsRatePromotionFootnote(ShipmentEntity shipment, bool showSingleAccountDialog)
         {
             InitializeComponent();
             Shipment = shipment;
+            ShowSingleAccountDialog = showSingleAccountDialog;
         }
 
         /// <summary>
@@ -30,15 +35,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         public ShipmentEntity Shipment { get; private set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to [show single account dialog] when 
+        /// the activate link is clicked. 
+        /// </summary>
+        public bool ShowSingleAccountDialog { get; private set; }
+
+        /// <summary>
         /// Link to activate the USPS (Stamps.com Expedited) discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg(Shipment))
+            if (ShowSingleAccountDialog)
             {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                using (SingleAccountMarketingDlg dlg = new SingleAccountMarketingDlg(Shipment))
                 {
-                    RaiseRateCriteriaChanged();
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        RaiseRateCriteriaChanged();
+                    }
+                }
+            }
+            else
+            {
+                using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg(Shipment))
+                {
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        RaiseRateCriteriaChanged();
+                    }
                 }
             }
         }

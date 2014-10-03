@@ -193,6 +193,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
+            // Take this opportunity to try to update contract type of the account
+            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UpdateContractType(account);
+
             // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
             return AccountRepository.Accounts.Any() ?
@@ -356,7 +360,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 if (contractType == StampsAccountContractType.Commercial)
                 {
                     // Show the promotional footer for discounted rates 
-                    rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment));
+                    rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
                 }
                 // TODO: Enable this if/when we have rates coming back for commercial plus to compare with
                 //else if (contractType == StampsAccountContractType.CommercialPlus)
@@ -398,9 +402,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
 
-            // Take this opportunity to try to update contract type of the account
-            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            UpdateContractType(account);
+            //// Take this opportunity to try to update contract type of the account
+            //StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            //UpdateContractType(account);
 
             return shipments;
         }
@@ -733,12 +737,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public virtual void UpdateContractType(StampsAccountEntity account)
         {
             // Only update the contract type if it's unknown 
-            if (account.ContractType == (int)StampsAccountContractType.Unknown)
+            if (account != null && account.ContractType == (int)StampsAccountContractType.Unknown)
             {
                 try
                 {
-                    // TODO: Grab contract type from the Stamps API once it is available
-                    // account.ContractType = StampsApiSession...
+                    // Grab contract type from the Stamps API 
+                    StampsApiSession apiSession = new StampsApiSession(AccountRepository, new LogEntryFactory(), CertificateInspector);
+                    account.ContractType = (int)apiSession.GetContractType(account);
 
                     // Save the contract to the DB and push it to Tango
                     AccountRepository.Save(account);

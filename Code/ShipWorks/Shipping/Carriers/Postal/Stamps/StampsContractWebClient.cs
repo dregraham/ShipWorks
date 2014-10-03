@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         // This value came from Stamps.com (the "standard" account value is 88)
         private const int ExpeditedPlanID = 236;
-        private readonly Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
+        private readonly Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
         private readonly ILog log;
 
         // Maps stamps.com usernames to their latest authenticator tokens
@@ -93,6 +93,56 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        /// <summary>
+        /// Checks with Stamps.com to get the contract type of the account.
+        /// </summary>
+        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        {
+            return AuthenticationWrapper(() => InternalGetContractType(account), account);
+        }
+
+        /// <summary>
+        /// The internal GetContractType implementation that is intended to be wrapped by the auth wrapper
+        /// </summary>
+        private StampsAccountContractType InternalGetContractType(StampsAccountEntity account)
+        {
+            StampsAccountContractType contract = StampsAccountContractType.Unknown;
+            AccountInfo accountInfo;
+
+            using (SwsimV39 webService = CreateWebService("GetAccountInfo"))
+            {
+                // Address and CustomerEmail are not returned by Express1, so do not use them.
+                Address address;
+                string email;
+
+                string auth = webService.GetAccountInfo(GetAuthenticator(account), out accountInfo, out address, out email);
+                usernameAuthenticatorMap[account.Username] = auth;
+            }
+
+            RatesetType? rateset = accountInfo.RatesetType;
+            if (rateset.HasValue)
+            {
+                switch (rateset)
+                {
+                    case RatesetType.CBP:
+                    case RatesetType.Retail:
+                        contract = StampsAccountContractType.Commercial;
+                        break;
+
+                    case RatesetType.CPP:
+                    case RatesetType.NSA:
+                    case RatesetType.Reseller:
+                        contract = StampsAccountContractType.CommercialPlus;
+                        break;
+
+                    default:
+                        contract = StampsAccountContractType.Unknown;
+                        break;
+                }
+            }
+
+            return contract;
+        }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL

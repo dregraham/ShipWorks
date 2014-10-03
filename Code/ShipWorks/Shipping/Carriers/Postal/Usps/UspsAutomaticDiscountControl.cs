@@ -27,6 +27,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets or sets the header text.
+        /// </summary>
+        public string HeaderText
+        {
+            get { return labelDiscountedPostage.Text; }
+            set { labelDiscountedPostage.Text = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the discount text.
+        /// </summary>
+        public string DiscountText
+        {
+            get { return labelDiscountInfo1.Text; }
+            set { labelDiscountInfo1.Text = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the text displayed for the checkbox.
+        /// </summary>
+        public string UseExpeitedOptionText
+        {
+            get { return checkBoxUseExpedited.Text; }
+            set { checkBoxUseExpedited.Text = value; }
+        }
+        
+        /// <summary>
         /// Gets a value indicating whether the user opted to [use expedited].
         /// </summary>
         /// <value>
