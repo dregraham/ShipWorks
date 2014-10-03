@@ -44,7 +44,8 @@ namespace ShipWorks.Shipping.Editing
 
             if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
             {
-                SetDisplayMode(DisplayMode.ProfileNotification);   
+                SetDisplayMode(DisplayMode.ProfileNotification);
+                primaryProfileLink.Text = shipmentType.GetPrimaryProfile().Name;
             }
             else
             {

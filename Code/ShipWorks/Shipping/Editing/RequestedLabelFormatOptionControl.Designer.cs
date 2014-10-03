@@ -38,14 +38,14 @@
             this.settingsMovedMessage.AutoSize = true;
             this.settingsMovedMessage.Location = new System.Drawing.Point(2, 38);
             this.settingsMovedMessage.Name = "settingsMovedMessage";
-            this.settingsMovedMessage.Size = new System.Drawing.Size(267, 13);
+            this.settingsMovedMessage.Size = new System.Drawing.Size(222, 13);
             this.settingsMovedMessage.TabIndex = 61;
-            this.settingsMovedMessage.Text = "Label format settings are now configured through the ";
+            this.settingsMovedMessage.Text = "Label format settings are configured through";
             // 
             // primaryProfileLink
             // 
             this.primaryProfileLink.AutoSize = true;
-            this.primaryProfileLink.Location = new System.Drawing.Point(263, 38);
+            this.primaryProfileLink.Location = new System.Drawing.Point(221, 38);
             this.primaryProfileLink.Name = "primaryProfileLink";
             this.primaryProfileLink.Size = new System.Drawing.Size(76, 13);
             this.primaryProfileLink.TabIndex = 62;
