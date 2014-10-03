@@ -151,11 +151,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ShipmentFields.ShipEmail),
 
                 new GridColumnDefinition("{04A69989-DC89-4B0A-AA72-7D9797A5E6B1}", false,
-                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Requested Label Format", ThermalLanguage.None,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Requested Label Format", ThermalLanguage.None,
                     ShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
 
                 new GridColumnDefinition("{B7B9C011-C66B-4B2F-933D-466A0B3AD4AE}", false,
-                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Actual Label Format", ThermalLanguage.None,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
                     ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }

@@ -125,11 +125,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     },
 
                 new GridColumnDefinition("{72E01539-A415-4D49-B08C-B96FA551CCE9}", false,
-                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Requested Label Format", ThermalLanguage.None,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Requested Label Format", ThermalLanguage.None,
                     ShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
 
                 new GridColumnDefinition("{ADB80862-F35B-4F79-8405-607E329155F1}", false,
-                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Value), "Actual Label Format", ThermalLanguage.None,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
                     ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }
