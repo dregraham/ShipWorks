@@ -619,7 +619,7 @@ namespace ShipWorks.Stores.Communication
                         bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
                         if (shippingAddressChanged)
                         {
-                            SetAddressValidationStatus(order);
+                            SetAddressValidationStatus(order, "Ship");
                             adapter.SaveAndRefetch(order);
 
                             ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
@@ -628,6 +628,12 @@ namespace ShipWorks.Stores.Communication
                         // Update the customer's addresses if necessary
                         AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
                         bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+
+                        if (billingAddressChanged)
+                        {
+                            SetAddressValidationStatus(order, "Bill");
+                            adapter.SaveAndRefetch(order);
+                        }
 
                         // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
                         if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
@@ -645,7 +651,8 @@ namespace ShipWorks.Stores.Communication
                     }
                     else
                     {
-                        SetAddressValidationStatus(order);
+                        SetAddressValidationStatus(order, "Ship");
+                        SetAddressValidationStatus(order, "Bill");
                         adapter.SaveAndRefetch(order);
                     }
                     
@@ -674,22 +681,29 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Sets the address validation status on the order, depending on the store settings
         /// </summary>
-        private void SetAddressValidationStatus(OrderEntity order)
+        private void SetAddressValidationStatus(OrderEntity order, string prefix)
         {
-            if (ValidatedAddressManager.EnsureAddressCanBeValidated(new AddressAdapter(order, "Ship")))
+            AddressAdapter address = new AddressAdapter(order, prefix);
+
+            address.POBox = (int)ValidationDetailStatusType.Unknown;
+            address.MilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            address.USTerritory = (int)ValidationDetailStatusType.Unknown;
+            address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            address.AddressValidationSuggestionCount = 0;
+            address.AddressValidationError = string.Empty;
+
+            if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
             {
-                if (addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify)
+                if ((addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
+                    prefix=="Ship")
                 {
-                    order.ShipAddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                    address.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
                 }
                 else
                 {
-                    order.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                    address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
                 }
-
-                order.ShipAddressValidationSuggestionCount = 0;
-                order.ShipAddressValidationError = string.Empty;
             }
         }
         /// <summary>
@@ -732,6 +746,7 @@ namespace ShipWorks.Stores.Communication
             if (shouldCopy)
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
+                AddressAdapter.Copy(order, existingCustomer, prefix);
             }
         }
 
