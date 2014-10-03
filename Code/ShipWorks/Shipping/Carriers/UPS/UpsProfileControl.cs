@@ -40,6 +40,28 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Label group box
+        /// </summary>
+        protected GroupBox GroupLabels
+        {
+            get
+            {
+                return groupLabels;
+            }
+        }
+
+        /// <summary>
+        /// Tab page settings control
+        /// </summary>
+        protected Control TabPageSettings
+        {
+            get
+            {
+                return tabPageSettings;
+            }
+        }
+
+        /// <summary>
         /// Load the data from the given profile into the UI
         /// </summary>
         public override void LoadProfile(ShippingProfileEntity profile)
