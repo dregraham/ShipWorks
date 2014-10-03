@@ -27,6 +27,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets a value indicating whether the user opted to [use expedited].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [use expedited]; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseExpedited
+        {
+            get { return checkBoxUseExpedited.Checked; }
+        }
+
+        /// <summary>
         /// Load the settings
         /// </summary>
         public void LoadSettings(ShippingSettingsEntity shippingSettings)

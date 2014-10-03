@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -482,7 +483,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 try
                 {
                     // Currently this actually recurses into this same method
-                    express1Rates = (ShouldRetrieveExpress1Rates) ? 
+                    express1Rates = (ShouldRetrieveExpress1Rates ) ? 
                         ShipmentTypeManager.GetType(shipment).GetRates(shipment).Rates.ToList() : 
                         new List<RateResult>();
                 }
@@ -507,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // For endicia, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Endicia)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !isExpress1Restricted)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
 
@@ -608,7 +609,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 else
                 {
-                    return new RateGroup(endiciaRates);
+                    // Express1 wasn't used, so we want to promote USPS (Stamps.com expedited)
+                    RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
+                    finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment));
+
+                    return finalEndiciaOnlyRates;
                 }
 
             }

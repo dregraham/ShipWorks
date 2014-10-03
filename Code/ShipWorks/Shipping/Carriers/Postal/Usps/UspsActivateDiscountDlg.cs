@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (requiresSignup)
+            if (requiresSignup && signUpForExpeditedControl.UseExpedited)
             {
                 // Make sure the settings are valid before trying to save them
                 if (settings.StampsAutomaticExpedited && settings.StampsAutomaticExpeditedAccount <= 0)
