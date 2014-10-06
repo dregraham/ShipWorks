@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Editing
                 throw new ArgumentNullException("shipments");
             }
 
-            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat);
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
 
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
@@ -253,6 +253,14 @@ namespace ShipWorks.Shipping.Editing
         public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
             OnRateSelected(sender, e);
+        }
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected virtual bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return true;
         }
 
         /// <summary>

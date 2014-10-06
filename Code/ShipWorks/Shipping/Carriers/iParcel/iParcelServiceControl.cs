@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             LoadAccounts();
 			
             EnumHelper.BindComboBox<iParcelServiceType>(service);
-            
+
             packageControl.Initialize();
 		}
 
@@ -107,6 +108,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+        }
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return format != ThermalLanguage.ZPL;
         }
 
         /// <summary>
