@@ -186,6 +186,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // Listen for entity changes so we know when to validate orders
             DataProvider.OrderEntityChangeDetected += AddressValidationQueue.OnOrderEntityChangeDetected;
+            DataProvider.ShipmentEntityChangeDetected += AddressValidationQueue.OnShipmentEntityChangeDetected;
         }
 
         /// <summary>

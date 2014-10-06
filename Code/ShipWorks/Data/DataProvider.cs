@@ -77,6 +77,11 @@ namespace ShipWorks.Data
         public static event EventHandler OrderEntityChangeDetected;
 
         /// <summary>
+        /// Raised when shipment entities are detected as being dirty and are removed from cache. Can be called from any thread.
+        /// </summary>
+        public static event EventHandler ShipmentEntityChangeDetected;
+
+        /// <summary>
         /// Do one-time application level initialization
         /// </summary>
         public static void InitializeForApplication()
@@ -365,13 +370,30 @@ namespace ShipWorks.Data
             EventHandler orderHandler = OrderEntityChangeDetected;
             if (orderHandler != null)
             {
-                if (e.Inserted.Any(x => x == EntityType.OrderEntity) ||
-                    e.Updated.Any(x => x == EntityType.OrderEntity) ||
-                    e.Deleted.Any(x => x == EntityType.OrderEntity))
+                if (DidEntityTypeChanged(EntityType.OrderEntity, e))
                 {
                     orderHandler(null, EventArgs.Empty);
                 }
             }
+
+            // Only raise the shipment specific entity change event if it's subscribed to 
+            // and if any of the cahnges are for shipment entities
+            EventHandler shipmentHandler = ShipmentEntityChangeDetected;
+            if (shipmentHandler != null && DidEntityTypeChanged(EntityType.ShipmentEntity, e))
+            {
+                shipmentHandler(null, EventArgs.Empty);
+            }
         }
+
+        /// <summary>
+        /// Detect if the entity type specified changed.
+        /// </summary>
+        private static bool DidEntityTypeChanged(EntityType entityType, EntityCacheChangeMonitoredChangedEventArgs args)
+        {
+            return args.Inserted.Any(x => x == entityType) ||
+                   args.Updated.Any(x => x == entityType) ||
+                   args.Deleted.Any(x => x == entityType);
+        }
+
     }
 }
