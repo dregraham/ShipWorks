@@ -633,7 +633,8 @@ namespace ShipWorks.Filters
             AddressValidationStatusCondition statusCondition = new OrderAddressValidationStatusCondition()
             {
                 Operator = EqualityOperator.Equals,
-                StatusTypes = statusesToInclude.ToList()
+                StatusTypes = statusesToInclude.ToList(),
+                AddressOperator = BillShipAddressOperator.Ship
             };
 
             definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
