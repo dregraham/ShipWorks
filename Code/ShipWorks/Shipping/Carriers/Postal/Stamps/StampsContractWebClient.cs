@@ -82,14 +82,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     webService.ChangePlan(authenticator, ExpeditedPlanID, promoCode, out purchaseStatus, out transactionID, out rejectionReason);
                 }
             }
-            catch (SoapException soapException)
+            catch (StampsException exception)
             {
-                log.ErrorFormat("ShipWorks was unable to change the Stamps.com plan. {0}. {1}", rejectionReason ?? string.Empty, soapException.Message);
-                throw new StampsApiException(soapException);
-            }
-            catch (Exception exception)
-            {
-                WebHelper.TranslateWebException(exception, typeof (StampsException));
+                log.ErrorFormat("ShipWorks was unable to change the Stamps.com plan. {0}. {1}", rejectionReason ?? string.Empty, exception.Message);
+                throw;
             }
         }
 
