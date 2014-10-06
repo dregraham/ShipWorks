@@ -10982,6 +10982,7 @@
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
+    <None Include="Stores\Platforms\XCart\Modules\XCart5\shipworks3.php" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -11427,7 +11428,7 @@
     </None>
     <None Include="Stores\Platforms\osCommerce\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart1\shipworks3.php" />
-    <None Include="Stores\Platforms\XCart\shipworks3.php" />
+    <None Include="Stores\Platforms\XCart\Modules\XCart4\shipworks3.php" />
     <None Include="Stores\Platforms\ZenCart\init_admin_auth.php" />
     <None Include="Stores\Platforms\ZenCart\shipworks3.php" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationReply.datasource">
