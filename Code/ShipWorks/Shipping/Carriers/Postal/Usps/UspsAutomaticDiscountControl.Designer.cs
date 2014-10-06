@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UspsAutomaticDiscountControl));
-            this.panelExpress1Account = new System.Windows.Forms.Panel();
+            this.panelDiscountAccount = new System.Windows.Forms.Panel();
             this.labelExpeditedAccount = new System.Windows.Forms.Label();
             this.expeditedAccounts = new System.Windows.Forms.ComboBox();
             this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
@@ -37,20 +37,20 @@
             this.labelDiscountedPostage = new System.Windows.Forms.Label();
             this.labelDiscountInfo1 = new System.Windows.Forms.Label();
             this.checkBoxUseExpedited = new System.Windows.Forms.CheckBox();
-            this.panelExpress1Account.SuspendLayout();
+            this.panelDiscountAccount.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelExpress1Account
             // 
-            this.panelExpress1Account.Controls.Add(this.labelExpeditedAccount);
-            this.panelExpress1Account.Controls.Add(this.expeditedAccounts);
-            this.panelExpress1Account.Controls.Add(this.expeditedLearnMore);
-            this.panelExpress1Account.Controls.Add(this.expeditedSignup);
-            this.panelExpress1Account.Enabled = false;
-            this.panelExpress1Account.Location = new System.Drawing.Point(6, 132);
-            this.panelExpress1Account.Name = "panelExpress1Account";
-            this.panelExpress1Account.Size = new System.Drawing.Size(442, 34);
-            this.panelExpress1Account.TabIndex = 11;
+            this.panelDiscountAccount.Controls.Add(this.labelExpeditedAccount);
+            this.panelDiscountAccount.Controls.Add(this.expeditedAccounts);
+            this.panelDiscountAccount.Controls.Add(this.expeditedLearnMore);
+            this.panelDiscountAccount.Controls.Add(this.expeditedSignup);
+            this.panelDiscountAccount.Enabled = false;
+            this.panelDiscountAccount.Location = new System.Drawing.Point(6, 132);
+            this.panelDiscountAccount.Name = "panelDiscountAccount";
+            this.panelDiscountAccount.Size = new System.Drawing.Size(442, 34);
+            this.panelDiscountAccount.TabIndex = 11;
             // 
             // labelExpeditedAccount
             // 
@@ -128,14 +128,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelExpress1Account);
+            this.Controls.Add(this.panelDiscountAccount);
             this.Controls.Add(this.labelDiscountedPostage);
             this.Controls.Add(this.labelDiscountInfo1);
             this.Controls.Add(this.checkBoxUseExpedited);
             this.Name = "UspsAutomaticDiscountControl";
             this.Size = new System.Drawing.Size(454, 173);
-            this.panelExpress1Account.ResumeLayout(false);
-            this.panelExpress1Account.PerformLayout();
+            this.panelDiscountAccount.ResumeLayout(false);
+            this.panelDiscountAccount.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,7 +143,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panelExpress1Account;
+        private System.Windows.Forms.Panel panelDiscountAccount;
         private System.Windows.Forms.Label labelExpeditedAccount;
         private System.Windows.Forms.ComboBox expeditedAccounts;
         private UI.Controls.LinkControl expeditedLearnMore;

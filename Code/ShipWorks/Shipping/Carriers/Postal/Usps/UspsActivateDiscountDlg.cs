@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 Height = signUpForExpeditedControl.Bottom + 60;
 
-                signUpForExpeditedControl.LoadSettings(settings);
+                signUpForExpeditedControl.LoadSettings(settings, shipment);
             }
         }
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (requiresSignup && signUpForExpeditedControl.UseExpedited)
             {
                 // Make sure the settings are valid before trying to save them
-                if (settings.StampsAutomaticExpedited && settings.StampsAutomaticExpeditedAccount <= 0)
+                if (signUpForExpeditedControl.UseExpedited && signUpForExpeditedControl.ExpeditedAccountID <= 0)
                 {
                     MessageHelper.ShowMessage(this, "Please select or create a USPS account.");
                     e.Cancel = true;
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 RateCache.Instance.Clear();
 
-                DialogResult = settings.StampsAutomaticExpedited ? DialogResult.OK : DialogResult.Cancel;
+                DialogResult = signUpForExpeditedControl.UseExpedited ? DialogResult.OK : DialogResult.Cancel;
             }
         }
 

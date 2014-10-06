@@ -529,6 +529,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EndiciaInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("EndiciaUspsAutomaticExpedited", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("EndiciaUspsAutomaticExpeditedAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -544,10 +550,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StampsAutomaticExpress1Account", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StampsAutomaticExpedited", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsUspsAutomaticExpedited", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StampsAutomaticExpeditedAccount", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsUspsAutomaticExpeditedAccount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1EndiciaThermal", fieldHashtable);
@@ -1055,6 +1061,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, value); }
 		}
 
+		/// <summary> The EndiciaUspsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaUspsAutomaticExpedited"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean EndiciaUspsAutomaticExpedited
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, value); }
+		}
+
+		/// <summary> The EndiciaUspsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaUspsAutomaticExpeditedAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 EndiciaUspsAutomaticExpeditedAccount
+		{
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, value); }
+		}
+
 		/// <summary> The WorldShipLaunch property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipLaunch"<br/>
@@ -1110,26 +1138,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, value); }
 		}
 
-		/// <summary> The StampsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The StampsUspsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpedited"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsUspsAutomaticExpedited"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean StampsAutomaticExpedited
+		public virtual System.Boolean StampsUspsAutomaticExpedited
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpedited, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpedited, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, value); }
 		}
 
-		/// <summary> The StampsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The StampsUspsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpeditedAccount"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsUspsAutomaticExpeditedAccount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StampsAutomaticExpeditedAccount
+		public virtual System.Int64 StampsUspsAutomaticExpeditedAccount
 		{
-			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount, value); }
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, value); }
 		}
 
 		/// <summary> The Express1EndiciaThermal property of the Entity ShippingSettings<br/><br/>

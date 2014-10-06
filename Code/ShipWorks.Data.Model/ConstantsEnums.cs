@@ -7520,6 +7520,10 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
+		///<summary>EndiciaUspsAutomaticExpedited. </summary>
+		EndiciaUspsAutomaticExpedited,
+		///<summary>EndiciaUspsAutomaticExpeditedAccount. </summary>
+		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
 		///<summary>StampsThermal. </summary>
@@ -7530,10 +7534,10 @@ namespace ShipWorks.Data.Model
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
 		StampsAutomaticExpress1Account,
-		///<summary>StampsAutomaticExpedited. </summary>
-		StampsAutomaticExpedited,
-		///<summary>StampsAutomaticExpeditedAccount. </summary>
-		StampsAutomaticExpeditedAccount,
+		///<summary>StampsUspsAutomaticExpedited. </summary>
+		StampsUspsAutomaticExpedited,
+		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
+		StampsUspsAutomaticExpeditedAccount,
 		///<summary>Express1EndiciaThermal. </summary>
 		Express1EndiciaThermal,
 		///<summary>Express1EndiciaThermalType. </summary>

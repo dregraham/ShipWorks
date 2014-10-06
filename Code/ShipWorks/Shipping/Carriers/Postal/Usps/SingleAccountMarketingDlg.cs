@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     {
         private readonly ShipmentEntity shipment;
         private readonly ShippingSettingsEntity settings;
+        private IUspsAutomaticDiscountControlAdapter discountControlAdapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleAccountMarketingDlg"/> class.
@@ -27,6 +28,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             this.shipment = shipment;
             settings = ShippingSettings.Fetch();
+
+            discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
 
             InitializeComponent();
         }
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (expeditedDiscountControl.UseExpedited)
             {
                 // Make sure the settings are valid before trying to save them
-                if (settings.StampsAutomaticExpedited && settings.StampsAutomaticExpeditedAccount <= 0)
+                if (discountControlAdapter.UsingUspsAutomaticExpedited && discountControlAdapter.UspsAutomaticExpeditedAccount <= 0)
                 {
                     MessageHelper.ShowMessage(this, "Please select or create a USPS account.");
                     e.Cancel = true;
@@ -67,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 RateCache.Instance.Clear();
 
-                DialogResult = settings.StampsAutomaticExpedited ? DialogResult.OK : DialogResult.Cancel;
+                DialogResult = discountControlAdapter.UsingUspsAutomaticExpedited ? DialogResult.OK : DialogResult.Cancel;
             }
         }
 

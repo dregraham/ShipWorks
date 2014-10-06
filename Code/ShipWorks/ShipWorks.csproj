@@ -719,6 +719,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\EndiciaUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -732,6 +733,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\SingleAccountMarketingDlg.Designer.cs">
       <DependentUpon>SingleAccountMarketingDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\StampsUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsActivateDiscountDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -764,6 +766,8 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControl.Designer.cs">
       <DependentUpon>UspsAutomaticDiscountControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControlAdapter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControlAdapterFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -2224,13 +2224,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1Account, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, 0, 0, 10);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaUspsAutomaticExpedited", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaUspsAutomaticExpeditedAccount", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipLaunch", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipLaunch, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, 0, 0, 19);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpedited", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpedited, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpeditedAccount", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpeditedAccount, 0, 0, 19);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsUspsAutomaticExpedited", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsUspsAutomaticExpeditedAccount", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermal", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermal, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermalType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermalType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaCustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaCustomsCertify, 0, 0, 0);

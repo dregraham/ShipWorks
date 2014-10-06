@@ -360,7 +360,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // USPS (Stamps.com Expedited) promotion when Express 1 is restricted
 
                 // Show the single account dialog if the customer is using Express1 and hasn't converted to USPS (Stamps.com Expedited)
-                bool showSingleAccountDialog = settings.StampsAutomaticExpress1 && !settings.StampsAutomaticExpedited;
+                bool showSingleAccountDialog = settings.StampsAutomaticExpress1 && !settings.StampsUspsAutomaticExpedited;
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
             }
             

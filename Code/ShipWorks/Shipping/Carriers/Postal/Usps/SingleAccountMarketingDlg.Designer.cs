@@ -52,7 +52,7 @@
             this.expeditedDiscountControl.Name = "expeditedDiscountControl";
             this.expeditedDiscountControl.Size = new System.Drawing.Size(435, 164);
             this.expeditedDiscountControl.TabIndex = 14;
-            this.expeditedDiscountControl.UseExpeitedOptionText = "TBD: the intent is to use this to capture/record whether the user opted into the " +
+            this.expeditedDiscountControl.UseExpeditedOptionText = "TBD: the intent is to use this to capture/record whether the user opted into the " +
     "single account";
             // 
             // SingleAccountMarketingDlg

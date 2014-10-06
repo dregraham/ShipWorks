@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsAutomaticDiscountControl : UserControl
     {
         private ShippingSettingsEntity settings;
+        private IUspsAutomaticDiscountControlAdapter discountControlAdapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAutomaticDiscountControl"/> class.
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets or sets the text displayed for the checkbox.
         /// </summary>
-        public string UseExpeitedOptionText
+        public string UseExpeditedOptionText
         {
             get { return checkBoxUseExpedited.Text; }
             set { checkBoxUseExpedited.Text = value; }
@@ -61,20 +62,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </value>
         public bool UseExpedited
         {
-            get { return checkBoxUseExpedited.Checked; }
+            get { return discountControlAdapter.UsingUspsAutomaticExpedited; }
+        }
+
+        /// <summary>
+        /// Gets the expedited account ID.
+        /// </summary>
+        public long ExpeditedAccountID
+        {
+            get { return discountControlAdapter.UspsAutomaticExpeditedAccount; }
         }
 
         /// <summary>
         /// Load the settings
         /// </summary>
-        public void LoadSettings(ShippingSettingsEntity shippingSettings)
+        public void LoadSettings(ShippingSettingsEntity shippingSettings, ShipmentEntity shipment)
         {
             this.settings = shippingSettings;
+            discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
 
-            checkBoxUseExpedited.Checked = settings.StampsAutomaticExpedited;
+            checkBoxUseExpedited.Checked = settings.StampsUspsAutomaticExpedited;
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
 
-            LoadExpeditedAccounts(settings.StampsAutomaticExpeditedAccount);
+            LoadExpeditedAccounts(settings.StampsUspsAutomaticExpeditedAccount);
         }
 
         /// <summary>
@@ -148,8 +158,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnChangeUseExpedited(object sender, EventArgs e)
         {
-            settings.StampsAutomaticExpedited = checkBoxUseExpedited.Checked;
-            panelExpress1Account.Enabled = checkBoxUseExpedited.Checked;
+            discountControlAdapter.UsingUspsAutomaticExpedited = checkBoxUseExpedited.Checked;
+            panelDiscountAccount.Enabled = checkBoxUseExpedited.Checked;
         }
 
         /// <summary>
@@ -157,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnExpeditedAccountsSelectedIndexChanged(object sender, EventArgs e)
         {
-            settings.StampsAutomaticExpeditedAccount = (expeditedAccounts.SelectedIndex >= 0) ? (long)expeditedAccounts.SelectedValue : 0;
+            discountControlAdapter.UspsAutomaticExpeditedAccount = (expeditedAccounts.SelectedIndex >= 0) ? (long)expeditedAccounts.SelectedValue : 0;
         }
 
         /// <summary>
