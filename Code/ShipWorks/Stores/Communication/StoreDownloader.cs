@@ -619,7 +619,7 @@ namespace ShipWorks.Stores.Communication
                         bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
                         if (shippingAddressChanged)
                         {
-                            SetAddressValidationStatus(order, "Ship");
+                            SetAddressValidationStatus(order, "Ship", adapter);
                             adapter.SaveAndRefetch(order);
 
                             ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
@@ -631,7 +631,7 @@ namespace ShipWorks.Stores.Communication
 
                         if (billingAddressChanged)
                         {
-                            SetAddressValidationStatus(order, "Bill");
+                            SetAddressValidationStatus(order, "Bill", adapter);
                             adapter.SaveAndRefetch(order);
                         }
 
@@ -651,8 +651,8 @@ namespace ShipWorks.Stores.Communication
                     }
                     else
                     {
-                        SetAddressValidationStatus(order, "Ship");
-                        SetAddressValidationStatus(order, "Bill");
+                        SetAddressValidationStatus(order, "Ship", adapter);
+                        SetAddressValidationStatus(order, "Bill", adapter);
                         adapter.SaveAndRefetch(order);
                     }
                     
@@ -681,7 +681,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Sets the address validation status on the order, depending on the store settings
         /// </summary>
-        private void SetAddressValidationStatus(OrderEntity order, string prefix)
+        private void SetAddressValidationStatus(OrderEntity order, string prefix, SqlAdapter adapter)
         {
             AddressAdapter address = new AddressAdapter(order, prefix);
 
@@ -691,6 +691,8 @@ namespace ShipWorks.Stores.Communication
             address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
             address.AddressValidationSuggestionCount = 0;
             address.AddressValidationError = string.Empty;
+
+            ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
 
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
             {
