@@ -33,6 +33,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets or sets the description text.
+        /// </summary>
+        public string DescriptionText
+        {
+            get { return labelConversionDescription.Text; }
+            set { labelConversionDescription.Text = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the link text.
+        /// </summary>
+        public string LinkText
+        {
+            get { return linkLabel1.Text; }
+            set { linkLabel1.Text = value; }
+        }
+
+        /// <summary>
         /// Initializes the account to convert with the specified stamps account.
         /// </summary>
         /// <param name="stampsAccount">The account to be converted.</param>
