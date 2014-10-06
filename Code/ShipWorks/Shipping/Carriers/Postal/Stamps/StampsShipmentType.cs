@@ -212,10 +212,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
-               settings.StampsAutomaticExpress1 && 
+               settings.StampsAutomaticExpress1 && !isExpress1Restricted &&
                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
                 var express1Account = StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account);
@@ -287,7 +288,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             List<RateResult> finalRates = new List<RateResult>();
             bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
-            
+            bool hasDiscountFootnote = false;
+
             // Go through each Stamps rate
             foreach (RateResult stampsRate in stampsRates)
             {
@@ -322,29 +324,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         discountedRate = null;
                     }
 
-                    RateResult rate = finalRates[finalRates.Count - 1];
+                    //RateResult rate = finalRates[finalRates.Count - 1];
 
-                    if (!isExpress1Restricted)
-                    {
-                        // Don't show indicators if Express1 is restricted
-                        // If user wanted Express 1 rates
-                        if (settings.StampsAutomaticExpress1)
-                        {
-                            // If they actually got the rate, show the check
-                            if (discountedRate != null)
-                            {
-                                rate.AmountFootnote = Resources.check2;
-                            }
-                        }
-                        else
-                        {
-                            // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                            if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.OriginalTag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
-                            {
-                                rate.AmountFootnote = Resources.star_green;
-                            }
-                        }
-                    }
+                    // Remove all checks/stars that bring attemtion to Express1
+                    // TODO: Will need to convert this to use Stamps.com expedited)
+                    //if (!isExpress1Restricted)
+                    //{
+                    //    // Don't show indicators if Express1 is restricted
+                    //    // If user wanted Express 1 rates
+                    //    if (settings.StampsAutomaticExpress1)
+                    //    {
+                    //        // If they actually got the rate, show the check
+                    //        if (discountedRate != null)
+                    //        {
+                    //            rate.AmountFootnote = Resources.check2;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
+                    //        if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.OriginalTag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
+                    //        {
+                    //            rate.AmountFootnote = Resources.star_green;
+                    //        }
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -354,16 +358,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             RateGroup finalGroup = new RateGroup(finalRates.Select(e => { e.ShipmentType = ShipmentTypeCode.Stamps; return e; }).ToList());
 
-            if (isExpress1Restricted)
+            // No longer show any Express1 related footnotes/promotions, but we always want to show the 
+            // USPS (Stamps.com Expedited) promotion when Express 1 is restricted and the account has not
+            // been converted from a commercial account
+            if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
             {
-                // No longer show any Express1 realted footnotes/promotions, but we always want to show the 
-                // USPS (Stamps.com Expedited) promotion when Express 1 is restricted
-
-                // Show the single account dialog if the customer is using Express1 and hasn't converted to USPS (Stamps.com Expedited)
-                bool showSingleAccountDialog = settings.StampsAutomaticExpress1 && !settings.StampsUspsAutomaticExpedited;
-                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
+                // Show the promotional footer for discounted rates 
+                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
+                hasDiscountFootnote = true;
             }
-            
+
+            if (!hasDiscountFootnote)
+            {
+                bool showFootnote = StampsAccountManager.Express1Accounts.Any() && !settings.StampsUspsAutomaticExpedited;
+                if (showFootnote)
+                {
+                    // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
+                    finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+                }
+            }
+
             return finalGroup;
         }
 

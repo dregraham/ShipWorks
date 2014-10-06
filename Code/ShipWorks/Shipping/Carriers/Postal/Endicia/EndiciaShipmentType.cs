@@ -510,10 +510,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 if (ShouldRetrieveExpress1Rates)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
-
-                    //bool hasExpress1Savings = false;
-
-                    if (settings == null) settings = ShippingSettings.Fetch();
+                    
+                    if (settings == null)
+                    {
+                        settings = ShippingSettings.Fetch();
+                    }
 
                     // Go through each Endicia rate
                     foreach (RateResult endiciaRate in endiciaRates)

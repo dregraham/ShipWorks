@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.settings = shippingSettings;
             discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
 
-            checkBoxUseExpedited.Checked = settings.StampsUspsAutomaticExpedited;
+            checkBoxUseExpedited.Checked = discountControlAdapter.UsingUspsAutomaticExpedited;
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
 
             LoadExpeditedAccounts(settings.StampsUspsAutomaticExpeditedAccount);

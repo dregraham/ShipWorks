@@ -78,7 +78,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnAccountConverted(object sender, UspsAccountConvertedEventArgs eventArgs)
         {
-            // Clear the cache since rates are now outdated
+            // Flag that the customer has opted to use USPS expedited and clear the
+            // rate cache since rates are now outdated
+            settings.StampsUspsAutomaticExpedited = true;
+            ShippingSettings.Save(settings);
+
             RateCache.Instance.Clear();
 
             Cursor.Current = Cursors.Default;
