@@ -695,8 +695,8 @@ namespace ShipWorks.Stores.Communication
             if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
             {
                 if ((addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                    addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
-                    prefix=="Ship")
+                     addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
+                    prefix == "Ship")
                 {
                     address.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
                 }
@@ -746,7 +746,6 @@ namespace ShipWorks.Stores.Communication
             if (shouldCopy)
             {
                 PersonAdapter.Copy(order, existingCustomer, prefix);
-                AddressAdapter.Copy(order, existingCustomer, prefix);
             }
         }
 
