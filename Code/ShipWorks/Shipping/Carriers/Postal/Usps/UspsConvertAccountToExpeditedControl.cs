@@ -87,12 +87,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
-                // Need to convert the account to get discounted rates via the 
-                // expedited contract/plan
-
-                //StampsExpeditedRegistrationPromotion promotion = new StampsExpeditedRegistrationPromotion();
+                // Need to convert the account to get discounted rates via the expedited contract/plan
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
-                new StampsApiSession().ChangeToExpeditedPlan(accountToConvert, "shipworks"); //promotion.GetPromoCode(PostalAccountRegistrationType.Expedited));                
+                new StampsApiSession().ChangeToExpeditedPlan(accountToConvert, "ShipWorks3"); 
             }
             catch (StampsApiException exception)
             {

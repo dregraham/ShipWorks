@@ -41,7 +41,7 @@
             this.labelConversionDescription.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelConversionDescription.Location = new System.Drawing.Point(26, 29);
             this.labelConversionDescription.Name = "labelConversionDescription";
-            this.labelConversionDescription.Size = new System.Drawing.Size(387, 88);
+            this.labelConversionDescription.Size = new System.Drawing.Size(387, 62);
             this.labelConversionDescription.TabIndex = 0;
             this.labelConversionDescription.Text = resources.GetString("labelConversionDescription.Text");
             // 
@@ -58,12 +58,12 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(26, 117);
+            this.linkLabel1.Location = new System.Drawing.Point(26, 91);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(130, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(195, 13);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Click here to start saving!";
+            this.linkLabel1.Text = "Click here to activate discounted rates.";
             this.linkLabel1.Click += new System.EventHandler(this.OnStartSaving);
             // 
             // UspsConvertAccountToExpeditedControl
@@ -75,7 +75,7 @@
             this.Controls.Add(this.labelConversionDescription);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UspsConvertAccountToExpeditedControl";
-            this.Size = new System.Drawing.Size(425, 140);
+            this.Size = new System.Drawing.Size(425, 121);
             this.ResumeLayout(false);
             this.PerformLayout();
 
