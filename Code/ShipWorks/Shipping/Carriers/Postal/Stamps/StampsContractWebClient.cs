@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             StampsAccountContractType contract = StampsAccountContractType.Unknown;
             AccountInfo accountInfo;
 
-            using (SwsimV39 webService = CreateWebService("GetAccountInfo"))
+            using (SwsimV39 webService = CreateWebService("GetContractType"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;

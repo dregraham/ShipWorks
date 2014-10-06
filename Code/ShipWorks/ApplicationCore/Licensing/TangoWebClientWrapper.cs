@@ -214,10 +214,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             IEnumerable<LicenseAccountDetail> licensesForLogging = licenses.GroupBy(l => l.TangoCustomerID).Select(grp => grp.First());
             foreach (LicenseAccountDetail license in licensesForLogging)
             {
-                TangoWebClient.LogStampsAccount(license, 
-                    PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)account.StampsReseller).ShipmentTypeCode, 
-                    account.Username,
-                    (StampsAccountContractType) account.ContractType);
+                TangoWebClient.LogStampsAccount(license,
+                                                PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.StampsReseller).ShipmentTypeCode,
+                                                account.Username,
+                                                (StampsAccountContractType) account.ContractType);
             }
         }
     }
