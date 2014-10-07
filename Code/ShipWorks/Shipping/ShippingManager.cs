@@ -894,7 +894,10 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.", new InsureShipSettings().InsureShipPhoneNumber);
+                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}", 
+                            new InsureShipSettings().InsureShipPhoneNumber,
+                            voidInsuranceException.Message);
+
                         throw new ShippingException(message, voidInsuranceException);
                     }
                 }
