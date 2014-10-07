@@ -1,4 +1,4 @@
-ShSET NUMERIC_ROUNDABORT OFF
+SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
@@ -4457,8 +4457,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1] [bit] NOT NULL,
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
-[EndiciaInsuranceProvider] [int] NOT NULL,
 [EndiciaUspsAutomaticExpedited] [bit] NOT NULL,
+[EndiciaUspsAutomaticExpeditedAccount] [int] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,

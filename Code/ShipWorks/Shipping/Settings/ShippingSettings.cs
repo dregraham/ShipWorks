@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.EndiciaUspsAutomaticExpedited = false;
-            settings.StampsUspsAutomaticExpeditedAccount = 0;
+            settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
             settings.Express1EndiciaThermal = false;
             settings.Express1EndiciaThermalType = (int)ThermalLanguage.EPL;
