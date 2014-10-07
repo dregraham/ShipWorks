@@ -406,9 +406,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
 
-            //// Take this opportunity to try to update contract type of the account
-            //StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            //UpdateContractType(account);
+            // Take this opportunity to try to update contract type of the account
+            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UpdateContractType(account);
 
             return shipments;
         }

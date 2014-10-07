@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                         if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int)StampsResellerType.Express1))
                         {
-                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
                         }
                         else
                         {
@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
             {
-                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
 
                 auth = usernameAuthenticatorMap[account.Username];
             }
