@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// A setup wizard for the USPS (Stamps.com Expedited) shipment type.
+    /// </summary>
     public class UspsSetupWizard : StampsSetupWizard
     {
         /// <summary>
@@ -15,11 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         { }
 
         /// <summary>
-        /// Gets or sets the initial account address.
+        /// Gets or sets the initial account address that to use when adding an account.
         /// </summary>
-        /// <value>
-        /// The initial account address.
-        /// </value>
         public PersonAdapter InitialAccountAddress { get; set; }
         
         /// <summary>

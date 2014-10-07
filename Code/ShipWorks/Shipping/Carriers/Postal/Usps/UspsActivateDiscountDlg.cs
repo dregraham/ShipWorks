@@ -11,13 +11,20 @@ using ShipWorks.Shipping.Settings.Defaults;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// A dialog for activating the USPS (Stamps.com Expedited) shipment type and creating 
+    /// a new account or converting an existing account.
+    /// </summary>
     public partial class UspsActivateDiscountDlg : Form
     {
         private ShippingSettingsEntity settings;
         private ShipmentEntity shipment;
 
         private bool requiresSignup = true;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UspsActivateDiscountDlg"/> class.
+        /// </summary>
         public UspsActivateDiscountDlg()
         {
             InitializeComponent();

@@ -2,6 +2,10 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// An implementation of an IUspsAutomaticDiscountControlAdapter to be ussed when converting/
+    /// signing up for a Stamps.com account from an Endicia shipment via the UspsAutomaticDiscountControl.
+    /// </summary>
     public class EndiciaUspsAutomaticDiscountControlAdapter : IUspsAutomaticDiscountControlAdapter
     {
         private readonly ShippingSettingsEntity settings;

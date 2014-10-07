@@ -2,6 +2,10 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// An implementation of an IUspsAutomaticDiscountControlAdapter to be ussed when converting/
+    /// signing up for a Stamps.com account from a Stamps.com shipment via the UspsAutomaticDiscountControl.
+    /// </summary>
     public class StampsUspsAutomaticDiscountControlAdapter : IUspsAutomaticDiscountControlAdapter
     {
         private readonly ShippingSettingsEntity settings;

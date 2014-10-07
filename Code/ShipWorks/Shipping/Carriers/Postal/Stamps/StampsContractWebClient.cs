@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Authenticate the given user with Stamps.com. 
         /// </summary>
-        public void AuthenticateUser(string username, string password, StampsResellerType stampsResellerType)
+        public void AuthenticateUser(string username, string password)
         {
             try
             {

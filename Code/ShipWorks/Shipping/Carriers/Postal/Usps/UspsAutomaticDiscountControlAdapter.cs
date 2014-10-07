@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// An adapter interface intended to be used from the UspsAutomaticDiscountControl to 
+    /// handle reading/writing Endicia/Stamps.com settings.
+    /// </summary>
     public interface IUspsAutomaticDiscountControlAdapter
     {
         /// <summary>

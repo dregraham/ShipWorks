@@ -1,9 +1,7 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Identical to the base class except the text of signup control differs.
+    /// Identical to the base class except the text of signup/converstion control differs.
     /// </summary>
     public partial class SingleAccountMarketingDlg : UspsActivateDiscountDlg
     {

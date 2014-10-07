@@ -15,6 +15,10 @@ using log4net.Core;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
+    /// <summary>
+    /// A UserControl that allows a customer to convert an existing Stamps.com account to an
+    /// USPS (Stamps.com Expedited) account via the Stamps.com API.
+    /// </summary>
     public partial class UspsConvertAccountToExpeditedControl : UserControl
     {
         private readonly ILog log;

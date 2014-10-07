@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
 {
+    /// <summary>
+    /// An IRateFootnoteFactory for creating USPS promotion footnotes.
+    /// </summary>
     public class UspsRatePromotionFootnoteFactory : IRateFootnoteFactory
     {
         /// <summary>

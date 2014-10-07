@@ -5,6 +5,9 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
 {
+    /// <summary>
+    /// A RateFootnoteControl for promoting the USPS (Stamps.com Expedited) shipping provider.
+    /// </summary>
     public partial class UspsRatePromotionFootnote : RateFootnoteControl
     {
         /// <summary>
