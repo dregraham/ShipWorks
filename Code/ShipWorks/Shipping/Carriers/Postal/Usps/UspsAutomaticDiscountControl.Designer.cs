@@ -32,11 +32,11 @@
             this.panelDiscountAccount = new System.Windows.Forms.Panel();
             this.labelExpeditedAccount = new System.Windows.Forms.Label();
             this.expeditedAccounts = new System.Windows.Forms.ComboBox();
+            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
             this.expeditedSignup = new System.Windows.Forms.Button();
             this.labelDiscountedPostage = new System.Windows.Forms.Label();
             this.labelDiscountInfo1 = new System.Windows.Forms.Label();
             this.checkBoxUseExpedited = new System.Windows.Forms.CheckBox();
-            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
             this.panelDiscountAccount.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +71,19 @@
             this.expeditedAccounts.TabIndex = 2;
             this.expeditedAccounts.Visible = false;
             this.expeditedAccounts.SelectedIndexChanged += new System.EventHandler(this.OnExpeditedAccountsSelectedIndexChanged);
+            // 
+            // expeditedLearnMore
+            // 
+            this.expeditedLearnMore.AutoSize = true;
+            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
+            this.expeditedLearnMore.Location = new System.Drawing.Point(229, 10);
+            this.expeditedLearnMore.Name = "expeditedLearnMore";
+            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
+            this.expeditedLearnMore.TabIndex = 7;
+            this.expeditedLearnMore.Text = "(Learn more)";
+            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
             // 
             // expeditedSignup
             // 
@@ -110,19 +123,6 @@
     "ss shipments:";
             this.checkBoxUseExpedited.UseVisualStyleBackColor = true;
             this.checkBoxUseExpedited.Click += new System.EventHandler(this.OnChangeUseExpedited);
-            // 
-            // expeditedLearnMore
-            // 
-            this.expeditedLearnMore.AutoSize = true;
-            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
-            this.expeditedLearnMore.Location = new System.Drawing.Point(229, 10);
-            this.expeditedLearnMore.Name = "expeditedLearnMore";
-            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
-            this.expeditedLearnMore.TabIndex = 7;
-            this.expeditedLearnMore.Text = "(Learn more)";
-            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
             // 
             // UspsAutomaticDiscountControl
             // 

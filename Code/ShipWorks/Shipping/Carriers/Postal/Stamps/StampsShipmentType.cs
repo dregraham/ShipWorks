@@ -361,20 +361,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // No longer show any Express1 related footnotes/promotions, but we always want to show the 
             // USPS (Stamps.com Expedited) promotion when Express 1 is restricted and the account has not
             // been converted from a commercial account
-            if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
+            if (StampsAccountManager.Express1Accounts.Any() && !settings.StampsUspsAutomaticExpedited)
             {
-                // Show the promotional footer for discounted rates 
-                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
+                // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
+                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 hasDiscountFootnote = true;
             }
 
             if (!hasDiscountFootnote)
             {
-                bool showFootnote = StampsAccountManager.Express1Accounts.Any() && !settings.StampsUspsAutomaticExpedited;
-                if (showFootnote)
+                // Only show one footnote at a time
+                if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int) StampsAccountContractType.Commercial)
                 {
-                    // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
-                    finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+                    // Show the promotional footer for discounted rates 
+                    finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
                 }
             }
 
