@@ -287,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private RateGroup MergeDiscountedRates(ShipmentEntity shipment, List<RateResult> stampsRates, List<RateResult> discountedRates, ShippingSettingsEntity settings)
         {
             List<RateResult> finalRates = new List<RateResult>();
-            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
+            //bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
             bool hasDiscountFootnote = false;
 
             // Go through each Stamps rate
