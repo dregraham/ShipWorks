@@ -40,7 +40,7 @@
             this.panelDiscountAccount.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panelExpress1Account
+            // panelDiscountAccount
             // 
             this.panelDiscountAccount.Controls.Add(this.labelExpeditedAccount);
             this.panelDiscountAccount.Controls.Add(this.expeditedAccounts);
@@ -109,7 +109,7 @@
             // 
             this.labelDiscountInfo1.Location = new System.Drawing.Point(18, 29);
             this.labelDiscountInfo1.Name = "labelDiscountInfo1";
-            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 69);
+            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 72);
             this.labelDiscountInfo1.TabIndex = 12;
             this.labelDiscountInfo1.Text = resources.GetString("labelDiscountInfo1.Text");
             // 

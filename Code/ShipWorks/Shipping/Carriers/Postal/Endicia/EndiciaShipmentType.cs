@@ -460,7 +460,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
-            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
+            bool isExpress1Restricted = true;// ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
@@ -591,8 +591,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     if (isExpress1Restricted)
                     {
-                        // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted
-                        finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+                        // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted - show the
+                        // single account dialog if Endicia has Express1 accounts and is not using USPS (Stamps.com Expedited)
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
                     return finalGroup;
@@ -610,7 +612,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             else
             {
                 // Express1 rates - return rates filtered by what is available to the user
-                return BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
+                RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
+                if (isExpress1Restricted)
+                {
+                    // Add USPS footnote when isExpress1Restricted == true to show single account marketing dialog
+                    express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+                }
             }
         }
 
