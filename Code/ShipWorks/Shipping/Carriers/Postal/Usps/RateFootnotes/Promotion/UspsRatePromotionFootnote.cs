@@ -47,8 +47,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         {
             if (ShowSingleAccountDialog)
             {
-                using (SingleAccountMarketingDlg dlg = new SingleAccountMarketingDlg(Shipment))
+                using (SingleAccountMarketingDlg dlg = new SingleAccountMarketingDlg())
                 {
+                    dlg.Initialize(Shipment);
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
                         RaiseRateCriteriaChanged();
@@ -57,8 +58,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
             }
             else
             {
-                using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg(Shipment))
+                using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg())
                 {
+                    dlg.Initialize(Shipment);
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
                         RaiseRateCriteriaChanged();

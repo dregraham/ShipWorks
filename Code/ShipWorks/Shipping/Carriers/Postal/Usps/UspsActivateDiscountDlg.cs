@@ -13,27 +13,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     public partial class UspsActivateDiscountDlg : Form
     {
-        private readonly ShippingSettingsEntity settings;
-        private readonly ShipmentEntity shipment;
+        private ShippingSettingsEntity settings;
+        private ShipmentEntity shipment;
 
         private bool requiresSignup = true;
         
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UspsActivateDiscountDlg"/> class.
-        /// </summary>
-        public UspsActivateDiscountDlg(ShipmentEntity shipment)
+        public UspsActivateDiscountDlg()
         {
-            settings = ShippingSettings.Fetch();
-            this.shipment = shipment;
-
             InitializeComponent();
         }
-        
+
         /// <summary>
-        /// Initialization
+        /// Initializes the the form based on the given shipment.
         /// </summary>
-        private void OnLoad(object sender, EventArgs e)
+        /// <param name="shipment">The shipment.</param>
+        public virtual void Initialize(ShipmentEntity shipment)
         {
+            this.settings = ShippingSettings.Fetch();
+            this.shipment = shipment;
+
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Stamps && StampsAccountManager.StampsAccounts.Any())
             {
                 // There are Stamps accounts, so we want to show the control to convert their existing account

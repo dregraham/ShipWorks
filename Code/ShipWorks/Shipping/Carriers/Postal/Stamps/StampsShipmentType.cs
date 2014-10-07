@@ -327,7 +327,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     //RateResult rate = finalRates[finalRates.Count - 1];
 
                     // Remove all checks/stars that bring attemtion to Express1
-                    // TODO: Will need to convert this to use Stamps.com expedited)
+                    // TODO: Will need to convert this to use Stamps.com expedited rates
                     //if (!isExpress1Restricted)
                     //{
                     //    // Don't show indicators if Express1 is restricted
