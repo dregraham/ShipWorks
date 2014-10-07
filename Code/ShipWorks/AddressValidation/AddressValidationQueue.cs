@@ -51,7 +51,7 @@ namespace ShipWorks.AddressValidation
                     return;
                 }
 
-                validationThread = Task.Factory.StartNew(ValidatePendingOrders, cancellationToken);
+                validationThread = Task.Factory.StartNew(ValidatePendingOrdersAndShipments, cancellationToken);
             }
         }
 
@@ -66,9 +66,9 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Try to validate any orders that are pending validation
+        /// Try to validate any orders and shipments that are pending validation
         /// </summary>
-        private static void ValidatePendingOrders()
+        private static void ValidatePendingOrdersAndShipments()
         {
             if (SqlSession.Current == null)
             {
@@ -159,7 +159,7 @@ namespace ShipWorks.AddressValidation
                     LinqMetaData linqMetaData = new LinqMetaData(adapter);
 
                     pendingShipments = linqMetaData.Shipment
-                        .Where(x => x.ShipAddressValidationStatus == (int)statusToValidate)
+                        .Where(x => x.ShipAddressValidationStatus == (int)statusToValidate && !x.Processed)
                         .Take(50)
                         .ToList();
                 }
