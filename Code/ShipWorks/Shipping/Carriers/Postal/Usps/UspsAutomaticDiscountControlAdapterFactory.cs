@@ -14,12 +14,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <exception cref="System.InvalidOperationException"></exception>
         public IUspsAutomaticDiscountControlAdapter CreateAdapter(ShippingSettingsEntity settings, ShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Endicia)
+            if (shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Endicia || shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Express1Endicia)
             {
                 return new EndiciaUspsAutomaticDiscountControlAdapter(settings);
             }
 
-            if (shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Stamps)
+            if (shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Stamps || shipmentEntity.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
                 return new StampsUspsAutomaticDiscountControlAdapter(settings);
             }

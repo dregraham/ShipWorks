@@ -618,6 +618,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Add USPS footnote when isExpress1Restricted == true to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }
+
+                return express1Group;
             }
         }
 

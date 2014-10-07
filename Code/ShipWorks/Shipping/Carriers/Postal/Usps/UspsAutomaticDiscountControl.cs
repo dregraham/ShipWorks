@@ -8,9 +8,12 @@ using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -18,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     {
         private ShippingSettingsEntity settings;
         private IUspsAutomaticDiscountControlAdapter discountControlAdapter;
+        private IRegistrationPromotion promotion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAutomaticDiscountControl"/> class.
@@ -80,6 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             this.settings = shippingSettings;
             discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
+            ConfigurePromotion(shipment);
 
             checkBoxUseExpedited.Checked = discountControlAdapter.UsingUspsAutomaticExpedited;
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
@@ -126,15 +131,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ShippingSettings.CheckForChangesNeeded();
 
-            UspsShipmentType shipmentType = new UspsShipmentType();
-            using (Form setupDlg = shipmentType.CreateSetupWizard())
+            using (UspsSetupWizard setupWizard = new UspsSetupWizard(promotion, false))
             {
-                // Ensure that the setup dialog is actually an USPS (Stamps.com Epedited) setup wizard
-                UspsSetupWizard setupWizard = setupDlg as UspsSetupWizard;
-
                 // Pre-load the account address details
                 setupWizard.InitialAccountAddress = GetDefaultAccountPerson();
 
+                UspsShipmentType shipmentType = new UspsShipmentType();
                 if (ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode))
                 {
                     added = (setupWizard.ShowDialog(this) == DialogResult.OK);
@@ -150,6 +152,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (added)
             {
                 LoadExpeditedAccounts(StampsAccountManager.StampsExpeditedAccounts.Max(a => a.StampsAccountID));
+            }
+        }
+
+        /// <summary>
+        /// Configures the registration promotion to use when adding a new account based on attributes of the shipment.
+        /// The shipment type should only be a Stamps.com, Express1 for Stamps.com, Endicia, or Express1 for Endicia.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        private void ConfigurePromotion(ShipmentEntity shipment)
+        {
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
+
+            if (shipmentTypeCode == ShipmentTypeCode.Stamps || shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
+            {
+                promotion = new StampsExpeditedRegistrationPromotion();
+            }
+            else
+            {
+                if (EndiciaAccountManager.EndiciaAccounts.Any())
+                {
+                    // Use the endicia promotion even if this is an Express1 shipment
+                    promotion = new EndiciaRegistrationPromotion();
+                }
+                else
+                {
+                    // Use the Express1 promotion when there aren't any Endicia accounts
+                    promotion = new Express1EndiciaRegistrationPromotion();
+                }
             }
         }
 

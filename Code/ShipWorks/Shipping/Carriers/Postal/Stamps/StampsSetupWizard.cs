@@ -202,7 +202,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnStepNextAccountAddress(object sender, WizardStepEventArgs e)
         {
             // Save the data entered in the person control back to our stampsAccount
-            personControl.SaveToEntity();
+            PersonAdapter updatedStampsAccountAdapter = new PersonAdapter(StampsAccount, string.Empty);
+            personControl.SaveToEntity(updatedStampsAccountAdapter);
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Full Name", StampsAccount.FirstName);
