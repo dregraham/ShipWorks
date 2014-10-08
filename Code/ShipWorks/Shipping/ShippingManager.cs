@@ -973,7 +973,7 @@ namespace ShipWorks.Shipping
                     
                     if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ProcessShipment, (ShipmentTypeCode)shipment.ShipmentType).Level == EditionRestrictionLevel.Forbidden)
                     {
-                        throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using a different carrier.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
+                        throw new ShippingException(string.Format("ShipWorks can no longer process {0} shipments. Please try using USPS.", EnumHelper.GetDescription((ShipmentTypeCode)shipment.ShipmentType)));
                     }
 
                     StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
