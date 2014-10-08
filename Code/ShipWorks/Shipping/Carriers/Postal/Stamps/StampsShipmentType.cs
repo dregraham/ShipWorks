@@ -269,11 +269,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Show the promotional footer for discounted rates 
                     rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
                 }
-                // TODO: Enable this if/when we have rates coming back for commercial plus to compare with
-                //else if (contractType == StampsAccountContractType.CommercialPlus)
-                //{
-                //    rateGroup.AddFootnoteFactory(new UspsRateDiscountedFootnoteFactory(this, stampsRates, stampsRates));
-                //}
 
                 return rateGroup;
             }
@@ -284,6 +279,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        /// <summary>
+        /// Merges the discounted rates with the Stamps.com rates.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="stampsRates">The stamps rates.</param>
+        /// <param name="discountedRates">The discounted rates.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns>A RateGroup containing the merged rate results.</returns>
         private RateGroup MergeDiscountedRates(ShipmentEntity shipment, List<RateResult> stampsRates, List<RateResult> discountedRates, ShippingSettingsEntity settings)
         {
             List<RateResult> finalRates = new List<RateResult>();
@@ -319,36 +322,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     else
                     {
                         finalRates.Add(stampsRate);
-
-                        // Set the express rate to null so that it doesn't add the icon later
-                        discountedRate = null;
-                    }
-
-                    //RateResult rate = finalRates[finalRates.Count - 1];
-
-                    // Remove all checks/stars that bring attemtion to Express1
-                    // TODO: Will need to convert this to use Stamps.com expedited rates
-                    //if (!isExpress1Restricted)
-                    //{
-                    //    // Don't show indicators if Express1 is restricted
-                    //    // If user wanted Express 1 rates
-                    //    if (settings.StampsAutomaticExpress1)
-                    //    {
-                    //        // If they actually got the rate, show the check
-                    //        if (discountedRate != null)
-                    //        {
-                    //            rate.AmountFootnote = Resources.check2;
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        // Stamps rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                    //        if (!isExpress1Restricted && Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.OriginalTag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
-                    //        {
-                    //            rate.AmountFootnote = Resources.star_green;
-                    //        }
-                    //    }
-                    //}
+                    }                    
                 }
                 else
                 {

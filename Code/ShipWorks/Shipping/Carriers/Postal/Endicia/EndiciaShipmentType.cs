@@ -460,12 +460,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
-
-            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
-
+            
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
-                && IsRateDiscountMessagingRestricted
+                && !IsRateDiscountMessagingRestricted
                 && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
                 && (settings = ShippingSettings.Fetch()).EndiciaAutomaticExpress1)
             {
@@ -551,32 +549,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             else
                             {
                                 finalRates.Add(endiciaRate);
-
-                                // Set the express rate to null so that it doesn't add the icon later
-                                express1Rate = null;
-                            }
-
-                            if (!isExpress1Restricted)
-                            {
-                                //RateResult rate = finalRates[finalRates.Count - 1];
-
-                                //// If user wanted Express 1 rates
-                                //if (settings.EndiciaAutomaticExpress1)
-                                //{
-                                //    // If they actually got the rate, show the check
-                                //    if (express1Rate != null)
-                                //    {
-                                //        rate.AmountFootnote = Resources.check2;
-                                //    }
-                                //}
-                                //else
-                                //{
-                                //    // Endicia rates only.  If it's not a valid Express1 packaging type, don't promote a savings
-                                //    if (Express1Utilities.IsValidPackagingType(((PostalRateSelection) rate.OriginalTag).ServiceType, (PostalPackagingType) shipment.Postal.PackagingType))
-                                //    {
-                                //        rate.AmountFootnote = Resources.star_green;
-                                //    }
-                                //}
                             }
                         }
                         else
