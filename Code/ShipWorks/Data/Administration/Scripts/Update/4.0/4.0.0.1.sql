@@ -7,6 +7,8 @@ Express1Endicia = 9,
 Stamps			= 3,
 Express1Stamps	= 13,
 
+USPS            = 15,
+
 PostalWebTools	= 4,
 
 */
@@ -51,18 +53,18 @@ ShipmentTypes (ShipmentTypeCode) as (
 	union
 	select 9 where not exists (select 1 from EndiciaAccount where EndiciaReseller = 1)
 	union 
-	select 3 where not exists (select 1 from StampsAccount where IsExpress1 = 0)
+	select 3 where not exists (select 1 from StampsAccount where [StampsReseller] = 0)
 	union 
-	select 13 where not exists (select 1 from StampsAccount where IsExpress1 = 1)
-),
+	select 13 where not exists (select 1 from StampsAccount where [StampsReseller] = 1)
+), 
 -- Now union the:
 	-- Currently excluded types
 	-- Ones that don't have accounts
 	-- And WebTools if it isn't configured
 NewExcludedShipmentTypeCodes (ShipmentTypeCode) as (
-	select ShipmentTypeCode from ExcludedTypeCodes
+	select ShipmentTypeCode from ExcludedTypeCodes where ShipmentTypeCode <> ''
 	union
-	select ShipmentTypeCode from ShipmentTypes
+	select ShipmentTypeCode from ShipmentTypes where ShipmentTypeCode <> ''
 	union 
 	select 4 where @WebToolsConfigured = 0
 )
@@ -76,4 +78,3 @@ set @ExcludedList = SUBSTRING(@ExcludedList, 2, 50)
 
 -- Update the excluded list to what we've discovered
 update ShippingSettings set Excluded = @ExcludedList
-

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -57,6 +59,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             // Just log the option that was selected to disk to simulate a call to Tango
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' option result was selected for nudge ID {1}", option.Result, option.Owner.NudgeID);
+        }
+
+        /// <summary>
+        /// Sends Stamps.com account info to Tango.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void LogStampsAccount(StampsAccountEntity account)
+        {
+            // Just log the account contract type to disk to simulate a call to Tango
+            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((StampsResellerType)account.StampsReseller));
         }
     }
 }

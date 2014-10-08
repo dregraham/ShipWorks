@@ -45,5 +45,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 return GetProfileAccount(ShipmentTypeCode.Stamps, accountID);
             }
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void Save(StampsAccountEntity account)
+        {
+            StampsAccountManager.SaveAccount(account);
+        }
     }
 }

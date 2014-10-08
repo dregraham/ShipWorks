@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Saves the given UPS account entity to the underlying data source.
         /// </summary>
         /// <param name="account">The account.</param>
-        public void Save(UpsAccountEntity account)
+        public override void Save(UpsAccountEntity account)
         {
             if (account == null)
             {

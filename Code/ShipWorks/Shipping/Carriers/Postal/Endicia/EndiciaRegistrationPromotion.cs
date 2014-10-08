@@ -13,14 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes
         {
-            get
-            {
-                return new List<PostalAccountRegistrationType>
-                {
-                    PostalAccountRegistrationType.Standard,
-                    PostalAccountRegistrationType.Expedited
-                };
-            }
+            get { return new List<PostalAccountRegistrationType> { PostalAccountRegistrationType.Expedited }; }
         }
 
         /// <summary>

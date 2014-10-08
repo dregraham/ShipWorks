@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Stores;
@@ -455,6 +456,29 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "CarrierBalance");
+
+            // Check for error
+            XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
+            if (errorNode != null)
+            {
+                throw new TangoException(errorNode.InnerText);
+            }
+        }
+
+        /// <summary>
+        /// Sends Stamps contract type to Tango.
+        /// </summary>
+        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, StampsAccountContractType stampsAccountContractType)
+        {
+            HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
+
+            postRequest.Variables.Add("action", "logstampsaccount");
+            postRequest.Variables.Add("license", license.Key);
+            postRequest.Variables.Add("accountidentifier", accountIdentifier);
+            postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int)stampsAccountContractType).ToString(CultureInfo.InvariantCulture));
+
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");
@@ -939,8 +963,11 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Timeout
             postRequest.Timeout = TimeSpan.FromSeconds(60);
 
+            // Get the url
+            string tangoUrl = string.Format("https://www.interapptive.com/{0}/shipworks.php", UseTestServer ? "tango_private" : "account");
+
             // Set the uri
-            postRequest.Uri = new Uri("https://www.interapptive.com/account/shipworks.php");
+            postRequest.Uri = new Uri(tangoUrl);
 
             // Logging
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorks, logEntryName);
@@ -1024,6 +1051,15 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new TangoException("The SSL certificate on the server is invalid.");
             }
+        }
+
+        /// <summary>
+        /// Indicates if the test server should be used instead of the live server
+        /// </summary>
+        public static bool UseTestServer
+        {
+            get { return InterapptiveOnly.Registry.GetValue("TangoTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("TangoTestServer", value); }
         }
     }
 }

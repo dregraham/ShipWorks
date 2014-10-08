@@ -14,6 +14,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.Business;
+using ShipWorks.Data.Controls;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -57,12 +58,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        /// <summary>
+        /// Gets the stamps account.
+        /// </summary>
         protected StampsAccountEntity StampsAccount { get; private set; }
+
+        /// <summary>
+        /// Gets the person control associated with the Stamps.com account.
+        /// </summary>
+        protected PersonControl PersonControl
+        {
+            get { return personControl; }
+        }
 
         /// <summary>
         /// Initialization
         /// </summary>
-        private void OnLoad(object sender, EventArgs e)
+        protected virtual void OnLoad(object sender, EventArgs e)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
 
@@ -90,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
-            StampsAccount = new StampsAccountEntity { CountryCode = "US" };
+            StampsAccount = new StampsAccountEntity { CountryCode = "US", ContractType = (int)StampsAccountContractType.Unknown };
             StampsAccount.InitializeNullsToDefault();
 
             personControl.LoadEntity(new PersonAdapter(StampsAccount, string.Empty));
@@ -190,7 +202,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnStepNextAccountAddress(object sender, WizardStepEventArgs e)
         {
             // Save the data entered in the person control back to our stampsAccount
-            personControl.SaveToEntity();
+            PersonAdapter updatedStampsAccountAdapter = new PersonAdapter(StampsAccount, string.Empty);
+            personControl.SaveToEntity(updatedStampsAccountAdapter);
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Full Name", StampsAccount.FirstName);
@@ -401,7 +414,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 if (StampsAccount == null)
                 {
-                    StampsAccount = new StampsAccountEntity();
+                    StampsAccount = new StampsAccountEntity { ContractType = (int)StampsAccountContractType.Unknown };
                 }
 
                 SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));
@@ -436,6 +449,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Save the stamps account and use it to initialize the stamps info control
             StampsAccountManager.SaveAccount(StampsAccount);
+
+            // Update the account contract type
+            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)StampsAccount.StampsReseller);
+            stampsShipmentType.UpdateContractType(StampsAccount);
         }
 
         /// <summary>

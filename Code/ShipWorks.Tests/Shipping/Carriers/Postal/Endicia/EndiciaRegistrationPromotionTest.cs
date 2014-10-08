@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         {
             IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableRegistrationTypes;
 
-            Assert.AreEqual(2, registrationAccountTypes.Count());
+            Assert.AreEqual(1, registrationAccountTypes.Count());
         }
 
         [TestMethod]
@@ -30,14 +30,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableRegistrationTypes;
 
             Assert.IsTrue(registrationAccountTypes.Any(r => r == PostalAccountRegistrationType.Expedited));
-        }
-
-        [TestMethod]
-        public void AvailableAvailableRegistrationTypes_ContainsStandardRegistrationType_Test()
-        {
-            IEnumerable<PostalAccountRegistrationType> registrationAccountTypes = testObject.AvailableRegistrationTypes;
-
-            Assert.IsTrue(registrationAccountTypes.Any(r => r == PostalAccountRegistrationType.Standard));
         }
 
         [TestMethod]

@@ -170,6 +170,8 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1 = false;
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            settings.EndiciaUspsAutomaticExpedited = false;
+            settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
             settings.Express1EndiciaThermal = false;
             settings.Express1EndiciaThermalType = (int)ThermalLanguage.EPL;
@@ -190,6 +192,8 @@ namespace ShipWorks.Shipping.Settings
             settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
+            settings.StampsUspsAutomaticExpedited = false;
+            settings.StampsUspsAutomaticExpeditedAccount = 0;
 
             settings.EquaShipThermal = false;
             settings.EquaShipThermalType = (int) ThermalLanguage.EPL;

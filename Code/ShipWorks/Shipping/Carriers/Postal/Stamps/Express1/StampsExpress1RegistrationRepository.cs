@@ -36,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             stampsAccount.InitializeNullsToDefault();
             stampsAccount.StampsReseller = (int)StampsResellerType.Express1;
 
+            stampsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
+
             // Translate the registration data into a Stamps account entity
             stampsAccount.Username = registration.UserName;
             stampsAccount.Password = registration.EncryptedPassword;
@@ -83,6 +85,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                     }
                 }
             }
+
+            // Update the account contract type
+            Express1StampsShipmentType stampsShipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
+            stampsShipmentType.UpdateContractType(stampsAccount);
 
             return stampsAccount.StampsAccountID;
         }

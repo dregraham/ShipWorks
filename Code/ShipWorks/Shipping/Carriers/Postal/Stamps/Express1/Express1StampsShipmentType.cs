@@ -69,6 +69,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Creates the Express1/Stamps service control.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
@@ -184,11 +192,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Supports getting counter rates.
+        /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
-        public override bool SupportsCounterRates
+        /// <param name="account">The account.</param>
+        public override void UpdateContractType(StampsAccountEntity account)
         {
-            get { return true; }
+            // If the ContractType is unknown, we must not have tried to check this account yet.
+            // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
+            if (account.ContractType == (int) StampsAccountContractType.Unknown)
+            {
+                account.ContractType = (int) StampsAccountContractType.NotApplicable;
+                AccountRepository.Save(account);
+            }
         }
     }
 }
