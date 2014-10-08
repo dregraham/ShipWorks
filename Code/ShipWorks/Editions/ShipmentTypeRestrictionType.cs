@@ -20,6 +20,11 @@
         /// <summary>
         /// Purchasing postage is not allowed.
         /// </summary>
-        Purchasing = 3
+        Purchasing = 3,
+
+        /// <summary>
+        /// Footers for discount messaging in the rate control are not allowed.
+        /// </summary>
+        RateDiscountMessaging = 4
     }
 }

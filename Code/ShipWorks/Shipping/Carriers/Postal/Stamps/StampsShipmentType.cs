@@ -90,6 +90,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+		/// <summary>
+        /// Gets a value indicating whether this shipment type has rate discount messaging restricted.
+        /// </summary>
+        public bool IsRateDiscountMessagingRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Forbidden;
+            }
+        }
+		
         /// <summary>
         /// Create the Form used to do the setup for the Stamps.com API
         /// </summary>
@@ -255,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // For Stamps, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
                 {
                     // Merge the discounted Express1 rates into the stamps.com rates
                     return MergeDiscountedRates(shipment, stampsRates, express1Rates, settings);
