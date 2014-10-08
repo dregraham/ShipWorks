@@ -616,7 +616,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             ValidateShipment(shipment);
 
-            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) &&
+            bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) && !IsRateDiscountMessagingRestricted &&
                 Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
                 ShippingSettings.Fetch().EndiciaAutomaticExpress1;
 
