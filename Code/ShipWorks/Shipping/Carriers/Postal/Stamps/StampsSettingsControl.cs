@@ -48,7 +48,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
-            express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Stamps;
 
             LoadExpress1Settings();
         }
@@ -72,21 +71,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted)
-                {
-                    // Express1 is restricted - hide the express1 settings
-                    express1SettingsControl.Hide();
-                    express1Options.Hide();
-
-                    panelBottom.Top = optionsControl.Bottom + 5;
-                }
-                else
-                {
-                    express1SettingsControl.LoadSettings(express1Settings);
-                    express1SettingsControl.Top = optionsControl.Bottom + 5;
-
-                    panelBottom.Top = express1SettingsControl.Bottom + 5;
-                }
+                // This isn't Express1 - hide the express1 settings
+                express1Options.Hide();
+                panelBottom.Top = optionsControl.Bottom + 5;
             }
         }
 
