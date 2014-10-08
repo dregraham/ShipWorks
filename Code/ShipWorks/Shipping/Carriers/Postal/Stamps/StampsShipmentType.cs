@@ -91,18 +91,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
 		/// <summary>
-        /// Gets a value indicating whether this shipment type has rate discount messaging restricted.
-        /// </summary>
-        public bool IsRateDiscountMessagingRestricted
-        {
-            get
-            {
-                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
-                return restriction.Level == EditionRestrictionLevel.Forbidden;
-            }
-        }
-		
-        /// <summary>
         /// Create the Form used to do the setup for the Stamps.com API
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
