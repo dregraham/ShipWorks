@@ -124,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ExcludeShipmentType(ShipmentTypeCode.Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Stamps);
+                ExcludeShipmentType(ShipmentTypeCode.Stamps);
                 
                 ShippingSettings.Save(settings);
 
@@ -132,6 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
 
                 RateCache.Instance.Clear();
 
