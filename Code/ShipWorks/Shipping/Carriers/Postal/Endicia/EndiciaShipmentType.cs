@@ -460,10 +460,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = null;
-            bool isExpress1Restricted = true;// ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
+
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted;
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
+                && IsRateDiscountMessagingRestricted
                 && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
                 && (settings = ShippingSettings.Fetch()).EndiciaAutomaticExpress1)
             {
@@ -507,7 +509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // For endicia, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
                     
@@ -589,7 +591,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         return e;
                     }).ToList());
 
-                    if (isExpress1Restricted)
+                    // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
+                    // Express1 with Endicia and can show promotion for USPS (Stamps.com Expedited) shipping. So when discount rate
+                    // messaging is restricted on Endicia, we want to show the Stamps.com promo
+                    if (IsRateDiscountMessagingRestricted)
                     {
                         // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted - show the
                         // single account dialog if Endicia has Express1 accounts and is not using USPS (Stamps.com Expedited)
@@ -613,9 +618,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // Express1 rates - return rates filtered by what is available to the user
                 RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
-                if (isExpress1Restricted)
+                if (IsRateDiscountMessagingRestricted)
                 {
-                    // Add USPS footnote when isExpress1Restricted == true to show single account marketing dialog
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS (Stamps.com Expedited)
+                    // poromo footnote to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }
 

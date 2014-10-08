@@ -143,6 +143,12 @@ namespace ShipWorks.Editions
         /// The ability to purchase postage for specific carriers can be restricted.
         /// </summary>
         [Description("Purchasing postage using the selected carrier is no longer supported.")]
-        PurchasePostage
+        PurchasePostage,
+
+        /// <summary>
+        /// The ability to display discount messaging for specific carriers can be restricted.
+        /// </summary>
+        [Description("Discount messaging using the selected carrier is disabled.")]
+        RateDiscountMessaging
     }
 }

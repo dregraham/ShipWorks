@@ -1053,6 +1053,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
         }
 
+
         /// <summary>
         /// Indicates if the test server should be used instead of the live server
         /// </summary>

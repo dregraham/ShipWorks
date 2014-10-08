@@ -82,9 +82,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted)
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted || ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
                 {
-                    // Express1 is restricted - hide the express1 settings
+                    // Hide the express1 settings if Express1 is restricted or discounted rate messaging is turned off
                     express1PostageDiscountSettingsControl.Hide();
                     express1Options.Hide();
 

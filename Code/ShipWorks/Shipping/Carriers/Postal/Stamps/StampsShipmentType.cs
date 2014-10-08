@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
-        /// <summary>
+		/// <summary>
         /// Create the Form used to do the setup for the Stamps.com API
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // For Stamps, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps)
             {
-                if (ShouldRetrieveExpress1Rates)
+                if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
                 {
                     // Merge the discounted Express1 rates into the stamps.com rates
                     return MergeDiscountedRates(shipment, stampsRates, express1Rates, settings);
