@@ -127,7 +127,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 }
                 else
                 {
-                    log.InfoFormat("The policy for shipment {0} cannot be voided with the InsureShip API. The policy was created more than {1} hours ago.", shipment.ShipmentID, gracePeriod.TotalHours);
+                    string errorMessage = string.Format("The policy for shipment {0} cannot be voided with the InsureShip API. The policy was created more than {1} hours ago.", 
+                        shipment.ShipmentID,
+                        gracePeriod.TotalHours);
+
+                    InsureShipException insureShipException = new InsureShipException(errorMessage);
+
+                    log.Info(errorMessage,insureShipException);
+                    throw insureShipException;
                 }
             }
             else

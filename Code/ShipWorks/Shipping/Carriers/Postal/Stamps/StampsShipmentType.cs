@@ -541,14 +541,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Stamps", typeof(StampsShipmentEntity), refreshIfPresent);
         }
-        
+
         /// <summary>
         /// Configure the properties of a newly created shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
- 	        base.ConfigureNewShipment(shipment);
-
             // We can be called during the creation of the base Postal shipment, before the Stamps one exists
             if (shipment.Postal.Stamps != null)
             {
@@ -556,6 +554,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipment.Postal.Stamps.IntegratorTransactionID = Guid.Empty;
                 shipment.Postal.Stamps.StampsTransactionID = Guid.Empty;
             }
+
+            // We need to call the base after setting up the Stamps.com specific information because LLBLgen was
+            // sometimes not including the above values when we first save the shipment deep in the customs loader
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
