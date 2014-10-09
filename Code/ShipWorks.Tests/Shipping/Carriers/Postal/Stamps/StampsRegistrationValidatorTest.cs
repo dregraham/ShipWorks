@@ -45,7 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                     City = "Newport News",
                     State = "VA",
                     ZIPCode = "23601",
-                    Country = "US"
+                    Country = "US",
+                    PhoneNumber = "5555555555"
                 },
                 
                 MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
@@ -75,7 +76,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                     City = "Sidcup",
                     Province = "Kent",
                     PostalCode = "DA14 6DJ",
-                    Country = "UK"
+                    Country = "UK",
+                    PhoneNumber = "5555555555"
                 },
 
                 MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
@@ -600,6 +602,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             Assert.AreEqual(1, errors.Count());
             Assert.AreEqual("Stamps.com requires that either credit card or account be provided in the registration process.", errors.First().Message);
+        }
+
+        [TestMethod]
+        public void Validate_CleansesPhoneNumber_WhenLongerThanTenCharacters_Test()
+        {
+            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            registration.PhysicalAddress.PhoneNumber = "555-555-5555";
+
+            IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
+
+            Assert.AreEqual("5555555555", registration.PhysicalAddress.PhoneNumber);
+        }
+
+        [TestMethod]
+        public void Validate_RetrunsOneError_WhenPhoneNumberIsLongerThanTenCharacters_AfterCleansing_Test()
+        {
+            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            registration.PhysicalAddress.PhoneNumber = "1-555-555-5555";
+
+            IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
+
+            Assert.AreEqual(1, errors.Count());
         }
     }
 }
