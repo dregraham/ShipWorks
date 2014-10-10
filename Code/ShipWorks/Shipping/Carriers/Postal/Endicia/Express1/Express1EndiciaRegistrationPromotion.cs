@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
 {
@@ -26,6 +28,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode(PostalAccountRegistrationType registrationType)
         {
+            if (EndiciaAccountManager.Express1Accounts.Any() || StampsAccountManager.Express1Accounts.Any())
+            {
+                // 
+                if (!StampsAccountManager.StampsAccounts.Any() && !EndiciaAccountManager.EndiciaAccounts.Any())
+                {
+                    // Promo code for customers that have an Express1 account but do not have a regular Stamps.com nor
+                    // Endicia account; this will allow these customers to have a free Stamps.com account since their
+                    // Express1 account was free
+                    return "ShipWorks7";
+                }
+            }
+
+            // Use the standard promo code if they're paying for an account from a USPS provider
             return "ShipWorks3";
         }
     }

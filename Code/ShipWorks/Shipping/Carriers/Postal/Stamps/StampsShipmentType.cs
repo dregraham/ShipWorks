@@ -95,7 +95,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            return new StampsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
+            // Push customers to the USPS (Stamps.com Expedited) setup wizard
+            return new UspsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
         }
 
         /// <summary>
@@ -381,8 +382,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
 
             // Take this opportunity to try to update contract type of the account
-            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            UpdateContractType(account);
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                UpdateContractType(account);
+            }
 
             return shipments;
         }
