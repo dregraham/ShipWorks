@@ -583,7 +583,7 @@ namespace ShipWorks.Shipping
             this.tabPageInsurance.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageInsurance.Size = new System.Drawing.Size(348, 323);
             this.tabPageInsurance.TabIndex = 4;
-            this.tabPageInsurance.Text = "Insurance";
+            this.tabPageInsurance.Text = "ShipWorks Insurance";
             this.tabPageInsurance.UseVisualStyleBackColor = true;
             // 
             // insuranceTabControl1
