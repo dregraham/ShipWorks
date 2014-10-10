@@ -894,7 +894,7 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.", new InsureShipSettings().InsureShipPhoneNumber);
+                        string message = String.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.", new InsureShipSettings().InsureShipPhoneNumber);
                         throw new ShippingException(message, voidInsuranceException);
                     }
                 }
@@ -1392,6 +1392,14 @@ namespace ShipWorks.Shipping
             }
 
             return incrementingDate;
+        }
+
+        /// <summary>
+        /// Get a formatted arrival date for a shipment
+        /// </summary>
+        public static string GetArrivalDescription(DateTime localArrival)
+        {
+            return String.Format("({0} {1})", localArrival.DayOfWeek, localArrival.ToString("h:mm tt"));
         }
 
         /// <summary>
