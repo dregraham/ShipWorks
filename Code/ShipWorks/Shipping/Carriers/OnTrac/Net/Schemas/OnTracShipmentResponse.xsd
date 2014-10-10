@@ -18,12 +18,25 @@
 			<xs:element name="Tracking" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="Error" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="TransitDays" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ExpectedDeliveryDate" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="CommitTime" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="ServiceChrg" type="xs:double" minOccurs="1" maxOccurs="1"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="ServiceChargeDetails" type="ServiceChargeDetails" />
 			<xs:element name="FuelChrg" type="xs:double" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="TotalChrg" type="xs:double" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="TariffChrg" type="xs:double" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="Label" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="SortCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="RateZone" type="xs:int" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
+  <xs:complexType name="ServiceChargeDetails">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="BaseCharge" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="CODCharge" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DeclaredCharge" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AdditionalCharges" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="SaturdayCharge" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
 </xs:schema>

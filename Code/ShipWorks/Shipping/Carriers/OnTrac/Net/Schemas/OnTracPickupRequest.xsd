@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:element name="OnTracPickupRequest" type="PickupRequest" nillable="true"/>
 	<xs:complexType name="PickupRequest">
-		<xs:sequence>
+    <xs:all>
 			<xs:element name="Date" type="xs:date" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="ReadyAt" type="xs:time" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="CloseAt" type="xs:time" minOccurs="1" maxOccurs="1"/>
@@ -15,6 +15,6 @@
 			<xs:element name="Instructions" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="Phone" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="Contact" type="xs:string" minOccurs="1" maxOccurs="1"/>
-		</xs:sequence>
+		</xs:all>
 	</xs:complexType>
 </xs:schema>
