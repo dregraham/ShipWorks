@@ -480,7 +480,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// The window is closing
         /// </summary>
-        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        protected virtual void OnFormClosing(object sender, FormClosingEventArgs e)
         {
             if (DialogResult != DialogResult.OK && StampsAccount != null && !StampsAccount.IsNew)
             {

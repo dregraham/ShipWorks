@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         private readonly StampsRegistrationValidator testObject;
 
         private Mock<IRegistrationPromotion> promotion;
-        private Mock<IStampsRegistrationGateway> gateway;
+        private Mock<IStampsRegistrationGateway> gateway;        
 
         public StampsRegistrationValidatorTest()
         {
@@ -58,7 +58,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
         private StampsRegistration CreateValidInternationalRegistration()
         {
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object)
+            promotion = new Mock<IRegistrationPromotion>();
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+
+            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",

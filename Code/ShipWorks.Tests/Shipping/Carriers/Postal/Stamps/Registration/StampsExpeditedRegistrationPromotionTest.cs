@@ -31,21 +31,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration
 
             Assert.AreEqual(PostalAccountRegistrationType.Expedited, registrationAccountTypes.First());
         }
-
-        [TestMethod]
-        public void GetPromoCode_ReturnsShipWorks3_WhenRegistrationTypeIsExpedited_Test()
-        {
-            string promo = testObject.GetPromoCode(PostalAccountRegistrationType.Expedited);
-
-            Assert.AreEqual("shipworks3", promo);
-        }
-
-        [TestMethod]
-        public void GetPromoCode_ReturnsShipWorks3_WhenRegistrationTypeIsStandard_Test()
-        {
-            string promo = testObject.GetPromoCode(PostalAccountRegistrationType.Standard);
-
-            Assert.AreEqual("shipworks3", promo);
-        }
     }
 }

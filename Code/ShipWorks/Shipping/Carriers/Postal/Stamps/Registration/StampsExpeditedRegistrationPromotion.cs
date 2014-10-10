@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
@@ -23,7 +25,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode(PostalAccountRegistrationType registrationType)
         {
-            // The promotion code for a new expedited account.
+            if (!StampsAccountManager.StampsAccounts.Any() && !StampsAccountManager.Express1Accounts.Any() && !StampsAccountManager.StampsExpeditedAccounts.Any() && !EndiciaAccountManager.Express1Accounts.Any() && !EndiciaAccountManager.EndiciaAccounts.Any())
+            {
+                // There aren't any postal accounts in ShipWorks; this is considered to be a brand new customer, 
+                // so use a promo code to indicate such to allow Stamps.com to track this information
+                return "ShipWorks6";
+            }
+            
+            // The regular promotion code for a new expedited account.
             return "shipworks3";
         }
     }

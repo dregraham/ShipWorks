@@ -183,12 +183,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
+            IBestRateShippingBroker broker = new NullShippingBroker();
             if (StampsAccountManager.Express1Accounts.Any())
             {
-                return new Express1StampsBestRateBroker();
+                // Only use an Express1 broker if there is an account. We no longer want to
+                // get Express1 counter rates
+                broker = new Express1StampsBestRateBroker();
             }
-            
-            return new Express1StampsCounterRatesBroker();
+
+            return broker;
         }
 
         /// <summary>
