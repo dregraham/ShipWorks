@@ -170,6 +170,11 @@ namespace ShipWorks.Editions
                 {
                     AddRestriction(EditionFeature.RateDiscountMessaging, typeCode, EditionRestrictionLevel.Forbidden);
                 }
+
+                if (restrictionTypes.Any(r => r == ShipmentTypeRestrictionType.ShippingAccountConversion))
+                {
+                    AddRestriction(EditionFeature.ShippingAccountConversion, typeCode, EditionRestrictionLevel.Forbidden);
+                }
             }
 
             // Update the shipping settings default shipment type just in case the default carrier is now disabled.
