@@ -288,27 +288,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         #region Username Tests
 
         [TestMethod]
-        public void Validate_ReturnsOneError_WhenUserNameIs41Characters_Test()
+        public void Validate_ReturnsOneError_WhenUserNameIs15Characters_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "REALLYLONGUSERNAMETHATISMORETHANFORTYCHARACTERS";
+            registration.UserName = "123456789012345";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("The username provided is too long. Usernames must be 40 characters or less.", errors.First().Message);
+            Assert.AreEqual("The username provided is too long. Usernames must be 14 characters or less.", errors.First().Message);
         }
 
         [TestMethod]
-        public void Validate_ReturnsOneError_WhenUserNameIsMoreThan41Characters_Test()
+        public void Validate_ReturnsOneError_WhenUserNameIsMoreThan15Characters_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "12345678901234567890123456789012345678901";
+            registration.UserName = "1234567890123456";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("The username provided is too long. Usernames must be 40 characters or less.", errors.First().Message);
+            Assert.AreEqual("The username provided is too long. Usernames must be 14 characters or less.", errors.First().Message);
         }
 
         [TestMethod]
@@ -316,7 +316,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Set the username to 40 characters
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "1234567890123456789012345678901234567890";
+            registration.UserName = "12345678901234";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
