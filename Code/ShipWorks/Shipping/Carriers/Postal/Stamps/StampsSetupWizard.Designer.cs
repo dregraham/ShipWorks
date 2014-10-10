@@ -94,7 +94,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOptions);
+            this.mainPanel.Controls.Add(this.wizardPageAccountAddress);
             this.mainPanel.Size = new System.Drawing.Size(542, 485);
             // 
             // etchBottom
@@ -332,7 +332,7 @@
             this.panelTerms.Location = new System.Drawing.Point(23, 396);
             this.panelTerms.Name = "panelTerms";
             this.panelTerms.Size = new System.Drawing.Size(494, 59);
-            this.panelTerms.TabIndex = 5;
+            this.panelTerms.TabIndex = 2;
             // 
             // labelTerms2
             // 
@@ -382,7 +382,7 @@
             this.labelTerms.Location = new System.Drawing.Point(3, 2);
             this.labelTerms.Name = "labelTerms";
             this.labelTerms.Size = new System.Drawing.Size(129, 13);
-            this.labelTerms.TabIndex = 1;
+            this.labelTerms.TabIndex = 0;
             this.labelTerms.Text = "Terms and Conditions";
             this.labelTerms.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -396,7 +396,7 @@
             this.panelAccountType.Location = new System.Drawing.Point(23, 8);
             this.panelAccountType.Name = "panelAccountType";
             this.panelAccountType.Size = new System.Drawing.Size(345, 78);
-            this.panelAccountType.TabIndex = 4;
+            this.panelAccountType.TabIndex = 0;
             // 
             // stampsAccountRegistrationType
             // 
@@ -462,7 +462,7 @@
             this.personControl.Location = new System.Drawing.Point(23, 92);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(355, 302);
-            this.personControl.TabIndex = 0;
+            this.personControl.TabIndex = 1;
             // 
             // wizardPageNewAccountCredentials
             // 
@@ -493,7 +493,7 @@
             this.wizardPageNewAccountPayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountPayment.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountPayment.Name = "wizardPageNewAccountPayment";
-            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(542, 433);
+            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(542, 485);
             this.wizardPageNewAccountPayment.TabIndex = 0;
             this.wizardPageNewAccountPayment.Title = "Account Registration";
             this.wizardPageNewAccountPayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPayment);

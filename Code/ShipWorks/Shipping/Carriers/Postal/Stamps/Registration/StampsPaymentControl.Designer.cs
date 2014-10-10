@@ -135,7 +135,7 @@
             this.label2.Location = new System.Drawing.Point(17, 135);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 13;
+            this.label2.TabIndex = 12;
             this.label2.Text = "Note:";
             // 
             // labelAch
@@ -145,7 +145,7 @@
             this.labelAch.Location = new System.Drawing.Point(53, 135);
             this.labelAch.Name = "labelAch";
             this.labelAch.Size = new System.Drawing.Size(326, 71);
-            this.labelAch.TabIndex = 12;
+            this.labelAch.TabIndex = 0;
             this.labelAch.Text = resources.GetString("labelAch.Text");
             // 
             // cardholderName
@@ -154,7 +154,7 @@
             this.cardholderName.Location = new System.Drawing.Point(123, 31);
             this.cardholderName.Name = "cardholderName";
             this.cardholderName.Size = new System.Drawing.Size(149, 21);
-            this.cardholderName.TabIndex = 11;
+            this.cardholderName.TabIndex = 4;
             // 
             // labelCardholderName
             // 
@@ -162,7 +162,7 @@
             this.labelCardholderName.Location = new System.Drawing.Point(2, 30);
             this.labelCardholderName.Name = "labelCardholderName";
             this.labelCardholderName.Size = new System.Drawing.Size(114, 21);
-            this.labelCardholderName.TabIndex = 10;
+            this.labelCardholderName.TabIndex = 3;
             this.labelCardholderName.Text = "Cardholder Name:";
             this.labelCardholderName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -174,7 +174,7 @@
             this.cardType.Location = new System.Drawing.Point(122, 4);
             this.cardType.Name = "cardType";
             this.cardType.Size = new System.Drawing.Size(148, 21);
-            this.cardType.TabIndex = 8;
+            this.cardType.TabIndex = 2;
             // 
             // label1
             // 
@@ -182,7 +182,7 @@
             this.label1.Location = new System.Drawing.Point(25, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 17);
-            this.label1.TabIndex = 7;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Card Type:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -192,7 +192,7 @@
             this.creditCardExpirationYear.Location = new System.Drawing.Point(161, 85);
             this.creditCardExpirationYear.Name = "creditCardExpirationYear";
             this.creditCardExpirationYear.Size = new System.Drawing.Size(45, 21);
-            this.creditCardExpirationYear.TabIndex = 6;
+            this.creditCardExpirationYear.TabIndex = 9;
             this.creditCardExpirationYear.Value = new decimal(new int[] {
             100,
             0,
@@ -215,7 +215,7 @@
             0});
             this.creditCardExpirationMonth.Name = "creditCardExpirationMonth";
             this.creditCardExpirationMonth.Size = new System.Drawing.Size(32, 21);
-            this.creditCardExpirationMonth.TabIndex = 5;
+            this.creditCardExpirationMonth.TabIndex = 8;
             this.creditCardExpirationMonth.Value = new decimal(new int[] {
             1,
             0,
@@ -229,7 +229,7 @@
             this.labelYear.Location = new System.Drawing.Point(163, 108);
             this.labelYear.Name = "labelYear";
             this.labelYear.Size = new System.Drawing.Size(29, 13);
-            this.labelYear.TabIndex = 4;
+            this.labelYear.TabIndex = 11;
             this.labelYear.Text = "Year";
             this.labelYear.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -240,7 +240,7 @@
             this.labelMonth.Location = new System.Drawing.Point(120, 108);
             this.labelMonth.Name = "labelMonth";
             this.labelMonth.Size = new System.Drawing.Size(37, 13);
-            this.labelMonth.TabIndex = 3;
+            this.labelMonth.TabIndex = 10;
             this.labelMonth.Text = "Month";
             this.labelMonth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -250,7 +250,7 @@
             this.creditCardNumber.Location = new System.Drawing.Point(123, 58);
             this.creditCardNumber.Name = "creditCardNumber";
             this.creditCardNumber.Size = new System.Drawing.Size(148, 21);
-            this.creditCardNumber.TabIndex = 2;
+            this.creditCardNumber.TabIndex = 6;
             // 
             // labelExpirationDate
             // 
@@ -258,7 +258,7 @@
             this.labelExpirationDate.Location = new System.Drawing.Point(28, 85);
             this.labelExpirationDate.Name = "labelExpirationDate";
             this.labelExpirationDate.Size = new System.Drawing.Size(91, 19);
-            this.labelExpirationDate.TabIndex = 1;
+            this.labelExpirationDate.TabIndex = 7;
             this.labelExpirationDate.Text = "Expiration Date:";
             this.labelExpirationDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -268,7 +268,7 @@
             this.labelCreditCardNumber.Location = new System.Drawing.Point(4, 59);
             this.labelCreditCardNumber.Name = "labelCreditCardNumber";
             this.labelCreditCardNumber.Size = new System.Drawing.Size(115, 17);
-            this.labelCreditCardNumber.TabIndex = 0;
+            this.labelCreditCardNumber.TabIndex = 5;
             this.labelCreditCardNumber.Text = "Credit Card Number:";
             this.labelCreditCardNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
