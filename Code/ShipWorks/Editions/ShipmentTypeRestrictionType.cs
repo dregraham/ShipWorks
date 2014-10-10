@@ -25,6 +25,15 @@
         /// <summary>
         /// Footers for discount messaging in the rate control are not allowed.
         /// </summary>
-        RateDiscountMessaging = 4
+        RateDiscountMessaging = 4,
+
+        /// <summary>
+        /// Dont' show messaging to convert/upgrade an existing Stamp.com account. This is sort of out of place 
+        /// and pertains only to Stamps.com. This is a result of a problem on the Stamps.com side when 
+        /// Stamps.com customers have multi-user accounts where they don't want to allow these customers
+        /// to convert through ShipWorks. After Stamps.com has reached out to these customers and converted
+        /// their accounts, this can be removed.
+        /// </summary>
+        ShippingAccountConversion = 5
     }
 }

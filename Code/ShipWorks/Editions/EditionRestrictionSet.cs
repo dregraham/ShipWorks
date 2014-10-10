@@ -56,6 +56,7 @@ namespace ShipWorks.Editions
                 case EditionFeature.ProcessShipment:
                 case EditionFeature.PurchasePostage:
                 case EditionFeature.RateDiscountMessaging:
+                case EditionFeature.ShippingAccountConversion:
                     return CheckShipmentTypeRestriction(feature, (ShipmentTypeCode) data);
 
                 case EditionFeature.ActionLimit:

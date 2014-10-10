@@ -149,6 +149,16 @@ namespace ShipWorks.Editions
         /// The ability to display discount messaging for specific carriers can be restricted.
         /// </summary>
         [Description("Discount messaging using the selected carrier is disabled.")]
-        RateDiscountMessaging
+        RateDiscountMessaging,
+        
+        /// <summary>
+        /// The ability to display a conversion promo/message for a shipping provider can be restricted. 
+        /// This is sort of out of place and pertains only to Stamps.com. This is a result of a problem 
+        /// on the Stamps.com side when Stamps.com customers have multi-user accounts where they don't 
+        /// want to allow these customers to convert through ShipWorks. After Stamps.com has reached 
+        /// out to these customers and converted their accounts, this can be removed.
+        /// </summary>
+        [Description("Converting an account using the selected carrier is disabled.")]
+        ShippingAccountConversion
     }
 }
