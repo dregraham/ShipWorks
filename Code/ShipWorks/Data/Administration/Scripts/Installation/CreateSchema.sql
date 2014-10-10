@@ -4458,7 +4458,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
 [EndiciaUspsAutomaticExpedited] [bit] NOT NULL,
-[EndiciaUspsAutomaticExpeditedAccount] [int] NOT NULL,
+[EndiciaUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
 [StampsThermal] [bit] NOT NULL,
 [StampsThermalType] [int] NOT NULL,
