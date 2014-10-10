@@ -31,11 +31,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             // Only perform the following if we have all of the required fields populated
             if (errors.Count == 0)
             {
-                
-                if (registration.UserName.Length > 40)
+                if (registration.UserName.Length > 14)
                 {
                     // Username too long
-                    errors.Add(new RegistrationValidationError("The username provided is too long. Usernames must be 40 characters or less."));
+                    errors.Add(new RegistrationValidationError("The username provided is too long. Usernames must be 14 characters or less."));
                 }
 
                 // Password checks - length (too short/long), strength requirements
