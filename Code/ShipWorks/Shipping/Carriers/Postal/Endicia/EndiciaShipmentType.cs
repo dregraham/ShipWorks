@@ -459,13 +459,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
-            ShippingSettingsEntity settings = null;
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
             
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia
                 && !IsRateDiscountMessagingRestricted
                 && Express1Utilities.IsValidPackagingType((PostalServiceType?) null, (PostalPackagingType) shipment.Postal.PackagingType)
-                && (settings = ShippingSettings.Fetch()).EndiciaAutomaticExpress1)
+                && settings.EndiciaAutomaticExpress1)
             {
                 var express1Account = EndiciaAccountManager.GetAccount(settings.EndiciaAutomaticExpress1Account);
 
@@ -510,11 +510,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 if (ShouldRetrieveExpress1Rates && !IsRateDiscountMessagingRestricted)
                 {
                     List<RateResult> finalRates = new List<RateResult>();
-                    
-                    if (settings == null)
-                    {
-                        settings = ShippingSettings.Fetch();
-                    }
 
                     // Go through each Endicia rate
                     foreach (RateResult endiciaRate in endiciaRates)
@@ -580,7 +575,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     // Express1 wasn't used, so we want to promote USPS (Stamps.com expedited)
                     RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
-                    finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
+
+                    if (IsRateDiscountMessagingRestricted)
+                    {
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS (Stamps.com Expedited)
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
+                    }
 
                     return finalEndiciaOnlyRates;
                 }
