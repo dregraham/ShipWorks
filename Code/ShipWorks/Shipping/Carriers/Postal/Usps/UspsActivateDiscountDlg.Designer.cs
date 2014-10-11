@@ -38,7 +38,7 @@
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.close.Location = new System.Drawing.Point(353, 337);
+            this.close.Location = new System.Drawing.Point(353, 447);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
             this.close.TabIndex = 1;
@@ -51,10 +51,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.convertToExpeditedControl.DescriptionText = resources.GetString("convertToExpeditedControl.DescriptionText");
             this.convertToExpeditedControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.convertToExpeditedControl.LinkText = "Click here to activate discounted rates.";
-            this.convertToExpeditedControl.Location = new System.Drawing.Point(3, 191);
+            this.convertToExpeditedControl.LinkText = "Click here to add these discounted rates from IntuiShip through your existing Sta" +
+    "mps.com account at no additional cost.";
+            this.convertToExpeditedControl.Location = new System.Drawing.Point(3, 225);
             this.convertToExpeditedControl.Name = "convertToExpeditedControl";
-            this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 140);
+            this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 162);
             this.convertToExpeditedControl.TabIndex = 2;
             // 
             // signUpForExpeditedControl
@@ -65,7 +66,7 @@
             this.signUpForExpeditedControl.HeaderText = "Postage Discount";
             this.signUpForExpeditedControl.Location = new System.Drawing.Point(3, 12);
             this.signUpForExpeditedControl.Name = "signUpForExpeditedControl";
-            this.signUpForExpeditedControl.Size = new System.Drawing.Size(425, 173);
+            this.signUpForExpeditedControl.Size = new System.Drawing.Size(425, 182);
             this.signUpForExpeditedControl.TabIndex = 0;
             this.signUpForExpeditedControl.UseExpeditedOptionText = "Automatically save postage costs on domestic and international Priority and Expre" +
     "ss shipments:";
@@ -76,7 +77,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.close;
-            this.ClientSize = new System.Drawing.Size(443, 368);
+            this.ClientSize = new System.Drawing.Size(443, 478);
             this.Controls.Add(this.convertToExpeditedControl);
             this.Controls.Add(this.close);
             this.Controls.Add(this.signUpForExpeditedControl);

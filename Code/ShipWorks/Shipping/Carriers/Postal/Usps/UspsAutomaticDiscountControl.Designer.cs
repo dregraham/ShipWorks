@@ -47,7 +47,7 @@
             this.panelDiscountAccount.Controls.Add(this.expeditedLearnMore);
             this.panelDiscountAccount.Controls.Add(this.expeditedSignup);
             this.panelDiscountAccount.Enabled = false;
-            this.panelDiscountAccount.Location = new System.Drawing.Point(9, 114);
+            this.panelDiscountAccount.Location = new System.Drawing.Point(9, 145);
             this.panelDiscountAccount.Name = "panelDiscountAccount";
             this.panelDiscountAccount.Size = new System.Drawing.Size(442, 34);
             this.panelDiscountAccount.TabIndex = 11;
@@ -109,13 +109,13 @@
             // 
             this.labelDiscountInfo1.Location = new System.Drawing.Point(18, 29);
             this.labelDiscountInfo1.Name = "labelDiscountInfo1";
-            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 58);
+            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 87);
             this.labelDiscountInfo1.TabIndex = 12;
             this.labelDiscountInfo1.Text = resources.GetString("labelDiscountInfo1.Text");
             // 
             // checkBoxUseExpedited
             // 
-            this.checkBoxUseExpedited.Location = new System.Drawing.Point(24, 86);
+            this.checkBoxUseExpedited.Location = new System.Drawing.Point(24, 117);
             this.checkBoxUseExpedited.Name = "checkBoxUseExpedited";
             this.checkBoxUseExpedited.Size = new System.Drawing.Size(424, 33);
             this.checkBoxUseExpedited.TabIndex = 10;
@@ -133,7 +133,7 @@
             this.Controls.Add(this.labelDiscountInfo1);
             this.Controls.Add(this.checkBoxUseExpedited);
             this.Name = "UspsAutomaticDiscountControl";
-            this.Size = new System.Drawing.Size(454, 157);
+            this.Size = new System.Drawing.Size(454, 187);
             this.panelDiscountAccount.ResumeLayout(false);
             this.panelDiscountAccount.PerformLayout();
             this.ResumeLayout(false);
