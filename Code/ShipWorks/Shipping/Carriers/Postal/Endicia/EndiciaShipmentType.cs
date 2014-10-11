@@ -711,6 +711,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Determines whether the specified shipment entity is domestic.
+        /// </summary>
+        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        {
+            bool isDomestic = base.IsDomestic(shipmentEntity);
+            
+            // Need to perform some additional checks for Endicia - errors are given if the label type is not 
+            // "Default" when shipping between US and US territory
+            if (!isDomestic)
+            {
+                // Check for US territories in case of territory is used as country code
+                if (shipmentEntity.OriginCountryCode.ToUpperInvariant() == "US")
+                {
+                    isDomestic = PostalUtility.IsDomesticCountry(shipmentEntity.ShipCountryCode);
+                }
+                else if (shipmentEntity.ShipCountryCode.ToUpperInvariant() == "US")
+                {
+                    // Check in case someone is shipping from VI, PR, etc. to the US
+                    isDomestic = PostalUtility.IsDomesticCountry(shipmentEntity.OriginCountryCode);
+                }
+            }
+            
+            return isDomestic;
+        }
+        /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
         protected void ValidateShipment(ShipmentEntity shipment)
