@@ -11,6 +11,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.AddressValidation
@@ -184,7 +185,7 @@ namespace ShipWorks.AddressValidation
             ValidatedAddressEntity originalValidatedAddress = validatedAddresses.FirstOrDefault(x => x.IsOriginal);
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
-            var menu = BuildMenu(entityAdapter, originalValidatedAddress, suggestedAddresses);
+            ContextMenu menu = BuildMenu(entityAdapter, originalValidatedAddress, suggestedAddresses);
 
             menu.Show(owner, displayPosition);
         }
@@ -211,7 +212,35 @@ namespace ShipWorks.AddressValidation
                 menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, entityAdapter)).OrderBy(x => x.Text));
             }
 
+            // If has a single suggestion and haven't set any store to ValidateAndApply, show this menu to set all stores to ValidateAndApply
+            if (entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.HasSuggestions &&
+                suggestedAddresses.Count == 1 &&
+                StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndApply))
+            {
+                menuItems.Add(new MenuItem("Always Fix Addresses", (sender, args) => AlwaysFixAddressesSelected(suggestedAddresses.First(), entityAdapter)));
+            }
+
             return new ContextMenu(menuItems.ToArray());
+        }
+
+        /// <summary>
+        /// Select the address and set AutoFix to be default for all stores.
+        /// </summary>
+        private void AlwaysFixAddressesSelected(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
+        {
+            SelectAddress(entityAdapter, validatedAddress);
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                List<StoreEntity> allStores = StoreManager.GetAllStores();
+                allStores.ForEach(store =>
+                {
+                    store.AddressValidationSetting = (int)AddressValidationStoreSettingType.ValidateAndApply;
+                    StoreManager.SaveStore(store, sqlAdapter);
+                });
+
+                sqlAdapter.Commit();
+            }
         }
 
         /// <summary>
