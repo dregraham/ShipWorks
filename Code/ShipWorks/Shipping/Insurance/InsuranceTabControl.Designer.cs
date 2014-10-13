@@ -35,10 +35,11 @@
             // 
             // messageLabel
             // 
-            this.messageLabel.AutoSize = true;
+            this.messageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.messageLabel.Location = new System.Drawing.Point(4, 0);
             this.messageLabel.Name = "messageLabel";
-            this.messageLabel.Size = new System.Drawing.Size(425, 13);
+            this.messageLabel.Size = new System.Drawing.Size(425, 66);
             this.messageLabel.TabIndex = 1;
             this.messageLabel.Text = "Multiple shipments are selected. Select a single shipment to view insurance infor" +
     "mation.";
@@ -48,11 +49,12 @@
             // 
             this.insuranceSubmitClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.insuranceSubmitClaimControl.AutoSize = true;
             this.insuranceSubmitClaimControl.ClaimSubmitted = null;
             this.insuranceSubmitClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(7, 364);
+            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(7, 387);
             this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
-            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(413, 366);
+            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(413, 369);
             this.insuranceSubmitClaimControl.TabIndex = 3;
             // 
             // insuranceViewClaimControl
@@ -60,7 +62,7 @@
             this.insuranceViewClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceViewClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceViewClaimControl.Location = new System.Drawing.Point(8, 25);
+            this.insuranceViewClaimControl.Location = new System.Drawing.Point(8, 69);
             this.insuranceViewClaimControl.Name = "insuranceViewClaimControl";
             this.insuranceViewClaimControl.Size = new System.Drawing.Size(412, 314);
             this.insuranceViewClaimControl.TabIndex = 1;
