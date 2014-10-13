@@ -206,10 +206,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnExpedited1LearnMore(object sender, EventArgs e)
         {
             MessageHelper.ShowInformation(this,
-                "With Stamps.com and Intuiship you get some of the best postal rates available, saving you significant money on each of your domestic and international Priority and Express " +
-                "shipments.\n\n" +
-                "Simply create a free Stamps.com/Intuiship account and ShipWorks will automatically utilize it for discounted rates when creating postal labels.\n\n" +
-                "For more information please contact us at www.interapptive.com/company/contact.html.");
+                                          "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your " +
+                                          "domestic and international Priority and Express shipments." + Environment.NewLine + Environment.NewLine +
+                                          "Simply create a Stamps.com account and ShipWorks will automatically utilize it for discounted rates from " +
+                                          "IntuiShip when creating postage labels." + Environment.NewLine + Environment.NewLine + "For more information, " +
+                                          "please contact us at www.interapptive.com/company/contact.html.");
         }
 
         /// <summary>

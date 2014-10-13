@@ -55,7 +55,7 @@
     "mps.com account at no additional cost.";
             this.convertToExpeditedControl.Location = new System.Drawing.Point(3, 225);
             this.convertToExpeditedControl.Name = "convertToExpeditedControl";
-            this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 162);
+            this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 193);
             this.convertToExpeditedControl.TabIndex = 2;
             // 
             // signUpForExpeditedControl

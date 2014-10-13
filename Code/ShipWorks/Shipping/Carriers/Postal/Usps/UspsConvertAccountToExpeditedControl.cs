@@ -129,5 +129,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
             }
         }
+
+        /// <summary>
+        /// Called when the learn more link is clicked.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Windows.Forms.LinkLabelLinkClickedEventArgs"/> instance containing the event data.</param>
+        private void OnLearnMore(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageHelper.ShowInformation(this,
+                                          "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your domestic and " +
+                                          "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Just add these rates to your " +
+                                          "Stamps.com account and ShipWorks will automatically utilize it for discounted rates from IntuiShip when creating postage labels." +
+                                          Environment.NewLine + Environment.NewLine + "For more information, please contact us at www.interapptive.com/company/contact.html.");
+        }
     }
 }
