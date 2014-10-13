@@ -46,10 +46,12 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         private void BindStatuses()
         {
+            EnumList<AddressValidationStatusType> statuses = EnumHelper.GetEnumList<AddressValidationStatusType>();
+
             // Loop through all the statuses in AddressValidationStatusType.
-            for (int statusIndex = 0; statusIndex < EnumHelper.GetEnumList<AddressValidationStatusType>().Count; statusIndex++)
+            for (int statusIndex = 0; statusIndex < statuses.Count; statusIndex++)
             {
-                var status = EnumHelper.GetEnumList<AddressValidationStatusType>()[statusIndex];
+                EnumEntry<AddressValidationStatusType> status = statuses[statusIndex];
 
                 // * 2 makes room for the label buttons.
                 int verticlePosition = 23*(statusIndex + 2);
@@ -57,7 +59,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
                 // Build statusList with new checkboxes and related enums.
                 var checkboxAndStatusType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
                 {
-                    Text = status.Key,
+                    Text = status.Value == AddressValidationStatusType.Pending ? "Checking..." : status.Key,
                     Location = new Point(3, verticlePosition),
                     AutoSize = true
                 }, status.Value);

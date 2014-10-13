@@ -14,8 +14,7 @@ namespace ShipWorks.AddressValidation
         [ImageResource("help2_16")]
         NotChecked = 0,
 
-        [Description("Checking...")]
-        [ImageResource("hourglass16")]
+        [Description("")]
         Pending = 1,
 
         [Description("Bad Address")]
