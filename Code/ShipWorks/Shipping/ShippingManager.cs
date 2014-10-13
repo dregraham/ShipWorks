@@ -1398,6 +1398,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Get a formatted arrival date for a shipment
+        /// </summary>
+        public static string GetArrivalDescription(DateTime localArrival)
+        {
+            return String.Format("({0} {1})", localArrival.DayOfWeek, localArrival.ToString("h:mm tt"));
+        }
+
+        /// <summary>
         /// Gets the service level based on number of days in transit.
         /// </summary>
         public static ServiceLevelType GetServiceLevel(int transitDays)

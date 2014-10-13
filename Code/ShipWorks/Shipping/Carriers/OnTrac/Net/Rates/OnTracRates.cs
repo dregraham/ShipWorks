@@ -60,12 +60,22 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                 OnTracServiceType onTracServiceType =
                     EnumHelper.GetEnumByApiValue<OnTracServiceType>(rateQuote.Service.ToString());
 
-                DateTime? expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                DateTime? expectedDeliveryDate = GetExpectedDeliveryDate(rateQuote);
+                string deliveryDateDescription = rateQuote.TransitDays.ToString();
+
+                if (expectedDeliveryDate.HasValue)
+                {
+                    deliveryDateDescription += " " + ShippingManager.GetArrivalDescription(expectedDeliveryDate.Value);
+                }
+                else
+                {
+                    expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                }
 
                 rates.Add(
                     new RateResult(
                         EnumHelper.GetDescription(onTracServiceType),
-                        rateQuote.TransitDays.ToString(),
+                        deliveryDateDescription,
                         (decimal)rateQuote.TotalCharge,
                         onTracServiceType)
                     {
@@ -77,6 +87,39 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
             }
 
             return new RateGroup(rates);
+        }
+
+        /// <summary>
+        /// Try to get an expected delivery date from the rate quote
+        /// </summary>
+        private static DateTime? GetExpectedDeliveryDate(RateQuote rateQuote)
+        {
+            if (rateQuote.ExpectedDeliveryDate == null || rateQuote.ExpectedDeliveryDate.Length != 8 || rateQuote.CommitTime == null)
+            {
+                return null;
+            }
+
+            int year;
+            int month;
+            int day;
+            DateTime commitTimeDate;
+
+            if (!int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(0, 4), out year) ||
+                !int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(4, 2), out month) ||
+                !int.TryParse(rateQuote.ExpectedDeliveryDate.Substring(6, 2), out day) ||
+                !DateTime.TryParse(rateQuote.CommitTime, out commitTimeDate))
+            {
+                return null;
+            }
+
+            DateTime createdDate = new DateTime(year, month, day, commitTimeDate.Hour, commitTimeDate.Minute, commitTimeDate.Second);
+                
+            // OnTrac returns their times in Pacific Time zone
+            var pacificTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                
+            return pacificTimeZone != null ? 
+                TimeZoneInfo.ConvertTime(createdDate, pacificTimeZone, TimeZoneInfo.Local) : 
+                createdDate;
         }
 
         /// <summary>
