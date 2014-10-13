@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Shipping.Insurance
 {
+    /// <summary>
+    /// Displays information about InsureShip insurance
+    /// </summary>
     public partial class InsureShipQuestionsControl : UserControl
     {
         private Point topLeft;
@@ -13,43 +19,72 @@ namespace ShipWorks.Shipping.Insurance
 
         private bool wasInLink;
         private readonly int emailAddressLocation;
+        private int previousLines;
+        private readonly float lineHeight;
 
         public const string EmailAddress = "claims@insureship.com";
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public InsureShipQuestionsControl()
         {
             InitializeComponent();
 
-            questionsTextBox.Find(EmailAddress, RichTextBoxFinds.MatchCase);
+            // Get the height of a line of text that will be used for sizing the control and hit testing links
+            lineHeight = GetLineHeight().Height;
 
-            emailAddressLocation = questionsTextBox.SelectionStart;
+            // Store how many lines of text there are now, which we'll use for resizing
+            previousLines = questionsTextBox.GetLineFromCharIndex(questionsTextBox.Text.Length + 1);
 
+            emailAddressLocation = questionsTextBox.Text.IndexOf(EmailAddress, StringComparison.OrdinalIgnoreCase);
+
+            FormatEmailAddresses();
+            UpdateLinkLocation();
+        }
+
+        /// <summary>
+        /// Color and underline the email address
+        /// </summary>
+        private void FormatEmailAddresses()
+        {
+            questionsTextBox.Select(emailAddressLocation, EmailAddress.Length);
             questionsTextBox.SelectionFont = new Font(questionsTextBox.Font, FontStyle.Underline);
             questionsTextBox.SelectionColor = Color.Blue;
             questionsTextBox.DeselectAll();
-
-            UpdateLinkLocation();
-
-            questionsTextBox.MouseMove += OnQuestionsTextBoxMouseMove;
-            questionsTextBox.ContentsResized += (sender, args) => UpdateLinkLocation();
-            questionsTextBox.Resize += (sender, args) => UpdateLinkLocation();
-            questionsTextBox.MouseUp += OnQuestionsTextBoxClick;
         }
 
+        /// <summary>
+        /// Handle resizing of the control
+        /// </summary>
+        private void OnResize(object sender, EventArgs e)
+        {
+            UpdateLinkLocation();
+
+            int lines = questionsTextBox.GetLineFromCharIndex(questionsTextBox.Text.Length + 1);
+
+            if (lines != previousLines)
+            {
+                previousLines = lines;
+
+                Height = (int)lineHeight * (lines + 1);
+            }
+        }
+
+        /// <summary>
+        /// Handle clicks to see if the email address has been clicked
+        /// </summary>
         private void OnQuestionsTextBoxClick(object sender, MouseEventArgs e)
         {
             if (IsInLink(e.Location))
             {
-                Process.Start("mailto:" + EmailAddress);
+                WebHelper.OpenMailTo(EmailAddress, this);
             }
         }
 
-        private void UpdateLinkLocation()
-        {
-            topLeft = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation);
-            bottomRight = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation + EmailAddress.Length);
-        }
-
+        /// <summary>
+        /// Handle mouse movement to see if we need to update the cursor
+        /// </summary>
         private void OnQuestionsTextBoxMouseMove(object sender, MouseEventArgs e)
         {
             bool isInLink = IsInLink(e.Location);
@@ -61,11 +96,33 @@ namespace ShipWorks.Shipping.Insurance
             }
         }
 
-        private bool IsInLink(Point e)
+        /// <summary>
+        /// Get the height of a line of text
+        /// </summary>
+        private SizeF GetLineHeight()
         {
-            return e.X > topLeft.X && e.X < bottomRight.X && e.Y > topLeft.Y && e.Y < bottomRight.Y + 16;
+            Graphics g = Graphics.FromHwnd(questionsTextBox.Handle);
+            SizeF f = g.MeasureString(questionsTextBox.Text, questionsTextBox.Font);
+            return f;
         }
 
+        /// <summary>
+        /// Update where in the text the email address currently is
+        /// </summary>
+        private void UpdateLinkLocation()
+        {
+            topLeft = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation);
+            bottomRight = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation + EmailAddress.Length);
+        }
+
+        /// <summary>
+        /// Finds whether the point is within the link hitbox
+        /// </summary>
+        private bool IsInLink(Point point)
+        {
+            return point.X > topLeft.X && point.X < bottomRight.X && 
+                point.Y > topLeft.Y && point.Y < bottomRight.Y + lineHeight;
+        }
 
         /// <summary>
         /// RichTextBox that behaves more like a label

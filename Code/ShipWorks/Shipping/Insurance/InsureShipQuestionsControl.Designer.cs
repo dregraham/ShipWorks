@@ -34,18 +34,23 @@
             // 
             // questionsTextBox
             // 
-            this.questionsTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.questionsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.questionsTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.questionsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.questionsTextBox.Cursor = System.Windows.Forms.Cursors.Default;
-            this.questionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.questionsTextBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.questionsTextBox.Location = new System.Drawing.Point(0, 0);
+            this.questionsTextBox.Location = new System.Drawing.Point(-1, -2);
+            this.questionsTextBox.Margin = new System.Windows.Forms.Padding(0);
             this.questionsTextBox.Name = "questionsTextBox";
             this.questionsTextBox.ReadOnly = true;
             this.questionsTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.questionsTextBox.Size = new System.Drawing.Size(457, 44);
             this.questionsTextBox.TabIndex = 0;
             this.questionsTextBox.Text = resources.GetString("questionsTextBox.Text");
+            this.questionsTextBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnQuestionsTextBoxMouseMove);
+            this.questionsTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuestionsTextBoxClick);
             // 
             // InsureShipQuestionsControl
             // 
@@ -54,6 +59,7 @@
             this.Controls.Add(this.questionsTextBox);
             this.Name = "InsureShipQuestionsControl";
             this.Size = new System.Drawing.Size(457, 44);
+            this.Resize += new System.EventHandler(this.OnResize);
             this.ResumeLayout(false);
 
         }
