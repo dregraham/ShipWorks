@@ -372,13 +372,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "S: Website", "www.interapptive.com",
                         OrderFields.ShipWebsite),
 
-                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}", true,
+                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}", 
                         new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
                         "S: Validation Status", AddressValidationStatusType.Valid,
                         OrderFields.ShipAddressValidationStatus) 
                         { DefaultWidth = 100 },
 
-                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
+                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}",
                         new GridActionDisplayType(shippingAddressSelector.DisplayValidationSuggestionLabel, 
                             shippingAddressSelector.ShowAddressOptionMenu, shippingAddressSelector.IsValidationSuggestionLinkEnabled), 
                         "S: Validation Suggestions", "2 Suggestions",
