@@ -51,7 +51,7 @@
             // submitClaimPanel
             // 
             this.submitClaimPanel.Controls.Add(this.insuranceSubmitClaimControl);
-            this.submitClaimPanel.Location = new System.Drawing.Point(8, 283);
+            this.submitClaimPanel.Location = new System.Drawing.Point(8, 387);
             this.submitClaimPanel.Name = "submitClaimPanel";
             this.submitClaimPanel.Size = new System.Drawing.Size(450, 319);
             this.submitClaimPanel.TabIndex = 3;
@@ -61,26 +61,30 @@
             this.viewClaimPanel.Controls.Add(this.insuranceViewClaimControl);
             this.viewClaimPanel.Location = new System.Drawing.Point(11, 16);
             this.viewClaimPanel.Name = "viewClaimPanel";
-            this.viewClaimPanel.Size = new System.Drawing.Size(447, 261);
+            this.viewClaimPanel.Size = new System.Drawing.Size(447, 329);
             this.viewClaimPanel.TabIndex = 4;
             // 
             // insuranceViewClaimControl
             // 
-            this.insuranceViewClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.insuranceViewClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceViewClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceViewClaimControl.Location = new System.Drawing.Point(3, 3);
             this.insuranceViewClaimControl.Name = "insuranceViewClaimControl";
-            this.insuranceViewClaimControl.Size = new System.Drawing.Size(441, 250);
+            this.insuranceViewClaimControl.Size = new System.Drawing.Size(441, 323);
             this.insuranceViewClaimControl.TabIndex = 1;
             // 
             // insuranceSubmitClaimControl
             // 
+            this.insuranceSubmitClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceSubmitClaimControl.ClaimSubmitted = null;
             this.insuranceSubmitClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(6, 3);
             this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
-            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(441, 299);
+            this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(441, 313);
             this.insuranceSubmitClaimControl.TabIndex = 3;
             // 
             // InsuranceTabControl

@@ -45,12 +45,13 @@
             this.checkStatus = new System.Windows.Forms.Button();
             this.email = new System.Windows.Forms.Label();
             this.emailLabel = new System.Windows.Forms.Label();
+            this.richTextBox1 = new ShipWorks.Shipping.Insurance.InsureShipQuestionsControl();
             this.SuspendLayout();
             // 
             // claimTypeLabel
             // 
             this.claimTypeLabel.AutoSize = true;
-            this.claimTypeLabel.Location = new System.Drawing.Point(21, 78);
+            this.claimTypeLabel.Location = new System.Drawing.Point(21, 129);
             this.claimTypeLabel.Name = "claimTypeLabel";
             this.claimTypeLabel.Size = new System.Drawing.Size(63, 13);
             this.claimTypeLabel.TabIndex = 0;
@@ -59,7 +60,7 @@
             // damageValueLabel
             // 
             this.damageValueLabel.AutoSize = true;
-            this.damageValueLabel.Location = new System.Drawing.Point(9, 103);
+            this.damageValueLabel.Location = new System.Drawing.Point(9, 154);
             this.damageValueLabel.Name = "damageValueLabel";
             this.damageValueLabel.Size = new System.Drawing.Size(79, 13);
             this.damageValueLabel.TabIndex = 1;
@@ -68,7 +69,7 @@
             // itemNameLabel
             // 
             this.itemNameLabel.AutoSize = true;
-            this.itemNameLabel.Location = new System.Drawing.Point(22, 128);
+            this.itemNameLabel.Location = new System.Drawing.Point(22, 179);
             this.itemNameLabel.Name = "itemNameLabel";
             this.itemNameLabel.Size = new System.Drawing.Size(63, 13);
             this.itemNameLabel.TabIndex = 2;
@@ -79,7 +80,7 @@
             this.claimType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.claimType.AutoSize = true;
-            this.claimType.Location = new System.Drawing.Point(89, 78);
+            this.claimType.Location = new System.Drawing.Point(89, 129);
             this.claimType.Name = "claimType";
             this.claimType.Size = new System.Drawing.Size(106, 13);
             this.claimType.TabIndex = 3;
@@ -90,7 +91,7 @@
             this.damageValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.damageValue.AutoSize = true;
-            this.damageValue.Location = new System.Drawing.Point(89, 103);
+            this.damageValue.Location = new System.Drawing.Point(89, 154);
             this.damageValue.Name = "damageValue";
             this.damageValue.Size = new System.Drawing.Size(125, 13);
             this.damageValue.TabIndex = 4;
@@ -102,7 +103,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.itemName.AutoEllipsis = true;
             this.itemName.AutoSize = true;
-            this.itemName.Location = new System.Drawing.Point(89, 128);
+            this.itemName.Location = new System.Drawing.Point(89, 179);
             this.itemName.Name = "itemName";
             this.itemName.Size = new System.Drawing.Size(107, 13);
             this.itemName.TabIndex = 5;
@@ -111,7 +112,7 @@
             // descriptionLabel
             // 
             this.descriptionLabel.AutoSize = true;
-            this.descriptionLabel.Location = new System.Drawing.Point(20, 174);
+            this.descriptionLabel.Location = new System.Drawing.Point(20, 225);
             this.descriptionLabel.Name = "descriptionLabel";
             this.descriptionLabel.Size = new System.Drawing.Size(64, 13);
             this.descriptionLabel.TabIndex = 8;
@@ -122,7 +123,7 @@
             this.submittedOn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.submittedOn.AutoSize = true;
-            this.submittedOn.Location = new System.Drawing.Point(89, 28);
+            this.submittedOn.Location = new System.Drawing.Point(89, 79);
             this.submittedOn.Name = "submittedOn";
             this.submittedOn.Size = new System.Drawing.Size(134, 13);
             this.submittedOn.TabIndex = 11;
@@ -131,7 +132,7 @@
             // labelSubmissionDate
             // 
             this.labelSubmissionDate.AutoSize = true;
-            this.labelSubmissionDate.Location = new System.Drawing.Point(9, 28);
+            this.labelSubmissionDate.Location = new System.Drawing.Point(9, 79);
             this.labelSubmissionDate.Name = "labelSubmissionDate";
             this.labelSubmissionDate.Size = new System.Drawing.Size(76, 13);
             this.labelSubmissionDate.TabIndex = 10;
@@ -142,7 +143,7 @@
             this.claimID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.claimID.AutoSize = true;
-            this.claimID.Location = new System.Drawing.Point(89, 3);
+            this.claimID.Location = new System.Drawing.Point(89, 54);
             this.claimID.Name = "claimID";
             this.claimID.Size = new System.Drawing.Size(95, 13);
             this.claimID.TabIndex = 13;
@@ -151,7 +152,7 @@
             // claimIDLabel
             // 
             this.claimIDLabel.AutoSize = true;
-            this.claimIDLabel.Location = new System.Drawing.Point(34, 3);
+            this.claimIDLabel.Location = new System.Drawing.Point(34, 54);
             this.claimIDLabel.Name = "claimIDLabel";
             this.claimIDLabel.Size = new System.Drawing.Size(50, 13);
             this.claimIDLabel.TabIndex = 12;
@@ -161,9 +162,9 @@
             // 
             this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.description.Location = new System.Drawing.Point(89, 174);
+            this.description.Location = new System.Drawing.Point(89, 225);
             this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(319, 113);
+            this.description.Size = new System.Drawing.Size(319, 74);
             this.description.TabIndex = 14;
             this.description.Text = "description text goes here";
             // 
@@ -171,7 +172,7 @@
             // 
             this.claimStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.claimStatus.Location = new System.Drawing.Point(89, 50);
+            this.claimStatus.Location = new System.Drawing.Point(89, 101);
             this.claimStatus.Name = "claimStatus";
             this.claimStatus.ReadOnly = true;
             this.claimStatus.Size = new System.Drawing.Size(210, 21);
@@ -181,7 +182,7 @@
             // claimStatusLabel
             // 
             this.claimStatusLabel.AutoSize = true;
-            this.claimStatusLabel.Location = new System.Drawing.Point(42, 53);
+            this.claimStatusLabel.Location = new System.Drawing.Point(42, 104);
             this.claimStatusLabel.Name = "claimStatusLabel";
             this.claimStatusLabel.Size = new System.Drawing.Size(42, 13);
             this.claimStatusLabel.TabIndex = 15;
@@ -190,7 +191,7 @@
             // checkStatus
             // 
             this.checkStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkStatus.Location = new System.Drawing.Point(306, 48);
+            this.checkStatus.Location = new System.Drawing.Point(306, 99);
             this.checkStatus.Name = "checkStatus";
             this.checkStatus.Size = new System.Drawing.Size(109, 23);
             this.checkStatus.TabIndex = 17;
@@ -204,7 +205,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.email.AutoEllipsis = true;
             this.email.AutoSize = true;
-            this.email.Location = new System.Drawing.Point(89, 152);
+            this.email.Location = new System.Drawing.Point(89, 203);
             this.email.Name = "email";
             this.email.Size = new System.Drawing.Size(128, 13);
             this.email.TabIndex = 21;
@@ -213,16 +214,27 @@
             // emailLabel
             // 
             this.emailLabel.AutoSize = true;
-            this.emailLabel.Location = new System.Drawing.Point(1, 152);
+            this.emailLabel.Location = new System.Drawing.Point(1, 203);
             this.emailLabel.Name = "emailLabel";
             this.emailLabel.Size = new System.Drawing.Size(83, 13);
             this.emailLabel.TabIndex = 20;
             this.emailLabel.Text = "Company Email:";
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox1.Location = new System.Drawing.Point(-1, -2);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(416, 43);
+            this.richTextBox1.TabIndex = 25;
+            // 
             // InsuranceViewClaimControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.email);
             this.Controls.Add(this.emailLabel);
             this.Controls.Add(this.checkStatus);
@@ -242,7 +254,7 @@
             this.Controls.Add(this.claimTypeLabel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "InsuranceViewClaimControl";
-            this.Size = new System.Drawing.Size(420, 300);
+            this.Size = new System.Drawing.Size(420, 310);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,5 +279,6 @@
         private System.Windows.Forms.Button checkStatus;
         private System.Windows.Forms.Label email;
         private System.Windows.Forms.Label emailLabel;
+        private InsureShipQuestionsControl richTextBox1;
     }
 }
