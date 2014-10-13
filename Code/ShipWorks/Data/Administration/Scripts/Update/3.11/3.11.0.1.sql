@@ -2,12 +2,6 @@
 
 GO
 
-UPDATE Store
-SET AddressValidationSetting = 1
-WHERE TypeCode = 1 OR TypeCode = 10 OR TypeCode = 18
-
-GO
-
 -- Update FedEx profiles to use address validation for residential determination
 -- if it was using the default
 UPDATE FedExProfile
