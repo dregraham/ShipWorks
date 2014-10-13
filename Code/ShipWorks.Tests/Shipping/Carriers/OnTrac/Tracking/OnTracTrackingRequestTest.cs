@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 
             //Validate URI was in correct format given the parameters
             Assert.AreEqual(
-                "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v1/37/shipments?pw=testpass&tn=123456&requestType=track",
+                "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/37/shipments?pw=testpass&tn=123456&requestType=track",
                 mockedSubmitter.Object.Uri.ToString());
         }
 

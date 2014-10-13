@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
             Assert.IsTrue(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
-                    "/OnTracServices.svc/v1/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;15;1X2X3;"));
+                    "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;15;1X2X3;"));
         }
 
         [TestMethod]
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
                         {
                             new RateQuote
                             {
-                                Service = serviceType.C
+                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
                             }
                         }
                     }
@@ -153,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
                         {
                             new RateQuote
                             {
-                                Service = serviceType.C
+                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
                             }
                         }
                     }
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
             Assert.IsTrue(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
-                    "/OnTracServices.svc/v1/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;0;0X0X0;"));
+                    "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;0;0X0X0;"));
 
         }
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
                         {
                             new RateQuote
                             {
-                                Service = serviceType.C
+                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
                             }
                         }
                     }
