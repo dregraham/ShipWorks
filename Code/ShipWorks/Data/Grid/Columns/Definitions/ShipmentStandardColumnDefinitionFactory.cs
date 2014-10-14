@@ -155,7 +155,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     ShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
 
                 new GridColumnDefinition("{B7B9C011-C66B-4B2F-933D-466A0B3AD4AE}", false,
-                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
+                    new GridActualLabelFormatDisplayType(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
                     ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }
