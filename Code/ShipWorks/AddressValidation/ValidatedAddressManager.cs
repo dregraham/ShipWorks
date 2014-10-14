@@ -274,16 +274,25 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
         {
-            if (PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) ||
-                PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
+
+            if (!PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) &&
+                !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
             {
-                return true;
+                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
+                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
+
+                return false;
             }
 
-            currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-            currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.WillNotValidate;
+            if (string.IsNullOrEmpty(currentShippingAddress.Street1))
+            {
+                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
+                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
 
-            return false;
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
