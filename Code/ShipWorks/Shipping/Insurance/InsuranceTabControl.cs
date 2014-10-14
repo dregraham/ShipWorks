@@ -52,6 +52,7 @@ namespace ShipWorks.Shipping.Insurance
             insuranceViewClaimControl.Visible = false;
             insuranceSubmitClaimControl.Visible = false;
             messageLabel.Visible = false;
+            insureShipQuestionsControl.Visible = false;
 
             if (!IsValid(shipments))
             {
@@ -141,8 +142,10 @@ namespace ShipWorks.Shipping.Insurance
 
             if (DateTime.Now < allowedSubmitClaimDate)
             {
-                messageLabel.Text = string.Format("You may submit a claim on or after {0}.", allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
+                string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
+                messageLabel.Text = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
                 messageLabel.Visible = true;
+                insureShipQuestionsControl.Visible = true;
                 insuranceViewClaimControl.Visible = false;
                 return false;
             }

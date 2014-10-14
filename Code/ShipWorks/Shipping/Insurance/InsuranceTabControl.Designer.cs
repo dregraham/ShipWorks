@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.messageLabel = new System.Windows.Forms.Label();
+            this.insureShipQuestionsControl = new ShipWorks.Shipping.Insurance.InsureShipQuestionsControl();
             this.insuranceSubmitClaimControl = new ShipWorks.Shipping.Insurance.InsuranceSubmitClaimControl();
             this.insuranceViewClaimControl = new ShipWorks.Shipping.Insurance.InsuranceViewClaimControl();
             this.SuspendLayout();
@@ -37,13 +38,20 @@
             // 
             this.messageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.messageLabel.Location = new System.Drawing.Point(4, 0);
+            this.messageLabel.Location = new System.Drawing.Point(7, 0);
             this.messageLabel.Name = "messageLabel";
-            this.messageLabel.Size = new System.Drawing.Size(425, 66);
+            this.messageLabel.Size = new System.Drawing.Size(421, 39);
             this.messageLabel.TabIndex = 1;
             this.messageLabel.Text = "Multiple shipments are selected. Select a single shipment to view insurance infor" +
     "mation.";
             this.messageLabel.Visible = false;
+            // 
+            // insureShipQuestionsControl
+            // 
+            this.insureShipQuestionsControl.Location = new System.Drawing.Point(12, 42);
+            this.insureShipQuestionsControl.Name = "insureShipQuestionsControl";
+            this.insureShipQuestionsControl.Size = new System.Drawing.Size(419, 44);
+            this.insureShipQuestionsControl.TabIndex = 4;
             // 
             // insuranceSubmitClaimControl
             // 
@@ -52,7 +60,7 @@
             this.insuranceSubmitClaimControl.AutoSize = true;
             this.insuranceSubmitClaimControl.ClaimSubmitted = null;
             this.insuranceSubmitClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(7, 387);
+            this.insuranceSubmitClaimControl.Location = new System.Drawing.Point(6, 410);
             this.insuranceSubmitClaimControl.Name = "insuranceSubmitClaimControl";
             this.insuranceSubmitClaimControl.Size = new System.Drawing.Size(413, 369);
             this.insuranceSubmitClaimControl.TabIndex = 3;
@@ -62,7 +70,7 @@
             this.insuranceViewClaimControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.insuranceViewClaimControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceViewClaimControl.Location = new System.Drawing.Point(8, 69);
+            this.insuranceViewClaimControl.Location = new System.Drawing.Point(7, 92);
             this.insuranceViewClaimControl.Name = "insuranceViewClaimControl";
             this.insuranceViewClaimControl.Size = new System.Drawing.Size(412, 314);
             this.insuranceViewClaimControl.TabIndex = 1;
@@ -72,6 +80,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.insureShipQuestionsControl);
             this.Controls.Add(this.insuranceSubmitClaimControl);
             this.Controls.Add(this.insuranceViewClaimControl);
             this.Controls.Add(this.messageLabel);
@@ -88,5 +97,6 @@
         private System.Windows.Forms.Label messageLabel;
         private InsuranceSubmitClaimControl insuranceSubmitClaimControl;
         private InsuranceViewClaimControl insuranceViewClaimControl;
+        private InsureShipQuestionsControl insureShipQuestionsControl;
     }
 }
