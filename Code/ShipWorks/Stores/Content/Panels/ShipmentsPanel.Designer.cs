@@ -35,7 +35,7 @@
             this.menuSep = new System.Windows.Forms.ToolStripSeparator();
             this.menuTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCopyTracking = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSubmitClaim = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuInsuranceClaim = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ratesControl = new ShipWorks.Shipping.Editing.Rating.RatesPanel();
@@ -70,7 +70,7 @@
             this.menuSep,
             this.menuTrack,
             this.menuCopyTracking,
-            this.menuSubmitClaim,
+            this.menuInsuranceClaim,
             this.menuSep2,
             this.menuCopy});
             this.contextMenu.Name = "contextMenu";
@@ -113,13 +113,13 @@
             this.menuCopyTracking.Text = "Copy Tracking Number";
             this.menuCopyTracking.Click += new System.EventHandler(this.OnCopyTracking);
             // 
-            // menuSubmitClaim
+            // menuInsuranceClaim
             // 
-            this.menuSubmitClaim.Image = global::ShipWorks.Properties.Resources.message;
-            this.menuSubmitClaim.Name = "menuSubmitClaim";
-            this.menuSubmitClaim.Size = new System.Drawing.Size(198, 22);
-            this.menuSubmitClaim.Text = "Submit Claim";
-            this.menuSubmitClaim.Click += new System.EventHandler(this.OnSubmitClaim);
+            this.menuInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
+            this.menuInsuranceClaim.Name = "menuInsuranceClaim";
+            this.menuInsuranceClaim.Size = new System.Drawing.Size(198, 22);
+            this.menuInsuranceClaim.Text = "Insurance Claim";
+            this.menuInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
             // 
             // menuSep2
             // 
@@ -171,6 +171,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuCopyTracking;
         private System.Windows.Forms.ToolStripSeparator menuSep2;
         private Shipping.Editing.Rating.RatesPanel ratesControl;
-        private System.Windows.Forms.ToolStripMenuItem menuSubmitClaim;
+        private System.Windows.Forms.ToolStripMenuItem menuInsuranceClaim;
     }
 }

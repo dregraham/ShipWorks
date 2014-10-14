@@ -614,10 +614,17 @@
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuranceClaimCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.Designer.cs">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -759,6 +766,12 @@
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.Designer.cs">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.Designer.cs">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
@@ -7107,6 +7120,10 @@
     <EmbeddedResource Include="FileTransfer\FtpFolderBrowserDlg.resx">
       <DependentUpon>FtpFolderBrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.resx">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\CountryValueEditor.resx">
       <DependentUpon>CountryValueEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7373,6 +7390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsureShipQuestionsControl.resx">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>

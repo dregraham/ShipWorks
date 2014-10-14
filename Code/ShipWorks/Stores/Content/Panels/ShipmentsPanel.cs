@@ -454,7 +454,7 @@ namespace ShipWorks.Stores.Content.Panels
             menuDelete.Enabled = entityGrid.Selection.Count == 1;
             menuTrack.Enabled = entityGrid.Selection.Count == 1;
             menuCopyTracking.Enabled = entityGrid.Selection.Count == 1;
-            menuSubmitClaim.Enabled = entityGrid.Selection.Count == 1;
+            menuInsuranceClaim.Enabled = entityGrid.Selection.Count == 1;
             menuCopy.Enabled = entityGrid.Selection.Count >= 1;
 
             string editText = "Ship";
