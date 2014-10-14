@@ -610,6 +610,7 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
