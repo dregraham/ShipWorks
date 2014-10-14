@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Insurance.InsureShip.Net;
 using log4net;
 using Interapptive.Shared.Utility;
+using System.Threading;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
@@ -184,14 +185,18 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         public void Submit_SetsSubmissionDate_WhenShipmentIsEligible_Test()
         {
             DateTime testBegin = DateTime.UtcNow;
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
+            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+            
             DateTime testEnd = DateTime.UtcNow;
 
-            // Make sure the test submission date is set to the time period between before the 
-            // Submit method was invoked and when it finished
-            Assert.IsTrue(testBegin >= shipment.InsurancePolicy.SubmissionDate);
-            Assert.IsTrue(shipment.InsurancePolicy.SubmissionDate <= testEnd);
+
+            // Make sure the recorded time the test was began and the time of the submission is positive;
+            // Same for time recorded after the submission and the time of the submission
+            TimeSpan beginToSubmission = shipment.InsurancePolicy.SubmissionDate.Value.Subtract(testBegin);
+            TimeSpan endFromSubmission = testEnd.Subtract(shipment.InsurancePolicy.SubmissionDate.Value);
+
+            Assert.IsTrue(beginToSubmission.TotalMilliseconds >= 0 && endFromSubmission.TotalMilliseconds >= 0);
         }
 
         [TestMethod]

@@ -215,6 +215,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
         public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
@@ -227,6 +228,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
         public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
@@ -238,6 +240,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InsureShipException))]
         public void Void_UsesInsureShipSettings_ToDetermineEligibility_Test()
         {
             // Grace period set to 24 hours in the initialize method above

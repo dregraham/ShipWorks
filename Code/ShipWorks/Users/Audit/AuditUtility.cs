@@ -76,7 +76,7 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private static long GetTransactionID(SqlConnection con)
         {
-            return (long) SqlCommandProvider.ExecuteScalar(con, "SELECT dbo.GetTransactionID()");
+            return SqlCommandProvider.ExecuteScalar<long>(con, "SELECT dbo.GetTransactionID()");
         }
 
         /// <summary>

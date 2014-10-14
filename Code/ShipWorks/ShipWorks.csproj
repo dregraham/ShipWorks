@@ -617,10 +617,17 @@
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\RequestedLabelFormatCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuranceClaimCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.Designer.cs">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -777,6 +784,12 @@
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.Designer.cs">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.Designer.cs">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
@@ -7125,6 +7138,10 @@
     <EmbeddedResource Include="FileTransfer\FtpFolderBrowserDlg.resx">
       <DependentUpon>FtpFolderBrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.resx">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\CountryValueEditor.resx">
       <DependentUpon>CountryValueEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7397,6 +7414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsureShipQuestionsControl.resx">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>
@@ -10917,6 +10937,7 @@
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
+    <None Include="Stores\Platforms\XCart\Modules\XCart5\shipworks3.php" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -11362,7 +11383,7 @@
     </None>
     <None Include="Stores\Platforms\osCommerce\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart1\shipworks3.php" />
-    <None Include="Stores\Platforms\XCart\shipworks3.php" />
+    <None Include="Stores\Platforms\XCart\Modules\XCart4\shipworks3.php" />
     <None Include="Stores\Platforms\ZenCart\init_admin_auth.php" />
     <None Include="Stores\Platforms\ZenCart\shipworks3.php" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationReply.datasource">
