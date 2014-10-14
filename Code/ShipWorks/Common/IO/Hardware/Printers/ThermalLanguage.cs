@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Common.IO.Hardware.Printers
 {
@@ -14,7 +9,6 @@ namespace ShipWorks.Common.IO.Hardware.Printers
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ThermalLanguage
     {
-        [Hidden]
         [Description("Standard")]
         None = -1,
 

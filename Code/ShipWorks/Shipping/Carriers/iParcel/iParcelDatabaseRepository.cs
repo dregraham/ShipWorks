@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 {
                     byte[] imageData;
 
-                    if (shipment.ThermalType.HasValue)
+                    if (shipment.ActualLabelFormat.HasValue)
                     {
                         // Extract the thermal label
                         imageData = GetThermalLabel(iParcelResponse, rowIndex);

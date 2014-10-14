@@ -19,7 +19,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         public LabelsOutline(TemplateTranslationContext context, Func<ShipmentEntity> shipment, Lazy<List<TemplateLabelData>> labels, ImageFormat standardLabelFormat) :
             base(context)
         {
-            AddAttribute("type", () => shipment().ThermalType == null ? "image" : "thermal");
+            AddAttribute("type", () => shipment().ActualLabelFormat == null ? "image" : "thermal");
 
             // Create a  package output entry per package.  We go ahead and evaluate the shipment as we pass it in - it will have already been evaluated anyway, since
             // to get to that point it would have had to have been checked for .Processed

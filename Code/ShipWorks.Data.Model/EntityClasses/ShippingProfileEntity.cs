@@ -806,6 +806,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -1337,6 +1340,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.ReturnShipment, false); }
 			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnShipment, value); }
+		}
+
+		/// <summary> The RequestedLabelFormat property of the Entity ShippingProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingProfile"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> RequestedLabelFormat
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, false); }
+			set	{ SetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, value); }
 		}
 
 

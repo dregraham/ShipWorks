@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         {
             base.SaveSettings(settings);
 
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
         }
     }
 }

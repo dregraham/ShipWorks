@@ -1004,7 +1004,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ThermalType", fieldHashtable);
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ActualLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipFirstName", fieldHashtable);
@@ -1873,15 +1876,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.CustomsValue, value); }
 		}
 
-		/// <summary> The ThermalType property of the Entity Shipment<br/><br/>
+		/// <summary> The RequestedLabelFormat property of the Entity Shipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "Shipment"."ThermalType"<br/>
+		/// <remarks>Mapped on  table field: "Shipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The ActualLabelFormat property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ActualLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ThermalType
+		public virtual Nullable<System.Int32> ActualLabelFormat
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ShipmentFieldIndex.ThermalType, false); }
-			set	{ SetValue((int)ShipmentFieldIndex.ThermalType, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)ShipmentFieldIndex.ActualLabelFormat, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ActualLabelFormat, value); }
 		}
 
 		/// <summary> The ShipFirstName property of the Entity Shipment<br/><br/>

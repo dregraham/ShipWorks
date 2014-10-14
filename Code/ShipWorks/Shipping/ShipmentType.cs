@@ -7,6 +7,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -14,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
@@ -53,6 +55,8 @@ namespace ShipWorks.Shipping
         /// HTTPS certificate inspector to use. 
         /// </summary>
         private ICertificateInspector certificateInspector;
+
+        private static object syncLock = new object();
 
         protected ShipmentType()
         {
@@ -277,7 +281,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            shipment.ThermalType = null;
+            shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
             // First apply the base profile
@@ -438,27 +442,44 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingProfileEntity GetPrimaryProfile()
         {
-            ShippingProfileEntity profile = ShippingProfileManager.Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
+            ShippingProfileEntity profile = GetDefaultProfile();
 
             if (profile == null)
             {
-                profile = new ShippingProfileEntity();
-                profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                profile.ShipmentType = (int)ShipmentTypeCode;
-                profile.ShipmentTypePrimary = true;
+                lock (syncLock)
+                {
+                    profile = GetDefaultProfile();
 
-                // Load the shipmentType specific profile data
-                LoadProfileData(profile, true);
+                    if (profile == null)
+                    {
+                        profile = new ShippingProfileEntity();
+                        profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
+                        profile.ShipmentType = (int)ShipmentTypeCode;
+                        profile.ShipmentTypePrimary = true;
 
-                // Configure it as a primary profile
-                ConfigurePrimaryProfile(profile);
+                        // Load the shipmentType specific profile data
+                        LoadProfileData(profile, true);
 
-                // Save the profile
-                ShippingProfileManager.SaveProfile(profile);
+                        // Configure it as a primary profile
+                        ConfigurePrimaryProfile(profile);
+
+                        // Save the profile
+                        ShippingProfileManager.SaveProfile(profile);
+                    }
+                }
             }
 
             return profile;
+        }
+
+        /// <summary>
+        /// Gets the default profile if it exists
+        /// </summary>
+        /// <returns></returns>
+        private ShippingProfileEntity GetDefaultProfile()
+        {
+            return ShippingProfileManager.Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
@@ -473,6 +494,8 @@ namespace ShipWorks.Shipping
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
+
+            profile.RequestedLabelFormat = (int)ThermalLanguage.None;
         }
 
         /// <summary>
@@ -676,6 +699,7 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
+            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)

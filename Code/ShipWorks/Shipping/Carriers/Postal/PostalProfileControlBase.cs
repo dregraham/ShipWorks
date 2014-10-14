@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public PostalProfileControlBase()
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabControl);
         }
 
         /// <summary>

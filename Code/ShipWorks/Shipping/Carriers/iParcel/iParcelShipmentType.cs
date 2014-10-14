@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -584,14 +585,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     throw new ArgumentNullException("shipment");
                 }
                 
-                ShippingSettingsEntity shippingSettings = repository.GetShippingSettings();
-                if (shippingSettings.IParcelThermal)
+                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
-                    shipment.ThermalType = shippingSettings.IParcelThermalType;
+                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
                 }
                 else
                 {
-                    shipment.ThermalType = null;
+                    shipment.ActualLabelFormat = null;
                 }
 
                 IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);

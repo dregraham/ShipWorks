@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
 
             settings.OnTracInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
             settings.OnTracInsurancePennyOne = pennyOne.Checked;

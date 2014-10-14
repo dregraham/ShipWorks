@@ -599,7 +599,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("recipientCompany", shipment.ShipCompany);
                 postRequest.Variables.Add("recipientPhone", shipment.ShipPhone);
                 postRequest.Variables.Add("recipientPostalCode", shipment.ShipPostalCode);
-                postRequest.Variables.Add("labelFormat", shipment.ThermalType == null ? "9" : shipment.ThermalType.Value.ToString());
+                postRequest.Variables.Add("labelFormat", shipment.ActualLabelFormat == null ? "9" : shipment.ActualLabelFormat.Value.ToString());
                 postRequest.Variables.Add("returnShipment", shipment.ReturnShipment ? "1" : "0");
                 postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
                 postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");

@@ -609,11 +609,14 @@
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\RequestedLabelFormatCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuranceClaimCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
@@ -722,6 +725,9 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -747,6 +753,18 @@
     </Compile>
     <Compile Include="Shipping\Editing\Rating\RatesPanel.Designer.cs">
       <DependentUpon>RatesPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatOptionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatOptionControl.Designer.cs">
+      <DependentUpon>RequestedLabelFormatOptionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatProfileControl.Designer.cs">
+      <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
@@ -7364,6 +7382,12 @@
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\RequestedLabelFormatOptionControl.resx">
+      <DependentUpon>RequestedLabelFormatOptionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\RequestedLabelFormatProfileControl.resx">
+      <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -9311,6 +9335,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExOptionsControl.resx">
       <DependentUpon>FedExOptionsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExPackageControl.resx">
       <DependentUpon>FedExPackageControl.cs</DependentUpon>
@@ -10611,6 +10636,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

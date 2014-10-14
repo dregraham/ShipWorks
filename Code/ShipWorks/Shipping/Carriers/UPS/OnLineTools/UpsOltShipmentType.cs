@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             outline.AddElement("Voided", () => shipment().Voided);
             outline.AddElement("NegotiatedRate", () => loaded().Ups.NegotiatedRate);
             outline.AddElement("PublishedCharges", () => loaded().Ups.PublishedCharges);
-            outline.AddElement("Package", new UpsLegacyPackageTemplateOutline(container.Context), () => labels.Value, ElementOutline.If(() => shipment().ThermalType == null));
+            outline.AddElement("Package", new UpsLegacyPackageTemplateOutline(container.Context), () => labels.Value, ElementOutline.If(() => shipment().ActualLabelFormat == null));
         }
 
         /// <summary>

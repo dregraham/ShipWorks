@@ -250,6 +250,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 667);
             this.sectionReturns.Size = new System.Drawing.Size(504, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionShipment
             // 
@@ -1962,6 +1964,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();

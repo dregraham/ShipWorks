@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
                             Width = isLetter ? 0 : onTracShipment.DimsWidth,
                             Height = isLetter ? 0 : onTracShipment.DimsHeight
                         },
-                        LabelType = GetOnTracLabelType(shipworksShipment.ThermalType),
+                        LabelType = GetOnTracLabelType(shipworksShipment.ActualLabelFormat),
                         ShipEmail = "",
                         DelEmail = "",
                         ShipDate = shipworksShipment.ShipDate

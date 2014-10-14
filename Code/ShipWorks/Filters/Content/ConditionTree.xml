@@ -300,6 +300,7 @@
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />
       <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />
+      <Condition identifier="Shipment.RequestedLabelFormat" />
       <Condition identifier="Shipment.LabelFormat" />
       <Separator/>
       <Group name="Postal">
