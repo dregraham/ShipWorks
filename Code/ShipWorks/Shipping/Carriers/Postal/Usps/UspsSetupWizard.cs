@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
@@ -66,6 +67,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
                 ExcludeShipmentType(settings, ShipmentTypeCode.Express1Stamps);
                 ExcludeShipmentType(settings, ShipmentTypeCode.Stamps);
+                ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
+
+                // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded
+                // before saving the settings
+                List<int> excludedTypes = settings.ExcludedTypes.ToList();
+                excludedTypes.Remove((int) ShipmentTypeCode.Usps);
+                settings.ExcludedTypes = excludedTypes.ToArray();
 
                 ShippingSettings.Save(settings);
 
@@ -75,6 +83,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
+
+                ShippingSettingsEventDispatcher.DispatchUspsAccountCreated(this, new ShippingSettingsEventArgs(ShipmentTypeCode.Usps));
             }
         }
 

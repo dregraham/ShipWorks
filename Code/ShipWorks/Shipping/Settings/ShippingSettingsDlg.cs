@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.UI;
@@ -32,6 +33,8 @@ namespace ShipWorks.Shipping.Settings
             InitializeComponent();
 
             WindowStateSaver.Manage(this);
+
+            ShippingSettingsEventDispatcher.UspsAccountCreated += OnUspsAccountCreated;
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace ShipWorks.Shipping.Settings
             providerRulesControl.UpdateActiveProviders(GetEnabledShipmentTypes());
             LoadShipmentTypePages();
         }
-
+        
         /// <summary>
         /// Create an option page for each loaded shipment type
         /// </summary>
@@ -278,6 +281,35 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Called when the ShippingSettingsEventDispatcher.UspsAccountCreated event is raised to make
+        /// sure the option pages and exluded shipment types are updated to reflect any changes since
+        /// shipment types could be exluded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
+        private void OnUspsAccountCreated(object sender, ShippingSettingsEventArgs eventArgs)
+        {
+            // Make sure the active providers reflect any shipment types that may have been disabled.
+            LoadProvidersPanel();
+
+            if (eventArgs.ShipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                // Push the user to the USPS tab in case they came from
+                // the USPS (Stamps.com) tab
+
+                // Clear out the settings map to force a reload (to pick up the new USPSs account)
+                settingsMap.Clear();
+                LoadShipmentTypePages();
+
+                OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>().FirstOrDefault(p => p.Tag != null && (ShipmentTypeCode)p.Tag == ShipmentTypeCode.Usps);
+                if (pageToSelect != null)
+                {
+                    optionControl.SelectedPage = pageToSelect;
+                }
+            }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -289,6 +321,8 @@ namespace ShipWorks.Shipping.Settings
                 {
                     components.Dispose();
                 }
+
+                ShippingSettingsEventDispatcher.UspsAccountCreated -= OnUspsAccountCreated;
 
                 // Dispose all the controls we created
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)
