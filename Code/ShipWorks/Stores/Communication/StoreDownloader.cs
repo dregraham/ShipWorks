@@ -313,7 +313,7 @@ namespace ShipWorks.Stores.Communication
                 log.InfoFormat("{0} not found, creating", orderIdentifier);
 
                 // Create a new order
-                order = storeType.CreateOrderInstance();
+                order = storeType.CreateOrder();
 
                 // Its for this store
                 order.StoreID = store.StoreID;
@@ -350,7 +350,7 @@ namespace ShipWorks.Stores.Communication
                 RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
                 // We use a prototype approach to determine what to search for
-                OrderEntity prototype = storeType.CreateOrderInstance();
+                OrderEntity prototype = storeType.CreateOrder();
                 prototype.IsNew = false;
                 prototype.RollbackChanges();
                 orderIdentifier.ApplyTo(prototype);

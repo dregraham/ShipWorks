@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Creates a store-specific instance of an OrderEntity
         /// </summary>
         /// <returns></returns>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             NeweggOrderEntity neweggOrderEntity = new NeweggOrderEntity();
             return neweggOrderEntity;

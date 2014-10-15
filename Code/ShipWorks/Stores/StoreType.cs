@@ -125,24 +125,34 @@ namespace ShipWorks.Stores
         /// </summary>
         public abstract StoreEntity CreateStoreInstance();
 
+        public OrderEntity CreateOrder()
+        {
+            OrderEntity newOrder = CreateOrderInstance();
+
+            newOrder.ShipAddressValidationError = string.Empty;
+            newOrder.ShipResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipPOBox = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipUSTerritory = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.ShipAddressValidationSuggestionCount = 0;
+            newOrder.BillAddressValidationError = string.Empty;
+            newOrder.BillResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillPOBox = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillUSTerritory = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.BillAddressValidationSuggestionCount = 0;
+
+            return newOrder;
+        }
+
         /// <summary>
         /// Creates a store-specific instance of an OrderEntity
         /// </summary>
-        public virtual OrderEntity CreateOrderInstance()
+        protected virtual OrderEntity CreateOrderInstance()
         {
-            return new OrderEntity
-            {
-                ShipAddressValidationError = string.Empty,
-                ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown,
-                ShipPOBox = (int) ValidationDetailStatusType.Unknown,
-                ShipUSTerritory = (int) ValidationDetailStatusType.Unknown,
-                ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown,
-                BillAddressValidationError = string.Empty,
-                BillResidentialStatus = (int) ValidationDetailStatusType.Unknown,
-                BillPOBox = (int) ValidationDetailStatusType.Unknown,
-                BillUSTerritory = (int) ValidationDetailStatusType.Unknown,
-                BillMilitaryAddress = (int) ValidationDetailStatusType.Unknown
-            };
+            return new OrderEntity();
         }
 
         /// <summary>

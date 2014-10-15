@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create a new store-specific order instance
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new ProStoresOrderEntity();
         }

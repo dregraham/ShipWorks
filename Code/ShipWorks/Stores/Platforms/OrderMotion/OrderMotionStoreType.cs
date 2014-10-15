@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Create an OrderMotion orderj
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new OrderMotionOrderEntity();
         }

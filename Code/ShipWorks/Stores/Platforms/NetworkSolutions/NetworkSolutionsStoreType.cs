@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Creates a NetworkSolutions order
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new NetworkSolutionsOrderEntity();
         }

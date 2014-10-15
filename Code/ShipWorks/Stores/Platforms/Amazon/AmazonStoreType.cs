@@ -183,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the custom Amazon entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             AmazonOrderEntity order = new AmazonOrderEntity();
 

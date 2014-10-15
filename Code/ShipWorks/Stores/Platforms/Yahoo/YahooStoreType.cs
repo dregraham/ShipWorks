@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create a new instance of a yahoo order
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new YahooOrderEntity();
         }

@@ -263,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Creates an eBay-specific order instance
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new EbayOrderEntity()
             {

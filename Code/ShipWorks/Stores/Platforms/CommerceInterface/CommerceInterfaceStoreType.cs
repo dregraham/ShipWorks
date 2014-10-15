@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Create the order entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             CommerceInterfaceOrderEntity ciOrder = new CommerceInterfaceOrderEntity();
             ciOrder.CommerceInterfaceOrderNumber = "";

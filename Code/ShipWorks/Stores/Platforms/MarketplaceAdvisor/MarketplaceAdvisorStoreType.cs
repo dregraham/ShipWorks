@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create a MarketplaceAdvisor specific order entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new MarketplaceAdvisorOrderEntity();
         }

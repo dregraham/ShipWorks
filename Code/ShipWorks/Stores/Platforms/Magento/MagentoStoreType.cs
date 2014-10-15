@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Create an order
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             MagentoOrderEntity magentoOrder = new MagentoOrderEntity();
 

@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Create a Sears specific order instance
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             SearsOrderEntity order = new SearsOrderEntity();
 

@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// Create the PayPal specific order entity
         /// </summary>
         /// <returns></returns>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new PayPalOrderEntity();
         }

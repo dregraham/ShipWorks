@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// Creates a new order entity
         /// </summary>
         /// <returns></returns>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             ClickCartProOrderEntity clickCartOrder = new ClickCartProOrderEntity();
             clickCartOrder.ClickCartProOrderID = "";
