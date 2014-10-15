@@ -85,6 +85,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
 
+                // We may have came from USPS (Stamps.com), which would not have marked USPS as configured, so mark it now.
+                ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
+
                 ShippingSettingsEventDispatcher.DispatchUspsAccountCreated(this, new ShippingSettingsEventArgs(ShipmentTypeCode.Usps));
             }
         }
