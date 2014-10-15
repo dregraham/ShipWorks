@@ -1365,7 +1365,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_shipment !=null);
 						DesetupSyncShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Shipment");
+						}
 					}
 					else
 					{

@@ -200,9 +200,6 @@ namespace ShipWorks.Shipping.Settings
 
             settings.AutoCreateShipments = true;
 
-            settings.UspsThermal = false;
-            settings.UspsThermalType = (int)ThermalLanguage.EPL;
-
             adapter.SaveAndRefetch(settings);
         }
     }

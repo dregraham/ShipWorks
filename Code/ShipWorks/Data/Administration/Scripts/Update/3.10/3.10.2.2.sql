@@ -22,19 +22,13 @@ CREATE TABLE [dbo].[tmp_rg_xx_ShippingSettings]
 [FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FedExMaskAccount] [bit] NOT NULL,
-[FedExThermal] [bit] NOT NULL,
-[FedExThermalType] [int] NOT NULL,
 [FedExThermalDocTab] [bit] NOT NULL,
 [FedExThermalDocTabType] [int] NOT NULL,
 [FedExInsuranceProvider] [int] NOT NULL,
 [FedExInsurancePennyOne] [bit] NOT NULL,
 [UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UpsThermal] [bit] NOT NULL,
-[UpsThermalType] [int] NOT NULL,
 [UpsInsuranceProvider] [int] NOT NULL,
 [UpsInsurancePennyOne] [bit] NOT NULL,
-[EndiciaThermal] [bit] NOT NULL,
-[EndiciaThermalType] [int] NOT NULL,
 [EndiciaCustomsCertify] [bit] NOT NULL,
 [EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EndiciaThermalDocTab] [bit] NOT NULL,
@@ -42,30 +36,22 @@ CREATE TABLE [dbo].[tmp_rg_xx_ShippingSettings]
 [EndiciaAutomaticExpress1] [bit] NOT NULL,
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
+[EndiciaUspsAutomaticExpedited] [bit] NOT NULL,
+[EndiciaUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
-[StampsThermal] [bit] NOT NULL,
-[StampsThermalType] [int] NOT NULL,
 [StampsAutomaticExpress1] [bit] NOT NULL,
 [StampsAutomaticExpress1Account] [bigint] NOT NULL,
-[Express1EndiciaThermal] [bit] NOT NULL,
-[Express1EndiciaThermalType] [int] NOT NULL,
+[StampsUspsAutomaticExpedited] [bit] NOT NULL,
+[StampsUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
 [Express1EndiciaThermalDocTabType] [int] NOT NULL,
 [Express1EndiciaSingleSource] [bit] NOT NULL,
-[EquaShipThermal] [bit] NOT NULL,
-[EquaShipThermalType] [int] NOT NULL,
-[OnTracThermal] [bit] NOT NULL,
-[OnTracThermalType] [int] NOT NULL,
 [OnTracInsuranceProvider] [int] NOT NULL,
 [OnTracInsurancePennyOne] [bit] NOT NULL,
-[iParcelThermal] [bit] NOT NULL,
-[iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsThermal] [bit] NOT NULL,
-[Express1StampsThermalType] [int] NOT NULL,
 [Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,
@@ -74,16 +60,15 @@ CREATE TABLE [dbo].[tmp_rg_xx_ShippingSettings]
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
 [ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL,
-[UspsThermal] [bit] NOT NULL,
-[UspsThermalType] [int] NOT NULL
+[AutoCreateShipments] [bit] NOT NULL
 )
 GO
--- Adopt thermal settings for Usps from the current stamps settings
-INSERT INTO [dbo].[tmp_rg_xx_ShippingSettings]([ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermal], [FedExThermalType], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsThermal], [UpsThermalType], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaThermal], [EndiciaThermalType], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], [EndiciaInsuranceProvider], [WorldShipLaunch], [StampsThermal], [StampsThermalType], [StampsAutomaticExpress1], [StampsAutomaticExpress1Account], [Express1EndiciaThermal], [Express1EndiciaThermalType], [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [EquaShipThermal], [EquaShipThermalType], [OnTracThermal], [OnTracThermalType], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelThermal], [iParcelThermalType], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsThermal], [Express1StampsThermalType], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], 
-	[AutoCreateShipments], [UspsThermal], [UspsThermalType]) 
-	SELECT [ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermal], [FedExThermalType], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsThermal], [UpsThermalType], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaThermal], [EndiciaThermalType], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], [EndiciaInsuranceProvider], [WorldShipLaunch], [StampsThermal], [StampsThermalType], [StampsAutomaticExpress1], [StampsAutomaticExpress1Account], [Express1EndiciaThermal], [Express1EndiciaThermalType], [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [EquaShipThermal], [EquaShipThermalType], [OnTracThermal], [OnTracThermalType], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelThermal], [iParcelThermalType], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsThermal], [Express1StampsThermalType], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], 
-	[AutoCreateShipments], [StampsThermal], [StampsThermalType] FROM [dbo].[ShippingSettings]
+INSERT INTO [dbo].[tmp_rg_xx_ShippingSettings]([ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], 
+	[EndiciaInsuranceProvider], [EndiciaUspsAutomaticExpedited], [EndiciaUspsAutomaticExpeditedAccount], [WorldShipLaunch], [StampsAutomaticExpress1], 
+	[StampsAutomaticExpress1Account], [StampsUspsAutomaticExpedited], [StampsUspsAutomaticExpeditedAccount], [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], [AutoCreateShipments]) 
+SELECT [ShippingSettingsID], [Activated], [Configured], [Excluded], [DefaultType], [BlankPhoneOption], [BlankPhoneNumber], [InsurancePolicy], [InsuranceLastAgreed], [FedExUsername], [FedExPassword], [FedExMaskAccount], [FedExThermalDocTab], [FedExThermalDocTabType], [FedExInsuranceProvider], [FedExInsurancePennyOne], [UpsAccessKey], [UpsInsuranceProvider], [UpsInsurancePennyOne], [EndiciaCustomsCertify], [EndiciaCustomsSigner], [EndiciaThermalDocTab], [EndiciaThermalDocTabType], [EndiciaAutomaticExpress1], [EndiciaAutomaticExpress1Account], 
+	[EndiciaInsuranceProvider], 0, 0, [WorldShipLaunch], [StampsAutomaticExpress1], 
+	[StampsAutomaticExpress1Account], 0, 0, [Express1EndiciaCustomsCertify], [Express1EndiciaCustomsSigner], [Express1EndiciaThermalDocTab], [Express1EndiciaThermalDocTabType], [Express1EndiciaSingleSource], [OnTracInsuranceProvider], [OnTracInsurancePennyOne], [iParcelInsuranceProvider], [iParcelInsurancePennyOne], [Express1StampsSingleSource], [UpsMailInnovationsEnabled], [WorldShipMailInnovationsEnabled], [BestRateExcludedShipmentTypes], [ShipSenseEnabled], [ShipSenseUniquenessXml], [ShipSenseProcessedShipmentID], [ShipSenseEndShipmentID], [AutoCreateShipments] FROM [dbo].[ShippingSettings]
 GO
 DROP TABLE [dbo].[ShippingSettings]
 GO
@@ -93,3 +78,4 @@ PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
 GO
+

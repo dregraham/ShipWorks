@@ -4485,9 +4485,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
 [ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL,
-[UspsThermal] [bit] NOT NULL,
-[UspsThermalType] [int] NOT NULL
+[AutoCreateShipments] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

@@ -7562,10 +7562,6 @@ namespace ShipWorks.Data.Model
 		ShipSenseEndShipmentID,
 		///<summary>AutoCreateShipments. </summary>
 		AutoCreateShipments,
-		///<summary>UspsThermal. </summary>
-		UspsThermal,
-		///<summary>UspsThermalType. </summary>
-		UspsThermalType,
 		/// <summary></summary>
 		AmountOfFields
 	}

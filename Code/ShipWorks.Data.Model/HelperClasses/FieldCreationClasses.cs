@@ -16062,16 +16062,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.AutoCreateShipments);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.UspsThermal field instance</summary>
-		public static EntityField2 UspsThermal
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsThermal);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.UspsThermalType field instance</summary>
-		public static EntityField2 UspsThermalType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsThermalType);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
