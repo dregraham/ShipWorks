@@ -28,8 +28,18 @@ namespace ShipWorks.Shipping.Insurance
             InitializeComponent();
 
             messageLabel.Location = new Point(8, 7);
-            viewClaimPanel.Location = new Point(0, 4);
-            submitClaimPanel.Location = new Point(0, 4);
+
+            SetControlPosition(insuranceViewClaimControl);
+            SetControlPosition(insuranceSubmitClaimControl);
+        }
+
+        /// <summary>
+        /// Update the control position so everything is the same size and location
+        /// </summary>
+        private void SetControlPosition(Control control)
+        {
+            control.Location = new Point(8, 10);
+            control.Width = Width - control.Left;
         }
 
         /// <summary>
@@ -39,9 +49,10 @@ namespace ShipWorks.Shipping.Insurance
         /// <param name="shipments"></param>
         public void LoadClaim(List<ShipmentEntity> shipments)
         {
-            viewClaimPanel.Visible = false;
-            submitClaimPanel.Visible = false;
+            insuranceViewClaimControl.Visible = false;
+            insuranceSubmitClaimControl.Visible = false;
             messageLabel.Visible = false;
+            insureShipQuestionsControl.Visible = false;
 
             if (!IsValid(shipments))
             {
@@ -56,11 +67,12 @@ namespace ShipWorks.Shipping.Insurance
                 // Only load insurance data if it is not already loaded so that in-memory changes are not overwritten
                 ShipmentTypeDataService.LoadInsuranceData(loadedShipment);   
             }
-
-            if (loadedShipment.InsurancePolicy != null)
+            else
             {
-                ShowViewClaim(loadedShipment);
-                ShowEditClaim(loadedShipment);
+                bool showViewClaim = !loadedShipment.Voided && loadedShipment.InsurancePolicy.ClaimID.HasValue;
+
+                ShowViewClaim(showViewClaim, loadedShipment);
+                ShowEditClaim(!showViewClaim, loadedShipment);
             }
         }
 
@@ -130,8 +142,10 @@ namespace ShipWorks.Shipping.Insurance
 
             if (DateTime.Now < allowedSubmitClaimDate)
             {
-                messageLabel.Text = string.Format("You may submit a claim on or after {0}.", allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
+                string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
+                messageLabel.Text = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
                 messageLabel.Visible = true;
+                insureShipQuestionsControl.Visible = true;
                 insuranceViewClaimControl.Visible = false;
                 return false;
             }
@@ -162,29 +176,28 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Show the readonly view of the claim
         /// </summary>
-        private void ShowViewClaim(ShipmentEntity shipment)
+        private void ShowViewClaim(bool showView, ShipmentEntity shipment)
         {
-            if (shipment.Voided || shipment.InsurancePolicy == null || !shipment.InsurancePolicy.ClaimID.HasValue)
+            insuranceViewClaimControl.Visible = showView;
+
+            if (showView)
             {
-                viewClaimPanel.Visible = false;
-            }
-            else
-            {
-                insuranceViewClaimControl.LoadClaim(shipment);
-                viewClaimPanel.Visible = true;
+                insuranceViewClaimControl.LoadClaim(shipment);      
             }
         }
 
         /// <summary>
         /// Show the readonly editable of the claim
         /// </summary>
-        private void ShowEditClaim(ShipmentEntity shipment)
+        private void ShowEditClaim(bool showView, ShipmentEntity shipment)
         {
-            bool show = !shipment.Voided && shipment.InsurancePolicy != null && !shipment.InsurancePolicy.ClaimID.HasValue;
-            submitClaimPanel.Visible = show;
+            insuranceSubmitClaimControl.Visible = showView;
 
-            insuranceSubmitClaimControl.LoadShipment(shipment);
-            insuranceSubmitClaimControl.ClaimSubmitted = () => LoadClaim(new List<ShipmentEntity>() {shipment});
+            if (showView)
+            {
+                insuranceSubmitClaimControl.LoadShipment(shipment);
+                insuranceSubmitClaimControl.ClaimSubmitted = () => LoadClaim(new List<ShipmentEntity> { shipment });   
+            }
         }
 
         /// <summary>
@@ -215,7 +228,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public void SaveToShipments()
         {
-            if (submitClaimPanel.Visible && loadedShipment != null)
+            if (insuranceSubmitClaimControl.Visible && loadedShipment != null)
             {
                 insuranceSubmitClaimControl.SaveToPolicy(loadedShipment.InsurancePolicy);
             }

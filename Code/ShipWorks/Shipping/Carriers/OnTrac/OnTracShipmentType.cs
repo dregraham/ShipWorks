@@ -7,6 +7,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -207,15 +208,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-                if (settings.OnTracThermal)
+                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
-                    shipment.ThermalType = settings.OnTracThermalType;
+                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
                 }
                 else
                 {
-                    shipment.ThermalType = null;
+                    shipment.ActualLabelFormat = null;
                 }
 
                 // Transform shipment to OnTrac DTO

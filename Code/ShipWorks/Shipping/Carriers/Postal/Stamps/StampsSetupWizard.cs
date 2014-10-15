@@ -98,7 +98,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Stamps))
+            {
+                Pages.Remove(wizardPageOptions);
+            }
+            else
+            {
+                wizardPageOptions.StepNext += OnPageOptionsStepNext;
+            }
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
@@ -464,17 +471,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Wizard is finishing
+        /// Wizard has just stepped out of the options page
         /// </summary>
-        private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
+        private void OnPageOptionsStepNext(object sender, WizardStepEventArgs e)
         {
-            if (Pages.Contains(wizardPageOptions))
-            {
-                var settings = ShippingSettings.Fetch();
-
-                optionsControl.SaveSettings(settings);
-                ShippingSettings.Save(settings);
-            }
+            var settings = ShippingSettings.Fetch();
+            optionsControl.SaveSettings(settings);
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>

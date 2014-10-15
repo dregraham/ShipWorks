@@ -7166,8 +7166,10 @@ namespace ShipWorks.Data.Model
 		CustomsGenerated,
 		///<summary>CustomsValue. </summary>
 		CustomsValue,
-		///<summary>ThermalType. </summary>
-		ThermalType,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>ActualLabelFormat. </summary>
+		ActualLabelFormat,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -7426,6 +7428,8 @@ namespace ShipWorks.Data.Model
 		InsuranceInitialValueAmount,
 		///<summary>ReturnShipment. </summary>
 		ReturnShipment,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7480,10 +7484,6 @@ namespace ShipWorks.Data.Model
 		FedExPassword,
 		///<summary>FedExMaskAccount. </summary>
 		FedExMaskAccount,
-		///<summary>FedExThermal. </summary>
-		FedExThermal,
-		///<summary>FedExThermalType. </summary>
-		FedExThermalType,
 		///<summary>FedExThermalDocTab. </summary>
 		FedExThermalDocTab,
 		///<summary>FedExThermalDocTabType. </summary>
@@ -7494,18 +7494,10 @@ namespace ShipWorks.Data.Model
 		FedExInsurancePennyOne,
 		///<summary>UpsAccessKey. </summary>
 		UpsAccessKey,
-		///<summary>UpsThermal. </summary>
-		UpsThermal,
-		///<summary>UpsThermalType. </summary>
-		UpsThermalType,
 		///<summary>UpsInsuranceProvider. </summary>
 		UpsInsuranceProvider,
 		///<summary>UpsInsurancePennyOne. </summary>
 		UpsInsurancePennyOne,
-		///<summary>EndiciaThermal. </summary>
-		EndiciaThermal,
-		///<summary>EndiciaThermalType. </summary>
-		EndiciaThermalType,
 		///<summary>EndiciaCustomsCertify. </summary>
 		EndiciaCustomsCertify,
 		///<summary>EndiciaCustomsSigner. </summary>
@@ -7526,10 +7518,6 @@ namespace ShipWorks.Data.Model
 		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>StampsThermal. </summary>
-		StampsThermal,
-		///<summary>StampsThermalType. </summary>
-		StampsThermalType,
 		///<summary>StampsAutomaticExpress1. </summary>
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
@@ -7538,10 +7526,6 @@ namespace ShipWorks.Data.Model
 		StampsUspsAutomaticExpedited,
 		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
 		StampsUspsAutomaticExpeditedAccount,
-		///<summary>Express1EndiciaThermal. </summary>
-		Express1EndiciaThermal,
-		///<summary>Express1EndiciaThermalType. </summary>
-		Express1EndiciaThermalType,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>
@@ -7552,30 +7536,14 @@ namespace ShipWorks.Data.Model
 		Express1EndiciaThermalDocTabType,
 		///<summary>Express1EndiciaSingleSource. </summary>
 		Express1EndiciaSingleSource,
-		///<summary>EquaShipThermal. </summary>
-		EquaShipThermal,
-		///<summary>EquaShipThermalType. </summary>
-		EquaShipThermalType,
-		///<summary>OnTracThermal. </summary>
-		OnTracThermal,
-		///<summary>OnTracThermalType. </summary>
-		OnTracThermalType,
 		///<summary>OnTracInsuranceProvider. </summary>
 		OnTracInsuranceProvider,
 		///<summary>OnTracInsurancePennyOne. </summary>
 		OnTracInsurancePennyOne,
-		///<summary>IParcelThermal. </summary>
-		IParcelThermal,
-		///<summary>IParcelThermalType. </summary>
-		IParcelThermalType,
 		///<summary>IParcelInsuranceProvider. </summary>
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>Express1StampsThermal. </summary>
-		Express1StampsThermal,
-		///<summary>Express1StampsThermalType. </summary>
-		Express1StampsThermalType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>

@@ -29,6 +29,8 @@ namespace ShipWorks.Shipping.Carriers.Other
         public OtherProfileControl()
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabPage);
         }
 
         /// <summary>

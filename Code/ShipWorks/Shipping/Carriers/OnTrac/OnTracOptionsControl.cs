@@ -1,9 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
-using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.Hardware.Printers;
+﻿using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
@@ -25,30 +21,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
-
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            thermalPrinter.Checked = settings.OnTracThermal;
-            thermalType.SelectedValue = (ThermalLanguage) settings.OnTracThermalType;
+            requestedLabelFormat.LoadDefaultProfile(new OnTracShipmentType());
         }
 
         /// <summary>
         /// Save the settings to the database
         /// </summary>
-        public void SaveSettings(ShippingSettingsEntity settings)
+        public void SaveSettings()
         {
-            settings.OnTracThermal = thermalPrinter.Checked;
-            settings.OnTracThermalType = (int) thermalType.SelectedValue;
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

@@ -156,7 +156,7 @@ namespace ShipWorks
             this.contextOrderShipOrders = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderTrackShipments = new System.Windows.Forms.ToolStripMenuItem();
             this.logShipmentToTangoRetryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextOrderSubmitClaim = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOrderInsuranceClaim = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep3 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep7 = new System.Windows.Forms.ToolStripSeparator();
@@ -223,7 +223,7 @@ namespace ShipWorks
             this.ribbonChunkOrdersSep1 = new Divelements.SandRibbon.Separator();
             this.ribbonChunkCustomers = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkShipping = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonSubmitClaim = new Divelements.SandRibbon.Button();
+            this.buttonInsuranceClaim = new Divelements.SandRibbon.Button();
             this.buttonFedExClose = new Divelements.SandRibbon.Button();
             this.popupFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.buttonEndiciaSCAN = new Divelements.SandRibbon.Button();
@@ -1264,7 +1264,7 @@ namespace ShipWorks
             this.contextOrderShipOrders,
             this.contextOrderTrackShipments,
             this.logShipmentToTangoRetryToolStripMenuItem,
-            this.contextOrderSubmitClaim,
+            this.contextOrderInsuranceClaim,
             this.contextOrderSep3,
             this.contextOrderCopy,
             this.contextOrderSep7,
@@ -1495,15 +1495,15 @@ namespace ShipWorks
             this.logShipmentToTangoRetryToolStripMenuItem.Visible = false;
             this.logShipmentToTangoRetryToolStripMenuItem.Click += new System.EventHandler(this.OnRetryLogShipmentsToTango);
             // 
-            // contextOrderSubmitClaim
+            // contextOrderInsuranceClaim
             // 
-            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderSubmitClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
-            this.contextOrderSubmitClaim.Image = global::ShipWorks.Properties.Resources.message;
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderSubmitClaim, new System.Guid("ce0039b3-5b6e-4e8b-9a5d-d01ed5047a9e"));
-            this.contextOrderSubmitClaim.Name = "contextOrderSubmitClaim";
-            this.contextOrderSubmitClaim.Size = new System.Drawing.Size(237, 22);
-            this.contextOrderSubmitClaim.Text = "Submit Claim";
-            this.contextOrderSubmitClaim.Click += new System.EventHandler(this.OnSubmitClaim);
+            this.selectionDependentEnabler.SetEnabledWhen(this.contextOrderInsuranceClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
+            this.contextOrderInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
+            this.gridMenuLayoutProvider.SetLayoutGuid(this.contextOrderInsuranceClaim, new System.Guid("ce0039b3-5b6e-4e8b-9a5d-d01ed5047a9e"));
+            this.contextOrderInsuranceClaim.Name = "contextOrderInsuranceClaim";
+            this.contextOrderInsuranceClaim.Size = new System.Drawing.Size(237, 22);
+            this.contextOrderInsuranceClaim.Text = "Insurance Claim";
+            this.contextOrderInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
             // 
             // contextOrderSep3
             // 
@@ -2120,19 +2120,19 @@ namespace ShipWorks
             this.ribbonChunkShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonShipOrders,
             this.buttonTrackOrders,
-            this.buttonSubmitClaim,
+            this.buttonInsuranceClaim,
             this.buttonFedExClose,
             this.buttonEndiciaSCAN});
             this.ribbonChunkShipping.Text = "Shipping";
             // 
-            // buttonSubmitClaim
+            // buttonInsuranceClaim
             // 
-            this.selectionDependentEnabler.SetEnabledWhen(this.buttonSubmitClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
-            this.buttonSubmitClaim.Guid = new System.Guid("e21c1c0c-938a-4f01-a9fe-0b02075221bd");
-            this.buttonSubmitClaim.Image = global::ShipWorks.Properties.Resources.message32;
-            this.buttonSubmitClaim.Text = "Submit Claim";
-            this.buttonSubmitClaim.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
-            this.buttonSubmitClaim.Activate += new System.EventHandler(this.OnSubmitClaim);
+            this.selectionDependentEnabler.SetEnabledWhen(this.buttonInsuranceClaim, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
+            this.buttonInsuranceClaim.Guid = new System.Guid("e21c1c0c-938a-4f01-a9fe-0b02075221bd");
+            this.buttonInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message32;
+            this.buttonInsuranceClaim.Text = "Insurance Claim";
+            this.buttonInsuranceClaim.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonInsuranceClaim.Activate += new System.EventHandler(this.OnSubmitClaim);
             // 
             // buttonFedExClose
             // 
@@ -2995,8 +2995,8 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
         private System.Windows.Forms.ToolStripMenuItem logShipmentToTangoRetryToolStripMenuItem;
         private Divelements.SandRibbon.Button buttonUship;
-        private System.Windows.Forms.ToolStripMenuItem contextOrderSubmitClaim;
-        private Divelements.SandRibbon.Button buttonSubmitClaim;
+        private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
+        private Divelements.SandRibbon.Button buttonInsuranceClaim;
     }
 }
 

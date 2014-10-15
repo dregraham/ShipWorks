@@ -613,6 +613,8 @@
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
     <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionality.cs" />
@@ -620,10 +622,18 @@
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\RequestedLabelFormatCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuranceClaimCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.Designer.cs">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -794,6 +804,9 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -820,6 +833,18 @@
     <Compile Include="Shipping\Editing\Rating\RatesPanel.Designer.cs">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatOptionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatOptionControl.Designer.cs">
+      <DependentUpon>RequestedLabelFormatOptionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\RequestedLabelFormatProfileControl.Designer.cs">
+      <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
       <SubType>UserControl</SubType>
@@ -838,6 +863,12 @@
     </Compile>
     <Compile Include="Shipping\Insurance\InsuranceViewClaimControl.Designer.cs">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.Designer.cs">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
@@ -7191,6 +7222,10 @@
     <EmbeddedResource Include="FileTransfer\FtpFolderBrowserDlg.resx">
       <DependentUpon>FtpFolderBrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.resx">
+      <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\CountryValueEditor.resx">
       <DependentUpon>CountryValueEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7455,6 +7490,12 @@
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\RequestedLabelFormatOptionControl.resx">
+      <DependentUpon>RequestedLabelFormatOptionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\RequestedLabelFormatProfileControl.resx">
+      <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
     </EmbeddedResource>
@@ -7481,6 +7522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Insurance\InsureShipQuestionsControl.resx">
+      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>
@@ -9404,6 +9448,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExOptionsControl.resx">
       <DependentUpon>FedExOptionsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExPackageControl.resx">
       <DependentUpon>FedExPackageControl.cs</DependentUpon>
@@ -10704,6 +10749,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.2.sql" />

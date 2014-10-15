@@ -208,14 +208,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// <param name="e"></param>
         void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (Pages.Contains(wizardPageOptions))
-            {
-                var settings = ShippingSettings.Fetch();
-
-                optionsControl.SaveSettings(settings);
-                ShippingSettings.Save(settings);
-            }
-
             // Make sure any pending changes have been saved
             if (Pages.Contains(wizardPageAccountList))
             {
@@ -457,6 +449,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
                 // that a new account has been added.
                 RateCache.Instance.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Stepping next from the settings page
+        /// </summary>
+        private void OnStepNextSettings(object sender, WizardStepEventArgs e)
+        {
+            if (Pages.Contains(wizardPageOptions))
+            {
+                var settings = ShippingSettings.Fetch();
+
+                optionsControl.SaveSettings(settings);
+                ShippingSettings.Save(settings);
             }
         }
     }

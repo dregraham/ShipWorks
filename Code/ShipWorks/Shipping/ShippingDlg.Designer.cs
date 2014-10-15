@@ -51,15 +51,20 @@ namespace ShipWorks.Shipping
             this.labelInternal = new System.Windows.Forms.Label();
             this.unprocess = new System.Windows.Forms.Button();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.processDropDownButton = new ShipWorks.UI.Controls.DropDownButton();
+            this.applyProfile = new ShipWorks.UI.Controls.DropDownButton();
+            this.shipmentControl = new ShipWorks.Shipping.Editing.ShipmentGridControl();
             this.ratesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageService = new System.Windows.Forms.TabPage();
+            this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelService = new System.Windows.Forms.Label();
             this.serviceControlArea = new System.Windows.Forms.Panel();
             this.tabPageCustoms = new System.Windows.Forms.TabPage();
             this.customsControlArea = new System.Windows.Forms.Panel();
             this.tabPageTracking = new System.Windows.Forms.TabPage();
             this.panelTrackingData = new System.Windows.Forms.Panel();
+            this.trackingControl = new ShipWorks.Shipping.Tracking.ShipmentTrackingControl();
             this.track = new System.Windows.Forms.Button();
             this.trackingNumbers = new System.Windows.Forms.TextBox();
             this.labelTrackingNumbers = new System.Windows.Forms.Label();
@@ -69,15 +74,10 @@ namespace ShipWorks.Shipping
             this.labelTrackingProcessed = new System.Windows.Forms.Label();
             this.panelTrackingMessage = new System.Windows.Forms.Panel();
             this.labelTrackingMessage = new System.Windows.Forms.Label();
-            this.labelRates = new System.Windows.Forms.Label();
-            this.processDropDownButton = new ShipWorks.UI.Controls.DropDownButton();
-            this.applyProfile = new ShipWorks.UI.Controls.DropDownButton();
-            this.shipmentControl = new ShipWorks.Shipping.Editing.ShipmentGridControl();
             this.tabPageInsurance = new System.Windows.Forms.TabPage();
             this.insuranceTabControl = new ShipWorks.Shipping.Insurance.InsuranceTabControl();
-            this.comboShipmentType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.trackingControl = new ShipWorks.Shipping.Tracking.ShipmentTrackingControl();
             this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
+            this.labelRates = new System.Windows.Forms.Label();
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -273,6 +273,44 @@ namespace ShipWorks.Shipping
             this.splitContainer.TabIndex = 0;
             this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
             // 
+            // processDropDownButton
+            // 
+            this.processDropDownButton.AutoSize = true;
+            this.processDropDownButton.ContextMenuStrip = this.contextMenuProcess;
+            this.processDropDownButton.Image = global::ShipWorks.Properties.Resources.box_next;
+            this.processDropDownButton.Location = new System.Drawing.Point(7, 16);
+            this.processDropDownButton.Name = "processDropDownButton";
+            this.processDropDownButton.Size = new System.Drawing.Size(150, 23);
+            this.processDropDownButton.SplitContextMenu = this.contextMenuProcess;
+            this.processDropDownButton.TabIndex = 14;
+            this.processDropDownButton.Text = "Create Label";
+            this.processDropDownButton.UseVisualStyleBackColor = true;
+            this.processDropDownButton.Click += new System.EventHandler(this.OnProcessSelected);
+            // 
+            // applyProfile
+            // 
+            this.applyProfile.AutoSize = true;
+            this.applyProfile.ContextMenuStrip = this.contextMenuProfiles;
+            this.applyProfile.Image = global::ShipWorks.Properties.Resources.document_out;
+            this.applyProfile.Location = new System.Drawing.Point(7, 71);
+            this.applyProfile.Name = "applyProfile";
+            this.applyProfile.Size = new System.Drawing.Size(150, 23);
+            this.applyProfile.SplitButton = false;
+            this.applyProfile.SplitContextMenu = this.contextMenuProfiles;
+            this.applyProfile.TabIndex = 4;
+            this.applyProfile.Text = "Apply Profile";
+            this.applyProfile.UseVisualStyleBackColor = true;
+            // 
+            // shipmentControl
+            // 
+            this.shipmentControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shipmentControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shipmentControl.Location = new System.Drawing.Point(0, 0);
+            this.shipmentControl.Name = "shipmentControl";
+            this.shipmentControl.Size = new System.Drawing.Size(291, 489);
+            this.shipmentControl.TabIndex = 0;
+            this.shipmentControl.SelectionChanged += new ShipWorks.Shipping.Editing.ShipmentSelectionChangedEventHandler(this.OnChangeSelectedShipments);
+            // 
             // ratesSplitContainer
             // 
             this.ratesSplitContainer.BackColor = System.Drawing.SystemColors.Control;
@@ -306,6 +344,7 @@ namespace ShipWorks.Shipping
             this.tabControl.Controls.Add(this.tabPageInsurance);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.MinimumSize = new System.Drawing.Size(200, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(356, 349);
@@ -325,6 +364,19 @@ namespace ShipWorks.Shipping
             this.tabPageService.TabIndex = 0;
             this.tabPageService.Text = "Service";
             this.tabPageService.UseVisualStyleBackColor = true;
+            // 
+            // comboShipmentType
+            // 
+            this.comboShipmentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboShipmentType.FormattingEnabled = true;
+            this.comboShipmentType.Items.AddRange(new object[] {
+            "FedEx"});
+            this.comboShipmentType.Location = new System.Drawing.Point(62, 12);
+            this.comboShipmentType.Name = "comboShipmentType";
+            this.comboShipmentType.PromptText = "(Multiple Values)";
+            this.comboShipmentType.Size = new System.Drawing.Size(184, 21);
+            this.comboShipmentType.TabIndex = 1;
+            this.comboShipmentType.SelectedIndexChanged += new System.EventHandler(this.OnChangeShipmentType);
             // 
             // labelService
             // 
@@ -393,6 +445,17 @@ namespace ShipWorks.Shipping
             this.panelTrackingData.Size = new System.Drawing.Size(342, 317);
             this.panelTrackingData.TabIndex = 1;
             this.panelTrackingData.Visible = false;
+            // 
+            // trackingControl
+            // 
+            this.trackingControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackingControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.trackingControl.Location = new System.Drawing.Point(33, 77);
+            this.trackingControl.Name = "trackingControl";
+            this.trackingControl.Size = new System.Drawing.Size(294, 227);
+            this.trackingControl.TabIndex = 8;
             // 
             // track
             // 
@@ -483,79 +546,25 @@ namespace ShipWorks.Shipping
             this.labelTrackingMessage.Text = "Multiple shipments are selected.  Select a single shipment to get tracking inform" +
     "ation.";
             // 
-            // labelRates
+            // tabPageInsurance
             // 
-            this.labelRates.AutoSize = true;
-            this.labelRates.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRates.Location = new System.Drawing.Point(0, 1);
-            this.labelRates.Name = "labelRates";
-            this.labelRates.Size = new System.Drawing.Size(40, 13);
-            this.labelRates.TabIndex = 1;
-            this.labelRates.Text = "Rates";
+            this.tabPageInsurance.Controls.Add(this.insuranceTabControl);
+            this.tabPageInsurance.Location = new System.Drawing.Point(4, 22);
+            this.tabPageInsurance.Name = "tabPageInsurance";
+            this.tabPageInsurance.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageInsurance.Size = new System.Drawing.Size(348, 323);
+            this.tabPageInsurance.TabIndex = 4;
+            this.tabPageInsurance.Text = "ShipWorks Insurance";
+            this.tabPageInsurance.UseVisualStyleBackColor = true;
             // 
-            // processDropDownButton
+            // insuranceTabControl
             // 
-            this.processDropDownButton.AutoSize = true;
-            this.processDropDownButton.ContextMenuStrip = this.contextMenuProcess;
-            this.processDropDownButton.Image = global::ShipWorks.Properties.Resources.box_next;
-            this.processDropDownButton.Location = new System.Drawing.Point(7, 16);
-            this.processDropDownButton.Name = "processDropDownButton";
-            this.processDropDownButton.Size = new System.Drawing.Size(150, 23);
-            this.processDropDownButton.SplitContextMenu = this.contextMenuProcess;
-            this.processDropDownButton.TabIndex = 14;
-            this.processDropDownButton.Text = "Create Label";
-            this.processDropDownButton.UseVisualStyleBackColor = true;
-            this.processDropDownButton.Click += new System.EventHandler(this.OnProcessSelected);
-            // 
-            // applyProfile
-            // 
-            this.applyProfile.AutoSize = true;
-            this.applyProfile.ContextMenuStrip = this.contextMenuProfiles;
-            this.applyProfile.Image = global::ShipWorks.Properties.Resources.document_out;
-            this.applyProfile.Location = new System.Drawing.Point(7, 71);
-            this.applyProfile.Name = "applyProfile";
-            this.applyProfile.Size = new System.Drawing.Size(150, 23);
-            this.applyProfile.SplitButton = false;
-            this.applyProfile.SplitContextMenu = this.contextMenuProfiles;
-            this.applyProfile.TabIndex = 4;
-            this.applyProfile.Text = "Apply Profile";
-            this.applyProfile.UseVisualStyleBackColor = true;
-            // 
-            // shipmentControl
-            // 
-            this.shipmentControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.shipmentControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.shipmentControl.Location = new System.Drawing.Point(0, 0);
-            this.shipmentControl.Name = "shipmentControl";
-            this.shipmentControl.Size = new System.Drawing.Size(291, 489);
-            this.shipmentControl.TabIndex = 0;
-            this.shipmentControl.SelectionChanged += new ShipWorks.Shipping.Editing.ShipmentSelectionChangedEventHandler(this.OnChangeSelectedShipments);
-            this.shipmentControl.ShipmentsAdded += this.OnShipmentsAdded;
-            this.shipmentControl.ShipmentsRemoved += this.OnShipmentsRemoved;
-            // 
-            // comboShipmentType
-            // 
-            this.comboShipmentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboShipmentType.FormattingEnabled = true;
-            this.comboShipmentType.Items.AddRange(new object[] {
-            "FedEx"});
-            this.comboShipmentType.Location = new System.Drawing.Point(62, 12);
-            this.comboShipmentType.Name = "comboShipmentType";
-            this.comboShipmentType.PromptText = "(Multiple Values)";
-            this.comboShipmentType.Size = new System.Drawing.Size(184, 21);
-            this.comboShipmentType.TabIndex = 1;
-            this.comboShipmentType.SelectedIndexChanged += new System.EventHandler(this.OnChangeShipmentType);
-            // 
-            // trackingControl
-            // 
-            this.trackingControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackingControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackingControl.Location = new System.Drawing.Point(33, 77);
-            this.trackingControl.Name = "trackingControl";
-            this.trackingControl.Size = new System.Drawing.Size(294, 227);
-            this.trackingControl.TabIndex = 8;
+            this.insuranceTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.insuranceTabControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceTabControl.Location = new System.Drawing.Point(3, 3);
+            this.insuranceTabControl.Name = "insuranceTabControl";
+            this.insuranceTabControl.Size = new System.Drawing.Size(342, 317);
+            this.insuranceTabControl.TabIndex = 1;
             // 
             // rateControl
             // 
@@ -571,29 +580,19 @@ namespace ShipWorks.Shipping
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.rateControl.ShowAllRates = true;
-            this.rateControl.Size = new System.Drawing.Size(356, 115);
+            this.rateControl.Size = new System.Drawing.Size(356, 250);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
-            // tabPageInsurance
+            // labelRates
             // 
-            this.tabPageInsurance.Controls.Add(this.insuranceTabControl);
-            this.tabPageInsurance.Location = new System.Drawing.Point(4, 22);
-            this.tabPageInsurance.Name = "tabPageInsurance";
-            this.tabPageInsurance.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInsurance.Size = new System.Drawing.Size(348, 323);
-            this.tabPageInsurance.TabIndex = 4;
-            this.tabPageInsurance.Text = "Insurance";
-            this.tabPageInsurance.UseVisualStyleBackColor = true;
-            // 
-            // insuranceTabControl1
-            // 
-            this.insuranceTabControl.AutoSize = true;
-            this.insuranceTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.insuranceTabControl.Location = new System.Drawing.Point(3, 3);
-            this.insuranceTabControl.Name = "insuranceTabControl1";
-            this.insuranceTabControl.Size = new System.Drawing.Size(342, 517);
-            this.insuranceTabControl.TabIndex = 0;
+            this.labelRates.AutoSize = true;
+            this.labelRates.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRates.Location = new System.Drawing.Point(0, 1);
+            this.labelRates.Name = "labelRates";
+            this.labelRates.Size = new System.Drawing.Size(40, 13);
+            this.labelRates.TabIndex = 1;
+            this.labelRates.Text = "Rates";
             // 
             // ShippingDlg
             // 
@@ -641,7 +640,6 @@ namespace ShipWorks.Shipping
             this.panelTrackingData.PerformLayout();
             this.panelTrackingMessage.ResumeLayout(false);
             this.tabPageInsurance.ResumeLayout(false);
-            this.tabPageInsurance.PerformLayout();
             this.ResumeLayout(false);
 
         }

@@ -42,9 +42,10 @@
             // 
             // optionsControl
             // 
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(6, 3);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(348, 71);
+            this.optionsControl.Size = new System.Drawing.Size(427, 71);
             this.optionsControl.TabIndex = 0;
             // 
             // pennyOneLink
@@ -53,7 +54,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(320, 299);
+            this.pennyOneLink.Location = new System.Drawing.Point(320, 303);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 16;
@@ -64,7 +65,7 @@
             // 
             this.labelShipWorksInsurance.AutoSize = true;
             this.labelShipWorksInsurance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipWorksInsurance.Location = new System.Drawing.Point(3, 278);
+            this.labelShipWorksInsurance.Location = new System.Drawing.Point(8, 282);
             this.labelShipWorksInsurance.Name = "labelShipWorksInsurance";
             this.labelShipWorksInsurance.Size = new System.Drawing.Size(127, 13);
             this.labelShipWorksInsurance.TabIndex = 17;
@@ -73,7 +74,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(26, 299);
+            this.pennyOne.Location = new System.Drawing.Point(27, 302);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 15;
@@ -84,7 +85,7 @@
             // 
             this.insuranceProtectionPanel.Controls.Add(this.labelShipmentProtection);
             this.insuranceProtectionPanel.Controls.Add(this.insuranceProviderChooser);
-            this.insuranceProtectionPanel.Location = new System.Drawing.Point(0, 329);
+            this.insuranceProtectionPanel.Location = new System.Drawing.Point(0, 332);
             this.insuranceProtectionPanel.Margin = new System.Windows.Forms.Padding(0);
             this.insuranceProtectionPanel.Name = "insuranceProtectionPanel";
             this.insuranceProtectionPanel.Size = new System.Drawing.Size(456, 57);
@@ -94,7 +95,7 @@
             // 
             this.labelShipmentProtection.AutoSize = true;
             this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipmentProtection.Location = new System.Drawing.Point(3, 0);
+            this.labelShipmentProtection.Location = new System.Drawing.Point(8, 0);
             this.labelShipmentProtection.Name = "labelShipmentProtection";
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
             this.labelShipmentProtection.TabIndex = 7;
@@ -105,7 +106,7 @@
             this.insuranceProviderChooser.CarrierMessage = "";
             this.insuranceProviderChooser.CarrierProviderName = "i-parcel Insurance";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(20, 19);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 19);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 8;
@@ -114,7 +115,7 @@
             // accountManager
             // 
             this.accountManager.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountManager.Location = new System.Drawing.Point(26, 98);
+            this.accountManager.Location = new System.Drawing.Point(27, 99);
             this.accountManager.Name = "accountManager";
             this.accountManager.Size = new System.Drawing.Size(400, 168);
             this.accountManager.TabIndex = 19;
@@ -123,7 +124,7 @@
             // 
             this.managerLabel.AutoSize = true;
             this.managerLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managerLabel.Location = new System.Drawing.Point(3, 77);
+            this.managerLabel.Location = new System.Drawing.Point(8, 78);
             this.managerLabel.Name = "managerLabel";
             this.managerLabel.Size = new System.Drawing.Size(105, 13);
             this.managerLabel.TabIndex = 20;

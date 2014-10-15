@@ -69,9 +69,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // express1Options
             // 
             this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1Options.Location = new System.Drawing.Point(7, 115);
+            this.express1Options.Location = new System.Drawing.Point(4, 59);
             this.express1Options.Name = "express1Options";
-            this.express1Options.Size = new System.Drawing.Size(421, 49);
+            this.express1Options.Size = new System.Drawing.Size(421, 41);
             this.express1Options.TabIndex = 5;
             // 
             // panelBottom
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(485, 131);
             this.panelBottom.TabIndex = 6;
-            // 
+            //
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

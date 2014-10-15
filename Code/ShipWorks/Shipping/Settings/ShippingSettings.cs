@@ -148,21 +148,15 @@ namespace ShipWorks.Shipping.Settings
             settings.FedExUsername = null;
             settings.FedExPassword = null;
             settings.FedExMaskAccount = true;
-            settings.FedExThermal = false;
-            settings.FedExThermalType = (int) ThermalLanguage.EPL;
             settings.FedExThermalDocTab = false;
             settings.FedExThermalDocTabType = (int) ThermalDocTabType.Leading;
             settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.FedExInsurancePennyOne = false;
 
             settings.UpsAccessKey = null;
-            settings.UpsThermal = false;
-            settings.UpsThermalType = (int) ThermalLanguage.EPL;
             settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.UpsInsurancePennyOne = false;
 
-            settings.EndiciaThermal = false;
-            settings.EndiciaThermalType = (int) ThermalLanguage.EPL;
             settings.EndiciaCustomsCertify = false;
             settings.EndiciaCustomsSigner = "";
             settings.EndiciaThermalDocTab = false;
@@ -173,38 +167,25 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaUspsAutomaticExpedited = false;
             settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
-            settings.Express1EndiciaThermal = false;
-            settings.Express1EndiciaThermalType = (int)ThermalLanguage.EPL;
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
             settings.Express1EndiciaThermalDocTab = false;
             settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
 
-            settings.Express1StampsThermal = false;
-            settings.Express1StampsThermalType = (int)ThermalLanguage.EPL;
             settings.Express1StampsSingleSource = false;
 
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
-            settings.StampsThermal = false;
-            settings.StampsThermalType = (int) ThermalLanguage.EPL;
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
             settings.StampsUspsAutomaticExpedited = false;
             settings.StampsUspsAutomaticExpeditedAccount = 0;
 
-            settings.EquaShipThermal = false;
-            settings.EquaShipThermalType = (int) ThermalLanguage.EPL;
-
-            settings.OnTracThermal = false;
-            settings.OnTracThermalType = (int) ThermalLanguage.EPL;
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;
 
-            settings.IParcelThermal = false;
-            settings.IParcelThermalType = (int)ThermalLanguage.EPL;
             settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.IParcelInsurancePennyOne = false;
 

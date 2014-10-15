@@ -9,6 +9,7 @@ using System.Threading;
 using System.Web.Configuration;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Controls;
@@ -197,6 +198,9 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseEntry = new byte[0];
             shipment.OnlineShipmentID = 0;
 
+            //TODO: Remove this once the profile copying is implemented.
+            shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
+
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
 
@@ -378,7 +382,7 @@ namespace ShipWorks.Shipping
             clonedShipment.ProcessedDate = null;
             clonedShipment.TrackingNumber = "";
             clonedShipment.Voided = false;
-            clonedShipment.ThermalType = null;
+            clonedShipment.ActualLabelFormat = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = 0;

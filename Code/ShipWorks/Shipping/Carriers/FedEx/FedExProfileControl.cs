@@ -32,6 +32,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             InitializeComponent();
 
+            ResizeGroupBoxes(tabPageSettings);
+            ResizeGroupBoxes(tabPagePackages);
+
             packagesCount.Items.Clear();
 
             for (int i = 1; i <= 5; i++)
@@ -133,6 +136,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyOtherAddress, emailNotifyOtherState, emailNotifyOtherAddress, labelEmailOther);
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyMessage, emailNotifyMessageState, emailNotifyMessage, labelPersonalMessage);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);

@@ -287,6 +287,10 @@
       <Condition identifier="Shipment.Weight" displayAs="Weight" />
       <Condition identifier="Shipment.Insurance" />
       <Separator/>
+      <Group name="ShipWorks Insurance">
+        <Condition identifier="Shipment.InsuranceClaimFiled" />  
+      </Group>
+      <Separator/>
       <Condition identifier="Shipment.Status" />
       <Condition identifier="Shipment.ProcessedDate" />
       <Condition identifier="Shipment.ProcessedUser" />
@@ -296,6 +300,7 @@
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />
       <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />
+      <Condition identifier="Shipment.RequestedLabelFormat" />
       <Condition identifier="Shipment.LabelFormat" />
       <Separator/>
       <Group name="Postal">
