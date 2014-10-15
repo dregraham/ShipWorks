@@ -77,7 +77,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // SSL certificate policy
             ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+            //TODO: We need to figure out SSL3 support because of the POODLE flaw.  This is a temporary fix.
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
 
             // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
             // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.

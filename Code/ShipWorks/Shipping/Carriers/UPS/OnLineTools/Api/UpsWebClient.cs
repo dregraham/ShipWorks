@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         static readonly ILog log = LogManager.GetLogger(typeof(UpsWebClient));
 
         private const string testHost = "https://wwwcie.ups.com/ups.app/xml/";
-        private const string liveHost = "https://www.ups.com/ups.app/xml/";
+        private const string liveHost = "https://onlinetools.ups.com/ups.app/xml/";
 
         /// <summary>
         /// Holds all of the properties needed to build the basic XML structure
