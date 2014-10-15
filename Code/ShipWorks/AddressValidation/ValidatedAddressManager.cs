@@ -274,6 +274,13 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
         {
+            if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
+            {
+                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
+                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+
+                return false;
+            }
 
             if (!PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) &&
                 !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
