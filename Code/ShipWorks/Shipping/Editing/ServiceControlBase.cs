@@ -608,5 +608,10 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentTypeChanged(this, EventArgs.Empty);
             }
         }
+
+        private void OnHelpClick(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
+        }
     }
 }

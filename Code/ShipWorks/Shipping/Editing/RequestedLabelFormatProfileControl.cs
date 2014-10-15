@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -72,6 +73,14 @@ namespace ShipWorks.Shipping.Editing
         private void BindComboBox()
         {
             EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, x => excludedFormats == null || !excludedFormats.Contains(x));
+        }
+
+        /// <summary>
+        /// Called when [help click].
+        /// </summary>
+        private void OnHelpClick(object sender, System.EventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
         }
     }
 }

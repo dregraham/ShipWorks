@@ -30,7 +30,8 @@
         {
             this.labelFormat = new System.Windows.Forms.ComboBox();
             this.labelFormatMessage = new System.Windows.Forms.Label();
-            this.infotipLabelType = new ShipWorks.UI.Controls.InfoTip();
+            this.help = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.help)).BeginInit();
             this.SuspendLayout();
             // 
             // labelFormat
@@ -39,7 +40,7 @@
             this.labelFormat.FormattingEnabled = true;
             this.labelFormat.Location = new System.Drawing.Point(125, 0);
             this.labelFormat.Name = "labelFormat";
-            this.labelFormat.Size = new System.Drawing.Size(115, 21);
+            this.labelFormat.Size = new System.Drawing.Size(90, 21);
             this.labelFormat.TabIndex = 63;
             // 
             // labelFormatMessage
@@ -47,29 +48,33 @@
             this.labelFormatMessage.AutoSize = true;
             this.labelFormatMessage.Location = new System.Drawing.Point(0, 3);
             this.labelFormatMessage.Name = "labelFormatMessage";
-            this.labelFormatMessage.Size = new System.Drawing.Size(123, 13);
+            this.labelFormatMessage.Size = new System.Drawing.Size(126, 13);
             this.labelFormatMessage.TabIndex = 62;
-            this.labelFormatMessage.Text = "Requested label format:";
+            this.labelFormatMessage.Text = "Requested Label format:";
             // 
-            // infotipLabelType
+            // help
             // 
-            this.infotipLabelType.Caption = "The printer type for a shipment cannot be changed after processing.";
-            this.infotipLabelType.Location = new System.Drawing.Point(246, 4);
-            this.infotipLabelType.Name = "infotipLabelType";
-            this.infotipLabelType.Size = new System.Drawing.Size(12, 12);
-            this.infotipLabelType.TabIndex = 61;
-            this.infotipLabelType.Title = "Printer Type";
+            this.help.BackColor = System.Drawing.Color.Transparent;
+            this.help.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.help.Image = global::ShipWorks.Properties.Resources.help2_16;
+            this.help.Location = new System.Drawing.Point(221, 3);
+            this.help.Name = "help";
+            this.help.Size = new System.Drawing.Size(16, 16);
+            this.help.TabIndex = 64;
+            this.help.TabStop = false;
+            this.help.Click += new System.EventHandler(this.OnHelpClick);
             // 
             // RequestedLabelFormatProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.help);
             this.Controls.Add(this.labelFormat);
             this.Controls.Add(this.labelFormatMessage);
-            this.Controls.Add(this.infotipLabelType);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "RequestedLabelFormatProfileControl";
             this.Size = new System.Drawing.Size(265, 21);
+            ((System.ComponentModel.ISupportInitialize)(this.help)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,7 +84,7 @@
 
         private System.Windows.Forms.ComboBox labelFormat;
         private System.Windows.Forms.Label labelFormatMessage;
-        private UI.Controls.InfoTip infotipLabelType;
+        private System.Windows.Forms.PictureBox help;
 
     }
 }
