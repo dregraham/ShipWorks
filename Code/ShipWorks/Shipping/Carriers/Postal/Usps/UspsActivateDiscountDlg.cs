@@ -139,6 +139,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Stamps);
                 ExcludeShipmentType(ShipmentTypeCode.Stamps);
+
+                // Be sure the USPS shipment type is not included in the excluded list
+                List<int> excludedTypes = settings.ExcludedTypes.ToList();
+                excludedTypes.Remove((int)ShipmentTypeCode.Usps);
+                settings.ExcludedTypes = excludedTypes.ToArray();
                 
                 ShippingSettings.Save(settings);
 
