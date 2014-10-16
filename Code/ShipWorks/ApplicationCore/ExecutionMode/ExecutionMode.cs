@@ -21,6 +21,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
     /// </summary>
     public abstract class ExecutionMode
     {
+        private const int SecurityProtocolTypeTls12 = 3072;
+        private const int SecurityProtocolTypeTls11 = 768;
         private static readonly ILog log = LogManager.GetLogger(typeof(ExecutionMode));
 
         /// <summary>
@@ -77,8 +79,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // SSL certificate policy
             ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
-            //TODO: We need to figure out SSL3 support because of the POODLE flaw.  This is a temporary fix.
-            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+
+            SetAllowedSecurityProtocols();
 
             // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due
             // to people's machines just not being able to handle the load, and 30 seconds just wasn't enough.
@@ -106,6 +108,35 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                     MessageHelper.ShowInformation(null, message);
                 }
             }
+        }
+
+        /// <summary>
+        /// Attempt to add TLS 1.1 and 1.2 support for any customers running Windows 7 or higher with .NET 4.5 or higher
+        /// </summary>
+        private static void SetAllowedSecurityProtocols()
+        {
+            try
+            {
+                if (MyComputer.IsWindowsVista)
+                {
+                    // Vista will allow the protocols to be added to the available list, but does not actually support them.
+                    // The only reason we call this out seperately is to avoid confusion where we say support is loaded, but actually isn't available
+                    log.Info("Could not add TLS1.1 and 1.2 protocols: Windows Vista does not support these protocols");
+                }
+                else
+                {
+                    ServicePointManager.SecurityProtocol |=
+                        (SecurityProtocolType) SecurityProtocolTypeTls12 |
+                        (SecurityProtocolType) SecurityProtocolTypeTls11;
+                    log.Info("Successfully added TLS1.1 and 1.2 protocols.");
+                }
+            }
+            catch (NotSupportedException ex)
+            { 
+                log.Info("Could not add TLS1.1 and 1.2 protocols: ", ex);
+            }
+
+            log.Debug("Supported security protocols: " + ServicePointManager.SecurityProtocol);
         }
     }
 }
