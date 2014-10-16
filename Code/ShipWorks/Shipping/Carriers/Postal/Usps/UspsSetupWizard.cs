@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {

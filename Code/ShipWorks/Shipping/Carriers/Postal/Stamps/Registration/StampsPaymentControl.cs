@@ -145,6 +145,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             }
         }
 
+        /// <summary>
+        /// Removes the text about the $15.99 monthly fee for an account.
+        /// </summary>
+        public void RemoveMonthlyFeeText()
+        {
+            labelPaymentInfo.Text = labelPaymentInfo.Text.Replace(" and for the $15.99 Stamps.com monthly service fee", string.Empty);
+        }
 
         /// <summary>
         /// Validates the payment data.

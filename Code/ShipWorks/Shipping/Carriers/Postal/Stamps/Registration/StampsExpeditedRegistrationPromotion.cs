@@ -18,6 +18,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         }
 
         /// <summary>
+        /// Gets a value indicating whether the promotion waives the monthly fee.
+        /// </summary>
+        public bool IsMonthlyFeeWaived
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets the promo code to use when registering an account with Stamps.com based on the
         /// type of account being registered.
         /// </summary>

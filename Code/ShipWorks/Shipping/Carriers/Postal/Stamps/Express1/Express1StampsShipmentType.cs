@@ -202,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             // If the ContractType is unknown, we must not have tried to check this account yet.
             // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
-            if (account.ContractType == (int) StampsAccountContractType.Unknown)
+            if (account != null && account.ContractType == (int) StampsAccountContractType.Unknown)
             {
                 account.ContractType = (int) StampsAccountContractType.NotApplicable;
                 AccountRepository.Save(account);

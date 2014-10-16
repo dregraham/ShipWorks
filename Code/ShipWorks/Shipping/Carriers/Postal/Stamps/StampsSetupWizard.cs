@@ -40,6 +40,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             : this (promotion, allowRegisteringExistingAccount, ShipmentTypeCode.Stamps)
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StampsSetupWizard"/> class.
+        /// </summary>
+        /// <param name="promotion">The promotion.</param>
+        /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering an existing account].</param>
+        /// <param name="shipmentTypeCode">The shipment type code.</param>
+        /// <exception cref="StampsRegistrationException">There weren't any registration types provided to the Stamps.com setup wizard.</exception>
         protected StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
@@ -55,6 +62,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (!availableRegistrationTypes.Any())
             {
                 throw new StampsRegistrationException("There weren't any registration types provided to the Stamps.com setup wizard.");
+            }
+
+            if (promotion.IsMonthlyFeeWaived)
+            {
+                RemoveMonthlyFeeText();
             }
         }
 
@@ -519,5 +531,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        /// <summary>
+        /// Removes the text about the $15.99 monthly fee for an account. This is intended for those users that
+        /// may be signing up from that only have an Express1 account.
+        /// </summary>
+        protected void RemoveMonthlyFeeText()
+        {
+            stampsPaymentControl.RemoveMonthlyFeeText();
+        }
     }
 }
