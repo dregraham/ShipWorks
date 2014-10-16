@@ -335,6 +335,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 case OrderStatusCodeType.Completed: return "Completed";
                 case OrderStatusCodeType.Inactive: return "Inactive";
                 case OrderStatusCodeType.Shipped: return "Shipped";
+                case OrderStatusCodeType.CancelPending: return "Cancel Pending";
             }
 
             return "Invalid";
