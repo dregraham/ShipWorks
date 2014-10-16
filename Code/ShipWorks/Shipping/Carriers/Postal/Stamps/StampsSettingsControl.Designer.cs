@@ -78,11 +78,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // 
             this.panelBottom.Controls.Add(this.labelAccountType);
             this.panelBottom.Controls.Add(this.accountControl);
-            this.panelBottom.Location = new System.Drawing.Point(7, 170);
+            this.panelBottom.Location = new System.Drawing.Point(7, 111);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(485, 131);
             this.panelBottom.TabIndex = 6;
-            //
+            // 
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
             this.Name = "StampsSettingsControl";
-            this.Size = new System.Drawing.Size(495, 332);
+            this.Size = new System.Drawing.Size(495, 257);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.ResumeLayout(false);

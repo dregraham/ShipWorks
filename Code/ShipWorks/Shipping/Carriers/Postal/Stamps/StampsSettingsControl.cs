@@ -65,15 +65,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 express1Options.LoadSettings(settings);
                 panelBottom.Top = express1Options.Bottom + 5;
             }
-            else if (shipmentTypeCode == ShipmentTypeCode.Usps)
-            {
-                panelBottom.Top = optionsControl.Bottom + 5;
-            }
             else
             {
                 // This isn't Express1 - hide the express1 settings
                 express1Options.Hide();
-                panelBottom.Top = optionsControl.Bottom + 5;
+                panelBottom.Top = optionsControl.Bottom - 35;
             }
         }
 
