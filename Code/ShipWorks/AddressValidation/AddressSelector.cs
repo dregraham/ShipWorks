@@ -257,20 +257,47 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select an address to copy into the entity's shipping address
         /// </summary>
-        private void SelectAddress(AddressAdapter entityAdapter, ValidatedAddressEntity validatedAddressEntity)
+        private void SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
         {
             OnAddressSelecting();
 
+            UpdateSelectedAddressIfRequred(selectedAddress);
+
             AddressAdapter originalAddress = new AddressAdapter();
-            entityAdapter.CopyTo(originalAddress);
+            addressToUpdate.CopyTo(originalAddress);
 
-            AddressAdapter.Copy(validatedAddressEntity, string.Empty, entityAdapter);
+            AddressAdapter.Copy(selectedAddress, string.Empty, addressToUpdate);
 
-            entityAdapter.AddressValidationStatus = validatedAddressEntity.IsOriginal ?
+            addressToUpdate.AddressValidationStatus = selectedAddress.IsOriginal ?
                 (int)AddressValidationStatusType.SuggestionIgnored :
                 (int)AddressValidationStatusType.SuggestionSelected;
 
-            OnAddressSelected(entityAdapter, originalAddress);
+            OnAddressSelected(addressToUpdate, originalAddress);
+        }
+
+        /// <summary>
+        /// When a suggested address is selected, it might not have a value for residential or PO Box
+        /// </summary>
+        private void UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
+        {
+            AddressAdapter selectedAddressCopy = new AddressAdapter();
+            AddressAdapter.Copy(selectedAddress, string.Empty, selectedAddressCopy);
+
+            if (!selectedAddress.IsOriginal &&
+                selectedAddress.ResidentialStatus == (int)ValidationDetailStatusType.Unknown &&
+                selectedAddress.POBox == (int)ValidationDetailStatusType.Unknown)
+            {
+                AddressValidator addressValidator = new AddressValidator();
+                addressValidator.Validate(selectedAddressCopy, true, (entity, entities) =>
+                {
+                    if (selectedAddressCopy.AddressValidationStatus == (int) AddressValidationStatusType.Fixed ||
+                        selectedAddressCopy.AddressValidationStatus == (int) AddressValidationStatusType.Valid)
+                    {
+                        selectedAddress.ResidentialStatus = selectedAddressCopy.ResidentialStatus;
+                        selectedAddress.POBox = selectedAddressCopy.POBox;
+                    }
+                });
+            }
         }
 
         /// <summary>
