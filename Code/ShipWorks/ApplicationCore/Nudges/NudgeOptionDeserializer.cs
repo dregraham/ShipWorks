@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         private static int GetNudgeOptionID(XElement nudgeOptionElement)
         {
             int optionId;
-            string value = GetValue(nudgeOptionElement, "NudgeOptionID");
+            string value = GetValue(nudgeOptionElement, "OptionId");
             if (!int.TryParse(value, out optionId))
             {
                 log.Error(string.Format("Invalid ID in nudge option xml: {0}", nudgeOptionElement));

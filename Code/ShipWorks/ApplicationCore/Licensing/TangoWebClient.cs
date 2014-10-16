@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using System.Xml;
 using System.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -41,6 +42,9 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public static class TangoWebClient
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(TangoWebClient));
+
         private static InsureShipAffiliateProvider insureShipAffiliateProvider = new InsureShipAffiliateProvider();
 
         /// <summary>
@@ -126,8 +130,15 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             foreach (XElement xNudge in xNudges.Elements("Nudge"))
             {
-                Nudge nudge = NudgeDeserializer.Deserialize(xNudge);
-                nudges.Add(nudge);
+                try
+                {
+                    Nudge nudge = NudgeDeserializer.Deserialize(xNudge);
+                    nudges.Add(nudge);
+                }
+                catch (NudgeException ex)
+                {
+                    log.ErrorFormat("Unable to deserialize a nudge from Tango.  Exception message: {0}", ex.Message);
+                }
             }
 
             return nudges;
