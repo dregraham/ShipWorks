@@ -61,22 +61,21 @@ namespace ShipWorks.Shipping
 
                     if (typeCode == ShipmentTypeCode.Express1Stamps)
                     {
-                        // We have an Express1 for Stamps shipment type which should be excluded if Stamps has never been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps))
+                        // The only time Express1 for Stamps should be excluded is when Stamps has never been setup but Endicia has been setup
+                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps) &&
+                            !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
                         {
-                            // The Stamps.com type has never been setup, so we want to exclude the Express1 for Stamps.com type
+                            // Stamps has never been setup, so we want to exclude the Express1/Stamps type since Endicia IS setup in ShipWorks
                             continue;
                         }
+                        
                     }
                     else if (typeCode == ShipmentTypeCode.Express1Endicia)
                     {
-                        // The only time Express1 for Endicia should be excluded is when Endicia has 
-                        // never been setup but Stamps has been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && 
-                            !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps))
+                        // We have an Express1 for Endicia shipment type which should be excluded if Endicia has never been setup
+                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) && !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia))
                         {
-                            // Endicia has never been setup, so we want to exclude the Express1/Endicia type
-                            // since Stamps.com IS setup in ShipWorks
+                            // The Endicia type has never been setup, so we want to exclude the Express1 for Endicia type
                             continue;
                         }
                     }
