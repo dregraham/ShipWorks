@@ -19,6 +19,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the promotion waives the monthly fee.
+        /// </summary>
+        bool IsMonthlyFeeWaived { get; }
+
+        /// <summary>
         /// Gets the promo code to use when registering an account with Stamps.com based on the 
         /// type of account being registered.
         /// </summary>
