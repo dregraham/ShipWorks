@@ -278,23 +278,24 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// When a suggested address is selected, it might not have a value for residential or PO Box
         /// </summary>
-        private void UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
+        private static void UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
         {
-            AddressAdapter selectedAddressCopy = new AddressAdapter();
-            AddressAdapter.Copy(selectedAddress, string.Empty, selectedAddressCopy);
-
             if (!selectedAddress.IsOriginal &&
                 selectedAddress.ResidentialStatus == (int)ValidationDetailStatusType.Unknown &&
                 selectedAddress.POBox == (int)ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
-                addressValidator.Validate(selectedAddressCopy, true, (entity, entities) =>
+                addressValidator.Validate(selectedAddress, string.Empty, true, (entity, entities) =>
                 {
-                    if (selectedAddressCopy.AddressValidationStatus == (int) AddressValidationStatusType.Fixed ||
-                        selectedAddressCopy.AddressValidationStatus == (int) AddressValidationStatusType.Valid)
+                    // If we have updated statuses save them.
+                    if (selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
+                        selectedAddress.POBox != (int)ValidationDetailStatusType.Unknown)
                     {
-                        selectedAddress.ResidentialStatus = selectedAddressCopy.ResidentialStatus;
-                        selectedAddress.POBox = selectedAddressCopy.POBox;
+                        using (SqlAdapter sqlAdapter = SqlAdapter.Default)
+                        {
+                            sqlAdapter.SaveAndRefetch(selectedAddress);
+                            sqlAdapter.Commit();
+                        }
                     }
                 });
             }
