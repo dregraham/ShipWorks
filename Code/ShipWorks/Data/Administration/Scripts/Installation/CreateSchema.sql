@@ -939,7 +939,7 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [int] NOT NULL
+[OnlineShipmentID] [varchar] (128) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'

@@ -12,10 +12,10 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         [Description("Standard")]
         None = -1,
 
-        [Description("EPL")]
+        [Description("Thermal - EPL")]
         EPL = 0,
 
-        [Description("ZPL")]
+        [Description("Thermal - ZPL")]
         ZPL = 1
     }
 }

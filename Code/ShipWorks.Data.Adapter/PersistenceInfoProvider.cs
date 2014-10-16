@@ -2220,7 +2220,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseStatus", "ShipSenseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 60 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseChangeSets", "ShipSenseChangeSets", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 61 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseEntry", "ShipSenseEntry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 62 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 63 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, (int)SqlDbType.VarChar, 128, 0, 0, false, "", null, typeof(System.String), 63 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()

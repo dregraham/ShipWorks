@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
-            shipment.OnlineShipmentID = 0;
+            shipment.OnlineShipmentID = string.Empty;
 
             //TODO: Remove this once the profile copying is implemented.
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
@@ -385,7 +385,7 @@ namespace ShipWorks.Shipping
             clonedShipment.ActualLabelFormat = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
-            clonedShipment.OnlineShipmentID = 0;
+            clonedShipment.OnlineShipmentID = string.Empty;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
