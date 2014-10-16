@@ -415,7 +415,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [int] NOT NULL
+[OnlineShipmentID] [varchar] (128) NOT NULL
 )
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
