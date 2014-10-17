@@ -40092,6 +40092,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices {
         
         /// <remarks/>
         All,
+
+        ///  <remarks/>
+        CancelPending,
     }
     
     /// <remarks/>
