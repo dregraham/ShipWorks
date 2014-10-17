@@ -136,7 +136,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
 
-            Assert.AreEqual(EnumHelper.GetApiValue(nudge.NudgeType),  GetValue(nudgeElement, "NudgeType"));
+            Assert.AreEqual((int)nudge.NudgeType, int.Parse(GetValue(nudgeElement, "NudgeType")));
         }
 
         [TestMethod]
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             <Nudges>
                  <Nudge>
                      <NudgeID>12345</NudgeID>
-                     <NudgeType>ShipWorksUpgrade</NudgeType>
+                     <NudgeType>0</NudgeType>
                      <ContentUri>https://www.shipworks.com/blah</ContentUri>
                      <ContentDimensions>
                          <Width>1024</Width>
@@ -180,13 +180,13 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                      </ContentDimensions>
                      <Options>
                          <Option>
-                             <NudgeOptionID>1</NudgeOptionID>
+                             <OptionId>1</OptionId>
                              <Index>0</Index>
                              <Text>OK</Text>
                              <Action>0</Action>
                          </Option>
                          <Option>
-                             <NudgeOptionID>2</NudgeOptionID>
+                             <OptionId>2</OptionId>
                              <Index>1</Index>
                              <Text>Close</Text>
                              <Action>1</Action>

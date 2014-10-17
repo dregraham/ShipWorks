@@ -13,6 +13,11 @@
         /// <summary>
         /// ShipWorks should shut down.
         /// </summary>
-        Shutdown = 1
+        Shutdown = 1,
+
+        /// <summary>
+        /// Open the register stamps account wizard
+        /// </summary>
+        RegisterStampsAccount = 2
     }
 }

@@ -7512,12 +7512,20 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
+		///<summary>EndiciaUspsAutomaticExpedited. </summary>
+		EndiciaUspsAutomaticExpedited,
+		///<summary>EndiciaUspsAutomaticExpeditedAccount. </summary>
+		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
 		///<summary>StampsAutomaticExpress1. </summary>
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
 		StampsAutomaticExpress1Account,
+		///<summary>StampsUspsAutomaticExpedited. </summary>
+		StampsUspsAutomaticExpedited,
+		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
+		StampsUspsAutomaticExpeditedAccount,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>
@@ -7970,8 +7978,10 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
-		///<summary>IsExpress1. </summary>
-		IsExpress1,
+		///<summary>StampsReseller. </summary>
+		StampsReseller,
+		///<summary>ContractType. </summary>
+		ContractType,
 		/// <summary></summary>
 		AmountOfFields
 	}

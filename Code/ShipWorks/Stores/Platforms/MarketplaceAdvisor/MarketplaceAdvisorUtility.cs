@@ -177,6 +177,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                     {
                         switch ((PostalServiceType) shipment.Postal.Service)
                         {

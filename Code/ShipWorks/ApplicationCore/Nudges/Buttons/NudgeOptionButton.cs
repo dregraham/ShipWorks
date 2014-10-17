@@ -13,6 +13,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
     public abstract class NudgeOptionButton : Button
     {
         private readonly NudgeOption option;
+        private Form hostForm;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NudgeOptionButton"/> class.
@@ -26,6 +27,21 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
             Click += OnClick;
         }
 
+        /// <summary>
+        /// Gets the NudgeOption that this button is for.
+        /// </summary>
+        protected NudgeOption Option
+        {
+            get { return option; }
+        }
+
+        /// <summary>
+        /// Gets the form that this button is hosted within.
+        /// </summary>
+        protected Form HostForm
+        {
+            get { return hostForm ?? (hostForm = FindForm()); }
+        }
         /// <summary>
         /// An abstract method allowing derived classes to perform any logic that is needed when the button is clicked. 
         /// </summary>
@@ -54,12 +70,13 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// </summary>
         private void OnClick(object sender, EventArgs eventArgs)
         {
+            // Allow derived classes to handle the event prior to logging to 
+            // allow a chance for the option's result to be set if needed
             Cursor.Current = Cursors.WaitCursor;
+            HandleClick();
 
             try
             {
-                // Log the that the option was selected and allow derived 
-                // classes to handle the event.
                 option.Log();
             }
             catch (Exception exception)
@@ -69,8 +86,6 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
                 // logged successfully.
                 LogManager.GetLogger(GetType()).WarnFormat("Could not log the nudge option for nudge {0}. {1}", option.Owner.NudgeID, exception.Message);
             }
-
-            HandleClick();
         }
     }
 }

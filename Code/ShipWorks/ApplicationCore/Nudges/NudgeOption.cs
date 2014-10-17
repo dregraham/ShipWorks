@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.ApplicationCore.Licensing;
+﻿using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.ApplicationCore.Nudges
@@ -18,8 +17,8 @@ namespace ShipWorks.ApplicationCore.Nudges
             Index = index;
             Text = text;
             Action = action;
-            Result = string.Empty;
             Owner = owner;
+            Result = string.Empty;
         }
 
         /// <summary>
@@ -48,7 +47,9 @@ namespace ShipWorks.ApplicationCore.Nudges
         public NudgeOptionActionType Action { get; private set; }
 
         /// <summary>
-        /// Result to be returned to Tango
+        /// Result to be returned to Tango. This can be customized to contain a value that is specific to the 
+        /// context that the option was selected within (e.g. a shipping account was created, declined to create a 
+        /// shipping account, etc.).
         /// </summary>
         public string Result { get; set; }
 
@@ -81,6 +82,12 @@ namespace ShipWorks.ApplicationCore.Nudges
                 case NudgeOptionActionType.Shutdown:
                 {
                     button = new ShutdownNudgeOptionButton(this);
+                    break;
+                }
+                
+                case NudgeOptionActionType.RegisterStampsAccount:
+                {
+                    button = new RegisterStampsAccountNudgeOptionButton(this);
                     break;
                 }
 

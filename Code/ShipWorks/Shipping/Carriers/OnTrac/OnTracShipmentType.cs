@@ -72,6 +72,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return OnTracAccountManager.Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Returns new OnTrac Service Control
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when

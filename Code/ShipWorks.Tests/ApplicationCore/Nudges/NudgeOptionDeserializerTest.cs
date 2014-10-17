@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOption nudgeOption = NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
 
-            Assert.AreEqual(int.Parse(GetValue(nudgeOptionElement, "NudgeOptionID")), nudgeOption.NudgeOptionID);
+            Assert.AreEqual(int.Parse(GetValue(nudgeOptionElement, "OptionId")), nudgeOption.NudgeOptionID);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         public void Deserialize_ThrowsNudgeException_WhenNudgeIDIsMissing_Test()
         {
             XElement nudgeOptionElement = XElement.Parse(GoodNudgeOptionXml);
-            nudgeOptionElement.Descendants("NudgeOptionID").Remove();
+            nudgeOptionElement.Descendants("OptionId").Remove();
 
             NudgeOptionDeserializer.Deserialize(nudge, nudgeOptionElement);
         }
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         private const string GoodNudgeOptionXml = @"
             <Option>
-                <NudgeOptionID>1</NudgeOptionID>
+                <OptionId>1</OptionId>
                 <Index>2</Index>
                 <Text>OK</Text>
                 <Action>0</Action>

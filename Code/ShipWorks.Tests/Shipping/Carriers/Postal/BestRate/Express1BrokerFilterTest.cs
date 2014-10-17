@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         }
 
         [TestMethod]
-        public void Filter_RemovesExpress1StampsCounterRatesBroker_WhenCollectionContainsExpress1EndiciaCounterRatesBroker_Test()
+        public void Filter_RemovesExpress1EndiciaCounterRatesBroker_WhenCollectionContainsExpress1StampsCounterRatesBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {
@@ -64,11 +64,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
             List<IBestRateShippingBroker> filteredBrokers = testObject.Filter(brokers).ToList();
 
             Assert.AreEqual(1, filteredBrokers.Count);
-            Assert.AreEqual(0, filteredBrokers.OfType<Express1StampsCounterRatesBroker>().Count());
+            Assert.AreEqual(0, filteredBrokers.OfType<Express1EndiciaCounterRatesBroker>().Count());
         }
 
         [TestMethod]
-        public void Filter_RetainsNonExpress1Brokers_AndRemovesExpress1StampsCounterRatesBroker_WhenCollectionContainsExpress1EndiciaCounterRatesBroker_Test()
+        public void Filter_RetainsNonExpress1Brokers_AndRemovesExpress1EndiciaCounterRatesBroker_WhenCollectionContainsExpress1StampsCounterRatesBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
             {
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
             List<IBestRateShippingBroker> filteredBrokers = testObject.Filter(brokers).ToList();
 
             Assert.AreEqual(3, filteredBrokers.Count);
-            Assert.AreEqual(0, filteredBrokers.OfType<Express1StampsCounterRatesBroker>().Count());
+            Assert.AreEqual(0, filteredBrokers.OfType<Express1EndiciaCounterRatesBroker>().Count());
             Assert.AreEqual(1, filteredBrokers.OfType<FedExBestRateBroker>().Count());
             Assert.AreEqual(1, filteredBrokers.OfType<UpsCounterRatesBroker>().Count());
 

@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
                 {
                     Username = credentialStore.Express1StampsUsername,
                     Password = credentialStore.Express1StampsPassword,
-                    IsExpress1 = true,
+                    StampsReseller = (int)StampsResellerType.Express1,
                     CountryCode = "US"
                 };
 
@@ -83,6 +83,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
             }
 
             return counterRateAccounts;
+        }
+
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(StampsAccountEntity account)
+        {
+            // Nothing to save. This is a counter rate account.
         }
     }
 }

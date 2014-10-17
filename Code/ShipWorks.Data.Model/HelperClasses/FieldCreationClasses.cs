@@ -15937,6 +15937,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaInsuranceProvider);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.EndiciaUspsAutomaticExpedited field instance</summary>
+		public static EntityField2 EndiciaUspsAutomaticExpedited
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.EndiciaUspsAutomaticExpeditedAccount field instance</summary>
+		public static EntityField2 EndiciaUspsAutomaticExpeditedAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.WorldShipLaunch field instance</summary>
 		public static EntityField2 WorldShipLaunch
 		{
@@ -15951,6 +15961,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 StampsAutomaticExpress1Account
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1Account);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsUspsAutomaticExpedited field instance</summary>
+		public static EntityField2 StampsUspsAutomaticExpedited
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.StampsUspsAutomaticExpeditedAccount field instance</summary>
+		public static EntityField2 StampsUspsAutomaticExpeditedAccount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsCertify field instance</summary>
 		public static EntityField2 Express1EndiciaCustomsCertify
@@ -16947,10 +16967,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
 		}
-		/// <summary>Creates a new StampsAccountEntity.IsExpress1 field instance</summary>
-		public static EntityField2 IsExpress1
+		/// <summary>Creates a new StampsAccountEntity.StampsReseller field instance</summary>
+		public static EntityField2 StampsReseller
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.IsExpress1);}
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StampsReseller);}
+		}
+		/// <summary>Creates a new StampsAccountEntity.ContractType field instance</summary>
+		public static EntityField2 ContractType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.ContractType);}
 		}
 	}
 

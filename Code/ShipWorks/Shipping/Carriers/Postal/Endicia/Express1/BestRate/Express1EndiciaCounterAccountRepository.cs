@@ -80,5 +80,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate
 
             return counterRatesAccounts;
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(EndiciaAccountEntity account)
+        {
+            // Nothing to save. This is a counter rate account.
+        }
     }
 }

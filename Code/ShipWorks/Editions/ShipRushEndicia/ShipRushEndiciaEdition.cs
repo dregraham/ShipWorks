@@ -20,6 +20,7 @@ namespace ShipWorks.Editions.Freemium
             : base(store)
         {
             AddRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.Stamps, EditionRestrictionLevel.Hidden);
+            AddRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.Usps, EditionRestrictionLevel.Hidden);
             AddRestriction(EditionFeature.SingleStore, StoreTypeCode.Invalid, EditionRestrictionLevel.Forbidden);
         }
     }

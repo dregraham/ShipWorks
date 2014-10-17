@@ -52,7 +52,12 @@ namespace ShipWorks.Editions
             switch (feature)
             {
                 case EditionFeature.ShipmentType:
-                    return CheckShipmentTypeRestriction((ShipmentTypeCode) data);
+                case EditionFeature.ShipmentTypeRegistration:
+                case EditionFeature.ProcessShipment:
+                case EditionFeature.PurchasePostage:
+                case EditionFeature.RateDiscountMessaging:
+                case EditionFeature.ShippingAccountConversion:
+                    return CheckShipmentTypeRestriction(feature, (ShipmentTypeCode) data);
 
                 case EditionFeature.ActionLimit:
                 case EditionFeature.FilterLimit:
@@ -143,10 +148,10 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Check restriction based on shipment type
         /// </summary>
-        private EditionRestrictionIssue CheckShipmentTypeRestriction(ShipmentTypeCode typeCode)
+        private EditionRestrictionIssue CheckShipmentTypeRestriction(EditionFeature feature, ShipmentTypeCode typeCode)
         {
             // Just take the first one that restricts it
-            var restriction = restrictions.FirstOrDefault(r => r.Feature == EditionFeature.ShipmentType && (ShipmentTypeCode) r.Data == typeCode);
+            var restriction = restrictions.FirstOrDefault(r => r.Feature == feature && (ShipmentTypeCode)r.Data == typeCode);
 
             return (restriction != null) ? 
                 new EditionRestrictionIssue(restriction, typeCode) :

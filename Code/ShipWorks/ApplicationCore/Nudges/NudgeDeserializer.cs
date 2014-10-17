@@ -22,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <Nudges>
         ///     <Nudge>
         ///         <NudgeID>12345</NudgeID>
-        ///         <NudgeType>ShipWorksUpgrade</NudgeType>
+        ///         <NudgeType>0</NudgeType>
         ///         <ContentUri>https://www.shipworks.com/blah</ContentUri>
         ///         <ContentDimensions>
         ///             <Width>1024</Width>
@@ -106,7 +106,7 @@ namespace ShipWorks.ApplicationCore.Nudges
             try
             {
                 string value = GetValue(nudgeElement, "NudgeType");
-                return EnumHelper.GetEnumByApiValue<NudgeType>(value);
+                return (NudgeType)(int.Parse(value));
             }
             catch (InvalidOperationException ex)
             {

@@ -6,6 +6,7 @@ using System.Threading;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Adapter.Custom;
@@ -165,6 +166,53 @@ namespace ShipWorks.Shipping
             set
             {
                 certificateInspector = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether account registration allowed for this shipment type.
+        /// </summary>
+        public virtual bool IsAccountRegistrationAllowed
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode);
+                return restriction.Level != EditionRestrictionLevel.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has been restricted.
+        /// </summary>
+        public virtual bool IsShipmentTypeRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has rate discount messaging restricted. This will mean different things to different shipment types.
+        /// </summary>
+        public bool IsRateDiscountMessagingRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Forbidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public virtual bool HasAccounts
+        {
+            get
+            {
+                return false;
             }
         }
 

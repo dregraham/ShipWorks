@@ -129,7 +129,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia scan based payment returns is allowed
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
-            
+
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(xpath);
+
             return edition;
         }
 

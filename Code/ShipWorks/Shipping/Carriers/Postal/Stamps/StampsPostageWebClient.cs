@@ -26,9 +26,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
         {
-            get 
+            get
             {
-                return account.IsExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps;
+                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)account.StampsReseller).ShipmentTypeCode;
             }
         }
 
