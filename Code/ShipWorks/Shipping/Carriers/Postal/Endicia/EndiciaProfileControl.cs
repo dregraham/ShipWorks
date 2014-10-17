@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -28,6 +21,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public EndiciaProfileControl(EndiciaReseller endiciaReseller)
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabPage);
 
             this.endiciaReseller = endiciaReseller;
 
@@ -74,6 +69,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);
             AddValueMapping(profile.Postal, PostalProfileFields.EntryFacility, stateEntryFacility, entryFacility, labelEntryFacility);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
         }
 
         /// <summary>

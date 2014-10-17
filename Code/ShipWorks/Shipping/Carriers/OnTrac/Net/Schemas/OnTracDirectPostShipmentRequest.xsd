@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="OnTracDirectPostShipmentRequest" type="OnTracDirectPostShipmentRequestList" nillable="true"/>
+  <xs:complexType name="OnTracDirectPostShipmentRequestList">
+    <xs:sequence>
+      <xs:element name="Shipments" type="ArrayOfDirectPostShipmentRequest" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfDirectPostShipmentRequest">
+    <xs:sequence>
+      <xs:element name="Shipment" type="DirectPostShipmentRequest" nillable="true" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DirectPostShipmentRequest">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="UID" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="shipper" type="Shipper" />
+      <xs:element minOccurs="1" maxOccurs="1" name="consignee" type="Consignee" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Weight" type="xs:double" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BillTo" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Reference" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Reference2" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Reference3" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="LabelType" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShipEmail" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="DelEmail" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Barcode" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="PIC" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="STC" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="BCC" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="MID" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Endorsements" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsMachinable" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ShipDate" type="xs:date" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Shipper">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Addr1" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="City" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Zip" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Contact" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Phone" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Consignee">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="Name" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Addr1" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Addr2" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Addr3" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="City" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="State" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Zip" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Contact" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="Phone" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

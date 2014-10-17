@@ -6,11 +6,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Model.EntityClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -167,6 +168,8 @@ namespace ShipWorks.Shipping.Editing
                 throw new ArgumentNullException("shipments");
             }
 
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
+
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
@@ -218,6 +221,8 @@ namespace ShipWorks.Shipping.Editing
                 // Go through and load the data from each shipment
                 foreach (ShipmentEntity shipment in shipments)
                 {
+                    labelFormat.ApplyMultiValue((ThermalLanguage)shipment.RequestedLabelFormat);
+
                     // Residential status info
                     if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
                     {
@@ -256,6 +261,14 @@ namespace ShipWorks.Shipping.Editing
         public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
             OnRateSelected(sender, e);
+        }
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected virtual bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return true;
         }
 
         /// <summary>
@@ -406,6 +419,8 @@ namespace ShipWorks.Shipping.Editing
             // Save the data to each selected shipment
             foreach (ShipmentEntity shipment in loadedShipments)
             {
+                labelFormat.ReadMultiValue(v => shipment.RequestedLabelFormat = (int)v);
+
                 // Residential
                 if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
                 {
@@ -600,6 +615,14 @@ namespace ShipWorks.Shipping.Editing
             {
                 ShipmentTypeChanged(this, EventArgs.Empty);
             }
+        }
+
+		/// <summary>
+		/// Show the knowledge base article for thermal settings
+		/// </summary>
+        private void OnHelpClick(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
         }
     }
 }

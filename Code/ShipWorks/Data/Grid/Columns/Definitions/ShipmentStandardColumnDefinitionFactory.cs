@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.AddressValidation;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Shipping.Editing;
@@ -178,7 +179,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                     "S: Military Address", ValidationDetailStatusType.Yes,
                     ShipmentFields.ShipMilitaryAddress) 
-                    { DefaultWidth = 115 }
+                    { DefaultWidth = 115 },
+
+                new GridColumnDefinition("{04A69989-DC89-4B0A-AA72-7D9797A5E6B1}", false,
+                    new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Requested Label Format", ThermalLanguage.None,
+                    ShipmentFields.RequestedLabelFormat)  { DefaultWidth = 60 },
+
+                new GridColumnDefinition("{B7B9C011-C66B-4B2F-933D-466A0B3AD4AE}", false,
+                    new GridActualLabelFormatDisplayType(), "Actual Label Format", ThermalLanguage.None,
+                    ShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
             };
         }
 

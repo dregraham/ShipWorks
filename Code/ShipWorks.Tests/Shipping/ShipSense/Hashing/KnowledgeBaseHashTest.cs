@@ -107,6 +107,13 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             Assert.AreNotEqual(result1.HashValue, result2.HashValue);
         }
-        
+
+        [TestMethod]
+        public void ComputeHash_ReturnsInvalidHashResult_WhenKeyCollectionIsEmpty_Test()
+        {
+            KnowledgebaseHashResult result = testObject.ComputeHash(new List<ShipSenseOrderItemKey>());
+
+            Assert.IsFalse(result.IsValid);
+        }
     }
 }

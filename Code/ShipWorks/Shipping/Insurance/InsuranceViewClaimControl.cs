@@ -34,18 +34,26 @@ namespace ShipWorks.Shipping.Insurance
             this.shipment = shipment;
             InsurancePolicyEntity insurancePolicy = shipment.InsurancePolicy;
 
+            if (insurancePolicy == null)
+            {
+                return;
+            }
+
             claimType.Text = EnumHelper.GetDescription((InsureShipClaimType) insurancePolicy.ClaimType);
             
             itemName.Text = insurancePolicy.ItemName;
             description.Text = insurancePolicy.Description;
             email.Text = insurancePolicy.EmailAddress;
 
-            damageValue.Text = insurancePolicy.DamageValue.Value.ToString("C");
-            submittedOn.Text = insurancePolicy.SubmissionDate.Value.ToLocalTime().ToString("g");
+            damageValue.Text = insurancePolicy.DamageValue.GetValueOrDefault().ToString("C");
+            submittedOn.Text = insurancePolicy.SubmissionDate.GetValueOrDefault().ToLocalTime().ToString("g");
             
-            claimID.Text = insurancePolicy.ClaimID.Value.ToString(CultureInfo.InvariantCulture);
+            claimID.Text = insurancePolicy.ClaimID.GetValueOrDefault().ToString(CultureInfo.InvariantCulture);
         }
 
+        /// <summary>
+        /// Get the claim status for the shipment's insurance policy
+        /// </summary>
         private string FetchClaimStatus()
         {
             StoreEntity storeEntity = StoreManager.GetStore(shipment.Order.StoreID);
@@ -59,6 +67,7 @@ namespace ShipWorks.Shipping.Insurance
             InsureShipClaim claim = new InsureShipClaim(shipment, insureShipAffiliate);
             return claim.CheckStatus();
         }
+
         /// <summary>
         /// Clear current values to get ready for next policy
         /// </summary>

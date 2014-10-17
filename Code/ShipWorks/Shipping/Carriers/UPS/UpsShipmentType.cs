@@ -944,7 +944,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (transitTime != null)
             {
                 DateTime localArrival = transitTime.ArrivalDate.ToLocalTime();
-                arrivalInfo = string.Format("({0} {1})", localArrival.DayOfWeek.ToString(), localArrival.ToString("h:mm tt"));
+                arrivalInfo = ShippingManager.GetArrivalDescription(localArrival);
             }
 
             return arrivalInfo;

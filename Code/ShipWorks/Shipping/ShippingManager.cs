@@ -10,6 +10,7 @@ using System.Web.Configuration;
 using System.Windows.Forms;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Controls;
@@ -195,7 +196,10 @@ namespace ShipWorks.Shipping
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
             shipment.ShipSenseChangeSets = new XElement("ChangeSets").ToString();
             shipment.ShipSenseEntry = new byte[0];
-            shipment.OnlineShipmentID = 0;
+            shipment.OnlineShipmentID = string.Empty;
+
+            //TODO: Remove this once the profile copying is implemented.
+            shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             // We have to get the order items to calculate the weight
             List<EntityBase2> orderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity);
@@ -389,10 +393,10 @@ namespace ShipWorks.Shipping
             clonedShipment.ProcessedDate = null;
             clonedShipment.TrackingNumber = "";
             clonedShipment.Voided = false;
-            clonedShipment.ThermalType = null;
+            clonedShipment.ActualLabelFormat = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
-            clonedShipment.OnlineShipmentID = 0;
+            clonedShipment.OnlineShipmentID = string.Empty;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
@@ -908,7 +912,10 @@ namespace ShipWorks.Shipping
                     // Rethrow the insurance exception if there was one
                     if (voidInsuranceException != null)
                     {
-                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.", new InsureShipSettings().InsureShipPhoneNumber);
+                        string message = string.Format("ShipWorks was not able to void the insurance policy with this shipment. Contact InsureShip at {0} to void the policy.\r\n\r\n{1}", 
+                            new InsureShipSettings().InsureShipPhoneNumber,
+                            voidInsuranceException.Message);
+
                         throw new ShippingException(message, voidInsuranceException);
                     }
                 }
@@ -1406,6 +1413,14 @@ namespace ShipWorks.Shipping
             }
 
             return incrementingDate;
+        }
+
+        /// <summary>
+        /// Get a formatted arrival date for a shipment
+        /// </summary>
+        public static string GetArrivalDescription(DateTime localArrival)
+        {
+            return String.Format("({0} {1})", localArrival.DayOfWeek, localArrival.ToString("h:mm tt"));
         }
 
         /// <summary>

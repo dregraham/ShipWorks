@@ -855,7 +855,8 @@ CREATE TABLE [dbo].[ShippingProfile]
 [Insurance] [bit] NULL,
 [InsuranceInitialValueSource] [int] NULL,
 [InsuranceInitialValueAmount] [money] NULL,
-[ReturnShipment] [bit] NULL
+[ReturnShipment] [bit] NULL,
+[RequestedLabelFormat] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'
@@ -909,7 +910,8 @@ CREATE TABLE [dbo].[Shipment]
 [TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsGenerated] [bit] NOT NULL,
 [CustomsValue] [money] NOT NULL,
-[ThermalType] [int] NULL,
+[RequestedLabelFormat] [int] NOT NULL,
+[ActualLabelFormat] [int] NULL,
 [ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -959,17 +961,12 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [int] NOT NULL
- CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED 
-(
-
-	[ShipmentID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
- CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED 
-(
-	[ShipmentID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
+[OnlineShipmentID] [varchar] (128) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
+GO
+ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [PK_Shipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 PRINT N'Creating index [IX_Shipment_OrderID] on [dbo].[Shipment]'
 GO
@@ -987,6 +984,14 @@ CREATE NONCLUSTERED INDEX [IX_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipme
 	[Processed] ASC,
 	[ShipSenseStatus] ASC
 )
+GO
+PRINT N'Creating index [IX_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_RequestedLabelFormat] ON [dbo].[Shipment] ([RequestedLabelFormat])
+GO
+PRINT N'Creating index [IX_Shipment_ActualLabelFormat] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ActualLabelFormat] ON [dbo].[Shipment] ([ActualLabelFormat])
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
@@ -4464,19 +4469,13 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FedExPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FedExMaskAccount] [bit] NOT NULL,
-[FedExThermal] [bit] NOT NULL,
-[FedExThermalType] [int] NOT NULL,
 [FedExThermalDocTab] [bit] NOT NULL,
 [FedExThermalDocTabType] [int] NOT NULL,
 [FedExInsuranceProvider] [int] NOT NULL,
 [FedExInsurancePennyOne] [bit] NOT NULL,
 [UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UpsThermal] [bit] NOT NULL,
-[UpsThermalType] [int] NOT NULL,
 [UpsInsuranceProvider] [int] NOT NULL,
 [UpsInsurancePennyOne] [bit] NOT NULL,
-[EndiciaThermal] [bit] NOT NULL,
-[EndiciaThermalType] [int] NOT NULL,
 [EndiciaCustomsCertify] [bit] NOT NULL,
 [EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EndiciaThermalDocTab] [bit] NOT NULL,
@@ -4485,29 +4484,17 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
-[StampsThermal] [bit] NOT NULL,
-[StampsThermalType] [int] NOT NULL,
 [StampsAutomaticExpress1] [bit] NOT NULL,
 [StampsAutomaticExpress1Account] [bigint] NOT NULL,
-[Express1EndiciaThermal] [bit] NOT NULL,
-[Express1EndiciaThermalType] [int] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
 [Express1EndiciaThermalDocTabType] [int] NOT NULL,
 [Express1EndiciaSingleSource] [bit] NOT NULL,
-[EquaShipThermal] [bit] NOT NULL,
-[EquaShipThermalType] [int] NOT NULL,
-[OnTracThermal] [bit] NOT NULL,
-[OnTracThermalType] [int] NOT NULL,
 [OnTracInsuranceProvider] [int] NOT NULL,
 [OnTracInsurancePennyOne] [bit] NOT NULL,
-[iParcelThermal] [bit] NOT NULL,
-[iParcelThermalType] [int] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsThermal] [bit] NOT NULL,
-[Express1StampsThermalType] [int] NOT NULL,
 [Express1StampsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,

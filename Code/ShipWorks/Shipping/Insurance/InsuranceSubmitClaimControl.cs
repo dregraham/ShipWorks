@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -9,6 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping.Insurance
@@ -43,7 +46,7 @@ namespace ShipWorks.Shipping.Insurance
         {
             this.shipment = shipment;
 
-            submitClaimLink.Visible = shipment.OnlineShipmentID > 0;
+            submitClaimLink.Visible = !string.IsNullOrWhiteSpace(shipment.OnlineShipmentID);
             
             // Make sure that controls are reset even if the data is empty
             claimType.SelectedValue = (InsureShipClaimType) shipment.InsurancePolicy.ClaimType.GetValueOrDefault((int) InsureShipClaimType.Damage);

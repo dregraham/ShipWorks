@@ -1078,12 +1078,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             outline.AddElement("LabelCODReturn",
                 () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
-                ElementOutline.If(() => shipment().ThermalType == null && codReturn.Value != null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null && codReturn.Value != null));
             
             outline.AddElement("Package",
                 new FedExLegacyPackageTemplateOutline(container.Context),
                 () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),
-                ElementOutline.If(() => shipment().ThermalType == null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null));
         }
 
         /// <summary>

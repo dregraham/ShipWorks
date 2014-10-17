@@ -71,6 +71,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             dutiesCountryCode.DataSource = Geography.Countries.Select(n => new KeyValuePair<string, string>(n, Geography.GetCountryCode(n))).ToList();
 
             packageControl.Initialize(shipmentTypeCode);
+
+            // WorldShip takes care of its own printing, so we won't deal with it here
+            if (shipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
+            {
+                sectionLabelOptions.Visible = false;
+            }
         }
 
         public override void Initialize()

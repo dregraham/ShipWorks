@@ -28,11 +28,36 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             InitializeComponent();
 
+            ResizeGroupBoxes(tabPageSettings);
+            ResizeGroupBoxes(tabPagePackages);
+
             packagesCount.Items.Clear();
 
             for (int i = 1; i <= 5; i++)
             {
                 packagesCount.Items.Add(i);
+            }
+        }
+
+        /// <summary>
+        /// Label group box
+        /// </summary>
+        protected GroupBox GroupLabels
+        {
+            get
+            {
+                return groupLabels;
+            }
+        }
+
+        /// <summary>
+        /// Tab page settings control
+        /// </summary>
+        protected Control TabPageSettings
+        {
+            get
+            {
+                return tabPageSettings;
             }
         }
 
@@ -130,6 +155,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             AddValueMapping(ups, UpsProfileFields.EmailNotifyFrom, emailNotifyFromState, emailFrom, labelEmailFrom);
             AddValueMapping(ups, UpsProfileFields.EmailNotifySubject, emailNotifySubjectState, emailSubject, labelEmailSubject);
 
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
+            
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
 
@@ -238,6 +266,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
         }
+
         /// <summary>
         /// Cancel any changes that have not yet been committed
         /// </summary>
