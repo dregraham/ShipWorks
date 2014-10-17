@@ -1081,12 +1081,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_settings !=null);
 						DesetupSyncSettings(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Settings");
-						}
 					}
 					else
 					{
