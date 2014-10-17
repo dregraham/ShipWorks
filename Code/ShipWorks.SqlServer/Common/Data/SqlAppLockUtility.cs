@@ -107,7 +107,22 @@ namespace ShipWorks.SqlServer.Common.Data
             cmd.Parameters.AddWithValue("@LockMode", "Exclusive");
             cmd.Parameters.AddWithValue("@LockOwner", "Session");
 
-            return ((int) cmd.ExecuteScalar()) != 1;
+            // A null reference exception is being thrown from this method and since the connection is being checked for null,
+            // I put checks in for the result of ExecuteScalar.  SELECT APPLOCK_TEST should always return a value, but casting
+            // null to an int would cause the exception
+            object result = cmd.ExecuteScalar();
+
+            if (result == null)
+            {
+                throw new ApplicationException("ExecuteScalar returned null");
+            }
+
+            if (!(result is int))
+            {
+                throw new ApplicationException(string.Format("ExecuteScalar returned a result of type {0}", result.GetType().Name));
+            }
+
+            return ((int) result) != 1;
         }
 
         /// <summary>
