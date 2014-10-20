@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Editions
@@ -65,7 +66,7 @@ namespace ShipWorks.Editions
             foreach (XElement type in typeElements)
             {
                 ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) (int) type.Attribute("TypeCode");
-                IEnumerable<ShipmentTypeRestrictionType> restrictions = type.Elements("Restriction").Select(e => Enum.Parse(typeof (ShipmentTypeRestrictionType), e.Value, true)).Cast<ShipmentTypeRestrictionType>();
+                IEnumerable<ShipmentTypeRestrictionType> restrictions = type.Elements("Restriction").Select(e => EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(e.Value));
 
                 functionality.AddShipmentTypeRestriction(shipmentTypeCode, restrictions.Distinct().ToList());
             }
