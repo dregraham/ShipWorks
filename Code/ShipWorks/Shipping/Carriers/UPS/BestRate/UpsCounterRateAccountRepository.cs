@@ -100,5 +100,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             return accounts;
         }
+        
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(UpsAccountEntity account)
+        {
+            // Nothing to save. This is a counter rate account.
+        }
     }
 }

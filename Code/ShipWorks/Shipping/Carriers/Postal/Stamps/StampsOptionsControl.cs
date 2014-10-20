@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -17,9 +18,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Whether the control is used for Express1.
+        /// The stamps reseller type.
         /// </summary>
-        public bool IsExpress1 
+        public ShipmentTypeCode ShipmentTypeCode
         { 
             get; 
             set; 
@@ -30,7 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadSettings()
         {
-            requestedLabelFormat.LoadDefaultProfile(IsExpress1 ? new Express1StampsShipmentType() : new StampsShipmentType());
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            requestedLabelFormat.LoadDefaultProfile(shipmentType);
         }
 
         /// <summary>

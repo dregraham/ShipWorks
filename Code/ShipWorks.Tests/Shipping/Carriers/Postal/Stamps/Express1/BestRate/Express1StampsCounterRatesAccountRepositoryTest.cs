@@ -2,6 +2,7 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
@@ -34,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1.BestRate
 
             Assert.AreEqual("Foo", account.Username);
             Assert.AreEqual("Bar", account.Password);
-            Assert.IsTrue(account.IsExpress1);
+            Assert.IsTrue((StampsResellerType)account.StampsReseller == StampsResellerType.Express1);
         }
     }
 }

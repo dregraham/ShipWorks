@@ -78,14 +78,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (endiciaReseller == EndiciaReseller.Express1)
             {
                 express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom + 4;
+                panelBottom.Top = express1Options.Bottom + 5;
             }
             else
             {
-                express1PostageDiscountSettingsControl.LoadSettings(this.settings);
-                express1PostageDiscountSettingsControl.Top = optionsControl.Bottom;
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted || ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
+                {
+                    // Hide the express1 settings if Express1 is restricted or discounted rate messaging is turned off
+                    express1PostageDiscountSettingsControl.Hide();
+                    express1Options.Hide();
 
-                panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 4;
+                    panelBottom.Top = optionsControl.Bottom + 5;
+                }
+                else
+                {
+                    express1PostageDiscountSettingsControl.LoadSettings(this.settings);
+                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+
+                    panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
+                }
             }
         }
 

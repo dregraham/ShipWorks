@@ -69,17 +69,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
-        /// Gets the configured Express1 Accounts
-        /// </summary>
-        public override List<EndiciaAccountEntity> Accounts
-        {
-            get
-            {
-                return EndiciaAccountManager.Express1Accounts;
-            }
-        }
-
-        /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
@@ -220,9 +209,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <returns>An instance of an Express1EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            return (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any()) ?
-                new Express1EndiciaBestRateBroker() : 
-                new Express1EndiciaCounterRatesBroker();
+            IBestRateShippingBroker broker = new NullShippingBroker();
+            if (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any())
+            {
+                // Only use an Express1 broker if there is an account. We no longer want to
+                // get Express1 counter rates
+                broker = new Express1EndiciaBestRateBroker();
+            }
+
+            return broker;
         }
 
         /// <summary>

@@ -49,7 +49,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
-        static string productionUrl = "https://swsim.stamps.com/swsim/SwsimV29.asmx";
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Maps stamps.com usernames to their latest authenticator tokens
@@ -85,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Indicates if the test server should be used instead of hte live server
+        /// Indicates if the test server should be used instead of the live server
         /// </summary>
         public static bool UseTestServer
         {
@@ -94,20 +93,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Create the web service instance with the appropriate URL
+        /// Gets the service URL to use when contacting the Stamps.com API.
         /// </summary>
-        private SwsimV29 CreateWebService(string logName, bool isExpress1)
+        private static string ServiceUrl
         {
-            return CreateWebService(logName, isExpress1, LogActionType.Other);
+            get { return UseTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV29.asmx" : "https://swsim.stamps.com/swsim/SwsimV29.asmx"; }
         }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV29 CreateWebService(string logName, bool isExpress1, LogActionType logActionType)
+        private SwsimV29 CreateWebService(string logName, StampsResellerType stampsResellerType)
+        {
+            return CreateWebService(logName, stampsResellerType, LogActionType.Other);
+        }
+
+        /// <summary>
+        /// Create the web service instance with the appropriate URL
+        /// </summary>
+        private SwsimV29 CreateWebService(string logName, StampsResellerType stampsResellerType, LogActionType logActionType)
         {
             SwsimV29 webService;
-            if (isExpress1)
+            if (stampsResellerType == StampsResellerType.Express1)
             {
                 webService = new Express1StampsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
                 {
@@ -117,9 +124,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
-                {
-                    Url = productionUrl
-                };
+                    {
+                        Url = ServiceUrl
+                    };
             }
 
             return webService;
@@ -128,10 +135,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Authenticate the given user with Stamps.com.  If 
         /// </summary>
-        public void AuthenticateUser(string username, string password, bool isExpress1)
+        public void AuthenticateUser(string username, string password, StampsResellerType stampsResellerType)
         {
             try
             {
+                bool isExpress1 = stampsResellerType == StampsResellerType.Express1;
+
                 // Output parameters from stamps.com
                 DateTime lastLoginTime = new DateTime();
                 bool clearCredential = false;
@@ -139,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV29 webService = CreateWebService("Authenticate", isExpress1))
+                using (SwsimV29 webService = CreateWebService("Authenticate", stampsResellerType))
                 {
                     CheckCertificate(webService.Url, isExpress1);
 
@@ -202,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             AccountInfo accountInfo;
 
-            using (SwsimV29 webService = CreateWebService("GetAccountInfo", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("GetAccountInfo", (StampsResellerType)account.StampsReseller))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -213,6 +222,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             return accountInfo;
+        }
+
+        /// <summary>
+        /// Changes the contract associated with the given account based on the contract type provided.
+        /// </summary>
+        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        {
+            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
+            // has been upgraded to v39+ 
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+            contractWebClient.ChangeToExpeditedPlan(account, promoCode);
+        }
+
+        /// <summary>
+        /// Checks with Stamps.com API to get the contract type of the account.
+        /// </summary>
+        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        {
+            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
+            // has been upgraded to v39+ 
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+            return contractWebClient.GetContractType(account);
         }
 
         /// <summary>
@@ -230,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             string url;
 
-            using (SwsimV29 webService = CreateWebService("GetURL", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("GetURL", (StampsResellerType)account.StampsReseller))
             {
                 string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -259,7 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             bool miRequired_Unused;
 
-            using (SwsimV29 webService = CreateWebService("PurchasePostage", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("PurchasePostage", (StampsResellerType)account.StampsReseller))
             {
                 string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -305,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             stampsRate.DeliverDays.Replace("Days", ""))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
-                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
+                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                         };
                     }
                     else
@@ -316,8 +347,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             stampsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                             {
-
-                                ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Stamps)
+                                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                             };
                     }
 
@@ -368,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName(account.IsExpress1),
+                                    StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -389,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates", account.IsExpress1, LogActionType.GetRates))
+            using (SwsimV29 webService = CreateWebService("GetRates", (StampsResellerType)account.StampsReseller, LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url, shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps);
 
@@ -478,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
 
-            using (SwsimV29 webService = CreateWebService("CleanseAddress", account != null && account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("CleanseAddress", account != null ? (StampsResellerType)account.StampsReseller : StampsResellerType.None))
             {
                 bool addressMatch;
                 bool cityStateZipOk;
@@ -541,7 +571,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV29 webService = CreateWebService("RegisterAccount", false))
+                using (SwsimV29 webService = CreateWebService("RegisterAccount", StampsResellerType.None))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API 
                     // for cleansing an address assumes there are existing credentials. Question is out to Stamps.com 
@@ -559,7 +589,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                             null,
                             registration.MachineInfo,
                             registration.Email,
-                            registration.AccountType,
+                            registration.UsageType,
                             registration.PromoCode,
                             (object)registration.CreditCard ?? registration.AchAccount,
                             out suggestedUserName,
@@ -611,7 +641,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV29 webService = CreateWebService("ScanForm", stampsAccountEntity.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("ScanForm", (StampsResellerType)stampsAccountEntity.StampsReseller))
             {
                 webService.CreateScanForm
                 (
@@ -627,7 +657,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 );
             }
 
-            if (stampsAccountEntity.IsExpress1)
+            if (stampsAccountEntity.StampsReseller == (int)StampsResellerType.Express1)
             {
                 XDocument response = XDocument.Parse("<ScanForm/>");
                 response.Root.Add(scanFormStampsId.Split(new[] { ' ' }).Select(x => new XElement("TransactionId", x)));
@@ -669,7 +699,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            using (SwsimV29 webService = CreateWebService("Void", account.IsExpress1))
+            using (SwsimV29 webService = CreateWebService("Void", (StampsResellerType)account.StampsReseller))
             {
                 string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -698,7 +728,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName(account.IsExpress1),
+                                    StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -751,8 +781,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             ThermalLanguage? thermalType;
 
-            // Determine what thermal type, if any to use.  Use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            // Determine what thermal type, if any to use.  
+            // If USPS, use it's setting.  
+            // Otherwise, use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
+            {
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
+            }
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
@@ -786,7 +822,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && !account.IsExpress1;
+            bool isSampleOnly = UseTestServer && account.StampsReseller != (int)StampsResellerType.Express1;
 
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope)
             {
@@ -794,7 +830,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to Stamps.com as of v. 22
-                using (SwsimV29 webService = CreateWebService("Process", account.IsExpress1))
+                using (SwsimV29 webService = CreateWebService("Process", (StampsResellerType)account.StampsReseller))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -821,7 +857,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV29 webService = CreateWebService("Process", account.IsExpress1))
+                using (SwsimV29 webService = CreateWebService("Process", (StampsResellerType)account.StampsReseller))
                 {
                     string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
                         ref tracking,
@@ -1385,9 +1421,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
 
-                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.IsExpress1))
+                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int) StampsResellerType.Express1))
                         {
-                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), account.IsExpress1);
+                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
                         }
                         else
                         {
@@ -1410,7 +1446,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
             {
-                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), account.IsExpress1);
+                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
 
                 auth = usernameAuthenticatorMap[account.Username];
             }

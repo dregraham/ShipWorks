@@ -125,6 +125,40 @@ namespace ShipWorks.Editions
         /// Endicia Scan Based Returns can be Restricted
         /// </summary>
         [Description("You must contact Interapptive to use Endicia Scan Based Returns.")]
-        EndiciaScanBasedReturns
+        EndiciaScanBasedReturns,
+
+        /// <summary>
+        /// The ability to add shipping accounts can be restricted.
+        /// </summary>
+        [Description("You must contact Interapptive to be able to add a new account to ShipWorks.")]
+        ShipmentTypeRegistration,
+
+        /// <summary>
+        /// The ability to process shipments for specific carriers can be restricted.
+        /// </summary>
+        [Description("Processing shipments using the selected carrier is no longer supported.")]
+        ProcessShipment,
+
+        /// <summary>
+        /// The ability to purchase postage for specific carriers can be restricted.
+        /// </summary>
+        [Description("Purchasing postage using the selected carrier is no longer supported.")]
+        PurchasePostage,
+
+        /// <summary>
+        /// The ability to display discount messaging for specific carriers can be restricted.
+        /// </summary>
+        [Description("Discount messaging using the selected carrier is disabled.")]
+        RateDiscountMessaging,
+        
+        /// <summary>
+        /// The ability to display a conversion promo/message for a shipping provider can be restricted. 
+        /// This is sort of out of place and pertains only to Stamps.com. This is a result of a problem 
+        /// on the Stamps.com side when Stamps.com customers have multi-user accounts where they don't 
+        /// want to allow these customers to convert through ShipWorks. After Stamps.com has reached 
+        /// out to these customers and converted their accounts, this can be removed.
+        /// </summary>
+        [Description("Converting an account using the selected carrier is disabled.")]
+        ShippingAccountConversion
     }
 }

@@ -84,7 +84,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// the appropriate account information for getting counter rates.
         /// </summary>
         public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
-        
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+	        get 
+	        {
+                return AccountRepository.Accounts.Any();
+	        }
+        }
+
         /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
         /// to obtain Ups related settings information. This provides
@@ -812,7 +823,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 

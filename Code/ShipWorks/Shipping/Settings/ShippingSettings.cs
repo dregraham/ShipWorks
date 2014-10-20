@@ -134,7 +134,9 @@ namespace ShipWorks.Shipping.Settings
 
             settings.ActivatedTypes = new int[0];
             settings.ConfiguredTypes = new int[0];
-            settings.ExcludedTypes = new int[0];
+
+            // Only want to show the single USPS provider by default
+            settings.ExcludedTypes = new int[] { (int)ShipmentTypeCode.Endicia, (int)ShipmentTypeCode.Express1Endicia, (int)ShipmentTypeCode.Express1Stamps, (int)ShipmentTypeCode.PostalWebTools, (int)ShipmentTypeCode.Stamps };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -162,6 +164,8 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1 = false;
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            settings.EndiciaUspsAutomaticExpedited = false;
+            settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
@@ -176,6 +180,8 @@ namespace ShipWorks.Shipping.Settings
 
             settings.StampsAutomaticExpress1 = false;
             settings.StampsAutomaticExpress1Account = 0;
+            settings.StampsUspsAutomaticExpedited = false;
+            settings.StampsUspsAutomaticExpeditedAccount = 0;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

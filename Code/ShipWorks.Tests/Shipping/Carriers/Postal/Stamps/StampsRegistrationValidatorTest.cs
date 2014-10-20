@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Moq;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
@@ -11,17 +10,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     [TestClass]
     public class StampsRegistrationValidatorTest
     {
-        private StampsRegistrationValidator testObject;
+        private readonly StampsRegistrationValidator testObject;
 
+        private Mock<IRegistrationPromotion> promotion;
+        private Mock<IStampsRegistrationGateway> gateway;        
 
         public StampsRegistrationValidatorTest()
         {
             testObject = new StampsRegistrationValidator();
         }
-
+        
         private StampsRegistration CreateValidUnitedStatesRegistration()
         {
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object)
+            promotion = new Mock<IRegistrationPromotion>();
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+           
+            gateway = new Mock<IStampsRegistrationGateway>();
+
+            StampsRegistration registration = new StampsRegistration(testObject, gateway.Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
@@ -39,7 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                     City = "Newport News",
                     State = "VA",
                     ZIPCode = "23601",
-                    Country = "US"
+                    Country = "US",
+                    PhoneNumber = "5555555555"
                 },
                 
                 MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
@@ -51,7 +58,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
         private StampsRegistration CreateValidInternationalRegistration()
         {
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object)
+            promotion = new Mock<IRegistrationPromotion>();
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+
+            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
@@ -69,7 +79,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                     City = "Sidcup",
                     Province = "Kent",
                     PostalCode = "DA14 6DJ",
-                    Country = "UK"
+                    Country = "UK",
+                    PhoneNumber = "5555555555"
                 },
 
                 MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
@@ -277,27 +288,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         #region Username Tests
 
         [TestMethod]
-        public void Validate_ReturnsOneError_WhenUserNameIs41Characters_Test()
+        public void Validate_ReturnsOneError_WhenUserNameIs15Characters_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "REALLYLONGUSERNAMETHATISMORETHANFORTYCHARACTERS";
+            registration.UserName = "123456789012345";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("The username provided is too long. Usernames must be 40 characters or less.", errors.First().Message);
+            Assert.AreEqual("The username provided is too long. Usernames must be 14 characters or less.", errors.First().Message);
         }
 
         [TestMethod]
-        public void Validate_ReturnsOneError_WhenUserNameIsMoreThan41Characters_Test()
+        public void Validate_ReturnsOneError_WhenUserNameIsMoreThan15Characters_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "12345678901234567890123456789012345678901";
+            registration.UserName = "1234567890123456";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("The username provided is too long. Usernames must be 40 characters or less.", errors.First().Message);
+            Assert.AreEqual("The username provided is too long. Usernames must be 14 characters or less.", errors.First().Message);
         }
 
         [TestMethod]
@@ -305,7 +316,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Set the username to 40 characters
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.UserName = "1234567890123456789012345678901234567890";
+            registration.UserName = "12345678901234";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -553,8 +564,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Create a promo code of 51 characters (exceeds the upper bound by 1)
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "123456789012345678901234567890123456789012345678901";
-
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345678901234567890123456789012345678901");
+            
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
@@ -565,7 +576,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "12345678901234567890123456789012345678901";
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("12345678901234567890123456789012345678901");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -576,7 +587,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeDoesNotMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            registration.PromoCode = "123456789012345";
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -594,6 +605,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             Assert.AreEqual(1, errors.Count());
             Assert.AreEqual("Stamps.com requires that either credit card or account be provided in the registration process.", errors.First().Message);
+        }
+
+        [TestMethod]
+        public void Validate_CleansesPhoneNumber_WhenLongerThanTenCharacters_Test()
+        {
+            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            registration.PhysicalAddress.PhoneNumber = "555-555-5555";
+
+            IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
+
+            Assert.AreEqual("5555555555", registration.PhysicalAddress.PhoneNumber);
+        }
+
+        [TestMethod]
+        public void Validate_RetrunsOneError_WhenPhoneNumberIsLongerThanTenCharacters_AfterCleansing_Test()
+        {
+            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            registration.PhysicalAddress.PhoneNumber = "1-555-555-5555";
+
+            IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
+
+            Assert.AreEqual(1, errors.Count());
         }
     }
 }

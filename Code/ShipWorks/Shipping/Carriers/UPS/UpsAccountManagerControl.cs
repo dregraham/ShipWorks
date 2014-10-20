@@ -88,6 +88,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
             edit.Enabled = enabled;
             delete.Enabled = enabled;
 
+            bool allowAccountRegistration = ShipmentTypeManager.GetType(shipmentTypeCode).IsAccountRegistrationAllowed;
+
+            if (!allowAccountRegistration)
+            {
+                add.Hide();
+
+                // Adjust the location of the remove button based on the visiblity of the add button and
+                // make sure it's on top of the add button. 
+                delete.Top = add.Top;
+                delete.BringToFront();
+            }
+            else
+            {
+                add.Show();
+                delete.Top = add.Bottom + 6;
+            }
+
             editionGuiHelper.UpdateUI();
         }
 

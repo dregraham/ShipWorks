@@ -34,7 +34,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             // Initialize the nulls to default values and denote that the account is for Express1
             stampsAccount.InitializeNullsToDefault();
-            stampsAccount.IsExpress1 = true;
+            stampsAccount.StampsReseller = (int)StampsResellerType.Express1;
+
+            stampsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
 
             // Translate the registration data into a Stamps account entity
             stampsAccount.Username = registration.UserName;
@@ -65,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             StampsAccountManager.SaveAccount(stampsAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(true, false);
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.Express1, false);
             if (accounts.Count == 1)
             {
                 StampsAccountEntity accountEntity = accounts.First();
@@ -83,6 +85,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                     }
                 }
             }
+
+            // Update the account contract type
+            Express1StampsShipmentType stampsShipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
+            stampsShipmentType.UpdateContractType(stampsAccount);
 
             return stampsAccount.StampsAccountID;
         }

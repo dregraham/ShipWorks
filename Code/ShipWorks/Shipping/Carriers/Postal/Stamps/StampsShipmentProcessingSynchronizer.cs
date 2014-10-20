@@ -10,13 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        public StampsShipmentProcessingSynchronizer()
-            : this(new StampsAccountRepository())
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StampsShipmentProcessingSynchronizer"/> class.
-        /// </summary>
         /// <param name="accountRepository">The account repository.</param>
         public StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<StampsAccountEntity> accountRepository)
         {
@@ -50,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                throw new StampsException("A Stamps.com account must be created to process this shipment.");
+                throw new StampsException("An account must be created to process this shipment.");
             }
         }
 

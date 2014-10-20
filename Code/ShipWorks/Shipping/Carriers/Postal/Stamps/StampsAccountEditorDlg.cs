@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             passwordUpdated = false;
 
             // Adjust the note text based on the carrier/reseller
-            string carrierName = StampsAccountManager.GetResellerName(account.IsExpress1);
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller);
             labelStamps.Text = carrierName;
             labelNote.Text = string.Format("Any changes made to the address are only for ShipWorks. Your address information with {0} is not updated.", carrierName);
             this.Text = string.Format("{0} Account", carrierName);

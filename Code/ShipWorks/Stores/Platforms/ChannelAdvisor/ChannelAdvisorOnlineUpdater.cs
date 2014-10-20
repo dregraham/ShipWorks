@@ -310,6 +310,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 }
 
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
@@ -381,8 +382,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
-                
+
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:

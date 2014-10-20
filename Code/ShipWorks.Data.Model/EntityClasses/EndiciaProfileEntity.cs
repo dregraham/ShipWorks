@@ -724,7 +724,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_postalProfile !=null);
 						DesetupSyncPostalProfile(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("PostalProfile");
+						}
 					}
 					else
 					{

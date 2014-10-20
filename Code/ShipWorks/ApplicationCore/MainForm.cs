@@ -14,6 +14,7 @@ using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -3376,6 +3377,7 @@ namespace ShipWorks
             repositories.Add(new Express1EndiciaScanFormAccountRepository());
             repositories.Add(new StampsScanFormAccountRepository());
             repositories.Add(new Express1StampsScanFormAccountRepository());
+            repositories.Add(new UspsScanFormAccountRepository());
 
             ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);
             ScanFormUtility.PopulatePrintScanFormMenu(menuPrintEndiciaScanForm, repositories);

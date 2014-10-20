@@ -43,6 +43,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return StampsAccountManager.Express1Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -55,6 +66,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                     ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia)) ?
                     "USPS (Express1 for Stamps)" : "USPS (Express1)";
             }
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -74,8 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { IsExpress1 = true };
-            StampsOptionsControl optionsControl = new StampsOptionsControl { IsExpress1 = true };
+            StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { StampsResellerType = StampsResellerType.Express1 };
+            StampsOptionsControl optionsControl = new StampsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
             StampsPurchasePostageDlg postageDialog = new StampsPurchasePostageDlg();
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
@@ -86,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(true);
+            return new StampsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -164,20 +183,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
+            IBestRateShippingBroker broker = new NullShippingBroker();
             if (StampsAccountManager.Express1Accounts.Any())
             {
-                return new Express1StampsBestRateBroker();
+                // Only use an Express1 broker if there is an account. We no longer want to
+                // get Express1 counter rates
+                broker = new Express1StampsBestRateBroker();
             }
-            
-            return new Express1StampsCounterRatesBroker();
+
+            return broker;
         }
 
         /// <summary>
-        /// Supports getting counter rates.
+        /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
-        public override bool SupportsCounterRates
+        /// <param name="account">The account.</param>
+        public override void UpdateContractType(StampsAccountEntity account)
         {
-            get { return true; }
+            // If the ContractType is unknown, we must not have tried to check this account yet.
+            // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
+            if (account != null && account.ContractType == (int) StampsAccountContractType.Unknown)
+            {
+                account.ContractType = (int) StampsAccountContractType.NotApplicable;
+                AccountRepository.Save(account);
+            }
         }
     }
 }

@@ -46,13 +46,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.accountName.Text = account.Description;
             postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
 
+            bool isExpress1 = account.StampsReseller == (int)StampsResellerType.Express1;
             
-            if (account.IsExpress1)
+            if (isExpress1)
             {
                 // Hide the links specific to Stamps.com if this is an Express1 account
-                labelStampsWebsite.Visible = !account.IsExpress1;
-                accountSettingsLink.Visible = !account.IsExpress1;
-                onlineReportsLink.Visible = !account.IsExpress1;
+                labelStampsWebsite.Visible = false;
+                accountSettingsLink.Visible = false;
+                onlineReportsLink.Visible = false;
 
                 // Adjust the size of the control, so the control hosting this control doesn't have 
                 // a ton of empty space
@@ -81,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName(account.IsExpress1));
+                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller));
                         keepTrying = true;
                     }
 

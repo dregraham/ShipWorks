@@ -490,7 +490,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MailingPostalCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("IsExpress1", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsReseller", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ContractType", fieldHashtable);
 		}
 		#endregion
 
@@ -765,15 +768,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)StampsAccountFieldIndex.MailingPostalCode, value); }
 		}
 
-		/// <summary> The IsExpress1 property of the Entity StampsAccount<br/><br/>
+		/// <summary> The StampsReseller property of the Entity StampsAccount<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "StampsAccount"."IsExpress1"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "StampsAccount"."StampsReseller"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IsExpress1
+		public virtual System.Int32 StampsReseller
 		{
-			get { return (System.Boolean)GetValue((int)StampsAccountFieldIndex.IsExpress1, true); }
-			set	{ SetValue((int)StampsAccountFieldIndex.IsExpress1, value); }
+			get { return (System.Int32)GetValue((int)StampsAccountFieldIndex.StampsReseller, true); }
+			set	{ SetValue((int)StampsAccountFieldIndex.StampsReseller, value); }
+		}
+
+		/// <summary> The ContractType property of the Entity StampsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsAccount"."ContractType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ContractType
+		{
+			get { return (System.Int32)GetValue((int)StampsAccountFieldIndex.ContractType, true); }
+			set	{ SetValue((int)StampsAccountFieldIndex.ContractType, value); }
 		}
 
 

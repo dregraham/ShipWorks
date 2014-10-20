@@ -4483,9 +4483,13 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1] [bit] NOT NULL,
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
+[EndiciaUspsAutomaticExpedited] [bit] NOT NULL,
+[EndiciaUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
 [StampsAutomaticExpress1] [bit] NOT NULL,
 [StampsAutomaticExpress1Account] [bigint] NOT NULL,
+[StampsUspsAutomaticExpedited] [bit] NOT NULL,
+[StampsUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
@@ -4503,7 +4507,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
 [ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL,
+[AutoCreateShipments] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -4545,7 +4549,8 @@ CREATE TABLE [dbo].[StampsAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsExpress1] [bit] NOT NULL
+[StampsReseller] [int] NOT NULL,
+[ContractType] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalStampsAccount] on [dbo].[StampsAccount]'
