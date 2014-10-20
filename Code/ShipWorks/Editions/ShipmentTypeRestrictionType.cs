@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Editions
 {
@@ -8,26 +10,36 @@ namespace ShipWorks.Editions
         /// <summary>
         /// The entire shipment type is restricted/disabled from being used in ShipWorks.
         /// </summary>
+        [Description("Disabled")]
+        [ApiValue("Disabled")]
         Disabled = 0,
 
         /// <summary>
         /// New accounts cannot be registered/created in ShipWorks.
         /// </summary>
+        [Description("Account registration")]
+        [ApiValue("AccountRegistration")]
         AccountRegistration = 1,
 
         /// <summary>
         /// A shipment cannot be processed.
         /// </summary>
+        [Description("Processing")]
+        [ApiValue("Processing")]
         Processing = 2,
 
         /// <summary>
         /// Purchasing postage is not allowed.
         /// </summary>
+        [Description("Purchasing")]
+        [ApiValue("Purchasing")]
         Purchasing = 3,
 
         /// <summary>
         /// Footers for discount messaging in the rate control are not allowed.
         /// </summary>
+        [Description("Rate discount messaging")]
+        [ApiValue("RateDiscountMessaging")]
         RateDiscountMessaging = 4,
 
         /// <summary>
@@ -37,6 +49,8 @@ namespace ShipWorks.Editions
         /// to convert through ShipWorks. After Stamps.com has reached out to these customers and converted
         /// their accounts, this can be removed.
         /// </summary>
+        [Description("Shipping account conversion")]
+        [ApiValue("ShippingAccountConversion")]
         ShippingAccountConversion = 5
     }
 }
