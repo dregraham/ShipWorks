@@ -386,13 +386,6 @@ CREATE TABLE [dbo].[tmp_rg_xx_Shipment]
 [ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipAddressValidationSuggestionCount] [int] NOT NULL,
-[ShipAddressValidationStatus] [int] NOT NULL,
-[ShipAddressValidationError] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipResidentialStatus] [int] NOT NULL,
-[ShipPOBox] [int] NOT NULL,
-[ShipUSTerritory] [int] NOT NULL,
-[ShipMilitaryAddress] [int] NOT NULL,
 [ResidentialDetermination] [int] NOT NULL,
 [ResidentialResult] [bit] NOT NULL,
 [OriginOriginID] [bigint] NOT NULL,
@@ -435,11 +428,13 @@ IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
 IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION END
 GO
-INSERT INTO [dbo].[tmp_rg_xx_Shipment]([ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ActualLabelFormat], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ShipAddressValidationSuggestionCount], [ShipAddressValidationStatus], [ShipAddressValidationError], [ShipResidentialStatus], [ShipPOBox], [ShipUSTerritory], [ShipMilitaryAddress], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID],
-	RequestedLabelFormat) 
-SELECT [ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ThermalType], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ShipAddressValidationSuggestionCount], [ShipAddressValidationStatus], [ShipAddressValidationError], [ShipResidentialStatus], [ShipPOBox], [ShipUSTerritory], [ShipMilitaryAddress], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID],
-	isnull(ThermalType,-1)
-FROM [dbo].[Shipment]
+INSERT INTO [dbo].[tmp_rg_xx_Shipment]([ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ActualLabelFormat], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID], [RequestedLabelFormat]) 
+	SELECT [ShipmentID], [OrderID], [Shipment].[ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ThermalType], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [Shipment].[ReturnShipment], [Shipment].[Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID], 
+		IsNull([ShippingProfile].[RequestedLabelFormat], -1) 
+	FROM [dbo].[Shipment]
+		LEFT JOIN [dbo].[ShippingProfile]
+			ON [dbo].[Shipment].[ShipmentType] = [dbo].[ShippingProfile].[ShipmentType]
+				AND [dbo].[ShippingProfile].[ShipmentTypePrimary] = 1
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO

@@ -6,9 +6,9 @@ PRINT N'Disabling table change tracking'
 GO
 ALTER TABLE [dbo].[Order] DISABLE CHANGE_TRACKING
 GO
-ALTER TABLE [dbo].[Shipment] DISABLE CHANGE_TRACKING
-GO
 ALTER TABLE [dbo].[Store] DISABLE CHANGE_TRACKING
+GO
+ALTER TABLE [dbo].[Shipment] DISABLE CHANGE_TRACKING
 GO
 PRINT N'Dropping extended properties'
 GO
@@ -185,46 +185,6 @@ GO
 ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Store]
 ALTER TABLE [dbo].[Order] DROP CONSTRAINT [FK_Order_Customer]
 GO
-PRINT N'Dropping foreign keys from [dbo].[BestRateShipment]'
-GO
-ALTER TABLE [dbo].[BestRateShipment] DROP CONSTRAINT [FK_BestRateShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] DROP CONSTRAINT [FK_EquashipShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[FedExShipment]'
-GO
-ALTER TABLE [dbo].[FedExShipment] DROP CONSTRAINT [FK_FedExShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[InsurancePolicy]'
-GO
-ALTER TABLE [dbo].[InsurancePolicy] DROP CONSTRAINT [FK_InsurancePolicy_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[iParcelShipment]'
-GO
-ALTER TABLE [dbo].[iParcelShipment] DROP CONSTRAINT [FK_iParcelShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[OnTracShipment]'
-GO
-ALTER TABLE [dbo].[OnTracShipment] DROP CONSTRAINT [FK_OnTracShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[OtherShipment]'
-GO
-ALTER TABLE [dbo].[OtherShipment] DROP CONSTRAINT [FK_OtherShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[PostalShipment]'
-GO
-ALTER TABLE [dbo].[PostalShipment] DROP CONSTRAINT [FK_PostalShipment_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[ShipmentCustomsItem]'
-GO
-ALTER TABLE [dbo].[ShipmentCustomsItem] DROP CONSTRAINT [FK_ShipmentCustomsItem_Shipment]
-GO
-PRINT N'Dropping foreign keys from [dbo].[UpsShipment]'
-GO
-ALTER TABLE [dbo].[UpsShipment] DROP CONSTRAINT [FK_UpsShipment_Shipment]
-GO
 PRINT N'Dropping foreign keys from [dbo].[AmazonStore]'
 GO
 ALTER TABLE [dbo].[AmazonStore] DROP CONSTRAINT [FK_AmazonStore_Store]
@@ -321,17 +281,57 @@ PRINT N'Dropping foreign keys from [dbo].[YahooStore]'
 GO
 ALTER TABLE [dbo].[YahooStore] DROP CONSTRAINT [FK_YahooStore_Store]
 GO
+PRINT N'Dropping foreign keys from [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] DROP CONSTRAINT [FK_BestRateShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[EquaShipShipment]'
+GO
+ALTER TABLE [dbo].[EquaShipShipment] DROP CONSTRAINT [FK_EquashipShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[FedExShipment]'
+GO
+ALTER TABLE [dbo].[FedExShipment] DROP CONSTRAINT [FK_FedExShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] DROP CONSTRAINT [FK_InsurancePolicy_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[iParcelShipment]'
+GO
+ALTER TABLE [dbo].[iParcelShipment] DROP CONSTRAINT [FK_iParcelShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[OnTracShipment]'
+GO
+ALTER TABLE [dbo].[OnTracShipment] DROP CONSTRAINT [FK_OnTracShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[OtherShipment]'
+GO
+ALTER TABLE [dbo].[OtherShipment] DROP CONSTRAINT [FK_OtherShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[PostalShipment]'
+GO
+ALTER TABLE [dbo].[PostalShipment] DROP CONSTRAINT [FK_PostalShipment_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[ShipmentCustomsItem]'
+GO
+ALTER TABLE [dbo].[ShipmentCustomsItem] DROP CONSTRAINT [FK_ShipmentCustomsItem_Shipment]
+GO
+PRINT N'Dropping foreign keys from [dbo].[UpsShipment]'
+GO
+ALTER TABLE [dbo].[UpsShipment] DROP CONSTRAINT [FK_UpsShipment_Shipment]
+GO
 PRINT N'Dropping constraints from [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] DROP CONSTRAINT [PK_Order]
 GO
-PRINT N'Dropping constraints from [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] DROP CONSTRAINT [PK_Shipment]
-GO
 PRINT N'Dropping constraints from [dbo].[Store]'
 GO
 ALTER TABLE [dbo].[Store] DROP CONSTRAINT [PK_Store]
+GO
+PRINT N'Dropping constraints from [dbo].[Shipment]'
+GO
+ALTER TABLE [dbo].[Shipment] DROP CONSTRAINT [PK_Shipment]
 GO
 PRINT N'Dropping index [IX_FilterNodeContentDirty_ColumnsUpdated] from [dbo].[FilterNodeContentDirty]'
 GO
@@ -348,6 +348,10 @@ GO
 PRINT N'Dropping index [IX_FilterNodeUpdateItem] from [dbo].[FilterNodeUpdateItem]'
 GO
 DROP INDEX [IX_FilterNodeUpdateItem] ON [dbo].[FilterNodeUpdateItem]
+GO
+PRINT N'Dropping index [IX_FilterNodeUpdateOrder] from [dbo].[FilterNodeUpdateOrder]'
+GO
+DROP INDEX [IX_FilterNodeUpdateOrder] ON [dbo].[FilterNodeUpdateOrder]
 GO
 PRINT N'Dropping index [IX_FilterNodeUpdateShipment] from [dbo].[FilterNodeUpdateShipment]'
 GO
@@ -477,6 +481,10 @@ PRINT N'Dropping index [IX_Auto_ShipSenseRecognitionStatus] from [dbo].[Order]'
 GO
 DROP INDEX [IX_Auto_ShipSenseRecognitionStatus] ON [dbo].[Order]
 GO
+PRINT N'Dropping index [IX_Store_StoreName] from [dbo].[Store]'
+GO
+DROP INDEX [IX_Store_StoreName] ON [dbo].[Store]
+GO
 PRINT N'Dropping index [IX_Shipment_OrderID] from [dbo].[Shipment]'
 GO
 DROP INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment]
@@ -489,13 +497,13 @@ PRINT N'Dropping index [IX_Shipment_ProcessedOrderID] from [dbo].[Shipment]'
 GO
 DROP INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment]
 GO
-PRINT N'Dropping index [IX_Store_StoreName] from [dbo].[Store]'
+PRINT N'Dropping index [IX_Shipment_RequestedLabelFormat] from [dbo].[Shipment]'
 GO
-DROP INDEX [IX_Store_StoreName] ON [dbo].[Store]
+DROP INDEX [IX_Shipment_RequestedLabelFormat] ON [dbo].[Shipment]
 GO
-PRINT N'Dropping index [IX_FilterNodeUpdateOrder] from [dbo].[FilterNodeUpdateOrder]'
+PRINT N'Dropping index [IX_Shipment_ActualLabelFormat] from [dbo].[Shipment]'
 GO
-DROP INDEX [IX_FilterNodeUpdateOrder] ON [dbo].[FilterNodeUpdateOrder]
+DROP INDEX [IX_Shipment_ActualLabelFormat] ON [dbo].[Shipment]
 GO
 PRINT N'Rebuilding [dbo].[Order]'
 GO
@@ -579,9 +587,9 @@ GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Order] ON
 GO
 INSERT INTO [dbo].[tmp_rg_xx_Order]([OrderID], [StoreID], [CustomerID], [OrderNumber], [OrderNumberComplete], [OrderDate], [OrderTotal], [LocalStatus], [IsManual], [OnlineLastModified], [OnlineCustomerID], [OnlineStatus], [OnlineStatusCode], [RequestedShipping], [BillFirstName], [BillMiddleName], [BillLastName], [BillCompany], [BillStreet1], [BillStreet2], [BillStreet3], [BillCity], [BillStateProvCode], [BillPostalCode], [BillCountryCode], [BillPhone], [BillFax], [BillEmail], [BillWebsite], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipFax], [ShipEmail], [ShipWebsite], [RollupItemCount], [RollupItemName], [RollupItemCode], [RollupItemSKU], [RollupItemLocation], [RollupItemQuantity], [RollupItemTotalWeight], [RollupNoteCount], [BillNameParseStatus], [BillUnparsedName], [ShipNameParseStatus], [ShipUnparsedName], [ShipSenseHashKey], [ShipSenseRecognitionStatus],
-		[BillAddressValidationError], [BillAddressValidationStatus], [BillAddressValidationSuggestionCount], [BillMilitaryAddress], [BillPOBox], [BillResidentialStatus], [BillUSTerritory], [ShipAddressValidationError], [ShipAddressValidationStatus], [ShipAddressValidationSuggestionCount], [ShipMilitaryAddress], [ShipPOBox], [ShipResidentialStatus], [ShipUSTerritory]) 
-	SELECT [OrderID], [StoreID], [CustomerID], [OrderNumber], [OrderNumberComplete], [OrderDate], [OrderTotal], [LocalStatus], [IsManual], [OnlineLastModified], [OnlineCustomerID], [OnlineStatus], [OnlineStatusCode], [RequestedShipping], [BillFirstName], [BillMiddleName], [BillLastName], [BillCompany], [BillStreet1], [BillStreet2], [BillStreet3], [BillCity], [BillStateProvCode], [BillPostalCode], [BillCountryCode], [BillPhone], [BillFax], [BillEmail], [BillWebsite], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipFax], [ShipEmail], [ShipWebsite], [RollupItemCount], [RollupItemName], [RollupItemCode], [RollupItemSKU], [RollupItemLocation], [RollupItemQuantity], [RollupItemTotalWeight], [RollupNoteCount], [BillNameParseStatus], [BillUnparsedName], [ShipNameParseStatus], [ShipUnparsedName], [ShipSenseHashKey], [ShipSenseRecognitionStatus],
-		'', 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0
+	[BillAddressValidationError], [BillAddressValidationStatus], [BillAddressValidationSuggestionCount], [BillMilitaryAddress], [BillPOBox], [BillResidentialStatus], [BillUSTerritory], [ShipAddressValidationError], [ShipAddressValidationStatus], [ShipAddressValidationSuggestionCount], [ShipMilitaryAddress], [ShipPOBox], [ShipResidentialStatus], [ShipUSTerritory]) 
+SELECT [OrderID], [StoreID], [CustomerID], [OrderNumber], [OrderNumberComplete], [OrderDate], [OrderTotal], [LocalStatus], [IsManual], [OnlineLastModified], [OnlineCustomerID], [OnlineStatus], [OnlineStatusCode], [RequestedShipping], [BillFirstName], [BillMiddleName], [BillLastName], [BillCompany], [BillStreet1], [BillStreet2], [BillStreet3], [BillCity], [BillStateProvCode], [BillPostalCode], [BillCountryCode], [BillPhone], [BillFax], [BillEmail], [BillWebsite], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipFax], [ShipEmail], [ShipWebsite], [RollupItemCount], [RollupItemName], [RollupItemCode], [RollupItemSKU], [RollupItemLocation], [RollupItemQuantity], [RollupItemTotalWeight], [RollupNoteCount], [BillNameParseStatus], [BillUnparsedName], [ShipNameParseStatus], [ShipUnparsedName], [ShipSenseHashKey], [ShipSenseRecognitionStatus],
+	'', 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0
 FROM [dbo].[Order]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Order] OFF
@@ -765,11 +773,11 @@ CREATE TABLE [dbo].[tmp_rg_xx_Store]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Store] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_Store]([StoreID], [License], [Edition], [TypeCode], [Enabled], [SetupComplete], [StoreName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Fax], [Email], [Website], [AutoDownload], [AutoDownloadMinutes], [AutoDownloadOnlyAway], [ComputerDownloadPolicy], [DefaultEmailAccountID], [ManualOrderPrefix], [ManualOrderPostfix], [InitialDownloadDays], [InitialDownloadOrder],
-		[AddressValidationSetting]) 
-	SELECT [StoreID], [License], [Edition], [TypeCode], [Enabled], [SetupComplete], [StoreName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Fax], [Email], [Website], [AutoDownload], [AutoDownloadMinutes], [AutoDownloadOnlyAway], [ComputerDownloadPolicy], [DefaultEmailAccountID], [ManualOrderPrefix], [ManualOrderPostfix], [InitialDownloadDays], [InitialDownloadOrder],
-		1
-	FROM [dbo].[Store]
+INSERT INTO [dbo].[tmp_rg_xx_Store]([StoreID], [License], [Edition], [TypeCode], [Enabled], [SetupComplete], [StoreName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Fax], [Email], [Website], [AutoDownload], [AutoDownloadMinutes], [AutoDownloadOnlyAway], [ComputerDownloadPolicy], [DefaultEmailAccountID], [ManualOrderPrefix], [ManualOrderPostfix], [InitialDownloadDays], [InitialDownloadOrder], 
+	[AddressValidationSetting]) 
+SELECT [StoreID], [License], [Edition], [TypeCode], [Enabled], [SetupComplete], [StoreName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Fax], [Email], [Website], [AutoDownload], [AutoDownloadMinutes], [AutoDownloadOnlyAway], [ComputerDownloadPolicy], [DefaultEmailAccountID], [ManualOrderPrefix], [ManualOrderPostfix], [InitialDownloadDays], [InitialDownloadOrder], 
+	1 
+FROM [dbo].[Store]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Store] OFF
 GO
@@ -817,7 +825,8 @@ CREATE TABLE [dbo].[tmp_rg_xx_Shipment]
 [TrackingNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsGenerated] [bit] NOT NULL,
 [CustomsValue] [money] NOT NULL,
-[ThermalType] [int] NULL,
+[RequestedLabelFormat] [int] NOT NULL,
+[ActualLabelFormat] [int] NULL,
 [ShipFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipMiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -867,16 +876,16 @@ CREATE TABLE [dbo].[tmp_rg_xx_Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [int] NOT NULL
+[OnlineShipmentID] [varchar] (128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Shipment] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_Shipment]([ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ThermalType], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], OnlineShipmentID,
-	 [ShipAddressValidationError], [ShipAddressValidationStatus], [ShipAddressValidationSuggestionCount], [ShipMilitaryAddress], [ShipPOBox], [ShipResidentialStatus], [ShipUSTerritory]) 
-	 SELECT [ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ThermalType], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], OnlineShipmentID,
-	 '', 0, 0, 0, 0, 0, 0
- FROM [dbo].[Shipment]
+INSERT INTO [dbo].[tmp_rg_xx_Shipment]([ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [RequestedLabelFormat], [ActualLabelFormat], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID],
+	[ShipAddressValidationError], [ShipAddressValidationStatus], [ShipAddressValidationSuggestionCount], [ShipMilitaryAddress], [ShipPOBox], [ShipResidentialStatus], [ShipUSTerritory]) 
+SELECT [ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [RequestedLabelFormat], [ActualLabelFormat], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID],
+	'', 0, 0, 0, 0, 0, 0
+FROM [dbo].[Shipment]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_Shipment] OFF
 GO
@@ -904,6 +913,14 @@ GO
 PRINT N'Creating index [IX_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC) INCLUDE ([OrderID])
+GO
+PRINT N'Creating index [IX_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_RequestedLabelFormat] ON [dbo].[Shipment] ([RequestedLabelFormat])
+GO
+PRINT N'Creating index [IX_Shipment_ActualLabelFormat] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Shipment_ActualLabelFormat] ON [dbo].[Shipment] ([ActualLabelFormat])
 GO
 ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
@@ -941,14 +958,6 @@ PRINT N'Creating index [IX_FilterNodeUpdateItem] on [dbo].[FilterNodeUpdateItem]
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateItem] ON [dbo].[FilterNodeUpdateItem] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-PRINT N'Altering [dbo].[FilterNodeUpdateShipment]'
-GO
-ALTER TABLE [dbo].[FilterNodeUpdateShipment] ALTER COLUMN [ColumnsUpdated] [varbinary] (100) NOT NULL
-GO
-PRINT N'Creating index [IX_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateShipment] ON [dbo].[FilterNodeUpdateShipment] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
-GO
 PRINT N'Altering [dbo].[FilterNodeUpdateOrder]'
 GO
 ALTER TABLE [dbo].[FilterNodeUpdateOrder] ALTER COLUMN [ColumnsUpdated] [varbinary] (100) NOT NULL
@@ -956,6 +965,14 @@ GO
 PRINT N'Creating index [IX_FilterNodeUpdateOrder] on [dbo].[FilterNodeUpdateOrder]'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateOrder] ON [dbo].[FilterNodeUpdateOrder] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
+GO
+PRINT N'Altering [dbo].[FilterNodeUpdateShipment]'
+GO
+ALTER TABLE [dbo].[FilterNodeUpdateShipment] ALTER COLUMN [ColumnsUpdated] [varbinary] (100) NOT NULL
+GO
+PRINT N'Creating index [IX_FilterNodeUpdateShipment] on [dbo].[FilterNodeUpdateShipment]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_FilterNodeUpdateShipment] ON [dbo].[FilterNodeUpdateShipment] ([ObjectID], [ColumnsUpdated]) INCLUDE ([ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
@@ -985,10 +1002,6 @@ GO
 PRINT N'Creating index [IX_ValidatedAddress_ConsumerIDAddressPrefix] on [dbo].[ValidatedAddress]'
 GO
 CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix] ON [dbo].[ValidatedAddress] ([ConsumerID], [AddressPrefix])
-GO
-PRINT N'Adding constraints to [dbo].[Shipment]'
-GO
-ALTER TABLE [dbo].[Shipment] ADD CONSTRAINT [IX_Shipment_Other] UNIQUE NONCLUSTERED  ([ShipmentID])
 GO
 PRINT N'Adding foreign keys to [dbo].[AmazonOrder]'
 GO
@@ -1078,46 +1091,6 @@ PRINT N'Adding foreign keys to [dbo].[Order]'
 GO
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [FK_Order_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 ALTER TABLE [dbo].[Order] ADD CONSTRAINT [FK_Order_Customer] FOREIGN KEY ([CustomerID]) REFERENCES [dbo].[Customer] ([CustomerID])
-GO
-PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
-GO
-ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
-GO
-ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[InsurancePolicy]'
-GO
-ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [FK_InsurancePolicy_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[iParcelShipment]'
-GO
-ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [FK_iParcelShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
-GO
-ALTER TABLE [dbo].[OnTracShipment] ADD CONSTRAINT [FK_OnTracShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[OtherShipment]'
-GO
-ALTER TABLE [dbo].[OtherShipment] ADD CONSTRAINT [FK_OtherShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[PostalShipment]'
-GO
-ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [FK_PostalShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[ShipmentCustomsItem]'
-GO
-ALTER TABLE [dbo].[ShipmentCustomsItem] ADD CONSTRAINT [FK_ShipmentCustomsItem_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[UpsShipment]'
-GO
-ALTER TABLE [dbo].[UpsShipment] ADD CONSTRAINT [FK_UpsShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[AmazonStore]'
 GO
@@ -1215,6 +1188,46 @@ PRINT N'Adding foreign keys to [dbo].[YahooStore]'
 GO
 ALTER TABLE [dbo].[YahooStore] ADD CONSTRAINT [FK_YahooStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
+GO
+ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
+GO
+ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
+GO
+ALTER TABLE [dbo].[FedExShipment] ADD CONSTRAINT [FK_FedExShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[InsurancePolicy]'
+GO
+ALTER TABLE [dbo].[InsurancePolicy] ADD CONSTRAINT [FK_InsurancePolicy_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[iParcelShipment]'
+GO
+ALTER TABLE [dbo].[iParcelShipment] ADD CONSTRAINT [FK_iParcelShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[OnTracShipment]'
+GO
+ALTER TABLE [dbo].[OnTracShipment] ADD CONSTRAINT [FK_OnTracShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[OtherShipment]'
+GO
+ALTER TABLE [dbo].[OtherShipment] ADD CONSTRAINT [FK_OtherShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[PostalShipment]'
+GO
+ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [FK_PostalShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[ShipmentCustomsItem]'
+GO
+ALTER TABLE [dbo].[ShipmentCustomsItem] ADD CONSTRAINT [FK_ShipmentCustomsItem_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[UpsShipment]'
+GO
+ALTER TABLE [dbo].[UpsShipment] ADD CONSTRAINT [FK_UpsShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
 PRINT N'Creating extended properties'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'BillCountryCode'
@@ -1284,7 +1297,7 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'ResidentialResult'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'6', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'ShipCountryCode'
-GO 
+GO
 EXEC sp_addextendedproperty N'AuditName', N'ShipCountry', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'ShipCountryCode'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'7', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'ShipDate'
