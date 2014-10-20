@@ -9,6 +9,7 @@ using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
+using System.Xml.Linq;
 
 namespace ShipWorks.Editions
 {
@@ -32,6 +33,9 @@ namespace ShipWorks.Editions
             {
                 throw new ArgumentNullException("store");
             }
+
+            // Initialize to an empty shipment type restriction set
+            ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize((XElement)null);
 
             this.store = store;
         }
