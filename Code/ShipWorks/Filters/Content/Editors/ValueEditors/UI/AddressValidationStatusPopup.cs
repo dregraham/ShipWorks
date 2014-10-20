@@ -59,7 +59,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
                 // Build statusList with new checkboxes and related enums.
                 var checkboxAndStatusType = new Tuple<CheckBox, AddressValidationStatusType>(new CheckBox
                 {
-                    Text = status.Value == AddressValidationStatusType.Pending ? "Checking..." : status.Key,
+                    Text = status.Value == AddressValidationStatusType.Pending ? "Pending" : status.Key,
                     Location = new Point(3, verticlePosition),
                     AutoSize = true
                 }, status.Value);
