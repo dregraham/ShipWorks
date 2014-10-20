@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI.Controls.ResizingRichTextBox));
             this.questionsTextBox = new UI.Controls.ResizingRichTextBox.DisabledCursorRichTextBox();
             this.SuspendLayout();
             // 

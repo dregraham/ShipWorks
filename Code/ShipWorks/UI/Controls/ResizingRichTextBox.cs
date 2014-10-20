@@ -12,7 +12,6 @@ namespace ShipWorks.UI.Controls
     public partial class ResizingRichTextBox : UserControl
     {
         private int previousLines;
-        protected readonly float LineHeight;
 
         /// <summary>
         /// Constructor
@@ -45,6 +44,11 @@ namespace ShipWorks.UI.Controls
                 UpdateSize();
             }
         }
+
+        /// <summary>
+        /// Defines the height of a single line of text
+        /// </summary>
+        protected float LineHeight { get; private set; }
 
         /// <summary>
         /// Gets the internal rich text box used to actually display text
