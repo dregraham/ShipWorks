@@ -35,6 +35,7 @@
             this.menuSep = new System.Windows.Forms.ToolStripSeparator();
             this.menuTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCopyTracking = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuInsuranceClaim = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ratesControl = new ShipWorks.Shipping.Editing.Rating.RatesPanel();
@@ -69,10 +70,11 @@
             this.menuSep,
             this.menuTrack,
             this.menuCopyTracking,
+            this.menuInsuranceClaim,
             this.menuSep2,
             this.menuCopy});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(199, 126);
+            this.contextMenu.Size = new System.Drawing.Size(199, 170);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.OnContextMenuOpening);
             // 
             // menuEdit
@@ -111,6 +113,14 @@
             this.menuCopyTracking.Text = "Copy Tracking Number";
             this.menuCopyTracking.Click += new System.EventHandler(this.OnCopyTracking);
             // 
+            // menuInsuranceClaim
+            // 
+            this.menuInsuranceClaim.Image = global::ShipWorks.Properties.Resources.message;
+            this.menuInsuranceClaim.Name = "menuInsuranceClaim";
+            this.menuInsuranceClaim.Size = new System.Drawing.Size(198, 22);
+            this.menuInsuranceClaim.Text = "Insurance Claim";
+            this.menuInsuranceClaim.Click += new System.EventHandler(this.OnSubmitClaim);
+            // 
             // menuSep2
             // 
             this.menuSep2.Name = "menuSep2";
@@ -127,11 +137,11 @@
             // 
             this.ratesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ratesControl.ConsolidatePostalRates = true;
             this.ratesControl.Location = new System.Drawing.Point(0, 64);
             this.ratesControl.Name = "ratesControl";
             this.ratesControl.Size = new System.Drawing.Size(659, 184);
             this.ratesControl.TabIndex = 5;
-            this.ratesControl.ConsolidatePostalRates = true;
             // 
             // ShipmentsPanel
             // 
@@ -161,5 +171,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuCopyTracking;
         private System.Windows.Forms.ToolStripSeparator menuSep2;
         private Shipping.Editing.Rating.RatesPanel ratesControl;
+        private System.Windows.Forms.ToolStripMenuItem menuInsuranceClaim;
     }
 }

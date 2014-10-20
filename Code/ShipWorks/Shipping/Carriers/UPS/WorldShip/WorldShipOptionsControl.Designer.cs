@@ -40,7 +40,7 @@
             // launchWorldShip
             // 
             this.launchWorldShip.AutoSize = true;
-            this.launchWorldShip.Location = new System.Drawing.Point(26, 24);
+            this.launchWorldShip.Location = new System.Drawing.Point(20, 22);
             this.launchWorldShip.Name = "launchWorldShip";
             this.launchWorldShip.Size = new System.Drawing.Size(330, 17);
             this.launchWorldShip.TabIndex = 0;
@@ -61,7 +61,7 @@
             // 
             this.labelWorldShipLaunch.AutoSize = true;
             this.labelWorldShipLaunch.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelWorldShipLaunch.Location = new System.Drawing.Point(43, 39);
+            this.labelWorldShipLaunch.Location = new System.Drawing.Point(37, 37);
             this.labelWorldShipLaunch.MaximumSize = new System.Drawing.Size(380, 0);
             this.labelWorldShipLaunch.Name = "labelWorldShipLaunch";
             this.labelWorldShipLaunch.Size = new System.Drawing.Size(372, 52);
@@ -72,7 +72,7 @@
             // 
             this.labelWorldShipConnectionSetup.AutoSize = true;
             this.labelWorldShipConnectionSetup.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelWorldShipConnectionSetup.Location = new System.Drawing.Point(43, 113);
+            this.labelWorldShipConnectionSetup.Location = new System.Drawing.Point(37, 111);
             this.labelWorldShipConnectionSetup.MaximumSize = new System.Drawing.Size(380, 0);
             this.labelWorldShipConnectionSetup.Name = "labelWorldShipConnectionSetup";
             this.labelWorldShipConnectionSetup.Size = new System.Drawing.Size(374, 52);
@@ -83,7 +83,7 @@
             // 
             this.labelConnectionSetupHeader.AutoSize = true;
             this.labelConnectionSetupHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelConnectionSetupHeader.Location = new System.Drawing.Point(23, 98);
+            this.labelConnectionSetupHeader.Location = new System.Drawing.Point(17, 96);
             this.labelConnectionSetupHeader.Name = "labelConnectionSetupHeader";
             this.labelConnectionSetupHeader.Size = new System.Drawing.Size(106, 13);
             this.labelConnectionSetupHeader.TabIndex = 7;
@@ -91,7 +91,7 @@
             // 
             // integrateWorldShip
             // 
-            this.integrateWorldShip.Location = new System.Drawing.Point(46, 170);
+            this.integrateWorldShip.Location = new System.Drawing.Point(40, 168);
             this.integrateWorldShip.Name = "integrateWorldShip";
             this.integrateWorldShip.Size = new System.Drawing.Size(161, 23);
             this.integrateWorldShip.TabIndex = 6;

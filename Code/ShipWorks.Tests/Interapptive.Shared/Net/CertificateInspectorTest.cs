@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
+            Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
         }
         
         [TestMethod]

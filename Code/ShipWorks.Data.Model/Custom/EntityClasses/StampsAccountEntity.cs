@@ -15,10 +15,9 @@ namespace ShipWorks.Data.Model.EntityClasses
             get
             {
                 // Express1 uses terribly long account numbers
-                if (!IsExpress1)
+                if (StampsReseller != 1)
                 {
                     return Username;
-                    
                 }
 
                 string descriptionBase = Username;

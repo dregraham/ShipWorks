@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
 
             //validate url
             Assert.IsTrue(
-                mockedSubmitter.Object.Uri.ToString().EndsWith("/OnTracServices.svc/v1/42/zips?pw=test&lastupdate=3000-1-1"));
+                mockedSubmitter.Object.Uri.ToString().EndsWith("/OnTracServices.svc/v2/42/zips?pw=test&lastupdate=3000-1-1"));
         }
 
         void SuccessfullyValidateUser()

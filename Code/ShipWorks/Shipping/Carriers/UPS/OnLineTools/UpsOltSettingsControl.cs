@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         {
             upsMailInnovationsOptions.SaveSettings(settings);
 
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
 
             settings.UpsInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.UpsInsurancePennyOne = pennyOne.Checked;

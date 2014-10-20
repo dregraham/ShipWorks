@@ -339,7 +339,28 @@ namespace ShipWorks.Stores.Content.Panels
                 if (shipment != null)
                 {
                     // Show the shipping window
-                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, true))
+                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Tracking))
+                    {
+                        dlg.ShowDialog(this);
+                    }
+
+                    ReloadContent();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Track the selected shipment
+        /// </summary>
+        private void OnSubmitClaim(object sender, EventArgs e)
+        {
+            if (entityGrid.Selection.Count == 1)
+            {
+                ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
+                if (shipment != null)
+                {
+                    // Show the shipping window
+                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Insurance))
                     {
                         dlg.ShowDialog(this);
                     }
@@ -433,6 +454,7 @@ namespace ShipWorks.Stores.Content.Panels
             menuDelete.Enabled = entityGrid.Selection.Count == 1;
             menuTrack.Enabled = entityGrid.Selection.Count == 1;
             menuCopyTracking.Enabled = entityGrid.Selection.Count == 1;
+            menuInsuranceClaim.Enabled = entityGrid.Selection.Count == 1;
             menuCopy.Enabled = entityGrid.Selection.Count >= 1;
 
             string editText = "Ship";

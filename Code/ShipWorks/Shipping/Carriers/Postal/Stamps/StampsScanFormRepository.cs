@@ -18,15 +18,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsScanFormRepository : IScanFormRepository
     {
-        private readonly bool isStampsCarrier;
+        private readonly StampsResellerType stampsResellerType;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsScanFormRepository"/> class.
         /// </summary>
-        /// <param name="stampsCarrier">if set to <c>true</c> [is stamps carrier].</param>
-        public StampsScanFormRepository(bool stampsCarrier)
+        /// <param name="stampsResellerType">The stamps reseller type.</param>
+        public StampsScanFormRepository(StampsResellerType stampsResellerType)
         {
-            isStampsCarrier = stampsCarrier;
+            this.stampsResellerType = stampsResellerType;
         }
 
         /// <summary>
@@ -84,7 +84,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 StampsScanFormEntity stampsScanFormEntity = scanForm.ScanFormEntity as StampsScanFormEntity;
                 if (stampsScanFormEntity == null)
                 {
-                    throw new StampsException(string.Format("The SCAN form provided was not {0} SCAN form.", isStampsCarrier ? "a Stamps.com" : "an Express1"));
+                    string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                    throw new StampsException(string.Format("The SCAN form provided was not a/an {0} SCAN form.", carrierName));
                 }
 
                 batchEntity.StampsScanForms.Add(stampsScanFormEntity);
@@ -102,9 +103,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             // We should have a stamps account entity
             StampsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as StampsAccountEntity;
+
             if (accountEntity == null)
             {
-                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", isStampsCarrier ? "Stamps.com" : "Express1"));
+                string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
             
             List<ScanForm> scanForms = new List<ScanForm>();
@@ -158,7 +161,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             StampsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as StampsAccountEntity;
             if (accountEntity == null)
             {
-                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", isStampsCarrier ? "Stamps.com" : "Express1"));
+                string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
 
             List<ScanFormBatch> batches = new List<ScanFormBatch>();

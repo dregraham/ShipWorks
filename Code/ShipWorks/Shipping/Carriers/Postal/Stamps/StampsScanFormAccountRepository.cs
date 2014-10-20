@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
         protected virtual IScanFormCarrierAccount CreateScanFormCarrierAccount(StampsAccountEntity accountEntity)
         {
-            return new StampsScanFormCarrierAccount(new StampsScanFormRepository(true), accountEntity);
+            return new StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.StampsReseller), accountEntity);
         }
     }
 }

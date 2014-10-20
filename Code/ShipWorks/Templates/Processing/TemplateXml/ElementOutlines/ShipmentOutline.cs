@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
@@ -84,6 +85,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                 // Copy the elements from the stand-in to ourself, adding on the ShipmentType specific condition
                 AddElements(container, If(() => Shipment.ShipmentType == (int) typeCode));
             }
+
+            AddElement("RequestedLabelFormat", () => EnumHelper.GetDescription((ThermalLanguage)Shipment.RequestedLabelFormat));
         }
         
         /// <summary>

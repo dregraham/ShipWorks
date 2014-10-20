@@ -47,7 +47,7 @@
             this.panelExpress1Account.Controls.Add(this.express1LearnMore);
             this.panelExpress1Account.Controls.Add(this.express1Signup);
             this.panelExpress1Account.Enabled = false;
-            this.panelExpress1Account.Location = new System.Drawing.Point(3, 129);
+            this.panelExpress1Account.Location = new System.Drawing.Point(7, 125);
             this.panelExpress1Account.Name = "panelExpress1Account";
             this.panelExpress1Account.Size = new System.Drawing.Size(442, 34);
             this.panelExpress1Account.TabIndex = 5;
@@ -107,7 +107,7 @@
             // 
             // labelDiscountInfo1
             // 
-            this.labelDiscountInfo1.Location = new System.Drawing.Point(15, 26);
+            this.labelDiscountInfo1.Location = new System.Drawing.Point(19, 22);
             this.labelDiscountInfo1.Name = "labelDiscountInfo1";
             this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 69);
             this.labelDiscountInfo1.TabIndex = 8;
@@ -115,7 +115,7 @@
             // 
             // checkBoxUseExpress1
             // 
-            this.checkBoxUseExpress1.Location = new System.Drawing.Point(18, 101);
+            this.checkBoxUseExpress1.Location = new System.Drawing.Point(22, 97);
             this.checkBoxUseExpress1.Name = "checkBoxUseExpress1";
             this.checkBoxUseExpress1.Size = new System.Drawing.Size(424, 33);
             this.checkBoxUseExpress1.TabIndex = 0;
@@ -134,7 +134,7 @@
             this.Controls.Add(this.checkBoxUseExpress1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AutomaticExpress1ControlBase";
-            this.Size = new System.Drawing.Size(454, 173);
+            this.Size = new System.Drawing.Size(454, 162);
             this.panelExpress1Account.ResumeLayout(false);
             this.panelExpress1Account.PerformLayout();
             this.ResumeLayout(false);

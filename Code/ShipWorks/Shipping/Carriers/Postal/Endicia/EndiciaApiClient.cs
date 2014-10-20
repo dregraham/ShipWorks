@@ -263,11 +263,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Determine what thermal type, if any to use.  Use the Endicia settings if it is an Endicia shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia || shipment.Postal.Endicia.OriginalEndiciaAccountID != null)
             {
-                thermalType = settings.EndiciaThermal ? (ThermalLanguage) settings.EndiciaThermalType : (ThermalLanguage?) null;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
             else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Endicia)
             {
-                thermalType = settings.Express1EndiciaThermal ? (ThermalLanguage) settings.Express1EndiciaThermalType : (ThermalLanguage?) null;
+                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
             else
             {
@@ -379,7 +379,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // Set the thermal type for the shipment
-            shipment.ThermalType = (int?) thermalType;
+            shipment.ActualLabelFormat = (int?)thermalType;
             request.ImageFormat = thermalType == null ? "PNG" : (thermalType == ThermalLanguage.EPL) ? "EPL2" : "ZPLII";
 
             // Not sure why these are required fields - i don't think they show up anywhere
@@ -801,7 +801,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(base64)))
             {
                 // If not cropping, or if it is thermal, just save it as-is
-                if (!crop || shipment.ThermalType != null)
+                if (!crop || shipment.ActualLabelFormat != null)
                 {
                     DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name);
                 }

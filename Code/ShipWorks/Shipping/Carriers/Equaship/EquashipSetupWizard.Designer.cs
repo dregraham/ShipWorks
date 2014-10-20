@@ -40,7 +40,7 @@
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
             this.optionsControl = new ShipWorks.Shipping.Carriers.EquaShip.EquaShipOptionsControl();
             this.mainPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageInitial.SuspendLayout();
             this.wizardPageAccount.SuspendLayout();
@@ -49,8 +49,10 @@
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(400, 542);
             this.next.TabIndex = 1;
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -64,7 +66,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageInitial);
+            this.mainPanel.Controls.Add(this.wizardPageSettings);
             this.mainPanel.Size = new System.Drawing.Size(568, 470);
             // 
             // etchBottom
@@ -88,7 +90,7 @@
             this.wizardPageInitial.Controls.Add(this.labelInfo1);
             this.wizardPageInitial.Description = "Setup ShipWorks to work with your EquaShip account.";
             this.wizardPageInitial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageInitial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageInitial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageInitial.Location = new System.Drawing.Point(0, 0);
             this.wizardPageInitial.Name = "wizardPageInitial";
             this.wizardPageInitial.Size = new System.Drawing.Size(568, 470);
@@ -102,8 +104,8 @@
             this.labelInfo1.Size = new System.Drawing.Size(454, 47);
             this.labelInfo1.TabIndex = 1;
             this.labelInfo1.Text = "This wizard will assist you in registering your EquaShip shipping account for use" +
-                " with ShipWorks. This enables you to begin shipping, tracking, and printing Equa" +
-                "ship labels directly from ShipWorks.";
+    " with ShipWorks. This enables you to begin shipping, tracking, and printing Equa" +
+    "ship labels directly from ShipWorks.";
             // 
             // wizardPageAccount
             // 
@@ -115,7 +117,7 @@
             this.wizardPageAccount.Controls.Add(this.personControl);
             this.wizardPageAccount.Description = "Enter your EquaShip account information.";
             this.wizardPageAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccount.Name = "wizardPageAccount";
             this.wizardPageAccount.Size = new System.Drawing.Size(568, 470);
@@ -159,7 +161,7 @@
             // labelFedExAccount
             // 
             this.labelFedExAccount.AutoSize = true;
-            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelFedExAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelFedExAccount.Location = new System.Drawing.Point(25, 9);
             this.labelFedExAccount.Name = "labelFedExAccount";
             this.labelFedExAccount.Size = new System.Drawing.Size(107, 13);
@@ -168,17 +170,17 @@
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-                        | ShipWorks.Data.Controls.PersonFields.Street)
-                        | ShipWorks.Data.Controls.PersonFields.City)
-                        | ShipWorks.Data.Controls.PersonFields.State)
-                        | ShipWorks.Data.Controls.PersonFields.Postal)
-                        | ShipWorks.Data.Controls.PersonFields.Country)
-                        | ShipWorks.Data.Controls.PersonFields.Residential)
-                        | ShipWorks.Data.Controls.PersonFields.Email)
-                        | ShipWorks.Data.Controls.PersonFields.Phone)
-                        | ShipWorks.Data.Controls.PersonFields.Website)));
-            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
+            | ShipWorks.Data.Controls.PersonFields.Residential) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone) 
+            | ShipWorks.Data.Controls.PersonFields.Website)));
+            this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 80);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 368);
@@ -189,10 +191,10 @@
             this.wizardPageSettings.Controls.Add(this.optionsControl);
             this.wizardPageSettings.Description = "Configure EquaShip settings.";
             this.wizardPageSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.wizardPageSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageSettings.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSettings.Name = "wizardPageSettings";
-            this.wizardPageSettings.Size = new System.Drawing.Size(660, 470);
+            this.wizardPageSettings.Size = new System.Drawing.Size(568, 470);
             this.wizardPageSettings.TabIndex = 0;
             this.wizardPageSettings.Title = "EquaShip Settings";
             this.wizardPageSettings.Load += new System.EventHandler(this.OnStepNextSettings);
@@ -209,8 +211,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 577);
+            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EquashipSetupWizard";
+            this.NextVisible = true;
             this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
             this.wizardPageInitial,
             this.wizardPageAccount,
@@ -220,7 +224,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.mainPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             this.wizardPageInitial.ResumeLayout(false);

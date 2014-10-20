@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
         protected override IScanFormCarrierAccount CreateScanFormCarrierAccount(StampsAccountEntity accountEntity)
         {
-            return new Express1StampsScanFormCarrierAccount(new StampsScanFormRepository(false), accountEntity);
+            return new Express1StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.StampsReseller), accountEntity);
         }
     }
 }

@@ -101,7 +101,11 @@ namespace ShipWorks.ApplicationCore.Logging
         ChannelSale,
         SureDone,
         nopCommerce,
-        LimeLightCRM,
+		LimeLightCRM,
+		
+		[ApiPrivateLogSource]
+        InsureShip,
+		
         SellerExpress,
         PowersportsSupport,
     }

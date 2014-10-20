@@ -25,6 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public StampsProfileControl(ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+
+            ResizeGroupBoxes(tabPage);
+
             this.shipmentTypeCode = shipmentTypeCode;
         }
 
@@ -43,6 +46,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             AddValueMapping(stampsProfile, StampsProfileFields.HidePostage, stateStealth, hidePostage, labelStealth);
             AddValueMapping(stampsProfile, StampsProfileFields.RequireFullAddressValidation, validationState, requireFullAddressValidation, labelValidation);
             AddValueMapping(stampsProfile, StampsProfileFields.Memo, stateMemo, memo, labelMemo);
+
+            // Labels
+            AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
         }
         
         /// <summary>
@@ -53,8 +59,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            bool isExpress1 = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(isExpress1);
+            StampsResellerType stampsResellerType = PostalUtility.GetStampsResellerType(shipmentTypeCode);
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(stampsResellerType);
             if (accounts.Any())
             {
                 stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();

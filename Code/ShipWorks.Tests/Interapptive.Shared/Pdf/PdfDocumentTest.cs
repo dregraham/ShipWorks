@@ -22,23 +22,34 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         [TestMethod]
         public void Convert_SinglePagePdf_ReturnsOneImageStream_Test()
         {
-            List<Stream> images;
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            const string ResourceName = "ShipWorks.Tests.Resources.SinglePagePdf.pdf";
+            List<Stream> images = new List<Stream>();
 
-            using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
+            try
             {
-                using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
-                {
-                    images = pdfDocument.ToImages().ToList();
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                const string ResourceName = "ShipWorks.Tests.Resources.SinglePagePdf.pdf";
 
-                    // Grab the first one and see if we can make it a bitmap.
-                    Bitmap bitmap = new Bitmap(images.First());
-                    bitmap.Dispose();
+                using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
+                {
+                    using (PdfDocument pdfDocument = new PdfDocument(pdfFileStream))
+                    {
+                        images = pdfDocument.ToImages().ToList();
+
+                        // Grab the first one and see if we can make it a bitmap.
+                        Bitmap bitmap = new Bitmap(images.First());
+                        bitmap.Dispose();
+                    }
+                }
+
+                Assert.AreEqual(1, images.Count);
+            }
+            finally
+            {
+                foreach (Stream imageStream in images)
+                {
+                    images.First().Dispose();
                 }
             }
-
-            Assert.AreEqual(1, images.Count);
         }
 
         // Verify that a multipage conversion works correctly
@@ -76,9 +87,9 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         public void ToImages_ReturnsPngImages_Test()
         {
             List<ImageFormat> formats;
+            
             Assembly assembly = Assembly.GetExecutingAssembly();
             const string ResourceName = "ShipWorks.Tests.Resources.MultiPagePdf.pdf";
-            
 
             using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
             {
@@ -93,10 +104,15 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
 
                         return format;
                     }).ToList();
-                }
-            }
 
-            Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+                    foreach (Stream imageStream in images)
+                    {
+                        images.First().Dispose();
+                    }
+                }
+
+                Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+            }
         }
     }
 }

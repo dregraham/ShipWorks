@@ -41,5 +41,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 return GetProfileAccount(ShipmentTypeCode.OnTrac, accountID);
             }
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void Save(OnTracAccountEntity account)
+        {
+            OnTracAccountManager.SaveAccount(account);
+        }
     }
 }

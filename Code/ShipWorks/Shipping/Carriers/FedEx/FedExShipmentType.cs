@@ -98,6 +98,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get { return SettingsRepository.GetAccounts().Any(); }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the shipment type [supports multiple packages].
         /// </summary>
         /// <value>
@@ -954,7 +962,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
@@ -1078,12 +1086,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             outline.AddElement("LabelCODReturn",
                 () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
-                ElementOutline.If(() => shipment().ThermalType == null && codReturn.Value != null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null && codReturn.Value != null));
             
             outline.AddElement("Package",
                 new FedExLegacyPackageTemplateOutline(container.Context),
                 () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),
-                ElementOutline.If(() => shipment().ThermalType == null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null));
         }
 
         /// <summary>

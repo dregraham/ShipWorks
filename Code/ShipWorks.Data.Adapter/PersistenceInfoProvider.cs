@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((162 + 0));
+			base.InitClass((163 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -123,6 +123,7 @@ namespace ShipWorks.Data.Adapter
 			InitGridColumnPositionEntityMappings();
 			InitInfopiaOrderItemEntityMappings();
 			InitInfopiaStoreEntityMappings();
+			InitInsurancePolicyEntityMappings();
 			InitIParcelAccountEntityMappings();
 			InitIParcelPackageEntityMappings();
 			InitIParcelProfileEntityMappings();
@@ -345,7 +346,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonStoreEntity's mappings</summary>
 		private void InitAmazonStoreEntityMappings()
 		{
-			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 17 );
+			base.AddElementMapping( "AmazonStoreEntity", "ShipWorksLocal", @"dbo", "AmazonStore", 18 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonApi", "AmazonApi", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, (int)SqlDbType.Char, 2, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -354,15 +355,16 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantName", "MerchantName", false, (int)SqlDbType.VarChar, 64, 0, 0, false, "", null, typeof(System.String), 5 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantToken", "MerchantToken", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 6 );
 			base.AddElementFieldMapping( "AmazonStoreEntity", "AccessKeyID", "AccessKeyID", false, (int)SqlDbType.VarChar, 32, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "Cookie", "Cookie", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieExpires", "CookieExpires", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 9 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieWaitUntil", "CookieWaitUntil", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 10 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "Certificate", "Certificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 11 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "WeightDownloads", "WeightDownloads", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
-			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 16 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "AuthToken", "AuthToken", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "Cookie", "Cookie", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieExpires", "CookieExpires", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 10 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "CookieWaitUntil", "CookieWaitUntil", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 11 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "Certificate", "Certificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 12 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "WeightDownloads", "WeightDownloads", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "MarketplaceID", "MarketplaceID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "ExcludeFBA", "ExcludeFBA", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
+			base.AddElementFieldMapping( "AmazonStoreEntity", "DomainName", "DomainName", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
 		}
 		/// <summary>Inits AmeriCommerceStoreEntity's mappings</summary>
 		private void InitAmeriCommerceStoreEntityMappings()
@@ -1433,6 +1435,21 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "InfopiaStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "InfopiaStoreEntity", "ApiToken", "ApiToken", false, (int)SqlDbType.VarChar, 128, 0, 0, false, "", null, typeof(System.String), 1 );
 		}
+		/// <summary>Inits InsurancePolicyEntity's mappings</summary>
+		private void InitInsurancePolicyEntityMappings()
+		{
+			base.AddElementMapping( "InsurancePolicyEntity", "ShipWorksLocal", @"dbo", "InsurancePolicy", 10 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "InsureShipStoreName", "InsureShipStoreName", false, (int)SqlDbType.NVarChar, 75, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "CreatedWithApi", "CreatedWithApi", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "ItemName", "ItemName", true, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "Description", "Description", true, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "ClaimType", "ClaimType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "DamageValue", "DamageValue", true, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 6 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "SubmissionDate", "SubmissionDate", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 7 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "ClaimID", "ClaimID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "InsurancePolicyEntity", "EmailAddress", "EmailAddress", true, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 9 );
+		}
 		/// <summary>Inits IParcelAccountEntity's mappings</summary>
 		private void InitIParcelAccountEntityMappings()
 		{
@@ -2139,7 +2156,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 62 );
+			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 64 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShipmentEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -2159,49 +2176,51 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "TrackingNumber", "TrackingNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 16 );
 			base.AddElementFieldMapping( "ShipmentEntity", "CustomsGenerated", "CustomsGenerated", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
 			base.AddElementFieldMapping( "ShipmentEntity", "CustomsValue", "CustomsValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 18 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ThermalType", "ThermalType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipFirstName", "ShipFirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 20 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipMiddleName", "ShipMiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 21 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipLastName", "ShipLastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 22 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipCompany", "ShipCompany", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 23 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet1", "ShipStreet1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 24 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet2", "ShipStreet2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 25 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet3", "ShipStreet3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 26 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipCity", "ShipCity", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 27 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipStateProvCode", "ShipStateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 28 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipPostalCode", "ShipPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 29 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipCountryCode", "ShipCountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 30 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipPhone", "ShipPhone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 31 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipEmail", "ShipEmail", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 32 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialDetermination", "ResidentialDetermination", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 33 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialResult", "ResidentialResult", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 34 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginOriginID", "OriginOriginID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 35 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginFirstName", "OriginFirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 36 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginMiddleName", "OriginMiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 37 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginLastName", "OriginLastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 38 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginCompany", "OriginCompany", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 39 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet1", "OriginStreet1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 40 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet2", "OriginStreet2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 41 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet3", "OriginStreet3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 42 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginCity", "OriginCity", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 43 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginStateProvCode", "OriginStateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 44 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginPostalCode", "OriginPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 45 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginCountryCode", "OriginCountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 46 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginPhone", "OriginPhone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 47 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginFax", "OriginFax", false, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 48 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginEmail", "OriginEmail", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 49 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginWebsite", "OriginWebsite", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 50 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ReturnShipment", "ReturnShipment", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 51 );
-			base.AddElementFieldMapping( "ShipmentEntity", "Insurance", "Insurance", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 52 );
-			base.AddElementFieldMapping( "ShipmentEntity", "InsuranceProvider", "InsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 53 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipNameParseStatus", "ShipNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 54 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 55 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginNameParseStatus", "OriginNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 56 );
-			base.AddElementFieldMapping( "ShipmentEntity", "OriginUnparsedName", "OriginUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 57 );
-			base.AddElementFieldMapping( "ShipmentEntity", "BestRateEvents", "BestRateEvents", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 58 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseStatus", "ShipSenseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 59 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseChangeSets", "ShipSenseChangeSets", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 60 );
-			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseEntry", "ShipSenseEntry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 61 );
+			base.AddElementFieldMapping( "ShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ActualLabelFormat", "ActualLabelFormat", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipFirstName", "ShipFirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 21 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipMiddleName", "ShipMiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 22 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipLastName", "ShipLastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 23 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipCompany", "ShipCompany", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 24 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet1", "ShipStreet1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 25 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet2", "ShipStreet2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 26 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipStreet3", "ShipStreet3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 27 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipCity", "ShipCity", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 28 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipStateProvCode", "ShipStateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 29 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipPostalCode", "ShipPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 30 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipCountryCode", "ShipCountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 31 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipPhone", "ShipPhone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 32 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipEmail", "ShipEmail", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 33 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialDetermination", "ResidentialDetermination", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 34 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ResidentialResult", "ResidentialResult", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 35 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginOriginID", "OriginOriginID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 36 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginFirstName", "OriginFirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 37 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginMiddleName", "OriginMiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 38 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginLastName", "OriginLastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 39 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginCompany", "OriginCompany", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 40 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet1", "OriginStreet1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 41 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet2", "OriginStreet2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 42 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginStreet3", "OriginStreet3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 43 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginCity", "OriginCity", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 44 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginStateProvCode", "OriginStateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 45 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginPostalCode", "OriginPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 46 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginCountryCode", "OriginCountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 47 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginPhone", "OriginPhone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 48 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginFax", "OriginFax", false, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 49 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginEmail", "OriginEmail", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 50 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginWebsite", "OriginWebsite", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 51 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ReturnShipment", "ReturnShipment", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 52 );
+			base.AddElementFieldMapping( "ShipmentEntity", "Insurance", "Insurance", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 53 );
+			base.AddElementFieldMapping( "ShipmentEntity", "InsuranceProvider", "InsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 54 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipNameParseStatus", "ShipNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 55 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipUnparsedName", "ShipUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 56 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginNameParseStatus", "OriginNameParseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 57 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OriginUnparsedName", "OriginUnparsedName", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 58 );
+			base.AddElementFieldMapping( "ShipmentEntity", "BestRateEvents", "BestRateEvents", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 59 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseStatus", "ShipSenseStatus", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 60 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseChangeSets", "ShipSenseChangeSets", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 61 );
+			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseEntry", "ShipSenseEntry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 62 );
+			base.AddElementFieldMapping( "ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, (int)SqlDbType.VarChar, 128, 0, 0, false, "", null, typeof(System.String), 63 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()
@@ -2274,7 +2293,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingProfileEntity's mappings</summary>
 		private void InitShippingProfileEntityMappings()
 		{
-			base.AddElementMapping( "ShippingProfileEntity", "ShipWorksLocal", @"dbo", "ShippingProfile", 10 );
+			base.AddElementMapping( "ShippingProfileEntity", "ShipWorksLocal", @"dbo", "ShippingProfile", 11 );
 			base.AddElementFieldMapping( "ShippingProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShippingProfileEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShippingProfileEntity", "Name", "Name", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2285,6 +2304,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingProfileEntity", "InsuranceInitialValueSource", "InsuranceInitialValueSource", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
 			base.AddElementFieldMapping( "ShippingProfileEntity", "InsuranceInitialValueAmount", "InsuranceInitialValueAmount", true, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 8 );
 			base.AddElementFieldMapping( "ShippingProfileEntity", "ReturnShipment", "ReturnShipment", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
+			base.AddElementFieldMapping( "ShippingProfileEntity", "RequestedLabelFormat", "RequestedLabelFormat", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
 		}
 		/// <summary>Inits ShippingProviderRuleEntity's mappings</summary>
 		private void InitShippingProviderRuleEntityMappings()
@@ -2298,7 +2318,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 65 );
+			base.AddElementMapping( "ShippingSettingsEntity", "ShipWorksLocal", @"dbo", "ShippingSettings", 51 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 0 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalActivated", "Activated", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalConfigured", "Configured", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2311,59 +2331,45 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExUsername", "FedExUsername", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 9 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExPassword", "FedExPassword", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 10 );
 			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExMaskAccount", "FedExMaskAccount", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 11 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermal", "FedExThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermalType", "FedExThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermalDocTab", "FedExThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 14 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermalDocTabType", "FedExThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 15 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExInsuranceProvider", "FedExInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExInsurancePennyOne", "FedExInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsAccessKey", "UpsAccessKey", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 18 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsThermal", "UpsThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 19 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsThermalType", "UpsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsInsuranceProvider", "UpsInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsInsurancePennyOne", "UpsInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 22 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermal", "EndiciaThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermalType", "EndiciaThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 24 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaCustomsCertify", "EndiciaCustomsCertify", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 25 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaCustomsSigner", "EndiciaCustomsSigner", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 26 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermalDocTab", "EndiciaThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 27 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermalDocTabType", "EndiciaThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 28 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaAutomaticExpress1", "EndiciaAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 29 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaAutomaticExpress1Account", "EndiciaAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 30 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaInsuranceProvider", "EndiciaInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 31 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipLaunch", "WorldShipLaunch", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 32 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsThermal", "StampsThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 33 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsThermalType", "StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 34 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1", "StampsAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 35 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1Account", "StampsAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 36 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermal", "Express1EndiciaThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 37 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermalType", "Express1EndiciaThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 38 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaCustomsCertify", "Express1EndiciaCustomsCertify", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 39 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaCustomsSigner", "Express1EndiciaCustomsSigner", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 40 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermalDocTab", "Express1EndiciaThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 41 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermalDocTabType", "Express1EndiciaThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 42 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaSingleSource", "Express1EndiciaSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 43 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EquaShipThermal", "EquaShipThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 44 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "EquaShipThermalType", "EquaShipThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 45 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracThermal", "OnTracThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 46 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracThermalType", "OnTracThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 47 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracInsuranceProvider", "OnTracInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 48 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracInsurancePennyOne", "OnTracInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 49 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelThermal", "iParcelThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 50 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelThermalType", "iParcelThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 51 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsuranceProvider", "iParcelInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 52 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsurancePennyOne", "iParcelInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 53 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermal", "Express1StampsThermal", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 54 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsThermalType", "Express1StampsThermalType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 55 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 56 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 57 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 58 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 59 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEnabled", "ShipSenseEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 60 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseUniquenessXml", "ShipSenseUniquenessXml", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 61 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 62 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEndShipmentID", "ShipSenseEndShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 63 );
-			base.AddElementFieldMapping( "ShippingSettingsEntity", "AutoCreateShipments", "AutoCreateShipments", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 64 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermalDocTab", "FedExThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExThermalDocTabType", "FedExThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExInsuranceProvider", "FedExInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 14 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "FedExInsurancePennyOne", "FedExInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsAccessKey", "UpsAccessKey", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 16 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsInsuranceProvider", "UpsInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsInsurancePennyOne", "UpsInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 18 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaCustomsCertify", "EndiciaCustomsCertify", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 19 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaCustomsSigner", "EndiciaCustomsSigner", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 20 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermalDocTab", "EndiciaThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 21 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaThermalDocTabType", "EndiciaThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 22 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaAutomaticExpress1", "EndiciaAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 23 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaAutomaticExpress1Account", "EndiciaAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 24 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaInsuranceProvider", "EndiciaInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 25 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaUspsAutomaticExpedited", "EndiciaUspsAutomaticExpedited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 26 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "EndiciaUspsAutomaticExpeditedAccount", "EndiciaUspsAutomaticExpeditedAccount", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 27 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipLaunch", "WorldShipLaunch", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 28 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1", "StampsAutomaticExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 29 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsAutomaticExpress1Account", "StampsAutomaticExpress1Account", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 30 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsUspsAutomaticExpedited", "StampsUspsAutomaticExpedited", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 31 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "StampsUspsAutomaticExpeditedAccount", "StampsUspsAutomaticExpeditedAccount", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 32 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaCustomsCertify", "Express1EndiciaCustomsCertify", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 33 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaCustomsSigner", "Express1EndiciaCustomsSigner", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 34 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermalDocTab", "Express1EndiciaThermalDocTab", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 35 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaThermalDocTabType", "Express1EndiciaThermalDocTabType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 36 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1EndiciaSingleSource", "Express1EndiciaSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 37 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracInsuranceProvider", "OnTracInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 38 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "OnTracInsurancePennyOne", "OnTracInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 39 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsuranceProvider", "iParcelInsuranceProvider", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 40 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "IParcelInsurancePennyOne", "iParcelInsurancePennyOne", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 41 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "Express1StampsSingleSource", "Express1StampsSingleSource", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 42 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "UpsMailInnovationsEnabled", "UpsMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 43 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", "WorldShipMailInnovationsEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 44 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", "BestRateExcludedShipmentTypes", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 45 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEnabled", "ShipSenseEnabled", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 46 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseUniquenessXml", "ShipSenseUniquenessXml", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 47 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseProcessedShipmentID", "ShipSenseProcessedShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 48 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "ShipSenseEndShipmentID", "ShipSenseEndShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 49 );
+			base.AddElementFieldMapping( "ShippingSettingsEntity", "AutoCreateShipments", "AutoCreateShipments", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 50 );
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()
@@ -2414,7 +2420,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StampsAccountEntity's mappings</summary>
 		private void InitStampsAccountEntityMappings()
 		{
-			base.AddElementMapping( "StampsAccountEntity", "ShipWorksLocal", @"dbo", "StampsAccount", 20 );
+			base.AddElementMapping( "StampsAccountEntity", "ShipWorksLocal", @"dbo", "StampsAccount", 21 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "StampsAccountID", "StampsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2434,7 +2440,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "StampsAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 16 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
 			base.AddElementFieldMapping( "StampsAccountEntity", "MailingPostalCode", "MailingPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 18 );
-			base.AddElementFieldMapping( "StampsAccountEntity", "IsExpress1", "IsExpress1", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 19 );
+			base.AddElementFieldMapping( "StampsAccountEntity", "StampsReseller", "StampsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
+			base.AddElementFieldMapping( "StampsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
 		}
 		/// <summary>Inits StampsProfileEntity's mappings</summary>
 		private void InitStampsProfileEntityMappings()

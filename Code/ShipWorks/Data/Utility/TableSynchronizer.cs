@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using log4net;
 using System.Diagnostics;
@@ -131,67 +132,80 @@ namespace ShipWorks.Data.Utility
                     }
 
                     // Go through each entity that changed
-                    foreach (IEntity2 entity in changeCollection)
+                    foreach (TEntity entity in changeCollection)
                     {
                         hasChanges = true;
 
-                        // Try to find the entity in our existing collection
-                        IEntityField2 pkField = entity.Fields.PrimaryKeyFields[0];
-                        List<int> matches = collection.FindMatches(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, pkField.CurrentValue));
-
-                        // Its already in the collection
-                        if (matches.Count == 1)
+                        TEntity modifiedEntity = MergeEntity(entity);
+                        if (modifiedEntity != null)
                         {
-                            IEntity2 existing = collection[matches[0]];
-
-                            if (!AllowOverwriteOfEdited && existing.IsDirty)
-                            {
-                                throw new InvalidOperationException("Cannot overwrite changes to a dirty entity when synchronizing.");
-                            }
-
-                            foreach (IEntityField2 field in entity.Fields)
-                            {
-                                if (!field.IsPrimaryKey)
-                                {
-                                    object newValue = entity.Fields[field.FieldIndex].CurrentValue;
-
-                                    if (!field.IsReadOnly)
-                                    {
-                                        // First, we use this to ensure proper eventing and propogation
-                                        existing.SetNewFieldValue(field.FieldIndex, newValue);
-                                    }
-
-                                    // Then we use this to set the original value
-                                    existing.Fields[field.FieldIndex].ForcedCurrentValueWrite(newValue, newValue);
-                                    existing.Fields[field.FieldIndex].IsNull = (newValue == null);
-
-                                    // Then, we need to mark it as not changed
-                                    existing.Fields[field.FieldIndex].IsChanged = false;
-                                }
-                            }
-
-                            existing.IsDirty = false;
-
                             if (modified != null)
                             {
-                                modified.Add((TEntity) existing);
+                                modified.Add(modifiedEntity);
                             }
                         }
-                        // It's not already in the collection, we have to add it
                         else
                         {
-                            collection.Add((TEntity) entity);
-
                             if (added != null)
                             {
-                                added.Add((TEntity) entity);
+                                added.Add(entity);
                             }
                         }
                     }
-
                     return hasChanges;
                 }
             }
+        }
+
+        /// <summary>
+        /// Merges the entity.
+        /// </summary>
+        /// <returns> Returns the updated entity if updating else, returns null.</returns>
+        /// <exception cref="System.InvalidOperationException">Cannot overwrite changes to a dirty entity when synchronizing.</exception>
+        public TEntity MergeEntity(TEntity entity)
+        {
+            // Try to find the entity in our existing collection
+            IEntityField2 pkField = entity.Fields.PrimaryKeyFields[0];
+            List<int> matches = collection.FindMatches(new FieldCompareValuePredicate(pkField, null, ComparisonOperator.Equal, pkField.CurrentValue));
+
+            // Its already in the collection
+            if (matches.Count == 1)
+            {
+                TEntity existing = collection[matches[0]];
+
+                if (!AllowOverwriteOfEdited && existing.IsDirty)
+                {
+                    throw new InvalidOperationException("Cannot overwrite changes to a dirty entity when synchronizing.");
+                }
+
+                foreach (IEntityField2 field in entity.Fields)
+                {
+                    if (!field.IsPrimaryKey)
+                    {
+                        object newValue = entity.Fields[field.FieldIndex].CurrentValue;
+
+                        if (!field.IsReadOnly)
+                        {
+                            // First, we use this to ensure proper eventing and propogation
+                            existing.SetNewFieldValue(field.FieldIndex, newValue);
+                        }
+
+                        // Then we use this to set the original value
+                        existing.Fields[field.FieldIndex].ForcedCurrentValueWrite(newValue, newValue);
+                        existing.Fields[field.FieldIndex].IsNull = (newValue == null);
+
+                        // Then, we need to mark it as not changed
+                        existing.Fields[field.FieldIndex].IsChanged = false;
+                    }
+                }
+
+                existing.IsDirty = false;
+                return existing;
+            }
+
+            // It's not already in the collection, we have to add it
+            collection.Add(entity);
+            return null;
         }
 
         /// <summary>

@@ -3,11 +3,13 @@ using System.Linq;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
     /// <summary>
-    /// Filters for only Endicia and Express1 Endicia rates.
+    /// Filters for only Stamps.com rates.
     /// </summary>
     internal class PostalOnlyBrokerFilter : IShippingBrokerFilter
     {
@@ -17,17 +19,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         public IEnumerable<IBestRateShippingBroker> Filter(IEnumerable<IBestRateShippingBroker> brokers)
         {
             List<IBestRateShippingBroker> bestRateShippingBrokers = new List<IBestRateShippingBroker>();
-
-            EndiciaCounterRatesBroker endiciaCounterRatesBroker = brokers.OfType<EndiciaCounterRatesBroker>().FirstOrDefault();
-            if (endiciaCounterRatesBroker != null)
+            
+            UspsCounterRatesBroker uspsCounterRatesBroker = brokers.OfType<UspsCounterRatesBroker>().FirstOrDefault();
+            if (uspsCounterRatesBroker != null)
             {
-                bestRateShippingBrokers.Add(endiciaCounterRatesBroker);
+                bestRateShippingBrokers.Add(uspsCounterRatesBroker);
             }
 
-            Express1EndiciaBestRateBroker express1EndiciaBestRateBroker = brokers.OfType<Express1EndiciaBestRateBroker>().FirstOrDefault();
-            if (express1EndiciaBestRateBroker != null)
+            StampsCounterRatesBroker stampsCounterRatesBroker = brokers.OfType<StampsCounterRatesBroker>().FirstOrDefault();
+            if (stampsCounterRatesBroker != null)
             {
-                bestRateShippingBrokers.Add(express1EndiciaBestRateBroker);
+                bestRateShippingBrokers.Add(stampsCounterRatesBroker);
             }
 
             return bestRateShippingBrokers;

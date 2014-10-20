@@ -7,6 +7,8 @@ using ActiproSoftware.Drawing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -58,6 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             switch (shipmentTypeCode)
             {
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
@@ -141,6 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     };
 
                 if (shipmentType == ShipmentTypeCode.Stamps ||
+                    shipmentType == ShipmentTypeCode.Usps ||
                     shipmentType == ShipmentTypeCode.Express1Stamps ||
                     shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
@@ -489,9 +493,46 @@ namespace ShipWorks.Shipping.Carriers.Postal
         public static bool IsPostalSetup()
         {
             return EndiciaAccountManager.EndiciaAccounts.Any() ||
-                     EndiciaAccountManager.Express1Accounts.Any() ||
-                     StampsAccountManager.StampsAccounts.Any() ||
-                     StampsAccountManager.Express1Accounts.Any();
+                   EndiciaAccountManager.Express1Accounts.Any() ||
+                   StampsAccountManager.StampsAccounts.Any() ||
+                   StampsAccountManager.Express1Accounts.Any() ||
+                   StampsAccountManager.StampsExpeditedAccounts.Any();
+        }
+
+        /// <summary>
+        /// Returns the StampsResellerType for a ShipmentTypeCode
+        /// </summary>
+        public static StampsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
+        {
+            switch (shipmentTypeCode)
+            {
+                case ShipmentTypeCode.Usps:
+                    return StampsResellerType.StampsExpedited;
+                case ShipmentTypeCode.Stamps:
+                    return StampsResellerType.None;
+                case ShipmentTypeCode.Express1Stamps:
+                    return StampsResellerType.Express1;
+                default:
+                    throw new ArgumentException(string.Format("{0} has no associated StampsResellerType.", EnumHelper.GetDescription(shipmentTypeCode)), "shipmentTypeCode");
+            }
+        }
+
+        /// <summary>
+        /// Returns a new StampsShipmentType for a given StampsResellerType
+        /// </summary>
+        public static StampsShipmentType GetStampsShipmentTypeForStampsResellerType(StampsResellerType stampsResellerType)
+        {
+            switch (stampsResellerType)
+            {
+                case StampsResellerType.None:
+                    return new StampsShipmentType();
+                case StampsResellerType.StampsExpedited:
+                    return new UspsShipmentType();
+                case StampsResellerType.Express1:
+                    return new Express1StampsShipmentType();
+                default:
+                    throw new ArgumentException(string.Format("{0} has no associated Shipment Type.", EnumHelper.GetDescription(stampsResellerType)), "stampsResellerType");
+            }
         }
     }
 }

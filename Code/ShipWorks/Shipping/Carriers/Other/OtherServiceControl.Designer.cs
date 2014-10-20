@@ -72,6 +72,9 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 314);
             this.sectionReturns.Size = new System.Drawing.Size(398, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(398, 24);
+            this.sectionLabelOptions.Visible = false;
             // 
             // sectionShipment
             // 

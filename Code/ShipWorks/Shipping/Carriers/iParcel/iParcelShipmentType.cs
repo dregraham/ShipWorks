@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -68,6 +69,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override ShipmentTypeCode ShipmentTypeCode
         {
             get { return ShipmentTypeCode.iParcel; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return iParcelAccountManager.Accounts.Any();
+            }
         }
 
         /// <summary>
@@ -584,14 +596,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     throw new ArgumentNullException("shipment");
                 }
                 
-                ShippingSettingsEntity shippingSettings = repository.GetShippingSettings();
-                if (shippingSettings.IParcelThermal)
+                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
-                    shipment.ThermalType = shippingSettings.IParcelThermalType;
+                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
                 }
                 else
                 {
-                    shipment.ThermalType = null;
+                    shipment.ActualLabelFormat = null;
                 }
 
                 IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
@@ -785,11 +796,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     foreach (iParcelServiceType serviceType in supportedServiceTypes)
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
-                        decimal totalServiceCost = costInfoTable.AsEnumerable()
-                                                                .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
-                                                                .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        List<DataRow> serviceRows = costInfoTable.AsEnumerable()
+                                               .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
+                                               .ToList();
 
-                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
+                        decimal shippingCost = serviceRows.Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        decimal taxCost = serviceRows.Sum(row => decimal.Parse(row["PackageTax"].ToString()));
+                        decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
+                        decimal totalCost = shippingCost + taxCost + dutyCost;
+
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalCost, dutyCost, taxCost, shippingCost, new iParcelRateSelection(serviceType))
                         {
                             ServiceLevel = ServiceLevelType.Anytime,
                             ShipmentType = ShipmentTypeCode.iParcel,

@@ -271,27 +271,27 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("zenventory")]
         Zenventory = 51,
 
-        [Description("Lime Light CRM")]
-        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
-        [StoreTypeIcon("limelightcrm")]
-        LimeLightCRM = 53,
-		
         [Description("nopCommerce")]
         [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
         [StoreTypeIcon("nopcommerce")]
         nopCommerce = 52,
+		
+        [Description("Lime Light CRM")]
+        [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
+        [StoreTypeIcon("limelightcrm")]
+        LimeLightCRM = 53,
 
         [Description("OpenCart")]
         [StoreTypeIdentity("OPENCART", "OCT")]
         [StoreTypeIcon("opencart")]
         OpenCart = 54,
 
-        [Description("sellerexpress")]
+        [Description("SellerExpress")]
         [StoreTypeIdentity("SELLEREXPRESS", "SEE")]
         [StoreTypeIcon("sellerexpress")]
         SellerExpress = 55,
 		
-        [Description("Powersports Support")]
+        [Description("Powersport Support")]
         [StoreTypeIdentity("POWERSPORTSSUPPORT", "PSS")]
         [StoreTypeIcon("powersportssupport")]
         PowersportsSupport = 56,

@@ -810,7 +810,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnStepNextOptions(object sender, WizardStepEventArgs e)
         {
-
+            var settings = ShippingSettings.Fetch();
+            optionsControl.SaveSettings(settings);
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>
@@ -829,14 +831,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void OnSteppingIntoFinish(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (Pages.Contains(wizardPageOptions))
-            {
-                var settings = ShippingSettings.Fetch();
-
-                optionsControl.SaveSettings(settings);
-                ShippingSettings.Save(settings);
-            }
-
             // Make sure any pending changes have been saved
             EndiciaAccountManager.SaveAccount(account);
 

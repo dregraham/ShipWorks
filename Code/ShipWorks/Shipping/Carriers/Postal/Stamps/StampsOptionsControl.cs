@@ -1,8 +1,6 @@
-﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings;
-using System;
-using ShipWorks.Common.IO.Hardware.Printers;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -20,9 +18,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Whether the control is used for Express1.
+        /// The stamps reseller type.
         /// </summary>
-        public bool IsExpress1 
+        public ShipmentTypeCode ShipmentTypeCode
         { 
             get; 
             set; 
@@ -33,29 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
-
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-            if(IsExpress1)
-            {
-                thermalPrinter.Checked = settings.Express1StampsThermal;
-                thermalType.SelectedValue = (ThermalLanguage)settings.Express1StampsThermalType;
-            }
-            else
-            {
-                thermalPrinter.Checked = settings.StampsThermal;
-                thermalType.SelectedValue = (ThermalLanguage)settings.StampsThermalType;
-            }
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            requestedLabelFormat.LoadDefaultProfile(shipmentType);
         }
 
         /// <summary>
@@ -63,16 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
-            if(IsExpress1)
-            {
-                settings.Express1StampsThermal = thermalPrinter.Checked;
-                settings.Express1StampsThermalType = (int)thermalType.SelectedValue;   
-            }
-            else
-            {
-                settings.StampsThermal = thermalPrinter.Checked;
-                settings.StampsThermalType = (int)thermalType.SelectedValue;    
-            }
+            requestedLabelFormat.SaveDefaultProfile();
         }
     }
 }

@@ -35,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 new RequestThrottleQuotaDefinition<AmazonMwsApiCall>(TimeSpan.FromSeconds(30),  AmazonMwsApiCall.ListOrdersByNextToken),  
                 new RequestThrottleQuotaDefinition<AmazonMwsApiCall>(TimeSpan.FromSeconds(30),  AmazonMwsApiCall.ListOrderItemsByNextToken),  
                 new RequestThrottleQuotaDefinition<AmazonMwsApiCall>(TimeSpan.FromSeconds(30),  AmazonMwsApiCall.ListMarketplaceParticipations),
+                new RequestThrottleQuotaDefinition<AmazonMwsApiCall>(TimeSpan.FromSeconds(10), AmazonMwsApiCall.GetAuthToken)
             };
         }
 

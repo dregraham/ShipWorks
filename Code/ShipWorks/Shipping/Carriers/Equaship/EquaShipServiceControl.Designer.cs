@@ -83,6 +83,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 439);
             this.sectionReturns.Size = new System.Drawing.Size(496, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(496, 24);
             // 
             // sectionShipment
             // 
@@ -469,7 +471,9 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();

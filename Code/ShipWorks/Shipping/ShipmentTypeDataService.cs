@@ -101,13 +101,13 @@ namespace ShipWorks.Shipping
                 // Try to fetch the existing profile data for the shipment
                 if (parent.Fields.State != EntityState.New)
                 {
-                    childEntity = (EntityBase2) Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
+                    childEntity = (EntityBase2)Activator.CreateInstance(profileType, parent.Fields["ShippingProfileID"].CurrentValue);
                     SqlAdapter.Default.FetchEntity(childEntity);
                 }
                 // If the parent is new, just create a new child.
                 else
                 {
-                    childEntity = (EntityBase2) Activator.CreateInstance(profileType);
+                    childEntity = (EntityBase2)Activator.CreateInstance(profileType);
                 }
 
                 // Apply the reference
@@ -119,6 +119,22 @@ namespace ShipWorks.Shipping
                     // Reset the object to new and apply 
                     childEntity.Fields.State = EntityState.New;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Load insurance data into the parent entity, or create if it doesnt exist.  If its already loaded and present
+        /// it can be optionally refreshed.
+        /// </summary>
+        public static void LoadInsuranceData(ShipmentEntity shipment)
+        {
+            InsurancePolicyEntity insurancePolicyEntity = new InsurancePolicyEntity(shipment.ShipmentID);
+
+            SqlAdapter.Default.FetchEntity(insurancePolicyEntity);
+
+            if (insurancePolicyEntity.Fields.State == EntityState.Fetched)
+            {
+                shipment.InsurancePolicy = insurancePolicyEntity;
             }
         }
 
