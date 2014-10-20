@@ -11,6 +11,8 @@ USPS            = 15,
 
 PostalWebTools	= 4,
 
+OnTrac = 11,
+i-parcel = 12
 */
 -- Determine if Web Tools is configured since it doesn't have accounts
 declare @WebToolsConfigured bit
@@ -56,6 +58,10 @@ ShipmentTypes (ShipmentTypeCode) as (
 	select 3 where not exists (select 1 from StampsAccount where [StampsReseller] = 0)
 	union 
 	select 13 where not exists (select 1 from StampsAccount where [StampsReseller] = 1)
+	union 
+	select 11 where not exists (select 1 from OnTracAccount)
+	union 
+	select 12 where not exists (select 1 from iParcelAccount)
 ), 
 -- Now union the:
 	-- Currently excluded types
