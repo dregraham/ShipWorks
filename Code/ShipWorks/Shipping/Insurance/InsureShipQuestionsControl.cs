@@ -1,80 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Win32;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Insurance
 {
     /// <summary>
     /// Displays information about InsureShip insurance
     /// </summary>
-    public partial class InsureShipQuestionsControl : UserControl
+    public class InsureShipQuestionsControl : ResizingRichTextBox
     {
         private Point topLeft;
         private Point bottomRight;
 
         private bool wasInLink;
-        private readonly int emailAddressLocation;
-        private int previousLines;
-        private readonly float lineHeight;
+        private int emailAddressLocation;
 
         public const string EmailAddress = "claims@insureship.com";
 
         /// <summary>
-        /// Constructor
+        /// Constructors
         /// </summary>
         public InsureShipQuestionsControl()
         {
-            InitializeComponent();
+            Text = "Thanks for using ShipWorks insurance! ShipWorks Insurance is managed by InsureShip. If you have any questions about your claim, please contact InsureShip directly at claims@insureship.com or call (866) 701-3654.";
+            ParseTextForLink();
 
-            // Get the height of a line of text that will be used for sizing the control and hit testing links
-            lineHeight = GetLineHeight().Height;
+            InternalTextBox.MouseUp += OnInternalTextBoxMouseUp;
+            InternalTextBox.MouseMove += OnQuestionsTextBoxMouseMove;
+            InternalTextBox.TextChanged += OnInternalTextBoxTextChanged;
+        }
 
-            // Store how many lines of text there are now, which we'll use for resizing
-            previousLines = questionsTextBox.GetLineFromCharIndex(questionsTextBox.Text.Length + 1);
-
-            emailAddressLocation = questionsTextBox.Text.IndexOf(EmailAddress, StringComparison.OrdinalIgnoreCase);
+        /// <summary>
+        /// Find the link in the text
+        /// </summary>
+        private void ParseTextForLink()
+        {
+            emailAddressLocation = InternalTextBox.Text.IndexOf(EmailAddress, StringComparison.OrdinalIgnoreCase);
 
             FormatEmailAddresses();
             UpdateLinkLocation();
         }
 
         /// <summary>
-        /// Color and underline the email address
+        /// Handle text changes in the control
         /// </summary>
-        private void FormatEmailAddresses()
+        private void OnInternalTextBoxTextChanged(object sender, EventArgs eventArgs)
         {
-            questionsTextBox.Select(emailAddressLocation, EmailAddress.Length);
-            questionsTextBox.SelectionFont = new Font(questionsTextBox.Font, FontStyle.Underline);
-            questionsTextBox.SelectionColor = Color.Blue;
-            questionsTextBox.DeselectAll();
+            ParseTextForLink();
         }
 
         /// <summary>
-        /// Handle resizing of the control
+        /// Handle control resizes
         /// </summary>
-        private void OnResize(object sender, EventArgs e)
+        /// <param name="e"></param>
+        protected override void OnResize(EventArgs e)
         {
             UpdateLinkLocation();
 
-            int lines = questionsTextBox.GetLineFromCharIndex(questionsTextBox.Text.Length + 1);
-
-            if (lines != previousLines)
-            {
-                previousLines = lines;
-
-                Height = (int)lineHeight * (lines + 1);
-            }
+            base.OnResize(e);
         }
 
         /// <summary>
         /// Handle clicks to see if the email address has been clicked
         /// </summary>
-        private void OnQuestionsTextBoxClick(object sender, MouseEventArgs e)
+        private void OnInternalTextBoxMouseUp(object sender, MouseEventArgs e)
         {
             if (IsInLink(e.Location))
             {
@@ -97,13 +88,14 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
-        /// Get the height of a line of text
+        /// Color and underline the email address
         /// </summary>
-        private SizeF GetLineHeight()
+        private void FormatEmailAddresses()
         {
-            Graphics g = Graphics.FromHwnd(questionsTextBox.Handle);
-            SizeF f = g.MeasureString(questionsTextBox.Text, questionsTextBox.Font);
-            return f;
+            InternalTextBox.Select(emailAddressLocation, EmailAddress.Length);
+            InternalTextBox.SelectionFont = new Font(InternalTextBox.Font, FontStyle.Underline);
+            InternalTextBox.SelectionColor = Color.Blue;
+            InternalTextBox.DeselectAll();
         }
 
         /// <summary>
@@ -111,8 +103,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private void UpdateLinkLocation()
         {
-            topLeft = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation);
-            bottomRight = questionsTextBox.GetPositionFromCharIndex(emailAddressLocation + EmailAddress.Length);
+            topLeft = InternalTextBox.GetPositionFromCharIndex(emailAddressLocation);
+            bottomRight = InternalTextBox.GetPositionFromCharIndex(emailAddressLocation + EmailAddress.Length);
         }
 
         /// <summary>
@@ -120,29 +112,8 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private bool IsInLink(Point point)
         {
-            return point.X > topLeft.X && point.X < bottomRight.X && 
-                point.Y > topLeft.Y && point.Y < bottomRight.Y + lineHeight;
-        }
-
-        /// <summary>
-        /// RichTextBox that behaves more like a label
-        /// </summary>
-        private class DisabledCursorRichTextBox : RichTextBox
-        {
-            /// <summary>
-            /// Handle Windows messages
-            /// </summary>
-            protected override void WndProc(ref Message m)
-            {
-                // We need to stop cursor changes because it causes flickering when the containing control changes cursors
-                // We also need to stop focus so the caret doesn't display
-                if (m.Msg == NativeMethods.WM_SETCURSOR || m.Msg == NativeMethods.WM_SETFOCUS)
-                {
-                    return;
-                }
-
-                base.WndProc(ref m);
-            }
+            return point.X > topLeft.X && point.X < bottomRight.X &&
+                   point.Y > topLeft.Y && point.Y < bottomRight.Y + LineHeight;
         }
     }
 }
