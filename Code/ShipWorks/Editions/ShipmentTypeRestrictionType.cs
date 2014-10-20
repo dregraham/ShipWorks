@@ -1,5 +1,8 @@
-﻿namespace ShipWorks.Editions
+﻿using System.Reflection;
+
+namespace ShipWorks.Editions
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ShipmentTypeRestrictionType
     {
         /// <summary>
