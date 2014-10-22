@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -8,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
@@ -744,6 +746,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Log the error
                     LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
+
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                AccountRepository = new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
+
+                return GetRates(shipment);
+
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+                return errorRates;
+            }
+            finally
+            {
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
             }
         }
     }
