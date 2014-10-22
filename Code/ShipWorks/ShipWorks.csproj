@@ -731,6 +731,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\EndiciaUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnote.cs">
       <SubType>UserControl</SubType>

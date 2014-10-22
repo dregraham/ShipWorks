@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -87,6 +91,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (StampsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the USPS (Stamps.com Expedited) 
+        /// shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of a StampsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            if (AccountRepository.Accounts.Any())
+            {
+                // We have an account, so use the normal broker
+                return new UspsBestRateBroker(this, AccountRepository);
+            }
+            else
+            {
+                // No accounts, so use the counter rates broker to allow the user to
+                // sign up for the account. We can use the StampsCounterRateAccountRepository 
+                // here because the underlying accounts being used are the same.
+                return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
             }
         }
     }

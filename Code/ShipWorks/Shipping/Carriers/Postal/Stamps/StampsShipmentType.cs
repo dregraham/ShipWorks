@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
@@ -686,8 +687,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of a StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new StampsBestRateBroker(this, AccountRepository) : counterBroker;
+            if (AccountRepository.Accounts.Any())
+            {
+                // We have an account, so use the normal broker
+                return new StampsBestRateBroker(this, AccountRepository);
+            }
+            else
+            {
+                // No accounts, so use the counter rates broker to allow the user to
+                // sign up for the account
+                return new StampsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+            }
         }
 
         /// <summary>
