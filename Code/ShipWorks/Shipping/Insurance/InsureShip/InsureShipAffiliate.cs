@@ -20,16 +20,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// </summary>
         public InsureShipAffiliate(string tangoStoreID, string tangoCustomerID)
         {
-            if (string.IsNullOrWhiteSpace(tangoStoreID))
-            {
-                throw new ArgumentNullException("tangoStoreID");
-            }
-
-            if (string.IsNullOrWhiteSpace(tangoCustomerID))
-            {
-                throw new ArgumentNullException("tangoCustomerID");
-            }
-
             // The Tango store ID is the same as the InsureShip store id
             insureShipStoreID = tangoStoreID;
             insureShipPolicyID = string.Format("SW{0}", tangoCustomerID);

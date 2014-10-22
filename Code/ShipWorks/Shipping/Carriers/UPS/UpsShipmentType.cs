@@ -925,8 +925,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             return new RateGroup(rates);
         }
 
-
-
         /// <summary>
         /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
         /// empty string is returned.
@@ -935,7 +933,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (transitTime != null)
             {
-                return ((int)(transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString(CultureInfo.InvariantCulture);
+                return transitTime.BusinessDays.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
