@@ -81,5 +81,20 @@ namespace ShipWorks.Shipping.Carriers
         /// Gets data to verify the SSL certificate from Express1Stamps
         /// </summary>
         string Express1StampsCertificateVerificationData { get; }
+
+        /// <summary>
+        /// Gets the Stamps.com user name used for obtaining counter rates
+        /// </summary>
+        string StampsUsername { get; }
+
+        /// <summary>
+        /// Gets the Stamps.com password used for obtaining counter rates
+        /// </summary>
+        string StampsPassword { get; }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from Stamps.com
+        /// </summary>
+        string StampsCertificateVerificationData { get; }
     }
 }
