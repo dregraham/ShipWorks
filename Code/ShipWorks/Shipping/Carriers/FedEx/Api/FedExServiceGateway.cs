@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // ShipService object here (i.e. no more abstractions can be made)
-                using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
+                using (ShipService service = new FedExShipServiceWrapper(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
                 {
                     // Point the service to the correct endpoint
                     service.Url = settings.EndpointUrl;
