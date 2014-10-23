@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
 {
     /// <summary>
-    /// An implementation of the IRegistrationPromotion that should be used for creating new Stamps.com accounts.
+    /// An implementation of the IRegistrationPromotion that should be used for creating new 
+    /// Stamps.com accounts when migrating from an existing Endicia account.
     /// </summary>
-    public class StampsExpeditedRegistrationPromotion : IRegistrationPromotion
+    public class EndiciaRegistrationPromotion : IRegistrationPromotion
     {
         /// <summary>
-        /// This will only return the Expedited type.
+        /// This will return both the Expedited and Standard types.
         /// </summary>
         public IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes
         {
@@ -33,15 +32,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode(PostalAccountRegistrationType registrationType)
         {
-            if (!StampsAccountManager.StampsAccounts.Any() && !StampsAccountManager.Express1Accounts.Any() && !StampsAccountManager.StampsExpeditedAccounts.Any() && !EndiciaAccountManager.Express1Accounts.Any() && !EndiciaAccountManager.EndiciaAccounts.Any())
+            if (registrationType == PostalAccountRegistrationType.Expedited)
             {
-                // There aren't any postal accounts in ShipWorks; this is considered to be a brand new customer, 
-                // so use a promo code to indicate such to allow Stamps.com to track this information
-                return "ShipWorks6";
+                // The promotion code for a new expedited account.
+                return "ShipWorks5";
             }
-            
-            // The regular promotion code for a new expedited account.
-            return "shipworks3";
+            else
+            {
+                return "ShipWorks4";
+            }
         }
     }
 }

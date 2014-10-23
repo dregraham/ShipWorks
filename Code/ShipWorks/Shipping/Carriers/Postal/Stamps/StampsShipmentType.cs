@@ -96,7 +96,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             // Push customers to the USPS (Stamps.com Expedited) setup wizard
-            return new UspsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
+		    IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
+            return new UspsSetupWizard(promotion, true);
         }
 
         /// <summary>

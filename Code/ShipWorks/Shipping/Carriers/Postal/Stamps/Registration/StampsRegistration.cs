@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
         public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway)
-            : this(validator, gateway, new StampsExpeditedRegistrationPromotion())
+            : this(validator, gateway, new RegistrationPromotionFactory().CreateRegistrationPromotion())
         { }
 
         /// <summary>
