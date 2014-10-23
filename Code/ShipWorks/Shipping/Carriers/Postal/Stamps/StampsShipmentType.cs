@@ -283,7 +283,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // Express1 rates - return rates filtered by what is available to the user
-                return BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
+                RateGroup express1Group = BuildExpress1RateGroup(stampsRates, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Express1Stamps);
+                if (IsRateDiscountMessagingRestricted)
+                {
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS (Stamps.com Expedited)
+                    // promo footnote to show single account marketing dialog
+                    express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+                }
+
+                return express1Group;
             }
         }
 
