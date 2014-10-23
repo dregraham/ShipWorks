@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialExpress1StampsCertificateVerificationData = "<Service><Subject><Value>test</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialStampsUsername = "interapptive";
-        private const string TestCredentialStampsPassword = "password1";
+        private const string TestCredentialStampsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
         private const string TestCredentialStampsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
