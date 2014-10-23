@@ -675,6 +675,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulator.cs" />

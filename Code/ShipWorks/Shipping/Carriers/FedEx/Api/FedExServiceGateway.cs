@@ -57,7 +57,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </returns>
         /// <exception cref="System.ArgumentException">nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.</exception>
         /// <exception cref="FedExSoapCarrierException"></exception>
-        public IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
+        public virtual IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
+        {
+            using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
+            {
+                return Ship(nativeShipmentRequest, service);
+            }
+        }
+
+        /// <summary>
+        /// Communicates with the FedEx API to process a shipment.
+        /// </summary>
+        /// <returns>
+        /// The ProcessShipmentReply receivied from FedEx.
+        /// </returns>
+        protected IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest, ShipService service)
         {
             try
             {
@@ -65,23 +79,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // ShipService object here (i.e. no more abstractions can be made)
-                using (ShipService service = new FedExShipServiceWrapper(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
+
+                // Point the service to the correct endpoint
+                service.Url = settings.EndpointUrl;
+
+                // The request should already be configured at this point, so we just need to send
+                // it across the wire to FedEx
+                ProcessShipmentRequest processShipmentRequest = nativeShipmentRequest as ProcessShipmentRequest;
+                processReply = service.processShipment(processShipmentRequest);
+
+                // If we are an Interapptive user, save for certification
+                if (InterapptiveOnly.IsInterapptiveUser)
                 {
-                    // Point the service to the correct endpoint
-                    service.Url = settings.EndpointUrl;
-
-                    // The request should already be configured at this point, so we just need to send
-                    // it across the wire to FedEx
-                    ProcessShipmentRequest processShipmentRequest = nativeShipmentRequest as ProcessShipmentRequest;
-                    processReply = service.processShipment(processShipmentRequest);     
-
-                    // If we are an Interapptive user, save for certification
-                    if (InterapptiveOnly.IsInterapptiveUser)
-                    {
-                        string customerTransactionId = nativeShipmentRequest.TransactionDetail.CustomerTransactionId;
-                        FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);
-                    }
+                    string customerTransactionId = nativeShipmentRequest.TransactionDetail.CustomerTransactionId;
+                    FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);
                 }
+
 
                 return processReply;
             }
@@ -94,7 +107,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw WebHelper.TranslateWebException(ex, typeof(FedExException));
             }
         }
-
         
         /// <summary>
         /// Communicates with FedEx API to Validate postal code and obtain locationID
