@@ -8,6 +8,7 @@ using Moq;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Text.RegularExpressions;
 using log4net;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
@@ -17,6 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         StampsRegistration testObject;
         Mock<IStampsRegistrationValidator> mockedValidator;
         Mock<IStampsRegistrationGateway> mockedGateway;
+        private Mock<IRegistrationPromotion> promotion;
 
         [TestInitialize]
         public void Initialize()
@@ -28,7 +30,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             mockedGateway = new Mock<IStampsRegistrationGateway>();
             mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>()));
 
-            testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object);
+            promotion = new Mock<IRegistrationPromotion>();
+            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("shipworks");
+
+            testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object, promotion.Object);
         }
 
         [TestMethod]

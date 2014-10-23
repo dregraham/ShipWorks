@@ -692,8 +692,8 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
@@ -718,7 +718,9 @@
     <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsExpeditedRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
