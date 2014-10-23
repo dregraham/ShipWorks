@@ -12,14 +12,14 @@ namespace ShipWorks.Shipping.ShipSense.Population
     /// <summary>
     /// Loads the ShipSenseKnowledgebase based on shipment history
     /// </summary>
-    public class ShipSenseLoader
+    public class ShipSenseLoader : IDisposable
     {
         private const string AppLockName = "ShipSenseLoader_Working";
         private static readonly ILog log = LogManager.GetLogger(typeof(ShipSenseLoader));
 
         private static object runningLock = new object();
         
-        private readonly IShipSenseLoaderGateway shipSenseLoaderGateway;
+        private IShipSenseLoaderGateway shipSenseLoaderGateway;
         private readonly IProgressReporter progressReporter;
         
         /// <summary>
@@ -72,19 +72,19 @@ namespace ShipWorks.Shipping.ShipSense.Population
         {
             try
             {
-                using (ShipSenseLoaderGateway gateway = new ShipSenseLoaderGateway(new Knowledgebase()))
-                {
-                    ShipSenseLoader shipSenseLoader = new ShipSenseLoader(progressReporter, gateway);
-                    shipSenseLoader.ResetOrderHashKeys = resetOrderHashKeys;
+                ShipSenseLoader shipSenseLoader = new ShipSenseLoader(progressReporter);
+                shipSenseLoader.ResetOrderHashKeys = resetOrderHashKeys;
 
-                    Task.Factory.StartNew(shipSenseLoader.LoadData);
-                }
+                // We used to have this StartNew in a new ShipSenseLoaderGateway using block, but that doesn't make sense
+                // because we were in a using, starting a new thread that could take a long time, but immediately leaving the
+                // using block.  This was causing sql app locking issues, so removed the using block and added a Dispose
+                // method to ShipSenseLoader that now disposes the gateway.  The ContinueWith now calls this loader dispose method.
+                Task.Factory.StartNew(shipSenseLoader.LoadData).ContinueWith(t => shipSenseLoader.Dispose());
             }
             catch (Exception e)
             {
                 log.Error(e.Message, e);
             }
-
         }
 
         /// <summary>
@@ -207,6 +207,28 @@ namespace ShipWorks.Shipping.ShipSense.Population
             {
                 progressReporter.PercentComplete = Math.Min(percentComplete, 100);
                 progressReporter.Detail = detail;
+            }
+        }
+
+        /// <summary>
+        /// Dispose of any resources
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose of any resources
+        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+               shipSenseLoaderGateway.Dispose();
+
+               shipSenseLoaderGateway = null;
             }
         }
     }
