@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
@@ -54,11 +55,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages
             try
             {
                 // Create the processing client
-                MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient(store);
-
+                MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create(store);
 
                 // Process the request
-                XmlDocument xmlResponse = client.GetUser();
+                XElement xmlResponse = XElement.Parse(client.GetUser());
                 XPathNavigator xpath = xmlResponse.CreateNavigator();
 
                 // Try to find the primary account

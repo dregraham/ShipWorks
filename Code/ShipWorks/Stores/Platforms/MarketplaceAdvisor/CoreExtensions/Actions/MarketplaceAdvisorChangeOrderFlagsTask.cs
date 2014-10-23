@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Data;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 {
@@ -85,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 
                 try
                 {
-                    MarketplaceAdvisorOmsClient.ChangeOrderFlags(storeEntity, order, FlagsOn, FlagsOff);
+                    MarketplaceAdvisorOmsClient.Create(storeEntity).ChangeOrderFlags(new MarketplaceAdvisorOrderDto(order), FlagsOn, FlagsOff);
                 }
                 catch (MarketplaceAdvisorException ex)
                 {

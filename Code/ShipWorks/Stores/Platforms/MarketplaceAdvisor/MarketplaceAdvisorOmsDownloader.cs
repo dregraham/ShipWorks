@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private bool DownloadNextOrdersPage(int currentPage)
         {
-            OMOrders orders = MarketplaceAdvisorOmsClient.GetOrders((MarketplaceAdvisorStoreEntity) Store, currentPage);
+            OMOrders orders = MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).GetOrders(currentPage);
 
             if (orders.Orders.Length == 0)
             {
@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 // Only make the call if there are any to do
                 if (markAsProcessed.Count > 0)
                 {
-                    MarketplaceAdvisorOmsClient.MarkOrdersProcessed((MarketplaceAdvisorStoreEntity) Store, markAsProcessed);
+                    MarketplaceAdvisorOmsClient.Create((MarketplaceAdvisorStoreEntity)Store).MarkOrdersProcessed(markAsProcessed);
                 }
             }
         }
@@ -508,7 +508,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             item.Location = omsItem.InventoryLocation;
 
             // Get the details for the item
-            MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient((MarketplaceAdvisorStoreEntity) Store);
+            MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create((MarketplaceAdvisorStoreEntity) Store);
             MarketplaceAdvisorInventoryItem inventoryItem = client.GetInventoryItem(itemNumber);
 
             item.Description = inventoryItem.Description;
