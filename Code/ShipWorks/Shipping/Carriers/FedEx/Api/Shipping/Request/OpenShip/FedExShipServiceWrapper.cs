@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reflection;
 using System.Web.Services.Protocols;
+using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
@@ -24,6 +25,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
             
         }
 
+        protected override XmlReader GetReaderForMessage(SoapClientMessage message, int bufferSize)
+        {
+            return new FedExOpenShipXmlReader(base.GetReaderForMessage(message, bufferSize));
+        }
+
+        /// <summary>
+        /// Get the writer for the message
+        /// </summary>
         protected override System.Xml.XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
         {
             // Manipulate the outgoing message 
@@ -41,6 +50,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
             return webRequest = base.GetWebRequest(uri);
         }
 
+        /// <summary>
+        /// Fixups the outgoing SOAP message. Ensures action is correct.
+        /// </summary>
         private void FixupOutgoingSoapMessage(SoapClientMessage message)
         {
             string newAction = message.Action;
