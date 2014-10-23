@@ -240,7 +240,9 @@ namespace ShipWorks.ApplicationCore.Options
             loader.PrepareForLoading();
 
             // Start the load asynchronously now that everything should be ready to load
-            Task.Factory.StartNew(loader.LoadData);
+            // We MUST ContinueWith and dispose the loader so that the sql connection
+            // gets disposed.
+            Task.Factory.StartNew(loader.LoadData).ContinueWith(t => loader.Dispose());
         }
     }
 }
