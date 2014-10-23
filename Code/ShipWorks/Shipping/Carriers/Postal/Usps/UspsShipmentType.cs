@@ -49,7 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
-            return new UspsSetupWizard(new StampsExpeditedRegistrationPromotion(), true);
+            IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
+            return new UspsSetupWizard(promotion, true);
         }
 
         /// <summary>

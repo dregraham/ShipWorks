@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages
 {
@@ -63,7 +64,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnConfigureClick(object sender, EventArgs e)
         {
-            using (StampsSetupWizard wizard = new StampsSetupWizard(new StampsExpeditedRegistrationPromotion(), true))
+            IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
+            using (StampsSetupWizard wizard = new StampsSetupWizard(promotion, true))
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {
