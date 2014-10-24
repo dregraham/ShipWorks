@@ -31,14 +31,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         static Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
 
         private readonly bool useTestServer;
+        private readonly ICertificateInspector certificateInspector;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsContractWebClient"/> class.
+        /// Initializes a new instance of the <see cref="StampsContractWebClient" /> class.
         /// </summary>
         /// <param name="useTestServer">if set to <c>true</c> [use test server].</param>
-        public StampsContractWebClient(bool useTestServer)
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        public StampsContractWebClient(bool useTestServer, ICertificateInspector certificateInspector)
         {
             this.useTestServer = useTestServer;
+            this.certificateInspector = certificateInspector;
+
             log = LogManager.GetLogger(GetType());
         }
 
@@ -67,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Makes request to Stamps.com API to change plan associated with the account referenced by the authenticator to be 
         /// an Expedited plan. This requires an authentication call to the Stamps.com API prior to changing the plan.
         /// </summary>
-        public void InternalChangeToExpeditedPlan(string authenticator, string promoCode)
+        private void InternalChangeToExpeditedPlan(string authenticator, string promoCode)
         {
             // Output parameters for web service call
             int transactionID;
@@ -104,6 +108,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             StampsAccountContractType contract = StampsAccountContractType.Unknown;
             AccountInfo accountInfo;
+            
+            // There's a chance that this will be called when checking counter rates, so check the
+            // certificate before transmitting our credentials
+            CheckCertificate();
 
             using (SwsimV39 webService = CreateWebService("GetContractType"))
             {
@@ -139,6 +147,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             return contract;
         }
+        
+        private void CheckCertificate()
+        {
+            CertificateRequest certificateRequest = new CertificateRequest(new Uri(ServiceUrl), certificateInspector);
+
+            CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
+            if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
+            {
+                string description = EnumHelper.GetDescription(ShipmentTypeCode.Stamps);
+                throw new StampsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+            }
+        }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL
@@ -157,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Authenticate the given user with Stamps.com. 
         /// </summary>
-        public void AuthenticateUser(string username, string password)
+        private void AuthenticateUser(string username, string password)
         {
             try
             {
