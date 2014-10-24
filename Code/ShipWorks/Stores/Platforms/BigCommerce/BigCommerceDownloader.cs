@@ -695,7 +695,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Load shipping address info, if it's not "digital"
             // Digital can mean download or gift cert, in which case no shipping address is provided.  This value is only
             // true if ALL items on the order are digital.  If at least 1 item is shipped, it will be false.
-            if (!order.order_is_digital)
+            if (!order.order_is_digital && shipToAddress != null)
             {
                 LoadAddressInfo(orderEntity, shipToAddress, "Ship");
             }
