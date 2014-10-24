@@ -29,15 +29,13 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ArgumentNullException_IsThrown_WhenTangoStoreIDIsEmpty()
+        public void ArgumentNullException_IsNotThrown_WhenTangoStoreIDIsEmpty()
         {
             testObject = new InsureShipAffiliate("", "tangoCustomerID");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void ArgumentNullException_IsThrown_WhenTangoCustomerIDIsEmpty()
+        public void ArgumentNullException_IsNotThrown_WhenTangoCustomerIDIsEmpty()
         {
             testObject = new InsureShipAffiliate("xxx", "");
         }
