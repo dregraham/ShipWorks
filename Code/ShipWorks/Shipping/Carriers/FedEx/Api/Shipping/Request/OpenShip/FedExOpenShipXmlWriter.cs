@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
 {
@@ -12,30 +13,56 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         private readonly XmlWriter wrappedWriter;
         private readonly Stack<string> xmlPath = new Stack<string>();
 
-        private readonly Dictionary<string, string> nodeReplacements;
-        private readonly Dictionary<string, string> valueReplacements;
-        private readonly Dictionary<string, string> nameSpaceReplacements;
-        private readonly Dictionary<List<string>, string> appendAfter;
+        /// <summary>
+        /// Nodes that match the name of the key will be renamed to the value name.
+        /// </summary>
+        private readonly Dictionary<string, string> nodeReplacements = new Dictionary<string, string>()
+        {
+            { "ProcessShipmentRequest", "CreatePendingShipmentRequest" },
+            { "DeleteShipmentRequest", "DeletePendingShipmentRequest" },
+            { "TrackingId", "TrackingIds" }
+        };
+
+        /// <summary>
+        /// For nodes that match the name of the key, replace the XML value with the value.
+        /// </summary>
+        private readonly Dictionary<string, string> valueReplacements = new Dictionary<string, string>()
+        {
+            {"Major", "7"}
+        };
+
+        /// <summary>
+        /// The namespace in the key will be replaced with the value in the XML.
+        /// </summary>
+        private readonly Dictionary<string, string> nameSpaceReplacements = new Dictionary<string, string>()
+        {
+            { "http://fedex.com/ws/ship/v15", "http://fedex.com/ws/openship/v7" }
+        };
+
+        /// <summary>
+        /// For nodes whose name matches the key, when the node is closed, the text is returned.
+        /// </summary>
+        private readonly Dictionary<List<string>, string> appendAfter = new Dictionary<List<string>, string>()
+        {
+            { new List<string>() { "Version", "CreatePendingShipmentRequest" }, "<Actions>TRANSFER</Actions>" },
+            { new List<string>() { "EmailAddress", "Recipients", "EmailLabelDetail", "PendingShipmentDetail" }, "<Role>SHIPMENT_COMPLETOR</Role>" }
+        };
+
+        /// <summary>
+        /// Nodes that match the name in the list will not be written.
+        /// </summary>
+        private readonly List<string> omit = new List<string>()
+        {
+            "DeletionControl"
+        };
+
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExOpenShipXmlWriter"/> class.
         /// </summary>
         public FedExOpenShipXmlWriter(XmlWriter originalWriter)
         {
-            nodeReplacements = new Dictionary<string, string>();
-            nodeReplacements.Add("ProcessShipmentRequest", "CreatePendingShipmentRequest");
-
-            valueReplacements = new Dictionary<string, string>();
-            valueReplacements.Add("Major", "7");
-
-            nameSpaceReplacements = new Dictionary<string, string>();
-            nameSpaceReplacements.Add("http://fedex.com/ws/ship/v15", "http://fedex.com/ws/openship/v7");
-
-            // The key to the dictionary is a list of tag names. If, going backwards through the tags, the tags match the xml path, the value will be added.
-            appendAfter = new Dictionary<List<string>, string>();
-            appendAfter.Add(new List<string>() { "Version" }, "<Actions>TRANSFER</Actions>");
-            appendAfter.Add(new List<string>() { "EmailAddress", "Recipients", "EmailLabelDetail", "PendingShipmentDetail" }, "<Role>SHIPMENT_COMPLETOR</Role>");
-
             wrappedWriter = originalWriter;
         }
 
@@ -58,7 +85,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
                 ns = nameSpaceReplacements[ns];
             }
 
-            wrappedWriter.WriteStartElement(prefix, localName, ns);
+            if (ShouldWrite)
+            {
+                wrappedWriter.WriteStartElement(prefix, localName, ns);                
+            }
         }
 
         /// <summary>
@@ -68,7 +98,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// </summary>
         public override void WriteEndElement()
         {
-            wrappedWriter.WriteEndElement();
+            if (ShouldWrite)
+            {
+                wrappedWriter.WriteEndElement(); 
+            }
 
             string[] xmlPathArray = xmlPath.ToArray();
 
@@ -96,7 +129,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
                 data = valueReplacements[currentNode];
             }
 
-            wrappedWriter.WriteRaw(data);
+            if (ShouldWrite)
+            {
+                wrappedWriter.WriteRaw(data);
+            }
+        }
+
+        /// <summary>
+        /// Writes the given text content when it should.
+        /// </summary>
+        public override void WriteString(string text)
+        {
+            if (ShouldWrite)
+            {
+                wrappedWriter.WriteString(text);
+            }
+        }
+
+        /// <summary>
+        /// Shoulds the write.
+        /// </summary>
+        /// <returns></returns>
+        private bool ShouldWrite
+        {
+            get
+            {
+                return !omit.Contains(xmlPath.Peek());
+            }
         }
 
         #region pass through
@@ -194,11 +253,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         public override WriteState WriteState
         {
             get { return wrappedWriter.WriteState; }
-        }
-
-        public override void WriteString(string text)
-        {
-            wrappedWriter.WriteString(text);
         }
 
         public override void WriteSurrogateCharEntity(char lowChar, char highChar)

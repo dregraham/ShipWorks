@@ -248,7 +248,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExVoidParametersManipulator()
             };
 
-            return new FedExVoidRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, new FedExResponseFactory(), accountEntity);
+            IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
+            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int)FedExReturnType.EmailReturnLabel)
+            {
+                fedExServiceGateway = openShipFedExServiceGateway;
+            }
+
+            return new FedExVoidRequest(manipulators, shipmentEntity, fedExServiceGateway, new FedExResponseFactory(), accountEntity);
         }
 
         /// <summary>

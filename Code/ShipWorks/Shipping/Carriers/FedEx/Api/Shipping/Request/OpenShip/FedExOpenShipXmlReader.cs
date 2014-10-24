@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
             new Dictionary<string, string>
             {
                 { "CreatePendingShipmentReply", "ProcessShipmentReply" },
+                { "DeletePendingShipmentReply", "ShipmentReply" },
                 { "AsynchronousProcessingResults", null },
                 { "Index", null }
             };

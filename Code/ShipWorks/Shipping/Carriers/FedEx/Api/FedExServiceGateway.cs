@@ -272,7 +272,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="deleteShipmentRequest">The delete shipment request.</param>
         /// <returns>The ShipmentReply recevied from FedEx.</returns>
-        public ShipmentReply Void(DeleteShipmentRequest deleteShipmentRequest)
+        public virtual ShipmentReply Void(DeleteShipmentRequest deleteShipmentRequest)
+        {
+            using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Void")))
+            {
+                return Void(deleteShipmentRequest, service);
+            }
+        }
+
+        /// <summary>
+        /// Intended to interact with the FedEx API for performing a shipment void.
+        /// </summary>
+        protected ShipmentReply Void(DeleteShipmentRequest deleteShipmentRequest, ShipService service)
         {
             try
             {
@@ -280,15 +291,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // ShipService object here (i.e. no more abstractions can be made)
-                using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Void")))
-                {
-                    // Point the service to the correct endpoint
-                    service.Url = settings.EndpointUrl;
 
-                    // The request should already be configured at this point, so we just need to send
-                    // it across the wire to FedEx
-                    voidShipmentReply = service.deleteShipment(deleteShipmentRequest);
-                }
+                // Point the service to the correct endpoint
+                service.Url = settings.EndpointUrl;
+
+                // The request should already be configured at this point, so we just need to send
+                // it across the wire to FedEx
+                voidShipmentReply = service.deleteShipment(deleteShipmentRequest);
+
 
                 return voidShipmentReply;
             }
