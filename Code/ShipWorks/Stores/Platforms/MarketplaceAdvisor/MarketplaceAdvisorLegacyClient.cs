@@ -26,17 +26,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private MarketplaceAdvisorLog log;
 
         // Cache of inventory items we have downloaded
-        private static readonly Dictionary<long, MarketplaceAdvisorInventoryItem> inventoryItemMap;
+        private static readonly Dictionary<long, MarketplaceAdvisorInventoryItem> inventoryItemMap = new Dictionary<long, MarketplaceAdvisorInventoryItem>();
 
         const int downloadPageSize = 200;
-
-        /// <summary>
-        /// Static constructor
-        /// </summary>
-        static MarketplaceAdvisorLegacyClient()
-        {
-            inventoryItemMap = new Dictionary<long, MarketplaceAdvisorInventoryItem>();
-        }
 
         /// <summary>
         /// Constructor
