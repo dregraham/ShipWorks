@@ -773,6 +773,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
+            // We're going to be temporarily swapping these out to get counter rates, so 
+            // make a note of the original values
             ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
             ICertificateInspector originalCertificateInspector = CertificateInspector;
 
@@ -783,17 +785,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 AccountRepository = new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
                 CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
 
-                return GetRates(shipment);
+                // Fetch the rates now that we're setup to use counter rates
+                return GetCachedRates<StampsException>(shipment, GetRates);
 
             }
             catch (CounterRatesOriginAddressException)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+
                 return errorRates;
             }
             finally
             {
+                // Set everything back to normal
                 AccountRepository = originalAccountRepository;
                 CertificateInspector = originalCertificateInspector;
             }
