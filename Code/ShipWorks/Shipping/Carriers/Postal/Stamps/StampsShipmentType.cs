@@ -395,13 +395,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </returns>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
-            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
-            // Take this opportunity to try to update contract type of the account
-            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            // Refactor: These checks are to avoid infinite recursion, but this is not the best since implementation since we're 
+            // handling cases of derived classes. Since we only want to push the shipment type to USPS for the Stamps.com case, 
+            // allowing the derived classes (USPS and Express1) to effectively bypass thier base class (StampsShipmentType), we'd 
+            // have to duplicate the code in the abstract ShimpentType class.
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps || shipment.ShipmentType == (int) ShipmentTypeCode.Express1Stamps)
             {
-                StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-                UpdateContractType(account);
+                shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+            }
+            else
+            {
+                // We need to handle the case where the Stamps.com shipment type was selected to process the shipment and there
+                // aren't any "native" Stamps.com accounts; we need to basically push the shipment over to USPS to create the 
+                // account under USPS and process it there
+                if (GetProcessingSynchronizer().HasAccounts && shipment.ShipmentType == (int) ShipmentTypeCode.Stamps)
+                {
+                    // There is an existing "native" Stamps.com account, so do the pre-processing normally
+                    shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+                    // Take this opportunity to try to update contract type of the account
+                    if (shipment.Postal != null && shipment.Postal.Stamps != null)
+                    {
+                        StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                        UpdateContractType(account);
+                    }
+                }
+                else
+                {
+                    // There aren't any Stamps.com accounts, so we need to run the pre-process of the UspsShipmentType in order
+                    // to create the account/process the shipment
+                    shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
+
+                    UspsShipmentType uspsShipmentType = new UspsShipmentType();
+                    shipments = uspsShipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate);
+                }
             }
 
             return shipments;
