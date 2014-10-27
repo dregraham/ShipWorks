@@ -36,6 +36,10 @@ namespace ShipWorks.Stores.Platforms.Miva
                 throw new ArgumentNullException("store");
             }
 
+            // Remove the selected value changed event temporarily so that we can update the drop down and selected value
+            // without overwriting the sebenzaOrderStatusEmail.Checked value
+            updateStrategy.SelectedValueChanged -= OnUpdateStrategyChanged;
+
             List<KeyValuePair<string, MivaOnlineUpdateStrategy>> options = new List<KeyValuePair<string, MivaOnlineUpdateStrategy>>();
             options.Add(CreateEntry(MivaOnlineUpdateStrategy.None));
 
@@ -52,6 +56,13 @@ namespace ShipWorks.Stores.Platforms.Miva
             updateStrategy.DataSource = options;
 
             updateStrategy.SelectedValue = (MivaOnlineUpdateStrategy)store.OnlineUpdateStrategy;
+
+            // Run the logic that updates the visibility of the sebenzaOrderStatusEmail checkbox.
+            // If the store value is the same as the default value, it won't actually get called via += change event.
+            OnUpdateStrategyChanged(updateStrategy, null);
+
+            // Re-add the selected change event handler.
+            updateStrategy.SelectedValueChanged += OnUpdateStrategyChanged;
         }
 
         /// <summary>

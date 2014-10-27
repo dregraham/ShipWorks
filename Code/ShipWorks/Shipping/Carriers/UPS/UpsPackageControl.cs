@@ -268,9 +268,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             selectedRows.Clear();
 
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
-            List<InsuranceChoice> insuranceToLoad = new List<InsuranceChoice>();
-
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
 
             // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;
@@ -290,14 +287,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         packagingType.ApplyMultiValue((UpsPackagingType) package.PackagingType);
                         weight.ApplyMultiWeight(package.Weight);
 
-                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.UpsShipment.Shipment, package.UpsShipment.Packages.IndexOf(package)).Insurance);
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
                     }
                 }
             }
 
             // Load the insurance
-            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+            UpdateInsuranceDisplay();
 
             // Load the dimensions
             dimensionsControl.LoadDimensions(dimensionsToLoad);
@@ -339,7 +335,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public void UpdateInsuranceDisplay()
         {
-            OnChangeSelectedPackages(null, null);
+            suspendRateCriteriaEvent++;
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
+
+            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+                .Select(x => x.Tag).OfType<List<UpsPackageEntity>>()
+                .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.UpsShipment.Shipment, x.UpsShipment.Packages.IndexOf(x)).Insurance);
+
+            // Load the insurance
+            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+
+            suspendRateCriteriaEvent--;
         }
 
         /// <summary>
