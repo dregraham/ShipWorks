@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
@@ -38,19 +39,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         private readonly Dictionary<string, string> namespaceReplacements = new Dictionary<string, string>()
         {
             {
-                string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber),
-                string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber)
+                string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber),
+                string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber)
             }
         };
+
 
         /// <summary>
         /// For nodes whose name matches the key, when the node is closed, the text is returned.
         /// </summary>
-        private readonly Dictionary<List<string>, string> appendAfterElement = new Dictionary<List<string>, string>()
+        private readonly List<AppendAfter> appendAfterElement = new List<AppendAfter>()
         {
-            { new List<string>() { "Version", "CreatePendingShipmentRequest" }, "<Actions>TRANSFER</Actions>" },
-            { new List<string>() { "EmailAddress", "Recipients", "EmailLabelDetail", "PendingShipmentDetail" }, "<Role>SHIPMENT_COMPLETOR</Role>" }
+            new AppendAfter() { XmlPath = new List<string>() { "CreatePendingShipmentRequest", "Version" }, StringToAppend = "<Actions>TRANSFER</Actions>" },
+            new AppendAfter() { XmlPath = new List<string>() { "PendingShipmentDetail", "EmailAddress", "Recipients", "EmailLabelDetail" }, StringToAppend = "<Role>SHIPMENT_COMPLETOR</Role>" }
         };
+
 
         /// <summary>
         /// Nodes that match the name in the list will not be written.
@@ -105,16 +108,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
                 wrappedWriter.WriteEndElement(); 
             }
 
-            string[] xmlPathArray = xmlPath.ToArray();
-
-            appendAfterElement
-                .ToList()
-                .Where(specifiedTags => !specifiedTags.Key.Where((tagToFind, tagIndex) => xmlPathArray[tagIndex] != tagToFind).Any())
-                .Select(toAppend => toAppend.Value)
-                .ToList()
-                .ForEach(value => wrappedWriter.WriteRaw(value));
+            foreach (AppendAfter appendAfter in appendAfterElement.Where(AppendAfterMatches))
+            {
+                wrappedWriter.WriteRaw(appendAfter.StringToAppend);
+            }
 
             xmlPath.Pop();
+        }
+
+        private bool AppendAfterMatches(AppendAfter appendAfter)
+        {
+            string[] actualXmlPath = xmlPath.ToArray();
+
+            int appendAfterXmlPathCount = appendAfter.XmlPath.Count;
+            bool matches = appendAfterXmlPathCount <= actualXmlPath.Count();
+
+            if (matches)
+            {
+                for (int index = 1; index <= appendAfterXmlPathCount; index++)
+                {
+                    if (appendAfter.XmlPath[appendAfterXmlPathCount - index] != actualXmlPath[index])
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+            }
+            return matches;
         }
 
         /// <summary>
@@ -267,5 +287,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         }
 
         #endregion
+
+        class AppendAfter
+        {
+            public List<string> XmlPath { get; set; }
+            public string StringToAppend { get; set; }
+        }
     }
 }
