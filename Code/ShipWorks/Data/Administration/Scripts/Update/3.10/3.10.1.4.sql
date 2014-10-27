@@ -430,11 +430,19 @@ IF @@TRANCOUNT=0 BEGIN INSERT INTO #tmpErrors (Error) SELECT 1 BEGIN TRANSACTION
 GO
 INSERT INTO [dbo].[tmp_rg_xx_Shipment]([ShipmentID], [OrderID], [ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ActualLabelFormat], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [ReturnShipment], [Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID], [RequestedLabelFormat]) 
 	SELECT [ShipmentID], [OrderID], [Shipment].[ShipmentType], [ContentWeight], [TotalWeight], [Processed], [ProcessedDate], [ProcessedUserID], [ProcessedComputerID], [ShipDate], [ShipmentCost], [Voided], [VoidedDate], [VoidedUserID], [VoidedComputerID], [TrackingNumber], [CustomsGenerated], [CustomsValue], [ThermalType], [ShipFirstName], [ShipMiddleName], [ShipLastName], [ShipCompany], [ShipStreet1], [ShipStreet2], [ShipStreet3], [ShipCity], [ShipStateProvCode], [ShipPostalCode], [ShipCountryCode], [ShipPhone], [ShipEmail], [ResidentialDetermination], [ResidentialResult], [OriginOriginID], [OriginFirstName], [OriginMiddleName], [OriginLastName], [OriginCompany], [OriginStreet1], [OriginStreet2], [OriginStreet3], [OriginCity], [OriginStateProvCode], [OriginPostalCode], [OriginCountryCode], [OriginPhone], [OriginFax], [OriginEmail], [OriginWebsite], [Shipment].[ReturnShipment], [Shipment].[Insurance], [InsuranceProvider], [ShipNameParseStatus], [ShipUnparsedName], [OriginNameParseStatus], [OriginUnparsedName], [BestRateEvents], [ShipSenseStatus], [ShipSenseChangeSets], [ShipSenseEntry], [OnlineShipmentID], 
-		IsNull([ShippingProfile].[RequestedLabelFormat], -1) 
-	FROM [dbo].[Shipment]
-		LEFT JOIN [dbo].[ShippingProfile]
-			ON [dbo].[Shipment].[ShipmentType] = [dbo].[ShippingProfile].[ShipmentType]
-				AND [dbo].[ShippingProfile].[ShipmentTypePrimary] = 1
+			CASE Processed
+				WHEN 1 THEN
+					ISNULL(ThermalType, -1)
+				ELSE
+					IsNull(ProfileInfo.RequestedLabelFormat, -1) 
+				END
+		FROM [dbo].[Shipment]
+			LEFT JOIN 
+				(SELECT ShipmentType, Max(isnull(RequestedLabelFormat,-1)) as RequestedLabelFormat 
+					FROM ShippingProfile 
+					WHERE ShipmentTypePrimary=1
+					GROUP BY ShipmentType) AS ProfileInfo
+				ON [dbo].[Shipment].[ShipmentType] = ProfileInfo.ShipmentType
 GO
 IF @@ERROR<>0 AND @@TRANCOUNT>0 ROLLBACK TRANSACTION
 GO
