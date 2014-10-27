@@ -267,10 +267,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             SaveToEntities();
             selectedRows.Clear();
 
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
-            
-            List<InsuranceChoice> insuranceToLoad = new List<InsuranceChoice>();
-
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
 
 
@@ -292,12 +288,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                         weight.ApplyMultiWeight(package.Weight);
 
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
-
-                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.FedExShipment.Shipment, package.FedExShipment.Packages.IndexOf(package)).Insurance);
                     }
                 }
             }
-
 
             // Load the dimensions
             dimensionsControl.LoadDimensions(dimensionsToLoad);
@@ -306,7 +299,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             dimensionsControl.ShipmentWeightBox = weight;
 
             // Load the insurance
-            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+            UpdateInsuranceDisplay();
 
             suspendRateCriteriaEvent--;
             suspendShipSenseFieldEvent--;
@@ -341,7 +334,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void UpdateInsuranceDisplay()
         {
-            OnChangeSelectedPackages(null, null);
+            suspendRateCriteriaEvent++;
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+
+            IEnumerable<InsuranceChoice> insuranceToLoad = packagesGrid.SelectedElements.OfType<GridRow>()
+                .Select(x => x.Tag).OfType<List<FedExPackageEntity>>()
+                .SelectMany(x => x).Select(x => shipmentType.GetParcelDetail(x.FedExShipment.Shipment, x.FedExShipment.Packages.IndexOf(x)).Insurance);
+
+            // Load the insurance
+            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+
+            suspendRateCriteriaEvent--;
         }
 
         /// <summary>
