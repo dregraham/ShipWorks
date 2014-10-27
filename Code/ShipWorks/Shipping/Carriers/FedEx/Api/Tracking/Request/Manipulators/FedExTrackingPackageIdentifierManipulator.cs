@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
                     PackageIdentifier = new TrackPackageIdentifier()
                     {
                         Type = TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG,
-                        Value = FedExUtility.BuildTrackingNumber(trackingNumber, shipmentEntity.FedEx)
+                        Value = FedExUtility.GetTrackingNumberForApi(trackingNumber, shipmentEntity.FedEx)
                     }
                 }
             };

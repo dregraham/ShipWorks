@@ -486,5 +486,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 fedexShipment.SmartPostUspsApplicationId + trackingNumber :
                 trackingNumber;
         }
+
+        /// <summary>
+        /// Get the tracking number for use by the FedEx api
+        /// </summary>
+        /// <remarks>For most shipments, this will simply return the tracking number as-is.  For SmartPost shipments,
+        /// this will remove the application id from the tracking number first.</remarks>
+        public static string GetTrackingNumberForApi(string trackingNumber, FedExShipmentEntity fedexShipment)
+        {
+            if (fedexShipment != null && 
+                (FedExServiceType) fedexShipment.Service == FedExServiceType.SmartPost &&
+                trackingNumber.StartsWith(fedexShipment.SmartPostUspsApplicationId))
+            {
+                return trackingNumber.Substring(fedexShipment.SmartPostUspsApplicationId.Length);
+            }
+
+            return trackingNumber;
+        }
     }
 }
