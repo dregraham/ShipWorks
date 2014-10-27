@@ -13748,3 +13748,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "Username", Scope = "member", Target = "ShipWorks.Shipping.Carriers.ICounterRatesCredentialStore.#StampsUsername")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "type", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.BestRate.UspsBestRateBroker")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "PreProcessor", Scope = "type", Target = "ShipWorks.Shipping.ShipmentTypePreProcessor")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "ShipWorks.Shipping.Carriers.Postal.PostageBalance.#LogAsync(System.Decimal,System.Decimal)")]

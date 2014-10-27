@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 
@@ -28,14 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             decimal balance = postageWebClient.GetBalance();
             postageWebClient.Purchase(amount);
 
-            try
-            {
-                tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error logging PostageEvent to Tango.", ex);
-            }
+            LogAsync(amount, balance);
         }
 
         /// <summary>
@@ -46,16 +40,27 @@ namespace ShipWorks.Shipping.Carriers.Postal
             get
             {
                 decimal balance = postageWebClient.GetBalance();
-                try
-                {
-                    tangoWebClient.LogPostageEvent(balance, 0, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
-                }
-                catch (Exception ex)
-                {
-                    log.Error("Error logging PostageEvent to Tango.", ex);
-                }
+                LogAsync(0, balance);
 
                 return balance;
+            }
+        }
+
+        /// <summary>
+        /// Uses the Tango web client to log the postage in a fire and forget manner, so any upstream processing 
+        /// is not waiting on Tango to respond.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <param name="balance">The balance.</param>
+        private void LogAsync(decimal amount, decimal balance)
+        {
+            try
+            {
+                new TaskFactory().StartNew(() => tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error logging PostageEvent to Tango.", ex);
             }
         }
     }
