@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FedExOpenShipXmlReader : XmlReader
     {
         // the decorated XmlReader
@@ -10,11 +14,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
 
         // A list of namespaces from which we want to translate
         private static readonly Dictionary<string, string> namespaceMap =
-            new Dictionary<string, string> {
-                { "http://fedex.com/ws/openship/v7", "http://fedex.com/ws/ship/v15" }
+            new Dictionary<string, string>
+            {
+                {
+                    string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber),
+                    string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber)
+                }
             };
 
-        // Will be used to replace tag names with the new tag name. If null, tag name is ignored.
+        // Will be used to replace tag names with the new tag name. If value is null, tag not returned.
         private static readonly Dictionary<string, string> nodeReplacements =
             new Dictionary<string, string>
             {
@@ -39,16 +47,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         {
             get
             {
+                // TODO comment better
                 string shipReplacement;
                 if (!nodeReplacements.TryGetValue(wrappedReader.LocalName, out shipReplacement))
                 {
                     shipReplacement = wrappedReader.LocalName;
                 }
 
-                if (shipReplacement==null)
+                if (shipReplacement == null)
                 {
                     wrappedReader.Skip();
-                    
+
                     // recursive call as this node was skipped.
                     return LocalName;
                 }
@@ -85,12 +94,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         }
 
         /// <summary>
-        /// Translates an Express1 namespace to Stamps.
+        /// Translates Ship namespace to OpenShip namespace
         /// </summary>
         private static string GetShipNamespace(string nameSpace)
         {
             if (nameSpace == null)
+            {
                 return null;
+            }
 
             string shipNameSpace;
             if (namespaceMap.TryGetValue(nameSpace, out shipNameSpace))

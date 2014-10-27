@@ -4,27 +4,37 @@ using System.Reflection;
 using System.Web.Services.Protocols;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
 {
+    /// <summary>
+    /// Wraps FedExService to use OpenShip.
+    /// </summary>
     public class FedExShipServiceWrapper : ShipService
     {
-        // using relction, we need to set message.method.action, which is what message.Action is
+        // using reflection, we need to set message.method.action, which is what message.Action is
         FieldInfo methodField;
         FieldInfo actionField;
 
-        private string shipNamespace = "http://fedex.com/ws/ship/v15";
-        private string openShipNamespace = "http://fedex.com/ws/openship/v7";
+        private readonly string shipNamespace = string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber);
+        private readonly string openShipNamespace = string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber);
 
         WebRequest webRequest = null;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExShipServiceWrapper(IApiLogEntry logEntry)
             : base(logEntry)
         {
             
         }
 
+        /// <summary>
+        /// Get the XmlReader used to read the response message
+        /// </summary>
         protected override XmlReader GetReaderForMessage(SoapClientMessage message, int bufferSize)
         {
             return new FedExOpenShipXmlReader(base.GetReaderForMessage(message, bufferSize));
@@ -33,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// <summary>
         /// Get the writer for the message
         /// </summary>
-        protected override System.Xml.XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
+        protected override XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
         {
             // Manipulate the outgoing message 
             FixupOutgoingSoapMessage(message);
@@ -51,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         }
 
         /// <summary>
-        /// Fixups the outgoing SOAP message. Ensures action is correct.
+        /// Fixup the outgoing SOAP message. Ensures action is correct.
         /// </summary>
         private void FixupOutgoingSoapMessage(SoapClientMessage message)
         {

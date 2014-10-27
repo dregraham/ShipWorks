@@ -13,9 +13,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
     public class FedExOpenShipGateway : FedExServiceGateway
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExOpenShipGateway(ICarrierSettingsRepository settingsRepository) : base(settingsRepository)
         {}
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExOpenShipGateway(ICarrierSettingsRepository settingsRepository, ILogEntryFactory logEntryFactory) : base(settingsRepository, logEntryFactory)
         {}
 

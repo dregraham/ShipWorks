@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// <summary>
         /// Nodes that match the name of the key will be renamed to the value name.
         /// </summary>
-        private readonly Dictionary<string, string> nodeReplacements = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> elementNameReplacements = new Dictionary<string, string>()
         {
             { "ProcessShipmentRequest", "CreatePendingShipmentRequest" },
             { "DeleteShipmentRequest", "DeletePendingShipmentRequest" },
@@ -28,21 +29,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// </summary>
         private readonly Dictionary<string, string> valueReplacements = new Dictionary<string, string>()
         {
-            {"Major", "7"}
+            {"Major", FedExSettings.OpenShipVersionNumber.ToString()}
         };
 
         /// <summary>
         /// The namespace in the key will be replaced with the value in the XML.
         /// </summary>
-        private readonly Dictionary<string, string> nameSpaceReplacements = new Dictionary<string, string>()
+        private readonly Dictionary<string, string> namespaceReplacements = new Dictionary<string, string>()
         {
-            { "http://fedex.com/ws/ship/v15", "http://fedex.com/ws/openship/v7" }
+            {
+                string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber),
+                string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber)
+            }
         };
 
         /// <summary>
         /// For nodes whose name matches the key, when the node is closed, the text is returned.
         /// </summary>
-        private readonly Dictionary<List<string>, string> appendAfter = new Dictionary<List<string>, string>()
+        private readonly Dictionary<List<string>, string> appendAfterElement = new Dictionary<List<string>, string>()
         {
             { new List<string>() { "Version", "CreatePendingShipmentRequest" }, "<Actions>TRANSFER</Actions>" },
             { new List<string>() { "EmailAddress", "Recipients", "EmailLabelDetail", "PendingShipmentDetail" }, "<Role>SHIPMENT_COMPLETOR</Role>" }
@@ -51,15 +55,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// <summary>
         /// Nodes that match the name in the list will not be written.
         /// </summary>
-        private readonly List<string> omit = new List<string>()
+        private readonly List<string> elementsNameToOmit = new List<string>()
         {
             "DeletionControl"
         };
-
         
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExOpenShipXmlWriter"/> class.
+        /// Constructor
         /// </summary>
         public FedExOpenShipXmlWriter(XmlWriter originalWriter)
         {
@@ -67,22 +69,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         }
 
         /// <summary>
-        /// When overridden in a derived class, writes the specified start tag and associates it with the given namespace and prefix.
+        /// Writes the specified start tag and associates it with the given namespace and prefix.
         /// 
-        /// Replaces namespace if original namespace found in nameSpaceReplacements 
+        /// Replaces namespace if original namespace found in namespaceReplacements 
         /// </summary>
         public override void WriteStartElement(string prefix, string localName, string ns)
         {
-            if (nodeReplacements.ContainsKey(localName))
+            if (elementNameReplacements.ContainsKey(localName))
             {
-                localName = nodeReplacements[localName];
+                localName = elementNameReplacements[localName];
             }
 
             xmlPath.Push(localName);
 
-            if (!string.IsNullOrEmpty(ns) && nameSpaceReplacements.ContainsKey(ns))
+            if (!string.IsNullOrEmpty(ns) && namespaceReplacements.ContainsKey(ns))
             {
-                ns = nameSpaceReplacements[ns];
+                ns = namespaceReplacements[ns];
             }
 
             if (ShouldWrite)
@@ -94,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// <summary>
         /// When overridden in a derived class, closes one element and pops the corresponding namespace scope.
         /// 
-        /// Appends text from appendAfter
+        /// Appends text from appendAfterElement
         /// </summary>
         public override void WriteEndElement()
         {
@@ -105,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
 
             string[] xmlPathArray = xmlPath.ToArray();
 
-            appendAfter
+            appendAfterElement
                 .ToList()
                 .Where(specifiedTags => !specifiedTags.Key.Where((tagToFind, tagIndex) => xmlPathArray[tagIndex] != tagToFind).Any())
                 .Select(toAppend => toAppend.Value)
@@ -122,15 +124,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// </summary>
         public override void WriteRaw(string data)
         {
-            string currentNode = xmlPath.Peek();
-
-            if (valueReplacements.ContainsKey(currentNode))
-            {
-                data = valueReplacements[currentNode];
-            }
-
             if (ShouldWrite)
             {
+                string currentNode = xmlPath.Peek();
+
+                if (valueReplacements.ContainsKey(currentNode))
+                {
+                    data = valueReplacements[currentNode];
+                }
+
                 wrappedWriter.WriteRaw(data);
             }
         }
@@ -147,14 +149,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         }
 
         /// <summary>
-        /// Shoulds the write.
+        /// Gets a value indicating whether [should write]. This is determined if the current node is in the elementsNameToOmit collection.
         /// </summary>
-        /// <returns></returns>
         private bool ShouldWrite
         {
             get
             {
-                return !omit.Contains(xmlPath.Peek());
+                return !elementsNameToOmit.Contains(xmlPath.Peek());
             }
         }
 

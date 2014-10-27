@@ -29,6 +29,9 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
+    /// <summary>
+    /// FedEx Request Factory
+    /// </summary>
     public class FedExRequestFactory : IFedExRequestFactory
     {
         private readonly IFedExServiceGateway defaultFedExServiceGateway;
@@ -122,13 +125,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             nativeShipmentRequest = new ProcessShipmentRequest();
 
-            IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
-            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int) FedExReturnType.EmailReturnLabel)
-            {
-                fedExServiceGateway = openShipFedExServiceGateway;
-            }
-
-            return new FedExShipRequest(manipulators, shipmentEntity, fedExServiceGateway, responseFactory, settingsRepository, nativeShipmentRequest);
+            return new FedExShipRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), responseFactory, settingsRepository, nativeShipmentRequest);
         }
 
         /// <summary>
@@ -248,13 +245,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExVoidParametersManipulator()
             };
 
-            IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
-            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int)FedExReturnType.EmailReturnLabel)
-            {
-                fedExServiceGateway = openShipFedExServiceGateway;
-            }
-
-            return new FedExVoidRequest(manipulators, shipmentEntity, fedExServiceGateway, new FedExResponseFactory(), accountEntity);
+            return new FedExVoidRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), new FedExResponseFactory(), accountEntity);
         }
 
         /// <summary>
@@ -369,6 +360,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
             return new CertificateRequest(fedExEndpoint, certificateInspector);
+        }
+
+        /// <summary>
+        /// If Email Return Shipment, return OpenShipFedExServiceGateway, else return default gateway.
+        /// </summary>
+        private IFedExServiceGateway ChooseFedExServiceGateway(ShipmentEntity shipmentEntity)
+        {
+            IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
+            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int)FedExReturnType.EmailReturnLabel)
+            {
+                fedExServiceGateway = openShipFedExServiceGateway;
+            }
+            return fedExServiceGateway;
         }
     }
 }

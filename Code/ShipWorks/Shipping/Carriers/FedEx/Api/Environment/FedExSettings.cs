@@ -140,6 +140,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         }
 
         /// <summary>
+        /// Gets the ship version number.
+        /// </summary>
+        public static int ShipVersionNumber
+        {
+            get
+            {
+                return 15;
+            }
+        }
+
+        /// <summary>
+        /// Gets the open ship version number.
+        /// </summary>
+        public static int OpenShipVersionNumber
+        {
+            get
+            {
+                return 7;
+            }
+        }
+
+        /// <summary>
         /// Gets the type of the currency.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
