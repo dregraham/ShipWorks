@@ -619,6 +619,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
+            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             // 
             // packagingType
             // 
