@@ -44,8 +44,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
         /// </summary>
         public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
-            : this(new FedExServiceGateway(settingsRepository),new FedExOpenShipGateway(settingsRepository),  settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
-        { }
+            : this(new FedExServiceGateway(settingsRepository), new FedExOpenShipGateway(settingsRepository), settingsRepository, new FedExShipmentTokenProcessor(), new FedExResponseFactory())
+        {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// If Email Return Shipment, return OpenShipFedExServiceGateway, else return default gateway.
         /// </summary>
-        private IFedExServiceGateway ChooseFedExServiceGateway(ShipmentEntity shipmentEntity)
+        public IFedExServiceGateway ChooseFedExServiceGateway(ShipmentEntity shipmentEntity)
         {
             IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
             if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int)FedExReturnType.EmailReturnLabel)

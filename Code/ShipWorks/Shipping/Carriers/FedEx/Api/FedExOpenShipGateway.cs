@@ -11,18 +11,15 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
+    /// <summary>
+    /// Derives from FedExServiceGateway overwriting the OpenShip methods.
+    /// </summary>
     public class FedExOpenShipGateway : FedExServiceGateway
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExOpenShipGateway(ICarrierSettingsRepository settingsRepository) : base(settingsRepository)
-        {}
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExOpenShipGateway(ICarrierSettingsRepository settingsRepository, ILogEntryFactory logEntryFactory) : base(settingsRepository, logEntryFactory)
         {}
 
         /// <summary>

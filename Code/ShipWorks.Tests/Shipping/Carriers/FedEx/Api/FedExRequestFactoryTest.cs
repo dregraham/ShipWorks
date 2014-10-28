@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -43,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             tokenProcessor = new Mock<IFedExShipmentTokenProcessor>();
 
             // Use the "testing version" of the constructor
-            testObject = new FedExRequestFactory(fedExService.Object,fedExOpenShipService.Object, settingsRepository.Object, tokenProcessor.Object, responseFactory.Object);
+            testObject = new FedExRequestFactory(fedExService.Object, fedExOpenShipService.Object, settingsRepository.Object, tokenProcessor.Object, responseFactory.Object);
 
             fedExShipment = new ShipmentEntity(){FedEx = new FedExShipmentEntity()};
         }
@@ -778,5 +779,42 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsInstanceOfType(request, typeof(CertificateRequest));
         }
         #endregion
+
+        #region ChooseFedExServiceGateway Tests
+
+        [TestMethod]
+        public void ChooseFedExServiceGateway_ReturnsShipGateway_PrintReturn()
+        {
+            fedExShipment.ReturnShipment = true;
+            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.PrintReturnLabel;
+
+            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
+
+            Assert.AreEqual(fedExService.Object, chosenGateway);
+        }
+
+        [TestMethod]
+        public void ChooseFedExServiceGateway_ReturnsShipGateway_NotReturnButEmailReturnLabelReturnType()
+        {
+            fedExShipment.ReturnShipment = false;
+            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.EmailReturnLabel;
+
+            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
+
+            Assert.AreEqual(fedExService.Object, chosenGateway);
+        }
+
+        [TestMethod]
+        public void ChooseFedExServiceGateway_ReturnsOpenShipGateway_EmailReturn()
+        {
+            fedExShipment.ReturnShipment = true;
+            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.EmailReturnLabel;
+
+            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
+
+            Assert.AreEqual(fedExOpenShipService.Object, chosenGateway);
+        }
+
+        #endregion ChooseFedExServiceGateway Tests
     }
 }
