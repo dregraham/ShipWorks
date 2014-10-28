@@ -139,6 +139,7 @@ namespace ShipWorks.Shipping.Profiles
             lock (synchronizer)
             {
                 synchronizer.MergeEntity(profile);
+                CheckForChangesNeeded();
             }
         }
     }
