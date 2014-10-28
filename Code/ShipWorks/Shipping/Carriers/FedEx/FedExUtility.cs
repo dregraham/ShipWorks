@@ -496,7 +496,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (fedexShipment != null && 
                 (FedExServiceType) fedexShipment.Service == FedExServiceType.SmartPost &&
-                trackingNumber.StartsWith(fedexShipment.SmartPostUspsApplicationId))
+                trackingNumber.StartsWith(fedexShipment.SmartPostUspsApplicationId, StringComparison.Ordinal))
             {
                 return trackingNumber.Substring(fedexShipment.SmartPostUspsApplicationId.Length);
             }

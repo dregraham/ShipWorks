@@ -55,14 +55,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
             }
             else
             {
-                string trackingNumber = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber;;
-                shipment.TrackingNumber = FedExUtility.BuildTrackingNumber(trackingNumber, shipment.FedEx);
-
                 // To track SmartPost on USPS.com, we need to save the appliction id for removal later
                 if ((FedExServiceType)shipment.FedEx.Service == FedExServiceType.SmartPost)
                 {
                     shipment.FedEx.SmartPostUspsApplicationId = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId;
                 }
+
+                string trackingNumber = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber; ;
+                shipment.TrackingNumber = FedExUtility.BuildTrackingNumber(trackingNumber, shipment.FedEx);
 
                 shipment.FedEx.MasterFormID = "";
             }
