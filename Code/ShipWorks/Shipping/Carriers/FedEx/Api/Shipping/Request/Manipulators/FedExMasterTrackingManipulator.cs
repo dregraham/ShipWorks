@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 requestedShipment.MasterTrackingId = new TrackingId()
                 {
                     FormId = request.ShipmentEntity.FedEx.MasterFormID,
-                    TrackingNumber = request.ShipmentEntity.TrackingNumber
+                    TrackingNumber = FedExUtility.GetTrackingNumberForApi(request.ShipmentEntity.TrackingNumber, request.ShipmentEntity.FedEx)
                 };
             }
         }
