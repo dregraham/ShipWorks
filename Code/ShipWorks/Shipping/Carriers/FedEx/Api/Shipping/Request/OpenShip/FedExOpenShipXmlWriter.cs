@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// </summary>
         private readonly Dictionary<string, string> valueReplacements = new Dictionary<string, string>()
         {
-            {"Major", FedExSettings.OpenShipVersionNumber.ToString()}
+            {"Major", FedExSettings.OpenShipVersionNumber}
         };
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         /// </summary>
         private readonly List<AppendAfter> appendAfterElement = new List<AppendAfter>()
         {
-            new AppendAfter() { XmlPath = new List<string>() { "CreatePendingShipmentRequest", "Version" }, StringToAppend = "<Actions>TRANSFER</Actions>" },
-            new AppendAfter() { XmlPath = new List<string>() { "PendingShipmentDetail", "EmailAddress", "Recipients", "EmailLabelDetail" }, StringToAppend = "<Role>SHIPMENT_COMPLETOR</Role>" }
+            new AppendAfter() { XmlPath = new List<string>() { "Version", "CreatePendingShipmentRequest" }, StringToAppend = "<Actions>TRANSFER</Actions>" },
+            new AppendAfter() { XmlPath = new List<string>() { "EmailAddress", "Recipients", "EmailLabelDetail", "PendingShipmentDetail" }, StringToAppend = "<Role>SHIPMENT_COMPLETOR</Role>" }
         };
 
 
@@ -125,13 +125,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
             string[] actualXmlPath = xmlPath.ToArray();
 
             int appendAfterXmlPathCount = appendAfter.XmlPath.Count;
+            
+            // Make sure the expected path is at least as long as the actual path.
             bool matches = appendAfterXmlPathCount <= actualXmlPath.Count();
 
             if (matches)
             {
-                for (int index = 1; index <= appendAfterXmlPathCount; index++)
+                for (int index = 0; index < appendAfterXmlPathCount; index++)
                 {
-                    if (appendAfter.XmlPath[appendAfterXmlPathCount - index] != actualXmlPath[index])
+                    if (appendAfter.XmlPath[index] != actualXmlPath[index])
                     {
                         matches = false;
                         break;

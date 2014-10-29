@@ -13,17 +13,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
         private XmlReader wrappedReader;
 
         /// <summary>
-        /// The namespace in the key will be replaced with the value in the XML.
-        /// </summary>
-        private static readonly Dictionary<string, string> namespaceReplacements = new Dictionary<string, string>
-        {
-            {
-                string.Format("http://fedex.com/ws/openship/v{0}", FedExSettings.OpenShipVersionNumber),
-                string.Format("http://fedex.com/ws/ship/v{0}", FedExSettings.ShipVersionNumber)
-            }
-        };
-
-        /// <summary>
         /// Nodes that match the name of the key will be renamed to the value name.
         /// </summary>
         private static readonly Dictionary<string, string> elementNameReplacements = new Dictionary<string, string>
@@ -114,13 +103,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
                 return null;
             }
 
-            string shipNameSpace;
-            if (namespaceReplacements.TryGetValue(nameSpace, out shipNameSpace))
-            {
-                return shipNameSpace;
-            }
+            const string openShipNamespace = "http://fedex.com/ws/openship/v" + FedExSettings.OpenShipVersionNumber;
+            const string shipNamespace = "http://fedex.com/ws/ship/v" + FedExSettings.ShipVersionNumber;
 
-            return nameSpace;
+            return nameSpace == openShipNamespace ? shipNamespace : nameSpace;
         }
 
         #region pass through
