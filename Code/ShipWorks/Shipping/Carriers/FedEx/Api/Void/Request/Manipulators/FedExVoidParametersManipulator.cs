@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
 
             nativeRequest.TrackingId = new TrackingId
             {
-                TrackingNumber = shipment.TrackingNumber,
+                TrackingNumber = FedExUtility.GetTrackingNumberForApi(shipment.TrackingNumber, shipment.FedEx),
                 TrackingIdType = trackingIdType,
                 TrackingIdTypeSpecified = true
             };
