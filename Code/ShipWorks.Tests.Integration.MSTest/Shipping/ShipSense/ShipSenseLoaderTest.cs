@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
         }
 
         [TestMethod]
-        [TestCategory("ShipSense")]
+        [TestCategory("ShipSense"), TestCategory("IncludeInJenkinsBuild")]
         public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess_Test()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script
