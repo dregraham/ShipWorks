@@ -401,11 +401,11 @@
     $incrementId = $order->getIncrementId();
 	$orderPrefix = '';
 	$orderPostfix = '';
-	$prefixParts = preg_split('/(?=\d)/', $incrementId);
+	$prefixParts = preg_split('/(?=\d)/', $incrementId,2);
         
         $orderPrefix = $prefixParts[0];
       
-        $postfixParts = preg_split('[\-]', $prefixParts[1]);
+        $postfixParts = preg_split('[\-]', $prefixParts[1],2);
         
         $incrementId = $postfixParts[0];
         $orderPostfix = $postfixParts[1];
