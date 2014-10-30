@@ -1816,7 +1816,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OtherShipmentEntity", "Carrier", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Carrier, 50, 0, 0);
 			base.AddElementFieldInfo("OtherShipmentEntity", "Service", typeof(System.String), false, false, false, false,  (int)OtherShipmentFieldIndex.Service, 50, 0, 0);
 			base.AddElementFieldInfo("OtherShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OtherShipmentFieldIndex.InsuranceValue, 0, 4, 19);
-			base.AddElementFieldInfo("OtherShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)OtherShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits PayPalOrderEntity's FieldInfo objects</summary>
 		private void InitPayPalOrderEntityInfos()
@@ -2873,7 +2872,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("WorldShipShipmentEntity", "ShipmentProcessedOnComputerID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)WorldShipShipmentFieldIndex.ShipmentProcessedOnComputerID, 0, 0, 19);
 			base.AddElementFieldInfo("WorldShipShipmentEntity", "UspsEndorsement", typeof(System.String), false, false, false, true,  (int)WorldShipShipmentFieldIndex.UspsEndorsement, 50, 0, 0);
 			base.AddElementFieldInfo("WorldShipShipmentEntity", "CarbonNeutral", typeof(System.String), false, false, false, true,  (int)WorldShipShipmentFieldIndex.CarbonNeutral, 10, 0, 0);
-			base.AddElementFieldInfo("WorldShipShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)WorldShipShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits YahooOrderEntity's FieldInfo objects</summary>
 		private void InitYahooOrderEntityInfos()

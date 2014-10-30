@@ -6062,8 +6062,6 @@ namespace ShipWorks.Data.Model
 		Service,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
-		///<summary>RequestedLabelFormat. </summary>
-		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9339,8 +9337,6 @@ namespace ShipWorks.Data.Model
 		UspsEndorsement,
 		///<summary>CarbonNeutral. </summary>
 		CarbonNeutral,
-		///<summary>RequestedLabelFormat. </summary>
-		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}

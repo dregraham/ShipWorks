@@ -730,9 +730,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CarbonNeutral", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -1555,17 +1552,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)WorldShipShipmentFieldIndex.CarbonNeutral, true); }
 			set	{ SetValue((int)WorldShipShipmentFieldIndex.CarbonNeutral, value); }
-		}
-
-		/// <summary> The RequestedLabelFormat property of the Entity WorldShipShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "WorldShipShipment"."RequestedLabelFormat"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 RequestedLabelFormat
-		{
-			get { return (System.Int32)GetValue((int)WorldShipShipmentFieldIndex.RequestedLabelFormat, true); }
-			set	{ SetValue((int)WorldShipShipmentFieldIndex.RequestedLabelFormat, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'WorldShipGoodsEntity' which are related to this entity via a relation of type '1:n'.

@@ -93,16 +93,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Configure the initial values for a new shipment
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
-
-            shipment.Other.RequestedLabelFormat = (int)ThermalLanguage.None;
-        }
-
-        /// <summary>
         /// ShipWorks typically auto-updates the ShipDate on unprocessed shipments to be Today at 
         /// the earliest.  But the use-case for Other shipments is a bit different, where people
         /// manually enter shipment details, often occurring in the past.
@@ -227,17 +217,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
-        }
-
-        /// <summary>
-        /// Saves the requested label format to the child shipment
-        /// </summary>
-        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
-        {
-            if (shipment.Other != null)
-            {
-                shipment.Other.RequestedLabelFormat = (int)requestedLabelFormat;
-            }
         }
     }
 }

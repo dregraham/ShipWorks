@@ -12897,11 +12897,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OtherShipmentFieldIndex.InsuranceValue);}
 		}
-		/// <summary>Creates a new OtherShipmentEntity.RequestedLabelFormat field instance</summary>
-		public static EntityField2 RequestedLabelFormat
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OtherShipmentFieldIndex.RequestedLabelFormat);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity PayPalOrderEntity</summary>
@@ -19761,11 +19756,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CarbonNeutral
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WorldShipShipmentFieldIndex.CarbonNeutral);}
-		}
-		/// <summary>Creates a new WorldShipShipmentEntity.RequestedLabelFormat field instance</summary>
-		public static EntityField2 RequestedLabelFormat
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(WorldShipShipmentFieldIndex.RequestedLabelFormat);}
 		}
 	}
 

@@ -122,7 +122,6 @@
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
     <Compile Include="Custom\EntityClasses\UpsShipmentEntity.cs" />
-    <Compile Include="Custom\EntityClasses\OtherShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\IParcelShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\EquaShipShipmentEntity.cs" />

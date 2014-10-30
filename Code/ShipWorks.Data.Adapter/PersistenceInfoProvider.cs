@@ -1910,12 +1910,11 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits OtherShipmentEntity's mappings</summary>
 		private void InitOtherShipmentEntityMappings()
 		{
-			base.AddElementMapping( "OtherShipmentEntity", "ShipWorksLocal", @"dbo", "OtherShipment", 5 );
+			base.AddElementMapping( "OtherShipmentEntity", "ShipWorksLocal", @"dbo", "OtherShipment", 4 );
 			base.AddElementFieldMapping( "OtherShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "OtherShipmentEntity", "Carrier", "Carrier", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "OtherShipmentEntity", "Service", "Service", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "OtherShipmentEntity", "InsuranceValue", "InsuranceValue", false, (int)SqlDbType.Money, 0, 4, 19, false, "", null, typeof(System.Decimal), 3 );
-			base.AddElementFieldMapping( "OtherShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 		}
 		/// <summary>Inits PayPalOrderEntity's mappings</summary>
 		private void InitPayPalOrderEntityMappings()
@@ -2964,7 +2963,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits WorldShipShipmentEntity's mappings</summary>
 		private void InitWorldShipShipmentEntityMappings()
 		{
-			base.AddElementMapping( "WorldShipShipmentEntity", "ShipWorksLocal", @"dbo", "WorldShipShipment", 67 );
+			base.AddElementMapping( "WorldShipShipmentEntity", "ShipWorksLocal", @"dbo", "WorldShipShipment", 66 );
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "OrderNumber", "OrderNumber", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "FromCompanyOrName", "FromCompanyOrName", false, (int)SqlDbType.NVarChar, 35, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -3031,7 +3030,6 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "ShipmentProcessedOnComputerID", "ShipmentProcessedOnComputerID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 63 );
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "UspsEndorsement", "UspsEndorsement", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 64 );
 			base.AddElementFieldMapping( "WorldShipShipmentEntity", "CarbonNeutral", "CarbonNeutral", true, (int)SqlDbType.Char, 10, 0, 0, false, "", null, typeof(System.String), 65 );
-			base.AddElementFieldMapping( "WorldShipShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 66 );
 		}
 		/// <summary>Inits YahooOrderEntity's mappings</summary>
 		private void InitYahooOrderEntityMappings()

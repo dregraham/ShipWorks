@@ -17,7 +17,8 @@ namespace ShipWorks.Tests.Shipping
             {
                 "ShipmentEntity".ToUpperInvariant(),
                 "PostalShipmentEntity".ToUpperInvariant(),
-                "WorldShipShipmentEntity".ToUpperInvariant()
+                "WorldShipShipmentEntity".ToUpperInvariant(),
+                "OtherShipmentEntity".ToUpperInvariant()
             };
 
             IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
