@@ -12,6 +12,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -258,6 +259,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
+
+            shipment.OnTrac.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }

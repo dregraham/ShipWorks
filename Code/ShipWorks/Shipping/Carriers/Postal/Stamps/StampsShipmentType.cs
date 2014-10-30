@@ -3,10 +3,12 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
@@ -570,6 +572,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Use the empty guids for now - they'll get set properly during processing
                 shipment.Postal.Stamps.IntegratorTransactionID = Guid.Empty;
                 shipment.Postal.Stamps.StampsTransactionID = Guid.Empty;
+                shipment.Postal.Stamps.RequestedLabelFormat = (int)ThermalLanguage.None;
             }
 
             // We need to call the base after setting up the Stamps.com specific information because LLBLgen was

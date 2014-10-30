@@ -534,6 +534,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ScanBasedReturn", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -828,6 +831,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, value); }
 		}
 
+		/// <summary> The RequestedLabelFormat property of the Entity EndiciaShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)EndiciaShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
 
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity
@@ -888,7 +902,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_postalShipment !=null);
 						DesetupSyncPostalShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("PostalShipment");
+						}
 					}
 					else
 					{

@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -93,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             iParcelShipmentEntity.TrackByEmail = false;
             iParcelShipmentEntity.TrackBySMS = false;
             iParcelShipmentEntity.IsDeliveryDutyPaid = true;
+
+            iParcelShipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             IParcelPackageEntity package = CreateDefaultPackage();
             iParcelShipmentEntity.Packages.Add(package);

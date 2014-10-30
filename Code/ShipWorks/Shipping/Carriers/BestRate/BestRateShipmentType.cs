@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Enums;
@@ -658,6 +659,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.InsuranceValue = 0;
+            shipment.BestRate.RequestedLabelFormat = (int) LabelFormatType.Standard;
         }
 
         /// <summary>

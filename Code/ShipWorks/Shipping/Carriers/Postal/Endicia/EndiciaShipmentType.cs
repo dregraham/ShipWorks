@@ -3,10 +3,12 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
@@ -222,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // We can be called during the creation of the base Postal shipment, before the Endicia one exists
             if (shipment.Postal.Endicia != null)
             {
-                // Right now its all in the Profile
+                shipment.Postal.Endicia.RequestedLabelFormat = (int)ThermalLanguage.None;
             }
         }
 

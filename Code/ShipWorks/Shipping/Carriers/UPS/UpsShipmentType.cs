@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -258,6 +260,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
+
+            shipment.Ups.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
