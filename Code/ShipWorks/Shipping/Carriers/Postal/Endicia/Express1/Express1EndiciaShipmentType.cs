@@ -92,30 +92,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            ICarrierAccountRepository<EndiciaAccountEntity> originalAccountRepository = AccountRepository;
-            ICertificateInspector originalCertificateInspector = CertificateInspector;
+            //ICarrierAccountRepository<EndiciaAccountEntity> originalAccountRepository = AccountRepository;
+            //ICertificateInspector originalCertificateInspector = CertificateInspector;
 
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            //try
+            //{
+            //    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
+            //    AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
+            //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
 
-                // This call to GetRates won't be recursive since the counter rate account repository will return an account
-                return GetRates(shipment);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                AccountRepository = originalAccountRepository;
-                CertificateInspector = originalCertificateInspector;
-            }
+            //    // This call to GetRates won't be recursive since the counter rate account repository will return an account
+            //    return GetRates(shipment);
+            //}
+            //catch (CounterRatesOriginAddressException)
+            //{
+            //    RateGroup errorRates = new RateGroup(new List<RateResult>());
+            //    errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+            //    return errorRates;
+            //}
+            //finally
+            //{
+            //    AccountRepository = originalAccountRepository;
+            //    CertificateInspector = originalCertificateInspector;
+            //}
+            return GetCachedRates<EndiciaException>(shipment, entity => { throw new EndiciaException("An account is required to view Express1 rates."); });
         }
 
         
@@ -225,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// </summary>
         public override bool SupportsCounterRates
         {
-            get { return true; }
+            get { return false; }
         }
     }
 }
