@@ -1277,11 +1277,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.FedEx == null)
+            if (shipment.FedEx != null)
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
             }
-            shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }

@@ -752,12 +752,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.BestRate == null)
+            if (shipment.BestRate != null)
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
             }
-
-            shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }

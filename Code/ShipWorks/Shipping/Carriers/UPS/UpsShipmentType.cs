@@ -1313,12 +1313,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.Ups == null)
+            if (shipment.Ups != null)
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
             }
-
-            shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }

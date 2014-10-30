@@ -234,12 +234,10 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.Other == null)
+            if (shipment.Other != null)
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipment.Other.RequestedLabelFormat = (int)requestedLabelFormat;
             }
-
-            shipment.Other.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }

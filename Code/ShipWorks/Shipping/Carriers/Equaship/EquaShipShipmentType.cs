@@ -502,12 +502,10 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.EquaShip == null)
+            if (shipment.EquaShip != null)
             {
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shipment.EquaShip.RequestedLabelFormat = (int)requestedLabelFormat;
             }
-
-            shipment.EquaShip.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }
