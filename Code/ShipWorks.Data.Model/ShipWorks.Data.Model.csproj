@@ -121,7 +121,6 @@
     <Compile Include="Custom\EntityClasses\ActionFilterTriggerEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionQueueEntity.cs" />
     <Compile Include="Custom\EntityClasses\ActionTaskEntity.cs" />
-    <Compile Include="Custom\EntityClasses\WorldShipShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\UpsShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\OtherShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracShipmentEntity.cs" />
