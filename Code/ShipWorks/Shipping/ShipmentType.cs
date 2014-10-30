@@ -749,7 +749,7 @@ namespace ShipWorks.Shipping
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
             
             ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
-            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat);
+            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
@@ -1126,9 +1126,10 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
-        /// <param name="requestedLabelFormat">The requested label format.</param>
-        public virtual void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat)
-        {}
+        public virtual void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            
+        }
 
         /// <summary>
         /// Gets whether the shipment is going from the US to PR or from PR to US
