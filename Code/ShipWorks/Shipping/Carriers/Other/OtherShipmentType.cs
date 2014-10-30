@@ -228,5 +228,18 @@ namespace ShipWorks.Shipping.Carriers.Other
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Other == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.Other.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

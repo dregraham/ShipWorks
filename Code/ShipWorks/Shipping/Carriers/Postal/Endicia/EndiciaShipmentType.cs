@@ -931,5 +931,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             return fields;
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Postal == null || shipment.Postal.Endicia == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

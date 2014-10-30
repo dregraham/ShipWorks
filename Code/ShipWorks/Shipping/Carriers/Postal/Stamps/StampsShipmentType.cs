@@ -758,5 +758,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
             }
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Postal == null || shipment.Postal.Stamps == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.Postal.Stamps.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

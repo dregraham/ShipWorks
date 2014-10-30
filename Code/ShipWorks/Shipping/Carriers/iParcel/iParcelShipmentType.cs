@@ -1128,5 +1128,18 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 return true;
             }
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.IParcel == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.IParcel.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

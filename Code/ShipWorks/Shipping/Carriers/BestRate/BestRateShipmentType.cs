@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -674,6 +675,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
         }
 
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
         {
             List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
@@ -741,6 +745,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // User already processed it, don't give credit for getting rates which happens during process...
                 shipment.BestRateEvents |= (byte)eventType;
             }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.BestRate == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
         }
     }
 }

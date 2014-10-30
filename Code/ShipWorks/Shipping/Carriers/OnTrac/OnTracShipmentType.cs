@@ -591,5 +591,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             return false;
         }
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.OnTrac == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

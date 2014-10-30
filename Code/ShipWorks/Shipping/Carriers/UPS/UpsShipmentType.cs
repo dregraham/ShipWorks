@@ -1307,5 +1307,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             return base.IsCustomsRequiredByShipment(shipment);
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Ups == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }

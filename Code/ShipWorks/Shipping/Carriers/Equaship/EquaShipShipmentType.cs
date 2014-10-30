@@ -496,5 +496,18 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         {
             return new NullShippingBroker();
         }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.EquaShip == null)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+            }
+
+            shipment.EquaShip.RequestedLabelFormat = (int)requestedLabelFormat;
+        }
     }
 }
