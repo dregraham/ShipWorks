@@ -1,20 +1,19 @@
-﻿using System;
-namespace ShipWorks.Shipping.Editing.Rating
+﻿namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// Factory to create an ExceptionsRateFootnote
     /// </summary>
     public class ExceptionsRateFootnoteFactory : IRateFootnoteFactory
     {
-        private readonly Exception exception;
+        private readonly string errorMessage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteFactory"/> class.
         /// </summary>
-        public ExceptionsRateFootnoteFactory(ShipmentType shipmentType, Exception exception)
+        public ExceptionsRateFootnoteFactory(ShipmentType shipmentType, string errorMessage)
         {
-            this.exception = exception;
             ShipmentType = shipmentType;
+            this.errorMessage = errorMessage;
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new ExceptionsRateFootnoteControl(exception);
+            return new ExceptionsRateFootnoteControl(errorMessage);
         }
     }
 }

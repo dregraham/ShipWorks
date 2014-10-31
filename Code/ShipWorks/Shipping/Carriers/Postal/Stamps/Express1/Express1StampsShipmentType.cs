@@ -146,13 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             //    AccountRepository = originalAccountRepository;
             //    CertificateInspector = originalCertificateInspector;
             //}
-            return GetCachedRates<ShippingException>(shipment, entity =>
-            {
-                ShippingException exception = new ShippingException("An account is required to view Express1 rates.");
-                exception.HelpLink = "http://support.shipworks.com/support/solutions/articles/4000028957-creating-an-express1-account-for-stamps-com";
-
-                throw exception;
-            });
+            return GetCachedRates<StampsException>(shipment, entity => { throw new StampsException("An account is required to view Express1 rates."); });
         }
 
         /// <summary>
