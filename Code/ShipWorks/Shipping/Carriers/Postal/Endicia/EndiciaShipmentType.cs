@@ -215,20 +215,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Configure the properties of a newly created shipment
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
-
-            // We can be called during the creation of the base Postal shipment, before the Endicia one exists
-            if (shipment.Postal.Endicia != null)
-            {
-                shipment.Postal.Endicia.RequestedLabelFormat = (int)ThermalLanguage.None;
-            }
-        }
-
-        /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
