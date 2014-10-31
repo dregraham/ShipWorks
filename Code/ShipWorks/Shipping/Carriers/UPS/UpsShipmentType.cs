@@ -640,6 +640,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             }
 
+            shipment.RequestedLabelFormat = shipment.Ups.RequestedLabelFormat;
+
             // Check the UPS wide PennyOne settings and get them updated
             foreach (var package in shipment.Ups.Packages)
             {

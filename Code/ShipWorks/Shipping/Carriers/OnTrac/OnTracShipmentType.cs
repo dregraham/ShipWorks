@@ -401,6 +401,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // We do this because the first 100 is free.
                 shipment.OnTrac.DeclaredValue = Math.Min(100, shipment.OnTrac.InsuranceValue);
             }
+
+            shipment.RequestedLabelFormat = shipment.OnTrac.RequestedLabelFormat;
         }
 
         /// <summary>

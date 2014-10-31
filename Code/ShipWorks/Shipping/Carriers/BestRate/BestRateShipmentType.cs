@@ -673,6 +673,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+
+            shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
 
         /// <summary>

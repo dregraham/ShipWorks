@@ -767,6 +767,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
             }
 
+            shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
+            
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
             decimal? maxPackageDeclaredValue = (overriddenShipment.ShipCountryCode != "US") ? (shipment.CustomsValue / shipment.FedEx.Packages.Count) : (decimal?) null;

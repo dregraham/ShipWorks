@@ -393,6 +393,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Set the provider type based on i-Parcel settings
             shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
 
+            shipment.RequestedLabelFormat = shipment.IParcel.RequestedLabelFormat;
+
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
             if (shipment.IParcel.Packages.Count > 1)
             {

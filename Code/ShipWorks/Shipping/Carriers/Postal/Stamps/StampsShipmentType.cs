@@ -501,7 +501,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Update the dyamic data of the shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                shipment.RequestedLabelFormat = shipment.Postal.Stamps.RequestedLabelFormat;                
+            }
+        }
+
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>

@@ -315,6 +315,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
 
             // update the dimensions information
             DimensionsManager.UpdateDimensions(new DimensionsAdapter(shipment.EquaShip));
+
+            shipment.RequestedLabelFormat = shipment.EquaShip.RequestedLabelFormat;
         }
 
         /// <summary>

@@ -325,6 +325,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // If they had this shipment type as Endicia, set it to Endicia insurance, then switched to Express1... we need to be sure its always ShipWorks in the ex1 case
                 shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
             }
+
+            if (shipment.Postal != null && shipment.Postal.Endicia != null)
+            {
+                shipment.RequestedLabelFormat = shipment.Postal.Endicia.RequestedLabelFormat;
+            }
         }
 
         /// <summary>
