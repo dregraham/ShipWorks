@@ -25,7 +25,7 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake test:integration</command>
+      <command>rake test:integration[IncludeInJenkinsBuild]</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

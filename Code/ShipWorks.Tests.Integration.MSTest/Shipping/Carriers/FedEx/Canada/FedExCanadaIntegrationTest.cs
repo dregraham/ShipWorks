@@ -16,8 +16,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestCategory("FedEx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaExpressDomestic()
         {
             try
@@ -51,8 +51,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestCategory("FedEx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
@@ -81,8 +81,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 
         [DataSource("DataSource_Ship_FedExCanadaExpressInternational")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [TestCategory("FedEx")]
         [TestMethod]
-        [Ignore]
         public void Ship_FedExCanadaExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
