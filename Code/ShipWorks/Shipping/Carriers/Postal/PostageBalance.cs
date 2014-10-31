@@ -24,12 +24,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Purchases the specified amount.
         /// </summary>
-        public void Purchase(decimal amount)
+        public Task Purchase(decimal amount)
         {
             decimal balance = postageWebClient.GetBalance();
             postageWebClient.Purchase(amount);
 
-            LogAsync(amount, balance);
+            return LogAsync(amount, balance);
         }
 
         /// <summary>
@@ -52,16 +52,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         /// <param name="amount">The amount.</param>
         /// <param name="balance">The balance.</param>
-        private void LogAsync(decimal amount, decimal balance)
+        private Task LogAsync(decimal amount, decimal balance)
         {
-            try
+            return new TaskFactory().StartNew(() =>
             {
-                new TaskFactory().StartNew(() => tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier));
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error logging PostageEvent to Tango.", ex);
-            }
+                try
+                {
+                    tangoWebClient.LogPostageEvent(balance, amount, postageWebClient.ShipmentTypeCode, postageWebClient.AccountIdentifier);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error logging PostageEvent to Tango.", ex);
+                }
+            });
         }
     }
 }
