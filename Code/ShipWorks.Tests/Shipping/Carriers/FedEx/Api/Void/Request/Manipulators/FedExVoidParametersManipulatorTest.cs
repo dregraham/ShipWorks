@@ -88,6 +88,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             ShipmentEntity shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
             shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
+            shipmentEntity.TrackingNumber = "92123";
+            shipmentEntity.FedEx.SmartPostUspsApplicationId = "92";
 
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
