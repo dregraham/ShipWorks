@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
@@ -50,7 +52,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [TestMethod]
         public void Purchase_LogsPostageEventToTango_Test()
         {
-            testObject.Purchase(7);
+            Task result = testObject.Purchase(7);
+            result.Wait(TimeSpan.FromSeconds(5));
 
             tangoWebClient.Verify(t => t.LogPostageEvent(balance, 7, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
         }

@@ -223,6 +223,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
+            // Stamps.com fields - password needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "StampsUsername", "/CounterRateCredentials/Stamps/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["StampsUsername"]);
+
             return results;
         }
 
@@ -272,7 +276,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCounterRatesCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
-
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCounterRatesCredentialStore.StampsCertificateVerificationDataKeyName, results);
+            
             return results;
         }
 

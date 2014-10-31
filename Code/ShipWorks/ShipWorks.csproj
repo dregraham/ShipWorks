@@ -717,6 +717,7 @@
     <Compile Include="Shipping\Carriers\Postal\IPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
@@ -732,6 +733,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\EndiciaUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnote.cs">
       <SubType>UserControl</SubType>
@@ -2211,6 +2213,7 @@
     <Compile Include="Shipping\ShipmentCommonDetail.cs" />
     <Compile Include="Shipping\ShipmentParcel.cs" />
     <Compile Include="Shipping\InitialShippingTabDisplay.cs" />
+    <Compile Include="Shipping\ShipmentTypePreProcessor.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriter.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\IShipSenseOrderItemKeyFactory.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashResult.cs" />
@@ -10759,6 +10762,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
