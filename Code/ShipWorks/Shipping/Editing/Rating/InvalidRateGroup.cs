@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             this.exception = exception;
 
-            base.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, exception.Message));
+            base.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, exception));
         }
 
         /// <summary>

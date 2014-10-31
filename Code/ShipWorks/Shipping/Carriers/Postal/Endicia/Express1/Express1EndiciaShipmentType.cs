@@ -116,7 +116,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             //    AccountRepository = originalAccountRepository;
             //    CertificateInspector = originalCertificateInspector;
             //}
-            return GetCachedRates<EndiciaException>(shipment, entity => { throw new EndiciaException("An account is required to view Express1 rates."); });
+            return GetCachedRates<ShippingException>(shipment, entity =>
+            {
+                ShippingException exception = new ShippingException("An account is required to view Express1 rates.");
+                exception.HelpLink = "http://support.shipworks.com/support/solutions/articles/4000028957-creating-an-express1-account-for-stamps-com";
+
+                throw exception;
+            });
         }
 
         

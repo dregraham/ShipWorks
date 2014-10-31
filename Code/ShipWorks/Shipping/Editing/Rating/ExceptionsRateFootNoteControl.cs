@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Editing.Rating
@@ -8,15 +9,15 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public partial class ExceptionsRateFootnoteControl : RateFootnoteControl
     {
-        private readonly string errorMessageText;
+        private readonly Exception exception;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteControl"/> class.
+        /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteControl" /> class.
         /// </summary>
-        /// <param name="errorMessage">The error message.</param>
-        public ExceptionsRateFootnoteControl(string errorMessage)
+        /// <param name="exception">The exception.</param>
+        public ExceptionsRateFootnoteControl(Exception exception)
         {
-            errorMessageText = errorMessage;
+            this.exception = exception;
 
             InitializeComponent();
         }
@@ -26,7 +27,20 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         private void OnClickExceptionsLink(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageHelper.ShowInformation(this, errorMessageText);
+            ShippingException shippingException = exception as ShippingException;
+
+            if (shippingException != null && !string.IsNullOrWhiteSpace(shippingException.HelpLink))
+            {
+                using (ExceptionsRateFootnoteDlg dialog = new ExceptionsRateFootnoteDlg(shippingException.Message, shippingException.HelpLink))
+                {
+                    dialog.ShowDialog(this);
+                }
+            }
+            else
+            {
+                // Just show a standard message box
+                MessageHelper.ShowInformation(this, exception.Message);
+            }
         }
     }
 }
