@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -58,6 +59,10 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         private const string TestCredentialExpress1StampsCertificateVerificationData = "<Service><Subject><Value>test</Value><Value></Value></Subject></Service>";
 
+        private const string TestCredentialStampsUsername = "interapptive";
+        private const string TestCredentialStampsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
+        private const string TestCredentialStampsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
 
         // Key names of credential values in the dictionary 
@@ -79,6 +84,10 @@ namespace ShipWorks.Shipping.Carriers
         private const string Express1StampsUsernameKeyName = "Express1StampsUsername";
         private const string Express1StampsPasswordKeyName = "Express1StampsPassword";
         public const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
+
+        private const string StampsUsernameKeyName = "StampsUsername";
+        private const string StampsPasswordKeyName = "StampsPassword";
+        public const string StampsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
 
         public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
         
@@ -269,6 +278,42 @@ namespace ShipWorks.Shipping.Carriers
             {
                 return Express1StampsConnectionDetails.UseTestServer ? 
                     TestCredentialExpress1StampsPassword : GetCredentialValue(Express1StampsPasswordKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from Stamps
+        /// </summary>
+        public string StampsCertificateVerificationData
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the  Stamps user name used for obtaining counter rates
+        /// </summary>
+        public string StampsUsername
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the  Stamps password used for obtaining counter rates
+        /// </summary>
+        public string StampsPassword
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
             }
         }
 

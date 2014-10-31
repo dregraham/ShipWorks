@@ -291,10 +291,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
             ShipmentType shipmentType;
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
+            // Only change this to best rate for non-Stamps.com postal types
             if (ConsolidatePostalRates &&
-                PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) &&
-                !PostalUtility.IsPostalSetup())
+                PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
+                !PostalUtility.IsPostalSetup() && 
+                shipmentTypeCode != ShipmentTypeCode.Stamps && 
+                shipmentTypeCode != ShipmentTypeCode.Usps &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
             {
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new Express1BrokerFilter(), new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
 
