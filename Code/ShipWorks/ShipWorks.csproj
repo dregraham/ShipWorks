@@ -2305,6 +2305,11 @@
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorShipmentDto.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorApiLogger.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorLog.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\TlsAppDomain.cs" />
+    <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorOrderDto.cs" />
     <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />

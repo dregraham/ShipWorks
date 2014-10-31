@@ -10,6 +10,7 @@ using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Shipping;
 using ShipWorks.Data;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 {
@@ -86,9 +87,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 
                 try
                 {
-                    MarketplaceAdvisorOmsClient.ChangeParcelFlags(
-                        storeEntity, 
-                        order,
+                    MarketplaceAdvisorOmsClient.Create(storeEntity).ChangeParcelFlags(
+                        new MarketplaceAdvisorOrderDto(order),
                         FlagsOn,
                         FlagsOff);
                 }

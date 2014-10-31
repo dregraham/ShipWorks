@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 try
                 {
                     // Create the processing client
-                    MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient(mwStore);
+                    MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create(mwStore);
 
                     // Process the request
                     client.GetUser();

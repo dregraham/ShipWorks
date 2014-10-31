@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Base class for all exceptions that we want to handle from MarketplaceAdvisor
     /// </summary>
+    [Serializable]
     class MarketplaceAdvisorException : Exception
     {
         public MarketplaceAdvisorException()
@@ -24,6 +26,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
         public MarketplaceAdvisorException(string message, Exception inner)
             : base(ProcessMessage(message), inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor that supports remoting.
+        /// </summary>
+        public MarketplaceAdvisorException(SerializationInfo info, StreamingContext context) : 
+            base(info, context) 
         {
 
         }
