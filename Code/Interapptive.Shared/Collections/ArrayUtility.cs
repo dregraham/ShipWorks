@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -33,7 +34,7 @@ namespace Interapptive.Shared.Collections
         {
             try
             {
-                return Convert.ChangeType(fromValue, toType);
+                return Convert.ChangeType(fromValue, toType, CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {

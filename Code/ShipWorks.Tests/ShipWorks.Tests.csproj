@@ -142,6 +142,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
+    <Compile Include="Core\EnumTest.cs" />
     <Compile Include="Core\GuidTests.cs" />
     <Compile Include="Core\GeneralTests.cs" />
     <Compile Include="Core\PersonNameTests.cs" />
