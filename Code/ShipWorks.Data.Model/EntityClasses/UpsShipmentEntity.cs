@@ -653,6 +653,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UspsPackageID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -1324,6 +1327,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UpsShipmentFieldIndex.UspsPackageID, value); }
 		}
 
+		/// <summary> The RequestedLabelFormat property of the Entity UpsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)UpsShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
 		[TypeContainedAttribute(typeof(UpsPackageEntity))]
@@ -1365,7 +1379,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_shipment !=null);
 						DesetupSyncShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Shipment");
+						}
 					}
 					else
 					{

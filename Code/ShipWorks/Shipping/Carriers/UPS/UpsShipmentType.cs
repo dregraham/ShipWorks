@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -258,6 +260,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
+
+            shipment.Ups.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -635,6 +639,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             }
+
+            shipment.RequestedLabelFormat = shipment.Ups.RequestedLabelFormat;
 
             // Check the UPS wide PennyOne settings and get them updated
             foreach (var package in shipment.Ups.Packages)
@@ -1302,6 +1308,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return base.IsCustomsRequiredByShipment(shipment);
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Ups != null)
+            {
+                shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

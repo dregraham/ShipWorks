@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -88,14 +90,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
         {
             ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
-        }
-
-        /// <summary>
-        /// Configure the initial values for a new shipment
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>

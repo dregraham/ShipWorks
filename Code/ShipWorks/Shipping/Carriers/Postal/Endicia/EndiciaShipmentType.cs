@@ -3,10 +3,12 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
@@ -213,20 +215,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Configure the properties of a newly created shipment
-        /// </summary>
-        public override void ConfigureNewShipment(ShipmentEntity shipment)
-        {
-            base.ConfigureNewShipment(shipment);
-
-            // We can be called during the creation of the base Postal shipment, before the Endicia one exists
-            if (shipment.Postal.Endicia != null)
-            {
-                // Right now its all in the Profile
-            }
-        }
-
-        /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
         public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
@@ -322,6 +310,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // If they had this shipment type as Endicia, set it to Endicia insurance, then switched to Express1... we need to be sure its always ShipWorks in the ex1 case
                 shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+
+            if (shipment.Postal != null && shipment.Postal.Endicia != null)
+            {
+                shipment.RequestedLabelFormat = shipment.Postal.Endicia.RequestedLabelFormat;
             }
         }
 
@@ -928,6 +921,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             );
 
             return fields;
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Endicia != null)
+            {
+                shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;                
+            }
         }
     }
 }

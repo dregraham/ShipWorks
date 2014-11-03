@@ -411,10 +411,12 @@ namespace ShipWorks.Shipping.Editing
             // Save the data to each selected shipment
             foreach (ShipmentEntity shipment in loadedShipments)
             {
-                labelFormat.ReadMultiValue(v => shipment.RequestedLabelFormat = (int)v);
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
+                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
+                
                 // Residential
-                if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
+                if (shipmentType.IsResidentialStatusRequired(shipment))
                 {
                     ResidentialDeterminationType? type = null;
 

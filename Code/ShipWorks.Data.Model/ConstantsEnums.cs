@@ -738,6 +738,8 @@ namespace ShipWorks.Data.Model
 		ServiceLevel,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2449,6 +2451,8 @@ namespace ShipWorks.Data.Model
 		ScanFormBatchID,
 		///<summary>ScanBasedReturn. </summary>
 		ScanBasedReturn,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2592,6 +2596,8 @@ namespace ShipWorks.Data.Model
 		SaturdayDelivery,
 		///<summary>Confirmation. </summary>
 		Confirmation,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3408,6 +3414,8 @@ namespace ShipWorks.Data.Model
 		WeightUnitType,
 		///<summary>LinearUnitType. </summary>
 		LinearUnitType,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4205,6 +4213,8 @@ namespace ShipWorks.Data.Model
 		TrackBySMS,
 		///<summary>IsDeliveryDutyPaid. </summary>
 		IsDeliveryDutyPaid,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5557,6 +5567,8 @@ namespace ShipWorks.Data.Model
 		InsurancePennyOne,
 		///<summary>DeclaredValue. </summary>
 		DeclaredValue,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8057,6 +8069,8 @@ namespace ShipWorks.Data.Model
 		OriginalStampsAccountID,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8812,6 +8826,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargeCountryCode,
 		///<summary>UspsPackageID. </summary>
 		UspsPackageID,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
