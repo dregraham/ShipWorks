@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages;
 using ShipWorks.Filters.Content.Conditions;
@@ -317,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                     if (mwStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS)
                     {
-                        MarketplaceAdvisorOmsClient.PromoteOrder(mwStore, order);
+                        MarketplaceAdvisorOmsClient.Create(mwStore).PromoteOrder(new MarketplaceAdvisorOrderDto(order));
                     }
                     else
                     {
@@ -396,7 +397,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                     if (mwStore.AccountType == (int) MarketplaceAdvisorAccountType.OMS)
                     {
-                        MarketplaceAdvisorOmsClient.ChangeOrderFlags(mwStore, order, flagChanges[0], flagChanges[1]);
+                        MarketplaceAdvisorOmsClient.Create(mwStore).ChangeOrderFlags(new MarketplaceAdvisorOrderDto(order), flagChanges[0], flagChanges[1]);
                     }
                     else
                     {
