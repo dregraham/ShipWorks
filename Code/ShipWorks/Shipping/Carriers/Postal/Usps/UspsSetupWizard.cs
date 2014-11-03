@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using System.Windows.Forms;
@@ -16,6 +21,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsSetupWizard : StampsSetupWizard
     {
+        private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsSetupWizard"/> class.
         /// </summary>
@@ -118,9 +125,100 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<ShippingDefaultsRuleEntity> rules = ShippingDefaultsRuleManager.GetRules(shipmentTypeCode);
             foreach (ShippingDefaultsRuleEntity rule in rules)
             {
-                rule.ShipmentType = (int)ShipmentTypeCode.Usps;
-                ShippingDefaultsRuleManager.SaveRule(rule);
+                ShippingDefaultsRuleEntity clonedRule = CreateCopy(rule);
+
+                clonedRule.ShipmentType = (int)ShipmentTypeCode.Usps;
+                clonedRule.ShippingProfileID = GetRuleProfile(rule.ShippingProfileID);
+
+                ShippingDefaultsRuleManager.SaveRule(clonedRule);
             }
+        }
+
+        /// <summary>
+        /// Get a copied profile for the specified id
+        /// </summary>
+        private long GetRuleProfile(long profileId)
+        {
+            if (profileMap.ContainsKey(profileId))
+            {
+                return profileMap[profileId];
+            }
+
+            long newProfileId = CreateProfileClone(profileId);
+
+            profileMap.Add(profileId, newProfileId);
+
+            return newProfileId;
+        }
+
+        /// <summary>
+        /// Create a copy of the profile with the given id
+        /// </summary>
+        private static long CreateProfileClone(long profileId)
+        {
+            ShippingProfileEntity profile = ShippingProfileManager.GetProfile(profileId);
+
+            // If we can't find the requested profile (or it's not set in the original rule), we'll just set the new rule to (none).
+            if (profile == null)
+            {
+                return 0;
+            }
+
+            ShippingProfileEntity newProfile = CreateCopy(profile);
+
+            newProfile.Name = string.Format("{0} (Copy)", profile.Name);
+            newProfile.ShipmentType = (int)ShipmentTypeCode.Usps;
+            newProfile.ShipmentTypePrimary = false;
+
+            newProfile.Postal = CreateCopy(profile.Postal);
+            newProfile.Postal.Stamps = new StampsProfileEntity();
+
+            EnsureUniqueName(newProfile, profile.Name);
+
+            ShippingProfileManager.SaveProfile(newProfile);
+
+            return newProfile.ShippingProfileID;
+        }
+
+        /// <summary>
+        /// Attempt to ensure a unique name for the new profile
+        /// </summary>
+        private static void EnsureUniqueName(ShippingProfileEntity newProfile, string baseName)
+        {
+            int copyNumber = 1;
+            while (ShippingProfileManager.DoesNameExist(newProfile))
+            {
+                newProfile.Name = string.Format("{0} (Copy {1})", baseName, copyNumber);
+                copyNumber++;
+
+                // If we can't find a unique name after 10 attempts, just give up...
+                if (copyNumber == 10)
+                {
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create a copy of the specified object
+        /// </summary>
+        /// <returns>
+        /// EntityUtility.CloneEntity would have worked, but this is specific to the needs of copying the profile. We don't want
+        /// to copy any other postal profile data, Ups, FedEx, etc.
+        /// </returns>
+        private static T CreateCopy<T>(T copyFrom) where T : IEntity2, new()
+        {
+            T newObject = new T();
+
+            foreach (IEntityField2 field in copyFrom.Fields.Cast<IEntityField2>().Where(field => !field.IsPrimaryKey && !field.IsReadOnly))
+            {
+                newObject.Fields[field.Name].CurrentValue = field.CurrentValue;
+                newObject.Fields[field.Name].IsChanged = true;
+            }
+
+            newObject.Fields.IsDirty = true;
+
+            return newObject;
         }
     }
 }
