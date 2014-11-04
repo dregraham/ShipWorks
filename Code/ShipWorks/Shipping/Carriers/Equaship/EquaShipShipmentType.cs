@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
@@ -151,6 +153,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             base.ConfigureNewShipment(shipment);
 
             shipment.EquaShip.InsuranceValue = 0;
+            shipment.EquaShip.RequestedLabelFormat = (int)ThermalLanguage.None;
         }
 
         /// <summary>
@@ -312,6 +315,8 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
 
             // update the dimensions information
             DimensionsManager.UpdateDimensions(new DimensionsAdapter(shipment.EquaShip));
+
+            shipment.RequestedLabelFormat = shipment.EquaShip.RequestedLabelFormat;
         }
 
         /// <summary>
@@ -492,6 +497,17 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.EquaShip != null)
+            {
+                shipment.EquaShip.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

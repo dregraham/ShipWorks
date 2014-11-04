@@ -429,6 +429,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("BestRateShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)BestRateShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "ServiceLevel", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.ServiceLevel, 0, 0, 10);
 			base.AddElementFieldInfo("BestRateShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)BestRateShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			base.AddElementFieldInfo("BestRateShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)BestRateShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits BigCommerceOrderItemEntity's FieldInfo objects</summary>
 		private void InitBigCommerceOrderItemEntityInfos()
@@ -823,6 +824,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "RefundFormID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.RefundFormID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanBasedReturn", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ScanBasedReturn, 0, 0, 0);
+			base.AddElementFieldInfo("EndiciaShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits EquaShipAccountEntity's FieldInfo objects</summary>
 		private void InitEquaShipAccountEntityInfos()
@@ -890,6 +892,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EquaShipShipmentEntity", "EmailNotification", typeof(System.Boolean), false, false, false, false,  (int)EquaShipShipmentFieldIndex.EmailNotification, 0, 0, 0);
 			base.AddElementFieldInfo("EquaShipShipmentEntity", "SaturdayDelivery", typeof(System.Boolean), false, false, false, false,  (int)EquaShipShipmentFieldIndex.SaturdayDelivery, 0, 0, 0);
 			base.AddElementFieldInfo("EquaShipShipmentEntity", "Confirmation", typeof(System.Int32), false, false, false, false,  (int)EquaShipShipmentFieldIndex.Confirmation, 0, 0, 10);
+			base.AddElementFieldInfo("EquaShipShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)EquaShipShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits EtsyOrderEntity's FieldInfo objects</summary>
 		private void InitEtsyOrderEntityInfos()
@@ -1198,6 +1201,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "IntlExportDetailLicenseOrPermitExpirationDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)FedExShipmentFieldIndex.IntlExportDetailLicenseOrPermitExpirationDate, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "WeightUnitType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.WeightUnitType, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "LinearUnitType", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.LinearUnitType, 0, 0, 10);
+			base.AddElementFieldInfo("FedExShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()
@@ -1460,6 +1464,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("IParcelShipmentEntity", "TrackByEmail", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.TrackByEmail, 0, 0, 0);
 			base.AddElementFieldInfo("IParcelShipmentEntity", "TrackBySMS", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.TrackBySMS, 0, 0, 0);
 			base.AddElementFieldInfo("IParcelShipmentEntity", "IsDeliveryDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)IParcelShipmentFieldIndex.IsDeliveryDutyPaid, 0, 0, 0);
+			base.AddElementFieldInfo("IParcelShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)IParcelShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits LabelSheetEntity's FieldInfo objects</summary>
 		private void InitLabelSheetEntityInfos()
@@ -1665,6 +1670,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("OnTracShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)OnTracShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			base.AddElementFieldInfo("OnTracShipmentEntity", "InsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)OnTracShipmentFieldIndex.InsurancePennyOne, 0, 0, 0);
 			base.AddElementFieldInfo("OnTracShipmentEntity", "DeclaredValue", typeof(System.Decimal), false, false, false, false,  (int)OnTracShipmentFieldIndex.DeclaredValue, 0, 4, 19);
+			base.AddElementFieldInfo("OnTracShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)OnTracShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits OrderEntity's FieldInfo objects</summary>
 		private void InitOrderEntityInfos()
@@ -2344,6 +2350,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsShipmentEntity", "Memo", typeof(System.String), false, false, false, false,  (int)StampsShipmentFieldIndex.Memo, 200, 0, 0);
 			base.AddElementFieldInfo("StampsShipmentEntity", "OriginalStampsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsShipmentFieldIndex.OriginalStampsAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)StampsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("StampsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)StampsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()
@@ -2652,6 +2659,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargePostalCode", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargePostalCode, 20, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "UspsPackageID", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsPackageID, 50, 0, 0);
+			base.AddElementFieldInfo("UpsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>
 		private void InitUserEntityInfos()

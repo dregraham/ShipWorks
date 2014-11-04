@@ -8,12 +8,14 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -386,6 +388,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
+
+            shipment.FedEx.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -763,6 +767,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
             }
 
+            shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
+            
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
             decimal? maxPackageDeclaredValue = (overriddenShipment.ShipCountryCode != "US") ? (shipment.CustomsValue / shipment.FedEx.Packages.Count) : (decimal?) null;
@@ -1265,6 +1271,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     labelData = (TemplateLabelData) data
                 };
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.FedEx != null)
+            {
+                shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
     }

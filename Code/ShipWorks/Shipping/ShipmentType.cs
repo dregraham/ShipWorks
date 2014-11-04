@@ -747,7 +747,9 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
+            
             ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
+            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
@@ -1077,6 +1079,14 @@ namespace ShipWorks.Shipping
             }
 
             return requiresCustoms;
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public virtual void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            
         }
 
         /// <summary>
