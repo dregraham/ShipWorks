@@ -286,6 +286,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 item.UnitCost = unitCost.Value;
                 item.Weight = unitWeight.Value;
 
+                item.UPC = csv.ReadField("Item.UPC", "");
+
                 // Allow derive classes to load\change their own specific item data
                 LoadExtraOrderItemData(item, csv, factory);
             }

@@ -179,6 +179,7 @@ namespace ShipWorks.Data.Import.Xml
             item.Name = XPathUtility.Evaluate(xpath, "Name", "");
             item.Code = XPathUtility.Evaluate(xpath, "Code", "");
             item.SKU = XPathUtility.Evaluate(xpath, "SKU", item.Code);
+            item.UPC = XPathUtility.Evaluate(xpath, "UPC", "");
             item.Quantity = XPathUtility.Evaluate(xpath, "Quantity", (double) 0.0);
             item.UnitPrice = XPathUtility.Evaluate(xpath, "UnitPrice", 0.0M);
             item.UnitCost = XPathUtility.Evaluate(xpath, "UnitCost", 0.0M);
