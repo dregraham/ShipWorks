@@ -115,16 +115,13 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
+
+
                 // A null reference error was being thrown.  Discoverred by Crash Reports.
                 // Let's figure out what is null....
                 if (FilterNode == null)
                 {
                     throw new NullReferenceException("FilterNode cannot be null.");
-                }
-
-                if (FilterCount == null)
-                {
-                    throw new NullReferenceException("FilterCount cannot be null.");
                 }
 
                 if (FilterNode.Filter == null)
@@ -135,7 +132,7 @@ namespace ShipWorks.Filters.Controls
                 // Make a note whether the filter was already flagged as a slow running filter
                 bool previousFlag = IsFlaggedAsSlowRunning;
 
-                if (FilterCount.CostInMilliseconds > WarningThresholdInMilliseconds)
+                if (FilterCount != null && FilterCount.CostInMilliseconds > WarningThresholdInMilliseconds)
                 {
                     IsFlaggedAsSlowRunning = true;
                     cell.Image = Properties.Resources.funnel_warning;
