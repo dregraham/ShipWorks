@@ -586,7 +586,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 if (packageProfile.PriorityAlert.HasValue && packageProfile.PriorityAlert.Value)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlert, package, FedExPackageFields.PriorityAlert);
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertDetailContent, package, FedExPackageFields.PriorityAlertDetailContent);
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertEnhancementType, package, FedExPackageFields.PriorityAlertEnhancementType);
                 }
