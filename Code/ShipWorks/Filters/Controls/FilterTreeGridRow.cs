@@ -156,7 +156,7 @@ namespace ShipWorks.Filters.Controls
                     if (previousFlag && !statusChangeWrittenToLog)
                     {
                         // Write an entry to the log when a filter goes from slow to normal
-                        log.InfoFormat("The {0} filter took {1} ms to complete and the slow running filter flag has been removed.", FilterNode.Filter.Name, FilterCount.CostInMilliseconds);
+                        log.InfoFormat("The {0} filter took {1} ms to complete and the slow running filter flag has been removed.", FilterNode.Filter.Name, FilterCount == null ? 0 : FilterCount.CostInMilliseconds);
                         statusChangeWrittenToLog = true;
                     }
                 }
