@@ -2592,8 +2592,7 @@ CREATE TABLE [dbo].[OtherShipment]
 [ShipmentID] [bigint] NOT NULL,
 [Carrier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Service] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[InsuranceValue] [money] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[InsuranceValue] [money] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OtherShipment] on [dbo].[OtherShipment]'
@@ -3661,8 +3660,7 @@ CREATE TABLE [dbo].[WorldShipShipment]
 [InvoiceChargesOther] [money] NULL,
 [ShipmentProcessedOnComputerID] [bigint] NULL,
 [UspsEndorsement] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[CarbonNeutral] [char] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[CarbonNeutral] [char] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_WorldShipShipment] on [dbo].[WorldShipShipment]'

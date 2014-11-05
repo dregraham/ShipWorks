@@ -612,6 +612,7 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
