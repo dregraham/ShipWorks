@@ -267,6 +267,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Users.Security.PermissionScope".ToUpperInvariant(),
                 "ShipWorks.Users.Security.StorePermissionCoverage".ToUpperInvariant(),
                 "ShipWorks.Users.UserSettingsDlg+Section".ToUpperInvariant(),
+                "ShipWorks.Filters.FilterNodeState".ToUpperInvariant(),
             };
     }
 }
