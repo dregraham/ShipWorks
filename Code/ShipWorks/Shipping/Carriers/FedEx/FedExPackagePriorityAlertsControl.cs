@@ -75,6 +75,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 priorityAlertContentDetail.ReadMultiText(t => package.PriorityAlertDetailContent = t);
                 priorityAlertEnhancementType.ReadMultiValue(v => package.PriorityAlertEnhancementType = (int) v);
+
+                // Slightly backwards logic, but will still work if a new enhancement type is added in a newer version of the API
+                package.PriorityAlert = EnhancementType != FedExPriorityAlertEnhancementType.None;
             }
         }
     }
