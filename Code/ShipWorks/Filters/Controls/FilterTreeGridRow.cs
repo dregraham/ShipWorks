@@ -19,7 +19,9 @@ namespace ShipWorks.Filters.Controls
         static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
 
         FilterNodeEntity filterNode;
-        FilterCount filterCount;        
+        FilterCount filterCount;
+
+        private readonly DisabledFilterFont disabledFont;
 
         /// <summary>
         /// Constructor
@@ -29,6 +31,8 @@ namespace ShipWorks.Filters.Controls
         {
             this.filterNode = filterNode;
             this.filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
+
+            disabledFont = new DisabledFilterFont(Font);
         }
 
         /// <summary>
@@ -97,8 +101,15 @@ namespace ShipWorks.Filters.Controls
                 filterCount = count;
                 RedrawNeeded();
             }
-                        
+
             UpdateLayoutForSpeed();
+
+            bool isFilterDisabled = filterNode.State == (byte) FilterNodeState.Disabled;
+            foreach (GridCell cell in Cells)
+            {
+                cell.Font = isFilterDisabled ? disabledFont.Font : Font;
+                cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
+            }
         }
 
         /// <summary>
@@ -115,8 +126,6 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
-
-
                 // A null reference error was being thrown.  Discoverred by Crash Reports.
                 // Let's figure out what is null....
                 if (FilterNode == null)

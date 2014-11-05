@@ -192,6 +192,15 @@ namespace ShipWorks.Filters.Controls
                     countColor = Color.CornflowerBlue;
                 }
 
+                // Adjust font for disabled nodes
+                if (filterTreeRow.FilterNode.State == (byte) FilterNodeState.Disabled)
+                {
+                    DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont);
+
+                    countColor = disabledFont.TextColor;
+                    cellFont = disabledFont.Font;
+                }
+
                 // If its ready, we can draw a number.
                 if (count.Status == FilterCountStatus.Ready)
                 {

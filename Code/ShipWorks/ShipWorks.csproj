@@ -636,6 +636,7 @@
       <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Filters\FilterNodeState.cs" />
+        <Compile Include="Filters\Controls\DisabledFilterFont.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />

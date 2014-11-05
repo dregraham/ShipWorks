@@ -42,7 +42,7 @@ namespace ShipWorks.Filters.Controls
         Image countingImageNormal = Resources.arrows_blue;
         Image countingImageSelected = Resources.arrows_white;
         bool isAnimating = false;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -363,7 +363,7 @@ namespace ShipWorks.Filters.Controls
         protected override void OnDrawSelectedItem(Graphics g, Color foreColor, Rectangle bounds)
         {
             bool selected = false;
-
+            
             if (selectedNode != null)
             {
                 if (sizeToContentLastName != selectedNode.Filter.Name)
@@ -387,7 +387,18 @@ namespace ShipWorks.Filters.Controls
                 bounds.Offset(image.Width + imageTextSeparation, 1);
                 bounds.Width -= (image.Width + imageTextSeparation);
 
-                IndependentText.DrawText(g, selectedNode.Filter.Name, Font, bounds, textFormat, foreColor);
+                Font itemFont = new Font(Font, Font.Style);
+                Color itemColor = foreColor;
+                
+                DisabledFilterFont disabledFont = new DisabledFilterFont(Font);
+                bool isFilterDisabled = selectedNode.State == (byte) FilterNodeState.Disabled;
+                if (isFilterDisabled)
+                {
+                    itemFont = disabledFont.Font;
+                    itemColor = disabledFont.TextColor;
+                }
+
+                IndependentText.DrawText(g, selectedNode.Filter.Name, itemFont, bounds, textFormat, itemColor);
 
                 string countText = GetCountText(selectedNode);
 
@@ -402,6 +413,11 @@ namespace ShipWorks.Filters.Controls
                 Animate(countText == null);
 
                 Color countColor = (selected || !Enabled) ? foreColor : Color.Blue;
+
+                if (isFilterDisabled)
+                {
+                    countColor = disabledFont.TextColor;
+                }
 
                 // How big the text is drawn by default
                 Size size = IndependentText.MeasureText(g, selectedNode.Filter.Name, Font, textFormat);
