@@ -1232,6 +1232,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FilterNodeEntity", "FilterNodeContentID", typeof(System.Int64), false, true, false, false,  (int)FilterNodeFieldIndex.FilterNodeContentID, 0, 0, 19);
 			base.AddElementFieldInfo("FilterNodeEntity", "Created", typeof(System.DateTime), false, false, false, false,  (int)FilterNodeFieldIndex.Created, 0, 0, 0);
 			base.AddElementFieldInfo("FilterNodeEntity", "Purpose", typeof(System.Int32), false, false, false, false,  (int)FilterNodeFieldIndex.Purpose, 0, 0, 10);
+			base.AddElementFieldInfo("FilterNodeEntity", "State", typeof(System.Byte), false, false, false, false,  (int)FilterNodeFieldIndex.State, 0, 0, 3);
 		}
 		/// <summary>Inits FilterNodeColumnSettingsEntity's FieldInfo objects</summary>
 		private void InitFilterNodeColumnSettingsEntityInfos()

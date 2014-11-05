@@ -1782,7 +1782,8 @@ CREATE TABLE [dbo].[FilterNode]
 [FilterSequenceID] [bigint] NOT NULL,
 [FilterNodeContentID] [bigint] NOT NULL,
 [Created] [datetime] NOT NULL,
-[Purpose] [int] NOT NULL
+[Purpose] [int] NOT NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNode] on [dbo].[FilterNode]'
@@ -1792,6 +1793,10 @@ GO
 PRINT N'Creating index [IX_FilterNode_ParentFilterNodeID] on [dbo].[FilterNode]'
 GO
 CREATE NONCLUSTERED INDEX [IX_FilterNode_ParentFilterNodeID] ON [dbo].[FilterNode] ([ParentFilterNodeID])
+GO
+PRINT N'Creating index [IX_FilterNode_State] on [dbo].[FilterNode]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNode_State] ON [dbo].[FilterNode] ([State])
 GO
 PRINT N'Creating [dbo].[FilterLayout]'
 GO

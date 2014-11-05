@@ -758,6 +758,7 @@ namespace ShipWorks.Filters
             // each link its parent has.  But Move will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
+            filterNode.State = (int)FilterNodeState.Enabled;
 
             // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position, adapter);
@@ -895,7 +896,8 @@ namespace ShipWorks.Filters
                         FilterNodeEntity nodeToInsert = new FilterNodeEntity();
                         nodeToInsert.FilterSequence = sequenceToInsert;
                         nodeToInsert.Created = DateTime.UtcNow;
-                        nodeToInsert.Purpose = (int) FilterNodePurpose.Standard;
+                        nodeToInsert.Purpose = (int)FilterNodePurpose.Standard;
+                        nodeToInsert.State = (int)FilterNodeState.Enabled;
 
                         childNode = nodeToInsert;
                     }
@@ -991,6 +993,7 @@ namespace ShipWorks.Filters
             // each link its parent has.  But AddNodeToParent will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
+            filterNode.State = (int)FilterNodeState.Enabled;
 
             // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position);
@@ -1494,7 +1497,8 @@ namespace ShipWorks.Filters
                 linkedNode.ParentNode = linkedParentNode;
                 linkedNode.FilterSequence = node.FilterSequence;
                 linkedNode.Created = DateTime.UtcNow;
-                linkedNode.Purpose = (int) FilterNodePurpose.Standard;
+                linkedNode.Purpose = (int)FilterNodePurpose.Standard;
+                linkedNode.State = (int)FilterNodeState.Enabled;
 
                 CreateSoftLinks(node.ChildNodes, linkedNode, adapter);
 

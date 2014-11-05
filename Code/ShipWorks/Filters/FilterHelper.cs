@@ -214,7 +214,8 @@ namespace ShipWorks.Filters
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int) FilterNodePurpose.Standard;
+            node.Purpose = (int)FilterNodePurpose.Standard;
+            node.State = (int)FilterNodeState.Enabled;
 
             FilterLayoutEntity layout = new FilterLayoutEntity();
             layout.User = user;

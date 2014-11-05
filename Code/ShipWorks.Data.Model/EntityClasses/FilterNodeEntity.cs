@@ -688,6 +688,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Purpose", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("State", fieldHashtable);
 		}
 		#endregion
 
@@ -976,6 +979,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FilterNodeFieldIndex.Purpose, true); }
 			set	{ SetValue((int)FilterNodeFieldIndex.Purpose, value); }
+		}
+
+		/// <summary> The State property of the Entity FilterNode<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FilterNode"."State"<br/>
+		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte State
+		{
+			get { return (System.Byte)GetValue((int)FilterNodeFieldIndex.State, true); }
+			set	{ SetValue((int)FilterNodeFieldIndex.State, value); }
 		}
 
 

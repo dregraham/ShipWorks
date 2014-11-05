@@ -3485,6 +3485,8 @@ namespace ShipWorks.Data.Model
 		Created,
 		///<summary>Purpose. </summary>
 		Purpose,
+		///<summary>State. </summary>
+		State,
 		/// <summary></summary>
 		AmountOfFields
 	}

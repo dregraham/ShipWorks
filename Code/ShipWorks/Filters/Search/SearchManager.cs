@@ -121,6 +121,7 @@ namespace ShipWorks.Filters.Search
                     node.FilterNodeContent = content;
                     node.Created = DateTime.UtcNow;
                     node.Purpose = (int) FilterNodePurpose.Search;
+                    node.State = (int) FilterNodeState.Enabled;
                     adapter.SaveAndRefetch(node);
                 }
                 finally

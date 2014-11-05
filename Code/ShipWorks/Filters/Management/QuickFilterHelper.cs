@@ -52,7 +52,8 @@ namespace ShipWorks.Filters.Management
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int) FilterNodePurpose.Quick;
+            node.Purpose = (int)FilterNodePurpose.Quick;
+            node.State = (int)FilterNodeState.Enabled;
 
             return node;
         }

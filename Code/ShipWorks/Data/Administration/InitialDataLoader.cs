@@ -338,6 +338,7 @@ namespace ShipWorks.Data.Administration
                     node.FilterNodeContent = content;
                     node.Created = DateTime.UtcNow;
                     node.Purpose = (int) FilterNodePurpose.Standard;
+                    node.State = (int) FilterNodeState.Enabled;
                     adapter.SaveAndRefetch(node);
 
                     FilterLayoutEntity layout = new FilterLayoutEntity();
