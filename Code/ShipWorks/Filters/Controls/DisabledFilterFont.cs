@@ -13,7 +13,7 @@ namespace ShipWorks.Filters.Controls
         /// <param name="font">The font.</param>
         public DisabledFilterFont(Font font)
         {
-            Font = new Font(font, FontStyle.Italic);
+            Font = new Font(font, FontStyle.Strikeout);
         }
 
         /// <summary>
@@ -24,6 +24,6 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Gets the color of the text.
         /// </summary>
-        public Color TextColor { get { return Color.DarkGray; } }
+        public Color TextColor { get { return Color.DimGray; } }
     }
 }
