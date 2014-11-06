@@ -125,6 +125,10 @@ namespace ShipWorks.Actions.Triggers
             set { direction = value; }
         }
 
+        /// <summary>
+        /// Validates the state of the trigger.  An exception is thrown to indicate validation failure.
+        /// </summary>
+        /// <exception cref="ShipWorks.Actions.Triggers.FilterContentActionTriggerException">A disabled filter has been selected as a trigger.</exception>
         public override void Validate()
         {
             base.Validate();
