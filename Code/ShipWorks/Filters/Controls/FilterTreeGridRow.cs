@@ -22,6 +22,7 @@ namespace ShipWorks.Filters.Controls
         FilterCount filterCount;
 
         private readonly DisabledFilterFont disabledFont;
+        private FilterNodeState? previousFilterState;
 
         /// <summary>
         /// Constructor
@@ -31,10 +32,10 @@ namespace ShipWorks.Filters.Controls
         {
             this.filterNode = filterNode;
             this.filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
-
+            
             disabledFont = new DisabledFilterFont(Font);
         }
-
+        
         /// <summary>
         /// The filter node that this row represents
         /// </summary>
@@ -91,6 +92,35 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Updates the style of the row based on the state of the underlying data.
+        /// </summary>
+        public void UpdateStyle()
+        {
+            // We have a previous state, so only toggle the style if the state has changed
+            if (!previousFilterState.HasValue || previousFilterState != (FilterNodeState) filterNode.State)
+            {
+                ToggleStyle((FilterNodeState) filterNode.State);
+                previousFilterState = (FilterNodeState) filterNode.State;
+            }
+        }
+
+        /// <summary>
+        /// Toggles the style of the cells based on the state of the filter: uses
+        /// the disabled font if the filter is disabled; otherwise the "normal" 
+        /// font/color.
+        /// </summary>
+        /// <param name="filterState">State of the filter.</param>
+        private void ToggleStyle(FilterNodeState filterState)
+        {
+            bool isFilterDisabled = filterState == (byte)FilterNodeState.Disabled;
+            foreach (GridCell cell in Cells)
+            {
+                cell.Font = isFilterDisabled ? disabledFont.Font : Font;
+                cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
+            }
+        }
+
+        /// <summary>
         /// Update the filter count
         /// </summary>
         public void UpdateFilterCount()
@@ -103,13 +133,6 @@ namespace ShipWorks.Filters.Controls
             }
 
             UpdateLayoutForSpeed();
-
-            bool isFilterDisabled = filterNode.State == (byte) FilterNodeState.Disabled;
-            foreach (GridCell cell in Cells)
-            {
-                cell.Font = isFilterDisabled ? disabledFont.Font : Font;
-                cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
-            }
         }
 
         /// <summary>

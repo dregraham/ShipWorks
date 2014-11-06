@@ -201,6 +201,10 @@ namespace ShipWorks.Filters.Controls
                     cellFont = disabledFont.Font;
                 }
 
+                // Allow the row a chance to update its style based on the state of the filter node. We want
+                // the styling the filter name to reflect whether it is enabled/disabled.
+                filterTreeRow.UpdateStyle();
+
                 // If its ready, we can draw a number.
                 if (count.Status == FilterCountStatus.Ready)
                 {
