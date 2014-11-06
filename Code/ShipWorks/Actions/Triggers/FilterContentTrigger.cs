@@ -125,6 +125,18 @@ namespace ShipWorks.Actions.Triggers
             set { direction = value; }
         }
 
+        public override void Validate()
+        {
+            base.Validate();
+
+            // We want to throw an exception if the trigger is using a disabled filter
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(FilterNodeID);
+            if (filterNode.State == (byte) FilterNodeState.Disabled)
+            {
+                throw new FilterContentActionTriggerException("A disabled filter has been selected as a trigger.");
+            }
+        }
+
         /// <summary>
         /// Save additional data required by the trigger to the database
         /// </summary>
