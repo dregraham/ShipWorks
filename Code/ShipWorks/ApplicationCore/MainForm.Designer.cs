@@ -154,8 +154,7 @@ namespace ShipWorks
             this.contextOrderLookupCustomer = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderShipOrders = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextOrderTrackShipments = new System.Windows.Forms.ToolStripMenuItem();
-            this.logShipmentToTangoRetryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOrderTrackShipments = new System.Windows.Forms.ToolStripMenuItem();            
             this.contextOrderInsuranceClaim = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOrderSep3 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOrderCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -1263,7 +1262,6 @@ namespace ShipWorks
             this.contextOrderSep2,
             this.contextOrderShipOrders,
             this.contextOrderTrackShipments,
-            this.logShipmentToTangoRetryToolStripMenuItem,
             this.contextOrderInsuranceClaim,
             this.contextOrderSep3,
             this.contextOrderCopy,
@@ -1483,17 +1481,6 @@ namespace ShipWorks
             this.contextOrderTrackShipments.Size = new System.Drawing.Size(237, 22);
             this.contextOrderTrackShipments.Text = "Track Shipments";
             this.contextOrderTrackShipments.Click += new System.EventHandler(this.OnTrackShipments);
-            // 
-            // logShipmentToTangoRetryToolStripMenuItem
-            // 
-            this.selectionDependentEnabler.SetEnabledWhen(this.logShipmentToTangoRetryToolStripMenuItem, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreOrders);
-            this.gridMenuLayoutProvider.SetLayoutGuid(this.logShipmentToTangoRetryToolStripMenuItem, new System.Guid("f18e1ed4-c911-42dd-8452-3f02f6e17f0c"));
-            this.logShipmentToTangoRetryToolStripMenuItem.Name = "logShipmentToTangoRetryToolStripMenuItem";
-            this.gridMenuLayoutProvider.SetPermission(this.logShipmentToTangoRetryToolStripMenuItem, ShipWorks.Users.Security.PermissionType.InterapptiveOnly);
-            this.logShipmentToTangoRetryToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.logShipmentToTangoRetryToolStripMenuItem.Text = "Log Shipment to Tango (Retry)";
-            this.logShipmentToTangoRetryToolStripMenuItem.Visible = false;
-            this.logShipmentToTangoRetryToolStripMenuItem.Click += new System.EventHandler(this.OnRetryLogShipmentsToTango);
             // 
             // contextOrderInsuranceClaim
             // 
@@ -2993,7 +2980,6 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
-        private System.Windows.Forms.ToolStripMenuItem logShipmentToTangoRetryToolStripMenuItem;
         private Divelements.SandRibbon.Button buttonUship;
         private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
         private Divelements.SandRibbon.Button buttonInsuranceClaim;
