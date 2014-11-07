@@ -483,20 +483,26 @@ namespace ShipWorks.Filters
         {
             try
             {
-                bool definitionChanged = filter.Fields[(int) FilterFieldIndex.Definition].IsChanged;
+                bool filterDefinitionChanged = filter.Fields[(int)FilterFieldIndex.Definition].IsChanged;
+
+                // Fetch list of nodes befor refetching.
+                List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
+                IEnumerable<long> filterNodesIDsToUpdate = nodesToUpdate
+                    .Where(nodeToUpdate => nodeToUpdate.Fields[(int)FilterNodeFieldIndex.State].IsChanged)
+                    .Select(n => n.FilterNodeID)
+                    .ToList();
 
                 // First try to save the filter itself
                 adapter.SaveAndRefetch(filter);
 
-                // Only need to update filtering if the Definition of this filter has changed
-                if (definitionChanged)
+                // Grab the nodes again after refetch.
+                nodesToUpdate = GetNodesAffectedByDefinition(filter);
+                
+                // Go through each node that needs its sql updated
+                foreach (FilterNodeEntity node in nodesToUpdate)
                 {
-                    // This will be the list of node's whose SQL needs updated
-                    List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
-
-                    // Go through each node that needs its sql updated
-                    foreach (FilterNodeEntity node in nodesToUpdate)
-                    {                           
+                    if (filterDefinitionChanged || filterNodesIDsToUpdate.Any(noteToUpdate => noteToUpdate == node.FilterNodeID))
+                    {
                         node.FilterNodeContent = FilterContentManager.CreateNewFilterContent(new FilterContentCalculation(node), adapter);
                         adapter.SaveAndRefetch(node);
                     }
