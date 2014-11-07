@@ -1,16 +1,21 @@
 ﻿using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Properties;
+using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted;
@@ -392,13 +397,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </returns>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
-            List<ShipmentEntity> shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
-            // Take this opportunity to try to update contract type of the account
-            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            // We need to handle the case where the Stamps.com shipment type was selected to process the shipment and there
+            // aren't any "native" Stamps.com accounts; we need to basically push the shipment over to USPS to create the 
+            // account under USPS and process it there
+            if (GetProcessingSynchronizer().HasAccounts && shipment.ShipmentType == (int) ShipmentTypeCode.Stamps)
             {
-                StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-                UpdateContractType(account);
+                // There is an existing "native" Stamps.com account, so do the pre-processing normally
+                shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
+
+                // Take this opportunity to try to update contract type of the account
+                if (shipment.Postal != null && shipment.Postal.Stamps != null)
+                {
+                    StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                    UpdateContractType(account);
+                }
+            }
+            else
+            {
+                // There aren't any Stamps.com accounts, so we need to run the pre-process of the UspsShipmentType in order
+                // to create the account/process the shipment
+                shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
+
+                UspsShipmentType uspsShipmentType = new UspsShipmentType();
+                shipments = uspsShipmentType.PreProcess(shipment, counterRatesProcessing, selectedRate);
             }
 
             return shipments;
@@ -499,7 +522,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Update the dyamic data of the shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                shipment.RequestedLabelFormat = shipment.Postal.Stamps.RequestedLabelFormat;                
+            }
+        }
+
         /// <summary>
         /// Validate the shipment before processing or rating
         /// </summary>
@@ -570,6 +607,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Use the empty guids for now - they'll get set properly during processing
                 shipment.Postal.Stamps.IntegratorTransactionID = Guid.Empty;
                 shipment.Postal.Stamps.StampsTransactionID = Guid.Empty;
+                shipment.Postal.Stamps.RequestedLabelFormat = (int)ThermalLanguage.None;
             }
 
             // We need to call the base after setting up the Stamps.com specific information because LLBLgen was
@@ -693,8 +731,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of a StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new StampsBestRateBroker(this, AccountRepository) : counterBroker;
+            if (AccountRepository.Accounts.Any())
+            {
+                // We have an account, so use the normal broker
+                return new StampsBestRateBroker(this, AccountRepository);
+            }
+            else
+            {
+                // No accounts, so use the counter rates broker to allow the user to
+                // sign up for the account
+                return new StampsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+            }
         }
 
         /// <summary>
@@ -753,6 +800,52 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Log the error
                     LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            {
+                shipment.Postal.Stamps.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
+        }
+        /// <summary>
+        /// Gets counter rates for a postal shipment
+        /// </summary>
+        protected override RateGroup GetCounterRates(ShipmentEntity shipment)
+        {
+            // We're going to be temporarily swapping these out to get counter rates, so 
+            // make a note of the original values
+            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            ICertificateInspector originalCertificateInspector = CertificateInspector;
+
+            try
+            {
+                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+
+                AccountRepository = new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
+
+                // Fetch the rates now that we're setup to use counter rates
+                return GetCachedRates<StampsException>(shipment, GetRates);
+
+            }
+            catch (CounterRatesOriginAddressException)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+
+                return errorRates;
+            }
+            finally
+            {
+                // Set everything back to normal
+                AccountRepository = originalAccountRepository;
+                CertificateInspector = originalCertificateInspector;
             }
         }
     }

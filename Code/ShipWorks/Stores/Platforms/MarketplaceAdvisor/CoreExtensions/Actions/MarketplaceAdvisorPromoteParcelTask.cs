@@ -11,6 +11,7 @@ using ShipWorks.Data;
 using ShipWorks.Shipping;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 {
@@ -87,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 
                 try
                 {
-                    MarketplaceAdvisorOmsClient.PromoteParcel(storeEntity, order);
+                    MarketplaceAdvisorOmsClient.Create(storeEntity).PromoteParcel(new MarketplaceAdvisorOrderDto(order));
                 }
                 catch (MarketplaceAdvisorException ex)
                 {

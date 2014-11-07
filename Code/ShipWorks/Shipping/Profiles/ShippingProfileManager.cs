@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
@@ -141,6 +144,23 @@ namespace ShipWorks.Shipping.Profiles
                 synchronizer.MergeEntity(profile);
                 CheckForChangesNeeded();
             }
+        }
+
+        /// <summary>
+        /// Checks whether the name of the profile already exists in another profile
+        /// </summary>
+        public static bool DoesNameExist(ShippingProfileEntity profile)
+        {
+            if (profile == null)
+            {
+                return false;
+            }
+
+            int profileCount = ShippingProfileCollection.GetCount(SqlAdapter.Default,
+                ShippingProfileFields.ShippingProfileID != profile.ShippingProfileID &
+                ShippingProfileFields.Name == profile.Name);
+
+            return (profileCount != 0);
         }
     }
 }

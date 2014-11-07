@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -75,6 +79,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="counterRatesProcessing"></param>
+        /// <param name="selectedRate"></param>
+        /// <returns>
+        /// The updates shipment (or shipments) that is ready to be processed. A null value may
+        /// be returned to indicate that processing should be halted completely.
+        /// </returns>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
+
+            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
+        }
+
+        /// <summary>
         /// Process the shipment. Overridden here, so overhead of Express1 can be removed.
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -88,6 +114,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (StampsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the USPS (Stamps.com Expedited) 
+        /// shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of a StampsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        {
+            if (AccountRepository.Accounts.Any())
+            {
+                // We have an account, so use the normal broker
+                return new UspsBestRateBroker(this, AccountRepository);
+            }
+            else
+            {
+                // No accounts, so use the counter rates broker to allow the user to
+                // sign up for the account. We can use the StampsCounterRateAccountRepository 
+                // here because the underlying accounts being used are the same.
+                return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
             }
         }
     }

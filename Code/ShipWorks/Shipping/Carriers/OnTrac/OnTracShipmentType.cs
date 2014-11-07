@@ -12,6 +12,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -259,6 +260,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
 
+            shipment.OnTrac.RequestedLabelFormat = (int)ThermalLanguage.None;
+
             base.ConfigureNewShipment(shipment);
         }
 
@@ -398,6 +401,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // We do this because the first 100 is free.
                 shipment.OnTrac.DeclaredValue = Math.Min(100, shipment.OnTrac.InsuranceValue);
             }
+
+            shipment.RequestedLabelFormat = shipment.OnTrac.RequestedLabelFormat;
         }
 
         /// <summary>
@@ -587,6 +592,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             return false;
+        }
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.OnTrac != null)
+            {
+                shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

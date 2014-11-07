@@ -405,13 +405,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     // USPS (Stamps.com Expedited) has not been excluded from Best Rate, and there aren't any 
                     // USPS accounts, so use the counter rates broker for USPS
-                    broker = new UspsCounterRatesBroker(new UspsAccountRepository());
+                    broker = new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
                 }
                 else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
                 {
                     // Stamps.com has not been excluded from Best Rate, and there aren't any 
                     // Stamps.com accounts, so use the counter rates broker for Stamps.com
-                    broker = new StampsCounterRatesBroker(new StampsAccountRepository());
+                    broker = new StampsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
                 }
                 else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia))
                 {

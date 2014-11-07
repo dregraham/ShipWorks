@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Represents an item in the MarketplaceAdvisor inventory system for the user.
     /// </summary>
+    [Serializable]
     public class MarketplaceAdvisorInventoryItem
     {
         string imageUrl = "";
@@ -30,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
         /// <summary>
         /// Constructor
+        /// </summary>
         public MarketplaceAdvisorInventoryItem(XPathNavigator item)
         {
             imageUrl = XPathUtility.Evaluate(item, "ImageUrl1", "");

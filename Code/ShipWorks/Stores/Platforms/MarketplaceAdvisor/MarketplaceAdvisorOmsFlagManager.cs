@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 OMFlags customFlags;
                 if (!customFlagsMap.TryGetValue(store.Username, out customFlags))
                 {
-                    customFlags = MarketplaceAdvisorOmsClient.GetCustomFlags(store);
+                    customFlags = MarketplaceAdvisorOmsClient.Create(store).GetCustomFlags();
                     customFlagsMap[store.Username] = customFlags;
                 }
 

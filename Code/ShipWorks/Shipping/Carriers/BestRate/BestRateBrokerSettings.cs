@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -99,7 +100,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     express1ShipmentType = ShipmentTypeCode.Express1Stamps;
                     break;
                 default:
-                    throw new ArgumentException("shipmentType should be either Endicia or Stamps", "shipmentType");
+                    string message = string.Format("Shipment type {0} was provided. A shipment type of either Endicia or Stamps was expected.", shipmentType.ShipmentTypeName);
+                    throw new ArgumentException(message, "shipmentType");
             }
 
             if (settings.BestRateExcludedTypes.Contains((int)express1ShipmentType))

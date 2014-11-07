@@ -1,48 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using System.Xml;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Net;
 using ShipWorks.ApplicationCore;
-using log4net;
 using System.Diagnostics;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// Web client for connecting to legacy MarketplaceAdvisor stores
     /// </summary>
-    public class MarketplaceAdvisorLegacyClient
+    public class MarketplaceAdvisorLegacyClient : MarshalByRefObject
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorLegacyClient));
+        private readonly int accountType;
+        private readonly string username;
+        private readonly string password;
 
-        MarketplaceAdvisorStoreEntity store;
+        private MarketplaceAdvisorLog log;
 
         // Cache of inventory items we have downloaded
-        static Dictionary<long, MarketplaceAdvisorInventoryItem> inventoryItemMap = new Dictionary<long, MarketplaceAdvisorInventoryItem>();
+        private static readonly Dictionary<long, MarketplaceAdvisorInventoryItem> inventoryItemMap = new Dictionary<long, MarketplaceAdvisorInventoryItem>();
 
         const int downloadPageSize = 200;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorLegacyClient(MarketplaceAdvisorStoreEntity store)
+        private MarketplaceAdvisorLegacyClient(int accountType, string username, string password, MarketplaceAdvisorLog log)
         {
-            this.store = store;
+            this.accountType = accountType;
+            this.username = username;
+            this.password = password;
+            this.log = log;
+        }
+
+        /// <summary>
+        /// Create an instance of the MarketplaceAdvisorLegacyClient 
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public static MarketplaceAdvisorLegacyClient Create(MarketplaceAdvisorStoreEntity store)
+        {
+            return TlsAppDomain.Create<MarketplaceAdvisorLegacyClient>(store.AccountType, store.Username, store.Password,
+                new MarketplaceAdvisorLog(typeof(MarketplaceAdvisorLegacyClient)));
         }
 
         /// <summary>
         /// Issue the GetUser command to get information about a user's MarketplaceAdvisor account
         /// </summary>
-        public XmlDocument GetUser()
+        public string GetUser()
         {
             using (StringWriter stringWriter = new StringWriter())
             {
@@ -58,14 +71,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 WriteCloseRequest(xmlWriter);
 
                 // Process the request
-                return ProcessRequest(stringWriter.ToString());
+                return ProcessRequest(stringWriter.ToString()).ToString();
             }
         }
 
         /// <summary>
         /// Get the orders for the given store given the current page
         /// </summary>
-        public XmlDocument GetOrders(int currentPage)
+        public string GetOrders(int currentPage)
         {
             using (StringWriter stringWriter = new StringWriter())
             {
@@ -88,10 +101,6 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 xmlWriter.WriteElementString("StartDate", startDate.ToString("MM-dd-yyyy HH:mm:ss"));
                 xmlWriter.WriteElementString("PerPage", downloadPageSize.ToString());
                 xmlWriter.WriteElementString("PageNumber", currentPage.ToString());
-
-                // client.XmlWriter.WriteElementString("StartNumber", string.Format("{0}", startNumber.ToString()));
-                // client.XmlWriter.WriteElementString("EndNumber", int.MaxValue.ToString());
-                // client.XmlWriter.WriteElementString("ShowSQL", "1");
 
                 if (!InterapptiveOnly.MagicKeysDown)
                 {
@@ -141,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 WriteCloseRequest(xmlWriter);
 
                 // Process the request
-                XmlDocument response = ProcessRequest(stringWriter.ToString());
+                XElement response = XElement.Parse(ProcessRequest(stringWriter.ToString()));
                 XPathNavigator xpath = response.CreateNavigator();
 
                 XPathNodeIterator statusNodes = xpath.Select("//Status");
@@ -174,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     // Close all the elements
                     WriteCloseRequest(xmlWriter);
 
-                    XmlDocument response = ProcessRequest(stringWriter.ToString());
+                    XElement response = XElement.Parse(ProcessRequest(stringWriter.ToString()));
                     XPathNavigator xpath = response.CreateNavigator();
 
                     XPathNavigator xpathItem = xpath.SelectSingleNode("//Item");
@@ -197,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the online shipment status of the given order.
         /// </summary>
-        public void UpdateShipmentStatus(MarketplaceAdvisorOrderEntity order, ShipmentEntity shipment)
+        public void UpdateShipmentStatus(MarketplaceAdvisorOrderDto order, MarketplaceAdvisorShipmentDto shipment)
         {
             // This stuff is already looked at in the OnlineUpdater class
             Debug.Assert(!order.IsManual && shipment.Processed && !shipment.Voided);
@@ -218,7 +227,6 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 xmlWriter.WriteElementString("Number", order.OrderNumber.ToString());
                 xmlWriter.WriteElementString("ItemSent", "1");
                 xmlWriter.WriteElementString("ItemSentDate", shipment.ShipDate.AddHours(-4).ToString("MM-dd-yyyy HH:mm:ss"));
-                //xmlWriter.WriteElementString("ItemSentType", MarketplaceAdvisorEnums.GetShipmentServiceCode(shipment).ToString());
                 xmlWriter.WriteElementString("ShippedTrackingNumber", shipment.TrackingNumber);
                 xmlWriter.WriteEndElement();
 
@@ -226,15 +234,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                 WriteCloseRequest(xmlWriter);
 
-                XmlDocument response = ProcessRequest(stringWriter.ToString());
+                XElement response = XElement.Parse(ProcessRequest(stringWriter.ToString()));
 
-                XmlNode statusNode = response.SelectSingleNode("//Status");
+                XElement statusNode = response.XPathSelectElement("//Status");
                 if (statusNode == null)
                 {
                     throw new MarketplaceAdvisorException("ShipWorks did not receive update confirmation.");
                 }
 
-                string status = statusNode.InnerText;
+                string status = statusNode.Value;
                 if (status != "Updated")
                 {
                     throw new MarketplaceAdvisorException(string.Format("The status was not updated. ({0})", status));
@@ -245,9 +253,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Process the given requeist
         /// </summary>
-        private XmlDocument ProcessRequest(string xmlRequest)
+        private string ProcessRequest(string xmlRequest)
         {
-            string apiUrl = (store.AccountType == (int) MarketplaceAdvisorAccountType.LegacyCorporate) ?
+            string apiUrl = (accountType == (int)MarketplaceAdvisorAccountType.LegacyCorporate) ?
                 "https://api.corporate.marketplaceadvisor.channeladvisor.com/api/apiCall.asp" :
                 "https://api.marketplaceadvisor.channeladvisor.com/api/apiCall.asp";
 
@@ -268,7 +276,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 };
 
             // Log the request
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.MarketplaceAdvisor, XElement.Parse(xmlRequest).Descendants("Command").First().Value);
+            //ApiLogEntry logger = new ApiLogEntry(ApiLogSource.MarketplaceAdvisor, XElement.Parse(xmlRequest).Descendants("Command").First().Value);
+            MarketplaceAdvisorApiLogger logger = log.CreateApiLogger(XElement.Parse(xmlRequest).Descendants("Command").First().Value);
             logger.LogRequest(xmlRequest);
 
             try
@@ -283,9 +292,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     responseXml = XmlUtility.StripInvalidXmlCharacters(responseXml);
 
                     // Load the response and return it
-                    XmlDocument xmlResponse = new XmlDocument();
-                    xmlResponse.LoadXml(responseXml);
-
+                    XElement xmlResponse = XElement.Parse(responseXml);
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
 
                     // Determine if an error occurred
@@ -299,7 +306,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                         throw new MarketplaceAdvisorException(description);
                     }
 
-                    return xmlResponse;
+                    return responseXml;
                 }
             }
             catch (Exception ex)
@@ -317,8 +324,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             xmlWriter.WriteStartElement("Request");
 
             // User \ Pass
-            xmlWriter.WriteElementString("Username", store.Username);
-            xmlWriter.WriteElementString("Password", SecureText.Decrypt(store.Password, store.Username));
+            xmlWriter.WriteElementString("Username", username);
+            xmlWriter.WriteElementString("Password", SecureText.Decrypt(password, username));
         }
 
         /// <summary>
