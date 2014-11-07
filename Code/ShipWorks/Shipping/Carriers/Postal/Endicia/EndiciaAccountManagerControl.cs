@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using ShipWorks.UI;
@@ -108,9 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 try
                 {
-                    EndiciaAccountStatus accountInfo = (new EndiciaApiClient()).GetAccountStatus(account);
-
-                    result = accountInfo.PostageBalance.ToString("c");
+                    result = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
                 }
                 catch (EndiciaException ex)
                 {
@@ -150,7 +149,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             details.Enabled = enabled;
             remove.Enabled = enabled;
 
+            bool allowAccountRegistration = ShipmentTypeManager.GetType(IsExpress1 ? ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia).IsAccountRegistrationAllowed;
+
+            if (!allowAccountRegistration)
+            {
+                add.Hide();
+
+                // Adjust the location of the remove button based on the visiblity of the add button and
+                // make sure it's on top of the add button. 
+                remove.Top = add.Top;
+                remove.BringToFront();
+            }
+            else
+            {
+                add.Show();
+                remove.Top = add.Bottom + 6;
+            }
+
             editionGuiHelper.UpdateUI();
+        }
+
+        /// <summary>
+        /// Determines if this carrier is an Express1 carrier
+        /// </summary>
+        private bool IsExpress1
+        {
+            get
+            {
+                return endiciaReseller != EndiciaReseller.None;
+            }
         }
 
         /// <summary>

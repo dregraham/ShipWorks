@@ -47,6 +47,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private BestRateShipmentEntity _bestRate;
 		private EquaShipShipmentEntity _equaShip;
 		private FedExShipmentEntity _fedEx;
+		private InsurancePolicyEntity _insurancePolicy;
 		private IParcelShipmentEntity _iParcel;
 		private OnTracShipmentEntity _onTrac;
 		private OtherShipmentEntity _other;
@@ -79,6 +80,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string EquaShip = "EquaShip";
 			/// <summary>Member name FedEx</summary>
 			public static readonly string FedEx = "FedEx";
+			/// <summary>Member name InsurancePolicy</summary>
+			public static readonly string InsurancePolicy = "InsurancePolicy";
 			/// <summary>Member name IParcel</summary>
 			public static readonly string IParcel = "IParcel";
 			/// <summary>Member name OnTrac</summary>
@@ -172,6 +175,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(_fedEx!=null)
 				{
 					_fedEx.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
+				_insurancePolicy = (InsurancePolicyEntity)info.GetValue("_insurancePolicy", typeof(InsurancePolicyEntity));
+				if(_insurancePolicy!=null)
+				{
+					_insurancePolicy.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_iParcel = (IParcelShipmentEntity)info.GetValue("_iParcel", typeof(IParcelShipmentEntity));
 				if(_iParcel!=null)
@@ -269,6 +277,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "FedEx":
 					this.FedEx = (FedExShipmentEntity)entity;
 					break;
+				case "InsurancePolicy":
+					this.InsurancePolicy = (InsurancePolicyEntity)entity;
+					break;
 				case "IParcel":
 					this.IParcel = (IParcelShipmentEntity)entity;
 					break;
@@ -325,6 +336,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "FedEx":
 					toReturn.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
 					break;
+				case "InsurancePolicy":
+					toReturn.Add(ShipmentEntity.Relations.InsurancePolicyEntityUsingShipmentID);
+					break;
 				case "IParcel":
 					toReturn.Add(ShipmentEntity.Relations.IParcelShipmentEntityUsingShipmentID);
 					break;
@@ -374,6 +388,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -405,6 +420,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "FedEx":
 					SetupSyncFedEx(relatedEntity);
+					break;
+				case "InsurancePolicy":
+					SetupSyncInsurancePolicy(relatedEntity);
 					break;
 				case "IParcel":
 					SetupSyncIParcel(relatedEntity);
@@ -454,6 +472,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "FedEx":
 					DesetupSyncFedEx(false, true);
 					break;
+				case "InsurancePolicy":
+					DesetupSyncInsurancePolicy(false, true);
+					break;
 				case "IParcel":
 					DesetupSyncIParcel(false, true);
 					break;
@@ -492,6 +513,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_fedEx!=null)
 			{
 				toReturn.Add(_fedEx);
+			}
+
+			if(_insurancePolicy!=null)
+			{
+				toReturn.Add(_insurancePolicy);
 			}
 
 			if(_iParcel!=null)
@@ -552,6 +578,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 			return toReturn;
 		}
 		
@@ -585,6 +613,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
+				info.AddValue("_insurancePolicy", (!this.MarkedForDeletion?_insurancePolicy:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
 				info.AddValue("_onTrac", (!this.MarkedForDeletion?_onTrac:null));
 				info.AddValue("_other", (!this.MarkedForDeletion?_other:null));
@@ -676,6 +705,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(FedExShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'InsurancePolicy' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoInsurancePolicy()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(InsurancePolicyFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
 
@@ -808,6 +847,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("EquaShip", _equaShip);
 			toReturn.Add("FedEx", _fedEx);
+			toReturn.Add("InsurancePolicy", _insurancePolicy);
 			toReturn.Add("IParcel", _iParcel);
 			toReturn.Add("OnTrac", _onTrac);
 			toReturn.Add("Other", _other);
@@ -843,6 +883,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_fedEx!=null)
 			{
 				_fedEx.ActiveContext = base.ActiveContext;
+			}
+			if(_insurancePolicy!=null)
+			{
+				_insurancePolicy.ActiveContext = base.ActiveContext;
 			}
 			if(_iParcel!=null)
 			{
@@ -880,6 +924,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_bestRate = null;
 			_equaShip = null;
 			_fedEx = null;
+			_insurancePolicy = null;
 			_iParcel = null;
 			_onTrac = null;
 			_other = null;
@@ -959,7 +1004,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomsValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ThermalType", fieldHashtable);
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ActualLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipFirstName", fieldHashtable);
@@ -1086,6 +1134,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseEntry", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OnlineShipmentID", fieldHashtable);
 		}
 		#endregion
 
@@ -1217,6 +1268,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnFedExPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Removes the sync logic for member _insurancePolicy</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncInsurancePolicy(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _insurancePolicy, new PropertyChangedEventHandler( OnInsurancePolicyPropertyChanged ), "InsurancePolicy", ShipmentEntity.Relations.InsurancePolicyEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
+			_insurancePolicy = null;
+		}
+		
+		/// <summary> setups the sync logic for member _insurancePolicy</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncInsurancePolicy(IEntity2 relatedEntity)
+		{
+			if(_insurancePolicy!=relatedEntity)
+			{
+				DesetupSyncInsurancePolicy(true, true);
+				_insurancePolicy = (InsurancePolicyEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _insurancePolicy, new PropertyChangedEventHandler( OnInsurancePolicyPropertyChanged ), "InsurancePolicy", ShipmentEntity.Relations.InsurancePolicyEntityUsingShipmentID, false, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnInsurancePolicyPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1484,6 +1568,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(FedExShipmentEntityFactory))),
 					(IEntityRelation)GetRelationsForField("FedEx")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.FedExShipmentEntity, 0, null, null, null, null, "FedEx", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
+			}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'InsurancePolicy' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathInsurancePolicy
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(InsurancePolicyEntityFactory))),
+					(IEntityRelation)GetRelationsForField("InsurancePolicy")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.InsurancePolicyEntity, 0, null, null, null, null, "InsurancePolicy", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -1780,15 +1876,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.CustomsValue, value); }
 		}
 
-		/// <summary> The ThermalType property of the Entity Shipment<br/><br/>
+		/// <summary> The RequestedLabelFormat property of the Entity Shipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "Shipment"."ThermalType"<br/>
+		/// <remarks>Mapped on  table field: "Shipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The ActualLabelFormat property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ActualLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ThermalType
+		public virtual Nullable<System.Int32> ActualLabelFormat
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ShipmentFieldIndex.ThermalType, false); }
-			set	{ SetValue((int)ShipmentFieldIndex.ThermalType, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)ShipmentFieldIndex.ActualLabelFormat, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.ActualLabelFormat, value); }
 		}
 
 		/// <summary> The ShipFirstName property of the Entity Shipment<br/><br/>
@@ -2253,6 +2360,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.ShipSenseEntry, value); }
 		}
 
+		/// <summary> The OnlineShipmentID property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."OnlineShipmentID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 128<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OnlineShipmentID
+		{
+			get { return (System.String)GetValue((int)ShipmentFieldIndex.OnlineShipmentID, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.OnlineShipmentID, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
 		[TypeContainedAttribute(typeof(ShipmentCustomsItemEntity))]
@@ -2332,12 +2450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_bestRate !=null);
 						DesetupSyncBestRate(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("BestRate");
-						}
 					}
 					else
 					{
@@ -2375,12 +2488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_equaShip !=null);
 						DesetupSyncEquaShip(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("EquaShip");
-						}
 					}
 					else
 					{
@@ -2418,12 +2526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_fedEx !=null);
 						DesetupSyncFedEx(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("FedEx");
-						}
 					}
 					else
 					{
@@ -2432,6 +2535,44 @@ namespace ShipWorks.Data.Model.EntityClasses
 							IEntity2 relatedEntity = (IEntity2)value;
 							relatedEntity.SetRelatedEntity(this, "Shipment");
 							SetupSyncFedEx(relatedEntity);
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary> Gets / sets related entity of type 'InsurancePolicyEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual InsurancePolicyEntity InsurancePolicy
+		{
+			get
+			{
+				return _insurancePolicy;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncInsurancePolicy(value);
+					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
+					{
+						value.SetRelatedEntity(this, "Shipment");
+					}
+				}
+				else
+				{
+					if(value==null)
+					{
+						DesetupSyncInsurancePolicy(true, true);
+					}
+					else
+					{
+						if(_insurancePolicy!=value)
+						{
+							IEntity2 relatedEntity = (IEntity2)value;
+							relatedEntity.SetRelatedEntity(this, "Shipment");
+							SetupSyncInsurancePolicy(relatedEntity);
 						}
 					}
 				}
@@ -2461,12 +2602,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_iParcel !=null);
 						DesetupSyncIParcel(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("IParcel");
-						}
 					}
 					else
 					{
@@ -2504,12 +2640,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_onTrac !=null);
 						DesetupSyncOnTrac(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("OnTrac");
-						}
 					}
 					else
 					{
@@ -2547,12 +2678,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_other !=null);
 						DesetupSyncOther(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Other");
-						}
 					}
 					else
 					{
@@ -2590,12 +2716,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_postal !=null);
 						DesetupSyncPostal(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Postal");
-						}
 					}
 					else
 					{
@@ -2633,12 +2754,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_ups !=null);
 						DesetupSyncUps(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Ups");
-						}
 					}
 					else
 					{

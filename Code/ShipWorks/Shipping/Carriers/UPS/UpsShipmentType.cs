@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -84,7 +86,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// the appropriate account information for getting counter rates.
         /// </summary>
         public ICarrierAccountRepository<UpsAccountEntity> AccountRepository { get; set; }
-        
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+	        get 
+	        {
+                return AccountRepository.Accounts.Any();
+	        }
+        }
+
         /// <summary>
         /// Gets or sets the settings repository that the shipment type should use
         /// to obtain Ups related settings information. This provides
@@ -247,6 +260,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
+
+            shipment.Ups.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -625,6 +640,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
             }
 
+            shipment.RequestedLabelFormat = shipment.Ups.RequestedLabelFormat;
+
             // Check the UPS wide PennyOne settings and get them updated
             foreach (var package in shipment.Ups.Packages)
             {
@@ -812,7 +829,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
@@ -914,8 +931,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             return new RateGroup(rates);
         }
 
-
-
         /// <summary>
         /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
         /// empty string is returned.
@@ -924,7 +939,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (transitTime != null)
             {
-                return ((int)(transitTime.ArrivalDate.Date - DateTime.Now.Date).TotalDays).ToString(CultureInfo.InvariantCulture);
+                return transitTime.BusinessDays.ToString(CultureInfo.InvariantCulture);
             }
             else
             {
@@ -944,7 +959,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (transitTime != null)
             {
                 DateTime localArrival = transitTime.ArrivalDate.ToLocalTime();
-                arrivalInfo = string.Format("({0} {1})", localArrival.DayOfWeek.ToString(), localArrival.ToString("h:mm tt"));
+                arrivalInfo = ShippingManager.GetArrivalDescription(localArrival);
             }
 
             return arrivalInfo;
@@ -1147,7 +1162,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         shipment.Ups.Fields[UpsShipmentFields.CodAmount.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodEnabled.FieldIndex],
                         shipment.Ups.Fields[UpsShipmentFields.CodPaymentType.FieldIndex],
-                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex]
+                        shipment.Ups.Fields[UpsShipmentFields.Service.FieldIndex],
+                        shipment.Ups.Fields[UpsShipmentFields.DeliveryConfirmation.FieldIndex]
                     }
                 );
 
@@ -1293,6 +1309,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return base.IsCustomsRequiredByShipment(shipment);
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Ups != null)
+            {
+                shipment.Ups.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

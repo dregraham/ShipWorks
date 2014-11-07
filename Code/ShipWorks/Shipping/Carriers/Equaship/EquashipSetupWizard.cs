@@ -51,6 +51,10 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
                 Pages.Add(new ShippingWizardPageAutomation(shipmentType));
                 Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             }
+            else
+            {
+                Pages.Remove(wizardPageSettings);
+            }
 
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
@@ -63,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
         private void OnStepNextSettings(object sender, EventArgs e)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            optionsControl.SaveSettings(settings);
+            optionsControl.SaveSettings();
             ShippingSettings.Save(settings);
         }
 

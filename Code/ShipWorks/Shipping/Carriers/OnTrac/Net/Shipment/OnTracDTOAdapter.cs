@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
                             Width = isLetter ? 0 : onTracShipment.DimsWidth,
                             Height = isLetter ? 0 : onTracShipment.DimsHeight
                         },
-                        LabelType = GetOnTracLabelType(shipworksShipment.ThermalType),
+                        LabelType = GetOnTracLabelType(shipworksShipment.ActualLabelFormat),
                         ShipEmail = "",
                         DelEmail = "",
                         ShipDate = shipworksShipment.ShipDate
@@ -106,11 +106,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <summary>
         /// Given a shipworks service type, return an OnTrac service type defined by OnTrac XSD
         /// </summary>
-        private static serviceType GetOnTracServiceType(OnTracServiceType onTracServiceType)
+        private static string GetOnTracServiceType(OnTracServiceType onTracServiceType)
         {
-            string apiValue = EnumHelper.GetApiValue(onTracServiceType);
-
-            return (serviceType) Enum.Parse(typeof(serviceType), apiValue);
+            return EnumHelper.GetApiValue(onTracServiceType);
         }
 
         /// <summary>

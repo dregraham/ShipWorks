@@ -7,10 +7,12 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -67,6 +69,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return OnTracAccountManager.Accounts.Any();
             }
         }
 
@@ -163,7 +176,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.OnTrac, shipment.OnTrac),
                 new DimensionsAdapter(shipment.OnTrac));
-
         }
 
         /// <summary>
@@ -197,15 +209,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     throw new OnTracException("OnTrac does not provide service outside of the United States.", true);
                 }
 
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-                if (settings.OnTracThermal)
+                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
-                    shipment.ThermalType = settings.OnTracThermalType;
+                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
                 }
                 else
                 {
-                    shipment.ThermalType = null;
+                    shipment.ActualLabelFormat = null;
                 }
 
                 // Transform shipment to OnTrac DTO
@@ -249,6 +259,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             onTracShipment.InsurancePennyOne = false;
             onTracShipment.InsuranceValue = 0;
+
+            shipment.OnTrac.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -389,6 +401,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // We do this because the first 100 is free.
                 shipment.OnTrac.DeclaredValue = Math.Min(100, shipment.OnTrac.InsuranceValue);
             }
+
+            shipment.RequestedLabelFormat = shipment.OnTrac.RequestedLabelFormat;
         }
 
         /// <summary>
@@ -578,6 +592,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
             return false;
+        }
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.OnTrac != null)
+            {
+                shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

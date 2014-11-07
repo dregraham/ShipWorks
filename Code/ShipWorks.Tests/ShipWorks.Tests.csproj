@@ -91,6 +91,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
@@ -134,8 +135,14 @@
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoWebClientFactoryTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializerTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeOptionTest.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeTest.cs" />
     <Compile Include="Core\AssemblyDateTests.cs" />
     <Compile Include="Core\Certificates\ClientCertificateTests.cs" />
+    <Compile Include="Core\EnumTest.cs" />
     <Compile Include="Core\GuidTests.cs" />
     <Compile Include="Core\GeneralTests.cs" />
     <Compile Include="Core\PersonNameTests.cs" />
@@ -143,7 +150,9 @@
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
+    <Compile Include="Interapptive.Shared\Collections\ArrayUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
@@ -321,6 +330,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationTest.cs" />
@@ -328,16 +338,23 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostageBalanceTests.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotionTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotionTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationValidatorTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStoreTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
@@ -367,6 +384,15 @@
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResultTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipClaimStatusResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Insure\InsureShipInsureShipmentResponseTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
+    <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
@@ -505,6 +531,9 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadWithInvalidHyphen.xml">

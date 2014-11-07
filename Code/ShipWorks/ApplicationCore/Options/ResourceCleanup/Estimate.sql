@@ -27,7 +27,7 @@ BEGIN
 		AND p.UpsPackageID = r.ConsumerID	
 		AND s.ProcessedDate < @deleteOlderThan
 		AND s.Processed = 1
-		AND s.ThermalType IS NULL -- don't wipe thermals
+		AND s.ActualLabelFormat IS NULL -- don't wipe thermals
 		AND s.ShipmentType = 0	-- UPS online tools
 
 	-- find all of the fedex labels we want to wipe out
@@ -39,7 +39,7 @@ BEGIN
 		AND p.FedexPackageID = r.ConsumerID		
 		AND s.ProcessedDate < @deleteOlderThan	
 		AND s.Processed = 1
-		AND s.ThermalType IS NULL -- don't wipe thermals
+		AND s.ActualLabelFormat IS NULL -- don't wipe thermals
 		AND s.ShipmentType = 6	-- FedEx
 		
 	-- Endicia labels
@@ -51,7 +51,7 @@ BEGIN
 		AND p.ShipmentID = r.ConsumerID		
 		AND s.ProcessedDate < @deleteOlderThan
 		AND s.Processed = 1
-		AND s.ThermalType IS NULL
+		AND s.ActualLabelFormat IS NULL
 		AND s.ShipmentType = 2 -- endicia
 
 	-- Express1 labels
@@ -63,7 +63,7 @@ BEGIN
 		AND p.ShipmentID = r.ConsumerID		
 		AND s.ProcessedDate < @deleteOlderThan
 		AND s.Processed = 1
-		AND s.ThermalType IS NULL
+		AND s.ActualLabelFormat IS NULL
 		AND s.ShipmentType = 9 -- express1
 		
 	-- Stamps
@@ -75,7 +75,7 @@ BEGIN
 		AND p.ShipmentID = r.ConsumerID		
 		AND s.ProcessedDate < @deleteOlderThan
 		AND s.Processed = 1
-		AND s.ThermalType IS NULL
+		AND s.ActualLabelFormat IS NULL
 		AND s.ShipmentType = 3 -- stamps	
 END
 

@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
     /// <summary>
     /// An implementation of the IShippingBrokerFilter that will remove duplicate
-    /// Express1 counter rate brokers with a preference for Endicia. Express1 counter
+    /// Express1 counter rate brokers with a preference for Stamps.com. Express1 counter
     /// rate brokers are also removed if there is at least one "real" Express1 broker.
     /// </summary>
     public class Express1BrokerFilter : IShippingBrokerFilter
@@ -51,17 +51,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         }
 
         /// <summary>
-        /// Removes any duplicate counter rate brokers with a preference for keeping Endicia.
+        /// Removes any duplicate counter rate brokers with a preference for keeping Stamps.
         /// </summary>
         /// <param name="brokers">The brokers to be filtered.</param>
         /// <returns>The filtered list of brokers.</returns>
         private List<IBestRateShippingBroker> RemoveDuplicateCounterRateBrokers(IEnumerable<IBestRateShippingBroker> brokers)
         {
             List<IBestRateShippingBroker> filteredBrokers = new List<IBestRateShippingBroker>(brokers);
-            if (filteredBrokers.OfType<Express1StampsCounterRatesBroker>().Any() && filteredBrokers.OfType<Express1EndiciaCounterRatesBroker>().Any())
+            if (filteredBrokers.OfType<Express1StampsCounterRatesBroker>().Any() && filteredBrokers.OfType<Express1StampsCounterRatesBroker>().Any())
             {
-                // Remove the Stamps.com counter broker if an Endicia counter broker exists
-                filteredBrokers = filteredBrokers.Where(b => b.GetType() != typeof(Express1StampsCounterRatesBroker)).ToList();
+                // Remove the Endicia counter broker if a Stamps.com counter broker exists
+                filteredBrokers = filteredBrokers.Where(b => b.GetType() != typeof(Express1EndiciaCounterRatesBroker)).ToList();
             }
 
             return filteredBrokers;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
@@ -74,8 +75,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private bool DownloadNextOrdersPage(int currentPage)
         {
-            MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient((MarketplaceAdvisorStoreEntity) Store);
-            XmlDocument ordersResponse = client.GetOrders(currentPage);
+            MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create((MarketplaceAdvisorStoreEntity) Store);
+            XElement ordersResponse = XElement.Parse(client.GetOrders(currentPage));
 
             XPathNavigator xpath = ordersResponse.CreateNavigator();
             XPathNodeIterator orders = xpath.Select("//Order");
@@ -159,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             {
                 if (markAsProcessed.Count > 0)
                 {
-                    MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient((MarketplaceAdvisorStoreEntity) Store);
+                    MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create((MarketplaceAdvisorStoreEntity) Store);
                     client.MarkOrdersProcessed(markAsProcessed);
                 }
             }
@@ -349,7 +350,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");
 
             // Get the details for the item
-            MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient((MarketplaceAdvisorStoreEntity) Store);
+            MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create((MarketplaceAdvisorStoreEntity) Store);
             MarketplaceAdvisorInventoryItem inventoryItem = client.GetInventoryItem(itemNumber);
 
             item.Description = inventoryItem.Description;

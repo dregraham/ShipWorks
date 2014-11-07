@@ -31,11 +31,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             // Only perform the following if we have all of the required fields populated
             if (errors.Count == 0)
             {
-                
-                if (registration.UserName.Length > 40)
+                if (registration.UserName.Length > 14)
                 {
                     // Username too long
-                    errors.Add(new RegistrationValidationError("The username provided is too long. Usernames must be 40 characters or less."));
+                    errors.Add(new RegistrationValidationError("The username provided is too long. Usernames must be 14 characters or less."));
                 }
 
                 // Password checks - length (too short/long), strength requirements
@@ -70,6 +69,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
                 if (registration.CreditCard == null && registration.AchAccount == null)
                 {
                     errors.Add(new RegistrationValidationError("Stamps.com requires that either credit card or account be provided in the registration process."));
+                }
+
+                if (registration.PhysicalAddress.PhoneNumber.Length > 10)
+                {
+                    // Stamps.com API has max length of 10 for phone numbers, so attempt to 
+                    // clean up the phone number that will get sent to Stamps.com. If the phone number
+                    // is still too long, let the request go through and allow Stamps to handle the error
+                    string cleansedPhoneNumber = registration.PhysicalAddress.PhoneNumber.Replace("-", string.Empty);
+                    if (cleansedPhoneNumber.Length > 10)
+                    {
+                        // Phone number is still too long, so allow the user to correct it
+                        errors.Add(new RegistrationValidationError("Stamps.com requires that the phone number cannot exceed 10 characters."));
+                    }
+                    else
+                    {
+                        // The cleansed phone number is a valid length, so we'll just use that to pass on to Stamps.com
+                        registration.PhysicalAddress.PhoneNumber = cleansedPhoneNumber;
+                    }
                 }
             }
 

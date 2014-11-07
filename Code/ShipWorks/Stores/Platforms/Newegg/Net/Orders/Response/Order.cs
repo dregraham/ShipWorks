@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -41,12 +42,25 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response
         public long OrderNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the invoice number.
+        /// Gets or sets the invoice number based on the value sent from the API.
         /// </summary>
         /// <value>
         /// The invoice number.
         /// </value>
-        [XmlElement("InvoiceNumber")]
+        [XmlElement(ElementName = "InvoiceNumber")]
+        public string InvoiceNumberFromApi
+        {
+            get { return InvoiceNumber.ToString(CultureInfo.InvariantCulture); } 
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    InvoiceNumber = long.Parse(value);
+                }
+            }
+        }
+
+        [XmlIgnore]
         public long InvoiceNumber { get; set; }
 
         /// <summary>

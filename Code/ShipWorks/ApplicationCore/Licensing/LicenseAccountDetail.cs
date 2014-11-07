@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
 		// If its deactivated (disabled), this is the reason why (for metered only)
 		string disabledReason = "";
-
+        
         // State of the license
         LicenseActivationState licenseState = LicenseActivationState.Invalid;
 
@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 throw new ShipWorksLicenseException(error);
             }
-
+            
             // Key
             license = new ShipWorksLicense(XPathUtility.Evaluate(xpath, "//Key", ""));
 
@@ -89,14 +89,20 @@ namespace ShipWorks.ApplicationCore.Licensing
 			disabledReason = XPathUtility.Evaluate(xpath, "//DisabledReason", "");
 
             // Valid
-            valid = XPathUtility.Evaluate(xpath, "//Valid", false);
+            valid = XPathUtility.Evaluate(xpath, "//Valid", false);            
 
             // State
             DetermineState(StoreTypeManager.GetType(store).LicenseIdentifier);
 
             // Edition
             edition = DetermineEdition(xpath);
-        }
+
+            // Get the Tango store ID
+            TangoStoreID = XPathUtility.Evaluate(xpath, "//StoreID", "");
+
+            // Get the Tango CustomerID
+            TangoCustomerID = XPathUtility.Evaluate(xpath, "//CustomerID", "");
+		}
 
         /// <summary>
         /// Determine the edition this license represents
@@ -123,7 +129,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia scan based payment returns is allowed
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
-            
+
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(xpath);
+
             return edition;
         }
 
@@ -359,5 +367,23 @@ namespace ShipWorks.ApplicationCore.Licensing
 				return disabledReason;
 			}
 		}
+
+        /// <summary>
+        /// The Tango StoreID associated with this license
+        /// </summary>
+        public string TangoStoreID
+        {
+            get; 
+            private set;
+        }
+
+        /// <summary>
+        /// The Tango CustomerID associated with this license
+        /// </summary>
+        public string TangoCustomerID
+        {
+            get;
+            private set;
+        }
     }
 }

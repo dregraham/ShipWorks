@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -20,7 +21,25 @@ namespace Interapptive.Shared.Collections
                 return new T[] { };
             }
 
-            return list.Split(',').Select(s => (T) Convert.ChangeType(s, typeof(T))).ToArray();
+            return list.Split(',')
+                .Select(s => ChangeType(s, typeof(T)))
+                .OfType<T>()
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Try to change the type of an object, returning null if the change fails
+        /// </summary>
+        private static object ChangeType(object fromValue, Type toType)
+        {
+            try
+            {
+                return Convert.ChangeType(fromValue, toType, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -36,7 +55,7 @@ namespace Interapptive.Shared.Collections
                     sb.Append(",");
                 }
 
-                sb.Append(value.ToString());
+                sb.Append(value);
             }
 
             return sb.ToString();

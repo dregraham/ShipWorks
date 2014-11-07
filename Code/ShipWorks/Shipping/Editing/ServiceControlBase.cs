@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -159,6 +160,8 @@ namespace ShipWorks.Shipping.Editing
                 throw new ArgumentNullException("shipments");
             }
 
+            EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
+
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
@@ -210,6 +213,8 @@ namespace ShipWorks.Shipping.Editing
                 // Go through and load the data from each shipment
                 foreach (ShipmentEntity shipment in shipments)
                 {
+                    labelFormat.ApplyMultiValue((ThermalLanguage)shipment.RequestedLabelFormat);
+
                     // Residential status info
                     if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
                     {
@@ -248,6 +253,14 @@ namespace ShipWorks.Shipping.Editing
         public virtual void OnConfigureRateClick(object sender, RateSelectedEventArgs e)
         {
             OnRateSelected(sender, e);
+        }
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected virtual bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return true;
         }
 
         /// <summary>
@@ -398,8 +411,12 @@ namespace ShipWorks.Shipping.Editing
             // Save the data to each selected shipment
             foreach (ShipmentEntity shipment in loadedShipments)
             {
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+                labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage)v, shipment));
+                
                 // Residential
-                if (ShipmentTypeManager.GetType(shipment).IsResidentialStatusRequired(shipment))
+                if (shipmentType.IsResidentialStatusRequired(shipment))
                 {
                     ResidentialDeterminationType? type = null;
 
@@ -592,6 +609,11 @@ namespace ShipWorks.Shipping.Editing
             {
                 ShipmentTypeChanged(this, EventArgs.Empty);
             }
+        }
+
+        private void OnHelpClick(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);
         }
     }
 }

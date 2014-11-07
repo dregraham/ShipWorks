@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -25,6 +27,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExOptionsControl()
         {
             InitializeComponent();
+
+            EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
         }
 
         /// <summary>
@@ -32,31 +36,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void LoadSettings()
         {
-            EnumHelper.BindComboBox<ThermalLanguage>(thermalType);
-            EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
-
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             maskAccountNumber.Checked = settings.FedExMaskAccount;
 
-            thermalPrinter.Checked = settings.FedExThermal;
-            thermalType.SelectedValue = (ThermalLanguage) settings.FedExThermalType;
+            requestedLabelFormat.LoadDefaultProfile(new FedExShipmentType());
 
             thermalDocTab.Checked = settings.FedExThermalDocTab;
             thermalDocTabType.SelectedValue = (ThermalDocTabType) settings.FedExThermalDocTabType;
-        }
-
-        /// <summary>
-        /// Update the enabled state of the thermal UI based on what's selected
-        /// </summary>
-        private void OnUpdateThermalUI(object sender, EventArgs e)
-        {
-            labelThermalType.Enabled = thermalPrinter.Checked;
-            thermalType.Enabled = thermalPrinter.Checked;
-            thermalDocTab.Enabled = thermalPrinter.Checked;
-
-            labelThermalDocTabType.Enabled = thermalPrinter.Checked && thermalDocTab.Checked;
-            thermalDocTabType.Enabled = thermalPrinter.Checked && thermalDocTab.Checked;
         }
 
         /// <summary>
@@ -66,8 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             settings.FedExMaskAccount = maskAccountNumber.Checked;
 
-            settings.FedExThermal = thermalPrinter.Checked;
-            settings.FedExThermalType = (int) thermalType.SelectedValue;
+            requestedLabelFormat.SaveDefaultProfile();
 
             settings.FedExThermalDocTab = thermalDocTab.Checked;
             settings.FedExThermalDocTabType = (int) thermalDocTabType.SelectedValue;

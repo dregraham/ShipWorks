@@ -270,7 +270,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 item.SKU = item.Code;
 
                 // amazon-specific fields
-                item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amazonOrderItemCode", (long)0);
+                item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amazonOrderItemCode", string.Empty);
                 item.ConditionNote = XPathUtility.Evaluate(xpath, "conditionNote", "");
 
                 AmazonItemDetail amazonItemDetail = AmazonAsin.GetAmazonItemDetail((AmazonStoreEntity)Store, item.SKU);

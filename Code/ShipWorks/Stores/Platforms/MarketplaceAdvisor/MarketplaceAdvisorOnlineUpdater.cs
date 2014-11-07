@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
@@ -43,15 +44,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
             if (store.AccountType == (int) MarketplaceAdvisorAccountType.OMS)
             {
-                MarketplaceAdvisorOmsClient.UpdateShipmentStatus(
-                    store, 
-                    (MarketplaceAdvisorOrderEntity) shipment.Order, 
-                    shipment);
+                MarketplaceAdvisorOmsClient.Create(store).UpdateShipmentStatus(
+                    new MarketplaceAdvisorOrderDto(shipment.Order),
+                    new MarketplaceAdvisorShipmentDto(shipment));
             }
             else
             {
-                MarketplaceAdvisorLegacyClient client = new MarketplaceAdvisorLegacyClient(store);
-                client.UpdateShipmentStatus((MarketplaceAdvisorOrderEntity) shipment.Order, shipment);
+                MarketplaceAdvisorLegacyClient client = MarketplaceAdvisorLegacyClient.Create(store);
+                client.UpdateShipmentStatus(new MarketplaceAdvisorOrderDto(shipment.Order), new MarketplaceAdvisorShipmentDto(shipment));
             }
         }
     }

@@ -39,5 +39,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 return new NullEntity();
             }
         }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void Save(NullEntity account)
+        {
+            // Nothing to save
+        }
     }
 }

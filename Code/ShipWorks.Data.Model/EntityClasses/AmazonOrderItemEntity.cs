@@ -556,11 +556,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The AmazonOrderItemCode property of the Entity AmazonOrderItem<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonOrderItem"."AmazonOrderItemCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 AmazonOrderItemCode
+		public virtual System.String AmazonOrderItemCode
 		{
-			get { return (System.Int64)GetValue((int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, true); }
+			get { return (System.String)GetValue((int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, true); }
 			set	{ SetValue((int)AmazonOrderItemFieldIndex.AmazonOrderItemCode, value); }
 		}
 

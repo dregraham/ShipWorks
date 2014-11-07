@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -188,6 +189,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                 // Setup the worker with the work to perform asynchronously
                 ratesWorker.DoWork += (sender, args) =>
                 {
+                    RateGroup rates = null;
+                    ShipmentType shipmentType = null;
+
                     try
                     {
                         // Load all the child shipment data otherwise we'll get null reference
@@ -204,8 +208,10 @@ namespace ShipWorks.Shipping.Editing.Rating
                         }
 
                         // Fetch the rates and add them to the cache
-                        ShipmentType shipmentType = PrepareShipmentAndGetShipmentType(shipment);
-                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment, shipmentType), shipment);
+                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+
+                        rates = ShippingManager.GetRates(shipment, shipmentType);
+                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
                     }
                     catch (InvalidRateGroupShippingException ex)
                     {
@@ -227,11 +233,17 @@ namespace ShipWorks.Shipping.Editing.Rating
                         args.Result = ex;
 
                     }
-                    catch (ShippingException)
+                    catch (ShippingException ex)
                     {
-                        // The invalid rate group should be cached, so use the shipping manager to get the rate
-                        // so we can have access to the exception footer.
-                        panelRateGroup = new ShipmentRateGroup(ShippingManager.GetRates(shipment), shipment);
+                        // While the rate group should be cached, there was a situation where getting credentials from Tango caused an exception,
+                        // which happened before exception handling kicked in.  So calling GetRates again and relying on cache was causing a crash.
+                        if (rates == null)
+                        {
+                            rates = new RateGroup(new List<RateResult>());
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex.Message));
+                        }
+
+                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
                     }
                 };
 
@@ -279,10 +291,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
             ShipmentType shipmentType;
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
+            // Only change this to best rate for non-Stamps.com postal types
             if (ConsolidatePostalRates &&
-                PostalUtility.IsPostalShipmentType((ShipmentTypeCode)shipment.ShipmentType) &&
-                !PostalUtility.IsPostalSetup())
+                PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
+                !PostalUtility.IsPostalSetup() && 
+                shipmentTypeCode != ShipmentTypeCode.Stamps && 
+                shipmentTypeCode != ShipmentTypeCode.Usps &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
             {
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new Express1BrokerFilter(), new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
 

@@ -647,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            optionsControlOlt.SaveSettings(settings);
+            optionsControlOlt.SaveSettings();
 
             ShippingSettings.Save(settings);
         }

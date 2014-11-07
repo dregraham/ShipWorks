@@ -63,6 +63,9 @@
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 508);
             this.sectionReturns.Size = new System.Drawing.Size(415, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(415, 24);
+            this.sectionLabelOptions.Visible = false;
             // 
             // sectionShipment
             // 
@@ -118,7 +121,9 @@
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();

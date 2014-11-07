@@ -8,12 +8,14 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -95,6 +97,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override bool SupportsCounterRates
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get { return SettingsRepository.GetAccounts().Any(); }
         }
 
         /// <summary>
@@ -379,6 +389,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Weight of the first package equals the total shipment content weight
             package.Weight = shipment.ContentWeight;
 
+            shipment.FedEx.RequestedLabelFormat = (int)ThermalLanguage.None;
+
             base.ConfigureNewShipment(shipment);
         }
 
@@ -574,7 +586,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 if (packageProfile.PriorityAlert.HasValue && packageProfile.PriorityAlert.Value)
                 {
-                    ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlert, package, FedExPackageFields.PriorityAlert);
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertDetailContent, package, FedExPackageFields.PriorityAlertDetailContent);
                     ShippingProfileUtility.ApplyProfileValue(packageProfile.PriorityAlertEnhancementType, package, FedExPackageFields.PriorityAlertEnhancementType);
                 }
@@ -755,6 +766,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 shipment.InsuranceProvider = (int) InsuranceProvider.Carrier;
             }
 
+            shipment.RequestedLabelFormat = shipment.FedEx.RequestedLabelFormat;
+            
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
             decimal? maxPackageDeclaredValue = (overriddenShipment.ShipCountryCode != "US") ? (shipment.CustomsValue / shipment.FedEx.Packages.Count) : (decimal?) null;
@@ -926,7 +939,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (fedex.Packages.Count == 1)
             {
-                return new List<string> { FedExUtility.BuildTrackingNumber(shipment.TrackingNumber, fedex) };
+                return new List<string> { shipment.TrackingNumber };
             }
             else
             {
@@ -934,7 +947,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 for (int i = 0; i < fedex.Packages.Count; i++)
                 {
-                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, FedExUtility.BuildTrackingNumber(fedex.Packages[i].TrackingNumber, fedex)));
+                    trackingList.Add(string.Format("Package {0}: {1}", i + 1, fedex.Packages[i].TrackingNumber));
                 }
 
                 return trackingList;
@@ -954,7 +967,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 // Check with the SettingsRepository here rather than FedExAccountManager, so getting 
                 // counter rates from the broker is not impacted
-                if (!SettingsRepository.GetAccounts().Any())
+                if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
@@ -1078,12 +1091,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             outline.AddElement("LabelCODReturn",
                 () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
-                ElementOutline.If(() => shipment().ThermalType == null && codReturn.Value != null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null && codReturn.Value != null));
             
             outline.AddElement("Package",
                 new FedExLegacyPackageTemplateOutline(container.Context),
                 () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),
-                ElementOutline.If(() => shipment().ThermalType == null));
+                ElementOutline.If(() => shipment().ActualLabelFormat == null));
         }
 
         /// <summary>
@@ -1257,6 +1270,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 {
                     labelData = (TemplateLabelData) data
                 };
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.FedEx != null)
+            {
+                shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
     }

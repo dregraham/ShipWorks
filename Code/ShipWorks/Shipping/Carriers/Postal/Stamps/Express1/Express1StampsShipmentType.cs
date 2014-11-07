@@ -43,6 +43,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return StampsAccountManager.Express1Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// The user-displayable name of the shipment type
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -55,6 +66,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                     ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia)) ?
                     "USPS (Express1 for Stamps)" : "USPS (Express1)";
             }
+        }
+
+        /// <summary>
+        /// Supports getting counter rates.
+        /// </summary>
+        public override bool SupportsCounterRates
+        {
+            get { return false; }
         }
 
         /// <summary>
@@ -74,8 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { IsExpress1 = true };
-            StampsOptionsControl optionsControl = new StampsOptionsControl { IsExpress1 = true };
+            StampsAccountManagerControl accountManagerControl = new StampsAccountManagerControl { StampsResellerType = StampsResellerType.Express1 };
+            StampsOptionsControl optionsControl = new StampsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
             StampsPurchasePostageDlg postageDialog = new StampsPurchasePostageDlg();
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
@@ -86,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(true);
+            return new StampsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -103,30 +122,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
-            ICertificateInspector originalCertificateInspector = CertificateInspector;
+            //ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            //ICertificateInspector originalCertificateInspector = CertificateInspector;
 
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            //try
+            //{
+            //    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
+            //    AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
+            //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
 
-                // This call to GetRates won't be recursive since the counter rate account repository will return an account
-                return GetRates(shipment);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                AccountRepository = originalAccountRepository;
-                CertificateInspector = originalCertificateInspector;
-            }
+            //    // This call to GetRates won't be recursive since the counter rate account repository will return an account
+            //    return GetRates(shipment);
+            //}
+            //catch (CounterRatesOriginAddressException)
+            //{
+            //    RateGroup errorRates = new RateGroup(new List<RateResult>());
+            //    errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+            //    return errorRates;
+            //}
+            //finally
+            //{
+            //    AccountRepository = originalAccountRepository;
+            //    CertificateInspector = originalCertificateInspector;
+            //}
+            return GetCachedRates<StampsException>(shipment, entity => { throw new StampsException("An account is required to view Express1 rates."); });
         }
 
         /// <summary>
@@ -135,6 +155,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new Express1StampsShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="counterRatesProcessing"></param>
+        /// <param name="selectedRate"></param>
+        /// <returns>
+        /// The updates shipment (or shipments) that is ready to be processed. A null value may
+        /// be returned to indicate that processing should be halted completely.
+        /// </returns>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
+
+            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
         }
 
         /// <summary>
@@ -164,20 +206,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
+            IBestRateShippingBroker broker = new NullShippingBroker();
             if (StampsAccountManager.Express1Accounts.Any())
             {
-                return new Express1StampsBestRateBroker();
+                // Only use an Express1 broker if there is an account. We no longer want to
+                // get Express1 counter rates
+                broker = new Express1StampsBestRateBroker();
             }
-            
-            return new Express1StampsCounterRatesBroker();
+
+            return broker;
         }
 
         /// <summary>
-        /// Supports getting counter rates.
+        /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
-        public override bool SupportsCounterRates
+        /// <param name="account">The account.</param>
+        public override void UpdateContractType(StampsAccountEntity account)
         {
-            get { return true; }
-        }
+            // If the ContractType is unknown, we must not have tried to check this account yet.
+            // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts
+            if (account != null && account.ContractType == (int) StampsAccountContractType.Unknown)
+            {
+                account.ContractType = (int) StampsAccountContractType.NotApplicable;
+                AccountRepository.Save(account);
+            }
+        }        
     }
 }

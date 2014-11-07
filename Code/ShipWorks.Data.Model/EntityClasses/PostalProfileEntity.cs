@@ -1030,12 +1030,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_endicia !=null);
 						DesetupSyncEndicia(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Endicia");
-						}
 					}
 					else
 					{
@@ -1073,12 +1068,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_profile !=null);
 						DesetupSyncProfile(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Profile");
-						}
 					}
 					else
 					{
@@ -1116,12 +1106,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_stamps !=null);
 						DesetupSyncStamps(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Stamps");
-						}
 					}
 					else
 					{

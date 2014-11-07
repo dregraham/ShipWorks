@@ -18,7 +18,6 @@ namespace ShipWorks.Editions.Freemium
         public FreemiumPaidEdition(StoreEntity store)
             : base(store)
         {
-            AddRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.Stamps, EditionRestrictionLevel.Hidden);
         }
     }
 }

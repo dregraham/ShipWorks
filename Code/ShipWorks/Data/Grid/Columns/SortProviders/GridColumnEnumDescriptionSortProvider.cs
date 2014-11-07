@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
 
             sb.AppendFormat(" ELSE -1 END");
 
-            sortField.ExpressionToApply = new DbFunctionCall(sb.ToString(), new object[] { sortField.Clone() });
+            sortField.ExpressionToApply = BuildDbFunctionCall(sortField, sb);
         }
 
         /// <summary>
@@ -62,6 +62,14 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// Build the DbFunctionCall that will be used as the sort expression
+        /// </summary>
+        protected virtual DbFunctionCall BuildDbFunctionCall(EntityField2 sortField, StringBuilder builder)
+        {
+            return new DbFunctionCall(builder.ToString(), new[] { sortField.Clone() });
         }
     }
 }

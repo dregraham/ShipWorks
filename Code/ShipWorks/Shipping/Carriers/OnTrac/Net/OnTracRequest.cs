@@ -52,8 +52,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net
             OnTracPassword = onTracPassword;
 
             BaseUrlUsedToCallOnTrac = UseTestServer
-                          ? "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v1/"
-                          : "https://www.shipontrac.net/OnTracWebServices/OnTracServices.svc/v1/";
+                          ? "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/"
+                          : "https://www.shipontrac.net/OnTracWebServices/OnTracServices.svc/v2/";
         }
 
         /// <summary>

@@ -496,6 +496,8 @@ namespace ShipWorks.Data.Model
 		MerchantToken,
 		///<summary>AccessKeyID. </summary>
 		AccessKeyID,
+		///<summary>AuthToken. </summary>
+		AuthToken,
 		///<summary>Cookie. </summary>
 		Cookie,
 		///<summary>CookieExpires. </summary>
@@ -736,6 +738,8 @@ namespace ShipWorks.Data.Model
 		ServiceLevel,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2447,6 +2451,8 @@ namespace ShipWorks.Data.Model
 		ScanFormBatchID,
 		///<summary>ScanBasedReturn. </summary>
 		ScanBasedReturn,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2590,6 +2596,8 @@ namespace ShipWorks.Data.Model
 		SaturdayDelivery,
 		///<summary>Confirmation. </summary>
 		Confirmation,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3406,6 +3414,8 @@ namespace ShipWorks.Data.Model
 		WeightUnitType,
 		///<summary>LinearUnitType. </summary>
 		LinearUnitType,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4007,6 +4017,37 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InsurancePolicy.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum InsurancePolicyFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>InsureShipStoreName. </summary>
+		InsureShipStoreName,
+		///<summary>CreatedWithApi. </summary>
+		CreatedWithApi,
+		///<summary>ItemName. </summary>
+		ItemName,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>ClaimType. </summary>
+		ClaimType,
+		///<summary>DamageValue. </summary>
+		DamageValue,
+		///<summary>SubmissionDate. </summary>
+		SubmissionDate,
+		///<summary>ClaimID. </summary>
+		ClaimID,
+		///<summary>EmailAddress. </summary>
+		EmailAddress,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: IParcelAccount.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -4172,6 +4213,8 @@ namespace ShipWorks.Data.Model
 		TrackBySMS,
 		///<summary>IsDeliveryDutyPaid. </summary>
 		IsDeliveryDutyPaid,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5524,6 +5567,8 @@ namespace ShipWorks.Data.Model
 		InsurancePennyOne,
 		///<summary>DeclaredValue. </summary>
 		DeclaredValue,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7133,8 +7178,10 @@ namespace ShipWorks.Data.Model
 		CustomsGenerated,
 		///<summary>CustomsValue. </summary>
 		CustomsValue,
-		///<summary>ThermalType. </summary>
-		ThermalType,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>ActualLabelFormat. </summary>
+		ActualLabelFormat,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -7219,6 +7266,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseChangeSets,
 		///<summary>ShipSenseEntry. </summary>
 		ShipSenseEntry,
+		///<summary>OnlineShipmentID. </summary>
+		OnlineShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7391,6 +7440,8 @@ namespace ShipWorks.Data.Model
 		InsuranceInitialValueAmount,
 		///<summary>ReturnShipment. </summary>
 		ReturnShipment,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7445,10 +7496,6 @@ namespace ShipWorks.Data.Model
 		FedExPassword,
 		///<summary>FedExMaskAccount. </summary>
 		FedExMaskAccount,
-		///<summary>FedExThermal. </summary>
-		FedExThermal,
-		///<summary>FedExThermalType. </summary>
-		FedExThermalType,
 		///<summary>FedExThermalDocTab. </summary>
 		FedExThermalDocTab,
 		///<summary>FedExThermalDocTabType. </summary>
@@ -7459,18 +7506,10 @@ namespace ShipWorks.Data.Model
 		FedExInsurancePennyOne,
 		///<summary>UpsAccessKey. </summary>
 		UpsAccessKey,
-		///<summary>UpsThermal. </summary>
-		UpsThermal,
-		///<summary>UpsThermalType. </summary>
-		UpsThermalType,
 		///<summary>UpsInsuranceProvider. </summary>
 		UpsInsuranceProvider,
 		///<summary>UpsInsurancePennyOne. </summary>
 		UpsInsurancePennyOne,
-		///<summary>EndiciaThermal. </summary>
-		EndiciaThermal,
-		///<summary>EndiciaThermalType. </summary>
-		EndiciaThermalType,
 		///<summary>EndiciaCustomsCertify. </summary>
 		EndiciaCustomsCertify,
 		///<summary>EndiciaCustomsSigner. </summary>
@@ -7485,20 +7524,20 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
+		///<summary>EndiciaUspsAutomaticExpedited. </summary>
+		EndiciaUspsAutomaticExpedited,
+		///<summary>EndiciaUspsAutomaticExpeditedAccount. </summary>
+		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>StampsThermal. </summary>
-		StampsThermal,
-		///<summary>StampsThermalType. </summary>
-		StampsThermalType,
 		///<summary>StampsAutomaticExpress1. </summary>
 		StampsAutomaticExpress1,
 		///<summary>StampsAutomaticExpress1Account. </summary>
 		StampsAutomaticExpress1Account,
-		///<summary>Express1EndiciaThermal. </summary>
-		Express1EndiciaThermal,
-		///<summary>Express1EndiciaThermalType. </summary>
-		Express1EndiciaThermalType,
+		///<summary>StampsUspsAutomaticExpedited. </summary>
+		StampsUspsAutomaticExpedited,
+		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
+		StampsUspsAutomaticExpeditedAccount,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>
@@ -7509,30 +7548,14 @@ namespace ShipWorks.Data.Model
 		Express1EndiciaThermalDocTabType,
 		///<summary>Express1EndiciaSingleSource. </summary>
 		Express1EndiciaSingleSource,
-		///<summary>EquaShipThermal. </summary>
-		EquaShipThermal,
-		///<summary>EquaShipThermalType. </summary>
-		EquaShipThermalType,
-		///<summary>OnTracThermal. </summary>
-		OnTracThermal,
-		///<summary>OnTracThermalType. </summary>
-		OnTracThermalType,
 		///<summary>OnTracInsuranceProvider. </summary>
 		OnTracInsuranceProvider,
 		///<summary>OnTracInsurancePennyOne. </summary>
 		OnTracInsurancePennyOne,
-		///<summary>IParcelThermal. </summary>
-		IParcelThermal,
-		///<summary>IParcelThermalType. </summary>
-		IParcelThermalType,
 		///<summary>IParcelInsuranceProvider. </summary>
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>Express1StampsThermal. </summary>
-		Express1StampsThermal,
-		///<summary>Express1StampsThermalType. </summary>
-		Express1StampsThermalType,
 		///<summary>Express1StampsSingleSource. </summary>
 		Express1StampsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>
@@ -7967,8 +7990,10 @@ namespace ShipWorks.Data.Model
 		Website,
 		///<summary>MailingPostalCode. </summary>
 		MailingPostalCode,
-		///<summary>IsExpress1. </summary>
-		IsExpress1,
+		///<summary>StampsReseller. </summary>
+		StampsReseller,
+		///<summary>ContractType. </summary>
+		ContractType,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8044,6 +8069,8 @@ namespace ShipWorks.Data.Model
 		OriginalStampsAccountID,
 		///<summary>ScanFormBatchID. </summary>
 		ScanFormBatchID,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8799,6 +8826,8 @@ namespace ShipWorks.Data.Model
 		ShipmentChargeCountryCode,
 		///<summary>UspsPackageID. </summary>
 		UspsPackageID,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9732,6 +9761,8 @@ namespace ShipWorks.Data.Model
 		InfopiaOrderItemEntity,
 		///<summary>InfopiaStore</summary>
 		InfopiaStoreEntity,
+		///<summary>InsurancePolicy</summary>
+		InsurancePolicyEntity,
 		///<summary>IParcelAccount</summary>
 		IParcelAccountEntity,
 		///<summary>IParcelPackage</summary>

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<NeweggAPIResponse>
+  <IsSuccess>true</IsSuccess>
+  <OperationType>GetOrderInfoResponse</OperationType>
+  <SellerID>A0MD</SellerID>
+  <ResponseBody>
+    <PageInfo>
+      <TotalCount>27</TotalCount>
+      <TotalPageCount>27</TotalPageCount>
+      <PageIndex>1</PageIndex>
+      <PageSize>1</PageSize>
+    </PageInfo>
+    <OrderInfoList>
+      <OrderInfo>
+        <SellerID>A0MD</SellerID>
+        <OrderNumber>214332457</OrderNumber>
+        <InvoiceNumber/>
+        <OrderDownloaded>false</OrderDownloaded>
+        <OrderDate>10/22/2014 14:14:55</OrderDate>
+        <OrderStatus>0</OrderStatus>
+        <OrderStatusDescription>Unshipped</OrderStatusDescription>
+        <CustomerName>
+          <![CDATA[Jacob Zahler]]>
+        </CustomerName>
+        <CustomerPhoneNumber>845-354-6801</CustomerPhoneNumber>
+        <CustomerEmailAddress>cusa.q1fw1nlerfdt94rm@marketplace.newegg.com</CustomerEmailAddress>
+        <ShipToAddress1>
+          <![CDATA[22 Dike Dr]]>
+        </ShipToAddress1>
+        <ShipToAddress2/>
+        <ShipToCityName>Monsey</ShipToCityName>
+        <ShipToStateCode>NY</ShipToStateCode>
+        <ShipToZipCode>10952-1114</ShipToZipCode>
+        <ShipToCountryCode>UNITED STATES</ShipToCountryCode>
+        <ShipService>Standard Shipping (5-7 business days)</ShipService>
+        <ShipToFirstName>
+          <![CDATA[Jacob]]>
+        </ShipToFirstName>
+        <ShipToLastName>
+          <![CDATA[Zahler]]>
+        </ShipToLastName>
+        <ShipToCompany/>
+        <OrderItemAmount>167.50</OrderItemAmount>
+        <ShippingAmount>15.60</ShippingAmount>
+        <DiscountAmount>0.00</DiscountAmount>
+        <RefundAmount>0.00</RefundAmount>
+        <OrderTotalAmount>183.10</OrderTotalAmount>
+        <OrderQty>10</OrderQty>
+        <IsAutoVoid>false</IsAutoVoid>
+        <ItemInfoList>
+          <ItemInfo>
+            <SellerPartNumber>
+              <![CDATA[2223728]]>
+            </SellerPartNumber>
+            <NeweggItemNumber>9SIA0MD0BW0769</NeweggItemNumber>
+            <MfrPartNumber>
+              <![CDATA[2223728]]>
+            </MfrPartNumber>
+            <UPCCode>610074236351</UPCCode>
+            <Description>
+              <![CDATA[Black Professional Photo Session Album with Black Pages - fits 288 pictures - Sold individually]]>
+            </Description>
+            <OrderedQty>10</OrderedQty>
+            <ShippedQty>0</ShippedQty>
+            <UnitPrice>16.75</UnitPrice>
+            <ExtendUnitPrice>167.50</ExtendUnitPrice>
+            <UnitShippingCharge>1.56</UnitShippingCharge>
+            <ExtendShippingCharge>15.60</ExtendShippingCharge>
+            <Status>1</Status>
+            <StatusDescription>Unshipped</StatusDescription>
+          </ItemInfo>
+        </ItemInfoList>
+        <PackageInfoList/>
+      </OrderInfo>
+    </OrderInfoList>
+  </ResponseBody>
+  <ResponseDate>10/23/2014 07:25:29</ResponseDate>
+</NeweggAPIResponse>

@@ -527,6 +527,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -866,6 +869,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OnTracShipmentFieldIndex.DeclaredValue, value); }
 		}
 
+		/// <summary> The RequestedLabelFormat property of the Entity OnTracShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "OnTracShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)OnTracShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)OnTracShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
 
 
 
@@ -892,12 +906,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_shipment !=null);
 						DesetupSyncShipment(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Shipment");
-						}
 					}
 					else
 					{

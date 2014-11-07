@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.express1SettingsControl = new ShipWorks.Shipping.Carriers.Postal.Express1.AutomaticExpress1ControlBase();
             this.panelBottom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,56 +51,47 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.IsExpress1 = false;
             this.accountControl.Location = new System.Drawing.Point(12, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
+            this.accountControl.StampsResellerType = ShipWorks.Shipping.Carriers.Postal.Stamps.StampsResellerType.None;
             this.accountControl.TabIndex = 1;
             // 
             // optionsControl
             // 
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsControl.IsExpress1 = false;
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
+            this.optionsControl.ShipmentTypeCode = ShipWorks.Shipping.ShipmentTypeCode.Stamps;
             this.optionsControl.Size = new System.Drawing.Size(435, 105);
             this.optionsControl.TabIndex = 4;
             // 
             // express1Options
             // 
             this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1Options.Location = new System.Drawing.Point(7, 115);
+            this.express1Options.Location = new System.Drawing.Point(4, 59);
             this.express1Options.Name = "express1Options";
-            this.express1Options.Size = new System.Drawing.Size(421, 49);
+            this.express1Options.Size = new System.Drawing.Size(421, 41);
             this.express1Options.TabIndex = 5;
             // 
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.labelAccountType);
             this.panelBottom.Controls.Add(this.accountControl);
-            this.panelBottom.Location = new System.Drawing.Point(0, 333);
+            this.panelBottom.Location = new System.Drawing.Point(7, 111);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(495, 131);
+            this.panelBottom.Size = new System.Drawing.Size(485, 131);
             this.panelBottom.TabIndex = 6;
-            // 
-            // express1SettingsControl
-            // 
-            this.express1SettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1SettingsControl.Location = new System.Drawing.Point(3, 167);
-            this.express1SettingsControl.Name = "express1SettingsControl";
-            this.express1SettingsControl.Size = new System.Drawing.Size(468, 160);
-            this.express1SettingsControl.TabIndex = 7;
             // 
             // StampsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.express1SettingsControl);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
             this.Name = "StampsSettingsControl";
-            this.Size = new System.Drawing.Size(495, 507);
+            this.Size = new System.Drawing.Size(495, 257);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.ResumeLayout(false);
@@ -115,6 +105,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private StampsOptionsControl optionsControl;
         private Stamps.Express1.Express1StampsSingleSourceControl express1Options;
         private System.Windows.Forms.Panel panelBottom;
-        private AutomaticExpress1ControlBase express1SettingsControl;
     }
 }

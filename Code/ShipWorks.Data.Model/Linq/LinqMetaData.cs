@@ -262,6 +262,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.InfopiaStoreEntity:
 					toReturn = this.InfopiaStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.InsurancePolicyEntity:
+					toReturn = this.InsurancePolicy;
+					break;
 				case ShipWorks.Data.Model.EntityType.IParcelAccountEntity:
 					toReturn = this.IParcelAccount;
 					break;
@@ -954,6 +957,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<InfopiaStoreEntity> InfopiaStore
 		{
 			get { return new DataSource2<InfopiaStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting InsurancePolicyEntity instances in the database.</summary>
+		public DataSource2<InsurancePolicyEntity> InsurancePolicy
+		{
+			get { return new DataSource2<InsurancePolicyEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting IParcelAccountEntity instances in the database.</summary>

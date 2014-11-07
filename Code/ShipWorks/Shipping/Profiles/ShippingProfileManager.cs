@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
 using ShipWorks.Data.Connection;
@@ -121,7 +122,7 @@ namespace ShipWorks.Shipping.Profiles
             bool anyDirty = new ObjectGraphUtils().ProduceTopologyOrderedList(profile).Any(e => e.IsDirty);
 
             // Transaction
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            using (SqlAdapter adapter = new SqlAdapter(false))
             {
                 bool extraDirty = shipmentType.SaveProfileData(profile, adapter);
 
@@ -138,7 +139,28 @@ namespace ShipWorks.Shipping.Profiles
                 adapter.Commit();
             }
 
-            CheckForChangesNeeded();
+            lock (synchronizer)
+            {
+                synchronizer.MergeEntity(profile);
+                CheckForChangesNeeded();
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the name of the profile already exists in another profile
+        /// </summary>
+        public static bool DoesNameExist(ShippingProfileEntity profile)
+        {
+            if (profile == null)
+            {
+                return false;
+            }
+
+            int profileCount = ShippingProfileCollection.GetCount(SqlAdapter.Default,
+                ShippingProfileFields.ShippingProfileID != profile.ShippingProfileID &
+                ShippingProfileFields.Name == profile.Name);
+
+            return (profileCount != 0);
         }
     }
 }

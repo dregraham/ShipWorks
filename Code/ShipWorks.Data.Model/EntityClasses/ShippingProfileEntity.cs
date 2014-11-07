@@ -806,6 +806,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -1339,6 +1342,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingProfileFieldIndex.ReturnShipment, value); }
 		}
 
+		/// <summary> The RequestedLabelFormat property of the Entity ShippingProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingProfile"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> RequestedLabelFormat
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, false); }
+			set	{ SetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, value); }
+		}
+
 
 
 
@@ -1365,12 +1379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_bestRate !=null);
 						DesetupSyncBestRate(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("BestRate");
-						}
 					}
 					else
 					{
@@ -1408,12 +1417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_equaShip !=null);
 						DesetupSyncEquaShip(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("EquaShip");
-						}
 					}
 					else
 					{
@@ -1451,12 +1455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_fedEx !=null);
 						DesetupSyncFedEx(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("FedEx");
-						}
 					}
 					else
 					{
@@ -1494,12 +1493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_iParcel !=null);
 						DesetupSyncIParcel(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("IParcel");
-						}
 					}
 					else
 					{
@@ -1537,12 +1531,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_onTrac !=null);
 						DesetupSyncOnTrac(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("OnTrac");
-						}
 					}
 					else
 					{
@@ -1580,12 +1569,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_other !=null);
 						DesetupSyncOther(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Other");
-						}
 					}
 					else
 					{
@@ -1623,12 +1607,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_postal !=null);
 						DesetupSyncPostal(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Postal");
-						}
 					}
 					else
 					{
@@ -1666,12 +1645,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_ups !=null);
 						DesetupSyncUps(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Ups");
-						}
 					}
 					else
 					{

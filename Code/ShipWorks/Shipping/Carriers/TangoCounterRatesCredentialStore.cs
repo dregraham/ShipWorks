@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
 using ShipWorks.Stores;
+using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -56,7 +58,13 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialExpress1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
         private const string TestCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
         private const string TestCredentialExpress1StampsCertificateVerificationData = "<Service><Subject><Value>test</Value><Value></Value></Subject></Service>";
-       
+
+        private const string TestCredentialStampsUsername = "interapptive";
+        private const string TestCredentialStampsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
+        private const string TestCredentialStampsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+
+        private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
+
         // Key names of credential values in the dictionary 
         private const string FedExAccountNumberKeyName = "FedExAccountNumber";
         private const string FedExMeterNumberKeyName = "FedExMeterNumber";
@@ -76,6 +84,12 @@ namespace ShipWorks.Shipping.Carriers
         private const string Express1StampsUsernameKeyName = "Express1StampsUsername";
         private const string Express1StampsPasswordKeyName = "Express1StampsPassword";
         public const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
+
+        private const string StampsUsernameKeyName = "StampsUsername";
+        private const string StampsPasswordKeyName = "StampsPassword";
+        public const string StampsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
+
+        public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
         
         
         /// <summary>
@@ -268,6 +282,42 @@ namespace ShipWorks.Shipping.Carriers
         }
 
         /// <summary>
+        /// Gets data to verify the SSL certificate from Stamps
+        /// </summary>
+        public string StampsCertificateVerificationData
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the  Stamps user name used for obtaining counter rates
+        /// </summary>
+        public string StampsUsername
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets the  Stamps password used for obtaining counter rates
+        /// </summary>
+        public string StampsPassword
+        {
+            get
+            {
+                return StampsApiSession.UseTestServer ?
+                    TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
+            }
+        }
+
+        /// <summary>
         /// Gets data to verify the SSL certificate from Express1Stamps
         /// </summary>
         public string Express1StampsCertificateVerificationData
@@ -276,6 +326,18 @@ namespace ShipWorks.Shipping.Carriers
             {
                 return Express1StampsConnectionDetails.UseTestServer ?
                     TestCredentialExpress1StampsCertificateVerificationData : GetCertificateVerificationDataValue(Express1StampsCertificateVerificationDataKeyName);
+            }
+        }
+
+        /// <summary>
+        /// Gets data to verify the SSL certificate from InsureShip
+        /// </summary>
+        public string InsureShipCertificateVerificationData
+        {
+            get
+            {
+                return new InsureShipSettings().UseTestServer ?
+                    TestCredentialInsureCertificateVerficationData : GetCertificateVerificationDataValue(InsureShipCertificateVerificationDataKeyName);
             }
         }
 

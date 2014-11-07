@@ -302,15 +302,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 
             if (LabelType.ToUpperInvariant() == "IMAGE")
             {
-                shipment.ThermalType = null;
+                shipment.ActualLabelFormat = null;
             }
             else if (LabelType.ToUpperInvariant() == "ZPL")
             {
-                shipment.ThermalType = (int) ThermalLanguage.ZPL;
+                shipment.ActualLabelFormat = (int)ThermalLanguage.ZPL;
             }
             else if (LabelType.ToUpperInvariant() == "EPL")
             {
-                shipment.ThermalType = (int) ThermalLanguage.EPL;
+                shipment.ActualLabelFormat = (int)ThermalLanguage.EPL;
             }
 
             // Set the ship date to now if the timestamp is not specified otherwise find the date of the day specified by the timestamp

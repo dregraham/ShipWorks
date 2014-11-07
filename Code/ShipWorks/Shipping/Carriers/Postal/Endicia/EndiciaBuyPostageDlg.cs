@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.UI;
 using log4net;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.ApplicationCore.Licensing;
+
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -22,7 +21,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaBuyPostageDlg));
 
         EndiciaAccountEntity account;
-        private readonly EndiciaApiClient endiciaApiClient;
+
+        private readonly bool purchaseRestricted;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaBuyPostageDlg"/> class.
@@ -37,9 +37,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="account">The account.</param>
         public EndiciaBuyPostageDlg(EndiciaAccountEntity account)
         {
-            InitializeComponent();
+            // Set the local account so we can use it
             this.account = account;
-            endiciaApiClient = new EndiciaApiClient();
+
+            // If purchasing is restricted for Endicia, set the variable
+            if (!IsExpress1() && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.PurchasePostage, ShipmentTypeCode.Endicia).Level == EditionRestrictionLevel.Forbidden)
+            {
+                purchaseRestricted = true;
+            }
+
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Determine if this is for express1 
+        /// </summary>
+        /// <returns>False if account is null or account is not Express1.  True otherwise.</returns>
+        private bool IsExpress1()
+        {
+            return account != null && (EndiciaReseller)account.EndiciaReseller == EndiciaReseller.Express1;
         }
 
         /// <summary>
@@ -49,13 +65,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             Refresh();
 
+            // Show any purchase nudges if there are any
+            ShowPurchasePostageNudges();
+
+            // Close out if purchasing is restricted.
+            if (purchaseRestricted)
+            {
+                DialogResult = DialogResult.None;
+                Close();
+                return;
+            }
+
             Cursor.Current = Cursors.WaitCursor;
 
             try
             {
-                EndiciaAccountStatus status = endiciaApiClient.GetAccountStatus(account);
-
-                current.Text = status.PostageBalance.ToString("c");
+                current.Text = (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
             }
             catch (EndiciaException ex)
             {
@@ -76,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             try
             {
-                endiciaApiClient.BuyPostage(account, postage.Amount);
+                (new PostageBalance(new EndiciaPostageWebClient(account), new TangoWebClientWrapper())).Purchase(postage.Amount);
 
                 MessageHelper.ShowInformation(this,
                     String.Format("The purchase request has been submitted to {0}.", EndiciaAccountManager.GetResellerName((EndiciaReseller)account.EndiciaReseller)));
@@ -92,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }        
 
         /// <summary>
-        /// This will show the dialog using the information for the given Stamps account entity provided.
+        /// This will show the dialog using the information for the given Endicia account entity provided.
         /// </summary>
         /// <exception cref="EndiciaException">ShipWorks could not find information for this account.</exception>
         public DialogResult ShowDialog(IWin32Window owner, long accountID)
@@ -109,6 +134,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // InitializeAccountInfo(endiciaAccountEntity);
             this.account = endiciaAccountEntity;
             return ShowDialog(owner);
+        }
+
+        /// <summary>
+        /// Checks for any purchase postage nudges
+        /// </summary>
+        private void ShowPurchasePostageNudges()
+        {
+            // If there is an Endicia shipment in the list, check for PurchasesEndicia nudges
+            IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.PurchaseEndicia);
+            if (nudges.Any())
+            {
+                NudgeManager.ShowNudge(this, nudges.First());
+            }
+            else if (purchaseRestricted)
+            {
+                MessageHelper.ShowError(this, string.Format("ShipWorks can no longer purchase postage for Endicia."));
+            }
         }
     }
 }

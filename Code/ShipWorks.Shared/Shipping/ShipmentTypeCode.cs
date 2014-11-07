@@ -65,6 +65,10 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIconAttribute("bestrate")]
         BestRate = 14,
 
+        [Description("USPS")]
+        [ShipmentTypeIconAttribute("usps")]
+        Usps = 15,
+
         [Description("None")]
         None = 99
     }

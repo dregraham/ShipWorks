@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsServiceControl : PostalServiceControlBase
     {
-        readonly bool isExpress1;
+        readonly StampsResellerType stampsResellerType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsServiceControl"/> class.
@@ -23,16 +23,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public StampsServiceControl(RateControl rateControl)
-            : this(ShipmentTypeCode.Stamps, false, rateControl) 
+            : this(ShipmentTypeCode.Stamps, StampsResellerType.None, rateControl) 
         { }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StampsServiceControl(ShipmentTypeCode shipmentTypeCode, bool isExpress1, RateControl rateControl)
+        public StampsServiceControl(ShipmentTypeCode shipmentTypeCode, StampsResellerType stampsResellerType, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
-            this.isExpress1 = isExpress1;
+            this.stampsResellerType = stampsResellerType;
 
             InitializeComponent();
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            var accounts = StampsAccountManager.GetAccounts(isExpress1, false);
+            var accounts = StampsAccountManager.GetAccounts(stampsResellerType, false);
 
             if (accounts.Count > 0)
             {
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(isExpress1))
+            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(stampsResellerType))
             {
                 dlg.ShowDialog(this);
             }

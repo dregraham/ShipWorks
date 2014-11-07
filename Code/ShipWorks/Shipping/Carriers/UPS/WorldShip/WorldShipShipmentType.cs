@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -54,6 +55,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override SettingsControlBase CreateSettingsControl()
         {
             return new WorldShipSettingsControl();
+        }
+
+        /// <summary>
+        /// Create the UserControl that is used to edit a profile for the service
+        /// </summary>
+        public override ShippingProfileControlBase CreateProfileControl()
+        {
+            return new WorldShipProfileControl();
         }
 
         /// <summary>

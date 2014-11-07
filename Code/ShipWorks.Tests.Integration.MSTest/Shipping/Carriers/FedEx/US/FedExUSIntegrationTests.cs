@@ -18,7 +18,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExUSGroundDomestic()
         {
             var testObject = new FedExUSGroundFixture();
@@ -50,7 +49,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExGroundDomesticAlcohol()
         {
             fedExTestAccountNumber = "510158040";
@@ -83,7 +81,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExExpressInternationalAlcohol()
         {
             fedExTestAccountNumber = "510158040";
@@ -120,7 +117,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExExpressInternational()
         {
             var testObject = new FedExUSExpressInternationalFixture();
@@ -156,7 +152,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExExpressDomesticAlcohol()
         {
             fedExTestAccountNumber = "510158040";
@@ -180,7 +175,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExExpressDomestic()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
@@ -202,7 +196,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExOneRate_Test()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
@@ -224,7 +217,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestMethod]
         [TestCategory("FedEx")]
-        [Ignore]
         public void Ship_FedExETD()
         {
             var testObject = new FedExUSExpressInternationalFixture();

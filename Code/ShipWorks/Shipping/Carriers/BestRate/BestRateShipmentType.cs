@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Enums;
@@ -658,6 +660,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             base.ConfigureNewShipment(shipment);
 
             shipment.BestRate.InsuranceValue = 0;
+            shipment.BestRate.RequestedLabelFormat = (int) LabelFormatType.Standard;
         }
 
         /// <summary>
@@ -670,8 +673,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             InsuranceProvider shipmentInsuranceProvider = GetShipmentInsuranceProvider(shipment);
 
             shipment.InsuranceProvider = (int)shipmentInsuranceProvider;
+
+            shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
 
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
         {
             List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
@@ -738,6 +746,17 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 // User already processed it, don't give credit for getting rates which happens during process...
                 shipment.BestRateEvents |= (byte)eventType;
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.BestRate != null)
+            {
+                shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
     }

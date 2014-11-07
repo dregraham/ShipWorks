@@ -83,6 +83,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                     code = "usps";
                     break;
                 default:

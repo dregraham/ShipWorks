@@ -56,6 +56,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
 				Order = new OrderEntity { OrderTotal = 100.43M },
 
+                RequestedLabelFormat = (int) ThermalLanguage.None,
+
 				IParcel = new IParcelShipmentEntity
 				{
 					Reference = "reference-value",
@@ -96,47 +98,32 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 			testObject.ProcessShipment(null);
 		}
 
-
-		[TestMethod]
-		public void ProcessShipment_DelegatesToRepositoryForSettings_Test()
-		{
-			testObject.ProcessShipment(shipment);
-
-			repository.Verify(r => r.GetShippingSettings(), Times.Once());
-		}
-
 		[TestMethod]
 		public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL_Test()
 		{
-			// ZPL is not actually supported, but it's value is not zero, so we can make sure that the value is set
-			ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int) ThermalLanguage.ZPL};
-			repository.Setup(r => r.GetShippingSettings()).Returns(settings);
+		    shipment.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
 
 			testObject.ProcessShipment(shipment);
 
-			Assert.AreEqual((int) ThermalLanguage.ZPL, shipment.ThermalType);
+            Assert.AreEqual((int) ThermalLanguage.ZPL, shipment.ActualLabelFormat);
 		}
 
 		[TestMethod]
 		public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL_Test()
 		{
-			ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = true, IParcelThermalType = (int)ThermalLanguage.EPL };
-			repository.Setup(r => r.GetShippingSettings()).Returns(settings);
+		    shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
 
 			testObject.ProcessShipment(shipment);
 
-			Assert.AreEqual((int)ThermalLanguage.EPL, shipment.ThermalType);
+            Assert.AreEqual((int)ThermalLanguage.EPL, shipment.ActualLabelFormat);
 		}
 
 		[TestMethod]
 		public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse_Test()
 		{
-			ShippingSettingsEntity settings = new ShippingSettingsEntity { IParcelThermal = false };
-			repository.Setup(r => r.GetShippingSettings()).Returns(settings);
-
 			testObject.ProcessShipment(shipment);
 
-			Assert.IsNull(shipment.ThermalType);
+            Assert.IsNull(shipment.ActualLabelFormat);
 		}
 
 		[TestMethod]

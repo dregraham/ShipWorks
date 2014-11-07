@@ -13,6 +13,7 @@ using ShipWorks.ApplicationCore.Enums;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -115,6 +116,7 @@ using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore.Setup;
+using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks
 {
@@ -217,7 +219,7 @@ namespace ShipWorks
             // Initialize ribbon security
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + StampsAccountManager.StampsAccounts.Count + StampsAccountManager.Express1Accounts.Count) > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, () => (EndiciaAccountManager.EndiciaAccounts.Count + EndiciaAccountManager.Express1Accounts.Count + StampsAccountManager.StampsAccounts.Count + StampsAccountManager.Express1Accounts.Count + StampsAccountManager.StampsExpeditedAccounts.Count) > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
             ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => (SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb()));
 
@@ -653,6 +655,10 @@ namespace ShipWorks
 
             // Start the heartbeat
             heartBeat.Start();
+
+            // Update the nudges from Tango and show any upgrade related nudges
+            NudgeManager.Initialize(StoreManager.GetAllStores());
+            NudgeManager.ShowNudge(this, NudgeManager.Nudges.FirstOrDefault(n => n.NudgeType == NudgeType.ShipWorksUpgrade));
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
@@ -2665,7 +2671,13 @@ namespace ShipWorks
 
                         ShippingManager.EnsureShipmentLoaded(shipment);
 
-                        TangoWebClient.LogShipment(storeEntity, shipment, true);
+                        shipment.OnlineShipmentID = TangoWebClient.LogShipment(storeEntity, shipment, true);
+
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            adapter.SaveAndRefetch(shipment);
+                            adapter.Commit();
+                        }
                     }
                 },
 
@@ -3204,9 +3216,7 @@ namespace ShipWorks
             }
 
             ShipmentsLoader loader = new ShipmentsLoader(this);
-
-            // False = not tracking
-            loader.Tag = false;
+            loader.Tag = InitialShippingTabDisplay.Shipping;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
             loader.LoadAsync(gridControl.Selection.OrderedKeys);
@@ -3224,9 +3234,25 @@ namespace ShipWorks
             }
 
             ShipmentsLoader loader = new ShipmentsLoader(this);
+            loader.Tag = InitialShippingTabDisplay.Tracking;
 
-            // True = show tracking
-            loader.Tag = true;
+            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+        }
+
+        /// <summary>
+        /// Submit an insurance claim for the selected orders
+        /// </summary>
+        private void OnSubmitClaim(object sender, EventArgs e)
+        {
+            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            {
+                MessageHelper.ShowInformation(this, string.Format("You can only submit claims on up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+                return;
+            }
+
+            ShipmentsLoader loader = new ShipmentsLoader(this);
+            loader.Tag = InitialShippingTabDisplay.Insurance;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
             loader.LoadAsync(gridControl.Selection.OrderedKeys);
@@ -3247,8 +3273,11 @@ namespace ShipWorks
                 return;
             }
 
-            // Show the shipping window.  The Tag property hold the value of whether we are shipping or tracking.
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, (bool) ((ShipmentsLoader) sender).Tag))
+            // The Tag property hold the value of whether to show shipping, tracking, or insurance
+            InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
+
+            // Show the shipping window.  
+            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay))
             {
                 dlg.ShowDialog(this);
 
@@ -3347,6 +3376,7 @@ namespace ShipWorks
             repositories.Add(new Express1EndiciaScanFormAccountRepository());
             repositories.Add(new StampsScanFormAccountRepository());
             repositories.Add(new Express1StampsScanFormAccountRepository());
+            repositories.Add(new UspsScanFormAccountRepository());
 
             ScanFormUtility.PopulateCreateScanFormMenu(menuCreateEndiciaScanForm, repositories);
             ScanFormUtility.PopulatePrintScanFormMenu(menuPrintEndiciaScanForm, repositories);

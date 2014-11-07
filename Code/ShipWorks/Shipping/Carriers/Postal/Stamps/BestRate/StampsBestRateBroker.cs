@@ -1,7 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
@@ -12,30 +11,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
     public class StampsBestRateBroker : PostalResellerBestRateBroker<StampsAccountEntity>
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StampsBestRateBroker"/> class.
         /// </summary>
-        public StampsBestRateBroker() : this(new StampsShipmentType(), new StampsAccountRepository())
-        {
-            
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
+        /// <param name="shipmentType">Type of the shipment.</param>
+        /// <param name="accountRepository">The account repository.</param>
         public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
             this(shipmentType, accountRepository, "USPS")
-        {
-
-        }
+        { }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="StampsBestRateBroker"/> class.
         /// </summary>
+        /// <param name="shipmentType">Type of the shipment.</param>
+        /// <param name="accountRepository">The account repository.</param>
+        /// <param name="carrierDescription">The carrier description.</param>
         protected StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
-        {
-
-        }
+        { }
 
         /// <summary>
         /// Gets the insurance provider.

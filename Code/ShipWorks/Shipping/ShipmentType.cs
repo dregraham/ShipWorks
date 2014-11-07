@@ -6,7 +6,9 @@ using System.Threading;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
 using log4net;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
@@ -14,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Shipping.ShipSense.Hashing;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
@@ -53,6 +56,8 @@ namespace ShipWorks.Shipping
         /// HTTPS certificate inspector to use. 
         /// </summary>
         private ICertificateInspector certificateInspector;
+
+        private static object syncLock = new object();
 
         protected ShipmentType()
         {
@@ -161,6 +166,53 @@ namespace ShipWorks.Shipping
             set
             {
                 certificateInspector = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether account registration allowed for this shipment type.
+        /// </summary>
+        public virtual bool IsAccountRegistrationAllowed
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode);
+                return restriction.Level != EditionRestrictionLevel.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has been restricted.
+        /// </summary>
+        public virtual bool IsShipmentTypeRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has rate discount messaging restricted. This will mean different things to different shipment types.
+        /// </summary>
+        public bool IsRateDiscountMessagingRestricted
+        {
+            get
+            {
+                EditionRestrictionIssue restriction = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.RateDiscountMessaging, ShipmentTypeCode);
+                return restriction.Level == EditionRestrictionLevel.Forbidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public virtual bool HasAccounts
+        {
+            get
+            {
+                return false;
             }
         }
 
@@ -277,7 +329,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            shipment.ThermalType = null;
+            shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
 
             // First apply the base profile
@@ -438,27 +490,44 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingProfileEntity GetPrimaryProfile()
         {
-            ShippingProfileEntity profile = ShippingProfileManager.Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
+            ShippingProfileEntity profile = GetDefaultProfile();
 
             if (profile == null)
             {
-                profile = new ShippingProfileEntity();
-                profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
-                profile.ShipmentType = (int)ShipmentTypeCode;
-                profile.ShipmentTypePrimary = true;
+                lock (syncLock)
+                {
+                    profile = GetDefaultProfile();
 
-                // Load the shipmentType specific profile data
-                LoadProfileData(profile, true);
+                    if (profile == null)
+                    {
+                        profile = new ShippingProfileEntity();
+                        profile.Name = string.Format("Defaults - {0}", ShipmentTypeName);
+                        profile.ShipmentType = (int)ShipmentTypeCode;
+                        profile.ShipmentTypePrimary = true;
 
-                // Configure it as a primary profile
-                ConfigurePrimaryProfile(profile);
+                        // Load the shipmentType specific profile data
+                        LoadProfileData(profile, true);
 
-                // Save the profile
-                ShippingProfileManager.SaveProfile(profile);
+                        // Configure it as a primary profile
+                        ConfigurePrimaryProfile(profile);
+
+                        // Save the profile
+                        ShippingProfileManager.SaveProfile(profile);
+                    }
+                }
             }
 
             return profile;
+        }
+
+        /// <summary>
+        /// Gets the default profile if it exists
+        /// </summary>
+        /// <returns></returns>
+        private ShippingProfileEntity GetDefaultProfile()
+        {
+            return ShippingProfileManager.Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
         }
 
         /// <summary>
@@ -473,6 +542,8 @@ namespace ShipWorks.Shipping
             profile.InsuranceInitialValueAmount = 0;
 
             profile.ReturnShipment = false;
+
+            profile.RequestedLabelFormat = (int)ThermalLanguage.None;
         }
 
         /// <summary>
@@ -676,6 +747,9 @@ namespace ShipWorks.Shipping
         {
             ShippingProfileUtility.ApplyProfileValue(profile.OriginID, shipment, ShipmentFields.OriginOriginID);
             ShippingProfileUtility.ApplyProfileValue(profile.ReturnShipment, shipment, ShipmentFields.ReturnShipment);
+            
+            ShippingProfileUtility.ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
+            SaveRequestedLabelFormat((ThermalLanguage)shipment.RequestedLabelFormat, shipment);
 
             // Special case for insurance
             for (int i = 0; i < GetParcelCount(shipment); i++)
@@ -910,52 +984,10 @@ namespace ShipWorks.Shipping
         /// be returned to indicate that processing should be halted completely.</returns>
         public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>() { shipment };
             IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
-
-            if (synchronizer.HasAccounts)
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-            else
-            {
-                // Null values are passed because the rates don't matter for the general case; we're only
-                // interested in grabbing the account that was just created
-                CounterRatesProcessingArgs eventArgs = new CounterRatesProcessingArgs(null, null, shipment);
-
-                // Invoke the counter rates callback
-                if (counterRatesProcessing == null || counterRatesProcessing(eventArgs) != DialogResult.OK)
-                {
-                    // The user canceled, so we need to stop processing
-                    shipments = null;
-                }
-                else
-                {
-                    // The user created an account, so try to grab the account and use it 
-                    // to process the shipment
-                    ShippingSettings.CheckForChangesNeeded();
-                    if (synchronizer.HasAccounts)
-                    {
-                        shipments.ForEach(s =>
-                        {
-                            // Assign the account ID and save the shipment
-                            synchronizer.SaveAccountToShipment(s);
-                            using (SqlAdapter adapter = new SqlAdapter(true))
-                            {
-                                adapter.SaveAndRefetch(s);
-                                adapter.Commit();
-                            }
-                        });
-                    }
-                    else
-                    {
-                        // There still aren't any accounts for some reason, so throw an exception
-                        throw new ShippingException("An account must be created to process this shipment.");
-                    }
-                }
-            }
-
-            return shipments;
+            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
+            
+            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
         }
 
         /// <summary>
@@ -1047,6 +1079,14 @@ namespace ShipWorks.Shipping
             }
 
             return requiresCustoms;
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public virtual void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            
         }
 
         /// <summary>

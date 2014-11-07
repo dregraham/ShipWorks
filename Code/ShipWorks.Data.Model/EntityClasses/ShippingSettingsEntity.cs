@@ -469,12 +469,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FedExMaskAccount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("FedExThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("FedExThermalType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("FedExThermalDocTab", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -490,22 +484,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UpsAccessKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("UpsThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("UpsThermalType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("UpsInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UpsInsurancePennyOne", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("EndiciaThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("EndiciaThermalType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("EndiciaCustomsCertify", fieldHashtable);
@@ -529,13 +511,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EndiciaInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("EndiciaUspsAutomaticExpedited", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("EndiciaUspsAutomaticExpeditedAccount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("StampsThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("StampsThermalType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("StampsAutomaticExpress1", fieldHashtable);
@@ -544,10 +526,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StampsAutomaticExpress1Account", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Express1EndiciaThermal", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsUspsAutomaticExpedited", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Express1EndiciaThermalType", fieldHashtable);
+			_fieldsCustomProperties.Add("StampsUspsAutomaticExpeditedAccount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1EndiciaCustomsCertify", fieldHashtable);
@@ -565,40 +547,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Express1EndiciaSingleSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("EquaShipThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("EquaShipThermalType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("OnTracThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("OnTracThermalType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("OnTracInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OnTracInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("IParcelThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("IParcelThermalType", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("IParcelInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsThermal", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("Express1StampsThermalType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1StampsSingleSource", fieldHashtable);
@@ -823,28 +781,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExMaskAccount, value); }
 		}
 
-		/// <summary> The FedExThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean FedExThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.FedExThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExThermal, value); }
-		}
-
-		/// <summary> The FedExThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 FedExThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.FedExThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExThermalType, value); }
-		}
-
 		/// <summary> The FedExThermalDocTab property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExThermalDocTab"<br/>
@@ -900,28 +836,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsAccessKey, value); }
 		}
 
-		/// <summary> The UpsThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean UpsThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsThermal, value); }
-		}
-
-		/// <summary> The UpsThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 UpsThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UpsThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsThermalType, value); }
-		}
-
 		/// <summary> The UpsInsuranceProvider property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsInsuranceProvider"<br/>
@@ -942,28 +856,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, value); }
-		}
-
-		/// <summary> The EndiciaThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean EndiciaThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaThermal, value); }
-		}
-
-		/// <summary> The EndiciaThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 EndiciaThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.EndiciaThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaThermalType, value); }
 		}
 
 		/// <summary> The EndiciaCustomsCertify property of the Entity ShippingSettings<br/><br/>
@@ -1043,6 +935,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, value); }
 		}
 
+		/// <summary> The EndiciaUspsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaUspsAutomaticExpedited"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean EndiciaUspsAutomaticExpedited
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, value); }
+		}
+
+		/// <summary> The EndiciaUspsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaUspsAutomaticExpeditedAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 EndiciaUspsAutomaticExpeditedAccount
+		{
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, value); }
+		}
+
 		/// <summary> The WorldShipLaunch property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipLaunch"<br/>
@@ -1052,28 +966,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, value); }
-		}
-
-		/// <summary> The StampsThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean StampsThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsThermal, value); }
-		}
-
-		/// <summary> The StampsThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 StampsThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.StampsThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsThermalType, value); }
 		}
 
 		/// <summary> The StampsAutomaticExpress1 property of the Entity ShippingSettings<br/><br/>
@@ -1098,26 +990,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, value); }
 		}
 
-		/// <summary> The Express1EndiciaThermal property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The StampsUspsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaThermal"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsUspsAutomaticExpedited"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1EndiciaThermal
+		public virtual System.Boolean StampsUspsAutomaticExpedited
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermal, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, value); }
 		}
 
-		/// <summary> The Express1EndiciaThermalType property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The StampsUspsAutomaticExpeditedAccount property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsUspsAutomaticExpeditedAccount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Express1EndiciaThermalType
+		public virtual System.Int64 StampsUspsAutomaticExpeditedAccount
 		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1EndiciaThermalType, value); }
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, value); }
 		}
 
 		/// <summary> The Express1EndiciaCustomsCertify property of the Entity ShippingSettings<br/><br/>
@@ -1175,50 +1067,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1EndiciaSingleSource, value); }
 		}
 
-		/// <summary> The EquaShipThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."EquaShipThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean EquaShipThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.EquaShipThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.EquaShipThermal, value); }
-		}
-
-		/// <summary> The EquaShipThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."EquaShipThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 EquaShipThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.EquaShipThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.EquaShipThermalType, value); }
-		}
-
-		/// <summary> The OnTracThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean OnTracThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.OnTracThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.OnTracThermal, value); }
-		}
-
-		/// <summary> The OnTracThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 OnTracThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.OnTracThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.OnTracThermalType, value); }
-		}
-
 		/// <summary> The OnTracInsuranceProvider property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracInsuranceProvider"<br/>
@@ -1241,28 +1089,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.OnTracInsurancePennyOne, value); }
 		}
 
-		/// <summary> The IParcelThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean IParcelThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.IParcelThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelThermal, value); }
-		}
-
-		/// <summary> The IParcelThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 IParcelThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.IParcelThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelThermalType, value); }
-		}
-
 		/// <summary> The IParcelInsuranceProvider property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelInsuranceProvider"<br/>
@@ -1283,28 +1109,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
-		}
-
-		/// <summary> The Express1StampsThermal property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsThermal"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsThermal
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermal, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermal, value); }
-		}
-
-		/// <summary> The Express1StampsThermalType property of the Entity ShippingSettings<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsThermalType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Express1StampsThermalType
-		{
-			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalType, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsThermalType, value); }
 		}
 
 		/// <summary> The Express1StampsSingleSource property of the Entity ShippingSettings<br/><br/>

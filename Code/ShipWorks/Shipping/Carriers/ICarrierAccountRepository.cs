@@ -21,5 +21,11 @@ namespace ShipWorks.Shipping.Carriers
         /// Returns the default account as defined by the primary profile
         /// </summary>
         T DefaultProfileAccount { get; }
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        void Save(T account);
     }
 }

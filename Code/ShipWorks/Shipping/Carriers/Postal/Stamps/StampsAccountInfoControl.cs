@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
@@ -21,7 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public partial class StampsAccountInfoControl : UserControl
     {
         StampsAccountEntity account;
-        AccountInfo accountInfo;
+        private PostageBalance postageBalance;
+        private decimal? balance;
 
         bool postagePurchased = false;
 
@@ -42,14 +44,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             this.account = account;
             this.accountName.Text = account.Description;
+            postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
 
+            bool isExpress1 = account.StampsReseller == (int)StampsResellerType.Express1;
             
-            if (account.IsExpress1)
+            if (isExpress1)
             {
                 // Hide the links specific to Stamps.com if this is an Express1 account
-                labelStampsWebsite.Visible = !account.IsExpress1;
-                accountSettingsLink.Visible = !account.IsExpress1;
-                onlineReportsLink.Visible = !account.IsExpress1;
+                labelStampsWebsite.Visible = false;
+                accountSettingsLink.Visible = false;
+                onlineReportsLink.Visible = false;
 
                 // Adjust the size of the control, so the control hosting this control doesn't have 
                 // a ton of empty space
@@ -61,24 +65,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             while (tries-- > 0)
             {
-                bool keepTrying = false;
-
                 try
                 {
-                    accountInfo = new StampsApiSession().GetAccountInfo(account);
-                    postage.Text = accountInfo.PostageBalance.AvailablePostage.ToString("c");
-                    purchase.Left = postage.Right;
+                    balance = postageBalance.Value;
+                    postage.Text = balance.Value.ToString("c");
 
+                    purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
+
+                    break;
                 }
                 catch (StampsException ex)
                 {
+                    bool keepTrying = false;
                     string message = ex.Message;
 
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName(account.IsExpress1));
+                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller));
                         keepTrying = true;
                     }
 
@@ -87,13 +92,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     purchase.Left = postage.Right;
 
                     panelInfo.Enabled = false;
-                }
-
-                if (!keepTrying)
-                {
-                    Thread.Sleep(5000);
-
-                    break;
+                    
+                    if (keepTrying)
+                    {
+                        // Sleep for a few seconds to allow the registration time to go through
+                        Thread.Sleep(3000);
+                    }
                 }
             }
         }
@@ -147,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                using (StampsPurchasePostageDlg dlg = new StampsPurchasePostageDlg(account, accountInfo))
+                using (StampsPurchasePostageDlg dlg = balance.HasValue ? new StampsPurchasePostageDlg(account, balance.Value) : new StampsPurchasePostageDlg(account))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

@@ -9,12 +9,14 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -71,6 +73,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Gets a value indicating whether this shipment type has accounts
+        /// </summary>
+        public override bool HasAccounts
+        {
+            get
+            {
+                return iParcelAccountManager.Accounts.Any();
+            }
+        }
+
+        /// <summary>
         /// Create and Initialize a new shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
@@ -81,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             iParcelShipmentEntity.TrackByEmail = false;
             iParcelShipmentEntity.TrackBySMS = false;
             iParcelShipmentEntity.IsDeliveryDutyPaid = true;
+
+            iParcelShipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             IParcelPackageEntity package = CreateDefaultPackage();
             iParcelShipmentEntity.Packages.Add(package);
@@ -378,6 +393,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // Set the provider type based on i-Parcel settings
             shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
 
+            shipment.RequestedLabelFormat = shipment.IParcel.RequestedLabelFormat;
+
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
             if (shipment.IParcel.Packages.Count > 1)
             {
@@ -584,14 +601,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     throw new ArgumentNullException("shipment");
                 }
                 
-                ShippingSettingsEntity shippingSettings = repository.GetShippingSettings();
-                if (shippingSettings.IParcelThermal)
+                if (shipment.RequestedLabelFormat != (int) ThermalLanguage.None)
                 {
-                    shipment.ThermalType = shippingSettings.IParcelThermalType;
+                    shipment.ActualLabelFormat = shipment.RequestedLabelFormat;
                 }
                 else
                 {
-                    shipment.ThermalType = null;
+                    shipment.ActualLabelFormat = null;
                 }
 
                 IParcelAccountEntity iParcelAccount = repository.GetiParcelAccount(shipment);
@@ -785,11 +801,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     foreach (iParcelServiceType serviceType in supportedServiceTypes)
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
-                        decimal totalServiceCost = costInfoTable.AsEnumerable()
-                                                                .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
-                                                                .Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        List<DataRow> serviceRows = costInfoTable.AsEnumerable()
+                                               .Where(row => EnumHelper.GetEnumByApiValue<iParcelServiceType>(row["Service"].ToString()) == serviceType)
+                                               .ToList();
 
-                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalServiceCost, new iParcelRateSelection(serviceType))
+                        decimal shippingCost = serviceRows.Sum(row => decimal.Parse(row["PackageShipping"].ToString()) + decimal.Parse(row["PackageInsurance"].ToString()));
+                        decimal taxCost = serviceRows.Sum(row => decimal.Parse(row["PackageTax"].ToString()));
+                        decimal dutyCost = serviceRows.Sum(row => decimal.Parse(row["PackageDuty"].ToString()));
+                        decimal totalCost = shippingCost + taxCost + dutyCost;
+
+                        RateResult serviceRate = new RateResult(EnumHelper.GetDescription(serviceType), string.Empty, totalCost, dutyCost, taxCost, shippingCost, new iParcelRateSelection(serviceType))
                         {
                             ServiceLevel = ServiceLevelType.Anytime,
                             ShipmentType = ShipmentTypeCode.iParcel,
@@ -1107,6 +1128,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.IParcel != null)
+            {
+                shipment.IParcel.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
     }

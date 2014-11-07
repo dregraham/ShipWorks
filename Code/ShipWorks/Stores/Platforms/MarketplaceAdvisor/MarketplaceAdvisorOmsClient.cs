@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
-using Interapptive.Shared.Win32;
-using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Net;
-using System.Web.Services.Protocols;
 using ShipWorks.ApplicationCore;
-using log4net;
 using System.Diagnostics;
 using Interapptive.Shared.Net;
 
@@ -19,18 +13,42 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Web client for connecting to MarketplaceAdvisor via OMS
     /// </summary>
-    public static class MarketplaceAdvisorOmsClient
+    public class MarketplaceAdvisorOmsClient : MarshalByRefObject
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsClient));
+        private readonly string username;
+        private readonly string password;
+        private readonly MarketplaceAdvisorOmsFlagTypes downloadFlags;
+
+        private readonly MarketplaceAdvisorLog log;
 
         const int downloadPageSize = 200;
 
         /// <summary>
+        /// Create an instance of the client
+        /// </summary>
+        private MarketplaceAdvisorOmsClient(string username, string password, int downloadFlagsInt, MarketplaceAdvisorLog log)
+        {
+            this.username = username;
+            this.password = password;
+            this.log = log;
+            this.downloadFlags = (MarketplaceAdvisorOmsFlagTypes)downloadFlagsInt;
+        }
+
+        /// <summary>
+        /// Create an instance of the client on a separate app domain
+        /// </summary>
+        public static MarketplaceAdvisorOmsClient Create(MarketplaceAdvisorStoreEntity store)
+        {
+            return TlsAppDomain.Create<MarketplaceAdvisorOmsClient>(store.Username, store.Password, store.DownloadFlags, 
+                new MarketplaceAdvisorLog(typeof(MarketplaceAdvisorOmsClient)));
+        }
+
+        /// <summary>
         /// Create the MarketplaceAdvisor Web Service instance.
         /// </summary>
-        private static OMService CreateOMService(string requestName)
+        private OMService CreateOMService(string requestName)
         {
-            OMService service = new OMService(new ApiLogEntry(ApiLogSource.MarketplaceAdvisor, requestName));
+            OMService service = new OMService(log.CreateApiLogger(requestName));
 
             // Set the timeout for 6 minutes
             service.Timeout = 360000;
@@ -60,13 +78,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create the MarketplaceAdvisor credentials object for the store.
         /// </summary>
-        private static Credentials CreateCredentials(MarketplaceAdvisorStoreEntity store)
+        private Credentials CreateCredentials()
         {
-            Credentials mwCredentials = new Credentials();
-            mwCredentials.SellerUserName = store.Username;
-            mwCredentials.SellerPassword = SecureText.Decrypt(store.Password, store.Username);
-            mwCredentials.APIUserName = "Interapptive";
-            mwCredentials.APIPassword = SecureText.Decrypt("GLWw3ReI0rJ9mP0LKD8SiQ==", "interapptive");
+            Credentials mwCredentials = new Credentials
+            {
+                SellerUserName = username, 
+                SellerPassword = SecureText.Decrypt(password, username), 
+                APIUserName = "Interapptive", 
+                APIPassword = SecureText.Decrypt("GLWw3ReI0rJ9mP0LKD8SiQ==", "interapptive")
+            };
 
             return mwCredentials;
         }
@@ -74,13 +94,13 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Get the custom flags for the given store
         /// </summary>
-        public static OMFlags GetCustomFlags(MarketplaceAdvisorStoreEntity store)
+        public OMFlags GetCustomFlags()
         {
             try
             {
                 using (OMService service = CreateOMService("GetCustomFlags"))
                 {
-                    return service.GetCustomFlags(CreateCredentials(store));
+                    return service.GetCustomFlags(CreateCredentials());
                 }
             }
             catch (Exception ex)
@@ -92,12 +112,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Get the orders for the given store for the given page
         /// </summary>
-        public static OMOrders GetOrders(MarketplaceAdvisorStoreEntity store, int currentPage)
+        public OMOrders GetOrders(int currentPage)
         {
             // Create the query to download the appropriate orders
             OMOrderQuery query = new OMOrderQuery();
             query.DetailLevel = OrderQueryDetailEnum.AllDetailsLevel;
-            query.Flags = MarketplaceAdvisorOmsFlagManager.BuildOMOrderFlags((MarketplaceAdvisorOmsFlagTypes) store.DownloadFlags, MarketplaceAdvisorOmsFlagTypes.None);
+            query.Flags = MarketplaceAdvisorOmsFlagManager.BuildOMOrderFlags((MarketplaceAdvisorOmsFlagTypes) downloadFlags, MarketplaceAdvisorOmsFlagTypes.None);
             query.RecordsPerPage = downloadPageSize;
             query.PageNumber = currentPage;
 
@@ -108,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             {
                 using (OMService service = CreateOMService("GetOrders"))
                 {
-                    return service.GetOrders(CreateCredentials(store), query);
+                    return service.GetOrders(CreateCredentials(), query);
                 }
             }
             catch (Exception ex)
@@ -120,13 +140,13 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Mark the given list of MarketplaceAdvisor orders as processed
         /// </summary>
-        public static void MarkOrdersProcessed(MarketplaceAdvisorStoreEntity store, List<long> orderList)
+        public void MarkOrdersProcessed(List<long> orderList)
         {
             try
             {
                 using (OMService service = CreateOMService("MarkOrdersAsProcessed"))
                 {
-                    service.MarkOrdersAsProcessed(CreateCredentials(store), orderList.ToArray(), true);
+                    service.MarkOrdersAsProcessed(CreateCredentials(), orderList.ToArray(), true);
                 }
             }
             catch (Exception ex)
@@ -138,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the online flags for the given order.
         /// </summary>
-        public static void ChangeOrderFlags(MarketplaceAdvisorStoreEntity store, MarketplaceAdvisorOrderEntity order, MarketplaceAdvisorOmsFlagTypes flagsOn, MarketplaceAdvisorOmsFlagTypes flagsOff)
+        public void ChangeOrderFlags(MarketplaceAdvisorOrderDto order, MarketplaceAdvisorOmsFlagTypes flagsOn, MarketplaceAdvisorOmsFlagTypes flagsOff)
         {
             if (order.IsManual)
             {
@@ -162,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     OMOrderFlags orderFlags = MarketplaceAdvisorOmsFlagManager.BuildOMOrderFlags(flagsOn, flagsOff);
                     updateInfo.CustomFlags = orderFlags.FlagStatuses;
 
-                    service.UpdateOrders(CreateCredentials(store), updateInfo);
+                    service.UpdateOrders(CreateCredentials(), updateInfo);
                 }
             }
             catch (Exception ex)
@@ -174,7 +194,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Promote the given order to the next step in teh MarketplaceAdvisor workflow
         /// </summary>
-        public static void PromoteOrder(MarketplaceAdvisorStoreEntity store, MarketplaceAdvisorOrderEntity order)
+        public void PromoteOrder(MarketplaceAdvisorOrderDto order)
         {
             if (order.IsManual)
             {
@@ -196,7 +216,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                     updateInfo.PromoteOrder = OrderPromoteEnum.PromoteOneStep;
 
-                    service.UpdateOrders(CreateCredentials(store), updateInfo);
+                    service.UpdateOrders(CreateCredentials(), updateInfo);
                 }
             }
             catch (Exception ex)
@@ -208,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the online flags for the given parcel.
         /// </summary>
-        public static void ChangeParcelFlags(MarketplaceAdvisorStoreEntity store, MarketplaceAdvisorOrderEntity order, MarketplaceAdvisorOmsFlagTypes flagsOn, MarketplaceAdvisorOmsFlagTypes flagsOff)
+        public void ChangeParcelFlags(MarketplaceAdvisorOrderDto order, MarketplaceAdvisorOmsFlagTypes flagsOn, MarketplaceAdvisorOmsFlagTypes flagsOff)
         {
             if (order.IsManual)
             {
@@ -228,7 +248,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                     updateInfo.Flags = MarketplaceAdvisorOmsFlagManager.BuildOMOrderFlags(flagsOn, flagsOff).FlagStatuses;
 
-                    service.UpdateParcels(CreateCredentials(store), updateInfo);
+                    service.UpdateParcels(CreateCredentials(), updateInfo);
                 }
             }
             catch (Exception ex)
@@ -240,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Promote the given parcel to the next phase in the MarketplaceAdvisor workflow
         /// </summary>
-        public static void PromoteParcel(MarketplaceAdvisorStoreEntity store, MarketplaceAdvisorOrderEntity order)
+        public void PromoteParcel(MarketplaceAdvisorOrderDto order)
         {
             if (order.IsManual)
             {
@@ -259,7 +279,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                     updateInfo.PromoteParcel = OrderPromoteEnum.PromoteOneStep;
 
-                    service.UpdateParcels(CreateCredentials(store), updateInfo);
+                    service.UpdateParcels(CreateCredentials(), updateInfo);
                 }
             }
             catch (Exception ex)
@@ -271,7 +291,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Update the shipment status of the given order\parcel for the specified shipment
         /// </summary>
-        public static void UpdateShipmentStatus(MarketplaceAdvisorStoreEntity store, MarketplaceAdvisorOrderEntity order, ShipmentEntity shipment)
+        public void UpdateShipmentStatus(MarketplaceAdvisorOrderDto order, MarketplaceAdvisorShipmentDto shipment)
         {
             // This stuff is already looked at in the OnlineUpdater class
             Debug.Assert(!order.IsManual && shipment.Processed && !shipment.Voided);
@@ -285,12 +305,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     updateInfo.ParcelUid = order.ParcelID;
 
                     updateInfo.TrackingNumber = shipment.TrackingNumber;
-                    updateInfo.ShippingCost = (double) shipment.ShipmentCost;
+                    updateInfo.ShippingCost = (double)shipment.ShipmentCost;
 
-                    updateInfo.ShippingMethodCode = MarketplaceAdvisorUtility.GetShippingMethodID(shipment);
+                    updateInfo.ShippingMethodCode = shipment.ShippingMethodCode;
                     updateInfo.IsValidateShippingMethodCode = false;
 
-                    service.UpdateParcels(CreateCredentials(store), updateInfo);
+                    service.UpdateParcels(CreateCredentials(), updateInfo);
                 }
             }
             catch (Exception ex)
