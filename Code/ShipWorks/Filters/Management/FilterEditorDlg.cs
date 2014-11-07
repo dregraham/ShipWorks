@@ -1,28 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Properties;
-using ShipWorks.Filters.Management;
-using Interapptive.Shared;
-using ShipWorks.Users;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Diagnostics;
-using Microsoft.XmlDiffPatch;
-using System.Xml;
-using ShipWorks.Data.Grid.Columns;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users.Security;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Grid;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Filters.Management
 {
@@ -72,7 +59,8 @@ namespace ShipWorks.Filters.Management
 
             appliesTo.Text = EnumHelper.GetDescription((FilterTarget) filter.FilterTarget);
             appliesToImage.Image = FilterHelper.GetFilterImage((FilterTarget) filter.FilterTarget);
-
+            enabled.Checked = filterNode.State == (int)FilterNodeState.Enabled;
+            
             // Verify its OK for this user to edit this filter
             if (!FilterHelper.IsMyFilter(filterNode))
             {
@@ -94,6 +82,9 @@ namespace ShipWorks.Filters.Management
                     filterName.Enabled = false;
                     tabControl.TabPages.Remove(tabPageCondition);
                 }
+
+                labelEnabled.Enabled = false;
+                enabled.Enabled = false;
             }
 
             // Quick Filter's never have content displayed in a grid
@@ -182,8 +173,20 @@ namespace ShipWorks.Filters.Management
                 return;
             }
 
-            filter.Name = filterName.Text.Trim();
+            if (!enabled.Checked)
+            {
+                using (DisableLinkedFilterDlg dlg = new DisableLinkedFilterDlg(filterNode))
+                {
+                    if (dlg.ShowDialog(this) != DialogResult.OK)
+                    {
+                        return;
+                    }
+                }
+            }
 
+            filter.Name = filterName.Text.Trim();
+            filterNode.State = enabled.Checked ? (byte)FilterNodeState.Enabled : (byte)FilterNodeState.Disabled;
+            
             // Save the condition
             if (!conditionControl.SaveDefinitionToFilter())
             {
@@ -276,7 +279,5 @@ namespace ShipWorks.Filters.Management
                 }
             }
         }
-
-
     }
 }
