@@ -339,7 +339,7 @@ namespace ShipWorks.Data.Adapter
 		{
 			base.AddElementMapping( "AmazonOrderItemEntity", "ShipWorksLocal", @"dbo", "AmazonOrderItem", 4 );
 			base.AddElementFieldMapping( "AmazonOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "AmazonOrderItemEntity", "AmazonOrderItemCode", "AmazonOrderItemCode", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "AmazonOrderItemEntity", "AmazonOrderItemCode", "AmazonOrderItemCode", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "AmazonOrderItemEntity", "ASIN", "ASIN", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "AmazonOrderItemEntity", "ConditionNote", "ConditionNote", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
