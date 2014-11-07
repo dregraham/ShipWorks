@@ -269,17 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
 
                 RateGroup rateGroup = new RateGroup(stampsRates);
-                StampsAccountContractType contractType  = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType;
-
-                // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
-                // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
-                // in ShipmentTypeFunctionality
-                bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
-                if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
-                {
-                    // Show the promotional footer for discounted rates 
-                    rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
-                }
+                AddUspsRatePromotionFootnote(shipment, rateGroup);
 
                 return rateGroup;
             }
@@ -295,6 +285,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
 
                 return express1Group;
+            }
+        }
+
+        /// <summary>
+        /// Conditionally adds the usps rate promotion footnote based on the contract type of the account associated with the shipment
+        /// and whether the shipping account conversion feature is restricted.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="rateGroup">The rate group.</param>
+        protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
+        {
+            StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType;
+
+            // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
+            // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
+            // in ShipmentTypeFunctionality
+            bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
+            if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
+            {
+                // Show the promotional footer for discounted rates 
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
             }
         }
 

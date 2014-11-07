@@ -51,9 +51,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.settings = ShippingSettings.Fetch();
             this.shipment = shipment;
 
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Stamps && StampsAccountManager.StampsAccounts.Any())
+            if ((shipment.ShipmentType == (int) ShipmentTypeCode.Stamps && StampsAccountManager.StampsAccounts.Any())
+                || shipment.ShipmentType == (int)ShipmentTypeCode.Usps && StampsAccountManager.StampsExpeditedAccounts.Any())
             {
-                // There are Stamps accounts, so we want to show the control to convert their existing account
+                // There are Stamps-backed accounts, so we want to show the control to convert their existing account
                 requiresSignup = false;
                 signUpForExpeditedControl.Visible = false;
                 convertToExpeditedControl.Visible = true;
