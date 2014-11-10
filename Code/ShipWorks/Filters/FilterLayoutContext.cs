@@ -1504,7 +1504,7 @@ namespace ShipWorks.Filters
                 linkedNode.FilterSequence = node.FilterSequence;
                 linkedNode.Created = DateTime.UtcNow;
                 linkedNode.Purpose = (int)FilterNodePurpose.Standard;
-                linkedNode.State = (int)FilterNodeState.Enabled;
+                linkedNode.State = node.State;
 
                 CreateSoftLinks(node.ChildNodes, linkedNode, adapter);
 
