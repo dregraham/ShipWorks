@@ -67,7 +67,7 @@ namespace ShipWorks.Filters.Management
             this.disableFilter.Name = "disableFilter";
             this.disableFilter.Size = new System.Drawing.Size(93, 23);
             this.disableFilter.TabIndex = 1;
-            this.disableFilter.Text = "Disabled Filter";
+            this.disableFilter.Text = "Disable Filter";
             this.disableFilter.UseVisualStyleBackColor = true;
             this.disableFilter.Click += new System.EventHandler(this.OnDisableSelected);
             // 

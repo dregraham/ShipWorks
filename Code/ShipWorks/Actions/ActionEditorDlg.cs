@@ -599,7 +599,7 @@ namespace ShipWorks.Actions
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;
 
-                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo, "This action is configured to use filter that has been disabled. This action will not run until the filter is enabled.\n\nDo you want to use this filter anyway?");
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo, "This action is configured to use a filter that has been disabled. This action will not run until the filter is enabled.\n\nDo you want to use this filter anyway?");
                 if (result == DialogResult.No)
                 {
                     // The user opted not to use a disabled filter, so drop 
