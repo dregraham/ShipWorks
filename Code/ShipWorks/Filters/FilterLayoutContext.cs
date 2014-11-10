@@ -488,7 +488,7 @@ namespace ShipWorks.Filters
                 // Fetch list of nodes befor refetching.
                 List<FilterNodeEntity> nodesToUpdate = GetNodesAffectedByDefinition(filter);
                 IEnumerable<long> filterNodesIDsToUpdate = nodesToUpdate
-                    .Where(nodeToUpdate => nodeToUpdate.Fields[(int)FilterNodeFieldIndex.State].IsChanged)
+                    .Where(nodeToUpdate => nodeToUpdate.Fields[(int)FilterNodeFieldIndex.State].IsChanged || nodeToUpdate.Filter.IsFolder)
                     .Select(n => n.FilterNodeID)
                     .ToList();
 
