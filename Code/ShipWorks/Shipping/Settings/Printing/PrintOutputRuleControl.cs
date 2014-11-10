@@ -177,6 +177,18 @@ namespace ShipWorks.Shipping.Settings.Printing
         }
 
         /// <summary>
+        /// Gets whether the selected filter is disabled
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.SelectedFilterNode != null &&
+                    filterCombo.SelectedFilterNode.State != (int)FilterNodeState.Enabled;
+            }
+        }
+
+        /// <summary>
         /// Return all the template id's that the user has chosen to be used as templaets to print with
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith

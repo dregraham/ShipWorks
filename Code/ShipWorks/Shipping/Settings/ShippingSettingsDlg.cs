@@ -5,8 +5,10 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
@@ -188,15 +190,23 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnOptionPageDeselecting(object sender, OptionControlCancelEventArgs e)
         {
-            ShipmentTypeSettingsControl settingsControl = null;
-
-            if (e.OptionPage != null && e.OptionPage.Controls.Count == 1)
+            if (e.OptionPage == null || 
+                e.OptionPage == optionControl.SelectedPage || 
+                e.OptionPage.Controls.Count != 1)
             {
-                settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
+                return;
             }
+
+            ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
 
             if (settingsControl != null)
             {
+                if (!AllowDisabledPrintingFiltersToBeSaved(settingsControl))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
                 settingsTabPage = settingsControl.CurrentPage;
 
                 if (settingsTabPage == ShipmentTypeSettingsControl.Page.Printing)
@@ -207,6 +217,13 @@ namespace ShipWorks.Shipping.Settings
                         e.Cancel = true;
                         return;
                     }
+                }
+            }
+            else
+            {
+                if (!AllowDisabledShippingFiltersToBeSaved())
+                {
+                    e.Cancel = true;
                 }
             }
         }
@@ -242,6 +259,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            if (!AllowDisabledFiltersToBeSaved())
+            {
+                e.Cancel = true;
+                return;
+            }
+
             SaveSettings();
 
             // Clear the rate cache since it may now be out of date due to 
@@ -307,6 +330,47 @@ namespace ShipWorks.Shipping.Settings
                     optionControl.SelectedPage = pageToSelect;
                 }
             }
+        }
+
+        /// <summary>
+        /// Should disabled filters stop saving?
+        /// </summary>
+        private bool AllowDisabledFiltersToBeSaved()
+        {
+            return optionControl.SelectedPage == optionPageGeneral ?
+                AllowDisabledShippingFiltersToBeSaved() :
+                AllowDisabledPrintingFiltersToBeSaved(optionControl.SelectedPage.Controls.OfType<ShipmentTypeSettingsControl>().FirstOrDefault());
+        }
+
+        /// <summary>
+        /// Should disabled printing filters stop saving?
+        /// </summary>
+        private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
+        {
+            if (settingsControl == null || !settingsControl.AreAnyRuleFiltersDisabled)
+            {
+                return true;
+            }
+
+            return DoesUserWantToSaveDisabledFilters("printing");
+        }
+
+        /// <summary>
+        /// Should disabled shipping filters stop saving?
+        /// </summary>
+        private bool AllowDisabledShippingFiltersToBeSaved()
+        {
+            return !providerRulesControl.AreAnyRuleFiltersDisabled || DoesUserWantToSaveDisabledFilters("shipping");
+        }
+
+        /// <summary>
+        /// Prompt the user about whether they want to save since they've selected a disabled filter
+        /// </summary>
+        private bool DoesUserWantToSaveDisabledFilters(string filterTypeDescription)
+        {
+            DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
+                string.Format("At least one {0} rule uses a disabled filter, and will not match any shipment.\n\nSave anyway?", filterTypeDescription));
+            return result == DialogResult.Yes;
         }
 
         /// <summary>

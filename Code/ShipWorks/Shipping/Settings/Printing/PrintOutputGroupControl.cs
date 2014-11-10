@@ -263,6 +263,17 @@ namespace ShipWorks.Shipping.Settings.Printing
         }
 
         /// <summary>
+        /// Gets whether any of the rules use disabled filters
+        /// </summary>
+        public bool AreAnyRuleFiltersDisabled
+        {
+            get
+            {
+                return panelMain.Controls.OfType<PrintOutputRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
         /// Return all the template id's that the user has chosen to be used as templaets to print with
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith

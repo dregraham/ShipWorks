@@ -163,5 +163,17 @@ namespace ShipWorks.Shipping.Settings
                 adapter.Commit();
             }
         }
+
+        /// <summary>
+        /// Gets whether the selected filter is disabled
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.SelectedFilterNode != null &&
+                    filterCombo.SelectedFilterNode.State != (int) FilterNodeState.Enabled;
+            }
+        }
     }
 }
