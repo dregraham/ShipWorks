@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.Sears
         private void LoadOrder(XPathNavigator xpath)
         {
             // extract the order number
-            long orderNumber = XPathUtility.Evaluate(xpath, "customer-order-confirmation-number", 0);
+            long orderNumber = XPathUtility.Evaluate(xpath, "customer-order-confirmation-number", 0L);
             string poNumber = XPathUtility.Evaluate(xpath, "po-number", "");
 
             // get the order instance, creates one if neccessary
