@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -173,7 +174,8 @@ namespace ShipWorks.Filters.Management
                 return;
             }
 
-            if (!enabled.Checked)
+            // Only show the confirmation if the state is disabled and there are references to the filter
+            if (!enabled.Checked && new FilterNodeReferenceRepository().Find(filterNode).Any())
             {
                 using (DisableLinkedFilterDlg dlg = new DisableLinkedFilterDlg(filterNode))
                 {

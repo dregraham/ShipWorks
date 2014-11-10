@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Filters.Management
@@ -12,7 +11,7 @@ namespace ShipWorks.Filters.Management
     /// </summary>
     public partial class DisableLinkedFilterDlg : Form
     {
-        private FilterNodeEntity filterNode;
+        private readonly FilterNodeEntity filterNode;
 
         /// <summary>
         /// Constructor
@@ -28,7 +27,7 @@ namespace ShipWorks.Filters.Management
 
             if (filterNode.Filter.IsFolder)
             {
-                throw new ArgumentException("It is a folder.", "filterNode");
+                throw new ArgumentException(@"It is a folder.", "filterNode");
             }
 
             this.filterNode = filterNode;
@@ -41,14 +40,9 @@ namespace ShipWorks.Filters.Management
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            List<FilterNodeEntity> linkNodesToDelete = new List<FilterNodeEntity>();
+            List<string> linkReasons = new FilterNodeReferenceRepository().Find(filterNode);
 
-            // Generate a list of all nodes to be deleted, if only the link is deleted
-            linkNodesToDelete.AddRange(FilterHelper.GetNodesUsingSequence(filterNode.FilterSequence));
-
-            List<string> linkReasons = ObjectReferenceManager.GetReferenceReasons(linkNodesToDelete.Select(n => n.FilterNodeID).ToList());
-            
-            if (linkReasons.Count == 0)
+            if (!linkReasons.Any())
             {
                 panelUsages.Visible = false;
                 Height -= panelUsages.Height;
@@ -58,6 +52,8 @@ namespace ShipWorks.Filters.Management
                 usages.Lines = linkReasons.ToArray();
             }
         }
+
+        
 
         /// <summary>
         /// Disable Selected
