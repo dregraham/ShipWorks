@@ -44,6 +44,7 @@ namespace ShipWorks.Actions.Tasks
 
         // The menus for choosing whatits inputs will be
         ContextMenuStrip inputSourceMenu;
+        private bool usesDisabledFilter = false;
 
         /// <summary>
         /// Constructor
@@ -78,7 +79,11 @@ namespace ShipWorks.Actions.Tasks
             // The filter selection for input can be anything, and get's loaded one time
             inputSourceFilter.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers, FilterTarget.Shipments, FilterTarget.Items);
             inputSourceFilter.SelectedFilterNodeID = task.Entity.InputFilterNodeID;
-
+            if (inputSourceFilter.SelectedFilterNode != null)
+            {
+                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte)FilterNodeState.Enabled;
+            }
+            
             // As it changes, update the task
             inputSourceFilter.SelectedFilterNodeChanged += new EventHandler(OnInputSourceFilterChanged);
         }
@@ -89,6 +94,17 @@ namespace ShipWorks.Actions.Tasks
         public ActionTask ActionTask
         {
             get { return task; }
+        }
+
+        /// <summary>
+        /// Specifies whether this bubble is using a disabled filter
+        /// </summary>
+        public bool UsesDisabledFilter
+        {
+            get
+            {
+                return ActionTask.Entity.InputSource == (int) ActionTaskInputSource.FilterContents && usesDisabledFilter;
+            }
         }
 
         /// <summary>
@@ -445,7 +461,17 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         void OnInputSourceFilterChanged(object sender, EventArgs e)
         {
-            task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode != null ? inputSourceFilter.SelectedFilterNode.FilterNodeID : 0;
+            if (inputSourceFilter.SelectedFilterNode != null)
+            {
+                task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode.FilterNodeID;
+                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte)FilterNodeState.Enabled;
+            }
+            else
+            {
+                task.Entity.InputFilterNodeID = 0;
+                usesDisabledFilter = false;
+            }
+            //task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode != null ? inputSourceFilter.SelectedFilterNode.FilterNodeID : 0;
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
             taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());
