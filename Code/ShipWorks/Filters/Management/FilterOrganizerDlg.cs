@@ -843,7 +843,7 @@ namespace ShipWorks.Filters.Management
 
             try
             {
-                List<FilterNodeEntity> nodes = layoutContext.Copy(dropInfo.FilterNode.Filter, dropInfo.CopyLocation.ParentNode, dropInfo.CopyLocation.Position);
+                List<FilterNodeEntity> nodes = layoutContext.Copy(dropInfo.FilterNode.Filter, dropInfo.CopyLocation.ParentNode, dropInfo.CopyLocation.Position, (FilterNodeState)dropInfo.FilterNode.State);
 
                 FilterContentManager.CheckForChanges();
 
@@ -890,7 +890,7 @@ namespace ShipWorks.Filters.Management
 
             try
             {
-                List<FilterNodeEntity> nodes = layoutContext.Copy(selected.Filter, dlg.SelectedFolder, 0);
+                List<FilterNodeEntity> nodes = layoutContext.Copy(selected.Filter, dlg.SelectedFolder, 0, (FilterNodeState)selected.State);
 
                 FilterContentManager.CheckForChanges();
 

@@ -903,7 +903,7 @@ namespace ShipWorks.Filters
                         nodeToInsert.FilterSequence = sequenceToInsert;
                         nodeToInsert.Created = DateTime.UtcNow;
                         nodeToInsert.Purpose = (int)FilterNodePurpose.Standard;
-                        nodeToInsert.State = (int)FilterNodeState.Enabled;
+                        nodeToInsert.State = filterNode.State;
 
                         childNode = nodeToInsert;
                     }
@@ -977,7 +977,7 @@ namespace ShipWorks.Filters
         /// <summary>
         /// Make a copy of the selected filter as a child of the specified filter
         /// </summary>
-        public List<FilterNodeEntity> Copy(FilterEntity filter, FilterNodeEntity parentNode, int position)
+        public List<FilterNodeEntity> Copy(FilterEntity filter, FilterNodeEntity parentNode, int position, FilterNodeState nodeState)
         {
             if (filter.IsFolder)
             {
@@ -990,7 +990,7 @@ namespace ShipWorks.Filters
             copy.FilterTarget = filter.FilterTarget;
             copy.IsFolder = false;
             copy.Definition = filter.Definition;
-
+            
             // Every node has at least one sequence describing its position
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Filter = copy;
@@ -999,7 +999,7 @@ namespace ShipWorks.Filters
             // each link its parent has.  But AddNodeToParent will take care of that.
             FilterNodeEntity filterNode = new FilterNodeEntity();
             filterNode.FilterSequence = sequence;
-            filterNode.State = (int)FilterNodeState.Enabled;
+            filterNode.State = (byte)nodeState;
 
             // Since we don't exist anywhere yet, this doesnt actually add a link, its the first one
             return AddNodeToParent(filterNode, parentNode, position);
