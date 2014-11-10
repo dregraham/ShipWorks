@@ -379,6 +379,7 @@
     <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />

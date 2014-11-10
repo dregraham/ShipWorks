@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Editions;
@@ -418,6 +419,37 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return emailAddress.Length <= 50 ? emailAddress : string.Empty;
+        }
+
+        /// <summary>
+        /// Corrects the smart pickup error. Return null if address not changed.
+        /// </summary>
+        public static string CorrectSmartPickupError(string city)
+        {
+            List<KeyValuePair<string, string>> replacements = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("St ", "Saint "),
+                new KeyValuePair<string, string>("St. ", "Saint "),
+                new KeyValuePair<string, string>("Ste ", "Saint "),
+                new KeyValuePair<string, string>("Ste. ", "Saint "),
+                new KeyValuePair<string, string>("Saint G", "Ste. G"), // specifically St Genevieve.
+                new KeyValuePair<string, string>("Saint ", "St "),
+                new KeyValuePair<string, string>("Ft. ", "Fort "),
+                new KeyValuePair<string, string>("Ft ", "Fort "),
+                new KeyValuePair<string, string>("Fort ", "Ft "),
+                new KeyValuePair<string, string>("MT ", "Mount "),
+                new KeyValuePair<string, string>("Mount ", "MT ")
+            };
+
+            foreach (KeyValuePair<string, string> replacement in replacements)
+            {
+                if (city.StartsWith(replacement.Key, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return string.Format("{0}{1}", replacement.Value, city.Substring(replacement.Key.Length));
+                }
+            }
+
+            return null;
         }
     }
 }

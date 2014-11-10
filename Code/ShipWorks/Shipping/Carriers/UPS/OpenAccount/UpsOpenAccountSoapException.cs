@@ -4,6 +4,7 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using System;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -43,6 +44,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             if (ex.Detail != null && ex.Detail.FirstChild != null)
             {
                 XElement faultNode = XElement.Parse(ex.Detail.FirstChild.OuterXml);
+
+                // See if it is a SMART Pickup error
+                XNamespace nameSpace = "http://www.ups.com/XMLSchema/XOLTWS/Error/v1.1";
+                if (faultNode.Descendants(nameSpace + "Code").Any(code => code.Value == "9580091"))
+                {
+                    throw new UpsOpenAccountException("SMART Pickup Exception", UpsOpenAccountErrorCode.SmartPickupError);
+                }
 
                 // Find the first message node
                 foreach (XElement messageNode in faultNode.Descendants().Where(e => e.Name.LocalName == "message"))

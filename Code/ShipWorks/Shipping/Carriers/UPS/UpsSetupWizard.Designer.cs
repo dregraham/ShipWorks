@@ -220,7 +220,6 @@
             // existingAccount
             // 
             this.existingAccount.AutoSize = true;
-            this.existingAccount.Checked = true;
             this.existingAccount.Location = new System.Drawing.Point(0, 34);
             this.existingAccount.Name = "existingAccount";
             this.existingAccount.Size = new System.Drawing.Size(165, 17);
@@ -233,6 +232,7 @@
             // newAccount
             // 
             this.newAccount.AutoSize = true;
+            this.newAccount.Checked = true;
             this.newAccount.Location = new System.Drawing.Point(0, 8);
             this.newAccount.Name = "newAccount";
             this.newAccount.Size = new System.Drawing.Size(270, 17);

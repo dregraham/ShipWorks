@@ -30,16 +30,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         public void SaveToRequest(OpenAccountRequest request)
         {
-            if (industry.SelectedValue.ToString() == UpsBusinessIndustry.Unselected.ToString())
-            {
-                throw new UpsOpenAccountException("Please select an industry.", UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
-
-            if (numberOfEmployees.SelectedValue.ToString() == UpsNumberOfEmployees.Unselected.ToString())
-            {
-                throw new UpsOpenAccountException("Please select a number of employees.", UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
-
             if (request.AccountCharacteristics == null)
             {
                 request.AccountCharacteristics = new AccountCharacteristicsType();

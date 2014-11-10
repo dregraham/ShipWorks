@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
@@ -49,6 +51,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <returns></returns>
         private string CreateUpsAccount(IUpsClerk clerk)
         {
+            return CreateUpsAccount(clerk, false);
+        }
+
+        /// <summary>
+        /// Creates the ups account. Note the recursive call to correct the address.
+        /// </summary>
+        /// <param name="clerk">The clerk.</param>
+        /// <returns></returns>
+        private string CreateUpsAccount(IUpsClerk clerk, bool retrySmartPost)
+        {
             string shipperNumber = string.Empty;
 
             try
@@ -82,7 +94,23 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             }
             catch (UpsOpenAccountException ex)
             {
-                MessageHelper.ShowError(this, ex.Message);
+                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retrySmartPost)
+                {
+                    string correctedAddress = UpsUtility.CorrectSmartPickupError(OpenAccountRequest.PickupAddress.City);
+
+                    if (!string.IsNullOrEmpty(correctedAddress))
+                    {
+                        OpenAccountRequest.PickupAddress.City = correctedAddress;
+
+                        shipperNumber = CreateUpsAccount(clerk, true);
+                    }
+
+                    MessageHelper.ShowError(this, "UPS couldn't resolve the pickup address. If there are alternate spellings, try again using one of those.");
+                }
+                else
+                {
+                    MessageHelper.ShowError(this, ex.Message);   
+                }
             }
 
             return shipperNumber;
