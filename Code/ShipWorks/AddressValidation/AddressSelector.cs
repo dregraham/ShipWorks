@@ -13,6 +13,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.AddressValidation
 {
@@ -177,7 +179,7 @@ namespace ShipWorks.AddressValidation
                 entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.BadAddress ||
                 entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.Error)
             {
-                MessageHelper.ShowInformation(Program.MainForm, entityAdapter.AddressValidationError);
+                MessageHelper.ShowInformation(owner, entityAdapter.AddressValidationError);
                 return;
             }
 
@@ -185,7 +187,7 @@ namespace ShipWorks.AddressValidation
             ValidatedAddressEntity originalValidatedAddress = validatedAddresses.FirstOrDefault(x => x.IsOriginal);
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
-            ContextMenu menu = BuildMenu(entityAdapter, originalValidatedAddress, suggestedAddresses);
+            ContextMenu menu = BuildMenu(owner, entityAdapter, originalValidatedAddress, suggestedAddresses);
 
             menu.Show(owner, displayPosition);
         }
@@ -193,7 +195,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Build the context menu
         /// </summary>
-        private ContextMenu BuildMenu(AddressAdapter entityAdapter, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
+        private ContextMenu BuildMenu(Control owner, AddressAdapter entityAdapter, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
@@ -213,11 +215,12 @@ namespace ShipWorks.AddressValidation
             }
 
             // If has a single suggestion and haven't set any store to ValidateAndApply, show this menu to set all stores to ValidateAndApply
-            if (entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.HasSuggestions &&
+            if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
+                entityAdapter.AddressValidationStatus == (int)AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
                 StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndApply))
             {
-                menuItems.Add(new MenuItem("Always Fix Addresses", (sender, args) => AlwaysFixAddressesSelected(suggestedAddresses.First(), entityAdapter)));
+                menuItems.Add(new MenuItem("Always Fix Addresses For All Stores", (sender, args) => AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
             }
 
             return new ContextMenu(menuItems.ToArray());
@@ -226,9 +229,16 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select the address and set AutoFix to be default for all stores.
         /// </summary>
-        private void AlwaysFixAddressesSelected(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
+        private void AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
         {
+            
             SelectAddress(entityAdapter, validatedAddress);
+
+            DialogResult isSureResult = MessageHelper.ShowQuestion(owner, "Are you sure you want to always fix addresses for all stores?");
+            if (isSureResult != DialogResult.OK)
+            {
+                return;
+            }
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {

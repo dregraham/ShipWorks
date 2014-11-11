@@ -211,7 +211,9 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors.UI
         /// </summary>
         protected override void OnDrawSelectedItem(Graphics graphics, Color foreColor, Rectangle bounds)
         {
-            string text = string.Join(", ", GetSelectedStatuses().Select(m => EnumHelper.GetDescription(m)));
+            // Pending's description is blank
+            string text = string.Join(", ", GetSelectedStatuses().Select(m => m == AddressValidationStatusType.Pending ? "Pending" : EnumHelper.GetDescription(m)));
+
             if (statusList.All(s => s.Item1.Checked))
             {
                 text = "All Statuses";
