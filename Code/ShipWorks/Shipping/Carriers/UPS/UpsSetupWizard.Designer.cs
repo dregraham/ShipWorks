@@ -784,14 +784,14 @@
             // wizardPageOpenAccountCreateAccount
             // 
             this.wizardPageOpenAccountCreateAccount.Controls.Add(this.createAccount);
-            this.wizardPageOpenAccountCreateAccount.Description = "Verify correct address";
+            this.wizardPageOpenAccountCreateAccount.Description = "Create your UPS account";
             this.wizardPageOpenAccountCreateAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageOpenAccountCreateAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountCreateAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountCreateAccount.Name = "wizardPageOpenAccountCreateAccount";
             this.wizardPageOpenAccountCreateAccount.Size = new System.Drawing.Size(579, 415);
             this.wizardPageOpenAccountCreateAccount.TabIndex = 0;
-            this.wizardPageOpenAccountCreateAccount.Title = "UPS Verify Address";
+            this.wizardPageOpenAccountCreateAccount.Title = "UPS Create Account";
             this.wizardPageOpenAccountCreateAccount.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.SteppingIntoWizardPageOpenAccountCreateAccount);
             // 
             // createAccount
