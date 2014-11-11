@@ -871,11 +871,29 @@ namespace ShipWorks.Shipping.Carriers.UPS
             createAccount.AccountCreated = accountNumber =>
             {
                 upsAccount.AccountNumber = accountNumber;
+
+                if (ShippingSettings.Fetch().UpsAccessKey == null)
+                {
+                    if (!GetUpsAccessKey())
+                    {
+                        NextEnabled = false;
+                        return;
+                    }
+                }
+
                 bool processRegistration = ProcessRegistration(3);
                 if (processRegistration)
                 {
                     NextEnabled = true;
                     isAccountCreated = true;
+
+                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    {
+                        upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                        UpsAccountManager.SaveAccount(upsAccount);
+
+                        adapter.Commit();
+                    }
 
                     MessageHelper.ShowInformation(this, "Account created. Click next to continue.");                    
                 }
