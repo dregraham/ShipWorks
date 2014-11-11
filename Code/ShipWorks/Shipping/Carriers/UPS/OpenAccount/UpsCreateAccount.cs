@@ -104,8 +104,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
                         shipperNumber = CreateUpsAccount(clerk, true);
                     }
-
-                    MessageHelper.ShowError(this, "UPS couldn't resolve the pickup address. If there are alternate spellings, try again using one of those.");
+                    else
+                    {
+                        MessageHelper.ShowError(this, "UPS couldn't resolve the pickup address. If there are alternate spellings, try again using one of those.");    
+                    }
                 }
                 else
                 {
