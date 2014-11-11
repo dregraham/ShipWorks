@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -20,6 +21,35 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             EnumHelper.BindComboBox<UpsPickupOption>(pickupOption);
             EnumHelper.BindComboBox<UpsPickupLocation>(pickupLocation);
+            BindPickupStartDates();
+        }
+
+        /// <summary>
+        /// Popluate the pickup start dates with valid options.  It seems that UPS only allows 2 business days from now
+        /// and a total of 8 business days in the future.  
+        /// </summary>
+        private void BindPickupStartDates()
+        {
+            List<DateTime> pickupStartDates = new List<DateTime>();
+            
+            // Start two days in the future
+            DateTime date = DateTime.Now.AddDays(2);
+
+            // Now check the date for being a business day, and if it is add it to the list,
+            // otherwise, keep adding days.  Continue until we have 8 business days.
+            while (pickupStartDates.Count <= 7)
+            {
+                if (date.IsBusinessDay())
+                {
+                    pickupStartDates.Add(date);
+                }
+
+                date = date.AddDays(1);
+            }
+
+            pickupStartDate.DisplayMember = "Key";
+            pickupStartDate.ValueMember = "Value";
+            pickupStartDate.DataSource = pickupStartDates.Select(d => new { Key = d.ToString("dddd, MMMM dd, yyyy"), Value = d.ToString("yyyyMMdd") }).ToList();
         }
 
         /// <summary>
@@ -27,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         private void OnTimeChanged(object sender, EventArgs e)
         {
-            var dateTimePicker = (DateTimePicker)sender;
+            DateTimePicker dateTimePicker = (DateTimePicker)sender;
 
             int diff = dateTimePicker.Value.TimeOfDay.Minutes%15;
             if (diff > 7)
@@ -99,7 +129,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             }
         }
 
-
         /// <summary>
         ///     Adds the daily pickup options.
         /// </summary>
@@ -113,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 request.PickupInformation.PreferredPickupTime = preferredPickup.Value.ToString(timeFormat);
                 request.PickupInformation.LatestPickupTime = latestPickup.Value.ToString(timeFormat);
 
-                request.PickupInformation.PickupStartDate = latestPickup.Value.ToString("yyyyMMdd");
+                request.PickupInformation.PickupStartDate = pickupStartDate.SelectedValue.ToString();
             }
         }
 

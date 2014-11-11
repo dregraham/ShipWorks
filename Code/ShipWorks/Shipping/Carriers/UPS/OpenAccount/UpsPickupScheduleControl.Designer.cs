@@ -43,11 +43,11 @@
             this.earliestPickup = new System.Windows.Forms.DateTimePicker();
             this.preferredPickup = new System.Windows.Forms.DateTimePicker();
             this.latestPickup = new System.Windows.Forms.DateTimePicker();
-            this.pickupStart = new System.Windows.Forms.DateTimePicker();
             this.pickUpDay = new System.Windows.Forms.Panel();
             this.pickupDateTimePanel = new System.Windows.Forms.Panel();
             this.pickupLocation = new System.Windows.Forms.ComboBox();
             this.labelPickupLocation = new System.Windows.Forms.Label();
+            this.pickupStartDate = new System.Windows.Forms.ComboBox();
             this.pickUpDay.SuspendLayout();
             this.pickupDateTimePanel.SuspendLayout();
             this.SuspendLayout();
@@ -202,14 +202,6 @@
             this.latestPickup.Value = new System.DateTime(2013, 4, 8, 17, 0, 0, 0);
             this.latestPickup.ValueChanged += new System.EventHandler(this.OnTimeChanged);
             // 
-            // pickupStart
-            // 
-            this.pickupStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.pickupStart.Location = new System.Drawing.Point(125, 104);
-            this.pickupStart.Name = "pickupStart";
-            this.pickupStart.Size = new System.Drawing.Size(121, 21);
-            this.pickupStart.TabIndex = 16;
-            // 
             // pickUpDay
             // 
             this.pickUpDay.Controls.Add(this.labelPickupDays);
@@ -218,18 +210,18 @@
             this.pickUpDay.Controls.Add(this.wednesday);
             this.pickUpDay.Controls.Add(this.thursday);
             this.pickUpDay.Controls.Add(this.friday);
-            this.pickUpDay.Location = new System.Drawing.Point(0, 155);
+            this.pickUpDay.Location = new System.Drawing.Point(0, 162);
             this.pickUpDay.Name = "pickUpDay";
             this.pickUpDay.Size = new System.Drawing.Size(257, 122);
             this.pickUpDay.TabIndex = 17;
             // 
             // pickupDateTimePanel
             // 
+            this.pickupDateTimePanel.Controls.Add(this.pickupStartDate);
             this.pickupDateTimePanel.Controls.Add(this.pickupLocation);
             this.pickupDateTimePanel.Controls.Add(this.labelPickupLocation);
             this.pickupDateTimePanel.Controls.Add(this.labelEarliestPickupTime);
             this.pickupDateTimePanel.Controls.Add(this.labelPreferredPickupTime);
-            this.pickupDateTimePanel.Controls.Add(this.pickupStart);
             this.pickupDateTimePanel.Controls.Add(this.labelLatestPickupTime);
             this.pickupDateTimePanel.Controls.Add(this.latestPickup);
             this.pickupDateTimePanel.Controls.Add(this.labelPickupStartDate);
@@ -237,7 +229,7 @@
             this.pickupDateTimePanel.Controls.Add(this.earliestPickup);
             this.pickupDateTimePanel.Location = new System.Drawing.Point(0, 30);
             this.pickupDateTimePanel.Name = "pickupDateTimePanel";
-            this.pickupDateTimePanel.Size = new System.Drawing.Size(311, 128);
+            this.pickupDateTimePanel.Size = new System.Drawing.Size(311, 136);
             this.pickupDateTimePanel.TabIndex = 18;
             // 
             // pickupLocation
@@ -257,6 +249,14 @@
             this.labelPickupLocation.Size = new System.Drawing.Size(84, 13);
             this.labelPickupLocation.TabIndex = 17;
             this.labelPickupLocation.Text = "Pickup Location:";
+            // 
+            // pickupStartDate
+            // 
+            this.pickupStartDate.FormattingEnabled = true;
+            this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
+            this.pickupStartDate.Name = "pickupStartDate";
+            this.pickupStartDate.Size = new System.Drawing.Size(184, 21);
+            this.pickupStartDate.TabIndex = 20;
             // 
             // UpsPickupScheduleControl
             // 
@@ -295,11 +295,11 @@
         private System.Windows.Forms.DateTimePicker earliestPickup;
         private System.Windows.Forms.DateTimePicker preferredPickup;
         private System.Windows.Forms.DateTimePicker latestPickup;
-        private System.Windows.Forms.DateTimePicker pickupStart;
         private System.Windows.Forms.Panel pickUpDay;
         private System.Windows.Forms.Panel pickupDateTimePanel;
         private System.Windows.Forms.ComboBox pickupLocation;
         private System.Windows.Forms.Label labelPickupLocation;
+        private System.Windows.Forms.ComboBox pickupStartDate;
 
     }
 }
