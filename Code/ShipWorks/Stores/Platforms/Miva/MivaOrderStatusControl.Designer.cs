@@ -52,7 +52,6 @@
             this.updateStrategy.Name = "updateStrategy";
             this.updateStrategy.Size = new System.Drawing.Size(236, 21);
             this.updateStrategy.TabIndex = 29;
-            this.updateStrategy.SelectedValueChanged += new System.EventHandler(this.OnUpdateStrategyChanged);
             // 
             // label4
             // 

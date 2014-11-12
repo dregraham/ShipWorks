@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override bool SupportsCounterRates
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
@@ -122,30 +122,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
-            ICertificateInspector originalCertificateInspector = CertificateInspector;
+            //ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            //ICertificateInspector originalCertificateInspector = CertificateInspector;
 
-            try
-            {
-                CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
+            //try
+            //{
+            //    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.Express1StampsCertificateVerificationData);
+            //    AccountRepository = new Express1StampsCounterRatesAccountRepository(TangoCounterRatesCredentialStore.Instance);
+            //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1StampsCertificateVerificationData);
 
-                // This call to GetRates won't be recursive since the counter rate account repository will return an account
-                return GetRates(shipment);
-            }
-            catch (CounterRatesOriginAddressException)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-                return errorRates;
-            }
-            finally
-            {
-                AccountRepository = originalAccountRepository;
-                CertificateInspector = originalCertificateInspector;
-            }
+            //    // This call to GetRates won't be recursive since the counter rate account repository will return an account
+            //    return GetRates(shipment);
+            //}
+            //catch (CounterRatesOriginAddressException)
+            //{
+            //    RateGroup errorRates = new RateGroup(new List<RateResult>());
+            //    errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
+            //    return errorRates;
+            //}
+            //finally
+            //{
+            //    AccountRepository = originalAccountRepository;
+            //    CertificateInspector = originalCertificateInspector;
+            //}
+            return GetCachedRates<StampsException>(shipment, entity => { throw new StampsException("An account is required to view Express1 rates."); });
         }
 
         /// <summary>
@@ -154,6 +155,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new Express1StampsShipmentProcessingSynchronizer();
+        }
+
+        /// <summary>
+        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
+        /// actually processing the shipment. In most cases this is checking to see if an account exists
+        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
+        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <param name="counterRatesProcessing"></param>
+        /// <param name="selectedRate"></param>
+        /// <returns>
+        /// The updates shipment (or shipments) that is ready to be processed. A null value may
+        /// be returned to indicate that processing should be halted completely.
+        /// </returns>
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
+        {
+            // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
+
+            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
         }
 
         /// <summary>
@@ -207,6 +230,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 account.ContractType = (int) StampsAccountContractType.NotApplicable;
                 AccountRepository.Save(account);
             }
-        }
+        }        
     }
 }

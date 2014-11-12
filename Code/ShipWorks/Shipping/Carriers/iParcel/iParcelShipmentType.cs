@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.iParcel.BestRate;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
@@ -93,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             iParcelShipmentEntity.TrackByEmail = false;
             iParcelShipmentEntity.TrackBySMS = false;
             iParcelShipmentEntity.IsDeliveryDutyPaid = true;
+
+            iParcelShipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             IParcelPackageEntity package = CreateDefaultPackage();
             iParcelShipmentEntity.Packages.Add(package);
@@ -389,6 +392,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             // Set the provider type based on i-Parcel settings
             shipment.InsuranceProvider = settings.IParcelInsuranceProvider;
+
+            shipment.RequestedLabelFormat = shipment.IParcel.RequestedLabelFormat;
 
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
             if (shipment.IParcel.Packages.Count > 1)
@@ -1123,6 +1128,17 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.IParcel != null)
+            {
+                shipment.IParcel.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
     }

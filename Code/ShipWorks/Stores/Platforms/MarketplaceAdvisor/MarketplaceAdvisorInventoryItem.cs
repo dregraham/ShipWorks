@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Represents an item in the MarketplaceAdvisor inventory system for the user.
     /// </summary>
+    [Serializable]
     public class MarketplaceAdvisorInventoryItem
     {
         string imageUrl = "";

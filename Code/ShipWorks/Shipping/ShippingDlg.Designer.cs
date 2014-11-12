@@ -400,7 +400,7 @@ namespace ShipWorks.Shipping
             this.serviceControlArea.BackColor = System.Drawing.Color.Transparent;
             this.serviceControlArea.Location = new System.Drawing.Point(8, 39);
             this.serviceControlArea.Name = "serviceControlArea";
-            this.serviceControlArea.Size = new System.Drawing.Size(331, 242);
+            this.serviceControlArea.Size = new System.Drawing.Size(331, 257);
             this.serviceControlArea.TabIndex = 2;
             // 
             // tabPageCustoms
@@ -586,7 +586,7 @@ namespace ShipWorks.Shipping
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
             this.rateControl.ShowAllRates = true;
-            this.rateControl.Size = new System.Drawing.Size(356, 136);
+            this.rateControl.Size = new System.Drawing.Size(356, 135);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 

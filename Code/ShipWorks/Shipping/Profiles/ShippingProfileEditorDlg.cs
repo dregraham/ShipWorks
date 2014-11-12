@@ -111,9 +111,7 @@ namespace ShipWorks.Shipping.Profiles
                 return;
             }
 
-            if (ShippingProfileCollection.GetCount(SqlAdapter.Default, 
-                ShippingProfileFields.ShippingProfileID != profile.ShippingProfileID & 
-                ShippingProfileFields.Name == name) > 0)
+            if (ShippingProfileManager.DoesNameExist(profile))
             {
                 MessageHelper.ShowError(this, "A profile with the chosen name already exists.");
                 return;

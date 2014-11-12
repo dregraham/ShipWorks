@@ -550,5 +550,26 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsNotNull(result);
         }
 
+        [TestMethod]
+        public void Deserialize_XmlMissingInvoiceNumber_Test()
+        {
+            string xml = string.Empty;
+            
+            // Test created as a result of a customer having an order without an InvoiceNumber 
+            // supplied from Newegg that was causing a crash. Test that XML with this scenario
+            // is deserialized without throwing an exception
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ShipWorks.Tests.Stores.Newegg.Artifacts.OrderDownloadedWithEmptyInvoice.xml"))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    xml = reader.ReadToEnd();
+                }
+            }
+
+            DownloadResult result = serializer.Deserialize(xml) as DownloadResult;
+
+            Assert.IsNotNull(result);
+        }
+
     }
 }

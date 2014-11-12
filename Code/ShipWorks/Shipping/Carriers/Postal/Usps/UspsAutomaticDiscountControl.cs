@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -84,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             this.settings = shippingSettings;
             discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
-            ConfigurePromotion(shipment);
+            promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
 
             checkBoxUseExpedited.Checked = discountControlAdapter.UsingUspsAutomaticExpedited;
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
@@ -152,34 +145,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (added)
             {
                 LoadExpeditedAccounts(StampsAccountManager.StampsExpeditedAccounts.Max(a => a.StampsAccountID));
-            }
-        }
-
-        /// <summary>
-        /// Configures the registration promotion to use when adding a new account based on attributes of the shipment.
-        /// The shipment type should only be a Stamps.com, Express1 for Stamps.com, Endicia, or Express1 for Endicia.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        private void ConfigurePromotion(ShipmentEntity shipment)
-        {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
-
-            if (shipmentTypeCode == ShipmentTypeCode.Stamps || shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
-            {
-                promotion = new StampsExpeditedRegistrationPromotion();
-            }
-            else
-            {
-                if (EndiciaAccountManager.EndiciaAccounts.Any())
-                {
-                    // Use the endicia promotion even if this is an Express1 shipment
-                    promotion = new EndiciaRegistrationPromotion();
-                }
-                else
-                {
-                    // Use the Express1 promotion when there aren't any Endicia accounts
-                    promotion = new Express1EndiciaRegistrationPromotion();
-                }
             }
         }
 

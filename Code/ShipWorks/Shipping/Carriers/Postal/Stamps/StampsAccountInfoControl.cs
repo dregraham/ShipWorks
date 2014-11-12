@@ -65,8 +65,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             while (tries-- > 0)
             {
-                bool keepTrying = false;
-
                 try
                 {
                     balance = postageBalance.Value;
@@ -74,9 +72,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
+
+                    break;
                 }
                 catch (StampsException ex)
                 {
+                    bool keepTrying = false;
                     string message = ex.Message;
 
                     // This message means we created a new account, but it wasn't ready to go yet
@@ -91,13 +92,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     purchase.Left = postage.Right;
 
                     panelInfo.Enabled = false;
-                }
-
-                if (!keepTrying)
-                {
-                    Thread.Sleep(5000);
-
-                    break;
+                    
+                    if (keepTrying)
+                    {
+                        // Sleep for a few seconds to allow the registration time to go through
+                        Thread.Sleep(3000);
+                    }
                 }
             }
         }

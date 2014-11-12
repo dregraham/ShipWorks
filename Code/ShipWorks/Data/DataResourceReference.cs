@@ -183,7 +183,7 @@ namespace ShipWorks.Data
             lock (filename)
             {
                 string existing = GetCachedFilename();
-                string alternate = Path.Combine(DataPath.CurrentResources, Path.GetFileNameWithoutExtension(filename) + "." + extension);
+                string alternate = ConstructAlternateFilename(extension);
 
                 if (!File.Exists(alternate))
                 {
@@ -192,6 +192,38 @@ namespace ShipWorks.Data
 
                 return Path.GetFileName(alternate);
             }
+        }
+
+        /// <summary>
+        /// Regenerates the filename for the resource with the given extension. Useful in exception handling in cases where the
+        /// resource could not be loaded (due to corruption or some other reason).
+        /// </summary>
+        /// <param name="extension">The extension.</param>
+        public void RegenerateAlternateFile(string extension)
+        {
+            lock (filename)
+            {
+                string alternate = ConstructAlternateFilename(extension);
+
+                // We basically just want to wipe out the "friendly" file with the correct extension
+                // and copy over the .swr file again.
+                if (File.Exists(alternate))
+                {
+                    File.Delete(alternate);
+                }
+
+                File.Copy(GetCachedFilename(), alternate);
+            }
+        }
+
+        /// <summary>
+        /// Constructs the alternate filename for this resource.
+        /// </summary>
+        /// <param name="extension">The extension.</param>
+        /// <returns></returns>
+        private string ConstructAlternateFilename(string extension)
+        {
+            return Path.Combine(DataPath.CurrentResources, Path.GetFileNameWithoutExtension(filename) + "." + extension);
         }
 
         /// <summary>

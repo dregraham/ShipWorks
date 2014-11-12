@@ -1,19 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration.Promotion
 {
     [TestClass]
-    public class EndiciaRegistrationPromotionTest
+    public class StampsRegistrationPromotionTest
     {
-        private readonly EndiciaRegistrationPromotion testObject;
+        private readonly StampsRegistrationPromotion testObject;
 
-        public EndiciaRegistrationPromotionTest()
+        public StampsRegistrationPromotionTest()
         {
-            testObject = new EndiciaRegistrationPromotion();
+            testObject = new StampsRegistrationPromotion();
         }
 
         [TestMethod]
@@ -33,19 +35,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [TestMethod]
-        public void GetPromoCode_ReturnsShipWorks5_WhenRegistrationTypeIsExpedited_Test()
+        public void GetPromoCode_ReturnsShipWorks3_WhenRegistrationTypeIsExpedited_Test()
         {
             string promo = testObject.GetPromoCode(PostalAccountRegistrationType.Expedited);
 
-            Assert.AreEqual("shipworks5", promo);
+            Assert.AreEqual("ShipWorks3", promo);
         }
 
         [TestMethod]
-        public void GetPromoCode_ReturnsShipWorks4_WhenRegistrationTypeIsStandard_Test()
+        public void GetPromoCode_ReturnsShipWorks3_WhenRegistrationTypeIsStandard_Test()
         {
             string promo = testObject.GetPromoCode(PostalAccountRegistrationType.Standard);
 
-            Assert.AreEqual("shipworks4", promo);
+            Assert.AreEqual("ShipWorks3", promo);
         }
     }
 }

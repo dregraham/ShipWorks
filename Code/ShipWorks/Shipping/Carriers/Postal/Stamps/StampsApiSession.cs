@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
             // has been upgraded to v39+ 
-            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer, certificateInspector);
             contractWebClient.ChangeToExpeditedPlan(account, promoCode);
         }
 
@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
             // has been upgraded to v39+ 
-            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer);
+            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer, certificateInspector);
             return contractWebClient.GetContractType(account);
         }
 

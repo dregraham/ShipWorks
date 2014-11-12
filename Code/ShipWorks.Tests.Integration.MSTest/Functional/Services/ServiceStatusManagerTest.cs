@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
         }
 
         [TestMethod]
-        [TestCategory("ApplicationCore")]
+        [TestCategory("ApplicationCore"), TestCategory("IncludeInJenkinsBuild")]
         public void CheckIn_DoesNotThrowORMEntityOutOfSyncException_WhenDatabaseValuesHaveChanged()
         {
             ServiceStatusEntity firstServiceStatus = null;

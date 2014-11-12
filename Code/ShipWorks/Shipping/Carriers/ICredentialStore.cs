@@ -83,18 +83,18 @@ namespace ShipWorks.Shipping.Carriers
         string Express1StampsCertificateVerificationData { get; }
 
         /// <summary>
-        /// Gets the endicia account number used to validate an address
+        /// Gets the Stamps.com user name used for obtaining counter rates
         /// </summary>
-        string EndiciaAccountNumber { get; }
+        string StampsUsername { get; }
 
         /// <summary>
-        /// Gets the endicia API user password used to validate an address
+        /// Gets the Stamps.com password used for obtaining counter rates
         /// </summary>
-        string EndiciaApiUserPassword { get; }
+        string StampsPassword { get; }
 
         /// <summary>
-        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
+        /// Gets data to verify the SSL certificate from Stamps.com
         /// </summary>
-        string EndiciaCertificateVerificationData { get; }
+        string StampsCertificateVerificationData { get; }
     }
 }

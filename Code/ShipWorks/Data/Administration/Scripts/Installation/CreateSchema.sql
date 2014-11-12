@@ -653,7 +653,7 @@ GO
 CREATE TABLE [dbo].[AmazonOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[AmazonOrderItemCode] [bigint] NOT NULL,
+[AmazonOrderItemCode] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ASIN] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ConditionNote] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
@@ -1009,7 +1009,8 @@ CREATE TABLE [dbo].[BestRateShipment]
 [DimsWeight] [float] NOT NULL,
 [DimsAddWeight] [bit] NOT NULL,
 [ServiceLevel] [int] NOT NULL,
-[InsuranceValue] [money] NOT NULL
+[InsuranceValue] [money] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BestRateShipment] on [dbo].[BestRateShipment]'
@@ -1459,7 +1460,8 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
 [ScanFormBatchID] [bigint] NULL,
-[ScanBasedReturn] [bit] NOT NULL
+[ScanBasedReturn] [bit] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
@@ -1515,7 +1517,8 @@ CREATE TABLE [dbo].[EquaShipShipment]
 [DeclaredValue] [money] NOT NULL,
 [EmailNotification] [bit] NOT NULL,
 [SaturdayDelivery] [bit] NOT NULL,
-[Confirmation] [int] NOT NULL
+[Confirmation] [int] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EquashipShipment] on [dbo].[EquaShipShipment]'
@@ -1702,7 +1705,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [IntlExportDetailLicenseOrPermitNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IntlExportDetailLicenseOrPermitExpirationDate] [datetime] NULL,
 [WeightUnitType] [int] NOT NULL,
-[LinearUnitType] [int] NOT NULL
+[LinearUnitType] [int] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2056,7 +2060,8 @@ CREATE TABLE [dbo].[iParcelShipment]
 [Reference] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TrackByEmail] [bit] NOT NULL,
 [TrackBySMS] [bit] NOT NULL,
-[IsDeliveryDutyPaid] [bit] NOT NULL
+[IsDeliveryDutyPaid] [bit] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_iParcelShipment] on [dbo].[iParcelShipment]'
@@ -2389,7 +2394,8 @@ CREATE TABLE [dbo].[OnTracShipment]
 [Reference2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [InsuranceValue] [money] NOT NULL,
 [InsurancePennyOne] [bit] NOT NULL,
-[DeclaredValue] [money] NOT NULL
+[DeclaredValue] [money] NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OnTracShipment] on [dbo].[OnTracShipment]'
@@ -3165,7 +3171,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [StampsTransactionID] [uniqueidentifier] NOT NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalStampsAccountID] [bigint] NULL,
-[ScanFormBatchID] [bigint] NULL
+[ScanFormBatchID] [bigint] NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
@@ -3400,7 +3407,8 @@ CREATE TABLE [dbo].[UpsShipment]
 [ShipmentChargeAccount] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UspsPackageID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[UspsPackageID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RequestedLabelFormat] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
