@@ -14,7 +14,9 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Occurs when a USPS account is created from the ShippingSettingsDlg.
         /// </summary>
-        public static event EventHandler<ShippingSettingsEventArgs> UspsAccountCreated;        
+        public static event EventHandler<ShippingSettingsEventArgs> UspsAccountCreated;
+
+        public static event EventHandler<ShippingSettingsEventArgs> StampsUspsAutomaticExpeditedChanged;
 
         /// <summary>
         /// Notifies any listeners when a USPS (Stamps.com Expedited) account has been created.
@@ -26,6 +28,19 @@ namespace ShipWorks.Shipping.Settings
             if (UspsAccountCreated != null)
             {
                 UspsAccountCreated(source, eventArgs);
+            }
+        }
+
+        /// <summary>
+        /// Notifies any listeners when an USPS (Stamps.com Expedited) shipping setting has changed.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="eventArgs">The <see cref="EventArgs"/> instance containing the event data.</param>
+        public static void DispatchStampsUspsAutomaticExpeditedChanged(object source, ShippingSettingsEventArgs eventArgs)
+        {
+            if (StampsUspsAutomaticExpeditedChanged != null)
+            {
+                StampsUspsAutomaticExpeditedChanged(source, eventArgs);
             }
         }
     }

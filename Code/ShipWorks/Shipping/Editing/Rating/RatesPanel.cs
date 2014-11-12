@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -54,6 +55,26 @@ namespace ShipWorks.Shipping.Editing.Rating
             rateControl.ReloadRatesRequired += (sender, args) => RefreshRates(true);
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
+
+            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+        }
+
+        /// <summary>
+        /// Called when the shipping settings for using Stamps Expedited has changed. We need to refresh the
+        /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="shippingSettingsEventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
+        private void OnStampsUspsAutomaticExpeditedChanged(object sender, ShippingSettingsEventArgs shippingSettingsEventArgs)
+        {
+            if (selectedShipmentID.HasValue)
+            {
+                // Refresh the shipment data and then the rates
+                ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
+                ShippingManager.RefreshShipment(shipment);
+                
+                FetchRates(shipment, false);
+            }
         }
 
         /// <summary>

@@ -129,12 +129,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     return;
                 }
 
+                ShippingManager.RefreshShipment(shipment);
+
                 // Only way we should require a signup is not already using a Stamps.com account for 
                 // this shipment, so we need to change the shipment type to USPS (Stamps.com Expedited) 
                 // in order to take advantage of the new rates (since Stamps.com API doesn't match 
                 // with Endicia API and shipment configurations differ).
                 shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
                 ShippingManager.SaveShipment(shipment);
+
+                // Now that the shipment has been updated, we need to broadcast that the shipping 
+                // settings have been changed, so any listeners have a chance to react
+                ShippingSettingsEventDispatcher.DispatchStampsUspsAutomaticExpeditedChanged(this, new ShippingSettingsEventArgs((ShipmentTypeCode)shipment.ShipmentType));
+            
 
                 // We also need to exclude Endicia and Express1 from the list of active providers since
                 // the customer agreed to use USPS (Stamps.com Expedited)
