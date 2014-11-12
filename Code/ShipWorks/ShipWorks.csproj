@@ -490,6 +490,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
