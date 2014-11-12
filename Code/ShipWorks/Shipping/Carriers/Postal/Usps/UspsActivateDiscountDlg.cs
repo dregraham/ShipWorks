@@ -61,6 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 convertToExpeditedControl.Top = signUpForExpeditedControl.Top;
                 Height = convertToExpeditedControl.Bottom + 60;
+                close.Top = Height - 60;
+                close.Left = Right - close.Width - 22;
 
                 convertToExpeditedControl.AccountConverted += OnAccountConverted;
                 convertToExpeditedControl.AccountConverting += OnAccountConverting;
