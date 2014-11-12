@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>The matching account.</returns>
         public override StampsAccountEntity GetAccount(long accountID)
         {
-            return StampsAccountManager.GetAccount(accountID);
+            return Accounts.ToList().FirstOrDefault(a => a.StampsAccountID == accountID);
         }
 
         /// <summary>
