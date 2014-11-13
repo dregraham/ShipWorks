@@ -465,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // Check Stamps.com amount
-                    List<RateResult> stampsRates = new StampsApiSession().GetRates(shipment);
+                    List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
                     RateResult stampsRate = stampsRates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                   ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                   && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
@@ -525,7 +525,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    new StampsApiSession().ProcessShipment(shipment);
+                    new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).ProcessShipment(shipment);
                 }
                 catch (StampsException ex)
                 {
@@ -570,8 +570,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override void VoidShipment(ShipmentEntity shipment)
         {
             try
-            {
-                new StampsApiSession().VoidShipment(shipment);
+            {                
+                new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).VoidShipment(shipment);
+                //new StampsApiSession().VoidShipment(shipment);
             }
             catch (StampsException ex)
             {
