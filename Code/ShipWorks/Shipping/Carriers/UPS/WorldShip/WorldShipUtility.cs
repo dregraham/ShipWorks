@@ -973,6 +973,49 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         }
 
         /// <summary>
+        /// Get the directory that the WorldShip executable is in
+        /// </summary>
+        public static string GetWorldShipIniPath()
+        {
+            string worldShipIniPath = string.Empty;
+
+            // Get the full path to the ini
+            string worldShipIniFullPath = GetWorldShipIni();
+
+            // Make sure it's not blank
+            if (!string.IsNullOrWhiteSpace(worldShipIniFullPath))
+            {
+                // Get the directory name
+                worldShipIniPath = Path.GetDirectoryName(worldShipIniFullPath);
+            }
+
+            return worldShipIniPath;
+        }
+
+        /// <summary>
+        /// Get the full path to the worldship executable
+        /// </summary>
+        public static string GetWorldShipIni()
+        {
+            string path = string.Empty;
+
+            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\UPS\Installation"))
+            {
+                if (regKey != null)
+                {
+                    path = (string)regKey.GetValue("ShipMain", "");
+
+                    if (!File.Exists(path))
+                    {
+                        path = string.Empty;
+                    }
+                }
+            }
+
+            return path;
+        }
+
+        /// <summary>
         /// Gets the major version of WorldShip that is installed
         /// </summary>
         /// <returns>The major version of shippingSoftwareVersion in wstdShipmain.ini.  If wstdShipmain.ini cannot be found or an error occurs reading it,

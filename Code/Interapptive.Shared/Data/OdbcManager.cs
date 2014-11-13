@@ -295,11 +295,21 @@ namespace Interapptive.Shared.Data
             {
                 if (datasourcesKey == null)
                 {
-                    log.Error("Unable to create dsn because the ODBC Data Soruces registry key was not found or was unable to be opened.");
-                    throw new OdbcManagerException("Unable to open the 'ODBC Data Sources' registry entry.");
-                }
+                    using (RegistryKey newDataSourcesKey = CreateSubKey(RootKey, OdbcIniRegPath + "ODBC Data Sources"))
+                    {
+                        if (newDataSourcesKey == null)
+                        {
+                            log.Error("Unable to create dsn because the ODBC Data Soruces registry key was not found or was unable to be opened.");
+                            throw new OdbcManagerException("Unable to open the 'ODBC Data Sources' registry entry.");
+                        }
 
-                SetKeyValue(datasourcesKey, dsnName, driverName);
+                        SetKeyValue(newDataSourcesKey, dsnName, driverName);
+                    }
+                }
+                else
+                {
+                    SetKeyValue(datasourcesKey, dsnName, driverName);
+                }
             }
 
             // Create new key in odbc.ini with dsn name and add values
