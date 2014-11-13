@@ -60,12 +60,24 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             {
                 if (imageInfo == null)
                 {
-
+                    Image labelImage;
                     var resource = labelData.Resource;
 
                     // Start out assuming the label as-is is the orientation we need
                     string labelPath = resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(imageFormat));
-                    Image labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                    
+                    try
+                    {
+                        labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                    }
+                    catch (OutOfMemoryException)
+                    {
+                        // The resouce file is probably corrupt, so try regenerating the alternate file
+                        // and try to load again. If it fails again, just let it bubble up as this is a 
+                        // legitimate exception
+                        resource.RegenerateAlternateFile(TemplateLabelUtility.GetFileExtension(imageFormat));
+                        labelImage = Image.FromFile(Path.Combine(DataPath.CurrentResources, labelPath));
+                    }
 
                     // We need one orientation, but the original label is the other
                     if ((orientation == Orientation.Horizontal && labelImage.Height > labelImage.Width) ||
