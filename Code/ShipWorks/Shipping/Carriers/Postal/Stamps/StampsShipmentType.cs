@@ -792,25 +792,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(StampsAccountEntity account)
         {
-            // Only update the contract type if it's unknown 
-            if (account != null && account.ContractType == (int)StampsAccountContractType.Unknown)
+            if (account != null)
             {
-                try
+                // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
+                // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
+                // updated outside of ShipWorks.
+                if (!StampsContractTypeCache.Contains(account.StampsAccountID) || StampsContractTypeCache.GetContractType(account.StampsAccountID) == StampsAccountContractType.Unknown)
                 {
-                    // Grab contract type from the Stamps API 
-                    StampsApiSession apiSession = new StampsApiSession(AccountRepository, new LogEntryFactory(), CertificateInspector);
-                    account.ContractType = (int)apiSession.GetContractType(account);
+                    try
+                    {
+                        // Grab contract type from the Stamps API 
+                        StampsApiSession apiSession = new StampsApiSession(AccountRepository, new LogEntryFactory(), CertificateInspector);
+                        StampsAccountContractType contractType = apiSession.GetContractType(account);
 
-                    // Save the contract to the DB and push it to Tango
-                    AccountRepository.Save(account);
+                        bool hasContractChanged = account.ContractType != (int) contractType;
+                        account.ContractType = (int) contractType;
 
-                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                    tangoWebClient.LogStampsAccount(account);
-                }
-                catch (Exception exception)
-                {
-                    // Log the error
-                    LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
+                        // Save the contract to the DB and update the cache
+                        AccountRepository.Save(account);
+                        StampsContractTypeCache.Set(account.StampsAccountID, (StampsAccountContractType)account.ContractType);
+
+                        if (hasContractChanged)
+                        {
+                            // Any cached rates are probably invalid now
+                            RateCache.Instance.Clear();
+
+                            // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
+                            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                            tangoWebClient.LogStampsAccount(account);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        // Log the error
+                        LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
+                    }
                 }
             }
         }
@@ -825,6 +841,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipment.Postal.Stamps.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
