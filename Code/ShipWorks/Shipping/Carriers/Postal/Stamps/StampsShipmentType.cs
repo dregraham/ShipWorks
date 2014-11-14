@@ -269,17 +269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
 
                 RateGroup rateGroup = new RateGroup(stampsRates);
-                StampsAccountContractType contractType  = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType;
-
-                // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
-                // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
-                // in ShipmentTypeFunctionality
-                bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
-                if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
-                {
-                    // Show the promotional footer for discounted rates 
-                    rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
-                }
+                AddUspsRatePromotionFootnote(shipment, rateGroup);
 
                 return rateGroup;
             }
@@ -295,6 +285,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
 
                 return express1Group;
+            }
+        }
+
+        /// <summary>
+        /// Conditionally adds the usps rate promotion footnote based on the contract type of the account associated with the shipment
+        /// and whether the shipping account conversion feature is restricted.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="rateGroup">The rate group.</param>
+        protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
+        {
+            StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType;
+
+            // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
+            // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
+            // in ShipmentTypeFunctionality
+            bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
+            if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
+            {
+                // Show the promotional footer for discounted rates 
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
             }
         }
 
@@ -454,7 +465,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 try
                 {
                     // Check Stamps.com amount
-                    List<RateResult> stampsRates = new StampsApiSession().GetRates(shipment);
+                    List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
                     RateResult stampsRate = stampsRates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                   ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                   && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);
@@ -514,7 +525,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 try
                 {
-                    new StampsApiSession().ProcessShipment(shipment);
+                    new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).ProcessShipment(shipment);
                 }
                 catch (StampsException ex)
                 {
@@ -559,8 +570,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override void VoidShipment(ShipmentEntity shipment)
         {
             try
-            {
-                new StampsApiSession().VoidShipment(shipment);
+            {                
+                new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).VoidShipment(shipment);
+                //new StampsApiSession().VoidShipment(shipment);
             }
             catch (StampsException ex)
             {
@@ -780,25 +792,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(StampsAccountEntity account)
         {
-            // Only update the contract type if it's unknown 
-            if (account != null && account.ContractType == (int)StampsAccountContractType.Unknown)
+            if (account != null)
             {
-                try
+                // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
+                // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
+                // updated outside of ShipWorks.
+                if (!StampsContractTypeCache.Contains(account.StampsAccountID) || StampsContractTypeCache.GetContractType(account.StampsAccountID) == StampsAccountContractType.Unknown)
                 {
-                    // Grab contract type from the Stamps API 
-                    StampsApiSession apiSession = new StampsApiSession(AccountRepository, new LogEntryFactory(), CertificateInspector);
-                    account.ContractType = (int)apiSession.GetContractType(account);
+                    try
+                    {
+                        // Grab contract type from the Stamps API 
+                        StampsApiSession apiSession = new StampsApiSession(AccountRepository, new LogEntryFactory(), CertificateInspector);
+                        StampsAccountContractType contractType = apiSession.GetContractType(account);
 
-                    // Save the contract to the DB and push it to Tango
-                    AccountRepository.Save(account);
+                        bool hasContractChanged = account.ContractType != (int) contractType;
+                        account.ContractType = (int) contractType;
 
-                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                    tangoWebClient.LogStampsAccount(account);
-                }
-                catch (Exception exception)
-                {
-                    // Log the error
-                    LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
+                        // Save the contract to the DB and update the cache
+                        AccountRepository.Save(account);
+                        StampsContractTypeCache.Set(account.StampsAccountID, (StampsAccountContractType)account.ContractType);
+
+                        if (hasContractChanged)
+                        {
+                            // Any cached rates are probably invalid now
+                            RateCache.Instance.Clear();
+
+                            // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
+                            ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                            tangoWebClient.LogStampsAccount(account);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        // Log the error
+                        LogManager.GetLogger(GetType()).Error(string.Format("ShipWorks encountered an error when getting contract type for account {0}.", account.Username), exception);
+                    }
                 }
             }
         }
@@ -813,6 +841,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipment.Postal.Stamps.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>

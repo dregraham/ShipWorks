@@ -156,6 +156,29 @@ namespace ShipWorks.Shipping
             shipments.ForEach(OrderUtility.PopulateOrderDetails);
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
+
+            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+        }
+
+        /// <summary>
+        /// Called when the shipping settings for using Stamps Expedited has changed. We need to refresh the
+        /// shipment data displayed to accurately reflect the new shimpent type (USPS).
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
+        private void OnStampsUspsAutomaticExpeditedChanged(object sender, ShippingSettingsEventArgs eventArgs)
+        {
+            List<ShipmentEntity> selectedShipments = shipmentControl.SelectedShipments.ToList();
+
+            // We need to reload shipment to ensure we have the latest data being displayed
+            foreach (ShipmentEntity shipment in loadedShipmentEntities)
+            {
+                ShippingManager.RefreshShipment(shipment);
+                ApplyShipmentToGridRow(shipment);
+            }
+
+            shipmentControl.SelectShipments(selectedShipments);
+            LoadSelectedShipments(true);
         }
 
         /// <summary>
@@ -2596,6 +2619,24 @@ namespace ShipWorks.Shipping
         {
             // Hide the rates panel if we aren't on the service tab.
             ratesSplitContainer.Panel2Collapsed = tabControl.SelectedTab != tabPageService;
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+
+            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged -= OnStampsUspsAutomaticExpeditedChanged;
+            base.Dispose(disposing);
         }
     }
 }
