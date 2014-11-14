@@ -154,6 +154,7 @@
     <Compile Include="Email\EmailExceptionTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\ArrayUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
+    <Compile Include="Interapptive.Shared\MessengerTest.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
     <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />

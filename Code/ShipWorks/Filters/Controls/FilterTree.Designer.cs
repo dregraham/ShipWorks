@@ -1,3 +1,5 @@
+using Interapptive.Shared.Messenger;
+
 namespace ShipWorks.Filters.Controls
 {
     partial class FilterTree

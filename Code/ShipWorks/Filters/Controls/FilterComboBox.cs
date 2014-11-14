@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared.Messenger;
+using ShipWorks.Filters.Management;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
 using System.Drawing;
@@ -42,7 +44,9 @@ namespace ShipWorks.Filters.Controls
         Image countingImageNormal = Resources.arrows_blue;
         Image countingImageSelected = Resources.arrows_white;
         bool isAnimating = false;
-        
+        private MessengerToken filterEditedToken;
+        private FilterTarget[] lastLoadedTargets;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -68,6 +72,13 @@ namespace ShipWorks.Filters.Controls
 
             // The filter is what we are going to be dropping down
             this.PopupController = popupController;
+
+            filterEditedToken = Messenger.Current.Handle<FilterEditedMessage>(HandleFilterEdited);
+        }
+
+        private void HandleFilterEdited(FilterEditedMessage obj)
+        {
+            //LoadLayouts(lastLoadedTargets);
         }
 
         /// <summary>
@@ -75,6 +86,8 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         public void LoadLayouts(params FilterTarget[] targets)
         {
+            lastLoadedTargets = targets;
+
             filterTree.SelectedFilterNodeChanged -= new EventHandler(OnFilterSelected);
             filterTree.LoadLayouts(targets);
             filterTree.SelectedFilterNodeChanged += new EventHandler(OnFilterSelected);
@@ -515,6 +528,7 @@ namespace ShipWorks.Filters.Controls
 
             if (filterTree != null)
             {
+                Messenger.Current.Remove(filterEditedToken);
                 filterTree.Dispose();
                 filterTree = null;
             }
