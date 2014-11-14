@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
             MockSettingsRepository.Setup(x => x.GetAccount(It.IsAny<ShipmentEntity>()))
                                   .Returns(account);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(new FedExServiceGateway(MockSettingsRepository.Object), MockSettingsRepository.Object, new FedExShipmentTokenProcessor(), new FedExResponseFactory());
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(new FedExServiceGateway(MockSettingsRepository.Object), new FedExOpenShipGateway(MockSettingsRepository.Object),  MockSettingsRepository.Object, new FedExShipmentTokenProcessor(), new FedExResponseFactory());
             CarrierRequest searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
             ICarrierResponse carrierResponse = searchLocationsRequest.Submit();

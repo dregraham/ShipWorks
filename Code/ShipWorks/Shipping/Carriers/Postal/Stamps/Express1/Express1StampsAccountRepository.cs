@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="accountID">Id of the account to retrieve</param>
         public override StampsAccountEntity GetAccount(long accountID)
         {
-            return StampsAccountManager.GetAccount(accountID);
+            return Accounts.ToList().FirstOrDefault(a => a.StampsAccountID == accountID);            
         }
 
         /// <summary>
