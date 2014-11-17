@@ -925,9 +925,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ShowAccountNumberPanel();
         }
 
+        /// <summary>
+        /// Shows the account number panel.
+        /// </summary>
         private void ShowAccountNumberPanel()
         {
             accountNumberPanel.Visible = existingAccount.Checked;
+        }
+
+        /// <summary>
+        /// Show Open Account help when help clicked.
+        /// </summary>
+        private void OnHelpClick(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
         }
     }
 }

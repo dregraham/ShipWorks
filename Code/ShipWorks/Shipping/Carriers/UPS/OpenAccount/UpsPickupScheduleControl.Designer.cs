@@ -48,6 +48,7 @@
             this.pickupStartDate = new System.Windows.Forms.ComboBox();
             this.pickupLocation = new System.Windows.Forms.ComboBox();
             this.labelPickupLocation = new System.Windows.Forms.Label();
+            this.labelPickupLocationHeader = new System.Windows.Forms.Label();
             this.pickUpDay.SuspendLayout();
             this.pickupDateTimePanel.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             // labelPickupOptions
             // 
             this.labelPickupOptions.AutoSize = true;
-            this.labelPickupOptions.Location = new System.Drawing.Point(36, 6);
+            this.labelPickupOptions.Location = new System.Drawing.Point(36, 23);
             this.labelPickupOptions.Name = "labelPickupOptions";
             this.labelPickupOptions.Size = new System.Drawing.Size(81, 13);
             this.labelPickupOptions.TabIndex = 1;
@@ -65,7 +66,7 @@
             // 
             this.pickupOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.pickupOption.FormattingEnabled = true;
-            this.pickupOption.Location = new System.Drawing.Point(124, 3);
+            this.pickupOption.Location = new System.Drawing.Point(124, 20);
             this.pickupOption.Name = "pickupOption";
             this.pickupOption.Size = new System.Drawing.Size(121, 21);
             this.pickupOption.TabIndex = 2;
@@ -210,7 +211,7 @@
             this.pickUpDay.Controls.Add(this.wednesday);
             this.pickUpDay.Controls.Add(this.thursday);
             this.pickUpDay.Controls.Add(this.friday);
-            this.pickUpDay.Location = new System.Drawing.Point(0, 162);
+            this.pickUpDay.Location = new System.Drawing.Point(0, 179);
             this.pickUpDay.Name = "pickUpDay";
             this.pickUpDay.Size = new System.Drawing.Size(257, 122);
             this.pickUpDay.TabIndex = 17;
@@ -227,10 +228,18 @@
             this.pickupDateTimePanel.Controls.Add(this.labelPickupStartDate);
             this.pickupDateTimePanel.Controls.Add(this.preferredPickup);
             this.pickupDateTimePanel.Controls.Add(this.earliestPickup);
-            this.pickupDateTimePanel.Location = new System.Drawing.Point(0, 30);
+            this.pickupDateTimePanel.Location = new System.Drawing.Point(0, 47);
             this.pickupDateTimePanel.Name = "pickupDateTimePanel";
             this.pickupDateTimePanel.Size = new System.Drawing.Size(311, 136);
             this.pickupDateTimePanel.TabIndex = 18;
+            // 
+            // pickupStartDate
+            // 
+            this.pickupStartDate.FormattingEnabled = true;
+            this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
+            this.pickupStartDate.Name = "pickupStartDate";
+            this.pickupStartDate.Size = new System.Drawing.Size(184, 21);
+            this.pickupStartDate.TabIndex = 20;
             // 
             // pickupStartDate
             // 
@@ -259,17 +268,28 @@
             this.labelPickupLocation.TabIndex = 17;
             this.labelPickupLocation.Text = "Pickup Location:";
             // 
+            // labelPickupLocationHeader
+            // 
+            this.labelPickupLocationHeader.AutoSize = true;
+            this.labelPickupLocationHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPickupLocationHeader.Location = new System.Drawing.Point(3, 0);
+            this.labelPickupLocationHeader.Name = "labelPickupLocationHeader";
+            this.labelPickupLocationHeader.Size = new System.Drawing.Size(166, 13);
+            this.labelPickupLocationHeader.TabIndex = 19;
+            this.labelPickupLocationHeader.Text = "Pickup Location Information";
+            // 
             // UpsPickupScheduleControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelPickupLocationHeader);
             this.Controls.Add(this.pickupDateTimePanel);
             this.Controls.Add(this.pickUpDay);
             this.Controls.Add(this.pickupOption);
             this.Controls.Add(this.labelPickupOptions);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsPickupScheduleControl";
-            this.Size = new System.Drawing.Size(369, 296);
+            this.Size = new System.Drawing.Size(369, 338);
             this.pickUpDay.ResumeLayout(false);
             this.pickUpDay.PerformLayout();
             this.pickupDateTimePanel.ResumeLayout(false);
@@ -301,6 +321,7 @@
         private System.Windows.Forms.ComboBox pickupLocation;
         private System.Windows.Forms.Label labelPickupLocation;
         private System.Windows.Forms.ComboBox pickupStartDate;
+        private System.Windows.Forms.Label labelPickupLocationHeader;
 
     }
 }
