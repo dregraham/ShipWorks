@@ -221,9 +221,17 @@ namespace ShipWorks.Shipping.Settings
             }
             else
             {
-                if (!AllowDisabledShippingFiltersToBeSaved())
+                // The settings control could be null if the shipment type has not been
+                // configured, so we need to check the page's tag to determine if we're
+                // coming from the general settings page. We don't want to display the 
+                // confirmation if navigating from a shipment type that is not configured.
+                if (e.OptionPage.Tag == null)
                 {
-                    e.Cancel = true;
+                    // We're coming from the general settings page
+                    if (!AllowDisabledShippingFiltersToBeSaved())
+                    {
+                        e.Cancel = true;
+                    }
                 }
             }
         }

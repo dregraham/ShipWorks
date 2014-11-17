@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using ShipWorks.Filters.Controls;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -25,12 +26,23 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         public event EventHandler FlowClicked;
 
+        private readonly DisabledFilterFont disabledFont;
+        private readonly Font standardFont;
+        private readonly Color standardColor;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ActionTaskFlowInfoControl()
         {
             InitializeComponent();
+
+            // Need to capture the "normal" font of the filter name in case we
+            // need to flip the font back and forth from disabled to enbabled
+            standardColor = filterName.ForeColor;
+            standardFont = new Font(filterName.Font, filterName.Font.Style);
+
+            disabledFont = new DisabledFilterFont(filterName.Font);
         }
 
         /// <summary>
@@ -141,8 +153,21 @@ namespace ShipWorks.Actions.Tasks
 
                     filterName.Visible = true;
                     filterName.Text = filterNode.Filter.Name;
-
+                    
                     filterCount.Left = filterName.Right - 3;
+
+                    // The if/else is required for the case where a disabled filter is changed to 
+                    // an enabled filter. Without the else block the filter would still show as disabled
+                    if (filterNode.State == (byte)FilterNodeState.Disabled)
+                    {
+                        filterName.Font = disabledFont.Font;
+                        filterName.ForeColor = disabledFont.TextColor;
+                    }
+                    else
+                    {
+                        filterName.Font = standardFont;
+                        filterName.ForeColor = standardColor;
+                    }
 
                     FilterCount count = FilterContentManager.GetCount(filterNode.FilterNodeID);
                     if (count != null)
