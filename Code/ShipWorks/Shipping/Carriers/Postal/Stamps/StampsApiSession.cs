@@ -1208,7 +1208,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // Puerto Rico is treated as the United States by Stamps
-            if (code == "PR")
+            if (code == "PR" || code == "VI")
             {
                 return "US";
             }
