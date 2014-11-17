@@ -21,7 +21,6 @@ namespace ShipWorks.Filters.Controls
         FilterNodeEntity filterNode;
         FilterCount filterCount;
 
-        private readonly DisabledFilterFont disabledFont;
         private FilterNodeState? previousFilterState;
 
         /// <summary>
@@ -31,8 +30,6 @@ namespace ShipWorks.Filters.Controls
             : base(filterNode.Filter.Name, FilterHelper.GetFilterImage(filterNode, false))
         {
             SetFilter(filterNode);
-            
-            disabledFont = new DisabledFilterFont(Font);
         }
         
         /// <summary>
@@ -112,10 +109,16 @@ namespace ShipWorks.Filters.Controls
         private void ToggleStyle(FilterNodeState filterState)
         {
             bool isFilterDisabled = filterState == (byte)FilterNodeState.Disabled;
-            foreach (GridCell cell in Cells)
+
+            // We need to use a new disabled font each time we toggle since it's disposable and the
+            // FilterTreeGridRow is not
+            using (DisabledFilterFont disabledFont = new DisabledFilterFont(Font))
             {
-                cell.Font = isFilterDisabled ? disabledFont.Font : Font;
-                cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
+                foreach (GridCell cell in Cells)
+                {
+                    cell.Font = isFilterDisabled ? disabledFont.Font : Font;
+                    cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
+                }   
             }
         }
 

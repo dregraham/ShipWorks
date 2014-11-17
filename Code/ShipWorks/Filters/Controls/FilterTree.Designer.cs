@@ -20,6 +20,8 @@ namespace ShipWorks.Filters.Controls
                 components.Dispose();
 
                 Messenger.Current.Remove(filterEditedToken);
+
+                quickFilterDisplayManager.Dispose();
             }
             base.Dispose(disposing);
         }

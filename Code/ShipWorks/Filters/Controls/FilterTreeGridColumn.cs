@@ -195,10 +195,11 @@ namespace ShipWorks.Filters.Controls
                 // Adjust font for disabled nodes
                 if (filterTreeRow.FilterNode.State == (byte) FilterNodeState.Disabled)
                 {
-                    DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont);
-
-                    countColor = disabledFont.TextColor;
-                    cellFont = disabledFont.Font;
+                    using (DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont))
+                    {
+                        countColor = disabledFont.TextColor;
+                        cellFont = disabledFont.Font;   
+                    }
                 }
 
                 // Allow the row a chance to update its style based on the state of the filter node. We want

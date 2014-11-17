@@ -20,9 +20,9 @@
                     components.Dispose();
                 }
 
-                if (standardFont != null)
+                if (filterDisplayManager != null)
                 {
-                    standardFont.Dispose();
+                    filterDisplayManager.Dispose();
                 }
             }
             base.Dispose(disposing);

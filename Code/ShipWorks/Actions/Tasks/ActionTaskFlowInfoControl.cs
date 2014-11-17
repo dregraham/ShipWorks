@@ -26,9 +26,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         public event EventHandler FlowClicked;
 
-        private readonly DisabledFilterFont disabledFont;
-        private readonly Font standardFont;
-        private readonly Color standardColor;
+        private readonly FilterControlDisplayManager filterDisplayManager;
 
         /// <summary>
         /// Constructor
@@ -37,12 +35,7 @@ namespace ShipWorks.Actions.Tasks
         {
             InitializeComponent();
 
-            // Need to capture the "normal" font of the filter name in case we
-            // need to flip the font back and forth from disabled to enbabled
-            standardColor = filterName.ForeColor;
-            standardFont = new Font(filterName.Font, filterName.Font.Style);
-
-            disabledFont = new DisabledFilterFont(filterName.Font);
+            filterDisplayManager = new FilterControlDisplayManager(filterName, filterCount);
         }
 
         /// <summary>
@@ -156,18 +149,7 @@ namespace ShipWorks.Actions.Tasks
                     
                     filterCount.Left = filterName.Right - 3;
 
-                    // The if/else is required for the case where a disabled filter is changed to 
-                    // an enabled filter. Without the else block the filter would still show as disabled
-                    if (filterNode.State == (byte)FilterNodeState.Disabled)
-                    {
-                        filterName.Font = disabledFont.Font;
-                        filterName.ForeColor = disabledFont.TextColor;
-                    }
-                    else
-                    {
-                        filterName.Font = standardFont;
-                        filterName.ForeColor = standardColor;
-                    }
+                    filterDisplayManager.ToggleDisplay(filterNode.State == (byte)FilterNodeState.Enabled);
 
                     FilterCount count = FilterContentManager.GetCount(filterNode.FilterNodeID);
                     if (count != null)

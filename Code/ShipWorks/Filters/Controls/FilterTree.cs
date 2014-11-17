@@ -76,8 +76,8 @@ namespace ShipWorks.Filters.Controls
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
         bool quickFilterSelected = false;
-        private MessengerToken filterEditedToken;
-        private FilterControlDisplayManager quickFilterDisplayManager;
+        private readonly MessengerToken filterEditedToken;
+        private readonly FilterControlDisplayManager quickFilterDisplayManager;
 
         // Event raised when a drag-drop operation has taken place
         public event FilterDragDropCompleteEventHandler DragDropComplete;

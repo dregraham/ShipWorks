@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace ShipWorks.Filters.Controls
     /// <summary>
     /// Manage the display of a filter control
     /// </summary>
-    public class FilterControlDisplayManager
+    public class FilterControlDisplayManager : IDisposable
     {
         private readonly Control[] controls;
         private readonly List<Color> originalColors;
@@ -36,15 +37,31 @@ namespace ShipWorks.Filters.Controls
             {
                 Control control = controls[i];
 
-                if (isEnabled)
+                control.ForeColor = isEnabled ? originalColors[0] : disabledFonts[i].TextColor;
+                control.Font = isEnabled ? originalFonts[0] : disabledFonts[i].Font;
+            }
+        }
+
+        /// <summary>
+        /// Dispose the object
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose object
+        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                for (int i = 0; i < controls.Count(); i++)
                 {
-                    control.ForeColor = originalColors[i];
-                    control.Font = originalFonts[i];
-                }
-                else
-                {
-                    control.ForeColor = disabledFonts[i].TextColor;
-                    control.Font = disabledFonts[i].Font;
+                    originalFonts[i].Dispose();
+                    disabledFonts[i].Dispose();
                 }
             }
         }

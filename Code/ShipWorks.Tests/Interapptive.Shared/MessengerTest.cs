@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Interapptive.Shared.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -91,6 +92,22 @@ namespace ShipWorks.Tests.Interapptive.Shared
         }
 
         [TestMethod]
+        public void Handle_HandlerDoesNotGetCalled_WhenRemovedByReference()
+        {
+            bool wasCalled1 = false;
+            bool wasCalled2 = false;
+
+            Action<TestMessage> handler1 = x => wasCalled1 = true;
+
+            messenger.Handle(handler1);
+            messenger.Handle<TestMessage>(x => wasCalled2 = true);
+            messenger.Remove(handler1);
+            messenger.Send(new TestMessage());
+            Assert.IsFalse(wasCalled1);
+            Assert.IsTrue(wasCalled2);
+        }
+
+        [TestMethod]
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
@@ -98,6 +115,22 @@ namespace ShipWorks.Tests.Interapptive.Shared
             handler.Dispose();
             GC.Collect();
             messenger.Send(new TestMessage());
+        }
+
+        [TestMethod]
+        public void Send_DoesNotCallMethod_WhenObjectHasBeenCollected()
+        {
+            bool wasCalled = false;
+            using (DisposableHandler handler = new DisposableHandler(x => wasCalled = true))
+            {
+                messenger.Handle(handler.Handler);    
+            }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            messenger.Send(new TestMessage());
+            Assert.IsFalse(wasCalled);
         }
 
         private class TestMessage : IShipWorksMessage
@@ -110,6 +143,13 @@ namespace ShipWorks.Tests.Interapptive.Shared
             public DisposableHandler()
             {
                 Handler = x => Calls++;
+            }
+
+            public DisposableHandler(Action<TestMessage> handler)
+            {
+                // We're wrapping the handler in an anonymous method so that the Handler is a reference
+                // to this object as opposed to the source of the handler parameter
+                Handler = x => { handler(x); };
             }
 
             public Action<TestMessage> Handler { get; private set; }
