@@ -53,8 +53,9 @@ namespace ShipWorks.Shipping.Settings
             radioBlankPhoneUseShipper.Checked = (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.ShipperPhone);
             radioBlankPhoneUseSpecified.Checked = !radioBlankPhoneUseShipper.Checked;
             blankPhone.Text = settings.BlankPhoneNumber;
-            
+
             originControl.Initialize();
+            usedDisabledFilters = providerRulesControl.AreAnyRuleFiltersDisabled;
 
             LoadShipmentTypePages();
         }
@@ -261,7 +262,7 @@ namespace ShipWorks.Shipping.Settings
             if (e.OptionPage == optionPageGeneral)
             {
                 originControl.Initialize();
-                //usedDisabledFilters = address.AreAnyRuleFiltersDisabled;
+                usedDisabledFilters = providerRulesControl.AreAnyRuleFiltersDisabled;
             }
         }
 
@@ -358,17 +359,10 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
         {
-            if (settingsControl == null || !settingsControl.AreAnyRuleFiltersDisabled)
-            {
-                return true;
-            }
-
-            if (usedDisabledFilters)
-            {
-                return true;
-            }
-
-            return DoesUserWantToSaveDisabledFilters("printing");
+            return settingsControl == null ||
+                   !settingsControl.AreAnyRuleFiltersDisabled ||
+                   usedDisabledFilters ||
+                   DoesUserWantToSaveDisabledFilters("printing");
         }
 
         /// <summary>
@@ -376,7 +370,9 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private bool AllowDisabledShippingFiltersToBeSaved()
         {
-            return !providerRulesControl.AreAnyRuleFiltersDisabled || DoesUserWantToSaveDisabledFilters("shipping");
+            return !providerRulesControl.AreAnyRuleFiltersDisabled ||
+                usedDisabledFilters ||
+                DoesUserWantToSaveDisabledFilters("shipping");
         }
 
         /// <summary>
