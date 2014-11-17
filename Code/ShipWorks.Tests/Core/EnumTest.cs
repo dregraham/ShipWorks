@@ -70,6 +70,7 @@ namespace ShipWorks.Tests.Core
                 "ChannelAdvisor.WebServices".ToUpperInvariant(),
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
+                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant()
             };
 
         private List<string> ignoreShipmentTypeNames = new List<string>

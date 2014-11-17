@@ -942,8 +942,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 else
                 {
-                    // First one is always the primary
-                    SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", Rectangle.Empty);
+                    // The bottom half of Guam are instructions we do not need.
+                    if (shipment.ShipCountryCode == "GU" || shipment.ShipStateProvCode == "GU")
+                    {
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1600, 1010));                        
+                    }
+                    else
+                    {
+                        // First one is always the primary
+                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", Rectangle.Empty);   
+                    }
                 }
             }
             // International services require some trickdickery
@@ -975,6 +983,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         // The first 2 images represent 4 labels that need cropped out. The 3rd url will be the instructions, that we don't need
                         SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1600, 1010));
                         SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1075, 1600, 1010));
+
                         SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1600, 1010));
                         SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1075, 1600, 1010));
                     }

@@ -64,7 +64,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
-            return new RateGroup(stampsRates);
+            
+            RateGroup rateGroup = new RateGroup(stampsRates);
+            AddUspsRatePromotionFootnote(shipment, rateGroup);
+            
+            return rateGroup;
         }
 
         /// <summary>
