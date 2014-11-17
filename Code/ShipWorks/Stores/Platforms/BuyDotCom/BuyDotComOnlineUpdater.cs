@@ -9,6 +9,8 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
 using ShipWorks.Stores.Content;
 using ShipWorks.Data;
@@ -192,6 +194,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
+                    if (shipment.Ups != null && UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+                    {
+                        return BuyDotComTrackingType.UPSMI;
+                    }
+
                     return BuyDotComTrackingType.Ups;
 
                 case ShipmentTypeCode.FedEx:
