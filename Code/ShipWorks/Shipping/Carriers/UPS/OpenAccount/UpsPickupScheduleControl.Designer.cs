@@ -45,9 +45,9 @@
             this.latestPickup = new System.Windows.Forms.DateTimePicker();
             this.pickUpDay = new System.Windows.Forms.Panel();
             this.pickupDateTimePanel = new System.Windows.Forms.Panel();
+            this.pickupStartDate = new System.Windows.Forms.ComboBox();
             this.pickupLocation = new System.Windows.Forms.ComboBox();
             this.labelPickupLocation = new System.Windows.Forms.Label();
-            this.pickupStartDate = new System.Windows.Forms.ComboBox();
             this.pickUpDay.SuspendLayout();
             this.pickupDateTimePanel.SuspendLayout();
             this.SuspendLayout();
@@ -232,6 +232,15 @@
             this.pickupDateTimePanel.Size = new System.Drawing.Size(311, 136);
             this.pickupDateTimePanel.TabIndex = 18;
             // 
+            // pickupStartDate
+            // 
+            this.pickupStartDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.pickupStartDate.FormattingEnabled = true;
+            this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
+            this.pickupStartDate.Name = "pickupStartDate";
+            this.pickupStartDate.Size = new System.Drawing.Size(184, 21);
+            this.pickupStartDate.TabIndex = 20;
+            // 
             // pickupLocation
             // 
             this.pickupLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -249,14 +258,6 @@
             this.labelPickupLocation.Size = new System.Drawing.Size(84, 13);
             this.labelPickupLocation.TabIndex = 17;
             this.labelPickupLocation.Text = "Pickup Location:";
-            // 
-            // pickupStartDate
-            // 
-            this.pickupStartDate.FormattingEnabled = true;
-            this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
-            this.pickupStartDate.Name = "pickupStartDate";
-            this.pickupStartDate.Size = new System.Drawing.Size(184, 21);
-            this.pickupStartDate.TabIndex = 20;
             // 
             // UpsPickupScheduleControl
             // 
