@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.Settings
         // The tab page currently displayed in the settings.  So it looks like it remains the same when 
         // switching between service types.
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
+        private bool usedDisabledFilters;
 
         /// <summary>
         /// Constructor
@@ -254,11 +255,13 @@ namespace ShipWorks.Shipping.Settings
             {
                 settingsControl.RefreshContent();
                 settingsControl.CurrentPage = settingsTabPage;
+                usedDisabledFilters = settingsControl.AreAnyRuleFiltersDisabled;
             }
 
             if (e.OptionPage == optionPageGeneral)
             {
                 originControl.Initialize();
+                //usedDisabledFilters = address.AreAnyRuleFiltersDisabled;
             }
         }
 
@@ -356,6 +359,11 @@ namespace ShipWorks.Shipping.Settings
         private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
         {
             if (settingsControl == null || !settingsControl.AreAnyRuleFiltersDisabled)
+            {
+                return true;
+            }
+
+            if (usedDisabledFilters)
             {
                 return true;
             }

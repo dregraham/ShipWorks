@@ -29,7 +29,7 @@ namespace Interapptive.Shared.Messaging
         /// Handle a message using the specified handler
         /// </summary>
         /// <returns>Token that can be used to remove the handler later</returns>
-        public MessengerToken Handle<T>(Action<T> handler) where T : IShipWorksMessage
+        public MessengerToken Handle<T>(object owner, Action<T> handler) where T : IShipWorksMessage
         {
             Type messageType = typeof(T);
 
@@ -40,14 +40,17 @@ namespace Interapptive.Shared.Messaging
                     handlers.Add(messageType, new List<MessageHandler>());
                 }
 
-                MessageHandler messageHandler = handlers[messageType].FirstOrDefault(x => x.ReferencesHandler(handler));
+                MessageHandler messageHandler = handlers[messageType].FirstOrDefault(x => x.ReferencesHandler(owner, handler));
                 
+                // If this handler isn't already registered, go ahead and register it
                 if (messageHandler == null)
                 {
-                    messageHandler = new MessageHandler(messageType, handler, new MessengerToken());
+                    messageHandler = new MessageHandler(messageType, owner, handler, new MessengerToken());
 
                     handlers[messageType].Add(messageHandler);
                 }
+
+                Cleanup();
 
                 return messageHandler.Token;
             }
@@ -93,11 +96,11 @@ namespace Interapptive.Shared.Messaging
         /// <summary>
         /// Remove a handler based on the handler method
         /// </summary>
-        public void Remove<T>(Action<T> handler)
+        public void Remove<T>(object owner, Action<T> handler)
         {
             lock (lockObj)
             {
-                Remove(handlers.SelectMany(x => x.Value).Where(x => x.ReferencesHandler(handler)).ToList());
+                Remove(handlers.SelectMany(x => x.Value).Where(x => x.ReferencesHandler(owner, handler)).ToList());
             }
         }
 
@@ -113,20 +116,34 @@ namespace Interapptive.Shared.Messaging
         }
 
         /// <summary>
+        /// Clean up any dead references
+        /// </summary>
+        private void Cleanup()
+        {
+            Remove(handlers.SelectMany(x => x.Value).Where(x => !x.IsAlive).ToList());
+        }
+
+        /// <summary>
         /// Associate a handler with a type to make removal easier
         /// </summary>
         private class MessageHandler
         {
+            /// <summary>
+            /// Store a weak reference to the owner of the action so that the messenger doesn't cause the
+            /// object to stay around longer than intended
+            /// </summary>
             private readonly WeakReference handlerReference;
+            private readonly object action;
 
             /// <summary>
             /// Constructor
             /// </summary>
-            public MessageHandler(Type messageType, object handler, MessengerToken token)
+            public MessageHandler(Type messageType, object owner, object handler, MessengerToken token)
             {
                 MessageType = messageType;
                 Token = token;
-                handlerReference = new WeakReference(handler);
+                action = handler;
+                handlerReference = new WeakReference(owner);
             }
 
             /// <summary>
@@ -146,23 +163,33 @@ namespace Interapptive.Shared.Messaging
             /// and should be removed</returns>
             public bool Handle<T>(T message)
             {
-                Action<T> handler = handlerReference.Target as Action<T>;
-
-                if (!handlerReference.IsAlive || handler == null)
+                if (!handlerReference.IsAlive || handlerReference.Target == null)
                 {
                     return false;
                 }
 
-                handler(message);
+                ((Action<T>)action)(message);
                 return true;
             }
 
             /// <summary>
             /// Checks whether the given handler is what is used by this object
             /// </summary>
-            public bool ReferencesHandler(object handler)
+            public bool ReferencesHandler(object owner, object handler)
             {
-                return ReferenceEquals(handlerReference.Target, handler);
+                return ReferenceEquals(handlerReference.Target, owner) && 
+                    ReferenceEquals(action, handler);
+            }
+
+            /// <summary>
+            /// Gets whether the handler's owner is still alive
+            /// </summary>
+            public bool IsAlive
+            {
+                get
+                {
+                    return handlerReference != null && handlerReference.Target != null;
+                }
             }
         }
     }

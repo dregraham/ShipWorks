@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using Interapptive.Shared.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotCallHandler_WhenHandlerIsForDifferentMessage()
         {
             bool wasCalled = false;
-            messenger.Handle<TestMessage>(x => wasCalled = true);
+            messenger.Handle<TestMessage>(this, x => wasCalled = true);
             messenger.Send(Mock.Of<IShipWorksMessage>());
             Assert.IsFalse(wasCalled);
         }
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Handle_GetsCalled_OnMessageSend()
         {
             bool wasCalled = false;
-            messenger.Handle<TestMessage>(x => wasCalled = true);
+            messenger.Handle<TestMessage>(this, x => wasCalled = true);
             messenger.Send(new TestMessage());
             Assert.IsTrue(wasCalled);
         }
@@ -46,8 +45,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            messenger.Handle<TestMessage>(x => wasCalled1 = true);
-            messenger.Handle<TestMessage>(x => wasCalled2 = true);
+            messenger.Handle<TestMessage>(this, x => wasCalled1 = true);
+            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
             messenger.Send(new TestMessage());
             Assert.IsTrue(wasCalled1);
             Assert.IsTrue(wasCalled2);
@@ -58,8 +57,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             using (DisposableHandler handler = new DisposableHandler())
             {
-                MessengerToken firstToken = messenger.Handle(handler.Handler);
-                MessengerToken secondToken = messenger.Handle(handler.Handler);
+                MessengerToken firstToken = messenger.Handle(handler, handler.Handler);
+                MessengerToken secondToken = messenger.Handle(handler, handler.Handler);
 
                 Assert.AreEqual(firstToken, secondToken);
             }
@@ -70,8 +69,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             using (DisposableHandler handler = new DisposableHandler())
             {
-                messenger.Handle(handler.Handler);
-                messenger.Handle(handler.Handler);
+                messenger.Handle(handler, handler.Handler);
+                messenger.Handle(handler, handler.Handler);
                 messenger.Send(new TestMessage());
 
                 Assert.AreEqual(1, handler.Calls);
@@ -83,8 +82,8 @@ namespace ShipWorks.Tests.Interapptive.Shared
         {
             bool wasCalled1 = false;
             bool wasCalled2 = false;
-            MessengerToken token = messenger.Handle<TestMessage>(x => wasCalled1 = true);
-            messenger.Handle<TestMessage>(x => wasCalled2 = true);
+            MessengerToken token = messenger.Handle<TestMessage>(this, x => wasCalled1 = true);
+            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
             messenger.Remove(token);
             messenger.Send(new TestMessage());
             Assert.IsFalse(wasCalled1);
@@ -99,9 +98,9 @@ namespace ShipWorks.Tests.Interapptive.Shared
 
             Action<TestMessage> handler1 = x => wasCalled1 = true;
 
-            messenger.Handle(handler1);
-            messenger.Handle<TestMessage>(x => wasCalled2 = true);
-            messenger.Remove(handler1);
+            messenger.Handle(this, handler1);
+            messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
+            messenger.Remove(this, handler1);
             messenger.Send(new TestMessage());
             Assert.IsFalse(wasCalled1);
             Assert.IsTrue(wasCalled2);
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
-            messenger.Handle(handler.Handler);
+            messenger.Handle(handler, handler.Handler);
             handler.Dispose();
             GC.Collect();
             messenger.Send(new TestMessage());
@@ -121,10 +120,10 @@ namespace ShipWorks.Tests.Interapptive.Shared
         public void Send_DoesNotCallMethod_WhenObjectHasBeenCollected()
         {
             bool wasCalled = false;
-            using (DisposableHandler handler = new DisposableHandler(x => wasCalled = true))
-            {
-                messenger.Handle(handler.Handler);    
-            }
+            DisposableHandler handler = new DisposableHandler(x => wasCalled = true);
+            messenger.Handle(handler, handler.Handler);
+            handler.Dispose();
+            handler = null;
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -147,9 +146,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
 
             public DisposableHandler(Action<TestMessage> handler)
             {
-                // We're wrapping the handler in an anonymous method so that the Handler is a reference
-                // to this object as opposed to the source of the handler parameter
-                Handler = x => { handler(x); };
+                Handler = handler;
             }
 
             public Action<TestMessage> Handler { get; private set; }

@@ -97,7 +97,7 @@ namespace ShipWorks.Filters.Controls
 
             UpdateQuickFilterDisplay();
 
-            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(HandleFilterEdited);
+            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(this, HandleFilterEdited);
         }
 
         /// <summary>

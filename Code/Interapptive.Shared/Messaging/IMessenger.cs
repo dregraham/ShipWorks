@@ -10,7 +10,7 @@ namespace Interapptive.Shared.Messaging
         /// <summary>
         /// Handle a message using the specified handler
         /// </summary>
-        MessengerToken Handle<T>(Action<T> handler) where T : IShipWorksMessage;
+        MessengerToken Handle<T>(object owner, Action<T> handler) where T : IShipWorksMessage;
 
         /// <summary>
         /// Send a message to any listeners
