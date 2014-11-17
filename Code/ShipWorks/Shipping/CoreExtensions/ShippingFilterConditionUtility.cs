@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.CoreExtensions
                 (int) ShipmentTypeCode.Stamps,
                 (int) ShipmentTypeCode.Express1Endicia,
                 (int) ShipmentTypeCode.Express1Stamps,
-                (int)ShipmentTypeCode.PostalWebTools,
-                (int)ShipmentTypeCode.Stamps);
+                (int) ShipmentTypeCode.PostalWebTools,
+                (int) ShipmentTypeCode.Usps);
         }
 
         /// <summary>
