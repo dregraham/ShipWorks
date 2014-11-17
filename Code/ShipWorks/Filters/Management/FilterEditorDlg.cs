@@ -175,7 +175,7 @@ namespace ShipWorks.Filters.Management
             }
 
             // Only show the confirmation if the state is disabled and there are references to the filter
-            if (!enabled.Checked && new FilterNodeReferenceRepository().Find(filterNode).Any())
+            if (IsFilterBeingDisabled && new FilterNodeReferenceRepository().Find(filterNode).Any())
             {
                 using (DisableLinkedFilterDlg dlg = new DisableLinkedFilterDlg(filterNode))
                 {
@@ -210,6 +210,17 @@ namespace ShipWorks.Filters.Management
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Returns whether the current filter is being disabled
+        /// </summary>
+        private bool IsFilterBeingDisabled
+        {
+            get
+            {
+                return filterNode.State == (int) FilterNodeState.Enabled && !enabled.Checked;
+            }
         }
 
         /// <summary>
