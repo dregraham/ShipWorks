@@ -14,10 +14,11 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
+    /// <summary>
+    /// UpsPickupLocationControl
+    /// </summary>
     public partial class UpsPickupLocationControl : UserControl
     {
-        private UpsAccountEntity upsAccountEntity;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsPickupLocationControl" /> class.
         /// </summary>
@@ -46,10 +47,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
             }
 
-                upsAccountEntity = new UpsAccountEntity();
+            UpsAccountEntity upsAccountEntity = new UpsAccountEntity();
+
+            // Adding to account because address fields can't be accessed directly.
             PersonAdapter personAdapter = new PersonAdapter(upsAccountEntity, "");
             pickupLocationPersonControl.SaveToEntity(personAdapter);
-
+            
             request.PickupAddress.City = upsAccountEntity.City;
             request.PickupAddress.CompanyName = upsAccountEntity.Company;
             request.PickupAddress.ContactName = pickupLocationPersonControl.FullName;
@@ -58,10 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             request.PickupAddress.Phone.Number = upsAccountEntity.Phone;
             request.PickupAddress.PostalCode = upsAccountEntity.PostalCode;
             request.PickupAddress.StateProvinceCode = upsAccountEntity.StateProvCode;
-            request.PickupAddress.StreetAddress = upsAccountEntity.Street1;
-
-            upsAccountEntity.RollbackChanges();
-            upsAccountEntity = null;
+            request.PickupAddress.StreetAddress = personAdapter.StreetAll;
         }
     }
 }

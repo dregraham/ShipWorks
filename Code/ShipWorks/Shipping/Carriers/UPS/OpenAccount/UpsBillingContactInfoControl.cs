@@ -9,11 +9,15 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
+    /// <summary>
+    /// UpsBillingContactInfoControl
+    /// </summary>
     public partial class UpsBillingContactInfoControl : UserControl
     {
         /// <summary>
@@ -23,11 +27,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             InitializeComponent();
         }
-         
+
+        public bool SameAsPickup
+        {
+            get
+            {
+                return sameAsPickupYes.Checked;
+            }
+        }
         /// <summary>
         /// Saves to request.
         /// </summary>
         public void SaveToAccountAndRequest(OpenAccountRequest request, UpsAccountEntity upsAccount)
+        {
+            if (!billingContactPersonControl.ValidateRequiredFields())
+            {
+                throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
+            }
+
+            SaveBillingInfoToAccountAndRequest(request, upsAccount);
+            CopyBillingInfoToPickupInfo(request);
+        }
+
+        /// <summary>
+        /// Saves the billing information to account and request.
+        /// </summary>
+        private void SaveBillingInfoToAccountAndRequest(OpenAccountRequest request, UpsAccountEntity upsAccount)
         {
             if (request.BillingAddress == null)
             {
@@ -37,11 +62,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             if (request.BillingAddress.Phone == null)
             {
                 request.BillingAddress.Phone = new PhoneType();
-            }
-
-            if (!billingContactPersonControl.ValidateRequiredFields())
-            {
-                throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
             }
 
             PersonAdapter personAdapter = new PersonAdapter(upsAccount, "");
@@ -55,7 +75,37 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             request.BillingAddress.Phone.Number = upsAccount.Phone;
             request.BillingAddress.PostalCode = upsAccount.PostalCode;
             request.BillingAddress.StateProvinceCode = upsAccount.StateProvCode;
-            request.BillingAddress.StreetAddress = upsAccount.Street1;
+            request.BillingAddress.StreetAddress = personAdapter.StreetAll.Replace("\r\n", ", ");
+        }
+
+        /// <summary>
+        /// Copies the billing information to pickup information.
+        /// </summary>
+        private void CopyBillingInfoToPickupInfo(OpenAccountRequest request)
+        {
+            if (sameAsPickupYes.Checked)
+            {
+                if (request.PickupAddress == null)
+                {
+                    request.PickupAddress = new PickupAddressType();
+                }
+
+                if (request.PickupAddress.Phone == null)
+                {
+                    request.PickupAddress.Phone = new PhoneType();
+                }
+
+                request.PickupAddress.City = request.BillingAddress.City;
+                request.PickupAddress.CompanyName = request.BillingAddress.CompanyName;
+                request.PickupAddress.ContactName = request.BillingAddress.ContactName;
+                request.PickupAddress.CountryCode = request.BillingAddress.CountryCode;
+                request.PickupAddress.EmailAddress = request.BillingAddress.EmailAddress;
+                request.PickupAddress.Phone.Number = request.BillingAddress.Phone.Number;
+                request.PickupAddress.PostalCode = request.BillingAddress.PostalCode;
+                request.PickupAddress.StateProvinceCode = request.BillingAddress.StateProvinceCode;
+                request.PickupAddress.StreetAddress = request.BillingAddress.StreetAddress;
+            }
+
         }
     }
 }

@@ -90,8 +90,6 @@
             this.pickupSchedule = new ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsPickupScheduleControl();
             this.wizardPageOpenAccountPickupLocation = new ShipWorks.UI.Wizard.WizardPage();
             this.upsPickupLocationControl = new ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsPickupLocationControl();
-            this.wizardPageOpenAccountCreateAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.createAccount = new ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsCreateAccount();
             this.wizardPageOpenAccountBusinessInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.helpBusinessInformation = new System.Windows.Forms.PictureBox();
             this.upsBusinessInfoControl = new ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsBusinessInfoControl();
@@ -120,31 +118,29 @@
             this.wizardPageOpenAccountPickupSchedule.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).BeginInit();
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
-            this.wizardPageOpenAccountCreateAccount.SuspendLayout();
             this.wizardPageOpenAccountBusinessInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.helpBusinessInformation)).BeginInit();
             this.SuspendLayout();
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(411, 487);
+            this.next.Location = new System.Drawing.Point(411, 546);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(492, 487);
+            this.cancel.Location = new System.Drawing.Point(492, 546);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(330, 487);
+            this.back.Location = new System.Drawing.Point(330, 546);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOpenAccountCreateAccount);
-            this.mainPanel.Size = new System.Drawing.Size(579, 415);
+            this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
             // 
-            this.etchBottom.Location = new System.Drawing.Point(0, 477);
+            this.etchBottom.Location = new System.Drawing.Point(0, 536);
             this.etchBottom.Size = new System.Drawing.Size(583, 2);
             // 
             // pictureBox
@@ -168,7 +164,7 @@
             this.wizardPageWelcomeOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcomeOlt.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcomeOlt.Name = "wizardPageWelcomeOlt";
-            this.wizardPageWelcomeOlt.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageWelcomeOlt.Size = new System.Drawing.Size(579, 474);
             this.wizardPageWelcomeOlt.TabIndex = 0;
             this.wizardPageWelcomeOlt.Title = "UPS Setup Wizard";
             this.wizardPageWelcomeOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
@@ -416,7 +412,7 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.Font = new System.Drawing.Font("Tahoma", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label1.Location = new System.Drawing.Point(4, 484);
+            this.label1.Location = new System.Drawing.Point(4, 543);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(320, 33);
             this.label1.TabIndex = 6;
@@ -693,7 +689,7 @@
             this.wizardPageOpenAccountCharacteristics.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountCharacteristics.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountCharacteristics.Name = "wizardPageOpenAccountCharacteristics";
-            this.wizardPageOpenAccountCharacteristics.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountCharacteristics.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountCharacteristics.TabIndex = 0;
             this.wizardPageOpenAccountCharacteristics.Title = "UPS Open Account ";
             this.wizardPageOpenAccountCharacteristics.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWizardPageOpenAccountCharacteristics);
@@ -756,7 +752,7 @@
             this.wizardPageOpenAccountPageBillingContactInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountPageBillingContactInfo.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountPageBillingContactInfo.Name = "wizardPageOpenAccountPageBillingContactInfo";
-            this.wizardPageOpenAccountPageBillingContactInfo.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountPageBillingContactInfo.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountPageBillingContactInfo.TabIndex = 0;
             this.wizardPageOpenAccountPageBillingContactInfo.Title = "UPS Billing and Contact Info";
             this.wizardPageOpenAccountPageBillingContactInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOpenAccountBillingInfo);
@@ -766,7 +762,7 @@
             this.upsBillingContactInfoControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upsBillingContactInfoControl.Location = new System.Drawing.Point(64, 20);
             this.upsBillingContactInfoControl.Name = "upsBillingContactInfoControl";
-            this.upsBillingContactInfoControl.Size = new System.Drawing.Size(446, 366);
+            this.upsBillingContactInfoControl.Size = new System.Drawing.Size(446, 440);
             this.upsBillingContactInfoControl.TabIndex = 0;
             // 
             // wizardPageOpenAccountPickupSchedule
@@ -778,7 +774,7 @@
             this.wizardPageOpenAccountPickupSchedule.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountPickupSchedule.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountPickupSchedule.Name = "wizardPageOpenAccountPickupSchedule";
-            this.wizardPageOpenAccountPickupSchedule.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountPickupSchedule.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountPickupSchedule.TabIndex = 0;
             this.wizardPageOpenAccountPickupSchedule.Title = "UPS Pickup Schedule";
             this.wizardPageOpenAccountPickupSchedule.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWizardPageOpenAccountPickupSchedule);
@@ -809,7 +805,7 @@
             this.wizardPageOpenAccountPickupLocation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountPickupLocation.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountPickupLocation.Name = "wizardPageOpenAccountPickupLocation";
-            this.wizardPageOpenAccountPickupLocation.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountPickupLocation.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountPickupLocation.TabIndex = 0;
             this.wizardPageOpenAccountPickupLocation.Title = "UPS Pickup Location";
             this.wizardPageOpenAccountPickupLocation.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOpenAccountPickupLocationInfo);
@@ -822,26 +818,6 @@
             this.upsPickupLocationControl.Size = new System.Drawing.Size(446, 366);
             this.upsPickupLocationControl.TabIndex = 0;
             // 
-            // wizardPageOpenAccountCreateAccount
-            // 
-            this.wizardPageOpenAccountCreateAccount.Controls.Add(this.createAccount);
-            this.wizardPageOpenAccountCreateAccount.Description = "Create your UPS account";
-            this.wizardPageOpenAccountCreateAccount.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wizardPageOpenAccountCreateAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.wizardPageOpenAccountCreateAccount.Location = new System.Drawing.Point(0, 0);
-            this.wizardPageOpenAccountCreateAccount.Name = "wizardPageOpenAccountCreateAccount";
-            this.wizardPageOpenAccountCreateAccount.Size = new System.Drawing.Size(579, 415);
-            this.wizardPageOpenAccountCreateAccount.TabIndex = 0;
-            this.wizardPageOpenAccountCreateAccount.Title = "UPS Create Account";
-            this.wizardPageOpenAccountCreateAccount.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.SteppingIntoWizardPageOpenAccountCreateAccount);
-            // 
-            // createAccount
-            // 
-            this.createAccount.Location = new System.Drawing.Point(23, 11);
-            this.createAccount.Name = "createAccount";
-            this.createAccount.Size = new System.Drawing.Size(500, 388);
-            this.createAccount.TabIndex = 0;
-            // 
             // wizardPageOpenAccountBusinessInfo
             // 
             this.wizardPageOpenAccountBusinessInfo.Controls.Add(this.helpBusinessInformation);
@@ -851,7 +827,7 @@
             this.wizardPageOpenAccountBusinessInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountBusinessInfo.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountBusinessInfo.Name = "wizardPageOpenAccountBusinessInfo";
-            this.wizardPageOpenAccountBusinessInfo.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountBusinessInfo.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountBusinessInfo.TabIndex = 0;
             this.wizardPageOpenAccountBusinessInfo.Title = "UPS Business Information";
             this.wizardPageOpenAccountBusinessInfo.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextBusinessInfo);
@@ -879,7 +855,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(579, 522);
+            this.ClientSize = new System.Drawing.Size(579, 581);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "UpsSetupWizard";
@@ -896,7 +872,6 @@
             this.wizardPageOpenAccountPickupSchedule,
             this.wizardPageOpenAccountPageBillingContactInfo,
             this.wizardPageOpenAccountPickupLocation,
-            this.wizardPageOpenAccountCreateAccount,
             this.wizardPageRates,
             this.wizardPageOptionsOlt,
             this.wizardPageOptionsWorldShip,
@@ -946,7 +921,6 @@
             this.wizardPageOpenAccountPickupSchedule.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.helpPickupLocation)).EndInit();
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
-            this.wizardPageOpenAccountCreateAccount.ResumeLayout(false);
             this.wizardPageOpenAccountBusinessInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.helpBusinessInformation)).EndInit();
             this.ResumeLayout(false);
@@ -1001,7 +975,6 @@
         private UI.Wizard.WizardPage wizardPageOpenAccountPageBillingContactInfo;
         private UI.Wizard.WizardPage wizardPageOpenAccountPickupSchedule;
         private UI.Wizard.WizardPage wizardPageOpenAccountPickupLocation;
-        private UI.Wizard.WizardPage wizardPageOpenAccountCreateAccount;
         private UI.Wizard.WizardPage wizardPageOpenAccountBusinessInfo;
         private OpenAccount.UpsBusinessInfoControl upsBusinessInfoControl;
         private OpenAccount.UpsAccountCharacteristicsControl accountCharacteristics;
@@ -1009,7 +982,6 @@
         private OpenAccount.UpsShipmentCharacteristicsControl shipmentCharacteristics;
         private OpenAccount.UpsPickupLocationControl upsPickupLocationControl;
         private OpenAccount.UpsPickupScheduleControl pickupSchedule;
-        private OpenAccount.UpsCreateAccount createAccount;
         private System.Windows.Forms.TextBox account;
         private System.Windows.Forms.Label labelUpsAccount;
         private System.Windows.Forms.Label labelWsUpsAccountNumberLink;

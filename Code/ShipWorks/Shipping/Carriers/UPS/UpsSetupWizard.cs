@@ -42,8 +42,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private OpenAccountRequest openAccountRequest;
 
-        private bool isAccountCreated = false;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -90,7 +88,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageOpenAccountPickupSchedule,
                 wizardPageOpenAccountPageBillingContactInfo,
                 wizardPageOpenAccountPickupLocation,
-                wizardPageOpenAccountCreateAccount,
                 wizardPageRates,
                 wizardPageOptionsOlt,
                 wizardPageOptionsWorldShip,
@@ -113,7 +110,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
-                Pages.Remove(wizardPageOpenAccountCreateAccount);
             }
 
             upsAccount.CountryCode = "US";
@@ -263,7 +259,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 Pages.Remove(wizardPageOpenAccountBusinessInfo);
                 Pages.Remove(wizardPageOpenAccountCharacteristics);
-                Pages.Remove(wizardPageOpenAccountCreateAccount);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
@@ -775,6 +770,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 upsBillingContactInfoControl.SaveToAccountAndRequest(openAccountRequest, upsAccount);
+                if (upsBillingContactInfoControl.SameAsPickup)
+                {
+                    CreateAccount();
+                    e.NextPage = wizardPageRates;
+                }
             }
             catch (UpsOpenAccountException ex)
             {
@@ -798,6 +798,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 upsPickupLocationControl.SaveToRequest(openAccountRequest);
+                CreateAccount();
             }
             catch (UpsOpenAccountException ex)
             {
@@ -858,54 +859,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Steppings the into wizard page open account create account.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
-        private void SteppingIntoWizardPageOpenAccountCreateAccount(object sender, WizardSteppingIntoEventArgs e)
-        {
-            createAccount.OpenAccountRequest = openAccountRequest;
-
-            NextEnabled = isAccountCreated;
-
-            createAccount.AccountCreated = accountNumber =>
-            {
-                upsAccount.AccountNumber = accountNumber;
-
-                if (ShippingSettings.Fetch().UpsAccessKey == null)
-                {
-                    if (!GetUpsAccessKey())
-                    {
-                        NextEnabled = false;
-                        return;
-                    }
-                }
-
-                bool processRegistration = ProcessRegistration(3);
-                if (processRegistration)
-                {
-                    NextEnabled = true;
-                    isAccountCreated = true;
-
-                    using (SqlAdapter adapter = new SqlAdapter(true))
-                    {
-                        upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                        UpsAccountManager.SaveAccount(upsAccount);
-
-                        adapter.Commit();
-                    }
-
-                    MessageHelper.ShowInformation(this, "Account created. Click next to continue.");                    
-                }
-                else
-                {
-                    MessageHelper.ShowInformation(this, string.Format("Ups Account created, but not registered in ShipWorks."));
-                }
-            };
-
-        }
-
-        /// <summary>
         /// Called when [stepping into rates].
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -939,6 +892,183 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnHelpClick(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
+        }
+
+        /// <summary>
+        /// Creates the ups account. Note the recursive call to correct the address.
+        /// </summary>
+        /// <param name="clerk">The clerk.</param>
+        /// <returns></returns>
+        private string OpenUpsAccount(IUpsClerk clerk)
+        {
+            return OpenUpsAccount(clerk, false);
+        }
+
+        /// <summary>
+        /// Creates the account.
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private void CreateAccount()
+        {
+            string newAccountNumber = OpenUpsAccount(new UpsClerk());
+            if (!string.IsNullOrEmpty(newAccountNumber))
+            {
+                RegisterAccount(newAccountNumber);
+            }
+        }
+
+        /// <summary>
+        /// Registers the account.
+        /// </summary>
+        private void RegisterAccount(string newAccountNumber)
+        {
+            upsAccount.AccountNumber = newAccountNumber;
+
+            bool processRegistration = ProcessRegistration(3);
+            if (processRegistration)
+            {
+                NextEnabled = true;
+
+                using (SqlAdapter adapter = new SqlAdapter(true))
+                {
+                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                    UpsAccountManager.SaveAccount(upsAccount);
+
+                    adapter.Commit();
+                }
+            }
+            else
+            {
+                throw new UpsOpenAccountException("Ups Account created, but not registered in ShipWorks.");
+            }
+        }
+
+        /// <summary>
+        /// Creates the ups account. Note the recursive call to correct the address.
+        /// </summary>
+        /// <param name="clerk">The clerk.</param>
+        /// <param name="retrySmartPost">if set to <c>true</c> [retry smart post].</param>
+        /// <returns></returns>
+        /// <exception cref="UpsOpenAccountException">Ups didn't return a new account number.</exception>
+        private string OpenUpsAccount(IUpsClerk clerk, bool retrySmartPost)
+        {
+            string shipperNumber = string.Empty;
+
+            try
+            {
+                OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
+
+                shipperNumber = response.ShipperNumber;
+
+                if (string.IsNullOrEmpty(shipperNumber))
+                {
+                    throw new UpsOpenAccountException("Ups didn't return a new account number.");
+                }
+            }
+            catch (UpsOpenAccountPickupAddressException ex)
+            {
+                if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
+                {
+                    shipperNumber = OpenUpsAccount(clerk);
+                }
+            }
+            catch (UpsOpenAccountBusinessAddressException ex)
+            {
+                if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
+                {
+                    shipperNumber = OpenUpsAccount(clerk);
+                }
+            }
+            catch (UpsOpenAccountSoapException ex)
+            {
+                throw new UpsOpenAccountException(string.Format("Ups returned the following error: {0}", ex.Message), ex);
+            }
+            catch (UpsOpenAccountException ex)
+            {
+                if (ex.ErrorCode == UpsOpenAccountErrorCode.SmartPickupError && !retrySmartPost)
+                {
+                    string correctedAddress = UpsUtility.CorrectSmartPickupError(openAccountRequest.PickupAddress.City);
+
+                    if (!string.IsNullOrEmpty(correctedAddress))
+                    {
+                        openAccountRequest.PickupAddress.City = correctedAddress;
+
+                        shipperNumber = OpenUpsAccount(clerk, true);
+                    }
+                    else
+                    {
+                        throw new UpsOpenAccountException("UPS couldn't resolve the pickup address. If there are alternate spellings, try again using one of those.", ex);
+                    }
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return shipperNumber;
+        }
+
+        /// <summary>
+        /// Validates the pickup address.
+        /// </summary>
+        /// <param name="addressCandidate">The address candidate.</param>
+        /// <param name="pickupAddressType">Type of the pickup address.</param>
+        /// <returns></returns>
+        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
+        private static bool CorrectPickupAddress(AddressKeyCandidateType addressCandidate, PickupAddressType pickupAddressType)
+        {
+            bool isAddressCorrected = false;
+
+            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
+            {
+                invalidAddressDlg.SetAddress(addressCandidate, "Pickup");
+                DialogResult result = invalidAddressDlg.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    pickupAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    pickupAddressType.City = addressCandidate.City;
+                    pickupAddressType.StateProvinceCode = addressCandidate.State;
+                    pickupAddressType.PostalCode = addressCandidate.PostalCode;
+                    pickupAddressType.CountryCode = addressCandidate.CountryCode;
+
+                    isAddressCorrected = true;
+                }
+            }
+
+            return isAddressCorrected;
+        }
+
+        /// <summary>
+        /// Validates the address.
+        /// </summary>
+        /// <param name="addressCandidate">The address candidate.</param>
+        /// <param name="billingAddressType">Type of the billing address.</param>
+        /// <returns></returns>
+        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException">If address suggested and user cancels, throw</exception>
+        private static bool CorrectBillingAddress(AddressKeyCandidateType addressCandidate, BillingAddressType billingAddressType)
+        {
+            bool isAddressCorrected = false;
+
+            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
+            {
+                invalidAddressDlg.SetAddress(addressCandidate, "Billing");
+                DialogResult result = invalidAddressDlg.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    billingAddressType.StreetAddress = addressCandidate.StreetAddress;
+                    billingAddressType.City = addressCandidate.City;
+                    billingAddressType.StateProvinceCode = addressCandidate.State;
+                    billingAddressType.PostalCode = addressCandidate.PostalCode;
+                    billingAddressType.CountryCode = addressCandidate.CountryCode;
+
+                    isAddressCorrected = true;
+                }
+            }
+
+            return isAddressCorrected;
         }
     }
 }
