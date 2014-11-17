@@ -1,4 +1,4 @@
-﻿namespace Interapptive.Shared.Messenger
+﻿namespace Interapptive.Shared.Messaging
 {
     /// <summary>
     /// Token that allows the messenger to track handlers

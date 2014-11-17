@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Interapptive.Shared.Messenger;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using System.ComponentModel;
@@ -99,7 +99,7 @@ namespace ShipWorks.Filters.Management
 
                         result = FilterEditingResult.OK;
 
-                        Messenger.Current.Send(new FilterEditedMessage(filter));
+                        Messenger.Current.Send(new FilterNodeEditedMessage(parent, filterNode));
                     }
                     catch (FilterException ex)
                     {
@@ -148,25 +148,5 @@ namespace ShipWorks.Filters.Management
             return null;
         }
 
-    }
-
-    /// <summary>
-    /// A filter has been changed
-    /// </summary>
-    public class FilterEditedMessage : IShipWorksMessage
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="filter"></param>
-        public FilterEditedMessage(FilterEntity filter)
-        {
-            Filter = filter;
-        }
-
-        /// <summary>
-        /// Filter that has been changed
-        /// </summary>
-        public FilterEntity Filter { get; private set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
-using Interapptive.Shared.Messenger;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Properties;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
@@ -76,6 +76,8 @@ namespace ShipWorks.Filters.Controls
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
         bool quickFilterSelected = false;
+        private MessengerToken filterEditedToken;
+        private FilterControlDisplayManager quickFilterDisplayManager;
 
         // Event raised when a drag-drop operation has taken place
         public event FilterDragDropCompleteEventHandler DragDropComplete;
@@ -91,7 +93,11 @@ namespace ShipWorks.Filters.Controls
 
             ThemedBorderProvider themedBorder = new ThemedBorderProvider(this);
 
+            quickFilterDisplayManager = new FilterControlDisplayManager(quickFilterName, quickFilterCount);
+
             UpdateQuickFilterDisplay();
+
+            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(HandleFilterEdited);
         }
 
         /// <summary>
@@ -1190,6 +1196,8 @@ namespace ShipWorks.Filters.Controls
                 FilterCount count = FilterContentManager.GetCount(quickFilterNode.FilterNodeID);
                 if (count != null)
                 {
+                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.State == (int)FilterNodeState.Enabled);
+                    
                     if (count.Status == FilterCountStatus.Ready)
                     {
                         quickFilterCount.Visible = true;
@@ -1449,6 +1457,33 @@ namespace ShipWorks.Filters.Controls
             if (quickFilterNode != null && HotTracking)
             {
                 SelectedFilterNode = quickFilterNode;
+            }
+        }
+
+        /// <summary>
+        /// Handle any filter node changed messages
+        /// </summary>
+        private void HandleFilterEdited(FilterNodeEditedMessage message)
+        {
+            IEnumerable<FilterTreeGridRow> rows = sandGrid.FlatRows.OfType<FilterTreeGridRow>().Where(x => x.FilterNode.FilterNodeID == message.FilterNode.FilterNodeID);
+
+            foreach (FilterTreeGridRow row in rows)
+            {
+                row.UpdateFilterNode(message.FilterNode);
+            }
+
+            // Update the quick filter node if it matches the edited filter
+            if (quickFilterNode != null && quickFilterNode.FilterNodeID == message.FilterNode.FilterNodeID)
+            {
+                quickFilterNode = message.FilterNode;
+                UpdateQuickFilterDisplay();
+            }
+
+            // Update the selected node if it matches the edited filter
+            if (SelectedFilterNode != null && SelectedFilterNode.FilterNodeID == message.FilterNode.FilterNodeID)
+            {
+                SelectedFilterNode = message.FilterNode;
+                OnSelectedFilterNodeChanged();
             }
         }
 

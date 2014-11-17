@@ -3546,3 +3546,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.Byte[])")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.IO.Stream)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Scope = "member", Target = "Interapptive.Shared.Pdf.PdfDocument.#ConvertToPng(System.Byte[])")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Shared", Scope = "namespace", Target = "Interapptive.Shared.Messaging")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Interapptive.Shared.Messaging")]

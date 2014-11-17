@@ -30,8 +30,7 @@ namespace ShipWorks.Filters.Controls
         public FilterTreeGridRow(FilterNodeEntity filterNode)
             : base(filterNode.Filter.Name, FilterHelper.GetFilterImage(filterNode, false))
         {
-            this.filterNode = filterNode;
-            this.filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
+            SetFilter(filterNode);
             
             disabledFont = new DisabledFilterFont(Font);
         }
@@ -133,6 +132,25 @@ namespace ShipWorks.Filters.Controls
             }
 
             UpdateLayoutForSpeed();
+        }
+
+        /// <summary>
+        /// Update the filter node associated with this grid row
+        /// </summary>
+        public void UpdateFilterNode(FilterNodeEntity filterNodeEntity)
+        {
+            SetFilter(filterNodeEntity);
+            UpdateFilterCount();
+            UpdateStyle();
+        }
+
+        /// <summary>
+        /// Set the specified filter
+        /// </summary>
+        private void SetFilter(FilterNodeEntity filterNodeEntity)
+        {
+            filterNode = filterNodeEntity;
+            filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
         }
 
         /// <summary>

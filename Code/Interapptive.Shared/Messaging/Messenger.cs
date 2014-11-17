@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Interapptive.Shared.Messenger
+namespace Interapptive.Shared.Messaging
 {
     /// <summary>
     /// Messenger that allows messages to be sent and handled from anywhere in the application

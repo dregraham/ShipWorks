@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Interapptive.Shared.Messenger
+namespace Interapptive.Shared.Messaging
 {
     /// <summary>
     /// Defines a messenger interface

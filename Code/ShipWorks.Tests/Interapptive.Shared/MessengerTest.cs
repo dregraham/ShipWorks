@@ -1,5 +1,5 @@
 ﻿using System;
-using Interapptive.Shared.Messenger;
+using Interapptive.Shared.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
 
         private class TestMessage : IShipWorksMessage
         {
-            
+            public object Sender { get; private set; }
         }
 
         private class DisposableHandler : IDisposable
