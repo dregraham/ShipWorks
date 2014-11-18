@@ -84,6 +84,14 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public static string GetPhoneDigits10(string phone)
         {
+            return GetPhoneDigits(phone, 10, false);
+        }
+
+        /// <summary>
+        /// Replace all characters to the numeric equivalent and strip the phone number down to the specified number of digits.
+        /// </summary>
+        public static string GetPhoneDigits(string phone, int numberOfDigits, bool includeLeadingOne)
+        {
             StringBuilder sb = new StringBuilder(phone.ToLower());
 
             // Replace all characters with the digit equivalent
@@ -94,21 +102,17 @@ namespace Interapptive.Shared.Business
 
             string digitsOnly = Regex.Replace(sb.ToString(), @"[^0-9]", "");
 
-            if (digitsOnly.Length <= 10)
+            if (digitsOnly.Length <= numberOfDigits)
             {
                 return digitsOnly;
             }
-            else
+
+            if (!includeLeadingOne && digitsOnly.StartsWith("1"))
             {
-                if (digitsOnly.StartsWith("1"))
-                {
-                    return digitsOnly.Substring(1, 10);
-                }
-                else
-                {
-                    return digitsOnly.Substring(0, 10);
-                }
+                return digitsOnly.Substring(1, numberOfDigits);
             }
+            
+            return digitsOnly.Substring(0, numberOfDigits);
         }
     }
 }
