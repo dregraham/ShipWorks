@@ -152,6 +152,7 @@
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
+    <Compile Include="Interapptive.Shared\Business\PersonUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Collections\ArrayUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
