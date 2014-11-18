@@ -507,6 +507,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address address = CreateAddress(person);
 
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
+            address.Country = AdjustCountryCode(person.CountryCode);
 
             using (SwsimV29 webService = CreateWebService("CleanseAddress", account != null ? (StampsResellerType)account.StampsReseller : StampsResellerType.None))
             {

@@ -115,7 +115,7 @@ namespace ShipWorks.AddressValidation
             catch (AddressValidationException ex)
             {
                 log.Warn("Error communicating with Address Validation Server.", ex);
-                addressAdapter.AddressValidationError = "Error communicating with Address Validation Server.";
+                addressAdapter.AddressValidationError = string.Format("Error communicating with Address Validation Server.\r\n{0}", ex.Message);
                 addressAdapter.AddressValidationStatus = (int)AddressValidationStatusType.Error;
                 saveAction(null, new List<ValidatedAddressEntity>());
             }
