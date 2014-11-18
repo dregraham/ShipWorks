@@ -45,6 +45,7 @@ namespace ShipWorks.Actions.Tasks
         // The menus for choosing whatits inputs will be
         ContextMenuStrip inputSourceMenu;
         private bool usesDisabledFilter = false;
+        private readonly long initialInputFilterNodeId;
 
         /// <summary>
         /// Constructor
@@ -79,13 +80,11 @@ namespace ShipWorks.Actions.Tasks
             // The filter selection for input can be anything, and get's loaded one time
             inputSourceFilter.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers, FilterTarget.Shipments, FilterTarget.Items);
             inputSourceFilter.SelectedFilterNodeID = task.Entity.InputFilterNodeID;
-            if (inputSourceFilter.SelectedFilterNode != null)
-            {
-                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte)FilterNodeState.Enabled;
-            }
             
             // As it changes, update the task
             inputSourceFilter.SelectedFilterNodeChanged += new EventHandler(OnInputSourceFilterChanged);
+
+            initialInputFilterNodeId = task.Entity.InputFilterNodeID;
         }
 
         /// <summary>
@@ -464,14 +463,14 @@ namespace ShipWorks.Actions.Tasks
             if (inputSourceFilter.SelectedFilterNode != null)
             {
                 task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode.FilterNodeID;
-                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte)FilterNodeState.Enabled;
+                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte) FilterNodeState.Enabled &&
+                    inputSourceFilter.SelectedFilterNodeID != initialInputFilterNodeId;
             }
             else
             {
                 task.Entity.InputFilterNodeID = 0;
                 usesDisabledFilter = false;
             }
-            //task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode != null ? inputSourceFilter.SelectedFilterNode.FilterNodeID : 0;
 
             ActionTaskEditor taskEditor = (ActionTaskEditor) panelTaskSettings.Controls[0];
             taskEditor.NotifyTaskInputChanged(trigger, (ActionTaskInputSource) task.Entity.InputSource, GetEffectiveInputEntityType());

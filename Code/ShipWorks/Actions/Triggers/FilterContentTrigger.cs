@@ -133,6 +133,12 @@ namespace ShipWorks.Actions.Triggers
         {
             base.Validate();
 
+            // If the selected filter didn't change, don't bother validating it
+            if (initialFilterNodeID == FilterNodeID)
+            {
+                return;
+            }
+
             // We want to throw an exception if the trigger is using a disabled filter
             FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(FilterNodeID);
             if (filterNode.State == (byte) FilterNodeState.Disabled)
