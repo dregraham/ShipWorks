@@ -146,8 +146,13 @@ namespace ShipWorks.Shipping.ScanForms
                 ShipmentCount = shipments.Count;
 
                 // Process SCAN forms in batches to try and avoid connection timeouts.
-                IEnumerable<IEntity2> scanFormEntities = shipments.SplitIntoChunksOf(100)
-                    .SelectMany(shipmentChunk => carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk))
+                IEnumerable<IEntity2> scanFormEntities = shipments
+                    .GroupBy(s => s.OriginPostalCode)
+                    .SelectMany(shipmentsByZip => 
+                        shipmentsByZip
+                        .SplitIntoChunksOf(1000)
+                        .SelectMany(shipmentChunk => 
+                            carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk)))
                     .ToList();
 
                 if (!scanFormEntities.Any())

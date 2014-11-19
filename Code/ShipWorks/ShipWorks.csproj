@@ -490,6 +490,7 @@
     </Compile>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashResponse.cs" />
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
@@ -676,11 +677,15 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\International\FedExRateBrokerManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlReader.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExShipServiceWrapper.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
@@ -723,6 +728,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />

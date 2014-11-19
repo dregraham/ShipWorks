@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -86,6 +87,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Utilities
             shipment.ShipSenseStatus = (int) ShipSenseStatus.NotApplied;
             shipment.ShipSenseEntry = new byte[] {};
             shipment.ShipSenseChangeSets = "<ChangeSets/>";
+            shipment.OnlineShipmentID = string.Empty;
+            shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
 
             List<EntityBase2> orderItems = new List<EntityBase2>();
             for (int i = 0; i < numberOfItems; i++)

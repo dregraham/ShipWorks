@@ -483,8 +483,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns>State code that should be used for a postal address</returns>
         public static string AdjustState(string countryCode, string state)
         {
-            // If the country is Puerto Rico, return PR regardless of what was entered
-            return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : state;
+            switch (countryCode.ToUpper())
+            {
+                case "PR":
+                    return "PR";
+                case "VI":
+                    return "VI";
+                default:
+                    return state;
+            }
         }
 
         /// <summary>

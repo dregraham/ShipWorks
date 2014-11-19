@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.FromStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(from.CountryCode, from.StateProvCode);
             worldship.FromPostalCode = from.PostalCode;
             worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode, from.StateProvCode);
-            worldship.FromTelephone = from.Phone10Digits;
+            worldship.FromTelephone = PersonUtility.GetPhoneDigits(from.Phone, 15, true);
             worldship.FromEmail = UpsUtility.GetCorrectedEmailAddress(from.Email);
             worldship.FromAccountNumber = account.AccountNumber;
 
@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.ToStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(to.CountryCode, to.StateProvCode);
             worldship.ToPostalCode = to.PostalCode;
             worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode, to.StateProvCode);
-            worldship.ToTelephone = to.Phone10Digits;
+            worldship.ToTelephone = PersonUtility.GetPhoneDigits(to.Phone, 15, true);
             worldship.ToEmail = UpsUtility.GetCorrectedEmailAddress(to.Email);
             worldship.ToResidential = shipment.ResidentialResult ? "Y" : "N";
             worldship.ToAccountNumber = payorType == UpsPayorType.Sender ? "" : ups.PayorAccount;
@@ -970,6 +970,49 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             return worldShipExePath;
+        }
+
+        /// <summary>
+        /// Get the directory that the WorldShip executable is in
+        /// </summary>
+        public static string GetWorldShipIniPath()
+        {
+            string worldShipIniPath = string.Empty;
+
+            // Get the full path to the ini
+            string worldShipIniFullPath = GetWorldShipIni();
+
+            // Make sure it's not blank
+            if (!string.IsNullOrWhiteSpace(worldShipIniFullPath))
+            {
+                // Get the directory name
+                worldShipIniPath = Path.GetDirectoryName(worldShipIniFullPath);
+            }
+
+            return worldShipIniPath;
+        }
+
+        /// <summary>
+        /// Get the full path to the worldship executable
+        /// </summary>
+        public static string GetWorldShipIni()
+        {
+            string path = string.Empty;
+
+            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\UPS\Installation"))
+            {
+                if (regKey != null)
+                {
+                    path = (string)regKey.GetValue("ShipMain", "");
+
+                    if (!File.Exists(path))
+                    {
+                        path = string.Empty;
+                    }
+                }
+            }
+
+            return path;
         }
 
         /// <summary>
