@@ -45,12 +45,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
         }
 
         [TestMethod]
-        public void CarrierAccountEntity_IsNull_Test()
-        {
-            Assert.IsNull(testObject.CarrierAccountEntity as UpsAccountEntity);
-        }
-
-        [TestMethod]
         public void Submit_ManipulatorsExecuted()
         {
             ICarrierResponse response = testObject.Submit();

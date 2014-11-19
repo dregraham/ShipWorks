@@ -41,12 +41,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             };
 
             pickupCode = new CodeOnlyType() { Code = EnumHelper.GetApiValue(UpsPickupOption.DailyOnRoute) };
-            
-            carrierRequest = new Mock<CarrierRequest>();
-            carrierRequest
-                .Setup(c => c.NativeRequest)
-                .Returns(new OpenAccountRequest() { PickupInformation = new PickupInformationType() { PickupOption = pickupCode } });
 
+            OpenAccountRequest nativeRequest = new OpenAccountRequest() { PickupInformation = new PickupInformationType() { PickupOption = pickupCode } };
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
+           
             upsAccount = new UpsAccountEntity()
             {
                 Street1 = "test street",
